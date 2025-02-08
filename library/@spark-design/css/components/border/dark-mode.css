@@ -1,0 +1,8 @@
+html[data-theme='dark'] {
+    --spark-border-split-doubleline-background-color: #2e2f32;
+    --spark-border-split-doubleline-border-color: #242528;
+    --spark-border-split-hairline-background-color: #242528;
+    --spark-border-split-ghost-background-color: transparent;
+    --spark-border-split-active-background-color: #00b6e5;
+    --spark-border-split-active-icon-color: #242528;
+}

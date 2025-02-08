@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+.github
+node_modules
+build
+public
+deploy
+venv
+coverage
+dist
+.nyc_output
+.nyc_output/out.json
+cypress/pacts
+logs.json
+api_versions.md
+artifacts
+src/api/observability.monitor
+trivy.yaml
+
+# NOTE there are dependency import order in these files,
+# we can't automatically sort the imports with prettier until those are resolved
+library/utils/index.ts
+library/components/index.ts
+library/utils/mocks/app-orch/index.ts
+library/utils/mocks/app-orch/adm/index.ts
+library/@spark-design/react/lib/esm/components/index.js

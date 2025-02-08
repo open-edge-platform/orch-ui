@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+
+# IDEs
+*.sublime-project
+*.sublime-workspace
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+
+# Deps
+node_modules
+venv-lp
+
+# Auto generated
+dist
+node_modules
+cobertura-coverage.xml
+coverage
+orch-ui-admin-*.tgz
+lib
+!library/@spark-design/core/lib
+!library/@spark-design/react/lib
+!library/@spark-design/react-icons/lib
+!library/@spark-design/tokens/lib
+!library/@spark-design/utils/lib
+
+#python
+__pycache__
+
+#jenkins
+artifacts
+.nyc_output
+**/cypress/pacts/*
+**/cypress/videos/*
+**/cypress/screenshots/*

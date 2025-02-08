@@ -1,0 +1,75 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+:root {
+  --tree-expander__conector-color: hsla(228, 4%, 52%, 1);
+  --tree-expander__width: 2rem;
+}
+
+//https://stackoverflow.com/questions/63775143/how-does-grid-row-1-1-actually-work-references-needed
+.tree-expander {
+  grid-column: 1;
+  grid-row: 1 / 99999; //see above link
+  display: flex;
+  gap: 0; //space between the expand icon and the vertical line
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%; //will take the column value from grid-template-columns
+
+  .spark-icon.spark-icon-light {
+    transition: transform 0.2s ease-in;
+  }
+  &__icon {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    //height : calculated from what the __content screen height is
+    width: inherit;
+    &:hover {
+      cursor: pointer;
+    }
+    .spark-icon.spark-icon-light {
+      display: block;
+      padding: 0;
+      margin: 0;
+      color: black;
+      font-weight: 600;
+      line-height: 1.2;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      transition:
+        color 0.2s ease-in,
+        background-color 0.2s ease-in,
+        transform 0.2s ease-in;
+    }
+
+    &:hover .spark-icon.spark-icon-light {
+      background-color: hsla(0, 0%, 0%, 0.1);
+    }
+  }
+  &__icon--expanded .spark-icon.spark-icon-light {
+    transform: rotate(90deg);
+  }
+  &__icon--collapsed .spark-icon.spark-icon-light {
+    transform: rotate(0deg);
+  }
+
+  &__vertical-connector {
+    flex: 1;
+    border-left: 0.01rem solid var(--tree-expander__conector-color);
+  }
+
+  &__horizontal-connector {
+    position: absolute;
+    //top: see component for calculation of this
+    left: 0;
+    border-bottom: 0.01rem solid var(--tree-expander__conector-color);
+    width: calc(0.75 * var(--tree-expander__width));
+    transform: translateX(calc(-0.5 * var(--tree-expander__width)));
+  }
+}

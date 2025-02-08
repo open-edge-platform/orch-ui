@@ -1,0 +1,22 @@
+---
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - opened
+      - synchronize
+      - reopened
+      - edited
+jobs:
+  Check-PR-Reqs:
+    runs-on: generic
+    steps:
+      - name: Jira Key Validation
+        uses: intel-innersource/frameworks.actions.jira-pr-key-validation@main
+        with:
+          github_faceless_token: ${{ secrets.SYS_OIE_DEVOPS_GITHUBAPI_TOKEN }}
+          jira_token: ${{ secrets.SYS_OIE_DEVOPS_JIRAAPI }}
+        if: ${{ ! contains(github.event.pull_request.labels.*.name, 'skip-jira-validation') }}

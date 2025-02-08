@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mfe.container.fullname" . }}
+  labels:
+    app.kubernetes.io/part-of: orch-ui
+    container: app-orch
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/part-of: orch-ui
+    app: mfe-container
+    release: {{ .Release.Name }}

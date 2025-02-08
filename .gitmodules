@@ -1,0 +1,7 @@
+[submodule "library/apis/tenancy/tenancy-api-mapping"]
+	path = library/apis/tenancy/tenancy-api-mapping
+	url = https://github.com/intel-innersource/frameworks.edge.one-intel-edge.iam.tenancy-api-mapping.git
+[submodule "library/apis/tenancy/tenancy-datamodel"]
+	path = library/apis/tenancy/tenancy-datamodel
+	url = https://github.com/intel-innersource/frameworks.edge.one-intel-edge.iam.tenancy-datamodel.git
+	branch = dbakiaraj-staic-openapispec

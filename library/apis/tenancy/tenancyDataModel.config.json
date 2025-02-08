@@ -1,0 +1,9 @@
+{
+  "schemaFile": "./tenancy-datamodel/build/openapi/infra-host.com.json",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "tdmApi",
+  "outputFile": "./tenancyDataModelApi.ts",
+  "exportName": "tenancyDataModelApi",
+  "hooks": true,
+  "tag": true
+}

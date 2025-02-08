@@ -1,0 +1,32 @@
+// SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+// SPDX-License-Identifier: LicenseRef-Intel
+
+window.__RUNTIME_CONFIG__ = {
+  AUTH: "false",
+  KC_URL: "https://keycloak.kind.internal",
+  KC_REALM: "master",
+  KC_CLIENT_ID: "webui-client",
+  SESSION_TIMEOUT: 0,
+  OBSERVABILITY_URL: "https://observability-ui.kind.internal",
+  MFE: {
+    APP_ORCH: "false",
+    FM: "false",
+    CLUSTER_ORCH: "false",
+    ADMIN: "true",
+  },
+  TITLE: "Admin",
+  API: {
+    CATALOG: "https://app-orch.kind.internal",
+    ADM: "https://app-orch.kind.internal",
+    ARM: "https://app-orch.kind.internal",
+    FM: "https://iaas.kind.internal",
+    CO: "https://cluster-orch.kind.internal",
+    MB: "https://metadata.kind.internal",
+    ALERT: "https://alerting-monitor.kind.internal",
+    LICENSE: "https://orchestrator-license.kind.internal",
+    TM: "https://api.kind.internal",
+  },
+  VERSIONS: {
+    orchestrator: "unknown",
+  },
+};

@@ -1,0 +1,10 @@
+{
+  "id": "m-d-34fewewf",
+  "name": "Good Template2",
+  "version": "v1.0.1",
+  "description": "example description 1",
+  "clustertype": "test",
+  "providertype": "test",
+  "clusterconfiguration": {},
+  "extensions": []
+}

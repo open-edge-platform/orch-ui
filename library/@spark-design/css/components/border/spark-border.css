@@ -1,0 +1,10 @@
+@import '../../global/index.css';
+
+:root {
+    --spark-border-split-doubleline-background-color: #e2e2e4;
+    --spark-border-split-doubleline-border-color: #c9cace;
+    --spark-border-split-hairline-background-color: #c9cace;
+    --spark-border-split-ghost-background-color: transparent;
+    --spark-border-split-active-background-color: #0054ae;
+    --spark-border-split-active-icon-color: #ffffff;
+}

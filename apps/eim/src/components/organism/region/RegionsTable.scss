@@ -1,0 +1,20 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.iaas-regions-table {
+  &__tag {
+    margin-right: 0.5rem;
+  }
+}
+
+.regions-table {
+  .faux-ribbon {
+    display: flex;
+    align-items: center;
+  }
+  .add-region-button {
+    margin-left: auto;
+  }
+}

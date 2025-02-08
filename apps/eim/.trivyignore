@@ -1,0 +1,23 @@
+# `Jinja2` is a part of Python related requirements which are not shipped with the UI
+CVE-2024-22195
+CVE-2024-34064
+
+# `certifi` is a part of Python related requirements which is not shipped with the UI
+CVE-2024-39689
+
+# `idna` is a part of Python related requirements which is not shipped with the UI
+CVE-2024-3651
+
+# `requests` is a part of Python related requirements which is not shipped with the UI
+CVE-2023-32681
+CVE-2024-35195
+
+# `urllib3` is a part of Python related requirements which is not shipped with the UI
+CVE-2023-43804
+CVE-2023-45803
+CVE-2024-37891
+
+# Helm charts related
+# The root file-system can't be readonly as nginx writes logs,
+# all important files are readonly (see NEX-1682 which is related)
+AVD-KSV-0014

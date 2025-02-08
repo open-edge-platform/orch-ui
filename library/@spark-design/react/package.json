@@ -1,0 +1,7 @@
+{
+  "name": "@spark-design/react",
+  "version": "1.1.5-alpha.20",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/types/index.d.ts"
+}

@@ -1,0 +1,7 @@
+{
+    "name": "@spark-design/react-icons",
+    "version": "1.0.1-alpha.7",
+    "main": "lib/cjs/index.js",
+    "module": "lib/esm/index.js",
+    "types": "lib/types/index.d.ts"
+}

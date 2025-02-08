@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-maestro-app-app-resource-manager.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "appResourceManagerApi",
+  "outputFile": "./resourceManagerApis.ts",
+  "exportName": "resourceManager",
+  "hooks": true,
+  "tag": true
+}

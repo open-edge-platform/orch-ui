@@ -1,0 +1,90 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+.region-form {
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .name-field {
+    padding-right: 2rem;
+  }
+
+  .spark-flex {
+    margin-bottom: 1rem;
+  }
+
+  .spark-dropdown {
+    box-sizing: border-box;
+    width: 100%;
+    height: 4rem;
+  }
+
+  // Additional space for error message
+  .spark-text-field-container {
+    height: 3rem;
+  }
+
+  &-form-item {
+    width: 100%;
+    margin-bottom: 0.5rem;
+
+    &-right {
+      margin-left: 4rem;
+    }
+
+    &-btn-container {
+      width: 100%;
+
+      button {
+        margin-top: 2rem;
+        margin-left: auto;
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  .spark-combobox {
+    width: 100%;
+
+    .spark-combobox-text-field {
+      display: block !important;
+    }
+
+    .spark-combobox-button {
+      width: 100%;
+    }
+
+    .spark-combobox .spark-combobox-text-field {
+      width: 100% !important;
+    }
+
+    .spark-combobox-button-label {
+      width: 100% !important;
+    }
+  }
+
+  .spark-flex-item:not(:last-child) &-item {
+    padding-right: 1rem;
+  }
+
+  .spark-flex-item:not(:first-child) &-item {
+    padding-left: 1rem;
+  }
+
+  .spark-button-group.spark-button-group-align-start {
+    justify-content: end;
+  }
+
+  .ribbon .ribbon-all {
+    margin: 2rem 0 1rem 0;
+  }
+
+  .regions-table,
+  .sites-table {
+    margin-top: 2rem;
+  }
+}

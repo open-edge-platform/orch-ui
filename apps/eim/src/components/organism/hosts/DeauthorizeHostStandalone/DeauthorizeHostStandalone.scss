@@ -1,0 +1,14 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+$content-font-size: 0.8rem;
+.deauthorize-host-standalone {
+  font-size: $content-font-size;
+  .spark-text-field-container {
+    label[class^="spark-fieldlabel"] {
+      font-size: $content-font-size;
+    }
+  }
+}

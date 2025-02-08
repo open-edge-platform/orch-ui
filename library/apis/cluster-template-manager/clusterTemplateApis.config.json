@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-maestro-caas-services-cluster-template-manager.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "ctmApi",
+  "outputFile": "./clusterTemplateManagerApis.ts",
+  "exportName": "clusterTemplateManagerApis",
+  "hooks": true,
+  "tag": true
+}

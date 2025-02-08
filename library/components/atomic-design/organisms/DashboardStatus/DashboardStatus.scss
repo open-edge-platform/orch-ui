@@ -1,0 +1,86 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.dashboard-status {
+  /* Custom alpha-blended colors based on the wireframes */
+  --spark-color-moss-alpha: #8caf461a;
+  --spark-color-coral-shade1-alpha: #c813261a;
+  --spark-color-classic-blue-alpha: #0054ae1a;
+  --spark-color-theme-light-gray200-alpha: #e9eaeb80;
+
+  margin: 1.75rem 2rem 0;
+  h5 {
+    font-weight: 500;
+  }
+
+  &__stat-group {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__stat-card {
+    width: 28%;
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+
+    &.info {
+      background-color: var(--spark-color-classic-blue-alpha);
+      .icon {
+        color: var(--spark-color-classic-blue);
+      }
+    }
+    &.error {
+      background-color: var(--spark-color-coral-shade1-alpha);
+      .icon {
+        color: var(--spark-color-coral-shade1);
+      }
+    }
+    &.success {
+      background-color: var(--spark-color-moss-alpha);
+      .icon {
+        color: var(--spark-color-moss);
+      }
+    }
+
+    &.disabled {
+      background-color: var(--spark-color-theme-light-gray200-alpha);
+      color: var(--spark-color-theme-light-gray900);
+      .icon {
+        color: var(--spark-color-theme-light-gray500);
+      }
+      .stat {
+        color: var(--spark-color-theme-light-gray700);
+      }
+    }
+
+    .icon {
+      font-size: 2rem;
+      margin: 0.25rem;
+    }
+
+    .sub-title {
+      font-size: 1rem;
+      color: var(--spark-color-theme-light-gray700);
+    }
+
+    .stat {
+      font-size: 2.25rem;
+    }
+  }
+
+  &__footer {
+    min-height: 4rem;
+    padding-right: 0.5rem;
+    color: #6a6d75;
+
+    &-content {
+      display: flex;
+      align-items: center;
+      &.justify-right {
+        justify-content: right;
+      }
+    }
+  }
+}

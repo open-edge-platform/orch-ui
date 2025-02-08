@@ -1,0 +1,86 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import {
+  AggregatedStatusesMap,
+  GenericStatus,
+  Status,
+  StatusIcon,
+} from "@orch-ui/components";
+import { Text } from "@spark-design/react";
+import "./DetailedStatuses.scss";
+
+export const dataCy = "clusterStatusDetails";
+
+const genericStatusToIconStatus = (gs: GenericStatus): Status => {
+  switch (gs.indicator) {
+    case "STATUS_INDICATION_ERROR":
+      return Status.Error;
+    case "STATUS_INDICATION_IN_PROGRESS":
+      return Status.NotReady;
+    case "STATUS_INDICATION_IDLE":
+      return Status.Ready;
+    default:
+      return Status.Unknown;
+  }
+};
+
+type FieldLabel = {
+  label: string;
+  formatter?: <I extends GenericStatus>(s: I) => string;
+};
+
+// maps the fields in the data object to human readable labels and formatter functions.
+export type FieldLabels<T> = {
+  [field in keyof T]: FieldLabel;
+};
+
+interface ClusterStatusDetailsProps<T extends AggregatedStatusesMap> {
+  data: T;
+  statusFields: FieldLabels<T>;
+}
+export const DetailedStatuses = <T extends AggregatedStatusesMap>({
+  data,
+  statusFields,
+}: ClusterStatusDetailsProps<T>) => {
+  const cy = { "data-cy": dataCy };
+
+  const fieldToRow = (data: T, key: string, field: FieldLabel) => {
+    if (data[key] === undefined) {
+      return <></>;
+    }
+    return (
+      <>
+        <div data-cy={`label-${key}`}>
+          <Text>{field.label}</Text>
+        </div>
+        <div data-cy={`icon-${key}`}>
+          <StatusIcon
+            status={genericStatusToIconStatus(data[key])}
+            text={
+              field.formatter ? field.formatter(data[key]) : data[key].message
+            }
+          />
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <div {...cy} className="cluster-status-details">
+      <div className="cluster-status-details__grid-wrapper">
+        <div>
+          <Text style={{ fontWeight: "500" }}>Source</Text>
+        </div>
+        <div>
+          <Text style={{ fontWeight: "500" }}>Status</Text>
+        </div>
+        {Object.entries(statusFields).map(([key, field]) =>
+          fieldToRow(data, key, field),
+        )}
+      </div>
+    </div>
+  );
+};

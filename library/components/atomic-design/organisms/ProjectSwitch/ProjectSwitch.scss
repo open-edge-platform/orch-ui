@@ -1,0 +1,107 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2024 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.project-switch {
+  position: relative;
+  min-width: 6rem;
+  height: 100%;
+  align-content: center;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    position: absolute;
+    top: 5rem;
+    right: 10px;
+    min-width: 15rem;
+    min-height: 5rem;
+    color: black;
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(4, 4, 4, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.1490196078);
+    justify-content: left;
+    padding: 1rem;
+    z-index: 1;
+  }
+
+  &__list {
+    width: 100%;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 30rem;
+
+    &::-webkit-scrollbar {
+      width: 0.6rem;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+
+  &__header {
+    color: var(--spark-color-theme-light-gray700);
+    font-size: larger;
+  }
+
+  &__trigger {
+    cursor: pointer;
+    &:hover {
+      background-color: var(--spark-color-cobalt-shade2);
+    }
+  }
+  &__expand-icon {
+    margin-left: 0.7rem;
+  }
+
+  &__list-item {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    &:hover {
+      background-color: var(--spark-list-background-hover);
+    }
+    padding: 0.6rem 0;
+  }
+
+  &__list-item-selected {
+    font-weight: bold;
+  }
+
+  &__icon {
+    margin-right: 1rem;
+    margin-top: 0.1rem;
+  }
+
+  &__icon-selected {
+    text-decoration: underline var(--spark-color-classic-blue) 3px;
+  }
+
+  &__see-all-projects {
+    color: var(--spark-color-classic-blue);
+  }
+
+  &__divider-li {
+    list-style-type: none;
+  }
+
+  &__divider {
+    border-top: 1px solid gray;
+    width: 100%;
+  }
+}

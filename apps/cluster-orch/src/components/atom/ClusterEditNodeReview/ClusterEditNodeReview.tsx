@@ -1,0 +1,113 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import { ecm } from "@orch-ui/apis";
+import { TableColumn } from "@orch-ui/components";
+import { Button, Heading, Table } from "@spark-design/react";
+import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
+import { NodeTableColumns } from "../../../utils/NodeTableColumns";
+import NodeRoleDropdown from "../NodeRoleDropdown/NodeRoleDropdown";
+
+export const dataCy = "clusterEditNodeReview";
+export type NodeRoles = "all" | "controlplane" | "worker";
+
+interface ClusterEditNodeReviewProps {
+  /** final list of cluster nodes that will be seen in the table */
+  clusterNodeList: ecm.NodeInfo[];
+  /** list of immutable cluster nodes, that were already present in cluster, i.e., before edit */
+  configuredClusterNode?: ecm.NodeInfo[];
+  /** Notify any changes to node via the node dropdown */
+  onNodeUpdate: (node: ecm.NodeInfo, value: NodeRoles) => void;
+  /** Notify click on Add Host button */
+  onAddNode: () => void;
+  /** Notify click on Remove Host button */
+  onRemoveNode: (node: ecm.NodeInfo) => void;
+}
+
+const ClusterEditNodeReview = ({
+  clusterNodeList = [],
+  configuredClusterNode = [],
+  onNodeUpdate,
+  onAddNode,
+  onRemoveNode,
+}: ClusterEditNodeReviewProps) => {
+  const cy = { "data-cy": dataCy };
+
+  // these columns define the nodes in the cluster.
+  // They are used to render information about the node
+  const columns: TableColumn<ecm.NodeInfo>[] = [
+    NodeTableColumns.nameWithoutLink,
+    NodeTableColumns.serial,
+    NodeTableColumns.os,
+    NodeTableColumns.roleSelect((node: ecm.NodeInfo) => {
+      // If node is present as part of cluster then disable role edit on it
+      const isDisabled =
+        configuredClusterNode.find(
+          (clusterNode) => node.guid === clusterNode.guid,
+        ) !== undefined;
+      return (
+        <NodeRoleDropdown
+          role={node.role ?? "all"}
+          disable={isDisabled}
+          onSelect={(value: NodeRoles) => {
+            onNodeUpdate(node, value);
+          }}
+        />
+      );
+    }),
+    NodeTableColumns.actions((node) => (
+      <Button
+        data-cy="removeHostBtn"
+        className="remove-host-button"
+        size={ButtonSize.Medium}
+        variant={ButtonVariant.Ghost}
+        onPress={() => onRemoveNode(node)}
+      >
+        Remove from Cluster
+      </Button>
+    )),
+  ];
+
+  return (
+    <div {...cy} className="cluster-edit-node-review">
+      <Heading semanticLevel={6} className="host-title">
+        Hosts
+      </Heading>
+
+      {clusterNodeList.length > 0 ? (
+        // TODO: replace this with ClusterNodesTable with a @orch-ui/components
+        // NOTE: ClusterNodesTable doesn't work with affect by addition of row
+        //       within same page.
+        <div data-cy="reviewTable">
+          <Table
+            variant="minimal"
+            columns={columns}
+            data={clusterNodeList}
+            sort={[0, 1, 2, 3]}
+            initialSort={{
+              column: "Host Name",
+              direction: "asc",
+            }}
+            key="hosts-table"
+          />
+        </div>
+      ) : (
+        "No hosts available."
+      )}
+
+      <Button
+        data-cy="addHostBtn"
+        className="add-host-button"
+        size={ButtonSize.Large}
+        variant={ButtonVariant.Secondary}
+        onPress={onAddNode}
+      >
+        Add Host
+      </Button>
+    </div>
+  );
+};
+
+export default ClusterEditNodeReview;

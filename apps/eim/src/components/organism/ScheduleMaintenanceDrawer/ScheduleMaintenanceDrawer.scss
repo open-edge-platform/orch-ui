@@ -1,0 +1,46 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.schedule-maintenance-drawer {
+  &__header {
+    border-bottom: 0.125rem solid var(--spark-drawer-border-color);
+    margin: 1rem 2rem;
+    .title {
+      margin-block: 0.25rem;
+    }
+    .back-button {
+      display: inline-block;
+    }
+  }
+
+  .spark-drawer-body {
+    .maintenance-drawer-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .drawer-close-btn {
+        position: absolute;
+        top: 0;
+        right: 0.5rem;
+      }
+      .tab-scroll {
+        height: fit-content;
+      }
+
+      .spark-tabs-scrollbar {
+        height: inherit;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+    }
+  }
+
+  // TODO: increase confirmation-dialog's z-index to `3` and remove below code
+  .spark-drawer-backdrop,
+  .spark-drawer-base {
+    z-index: 2;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schemaFile": "./observability.monitor/api/v1/openapi.yaml",
+  "apiFile": "./src/observabilityMonitor/apiSlice.ts",
+  "apiImport": "observabilityMonitorApi",
+  "outputFile": "./src/observabilityMonitor/observabilityMonitorSlice.ts",
+  "exportName": "observabilityMonitor",
+  "hooks": true,
+  "tag": true
+}

@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+apiVersion: v2
+name: orch-ui
+description: Deploy Edge Orchestrator UI pods on Kubernetes
+type: application
+version: 3.0.0-dev
+# Default appVersion will be overwritten by a the build to use the version from package.json.
+
+# This value is supplied only to enable local unbuilt deployment of released content.
+appVersion: "3.0.0-dev"
+annotations:
+  api_iaas_maestro_infra_api: "1.9.1-dev"
+  api_app_orch_maestro_app_application_catalog: "0.10.8"
+  api_app_orch_maestro_app_app_deployment_manager: "2.1.10"
+  api_cluster_orch_cluster_ecm: "0.9.6"
+  api_app_orch_maestro_app_app_resource_manager: "2.0.4"
+  api_metadata_broker_metadata_service: "0.1.11"
+  api_cluster_orch_cluster_template_manager: "0.9.1"

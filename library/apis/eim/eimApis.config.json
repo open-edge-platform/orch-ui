@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-maestro-infra-api.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "eimApi",
+  "outputFile": "./eim.ts",
+  "exportName": "eim",
+  "hooks": true,
+  "tag": true
+}

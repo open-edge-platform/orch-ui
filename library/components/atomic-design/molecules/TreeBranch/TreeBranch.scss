@@ -1,0 +1,58 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+:root {
+  --tree-branch__height: 4rem;
+}
+.tree-branch {
+  display: grid;
+  grid-template-columns: var(--tree-expander__width) 1fr;
+  padding: 0;
+  margin: 0;
+  transition: background-color 0.2s ease-in;
+}
+.tree-branch {
+  &,
+  &--root,
+  &--leaf {
+    display: grid;
+    grid-template-columns: var(--tree-expander__width) 1fr;
+    padding: 0;
+    margin: 0;
+    transition: background-color 0.2s ease-in;
+  }
+
+  &--root {
+    border: 0.01rem solid hsl(0, 0%, 90%);
+    background-color: hsla(0, 0%, 100%, 1);
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  &--leaf {
+    transform: translateX(calc(-0.75 * var(--tree-expander__width)));
+    width: calc(100% + 0.75 * var(--tree-expander__width));
+  }
+
+  &__content {
+    grid-column: 2;
+    //height: see the component to understand how this gets calculated
+  }
+
+  &__loading {
+    margin-top: 0.4rem;
+    .square-spinner {
+      margin: 0;
+      justify-content: flex-start;
+    }
+  }
+}
+
+.tree-branch--root.tree-branch--collapsed {
+  background-color: var(
+    --spark-color-theme-dark-gray800,
+    hsla(210, 53%, 93%, 1)
+  );
+}

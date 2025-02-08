@@ -1,0 +1,166 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import { ecm, eim } from "@orch-ui/apis";
+import { ConfirmationDialogPom, MetadataDisplayPom } from "@orch-ui/components";
+import { SiTablePom } from "@orch-ui/poms";
+import { Cy, CyApiDetails, CyPom } from "@orch-ui/tests";
+import {
+  clusterEmptyNodes,
+  clusterOne,
+  regionPortlandId,
+} from "@orch-ui/utils";
+import { ClusterPerformanceCardPom } from "../../atom/ClusterPerformanceCard/ClusterPerformanceCard.pom";
+import { ClusterHostsBySitePom } from "../../organism/cluster/ClusterHostsBySite/ClusterHostsBySite.pom";
+import DeploymentInstancesTablePom from "../../organism/clusterDetail/DeploymentInstancesTable/DeploymentInstancesTable.pom";
+import { dataCy } from "./ClusterDetail";
+
+const dataCySelectors = [
+  `${dataCy}Heading`,
+  `${dataCy}Popup`,
+  `${dataCy}Status`,
+  `${dataCy}GeneralInfoTable`,
+  `${dataCy}Tabs`,
+] as const;
+type Selectors = (typeof dataCySelectors)[number];
+
+type ClusterSuccessApiAliases =
+  | "getClusterSuccess"
+  | "deleteCluster"
+  | "getClusterEmptyNodes";
+type HostSuccessApiAliases = "getFirstHostData";
+type SiteSuccessApiAliases = "getSiteData";
+type ClusterErrorApiAliases = "getClusterError";
+type KubeconfigApiAliases = "getKubeconfig";
+type ApiAliases =
+  | ClusterSuccessApiAliases
+  | HostSuccessApiAliases
+  | SiteSuccessApiAliases
+  | ClusterErrorApiAliases
+  | KubeconfigApiAliases;
+
+const route = "**v1/**/clusters/**";
+const kubeconfigRoute = "**/v1/**/clusters/kubeconfigs/**";
+const firstHostRoute = "**/v1/projects/**/compute/hosts/**";
+const siteRoute = "/v1/projects/**/regions/**/sites/**";
+
+const siteRestaurantOne: eim.SiteRead = {
+  name: "Restaurant 01",
+  region: { name: regionPortlandId },
+  resourceId: "site-1",
+};
+
+const successClusterEndpoints: CyApiDetails<
+  ClusterSuccessApiAliases,
+  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+> = {
+  getClusterSuccess: {
+    route: route,
+    statusCode: 200,
+    response: clusterOne,
+  },
+  deleteCluster: {
+    route: `${route}/*`,
+    method: "DELETE",
+    statusCode: 200,
+  },
+  getClusterEmptyNodes: {
+    route: route,
+    statusCode: 200,
+    response: clusterEmptyNodes,
+  },
+};
+const successHostEndpointconst: CyApiDetails<
+  HostSuccessApiAliases,
+  eim.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+> = {
+  getFirstHostData: {
+    route: firstHostRoute,
+    statusCode: 200,
+    response: {
+      resourceId: "test-host",
+      name: "Host One",
+      site: siteRestaurantOne,
+    },
+  },
+};
+
+const successSiteEndpoint: CyApiDetails<
+  SiteSuccessApiAliases,
+  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+> = {
+  getSiteData: {
+    route: siteRoute,
+    statusCode: 200,
+    response: siteRestaurantOne,
+  },
+};
+
+const errorClusterEndpoint: CyApiDetails<ClusterErrorApiAliases> = {
+  getClusterError: {
+    route: route,
+    statusCode: 404,
+    response: {
+      status: 404,
+      detail: "No resources found",
+    },
+  },
+};
+
+const kubeconfigEndpoint: CyApiDetails<
+  KubeconfigApiAliases,
+  ecm.GetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsApiResponse
+> = {
+  getKubeconfig: {
+    route: kubeconfigRoute,
+    statusCode: 200,
+    response: {
+      kubeconfig: "testing",
+    },
+  },
+};
+
+export class ClusterDetailPom extends CyPom<Selectors, ApiAliases> {
+  public table: SiTablePom;
+  public testClusterId = clusterOne.clusterID;
+  public testCluster = clusterOne;
+  public testSite = siteRestaurantOne;
+  public deploymentMetadataPom: MetadataDisplayPom;
+  public performanceChartPoms: {
+    cpu: ClusterPerformanceCardPom;
+    memory: ClusterPerformanceCardPom;
+    storage: ClusterPerformanceCardPom;
+  };
+  public clusterHostTablePom: ClusterHostsBySitePom;
+  public confirmationDialogPom: ConfirmationDialogPom;
+  public deploymentInstancesTablePom: DeploymentInstancesTablePom;
+
+  constructor(public rootCy: string = dataCy) {
+    super(rootCy, [...dataCySelectors], {
+      ...successClusterEndpoints,
+      ...successHostEndpointconst,
+      ...successSiteEndpoint,
+      ...errorClusterEndpoint,
+      ...kubeconfigEndpoint,
+    });
+    this.deploymentMetadataPom = new MetadataDisplayPom();
+    this.performanceChartPoms = {
+      cpu: new ClusterPerformanceCardPom("cpuChart"),
+      memory: new ClusterPerformanceCardPom("memoryChart"),
+      storage: new ClusterPerformanceCardPom("storageChart"),
+    };
+    this.clusterHostTablePom = new ClusterHostsBySitePom();
+    this.confirmationDialogPom = new ConfirmationDialogPom();
+    this.deploymentInstancesTablePom = new DeploymentInstancesTablePom();
+  }
+
+  getGeneralInfoValueByKey(key: string): Cy {
+    return this.el.clusterDetailGeneralInfoTable.contains(key).siblings();
+  }
+
+  gotoTab(tabName: string): Cy {
+    return this.el.clusterDetailTabs.contains(tabName).click();
+  }
+}

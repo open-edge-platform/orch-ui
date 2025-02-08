@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-maestro-app-application-catalog.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "appCatalogApis",
+  "outputFile": "./catalogServiceApis.ts",
+  "exportName": "catalogServiceApis",
+  "hooks": { "queries": true, "lazyQueries": true, "mutations": true },
+  "tag": true
+}

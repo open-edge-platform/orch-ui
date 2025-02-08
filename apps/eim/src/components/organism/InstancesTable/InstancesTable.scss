@@ -1,0 +1,14 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.instances-table {
+  .spark-table .spark-table-head-cell:last-child {
+    text-align: center;
+
+    .spark-table-head-cell-box-sort {
+      width: 100%;
+    }
+  }
+}

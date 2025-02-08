@@ -1,0 +1,143 @@
+{
+    "name": "@spark-design/tokens",
+    "version": "1.1.5-alpha.11",
+    "main": "lib/cjs/index.js",
+    "module": "lib/esm/index.js",
+    "types": "lib/types/index.d.ts",
+    "exports": {
+        ".": { "import": "./lib/esm/index.js", "require": "./lib/cjs/index.js" },
+        "./palette": { "import": "./lib/esm/palette.js", "require": "./lib/cjs/palette.js" },
+        "./components": {
+            "import": "./lib/esm/components/index.js",
+            "require": "./lib/cjs/components/index.js"
+        },
+        "./components/button": {
+            "import": "./lib/esm/components/button/index.js",
+            "require": "./lib/cjs/components/button/index.js"
+        },
+        "./components/button-group": {
+            "import": "./lib/esm/components/button-group/index.js",
+            "require": "./lib/cjs/components/button-group/index.js"
+        },
+        "./components/input": {
+            "import": "./lib/esm/components/input/index.js",
+            "require": "./lib/cjs/components/input/index.js"
+        },
+        "./components/text-field": {
+            "import": "./lib/esm/components/text-field/index.js",
+            "require": "./lib/cjs/components/text-field/index.js"
+        },
+        "./components/list": {
+            "import": "./lib/esm/components/list/index.js",
+            "require": "./lib/cjs/components/list/index.js"
+        },
+        "./components/dropdown": {
+            "import": "./lib/esm/components/dropdown/index.js",
+            "require": "./lib/cjs/components/dropdown/index.js"
+        },
+        "./components/scrollbar": {
+            "import": "./lib/esm/components/scrollbar/index.js",
+            "require": "./lib/cjs/components/scrollbar/index.js"
+        },
+        "./components/slider": {
+            "import": "./lib/esm/components/slider/index.js",
+            "require": "./lib/cjs/components/slider/index.js"
+        },
+        "./components/shadow": {
+            "import": "./lib/esm/components/shadow/index.js",
+            "require": "./lib/cjs/components/shadow/index.js"
+        },
+        "./components/radio-button": {
+            "import": "./lib/esm/components/radio-button/index.js",
+            "require": "./lib/cjs/components/radio-button/index.js"
+        },
+        "./components/fieldlabel": {
+            "import": "./lib/esm/components/fieldlabel/index.js",
+            "require": "./lib/cjs/components/fieldlabel/index.js"
+        },
+        "./typography": {
+            "import": "./lib/esm/typography/index.js",
+            "require": "./lib/cjs/typography/index.js"
+        },
+        "./components/table": {
+            "import": "./lib/esm/components/table/index.js",
+            "require": "./lib/cjs/components/table/index.js"
+        },
+        "./components/tooltip": {
+            "import": "./lib/esm/components/tooltip/index.js",
+            "require": "./lib/cjs/components/tooltip/index.js"
+        },
+        "./components/tag": {
+            "import": "./lib/esm/components/tag/index.js",
+            "require": "./lib/cjs/components/tag/index.js"
+        },
+        "./components/upload": {
+            "import": "./lib/esm/components/upload/index.js",
+            "require": "./lib/cjs/components/upload/index.js"
+        },
+        "./components/toggle-button": {
+            "import": "./lib/esm/components/toggle-button/index.js",
+            "require": "./lib/cjs/components/toggle-button/index.js"
+        },
+        "./components/heading": {
+            "import": "./lib/esm/components/heading/index.js",
+            "require": "./lib/cjs/components/heading/index.js"
+        },
+        "./components/header": {
+            "import": "./lib/esm/components/header/index.js",
+            "require": "./lib/cjs/components/header/index.js"
+        },
+        "./components/shimmer": {
+            "import": "./lib/esm/components/shimmer/index.js",
+            "require": "./lib/cjs/components/shimmer/index.js"
+        },
+        "./components/code-snippet": {
+            "import": "./lib/esm/components/code-snippet/index.js",
+            "require": "./lib/cjs/components/code-snippet/index.js"
+        },
+        "./components/helper": {
+            "import": "./lib/esm/components/fieldtext-wrapper/index.js",
+            "require": "./lib/cjs/components/fieldtext-wrapper/index.js"
+        },
+        "./components/combobox": {
+            "import": "./lib/esm/components/combobox/index.js",
+            "require": "./lib/cjs/components/combobox/index.js"
+        },
+        "./components/flex": {
+            "import": "./lib/esm/components/flex/index.js",
+            "require": "./lib/cjs/components/flex/index.js"
+        },
+        "./components/ledge-flex": {
+            "import": "./lib/esm/components/ledge-flex/index.js",
+            "require": "./lib/cjs/components/ledge-flex/index.js"
+        },
+        "./components/toast": {
+            "import": "./lib/esm/components/toast/index.js",
+            "require": "./lib/cjs/components/toast/index.js"
+        },
+        "./components/modal": {
+            "import": "./lib/esm/components/modal/index.js",
+            "require": "./lib/cjs/components/modal/index.js"
+        },
+        "./components/stepper": {
+            "import": "./lib/esm/components/stepper/index.js",
+            "require": "./lib/cjs/components/stepper/index.js"
+        },
+        "./components/pagination": {
+            "import": "./lib/esm/components/pagination/index.js",
+            "require": "./lib/cjs/components/pagination/index.js"
+        },
+        "./components/badge": {
+            "import": "./lib/esm/components/badge/index.js",
+            "require": "./lib/cjs/components/badge/index.js"
+        },
+        "./components/message-banner": {
+            "import": "./lib/esm/components/message-banner/index.js",
+            "require": "./lib/cjs/components/message-banner/index.js"
+        },
+        "./components/form": {
+            "import": "./lib/esm/components/form/index.js",
+            "require": "./lib/cjs/components/form/index.js"
+        }
+    }
+}

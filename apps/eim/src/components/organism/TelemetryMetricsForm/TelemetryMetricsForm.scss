@@ -1,0 +1,47 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.telemetry-metrics-form {
+  /*Add styles*/
+  padding-bottom: 2rem;
+
+  .title {
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .system-metrics {
+    display: flex;
+    gap: 1rem;
+
+    .metric-type {
+      width: 50%;
+    }
+
+    .metric-interval {
+      width: 50%;
+    }
+  }
+
+  .system-metric-labels {
+    display: flex;
+    gap: 1rem;
+    height: 1.5rem;
+  }
+
+  .system-metric-labels span {
+    display: block;
+    flex: 1;
+  }
+
+  .system-metric-labels button {
+    visibility: hidden;
+  }
+
+  .add-button-padding button {
+    margin-top: -0.5rem;
+  }
+}

@@ -1,0 +1,37 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import { eim } from "@orch-ui/apis";
+import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
+import { sitePortland } from "@orch-ui/utils";
+import { dataCy } from "./SiteCell";
+
+const dataCySelectors = [] as const;
+type Selectors = (typeof dataCySelectors)[number];
+type ApiAliases = "getSiteSuccess" | "getSiteNotFound";
+
+const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites/${sitePortland.resourceId}`;
+
+const endpoints: CyApiDetails<
+  ApiAliases,
+  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+> = {
+  getSiteSuccess: {
+    route: route,
+    statusCode: 200,
+    response: sitePortland,
+  },
+  getSiteNotFound: {
+    route: route,
+    statusCode: 404,
+  },
+};
+
+class SiteCellPom extends CyPom<Selectors, ApiAliases> {
+  constructor(public rootCy: string = dataCy) {
+    super(rootCy, [...dataCySelectors], endpoints);
+  }
+}
+export default SiteCellPom;

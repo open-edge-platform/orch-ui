@@ -1,0 +1,66 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.popup {
+  position: relative;
+
+  /* To center the vertical ellipsis */
+  text-align: center;
+
+  .spark-icon.ellipsis-v {
+    font-size: 1.75em;
+    padding: 6px;
+    border-radius: 20px;
+
+    &:hover {
+      background-color: var(--spark-color-carbon-tint1);
+      color: black;
+      cursor: pointer;
+      background-color: #2b2c3020;
+    }
+  }
+
+  /* Setting individual list item text alignment to left */
+  li.popup__option-item {
+    text-align: left;
+    width: 200px;
+    box-shadow: 0px 1px 0px 0px #e2e2e4;
+  }
+
+  li.popup__option-item-disable {
+    text-align: left;
+    width: 200px;
+    box-shadow: 0px 1px 0px 0px #e2e2e4;
+    color: grey;
+  }
+
+  &__options {
+    position: absolute;
+    top: 1.3vh;
+    right: 50%;
+    z-index: 1;
+    width: max-content;
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(4, 4, 4, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.1490196078);
+    padding: 0;
+  }
+
+  &__option-item {
+    list-style: none;
+    padding: 0.85rem 1rem;
+  }
+
+  &__option-item-disable {
+    list-style: none;
+    padding: 0.85rem 1rem;
+    pointer-events: none;
+  }
+
+  &__option-item:hover {
+    cursor: pointer;
+    background-color: var(--spark-color-carbon-tint2);
+  }
+}

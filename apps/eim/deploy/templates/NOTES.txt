@@ -1,0 +1,7 @@
+------- EIM (Edge Infrastructure Manager) ---------
+
+kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "mfe.mi.fullname" . }} 3002:{{ .Values.service.port }}
+
+---
+revision: {{ .Chart.Annotations.revision }}
+created: {{ .Chart.Annotations.created }}

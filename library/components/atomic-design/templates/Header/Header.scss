@@ -1,0 +1,77 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.header {
+  font-family: "IntelOne Display Regular";
+  color: var(--spark-color-white);
+  background-color: var(--spark-color-cobalt-shade3);
+  display: flex;
+  padding-right: 1rem;
+
+  .ribbon {
+    width: 1em;
+    height: inherit;
+    background: linear-gradient(
+      165deg,
+      #7000ff 21.67%,
+      #6404ec 26.3%,
+      #4a0dc3 30.62%,
+      #33159f 35.35%,
+      #211c81 40.08%,
+      #13216b 44.52%,
+      #09245a 48.88%,
+      #032651 53.32%,
+      #01274e 57.67%,
+      #0f9b8f 78.33%
+    );
+  }
+
+  .divider {
+    width: 0.125rem;
+    height: 1.25rem;
+    background-color: #16cfb1;
+  }
+
+  .project-name a {
+    font-size: 20px;
+    line-height: 20px;
+    color: var(--spark-color-white);
+    text-decoration: none;
+  }
+
+  .popup {
+    padding: 0 0.75rem;
+    width: 1.765rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--spark-color-cobalt-shade2);
+    }
+
+    &:active {
+      background-color: var(--spark-color-cobalt-shade1);
+    }
+
+    &:focus {
+      border: 0.125rem solid var(--spark-color-white);
+    }
+
+    .popup__options {
+      border-top: 0.125rem solid var(--spark-color-energy-blue-shade1);
+
+      li:first-of-type {
+        text-align: center;
+      }
+
+      li {
+        color: black;
+
+        .spark-icon {
+          padding-right: 0.2rem;
+        }
+      }
+    }
+  }
+}

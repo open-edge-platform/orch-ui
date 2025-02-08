@@ -1,0 +1,54 @@
+export declare const prefix = "spark-radio-button";
+export declare const properties: import("@spark-design/core").TokenData<{
+    sideLength: string;
+    borderWidth: string;
+    borderRadius: string;
+    inlineSize: string;
+    inputOpacity: number;
+    inputBlockSize: string;
+    inputinsetBlockStart: string;
+    inputInsetInlineStart: string;
+    boxShadowSpreadRadiusOne: string;
+    boxShadowSpreadRadiusTwo: string;
+    boxShadowSpreadRadiusThree: string;
+    insetBlockStart: string;
+    boxShadowX: string;
+    boxShadowY: string;
+    boxShadowBlurRadius: string;
+    l: {
+        fontSize: string;
+        lineHeight: string;
+        inlineSize: string;
+        padding: string;
+        margin: string;
+        containerPaddingInlineLeft: string;
+        containerPaddingInlineRight: string;
+        containerPaddingBlock: string;
+        gap: string;
+        inputMarginBlockStart: string;
+    };
+    m: {
+        fontSize: string;
+        lineHeight: string;
+        inlineSize: string;
+        padding: string;
+        margin: string;
+        containerPaddingInlineLeft: string;
+        containerPaddingInlineRight: string;
+        containerPaddingBlock: string;
+        gap: string;
+        inputMarginBlockStart: string;
+    };
+    s: {
+        fontSize: string;
+        lineHeight: string;
+        inlineSize: string;
+        padding: string;
+        margin: string;
+        containerPaddingInlineLeft: string;
+        containerPaddingInlineRight: string;
+        containerPaddingBlock: string;
+        gap: string;
+        inputMarginBlockStart: string;
+    };
+}>;

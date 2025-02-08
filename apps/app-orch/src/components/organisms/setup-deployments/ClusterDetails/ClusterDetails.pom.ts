@@ -1,0 +1,47 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import { ecm } from "@orch-ui/apis";
+import { MetadataDisplayPom } from "@orch-ui/components";
+import { SiTablePom } from "@orch-ui/poms";
+import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
+import { clusterOne } from "@orch-ui/utils";
+import { dataCy } from "./ClusterDetails";
+
+const dataCySelectors = [
+  "status",
+  "statusValue",
+  "id",
+  "idValue",
+  "site",
+  "siteValue",
+  "labels",
+  "hosts",
+] as const;
+type Selectors = (typeof dataCySelectors)[number];
+type ApiAliases = "getClusterDetailSuccess" | "getHostsSuccess";
+
+const endpoints: CyApiDetails<ApiAliases> = {
+  getClusterDetailSuccess: {
+    route: "**v1/**/clusters/*",
+    response:
+      clusterOne as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse,
+  },
+  getHostsSuccess: {
+    route: `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`,
+    response: [],
+  },
+};
+
+class ClusterDetailsPom extends CyPom<Selectors, ApiAliases> {
+  public labelsDisplay: MetadataDisplayPom;
+  public iaasHostsTable: SiTablePom;
+  constructor(public rootCy: string = dataCy) {
+    super(rootCy, [...dataCySelectors], endpoints);
+    this.labelsDisplay = new MetadataDisplayPom("MetadataDisplay");
+    this.iaasHostsTable = new SiTablePom("iaasHostsTable");
+  }
+}
+export default ClusterDetailsPom;

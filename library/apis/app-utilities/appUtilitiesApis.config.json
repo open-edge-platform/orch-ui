@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-maestro-app-utilities-catalog.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "appUtilitiesApis",
+  "outputFile": "./appUtilitiesServiceApis.ts",
+  "exportName": "appUtilitiesServiceApis",
+  "hooks": { "queries": true, "lazyQueries": true, "mutations": true },
+  "tag": true
+}

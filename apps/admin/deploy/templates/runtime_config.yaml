@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mfe.admin.fullname" . }}-runtime-config
+  labels:
+    app.kubernetes.io/part-of: orch-ui
+    release: {{ .Release.Name }}
+data:
+  config: |
+{{ include "mfe.admin.runtime-config" . | indent 4 }}

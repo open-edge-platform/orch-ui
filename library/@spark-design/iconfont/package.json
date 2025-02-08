@@ -1,0 +1,7 @@
+{
+    "name": "@spark-design/iconfont",
+    "version": "1.0.33-alpha.12",
+    "main": "dist.web",
+    "types": "dist.web/index.d.ts",
+    "files": ["dist.web", "icons"]
+}

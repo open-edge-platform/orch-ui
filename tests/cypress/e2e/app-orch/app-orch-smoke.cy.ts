@@ -1,0 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2024 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import "./application-smoke.cy.ts";
+import "./base-smoke.cy.ts";
+import "./registry-smoke.cy.ts";
+// import "./deployment-package-smoke.cy.ts";

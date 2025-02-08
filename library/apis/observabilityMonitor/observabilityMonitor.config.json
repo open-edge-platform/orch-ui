@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-observability-monitor.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "observabilityMonitorApi",
+  "outputFile": "./observabilityMonitorApi.ts",
+  "exportName": "observabilityMonitor",
+  "hooks": true,
+  "tag": true
+}

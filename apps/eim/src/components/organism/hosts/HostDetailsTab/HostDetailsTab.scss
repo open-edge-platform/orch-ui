@@ -1,0 +1,21 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.iaas-host-resources {
+  // display: flex;
+  // flex-wrap: wrap;
+  // gap: 1rem;
+
+  [role="tabpanel"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1rem 0 !important; //need to override inline the SI value
+  }
+
+  .host-label {
+    width: 100%;
+  }
+}

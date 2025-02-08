@@ -1,0 +1,28 @@
+/*!
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.deploymentSummary {
+  .spark-flex-item:not(:first-child) .column {
+    padding-left: 0.5rem;
+  }
+  .spark-flex-item:not(:last-child) .column {
+    padding-right: 0.5rem;
+  }
+  &-applicationPackage {
+    .card-box {
+      .icon {
+        border-radius: 50%;
+        font-size: 32px;
+        padding: 1rem;
+        background-color: var(--spark-color-theme-light-gray200);
+      }
+
+      .caName,
+      .caVersion {
+        display: block;
+      }
+    }
+  }
+}

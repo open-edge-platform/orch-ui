@@ -1,0 +1,51 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.telemetry-logs-form {
+  /*Add styles*/
+  padding-bottom: 2rem;
+
+  .title {
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .system-logs {
+    display: flex;
+    gap: 1rem;
+
+    .log-source {
+      width: 50%;
+    }
+
+    .log-level {
+      width: 50%;
+    }
+
+    .spark-button.spark-button-size-l.spark-button-icon-only {
+      margin-top: 0;
+    }
+  }
+
+  .system-log-labels {
+    display: flex;
+    gap: 1rem;
+    height: 1.5rem;
+  }
+
+  .system-log-labels span {
+    display: block;
+    flex: 1;
+  }
+
+  .system-log-labels button {
+    visibility: hidden;
+  }
+
+  .add-button-padding button {
+    margin-top: -0.5rem;
+  }
+}

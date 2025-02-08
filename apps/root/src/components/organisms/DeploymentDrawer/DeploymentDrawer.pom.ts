@@ -1,0 +1,47 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+import { adm } from "@orch-ui/apis";
+import { SiDrawerPom } from "@orch-ui/poms";
+import { CyApiDetails, CyPom } from "@orch-ui/tests";
+import { deploymentOne } from "@orch-ui/utils";
+import { dataCy as DeploymentDrawerContent } from "../DeploymentDrawerContent/DeploymentDrawerContent";
+import { dataCy } from "./DeploymentDrawer";
+
+const dataCySelectors = ["error", DeploymentDrawerContent] as const;
+type Selectors = (typeof dataCySelectors)[number];
+
+type ApiAliases = "getDeployment" | "getDeployment404";
+
+const baseRoute = "**/v1/projects/**/appdeployment/deployments/**";
+
+const endpoints: CyApiDetails<
+  ApiAliases,
+  adm.DeploymentServiceGetDeploymentApiResponse
+> = {
+  getDeployment: {
+    route: `${baseRoute}?`,
+    statusCode: 200,
+    response: {
+      deployment: deploymentOne,
+    },
+  },
+  getDeployment404: {
+    route: `${baseRoute}?`,
+    statusCode: 404,
+  },
+};
+
+export class DeploymentDrawerPom extends CyPom<Selectors, ApiAliases> {
+  public drawerPom: SiDrawerPom<Selectors, ApiAliases>;
+  constructor(public rootCy: string = dataCy) {
+    super(rootCy, [...dataCySelectors], endpoints);
+    this.drawerPom = new SiDrawerPom(
+      this.rootCy,
+      [...dataCySelectors],
+      endpoints,
+    );
+  }
+}

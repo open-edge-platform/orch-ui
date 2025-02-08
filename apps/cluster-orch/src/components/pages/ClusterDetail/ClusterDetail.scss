@@ -1,0 +1,83 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.cluster-detail {
+  text-align: left;
+
+  &-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &-heading,
+  &-action-button {
+    display: flex;
+    align-items: center;
+  }
+
+  &-heading {
+    flex: 0 0 80%;
+    justify-content: start;
+  }
+
+  &-action-button {
+    flex: 0 0 20%;
+    justify-content: right;
+
+    .margin-1 {
+      margin-left: 1rem;
+    }
+  }
+
+  &__general-info {
+    &__table {
+      width: 100%;
+
+      td {
+        width: 75%;
+        padding: 0.5rem 0;
+        text-align: left;
+
+        &:first-of-type {
+          width: 25%;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  &__tabs {
+    margin-top: 2rem;
+  }
+
+  .deployment-heading {
+    margin: 0;
+
+    h6 {
+      font-weight: 500;
+    }
+  }
+
+  .spark-scrollbar {
+    padding-top: 2rem !important; //need to override inline the SI value
+    padding-left: 0.5rem; // vertical align the content of a tab with the tab title
+  }
+
+  .spark-flex-item:not(:last-child) .flex-item {
+    padding-right: 1rem;
+  }
+
+  .spark-flex-item:not(:first-child) .flex-item {
+    padding-left: 1rem;
+  }
+
+  .update-label {
+    margin-left: auto;
+  }
+
+  .hosts-table table {
+    width: 100%;
+  }
+}
