@@ -1,3 +1,95 @@
-# WEB-UI-OPEN-SOURCE
+# Orchestrator GUI Web User Interface
 
-This repo is intented to prep all the UI repos/utils/docs etc into one place for the purposes of then landing in the official open-source areas
+## Overview
+
+This implements the web user interface for the Orchestrator, allowing the user to do most of the features of the product in an intuitive, visual, manor without having learn all the complexities of the APIs.  That being said, everything the Web UI does and shows comes from the APIs.  This UI is intended for the day to day edge operators, who want to be able to:
+- Register, Onboard and Provision hosts
+- Create and manage Clusters
+- Create and manage Projects
+- Create Deployment Packages
+- Deploy and manage Deployments
+- Create applications and view and edit them in a catalog
+- Schedule maintenance windows
+- View alerts
+- View the state of the system
+- View Cluster templates and import new templates
+
+## Get Started
+
+## Edge Orchestrator Mirco Front Ends
+
+This project is a "mono-repo" example of micro front ends (MFEs), with minimal amount of configuration per project.
+
+> Note that MFEs and libraries are being moved to independent repost
+
+There are 5 apps in this repository:
+
+- Root - glues everything together, displays the other apps
+- app-orch - Manages Application Catalog and Deployments
+- cluster-orch - Manages the Clusters
+- EIM - Manages the Hosts (Edge Infratructure)
+- Admin - The administrator features (settings and alerts)
+
+In addition, there is a common library that is shared across all apps.
+
+(Note: All sub-projects are React based)
+
+```mermaid
+graph TD
+    linkStyle default interpolate basis
+    container(Container)
+    App Orch
+    Cluster Orch
+    Infrastructure
+    Shared Library
+    Container-- HTTP -->App Orch & Cluster Orch & Infrastructure
+    shared-. npm .->container & App Orch & Cluster Orch & Infrastructure
+
+    style shared fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
+
+    linkStyle 3 stroke:#ccc,stroke-width:1px;
+    linkStyle 4 stroke:#ccc,stroke-width:1px;
+    linkStyle 5 stroke:#ccc,stroke-width:1px;
+    linkStyle 6 stroke:#ccc,stroke-width:1px;
+```
+## Build the docker images
+
+A `Makefile` is provided to build the docker images.
+You can build the images individually with:
+
+```shell
+DOCKER_TAG=dev make -C container docker-build
+DOCKER_TAG=dev make -C maestro/maestro-a docker-build
+DOCKER_TAG=dev make -C maestro/maestro-c docker-build
+DOCKER_TAG=dev make -C maestro/maestro-i docker-build
+```
+
+or alternatively you can build all of them with:
+
+```shell
+DOCKER_TAG=dev make docker-build-all
+```
+
+> NOTE that this requires that your development environment is correctly setup with all the required dependencies in place
+
+
+Read more about {Name} in the \[User
+Guide\](<https://website-name.com>).
+
+
+See the \[Documentation\](<https://website-name.com>) to get started
+using {Name}.
+
+## The TLDR on deploying Edge Orchestrator UI in kubernetes
+
+```shell
+helm repo add lp https://amr-registry.caas.intel.com/chartrepo/one-intel-edge/ --username "**"  --password "**"
+helm upgrade --install --create-namespace -n orch-ui orch-ui apps/root/deploy
+```
+
+## License
+
+{Project Name} is licensed under \[license
+name\](https://website-name.com).
+
+Last Updated Date: {January 17, 2025}
