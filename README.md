@@ -37,20 +37,15 @@ In addition, there is a common library that is shared across all apps.
 ```mermaid
 graph TD
     linkStyle default interpolate basis
-    container(Container)
-    App Orch
-    Cluster Orch
-    Infrastructure
-    Shared Library
-    Container-- HTTP -->App Orch & Cluster Orch & Infrastructure
-    shared-. npm .->container & App Orch & Cluster Orch & Infrastructure
+    A[Root]
 
-    style shared fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
+    A -->|HTTP| B(Cluster Orch)
+    A -->|HTTP| D[Admin]
+    A -->|HTTP| E[App Orch]
+    A -->|HTTP| F[Infrastructure]
+    G[Shared Library]
 
-    linkStyle 3 stroke:#ccc,stroke-width:1px;
-    linkStyle 4 stroke:#ccc,stroke-width:1px;
-    linkStyle 5 stroke:#ccc,stroke-width:1px;
-    linkStyle 6 stroke:#ccc,stroke-width:1px;
+    style G fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
 ```
 ## Build the docker images
 
@@ -58,10 +53,10 @@ A `Makefile` is provided to build the docker images.
 You can build the images individually with:
 
 ```shell
-DOCKER_TAG=dev make -C container docker-build
-DOCKER_TAG=dev make -C maestro/maestro-a docker-build
-DOCKER_TAG=dev make -C maestro/maestro-c docker-build
-DOCKER_TAG=dev make -C maestro/maestro-i docker-build
+DOCKER_TAG=dev make -C apps/root docker-build
+DOCKER_TAG=dev make -C apps/eim docker-build
+DOCKER_TAG=dev make -C apps/cluster-orch docker-build
+DOCKER_TAG=dev make -C apps/app-orch docker-build
 ```
 
 or alternatively you can build all of them with:
