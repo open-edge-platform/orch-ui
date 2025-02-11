@@ -7,7 +7,6 @@ import { TablePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
 import ClusterNodeDetailsDrawerPom from "../../../../atom/ClusterNodeDetailsDrawer/ClusterNodeDetailsDrawer.pom";
 import NodeRoleDropdownPom from "../../../../atom/NodeRoleDropdown/NodeRoleDropdown.pom";
-import { dataCy } from "./ClusterNodesTableBySite";
 
 const dataCySelectors = ["hostTableContainer", "rowSelectCheckbox"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -17,7 +16,7 @@ class ClusterNodesTableBySitePom extends CyPom<Selectors> {
   public nodeDetailsDrawer: ClusterNodeDetailsDrawerPom;
   public hostTable: TablePom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterNodeTableBySite") {
     super(rootCy, [...dataCySelectors]);
 
     this.nodeDetailsDrawer = new ClusterNodeDetailsDrawerPom();

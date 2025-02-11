@@ -119,7 +119,9 @@
       "@orch-ui/poms": ["library/poms/index.ts"],
       "@orch-ui/tests": ["tests/index.ts"],
       "@orch-ui/app-orch-poms": ["apps/app-orch/poms.ts"],
-      "@orch-ui/admin-poms": ["apps/admin/pom.ts"]
+      "@orch-ui/admin-poms": ["apps/admin/pom.ts"],
+      "@orch-ui/cluster-orch-poms": ["apps/cluster-orch/pom.ts"],
+      "@orch-ui/eim-poms": ["apps/eim/pom.ts"],
     }
   },
   "exclude": ["node_modules"]

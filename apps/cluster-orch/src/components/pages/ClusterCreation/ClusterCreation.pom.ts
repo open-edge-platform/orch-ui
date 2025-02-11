@@ -7,11 +7,7 @@ import { ecm, eim, mbApi } from "@orch-ui/apis";
 import { MetadataFormPom, TablePom } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import {
-  clusterTemplateOneName,
-  clusterTemplateOneV1Info,
-  siteRestaurantOne,
-} from "@orch-ui/utils";
+import { siteRestaurantOne } from "@orch-ui/utils";
 import { setClusterSelectedSite } from "../../../store/reducers/cluster";
 import {
   updateRegionId,
@@ -23,7 +19,6 @@ import { setNodes } from "../../../store/reducers/nodes";
 import { setNodesSpec } from "../../../store/reducers/nodeSpec";
 import ClusterNodesTableBySite from "../../organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite.pom";
 import ClusterNodesTablePom from "../../organism/ClusterNodesTable/ClusterNodesTable.pom";
-import { dataCy } from "./ClusterCreation";
 
 type ModifiedInstance = Omit<eim.InstanceRead, "os" | "host"> & {
   os: eim.OperatingSystemResourceRead;
@@ -256,7 +251,7 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
 
   regionsDropdown: SiDropdown<string>;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterCreation") {
     super(rootCy, [...dataCySelectors], {
       ...successClusterEndpoint,
       ...errorClusterEndpoint,
@@ -271,19 +266,25 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
     this.regionsDropdown = new SiDropdown("region", []);
   }
 
-  public fillSpecifyNameAndTemplates() {
-    this.el.clusterName.type("Cluster1");
+  public fillSpecifyNameAndTemplates(
+    clusterName: string,
+    templateLabel: string,
+    versionLabel: string,
+    templateVal?: string,
+    versionVal?: string,
+  ) {
+    this.el.clusterName.type(clusterName);
     this.clusterTemplateDropdown.selectDropdownValue(
       this.clusterTemplateDropdown.root,
       "clusterTemplateDropdown",
-      clusterTemplateOneName,
-      clusterTemplateOneName,
+      templateLabel,
+      templateVal ?? templateLabel,
     );
     this.clusterTemplateVersionDropdown.selectDropdownValue(
       this.clusterTemplateVersionDropdown.root,
       "clusterTemplateVersionDropdown",
-      clusterTemplateOneV1Info.version,
-      clusterTemplateOneV1Info.version,
+      versionLabel,
+      versionVal ?? versionLabel,
     );
   }
 

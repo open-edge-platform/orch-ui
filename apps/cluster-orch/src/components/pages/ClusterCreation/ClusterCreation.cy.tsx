@@ -72,7 +72,11 @@ describe("<ClusterCreation/>", () => {
 
     describe("on metadata form validation", () => {
       beforeEach(() => {
-        pom.fillSpecifyNameAndTemplates();
+        pom.fillSpecifyNameAndTemplates(
+          "Cluster1",
+          clusterTemplateOneName,
+          clusterTemplateOneV1Info.version,
+        );
         pom.el.nextBtn.click();
 
         pom.selectSites(store);
@@ -107,7 +111,11 @@ describe("<ClusterCreation/>", () => {
 
     describe("execute `Specify Name and Template` to `Review` steps", () => {
       beforeEach(() => {
-        pom.fillSpecifyNameAndTemplates();
+        pom.fillSpecifyNameAndTemplates(
+          "Cluster1",
+          clusterTemplateOneName,
+          clusterTemplateOneV1Info.version,
+        );
         pom.el.nextBtn.click();
 
         pom.selectSites(store);
