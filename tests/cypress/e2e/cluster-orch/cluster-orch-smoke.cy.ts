@@ -179,13 +179,13 @@ describe("Cluster orch Smoke test:", () => {
     });
 
     after(() => {
-      if (hostId != undefined) {
+      if (hostId) {
         unconfigureHostViaApi(activeProject, hostId);
       }
-      if (siteId != undefined) {
+      if (siteId) {
         deleteSiteViaApi(activeProject, regionId, siteId);
       }
-      if (regionId != undefined) {
+      if (regionId) {
         deleteRegionViaApi(activeProject, regionId);
       }
     });
