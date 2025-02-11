@@ -31,6 +31,7 @@ const devConfig = {
     publicPath: process.env.REACT_LP_REMOTE_EP
       ? `http://${process.env.REACT_LP_REMOTE_EP}:8082/`
       : "http://localhost:8082/",
+    uniqueName: "eim"
   },
   devServer: {
     open: false,
