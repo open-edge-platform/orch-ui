@@ -1,0 +1,89 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.popover {
+    position: relative;
+    display: inline-block;
+
+    .popover-content {
+        visibility: hidden;
+        background-color: #F9F9F9;
+        color: #2B2C30;
+        box-shadow: 0 0.125rem 0.25rem 0 #00000040;
+        padding: 0.625rem;
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s;
+
+        &.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        &.top {
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        &.right {
+            top: 50%;
+            left: 125%;
+            transform: translateY(-50%);
+        }
+
+        &.bottom {
+            top: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        &.left {
+            top: 50%;
+            right: 125%;
+            transform: translateY(-50%);
+        }
+    }
+
+    .popover-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+
+        &.top {
+            bottom: -0.625rem;
+            left: 50%;
+            margin-left: -0.625rem;
+            border-width: 0.625rem 0.625rem 0 0.625rem;
+            border-color: #F9F9F9 transparent transparent transparent;
+        }
+
+        &.right {
+            top: 50%;
+            left: -0.625rem;
+            margin-top: -0.625rem;
+            border-width: 0.625rem 0.625rem 0.625rem 0;
+            border-color: transparent #F9F9F9 transparent transparent;
+        }
+
+        &.bottom {
+            top: -0.625rem;
+            left: 50%;
+            margin-left: -0.625rem;
+            border-width: 0 0.625rem 0.625rem 0.625rem;
+            border-color: transparent transparent #F9F9F9 transparent;
+        }
+
+        &.left {
+            top: 50%;
+            right: -0.625rem;
+            margin-top: -0.625rem;
+            border-width: 0.625rem 0 0.625rem 0.625rem;
+            border-color: transparent transparent transparent #F9F9F9;
+        }
+    }
+}
