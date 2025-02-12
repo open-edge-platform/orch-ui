@@ -5,7 +5,6 @@
 
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./Search";
 
 const dataCySelectors = [
   "textField",
@@ -59,7 +58,7 @@ const endpoints: CyApiDetails<
   },
 };
 export class SearchPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "search") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 

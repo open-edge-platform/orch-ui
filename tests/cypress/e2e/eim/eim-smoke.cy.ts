@@ -7,11 +7,11 @@ import UnconfiguredHostsPom from "../../../../apps/eim/src/components/pages/Unco
 import { NetworkLog } from "../../support/network-logs";
 import { EIM_USER } from "../../support/utilities";
 import {
-  createRegion,
-  createSite,
-  deleteRegion,
-  deleteSite,
-  unconfigureHost,
+  createRegionViaAPi,
+  createSiteViaApi,
+  deleteRegionViaApi,
+  deleteSiteViaApi,
+  unconfigureHostViaApi,
 } from "../helpers";
 
 interface TestData {
@@ -156,10 +156,10 @@ describe("EIM Smoke test:", () => {
       });
       after(() => {
         _.forEach(testSiteIds, (s) => {
-          deleteSite(activeProject, s.regionId, s.siteId);
+          deleteSiteViaApi(activeProject, s.regionId, s.siteId);
         });
         _.forEach(testRegionIds, (testRegionId) => {
-          deleteRegion(activeProject, testRegionId);
+          deleteRegionViaApi(activeProject, testRegionId);
         });
       });
     });
@@ -191,10 +191,10 @@ describe("EIM Smoke test:", () => {
       });
 
       it("should configure a host", () => {
-        createRegion(activeProject, data.region).then((rid) => {
+        createRegionViaAPi(activeProject, data.region).then((rid) => {
           regionId = rid;
           cy.log(`Created region ${data.region} with id ${regionId}`);
-          createSite(activeProject, regionId, data.site).then((sid) => {
+          createSiteViaApi(activeProject, regionId, data.site).then((sid) => {
             siteId = sid;
             cy.log(`Created site ${data.site} with id ${siteId}`);
           });
@@ -231,14 +231,14 @@ describe("EIM Smoke test:", () => {
       });
 
       after(() => {
-        if (hostId != undefined) {
-          unconfigureHost(activeProject, hostId);
+        if (hostId) {
+          unconfigureHostViaApi(activeProject, hostId);
         }
-        if (siteId != undefined) {
-          deleteSite(activeProject, regionId, siteId);
+        if (siteId) {
+          deleteSiteViaApi(activeProject, regionId, siteId);
         }
-        if (regionId != undefined) {
-          deleteRegion(activeProject, regionId);
+        if (regionId) {
+          deleteRegionViaApi(activeProject, regionId);
         }
       });
     });

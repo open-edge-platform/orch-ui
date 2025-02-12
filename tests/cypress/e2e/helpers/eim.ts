@@ -12,7 +12,7 @@ export const validateEimTabFailed = () => {
   cy.dataCy("header").should("contain.text", "Infrastructure");
 };
 
-export const createRegion = (
+export const createRegionViaAPi = (
   project: string,
   regionName: string,
 ): Chainable<string> => {
@@ -31,7 +31,7 @@ export const createRegion = (
     });
 };
 
-export const createSite = (
+export const createSiteViaApi = (
   project: string,
   regionId: string,
   siteName: string,
@@ -52,7 +52,7 @@ export const createSite = (
     });
 };
 
-export const deleteRegion = (project: string, regionId: string) => {
+export const deleteRegionViaApi = (project: string, regionId: string) => {
   cy.authenticatedRequest({
     method: "DELETE",
     url: `/v1/projects/${project}/regions/${regionId}`,
@@ -64,7 +64,7 @@ export const deleteRegion = (project: string, regionId: string) => {
   });
 };
 
-export const deleteSite = (
+export const deleteSiteViaApi = (
   project: string,
   regionId: string,
   siteId: string,
@@ -80,7 +80,7 @@ export const deleteSite = (
   });
 };
 
-export const unconfigureHost = (project: string, hostId: string) => {
+export const unconfigureHostViaApi = (project: string, hostId: string) => {
   cy.authenticatedRequest({
     method: "GET",
     url: `/v1/projects/${project}/compute/hosts/${hostId}`,
@@ -143,4 +143,35 @@ export const unconfigureHost = (project: string, hostId: string) => {
       expect(response.status).to.equal(200);
     });
   });
+};
+
+export const configureHostViaAPI = (
+  project: string,
+  hostName: string,
+  hostId: string,
+  siteId: string,
+  metadata?: { key: string; value: string }[],
+) => {
+  cy.authenticatedRequest({
+    method: "PATCH",
+    url: `/v1/projects/${project}/compute/hosts/${hostId}`,
+    body: { name: hostName, siteId: siteId, metadata: metadata },
+  }).then((response) => {
+    expect(response.status).to.equal(200);
+  });
+};
+
+export const getHostsViaApi = (project): Chainable => {
+  const onBoardedHostsFilter =
+    "((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR (currentState=HOST_STATE_ERROR AND NOT desiredState=HOST_STATE_REGISTERED)) AND (NOT has(site) OR NOT has(instance) OR NOT instance.desiredState=INSTANCE_STATE_RUNNING)&offset=0&orderBy=name asc&pageSize=10";
+
+  return cy
+    .authenticatedRequest({
+      method: "GET",
+      url: `/v1/projects/${project}/compute/hosts?filter=${onBoardedHostsFilter}`,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+      return cy.wrap(response.body.hosts);
+    });
 };
