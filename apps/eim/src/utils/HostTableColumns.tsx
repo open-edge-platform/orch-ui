@@ -11,6 +11,7 @@ import {
 } from "@orch-ui/components";
 import { CONSTANTS, HostGenericStatuses, hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
+import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 
@@ -167,7 +168,10 @@ const autoOnboard: TableColumn<eim.HostRead> = {
 
 const workload: TableColumn<eim.HostRead> = {
   Header: "Workload",
-  accessor: (host) => host.instance?.name ?? "",
+  Cell: (table: { row: { original: eim.HostRead } }) => {
+    const host = table.row.original;
+    return <ClusterNameAssociatedToHost host={host} />;
+  },
 };
 
 const actions = (

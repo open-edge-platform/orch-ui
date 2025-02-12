@@ -234,3 +234,8 @@ export const CONSTANTS = {
     NOT_CONNECTED: "Not Connected",
   },
 };
+
+export enum WorkloadMemberKind {
+  Cluster = "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
+  Unspecified = "WORKLOAD_MEMBER_KIND_UNSPECIFIED",
+}

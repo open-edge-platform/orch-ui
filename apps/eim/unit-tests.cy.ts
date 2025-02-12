@@ -4,6 +4,7 @@
  */
 
 import "./src/components/atom/BreadcrumbWrapper/BreadcrumbWrapper.cy.tsx";
+import "./src/components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost.cy.tsx";
 import "./src/components/atom/HostConfigReview/HostConfigReview.cy.tsx";
 import "./src/components/atom/HostLink/HostLink.cy.tsx";
 import "./src/components/atom/locations/DeploymentMetadata/DeploymentMetadata.cy.tsx";
