@@ -78,6 +78,7 @@ export {
   Status,
   StatusIcon,
 } from "./atomic-design/atoms/StatusIcon/StatusIcon";
+export { ContextSwitcher } from "./atomic-design/atoms/ContextSwitcher/ContextSwitcher";
 
 /************************** Molecules *****************************************/
 export { CodeSample } from "./atomic-design/molecules/CodeSample/CodeSample";
@@ -193,6 +194,7 @@ export { HeaderItem } from "./atomic-design/templates/HeaderItem/HeaderItem";
 
 /* devblock:start */
 /****************************************POM ********************************** */
+export { ContextSwitcherPom } from "./atomic-design/atoms/ContextSwitcher/ContextSwitcher.pom";
 export { AdvancedSettingsTogglePom } from "./atomic-design/atoms/AdvancedSettingsToggle/AdvancedSettingsToggle.pom";
 export { AggregatedStatusesPom } from "./atomic-design/atoms/AggregatedStatuses/AggregatedStatuses.pom";
 export { ApiErrorPom } from "./atomic-design/atoms/ApiError/ApiError.pom";
