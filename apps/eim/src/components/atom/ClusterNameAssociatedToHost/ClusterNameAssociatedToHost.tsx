@@ -27,7 +27,7 @@ const ClusterNameAssociatedToHost = ({
 
   const workloadMember = data?.workloadMembers?.find(
     (member) => member.kind === WorkloadMemberKind.Cluster,
-  )!;
+  );
   const clusterName = workloadMember?.workload?.name;
   return (
     <div {...cy}>

@@ -1,0 +1,25 @@
+name: Library Workflow
+on:
+  workflow_call
+
+jobs:
+  run-library-pipeline:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Cache npm dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.17.1
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          node -v
+          npm -v
+          npm ci
+
+      - name: Code style check
+        run: npm run library:lint

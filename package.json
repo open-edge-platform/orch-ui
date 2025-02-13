@@ -93,9 +93,6 @@
     "webpack-remove-code-blocks": "^0.10.1"
   },
   "dependencies": {
-    "@novnc/novnc": "^1.3.0",
-    "@react-aria/utils": "^3.14.2",
-    "@reduxjs/toolkit": "^2.5.0",
     "@spark-design/brand-tokens": "file:library/@spark-design/brand-tokens",
     "@spark-design/core": "file:library/@spark-design/core",
     "@spark-design/css": "file:library/@spark-design/css",
@@ -103,6 +100,9 @@
     "@spark-design/react": "file:library/@spark-design/react",
     "@spark-design/tokens": "file:library/@spark-design/tokens",
     "@spark-design/utils": "file:library/@spark-design/utils",
+    "@novnc/novnc": "^1.3.0",
+    "@react-aria/utils": "^3.14.2",
+    "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.6.0",
     "echarts": "^5.4.3",
     "js-cookie": "^3.0.5",

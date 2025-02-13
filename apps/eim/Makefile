@@ -12,7 +12,7 @@ VERSION                 ?= $(shell cat ./VERSION)
 DOCKER_TAG              ?= $(VERSION)
 VERSION_DEV_SUFFIX      :=
 DOCKER_REPOSITORY       ?= apps/orch-ui-iaas
-DOCKER_REGISTRY         ?=
+DOCKER_REGISTRY         ?= amr-registry.caas.intel.com/one-intel-edge/
 DOCKER_FILE             = "$(shell pwd)/build/Dockerfile"
 DOCKER_CONTEXT          = "$(shell pwd)/"
 
@@ -164,3 +164,11 @@ help: # @HELP Print the command options
 			BEGIN {FS = ": .* *# *@HELP"}; \
 			{printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}; \
 		'
+
+lint:
+	npm run app:eim:lint
+
+test:
+	npm run app:eim:cy:component
+
+build:	dist

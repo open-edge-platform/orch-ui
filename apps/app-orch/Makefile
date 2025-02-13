@@ -9,7 +9,7 @@ VERSION                 ?= $(shell cat ./VERSION)
 DOCKER_TAG              ?= $(VERSION)
 VERSION_DEV_SUFFIX      :=
 DOCKER_REPOSITORY       ?= apps/app-orch
-DOCKER_REGISTRY         ?=
+DOCKER_REGISTRY         ?= amr-registry.caas.intel.com/one-intel-edge/
 DOCKER_FILE             = "$(shell pwd)/build/Dockerfile"
 DOCKER_CONTEXT          = "$(shell pwd)/../.."
 
@@ -79,3 +79,11 @@ apply-version-x:
 
 app-version: ## @HELP ensure that all version are the same across the different projects
 	@echo "App Orchestration version is: ${VERSION}"
+
+lint:
+	npm run app:app-orch:lint
+
+test:
+	npm run app:app-orch:cy:component
+
+build:	dist
