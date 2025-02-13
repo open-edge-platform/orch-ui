@@ -49,12 +49,6 @@ const UNKNOWN_ERROR_MSG = "Unknown error. Please contact the administrator.";
  */
 export function parseError(error: unknown): LpInternalError {
   if (isFetchBaseQueryError(error)) {
-    return {
-      status: "CUSTOM_ERROR",
-      data: `${error}`,
-    };
-  }
-  if (isFetchBaseQueryError(error)) {
     if (!isNaN(<number>error.status)) {
       if (isErrorWithDetail(error.data)) {
         return {

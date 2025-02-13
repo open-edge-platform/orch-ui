@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { metadataBrokerMocks } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import { useState } from "react";
+import * as metadataBrokerMocks from "../../../../utils/mocks/metadata-broker";
 import {
   ErrorMessages,
   MetadataForm,

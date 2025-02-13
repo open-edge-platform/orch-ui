@@ -33,6 +33,7 @@
     "cypress:component": "cd tests && cypress open --component",
     "library:lint": "cd library && prettier --check ./ && eslint ./",
     "library:fix": "cd library && prettier --write ./ && eslint --fix ./",
+    "library:cy:component": "cd tests/library && cypress run --component --spec ./unit-tests.cy.ts",
     "tests:component": "cd tests && cypress open --component",
     "tests:e2e": "cd tests && cypress open --e2e --env EN_UUID=398395da-c10e-7c47-9b4f-efb34c0b261e",
     "tests:build": "cd tests && webpack build --config webpack.config.js"

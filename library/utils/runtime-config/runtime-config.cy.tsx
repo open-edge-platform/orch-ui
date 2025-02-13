@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { IRuntimeConfig, RuntimeConfig, apiServers } from "./runtime-config";
+import { apiServers, IRuntimeConfig, RuntimeConfig } from "./runtime-config";
 
 const runtimeConfig: IRuntimeConfig = {
   AUTH: "",

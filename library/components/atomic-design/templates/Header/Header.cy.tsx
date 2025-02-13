@@ -102,7 +102,7 @@ describe("<Header/>", () => {
         ],
       },
     );
-    pom.getProjectName().click();
+    pom.getProjectName().click({ force: true });
     cy.get("#pathname").contains("/");
   });
 
