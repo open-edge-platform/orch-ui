@@ -24,6 +24,7 @@ import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setSearchTerm } from "../../../store/hostFilterBuilder";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
+import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
 import HostPopup from "../hosts/HostPopup/HostPopup";
 import "./HostsTable.scss";
 export const dataCy = "hostsTable";
@@ -206,12 +207,7 @@ const HostsTable = ({
         canExpandRows={expandable}
         subRow={(row: { original: eim.HostRead }) => {
           const host = row.original;
-          return (
-            <div data-cy="hostDetails">
-              <div>Host ID</div>
-              <div>{host.name}</div>
-            </div>
-          );
+          return <HostsTableRowExpansionDetail host={host} />;
         }}
         isLoading={isLoading}
         actionsJsx={actionsJsx}

@@ -14,6 +14,7 @@ import {
   unconfiguredHosts,
 } from "@orch-ui/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
+import HostsTableRowExpansionDetailPom from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail.pom";
 import HostPopupPom from "../hosts/HostPopup/HostPopup.pom";
 import { dataCy } from "./HostsTable";
 
@@ -194,6 +195,7 @@ const errorEndpoints: CyApiDetails<HostErrorApiAliases> = {
 class HostsTablePom extends CyPom<Selectors, ApiAliases> {
   public table: TablePom;
   public hostPopup: HostPopupPom;
+  public hostRowDetails: HostsTableRowExpansionDetailPom;
 
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors], {
@@ -203,6 +205,7 @@ class HostsTablePom extends CyPom<Selectors, ApiAliases> {
     });
     this.table = new TablePom();
     this.hostPopup = new HostPopupPom();
+    this.hostRowDetails = new HostsTableRowExpansionDetailPom();
   }
 
   public getTableRows(): Cy {

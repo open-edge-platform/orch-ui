@@ -4,13 +4,14 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./OsConfig";
+import { dataCy } from "./HostsTableRowExpansionDetail";
 
-const dataCySelectors = ["osUpdate", "icon"] as const;
+const dataCySelectors = ["hostName", "uuid", "cpuModel"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export class OsConfigPom extends CyPom<Selectors> {
+class HostsTableRowExpansionDetailPom extends CyPom<Selectors> {
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors]);
   }
 }
+export default HostsTableRowExpansionDetailPom;

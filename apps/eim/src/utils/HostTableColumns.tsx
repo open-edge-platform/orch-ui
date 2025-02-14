@@ -148,7 +148,7 @@ const os: TableColumn<eim.HostRead> = {
   Header: "Operating System",
   accessor: (host) => host.instance?.os?.name ?? "-",
   Cell: (table: { row: { original: eim.HostRead } }) => {
-    return <OsConfig instance={table.row.original.instance} />;
+    return <OsConfig instance={table.row.original.instance} iconOnly />;
   },
 };
 

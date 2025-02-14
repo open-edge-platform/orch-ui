@@ -16,7 +16,7 @@ describe("<HostsTable/>", () => {
   describe("when the API return a list of hosts", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
-      cy.mount(<HostsTable query="" lifecycleState={LifeCycleState.All} />);
+      cy.mount(<HostsTable lifecycleState={LifeCycleState.All} />);
       pom.waitForApis();
     });
     it("should render the hosts correctly", () => {
@@ -40,14 +40,17 @@ describe("<HostsTable/>", () => {
     });
 
     it("should render the provided actions", () => {
-      cy.mount(<HostsTable filter="" lifecycleState={LifeCycleState.All} />);
-
       pom.table.getColumnHeader(7).contains("Action").should("have.length", 1);
       //TODO: table behavior is more dynamic on the action options, need to re-visit this
       // pom.table
       //   .getRows()
       //   .find(`td:contains(${renderedActionCol})`)
       //   .should("have.length", 10); // This `10` comes from current mocked intercept api
+    });
+
+    it("should expand a row and show details", () => {
+      pom.table.getCell(1, 1).click();
+      pom.hostRowDetails.root.should("be.visible");
     });
   });
 
@@ -130,104 +133,6 @@ describe("<HostsTable/>", () => {
       pom.getHostCheckboxByName("Host 1").should("not.be.checked");
     });
   });
-
-  //TODO: understand if we still need these tests since we have only one host page
-  // describe("as part of an MFE", () => {
-  //   const route = (path: string) => `/infrastructure/${path}/`;
-  //   const unconfiguredRoute = `${route(
-  //     "unconfigured-host",
-  //   )}${unconfiguredHostTwoId}`;
-  //   const configuredRoute = `${route("host")}${unassignedHostTwoId}`;
-  //   const activeRoute = `${route("host")}host-3uc8eh0w`;
-
-  //   const routeConfig = (jsx: JSX.Element, base: string) => ({
-  //     routerProps: { initialEntries: [base] },
-  //     routerRule: [
-  //       {
-  //         path: base,
-  //         element: jsx,
-  //       },
-  //       {
-  //         path: unconfiguredRoute,
-  //         element: <h1 id="unconfigured">Unconfigured</h1>,
-  //       },
-  //       {
-  //         path: configuredRoute,
-  //         element: <h1 id="configured">Configured</h1>,
-  //       },
-  //       {
-  //         path: activeRoute,
-  //         element: <h1 id="active">Active</h1>,
-  //       },
-  //     ],
-  //   });
-  //   it("will route to details of onboarded host", () => {
-  //     pom.interceptApis([pom.api.getOnboardedHosts]);
-  //     cy.mount(
-  //       null,
-  //       routeConfig(
-  //         <HostsTable
-  //           filters={{
-  //             projectName: SharedStorage.project?.name ?? "",
-  //             siteId: "null",
-  //           }}
-  //           columns={unconfiguredColumn}
-  //           category={HostCategory.Onboarded}
-  //         />,
-  //         route("unconfigured-hosts"),
-  //       ),
-  //     );
-  //     pom.waitForApis();
-
-  //     pom.table.getCellBySearchText("host-38fh47c0").find("a").click();
-  //     cy.get("#pathname").contains(unconfiguredRoute);
-  //   });
-  //   it("will route to details of configured host", () => {
-  //     pom.interceptApis([pom.api.getConfiguredHosts]);
-  //     cy.mount(
-  //       null,
-  //       routeConfig(
-  //         <HostsTable
-  //           filters={{
-  //             projectName: SharedStorage.project?.name ?? "",
-  //             workloadMemberId: "null",
-  //             siteId: "notnull",
-  //           }}
-  //           columns={configuredColumns}
-  //           category={HostCategory.Configured}
-  //         />,
-  //         route("unassigned-hosts"),
-  //       ),
-  //     );
-  //     pom.waitForApis();
-
-  //     pom.table.getCellBySearchText(unassignedHostTwoId).find("a").click();
-  //     cy.get("#pathname").contains(configuredRoute);
-  //   });
-
-  //   it("will route to details of active host", () => {
-  //     pom.interceptApis([pom.api.getActiveHosts]);
-  //     cy.mount(
-  //       null,
-  //       routeConfig(
-  //         <HostsTable
-  //           filters={{
-  //             projectName: SharedStorage.project?.name ?? "",
-  //             workloadMemberId: "notnull",
-  //             siteId: "notnull",
-  //           }}
-  //           columns={configuredColumns}
-  //           category={HostCategory.Active}
-  //         />,
-  //         route("hosts"),
-  //       ),
-  //     );
-  //     pom.waitForApis();
-
-  //     pom.table.getCellBySearchText("host-3uc8eh0w").find("a").click();
-  //     cy.get("#pathname").contains(activeRoute);
-  //   });
-  // });
 
   describe("when the onDataLoad prop is provided", () => {
     let onDataLoad;

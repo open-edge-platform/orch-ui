@@ -24,4 +24,8 @@ describe("<OsConfig/>", () => {
     cyGet("osUpdate").should("exist");
     pom.root.should("contain.text", osTiber.name);
   });
+  it("should render icon when added", () => {
+    cy.mount(<OsConfig instance={instanceTwo} iconOnly />);
+    pom.el.icon.should("be.visible");
+  });
 });
