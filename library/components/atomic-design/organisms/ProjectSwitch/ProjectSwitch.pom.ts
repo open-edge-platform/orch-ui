@@ -56,7 +56,7 @@ const successEndpoints: CyApiDetails<SuccessApiAliases, Project[]> = {
       {
         name: "sample-project",
         spec: {
-          description: `Sample project`,
+          description: "Sample project",
         },
         status: {
           projectStatus: {

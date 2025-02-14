@@ -5,13 +5,13 @@
 
 import { CrudData } from "shared";
 import {
-  siteBoston,
-  sitePortland,
-  siteSantaClara,
   regionEuId,
   regionUsEastId,
   regionUsWestId,
+  siteBoston,
+  sitePortland,
   siteRestaurantOne,
+  siteSantaClara,
 } from "../../store";
 import {
   GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse,
@@ -31,7 +31,7 @@ export const sites: { [regionId: string]: Site[] } = {
  * @deprecated
  */
 export const getSitesByRegion = (
-  regionId: string
+  regionId: string,
 ): GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse => {
   return {
     has_next: false,

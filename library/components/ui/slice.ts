@@ -59,6 +59,7 @@ export const uiSlice = createSlice({
 
 export const { setBreadcrumb, setActiveNavItem } = uiSlice.actions;
 export const getBreadcrumbData = (state: _UIRootState) => state.ui?.breadcrumb;
-export const getActiveNavItem = (state: _UIRootState) => state.ui?.activeNavItem;
+export const getActiveNavItem = (state: _UIRootState) =>
+  state.ui?.activeNavItem;
 
 export default uiSlice.reducer;

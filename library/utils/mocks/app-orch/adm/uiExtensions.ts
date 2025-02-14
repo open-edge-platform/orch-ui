@@ -21,7 +21,7 @@ export class UiExtensionsStore extends BaseStore<"label", adm.UiExtension> {
     super("label", [extension1]);
   }
 
-  convert(body: adm.UiExtension, id?: string): adm.UiExtension {
+  convert(body: adm.UiExtension): adm.UiExtension {
     // NOTE we don't create/update uiExtensions so this method is not actually used
     return body;
   }

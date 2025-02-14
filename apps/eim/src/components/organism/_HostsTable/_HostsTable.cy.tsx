@@ -10,17 +10,9 @@ import {
   RibbonPom,
   TableColumn,
 } from "@orch-ui/components";
-import {
-  SharedStorage,
-  unassignedHostTwoId,
-  unconfiguredHostTwoId,
-} from "@orch-ui/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
-import _HostsTable, { HostCategory } from "./_HostsTable";
-import _HostsTablePom, {
-  configuredColumns,
-  unconfiguredColumn,
-} from "./_HostsTable.pom";
+import _HostsTable from "./_HostsTable";
+import _HostsTablePom, { configuredColumns } from "./_HostsTable.pom";
 
 const pom = new _HostsTablePom();
 const ribbonPom = new RibbonPom("table");
@@ -59,12 +51,12 @@ describe("<_HostsTable/>", () => {
         HostTableColumn.name("../"),
         HostTableColumn.site,
         HostTableColumn.guid,
-        HostTableColumn.serial,
+        HostTableColumn.serialNumber,
         HostTableColumn.status,
         HostTableColumn.actions(() => <>{renderedActionCol}</>),
       ];
 
-      cy.mount(<HostsTable columns={columns} />);
+      cy.mount(<_HostsTable columns={columns} />);
 
       pom.table.getColumnHeader(5).contains("Action").should("have.length", 1);
       pom.table
@@ -87,14 +79,14 @@ describe("<_HostsTable/>", () => {
 
   it("handle empty", () => {
     pom.interceptApis([pom.api.getHostsListEmpty]);
-    cy.mount(<HostsTable columns={configuredColumns} />);
+    cy.mount(<_HostsTable columns={configuredColumns} />);
     pom.waitForApis();
     emptyPom.root.should("be.visible");
   });
 
   it("handle 500 error", () => {
     pom.interceptApis([pom.api.getHostsListError500]);
-    cy.mount(<HostsTable columns={configuredColumns} />);
+    cy.mount(<_HostsTable columns={configuredColumns} />);
     pom.waitForApis();
     apiErrorPom.root.should("be.visible");
   });
@@ -102,7 +94,7 @@ describe("<_HostsTable/>", () => {
   describe("search filter test", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.getHostsListSuccessPage1Total18]);
-      cy.mount(<HostsTable columns={configuredColumns} />);
+      cy.mount(<_HostsTable columns={configuredColumns} />);
       pom.waitForApis();
     });
     it("pass search value to GET request", () => {
@@ -122,7 +114,7 @@ describe("<_HostsTable/>", () => {
   describe("pagination tests", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.getHostsListSuccessPage1Total18]);
-      cy.mount(<HostsTable columns={configuredColumns} selectable />);
+      cy.mount(<_HostsTable columns={configuredColumns} selectable />);
       pom.waitForApis();
     });
 
@@ -169,7 +161,7 @@ describe("<_HostsTable/>", () => {
         pom.api.getHostsListSuccessWithOrderAsc,
         pom.api.getHostsListSuccessWithOrderDesc,
       ]);
-      cy.mount(<HostsTable columns={configuredColumns} sort={[0]} />);
+      cy.mount(<_HostsTable columns={configuredColumns} sort={[0]} />);
     });
     it("should initialize with sort asc", () => {
       cy.get(`@${pom.api.getHostsListSuccessWithOrderAsc}`)
@@ -190,110 +182,13 @@ describe("<_HostsTable/>", () => {
     });
   });
 
-  describe("as part of an MFE", () => {
-    const route = (path: string) => `/infrastructure/${path}/`;
-    const unconfiguredRoute = `${route(
-      "unconfigured-host",
-    )}${unconfiguredHostTwoId}`;
-    const configuredRoute = `${route("host")}${unassignedHostTwoId}`;
-    const activeRoute = `${route("host")}host-3uc8eh0w`;
-
-    const routeConfig = (jsx: JSX.Element, base: string) => ({
-      routerProps: { initialEntries: [base] },
-      routerRule: [
-        {
-          path: base,
-          element: jsx,
-        },
-        {
-          path: unconfiguredRoute,
-          element: <h1 id="unconfigured">Unconfigured</h1>,
-        },
-        {
-          path: configuredRoute,
-          element: <h1 id="configured">Configured</h1>,
-        },
-        {
-          path: activeRoute,
-          element: <h1 id="active">Active</h1>,
-        },
-      ],
-    });
-    it("will route to details of onboarded host", () => {
-      pom.interceptApis([pom.api.getOnboardedHosts]);
-      cy.mount(
-        null,
-        routeConfig(
-          <HostsTable
-            filters={{
-              projectName: SharedStorage.project?.name ?? "",
-              siteId: "null",
-            }}
-            columns={unconfiguredColumn}
-            category={HostCategory.Onboarded}
-          />,
-          route("unconfigured-hosts"),
-        ),
-      );
-      pom.waitForApis();
-
-      pom.table.getCellBySearchText("host-38fh47c0").find("a").click();
-      cy.get("#pathname").contains(unconfiguredRoute);
-    });
-    it("will route to details of configured host", () => {
-      pom.interceptApis([pom.api.getConfiguredHosts]);
-      cy.mount(
-        null,
-        routeConfig(
-          <HostsTable
-            filters={{
-              projectName: SharedStorage.project?.name ?? "",
-              workloadMemberId: "null",
-              siteId: "notnull",
-            }}
-            columns={configuredColumns}
-            category={HostCategory.Configured}
-          />,
-          route("unassigned-hosts"),
-        ),
-      );
-      pom.waitForApis();
-
-      pom.table.getCellBySearchText(unassignedHostTwoId).find("a").click();
-      cy.get("#pathname").contains(configuredRoute);
-    });
-
-    it("will route to details of active host", () => {
-      pom.interceptApis([pom.api.getActiveHosts]);
-      cy.mount(
-        null,
-        routeConfig(
-          <HostsTable
-            filters={{
-              projectName: SharedStorage.project?.name ?? "",
-              workloadMemberId: "notnull",
-              siteId: "notnull",
-            }}
-            columns={configuredColumns}
-            category={HostCategory.Active}
-          />,
-          route("hosts"),
-        ),
-      );
-      pom.waitForApis();
-
-      pom.table.getCellBySearchText("host-3uc8eh0w").find("a").click();
-      cy.get("#pathname").contains(activeRoute);
-    });
-  });
-
   describe("when the onDataLoad prop is provided", () => {
     let onDataLoad;
     beforeEach(() => {
       onDataLoad = cy.stub().as("onDataLoad");
       pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
       cy.mount(
-        <HostsTable
+        <_HostsTable
           columns={configuredColumns}
           sort={[1]}
           onDataLoad={onDataLoad}

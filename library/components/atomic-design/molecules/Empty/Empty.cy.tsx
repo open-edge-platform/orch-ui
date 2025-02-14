@@ -34,7 +34,6 @@ describe("Emppty component", () => {
   it("call its actions", () => {
     const title = "Some text for title";
     const subTitle = "Some text for subtitle";
-    const action = "action";
     const icon = "cube-detached";
     cy.mount(
       <Empty

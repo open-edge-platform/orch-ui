@@ -214,7 +214,7 @@ describe("<Table/>", () => {
     });
 
     it("Expand All Rows should not be visible on the header", () => {
-      cy.mount(<Table {...defaultProps} subRow={(row) => <h1>Sub Row</h1>} />);
+      cy.mount(<Table {...defaultProps} subRow={() => <h1>Sub Row</h1>} />);
       pom
         .getColumnHeader(0)
         .find(".toggle-expand-all-rows")

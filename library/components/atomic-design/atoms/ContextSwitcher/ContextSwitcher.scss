@@ -4,55 +4,54 @@
  */
 
 .context-switcher {
-    border: 0.1rem solid var(--spark-color-theme-light-gray500);
-    border-radius: 0.375rem;
-    width: fit-content;    
+  border: 0.1rem solid var(--spark-color-theme-light-gray500);
+  border-radius: 0.375rem;
+  width: fit-content;
 
-    &__button-container {
-        position: relative;
+  &__button-container {
+    position: relative;
 
-        button{
-            outline: none;
-        }
-
-        /* when button is not active show gray text for deselection */
-        .spark-button-content {
-            color: var(--spark-color-tiber-theme-light-gray700);
-            padding: 1.25rem 1rem;
-            margin: 0;
-            text-transform: capitalize;
-        }
-
-        /* show divider line */
-        &::after{ 
-            content: "";
-            display: inline-block;
-            position: absolute;
-            top: 0;
-            left: -0.675rem;
-            margin: 0.5rem;
-            height: 1rem;
-            width: 0.1rem;
-            background-color: var(--spark-color-theme-light-gray500);
-        }
-
-        /* when button is active show white text */
-        &.active {
-            .spark-button-content{
-                color: var(--spark-color-white);
-            }
-
-            /* donot show divider line before and after selected button element*/
-            &::after, &+::after { 
-                background-color: transparent;
-            }
-        }
-
-        /* donot show line in front of first elementt of the list buttton */
-        &:first-child::after{ 
-            background-color: transparent;
-        }
+    button {
+      outline: none;
     }
 
-}
+    /* when button is not active show gray text for deselection */
+    .spark-button-content {
+      color: var(--spark-color-tiber-theme-light-gray700);
+      padding: 1.25rem 1rem;
+      margin: 0;
+      text-transform: capitalize;
+    }
 
+    /* show divider line */
+    &::after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      left: -0.675rem;
+      margin: 0.5rem;
+      height: 1rem;
+      width: 0.1rem;
+      background-color: var(--spark-color-theme-light-gray500);
+    }
+
+    /* when button is active show white text */
+    &.active {
+      .spark-button-content {
+        color: var(--spark-color-white);
+      }
+
+      /* donot show divider line before and after selected button element*/
+      &::after,
+      & + ::after {
+        background-color: transparent;
+      }
+    }
+
+    /* donot show line in front of first elementt of the list buttton */
+    &:first-child::after {
+      background-color: transparent;
+    }
+  }
+}

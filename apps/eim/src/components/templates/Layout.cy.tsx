@@ -29,10 +29,7 @@ describe("<Layout/>", () => {
   };
   // this maps all clickable items to the expected url
   const navToUrlMapping: { [key in Selectors]?: string } = {
-    Active: "/hosts",
-    Configured: "/unassigned-hosts",
-    Onboarded: "/unconfigured-hosts",
-    Deauthorized: "/deauthorized-hosts",
+    Hosts: "/hosts",
   };
   beforeEach(() => {
     cy.mount(<Layout />, {

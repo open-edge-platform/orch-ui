@@ -391,7 +391,7 @@ export const handlers = [
 
     console.log("actually grabbing hosts", hostId, filter);
 
-    let instances = instanceStore.list({
+    const instances = instanceStore.list({
       hostId,
       ...(filter ? { filter } : {}),
     });
@@ -580,7 +580,7 @@ export const handlers = [
       }
 
       // TODO: this needs to go into hostStore.convert() after mockStore is setup
-      let instances = instanceStore.list({
+      const instances = instanceStore.list({
         workloadMemberID: null,
         hostId,
       });

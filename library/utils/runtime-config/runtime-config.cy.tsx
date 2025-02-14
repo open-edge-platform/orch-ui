@@ -143,6 +143,7 @@ describe("RuntimeConfig", () => {
         window.__RUNTIME_CONFIG__ = cfg;
       });
       it("should return true", () => {
+        // eslint-disable-next-line
         expect(RuntimeConfig.isAuthEnabled()).to.be.true;
       });
       describe("when the REACT_LP_MOCK_API is true", () => {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { Heading, Text, semanticLevels } from "@spark-design/react";
+import { Heading, semanticLevels, Text } from "@spark-design/react";
 import { PropsWithChildren } from "react";
 import "./CardContainer.scss";
 

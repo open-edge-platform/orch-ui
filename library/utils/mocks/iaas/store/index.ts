@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-export * from "./iaasIds";
-export * from "./regions";
-export * from "./sites";
 export * from "./hosts";
 export * from "./hostStatus";
+export * from "./iaasIds";
 export * from "./osresources";
+export * from "./regions";
+export * from "./sites";

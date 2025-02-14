@@ -11,7 +11,7 @@ const pom = new RadioCardPom();
 describe("<RadioCard/>", () => {
   beforeEach(() => {
     cy.mount(
-      <RadioGroup onChange={(value) => {}}>
+      <RadioGroup onChange={() => {}}>
         <RadioCard
           value="test"
           label="Test"

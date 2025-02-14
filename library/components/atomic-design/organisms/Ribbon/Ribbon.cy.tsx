@@ -330,8 +330,10 @@ describe("<Ribbon/>", () => {
       pom.el.search.type("1234");
       cy.get("@search").should("have.been.calledOnce");
       pom.el.search.type("5");
+      // eslint-disable-next-line
       cy.wait(250);
       pom.el.search.type("6");
+      // eslint-disable-next-line
       cy.wait(250);
 
       cy.get("@search").should("have.been.calledThrice");

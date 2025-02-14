@@ -15,7 +15,7 @@ interface MockReactHookFormTextFieldProps {
 const MockReactHookFormTextField = ({
   validate,
 }: MockReactHookFormTextFieldProps) => {
-  const { control, getValues } = useForm<MockField>({
+  const { control } = useForm<MockField>({
     defaultValues: { field: defaultFieldValue },
     mode: "onChange",
   });

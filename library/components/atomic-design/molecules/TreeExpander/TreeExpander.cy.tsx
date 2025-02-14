@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { TreeExpander, expandedLeafMessage } from "./TreeExpander";
+import { expandedLeafMessage, TreeExpander } from "./TreeExpander";
 import { TreeExpanderPom } from "./TreeExpander.pom";
 const pom = new TreeExpanderPom();
 describe("<TreeExpander/>", () => {

@@ -98,6 +98,7 @@ describe("the global utilities", () => {
   describe("downloadFile", () => {
     it("should download file correctly", () => {
       downloadFile("testing", "testing.txt");
+      // eslint-disable-next-line
       cy.wait(3000);
       cy.readFile("cypress/downloads/testing.txt").should(
         "contains",
@@ -107,6 +108,7 @@ describe("the global utilities", () => {
 
     it("should download file correctly (new line case)", () => {
       downloadFile("apiVersion: v1\nkind: Config", "testing.yaml");
+      // eslint-disable-next-line
       cy.wait(3000);
       cy.readFile("cypress/downloads/testing.yaml").should(
         "contains",

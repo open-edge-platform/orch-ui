@@ -19,7 +19,7 @@ export class StatusIconPom extends CyPom<Selectors> {
       this.root
         .get(".icon")
         // prevent previous line assertion from triggering
-        .should((_) => {})
+        .should(() => {})
         .then(($el) => {
           if (($el || []).length === 0) {
             return this.root.find(".spark-icon");

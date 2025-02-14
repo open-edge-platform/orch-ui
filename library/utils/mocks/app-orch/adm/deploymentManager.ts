@@ -202,9 +202,6 @@ export const handlers = [
   rest.get(
     `${baseURLPrefix}/appdeployment/deployments/:deplId/clusters`,
     (req, res, ctx) => {
-      const { deplId } =
-        req.params as unknown as adm.DeploymentServiceListDeploymentClustersApiArg;
-      const d = ds.get(deplId);
       const clusters = dcs.list();
       const url = new URL(req.url);
       const offset = parseInt(url.searchParams.get("offset")!) || 0;

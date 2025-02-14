@@ -7,6 +7,7 @@ import {
   buildColumnOrs,
   HostFilterBuilderState,
   LifeCycleState,
+  lifeCycleStateQuery,
   searchableColumns,
   _setLifeCycleState,
   _setOsProfiles,
@@ -30,7 +31,9 @@ describe("When constructing the host filter builder", () => {
         payload: LifeCycleState.Registered,
         type: "",
       });
-      expect(state.query).to.eq("(registered)");
+      expect(state.filter).to.eq(
+        lifeCycleStateQuery.get(LifeCycleState.Registered),
+      );
     });
   });
 
@@ -43,9 +46,9 @@ describe("When constructing the host filter builder", () => {
     it("put all columns together in final query", () => {
       const result = `(${searchableColumns
         .map((value) => `${value}="${defaultSearchTerm}"`)
-        .join(",")})`;
+        .join(" OR ")})`;
       _setSearchTerm(state, { payload: defaultSearchTerm, type: "" });
-      expect(state.query).to.contain(result);
+      expect(state.filter).to.contain(result);
     });
   });
 
@@ -56,9 +59,12 @@ describe("When constructing the host filter builder", () => {
       };
     });
     it("put all values as OR's in final query", () => {
-      const result = buildColumnOrs("osProfile", defaultOsProfiles);
+      const result = buildColumnOrs(
+        "instance.currentOs.profileName",
+        defaultOsProfiles,
+      );
       _setOsProfiles(state, { payload: defaultOsProfiles, type: "" });
-      expect(state.query).to.contain(result);
+      expect(state.filter).to.contain(result);
     });
   });
 });

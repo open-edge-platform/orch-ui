@@ -19,7 +19,7 @@ type baseMiResource<IdField extends string> = {
 export default abstract class BaseStore<
   I extends string,
   T extends baseMiResource<I>,
-  B = T
+  B = T,
 > {
   idField: I;
   resources: T[] = [];

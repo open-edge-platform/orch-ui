@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { Status } from "../StatusIcon/StatusIcon";
 import * as _ from "lodash";
+import { Status } from "../StatusIcon/StatusIcon";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -251,7 +251,7 @@ describe("<AggregatedStatuses/>", () => {
 });
 
 describe("AggregatedStatuses utilities", () => {
-  describe(`when all statuses are STATUS_INDICATION_IDLE`, () => {
+  describe("when all statuses are STATUS_INDICATION_IDLE", () => {
     it("should return Status.Ready and the defaultStatus message", () => {
       const statuses: AggregatedStatusesMap = {
         statusOne: statusOne,
@@ -262,7 +262,7 @@ describe("AggregatedStatuses utilities", () => {
       expect(res.message).to.equal(statuses["statusTwo"].message);
     });
   });
-  describe(`when one status is STATUS_INDICATION_ERROR`, () => {
+  describe("when one status is STATUS_INDICATION_ERROR", () => {
     it("should return Status.Error and the corresponding message", () => {
       const statuses: AggregatedStatusesMap = {
         statusOne: statusOne,
@@ -273,7 +273,7 @@ describe("AggregatedStatuses utilities", () => {
       expect(res.message).to.equal(statuses["statusTwo"].message);
     });
   });
-  describe(`when multiple statuses are STATUS_INDICATION_ERROR`, () => {
+  describe("when multiple statuses are STATUS_INDICATION_ERROR", () => {
     it("should return Status.Error and a generic error message", () => {
       const statuses: AggregatedStatusesMap = {
         statusOne: { ...statusOne, indicator: "STATUS_INDICATION_ERROR" },
@@ -294,7 +294,7 @@ describe("AggregatedStatuses utilities", () => {
       expect(res.message).to.equal(errMsg);
     });
   });
-  describe(`when one status is STATUS_INDICATION_IN_PROGRESS`, () => {
+  describe("when one status is STATUS_INDICATION_IN_PROGRESS", () => {
     it("should return Status.Error and the corresponding message", () => {
       const statuses: AggregatedStatusesMap = {
         statusOne: statusOne,
@@ -305,7 +305,7 @@ describe("AggregatedStatuses utilities", () => {
       expect(res.message).to.equal(statuses["statusTwo"].message);
     });
   });
-  describe(`when multiple statuses are STATUS_INDICATION_IN_PROGRESS`, () => {
+  describe("when multiple statuses are STATUS_INDICATION_IN_PROGRESS", () => {
     it("should return Status.Error and a generic error message", () => {
       const statuses: AggregatedStatusesMap = {
         statusOne: { ...statusOne, indicator: "STATUS_INDICATION_IN_PROGRESS" },

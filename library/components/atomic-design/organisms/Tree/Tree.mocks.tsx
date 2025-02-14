@@ -153,9 +153,6 @@ export const CySiteRegionTree = () => {
 
       setTreeBranchProps([...treeBranchProps]);
       setTimeout(() => {
-        const item: TreeNode = {
-          id: Math.floor(Math.random() * 10000).toString(),
-        };
         result.isLoading = false;
         result.isExpanded = true;
         result.children = [...createSiteRegionNodes(onExpand, onCollapse)];

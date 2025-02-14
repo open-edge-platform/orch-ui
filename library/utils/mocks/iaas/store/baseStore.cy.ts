@@ -65,7 +65,7 @@ describe("The BaseStore class", () => {
     expect(res?.value).eq("updated-value");
     expect(store.list().length).to.eq(models.length);
     expect(res ? store.get(res.myCustomIdField)?.value : "").eq(
-      "updated-value"
+      "updated-value",
     );
   });
 
@@ -85,7 +85,7 @@ describe("The BaseStore class", () => {
     expect(res).to.eq(true);
     expect(store.resources.length).to.eq(models.length - 1);
     expect(store.resources.find((r) => r.myCustomIdField === "id-1")).eq(
-      undefined
+      undefined,
     );
   });
 

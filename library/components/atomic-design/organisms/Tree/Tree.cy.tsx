@@ -7,7 +7,7 @@ import {
   duplicateIds,
   minimalTree,
 } from "../../molecules/TreeBranch/TreeBranch.mocks";
-import { Tree, duplicateIdsMessage } from "./Tree";
+import { duplicateIdsMessage, Tree } from "./Tree";
 import { CyExampleTree, CySiteRegionTree } from "./Tree.mocks";
 import { TreePom } from "./Tree.pom";
 

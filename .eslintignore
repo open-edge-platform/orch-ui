@@ -2,3 +2,5 @@
 # SPDX-License-Identifier: LicenseRef-Intel
 .eslintrc.cjs
 index.js
+library/apis
+library/@spark-design

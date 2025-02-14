@@ -42,7 +42,10 @@ const getIndicator = (
   value: "IDLE" | "UNSPECIFIED" | "IN_PROGRESS" | "ERROR",
 ) => `STATUS_INDICATION_${value}` as eim.StatusIndicator;
 
-const lifeCycleStateQuery = new Map<LifeCycleState, string | undefined>();
+export const lifeCycleStateQuery = new Map<
+  LifeCycleState,
+  string | undefined
+>();
 lifeCycleStateQuery.set(
   LifeCycleState.Provisioned,
   "(currentState=HOST_STATE_ONBOARDED AND has(instance))",

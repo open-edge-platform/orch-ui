@@ -5,9 +5,9 @@
 
 import { TreeBranch } from "./TreeBranch";
 import {
-  TreeBranchNode,
   createTreeBranchContentJSX,
   createTreeBranchProps,
+  TreeBranchNode,
 } from "./TreeBranch.mocks";
 import { TreeBranchPom } from "./TreeBranch.pom";
 

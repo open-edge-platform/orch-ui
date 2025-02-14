@@ -8,10 +8,10 @@ import {
   BarSeriesOption,
   ECharts,
   EChartsOption,
-  PieSeriesOption,
-  SetOptionOpts,
   getInstanceByDom,
   init,
+  PieSeriesOption,
+  SetOptionOpts,
 } from "echarts";
 import { CSSProperties, useEffect, useRef } from "react";
 

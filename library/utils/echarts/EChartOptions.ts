@@ -6,10 +6,10 @@
 import {
   GridComponentOption,
   LegendComponentOption,
+  registerTheme,
   TitleComponentOption,
   XAXisComponentOption,
   YAXisComponentOption,
-  registerTheme,
 } from "echarts";
 
 import darkTheme from "./EChartsThemeDark.json";

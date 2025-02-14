@@ -23,3 +23,6 @@ jobs:
 
       - name: Code style check
         run: npm run library:lint
+
+      - name: Cypress Component Tests
+        run: npm run library:cy:component

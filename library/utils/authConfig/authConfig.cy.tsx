@@ -41,6 +41,7 @@ describe("The authConfig file", () => {
     });
 
     it("should NOT parse the token", () => {
+      //@ts-ignore
       expect(() => {
         decodeToken("foobar");
       }).to.throw;

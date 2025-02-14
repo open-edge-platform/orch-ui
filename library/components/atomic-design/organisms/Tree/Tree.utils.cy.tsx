@@ -18,6 +18,7 @@ describe("Tree utils", () => {
       ];
 
       const searchResult = TreeUtils.find(branches, "1");
+
       expect(searchResult).to.not.be.undefined;
     });
 

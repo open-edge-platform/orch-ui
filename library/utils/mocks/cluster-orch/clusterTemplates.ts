@@ -430,7 +430,7 @@ export default class ClusterTemplatesStore extends BaseStore<
     version: clusterTemplateOneV1.version!,
   };
 
-  convert(body: ctm.TemplateInfo, id?: string | undefined) {
+  convert(body: ctm.TemplateInfo) {
     return body;
   }
 
