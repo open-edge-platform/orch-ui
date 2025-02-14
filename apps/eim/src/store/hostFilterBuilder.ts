@@ -133,24 +133,32 @@ export const _setSearchTerm = (
 
 export const _setStatuses = (
   state: HostFilterBuilderState,
-  action: PayloadAction<AggregatedStatus[]>,
+  action: PayloadAction<AggregatedStatus[] | undefined>,
 ) => {
   state.statuses = action.payload;
-  state.statusesQuery = `(${state.statuses
-    .map((value) => aggregatedStatusQuery.get(value))
-    .join(" OR ")})`;
+  if (state.statuses) {
+    state.statusesQuery = `(${state.statuses
+      .map((value) => aggregatedStatusQuery.get(value))
+      .join(" OR ")})`;
+  } else {
+    state.statusesQuery = undefined;
+  }
   hostFilterBuilder.caseReducers.buildFilter(state);
 };
 
 export const _setOsProfiles = (
   state: HostFilterBuilderState,
-  action: PayloadAction<string[]>,
+  action: PayloadAction<string[] | undefined>,
 ) => {
   state.osProfiles = action.payload;
-  state.osProfilesQuery = buildColumnOrs(
-    "instance.currentOs.profileName",
-    action.payload,
-  );
+  if (action.payload) {
+    state.osProfilesQuery = buildColumnOrs(
+      "instance.currentOs.profileName",
+      action.payload,
+    );
+  } else {
+    state.osProfilesQuery = undefined;
+  }
   hostFilterBuilder.caseReducers.buildFilter(state);
 };
 

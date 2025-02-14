@@ -4,6 +4,7 @@
  */
 
 import { Cy, cyGet, CyPom } from "@orch-ui/tests";
+import { RibbonPom } from "../Ribbon/Ribbon.pom";
 
 const dataCySelectors = [
   "pagination",
@@ -217,8 +218,10 @@ export const getMultiColumnKeyIdFromRow = (row: CustomRow) =>
   `${row.name},${row.ver}`;
 
 export class TablePom extends CyPom<Selectors> {
+  tableRibbon: RibbonPom;
   constructor(public rootCy: string = "table") {
     super(rootCy, [...dataCySelectors]);
+    this.tableRibbon = new RibbonPom();
   }
 
   public getRows(): Cy {

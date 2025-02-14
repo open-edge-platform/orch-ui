@@ -12,6 +12,7 @@ import "../../library/components/atomic-design/atoms/CardBox/CardBox.cy.tsx";
 import "../../library/components/atomic-design/atoms/CardContainer/CardContainer.cy.tsx";
 import "../../library/components/atomic-design/atoms/CollapsableList/CollapsableList.cy.tsx";
 import "../../library/components/atomic-design/atoms/ConfirmationDialog/ConfirmationDialog.cy.tsx";
+import "../../library/components/atomic-design/atoms/ContextSwitcher/ContextSwitcher.cy.tsx";
 import "../../library/components/atomic-design/atoms/DetailedStatuses/DetailedStatuses.cy.tsx";
 import "../../library/components/atomic-design/atoms/DownloadButton/DownloadButton.cy.tsx";
 import "../../library/components/atomic-design/atoms/EChart/EChart.cy.tsx";
@@ -44,6 +45,7 @@ import "../../library/components/atomic-design/organisms/CounterWheel/CounterWhe
 import "../../library/components/atomic-design/organisms/DashboardStatus/DashboardStatus.cy.tsx";
 import "../../library/components/atomic-design/organisms/LPBreadcrumb/LPBreadcrumb.cy.tsx";
 // import "../../library/components/atomic-design/organisms/MaestroTable/MaestroTable.cy.tsx";
+import "../../library/components/atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList.cy.tsx";
 import "../../library/components/atomic-design/organisms/MetadataBadge/MetadataBadge.cy.tsx";
 import "../../library/components/atomic-design/organisms/MetadataDisplay/MetadataDisplay.cy.tsx";
 import "../../library/components/atomic-design/organisms/MetadataForm/MetadataForm.cy.tsx";

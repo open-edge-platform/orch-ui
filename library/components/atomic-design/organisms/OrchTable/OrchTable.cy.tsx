@@ -251,9 +251,6 @@ describe("<OrchTable/>", () => {
       <OrchTable
         isSuccess={true}
         tableProps={{ columns: columns, data: data }}
-        ribbonProps={{
-          searchAfterStopTyping: true,
-        }}
       />,
       {
         routerProps: { initialEntries: ["/?searchTerm=initial"] },

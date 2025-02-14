@@ -5,7 +5,8 @@
 
 import { eim } from "@orch-ui/apis";
 import { ContextSwitcher } from "@orch-ui/components";
-import { Heading } from "@spark-design/react";
+import { Button, Heading } from "@spark-design/react";
+import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -13,6 +14,7 @@ import {
   LifeCycleState,
   setLifeCycleState,
 } from "../../../store/hostFilterBuilder";
+import HostSearchFilters from "../../organism/HostSearchFilters/HostSearchFilters";
 import HostsTable from "../../organism/HostsTable/HostsTable";
 import "./Hosts.scss";
 export const dataCy = "hosts";
@@ -21,7 +23,6 @@ const Hosts = () => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
-
   const [, setSelectedHosts] = useState<eim.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
 
@@ -29,6 +30,13 @@ const Hosts = () => {
   useEffect(() => {
     dispatch(buildFilter());
   }, []);
+
+  const hostTableActionButtons = (
+    <>
+      <HostSearchFilters />
+      <Button variant={ButtonVariant.Action}>Configure</Button>
+    </>
+  );
 
   return (
     <div {...cy} className="hosts">
@@ -62,6 +70,7 @@ const Hosts = () => {
         searchConfig={{
           searchTooltipContent: "Search active hosts from the table below.",
         }}
+        actionsJsx={hostTableActionButtons}
       />
     </div>
   );

@@ -45,7 +45,6 @@ const Applications = () => {
 
       <div className="applications__ribbon" data-cy="applicationSearch">
         <Ribbon
-          searchAfterStopTyping={true}
           onSearchChange={(value) => {
             setSearchParams((prev) => {
               if (value.trim() === "") {

@@ -309,7 +309,7 @@ describe("<Ribbon/>", () => {
     });
   });
   describe("debounce should", () => {
-    it("wait 200 milliseconds", () => {
+    it("wait 1500 milliseconds", () => {
       const debouncedOnChange = cy.stub().as("search");
 
       cy.mount(
@@ -331,10 +331,10 @@ describe("<Ribbon/>", () => {
       cy.get("@search").should("have.been.calledOnce");
       pom.el.search.type("5");
       // eslint-disable-next-line
-      cy.wait(250);
+      cy.wait(1500);
       pom.el.search.type("6");
       // eslint-disable-next-line
-      cy.wait(250);
+      cy.wait(1500);
 
       cy.get("@search").should("have.been.calledThrice");
     });

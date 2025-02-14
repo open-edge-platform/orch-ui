@@ -46,7 +46,7 @@ describe("<SelectPackage />", () => {
   });
   it("should work on searching", () => {
     pom.table.interceptApis([pom.table.api.packageEmpty]);
-    pom.ribbonPom.el.search.type("testing");
+    pom.table.table.tableRibbon.el.search.type("testing");
     pom.waitForApis();
     cy.get(`@${pom.table.api.packageEmpty}`)
       .its("request.url")

@@ -56,7 +56,6 @@ const DeploymentPackages = () => {
 
       <div className="deployment-packages__ribbon" data-cy="packagesSearch">
         <Ribbon
-          searchAfterStopTyping
           onSearchChange={(searchTerm) => {
             setSearchParams((prev) => {
               prev.set("direction", "asc");

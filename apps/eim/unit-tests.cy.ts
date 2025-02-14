@@ -42,6 +42,7 @@ import "./src/components/organism/hosts/ResourceDetails.cy.tsx";
 import "./src/components/organism/hosts/resourcedetails/Gpu.cy.tsx";
 import "./src/components/organism/hosts/ResourceIndicator.cy.tsx";
 import "./src/components/organism/hosts/UnconfiguredHostPopup/UnconfiguredHostPopup.cy.tsx";
+import "./src/components/organism/HostSearchFilters/HostSearchFilters.cy.tsx";
 import "./src/components/organism/HostsTable/HostsTable.cy.tsx";
 import "./src/components/organism/InstancesTable/InstancesTable.cy.tsx";
 import "./src/components/organism/locations/RegionSiteTree/RegionSiteTree.cy.tsx";

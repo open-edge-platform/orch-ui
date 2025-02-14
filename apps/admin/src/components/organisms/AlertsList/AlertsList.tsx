@@ -103,9 +103,6 @@ const AlertsList = () => {
           title: "Currently, there are no alerts to be shown",
           icon: "alert-triangle",
         }}
-        ribbonProps={{
-          searchAfterStopTyping: false,
-        }}
       />
       <AlertDrawer
         isOpen={isOpen}

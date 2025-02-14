@@ -28,11 +28,11 @@ import {
   useTable,
 } from "react-table";
 import { TableLoader } from "../../atoms/TableLoader/TableLoader";
+import { Ribbon } from "../Ribbon/Ribbon";
 import "./Table.scss";
 import { tableWithSelectColumn } from "./TableAllRowsSelected";
 import { TableColumn } from "./TableColumn";
 import { SortDirection, TableHeaderCell } from "./TableHeaderCell";
-import { TableRibbon, TableRibbonProps } from "./TableRibbon";
 import { tableRowExpander } from "./TableRowExpander";
 
 //https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-table#example-type-file
@@ -65,14 +65,7 @@ export type TableStateWithPagination<T extends object> = Partial<
 const DEFAULT_PAGESIZE = 10;
 const DEFAULT_PAGEINDEX = 0;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface RowSelectionData<T> {
-  selectedRow: T;
-  isSelected: boolean;
-  rowIndex?: number;
-}
-
-export interface TableProps<T extends object> extends TableRibbonProps {
+export interface TableProps<T extends object> {
   dataCy?: string;
   columns: Array<TableColumn<T>>;
   data?: Array<T>;
@@ -81,17 +74,19 @@ export interface TableProps<T extends object> extends TableRibbonProps {
   canExpandRows?: boolean;
   canPaginate?: boolean;
   canShowAllRows?: boolean;
-  canSearch?: boolean;
   isLoading?: boolean;
   isServerSidePaginated?: boolean;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   initialState?: TableStateWithPagination<object>;
   initialSort?: { column: string; direction: SortDirection };
-  searchTerm?: string;
   totalOverallRowsCount?: number;
   sortColumns?: number[];
   autoResetExpanded?: boolean;
+  canSearch?: boolean;
+  searchTerm?: string;
+  searchTooltip?: string;
+  actionsJsx?: JSX.Element;
   subRow?: (row: RowWithExpansion<T>) => JSX.Element | undefined;
   onSort?: (column: string, direction: SortDirection) => void;
   onSelect?: (
@@ -106,6 +101,7 @@ export interface TableProps<T extends object> extends TableRibbonProps {
     relativeIndex?: number,
     parent?: Row<T>,
   ) => string;
+  onSearch?: (value: string) => void;
 }
 
 export const serverSideTotalOverallRowsCountErrorMessage =
@@ -346,11 +342,12 @@ export const Table = <T extends object>({
       {!isLoading && (
         <>
           {canSearch && (
-            <TableRibbon
-              searchTerm={rest.searchTerm}
+            <Ribbon
+              showSearch={true}
+              defaultValue={rest.searchTerm}
               searchTooltip={rest.searchTooltip}
-              actionsJsx={rest.actionsJsx}
-              onSearch={(searchTerm: string) => {
+              customButtons={rest.actionsJsx}
+              onSearchChange={(searchTerm: string) => {
                 if (isServerSidePaginated !== true) setGlobalFilter(searchTerm);
                 if (onSearch) onSearch(searchTerm);
               }}

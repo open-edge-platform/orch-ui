@@ -358,7 +358,6 @@ const ApplicationTable = ({
         <>
           {!hideRibbon && (
             <Ribbon
-              searchAfterStopTyping={true}
               onSearchChange={onSearchChange}
               defaultValue={searchParams.get("searchTerm") ?? ""}
               customButtons={newApplicationButtonJsx}

@@ -160,7 +160,6 @@ export const OrchTable = ({
             });
           }}
           defaultValue={searchTerm}
-          searchAfterStopTyping={true}
           {...ribbonProps}
         />
       )}

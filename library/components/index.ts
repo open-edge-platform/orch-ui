@@ -177,6 +177,10 @@ export {
 export { SortDirection } from "./atomic-design/organisms/Table/TableHeaderCell";
 export { Tree, TreeProps } from "./atomic-design/organisms/Tree/Tree";
 export { TreeUtils } from "./atomic-design/organisms/Tree/Tree.utils";
+export {
+  CheckboxSelectionList, 
+  CheckboxSelectionOption,
+} from "./atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList";
 
 /***************************** Pages *****************************************/
 export { PageNotFound } from "./atomic-design/pages/PageNotFound/PageNotFound";
@@ -195,6 +199,7 @@ export { HeaderItem } from "./atomic-design/templates/HeaderItem/HeaderItem";
 /* devblock:start */
 /****************************************POM ********************************** */
 export { ContextSwitcherPom } from "./atomic-design/atoms/ContextSwitcher/ContextSwitcher.pom";
+export { CheckboxSelectionListPom } from "./atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList.pom";
 export { AdvancedSettingsTogglePom } from "./atomic-design/atoms/AdvancedSettingsToggle/AdvancedSettingsToggle.pom";
 export { AggregatedStatusesPom } from "./atomic-design/atoms/AggregatedStatuses/AggregatedStatuses.pom";
 export { ApiErrorPom } from "./atomic-design/atoms/ApiError/ApiError.pom";

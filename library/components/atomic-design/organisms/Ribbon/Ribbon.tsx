@@ -12,10 +12,9 @@ import {
   InputSize,
 } from "@spark-design/tokens";
 import { debounce } from "lodash";
-
 import "./Ribbon.scss";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Popup, PopupOption } from "../../atoms/Popup/Popup";
 
@@ -42,7 +41,6 @@ export interface RibbonProps {
   onSearchChange?: (value: string) => void;
   buttons?: RibbonButtonProps[];
   customButtons?: JSX.Element;
-  searchAfterStopTyping?: boolean;
   subtitle?: string;
   showSearch?: boolean;
 }
@@ -54,7 +52,6 @@ export const Ribbon = ({
   customButtons,
   subtitle,
   showSearch = true,
-  searchAfterStopTyping = false,
 }: RibbonProps) => {
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState<string>(
@@ -75,20 +72,29 @@ export const Ribbon = ({
     });
     return result;
   };
-  const handleSearch = debounce(
-    (query: string) => onSearchChange && onSearchChange(query),
-    200,
+
+  // Memoize the debounced function
+  const debouncedSearch = useCallback(
+    debounce((query) => {
+      if (onSearchChange) {
+        onSearchChange(query);
+      }
+    }, 1500),
+    [onSearchChange], // Dependencies for useCallback
   );
 
   // Effect to send search request when user stop typing for 1.5 seconds
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (onSearchChange) {
-        onSearchChange(search);
-      }
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, [search]);
+    if (search) {
+      debouncedSearch(search);
+    }
+
+    // Cleanup function to cancel the debounced call if the component unmounts
+    // or if the dependencies change
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [search, debouncedSearch]);
 
   const getButton = (
     button: RibbonButtonProps,
@@ -114,6 +120,19 @@ export const Ribbon = ({
       </Button>
     );
   };
+
+  const getTextField = () => (
+    <TextField
+      aria-label="search table"
+      type="search"
+      startIcon="magnifier"
+      placeholder="Search"
+      defaultValue={defaultValue}
+      onChange={(searchValue: string) => setSearch(searchValue)}
+      size={InputSize.Large}
+      data-cy="search"
+    />
+  );
 
   return (
     <div data-cy="ribbon" className="ribbon">
@@ -148,46 +167,10 @@ export const Ribbon = ({
                 placement="top"
                 data-cy="searchTooltip"
               >
-                <TextField
-                  aria-label="search table"
-                  type="search"
-                  startIcon="magnifier"
-                  placeholder="Search"
-                  defaultValue={defaultValue}
-                  onChange={(searchValue: string) => {
-                    if (searchValue.length === 0) {
-                      searchValue = " ";
-                    }
-                    if (searchAfterStopTyping) {
-                      setSearch(searchValue);
-                    } else {
-                      handleSearch(searchValue);
-                    }
-                  }}
-                  size={InputSize.Large}
-                  data-cy="search"
-                />
+                {getTextField()}
               </Tooltip>
             ) : (
-              <TextField
-                aria-label="search table"
-                data-cy="search"
-                type="search"
-                startIcon="magnifier"
-                size={InputSize.Large}
-                placeholder="Search"
-                defaultValue={defaultValue}
-                onChange={(searchValue: string) => {
-                  if (searchValue.length === 0) {
-                    searchValue = " ";
-                  }
-                  if (searchAfterStopTyping) {
-                    setSearch(searchValue);
-                  } else {
-                    handleSearch(searchValue);
-                  }
-                }}
-              />
+              getTextField()
             )
           ) : (
             <></>

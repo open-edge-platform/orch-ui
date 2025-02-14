@@ -36,7 +36,6 @@ const SelectPackage = ({ onSelect, selectedPackage }: SelectPackageProps) => {
       <Text size={TextSize.Large}>Select a Package</Text>
       <div className="applications__ribbon" data-cy="packagesSearch">
         <Ribbon
-          searchAfterStopTyping={true}
           onSearchChange={(searchTerm) => {
             setSearchParams((prev) => {
               prev.set("direction", "asc");
