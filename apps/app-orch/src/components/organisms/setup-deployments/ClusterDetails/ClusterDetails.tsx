@@ -4,12 +4,7 @@
  */
 
 import { ecm, eim } from "@orch-ui/apis";
-import {
-  Flex,
-  MetadataDisplay,
-  MetadataPair,
-  SquareSpinner,
-} from "@orch-ui/components";
+import { Flex, MetadataDisplay, SquareSpinner } from "@orch-ui/components";
 import {
   hostProviderStatusToString,
   RuntimeConfig,
@@ -18,6 +13,7 @@ import {
 } from "@orch-ui/utils";
 import { Drawer, Text } from "@spark-design/react";
 import React, { Suspense } from "react";
+import { generateMetadataPair } from "../../../../utils/global";
 import "./ClusterDetails.scss";
 
 export const dataCy = "clusterDetails";
@@ -36,7 +32,7 @@ const AggregateHostStatus = RuntimeConfig.isEnabled("FM")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 
-/* TODO: this component may need to be moved to ClusterOrch and imported via remote mfe component 
+/* TODO: this component may need to be moved to ClusterOrch and imported via remote mfe component
    OR preffered: better to reuse ClusterDetails page component as drawer for SelectHost table
 */
 const ClusterDetails = ({
@@ -55,17 +51,6 @@ const ClusterDetails = ({
       { skip: !cluster.name || !projectName },
     );
 
-  const generateMetadataPair = (labels?: any): MetadataPair[] => {
-    const result: MetadataPair[] = [];
-    if (labels) {
-      Object.keys(labels).map((key) => {
-        if (typeof key === "string" && typeof labels[key] === "string") {
-          result.push({ key: key, value: labels[key] });
-        }
-      });
-    }
-    return result;
-  };
   const guids = (): string[] => {
     const result =
       clusterDetail?.nodes?.nodeInfoList?.reduce(

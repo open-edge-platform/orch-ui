@@ -93,8 +93,8 @@ export const handlers = [
   rest.post(
     `${baseURLPrefix}/appdeployment/deployments`,
     async (req, res, ctx) => {
-      const d = await req.json<adm.Deployment>();
-      const created = ds.post(d);
+      const deployment = await req.json<adm.Deployment>();
+      const created = ds.post(deployment);
       return res(
         ctx.status(200),
         ctx.json<adm.DeploymentServiceCreateDeploymentApiResponse>({
@@ -107,12 +107,12 @@ export const handlers = [
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
     (req, res, ctx) => {
       const { deplId } = req.params as adm.DeploymentServiceGetDeploymentApiArg;
-      const d = ds.get(deplId);
-      if (d) {
+      const deployment = ds.get(deplId);
+      if (deployment) {
         return res(
           ctx.status(200),
           ctx.json<adm.DeploymentServiceGetDeploymentApiResponse>({
-            deployment: d,
+            deployment,
           }),
         );
       }
@@ -123,8 +123,29 @@ export const handlers = [
   ),
   rest.put(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
-    (_, res, ctx) => {
-      return res(ctx.status(501));
+    async (req, res, ctx) => {
+      const { deplId } = req.params as adm.DeploymentServiceGetDeploymentApiArg;
+      const currentDeployment = ds.get(deplId);
+
+      if (!currentDeployment) {
+        return res(ctx.status(404));
+      }
+
+      const deploymentReq = await req.json<adm.Deployment>();
+      const deployment = ds.put(deplId, {
+        ...currentDeployment,
+        ...deploymentReq,
+      });
+
+      if (deployment) {
+        return res(
+          ctx.status(200),
+          ctx.json<adm.DeploymentServiceGetDeploymentApiResponse>({
+            deployment,
+          }),
+        );
+      }
+      return res(ctx.status(404));
     },
   ),
   rest.delete(

@@ -4,37 +4,6 @@
  */
 
 .change-package-profile {
-  &__deployment-package {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border: 0.1rem solid var(--spark-color-carbon-tint2);
-
-    .spark-icon {
-      font-size: 2rem;
-      padding: 1rem;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      margin-right: 1rem;
-      background-color: var(--spark-color-carbon-tint2);
-    }
-  }
-
-  .deployment-package {
-    &__name,
-    &__version,
-    &__description {
-      margin: 0;
-      display: block;
-    }
-
-    &__version {
-      color: var(--spark-color-carbon);
-    }
-  }
-
   .spark-message-banner {
     margin-bottom: 1.5rem;
   }

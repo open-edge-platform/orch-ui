@@ -6,9 +6,10 @@
 import { adm, catalog } from "@orch-ui/apis";
 import { Empty, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
-import { Heading, Icon, MessageBanner, Text } from "@spark-design/react";
+import { MessageBanner, Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import { useEffect } from "react";
+import DeploymentPackage from "../../../atoms/DeploymentPackage/DeploymentPackage";
 import SelectProfilesTable from "../../setup-deployments/SelectProfileTable/SelectProfileTable";
 import "./ChangePackageProfile.scss";
 
@@ -18,14 +19,16 @@ interface ChangePackageProfileProps {
   deployment: adm.DeploymentRead;
   selectedProfile?: catalog.DeploymentProfile;
   onProfileSelect?: (row: catalog.DeploymentProfile) => void;
+  onDeploymentPackageLoaded?: (
+    deploymentPackage: catalog.DeploymentPackage,
+  ) => void;
 }
-
-const dpClassName = "deployment-package";
 
 const ChangePackageProfile = ({
   deployment,
   selectedProfile,
   onProfileSelect,
+  onDeploymentPackageLoaded,
 }: ChangePackageProfileProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -56,6 +59,14 @@ const ChangePackageProfile = ({
     }
   }, [deploymentProfile]);
 
+  useEffect(() => {
+    if (deploymentPackage) {
+      onDeploymentPackageLoaded?.(
+        deploymentPackage as catalog.DeploymentPackage,
+      );
+    }
+  }, [deploymentPackage]);
+
   if (isLoading) {
     return (
       <div {...cy}>
@@ -77,24 +88,11 @@ const ChangePackageProfile = ({
   return (
     <div {...cy} className="change-package-profile">
       <Text size={TextSize.Large}>Change Deployment Package Profile</Text>
-      <div className={`change-package-profile__${dpClassName}`}>
-        <Icon icon="cube" />
-        <div className={dpClassName}>
-          <Heading
-            semanticLevel={6}
-            className={`${dpClassName}__name`}
-            data-cy="name"
-          >
-            {deploymentPackage.name}
-          </Heading>
-          <Text className={`${dpClassName}__version`} data-cy="version">
-            Version: {deploymentPackage.version}
-          </Text>
-          <Text className={`${dpClassName}__description`} data-cy="description">
-            {deploymentPackage.description || "No Description provided!"}
-          </Text>
-        </div>
-      </div>
+      <DeploymentPackage
+        name={deploymentPackage.name}
+        version={deploymentPackage.version}
+        description={deploymentPackage.description}
+      />
       <MessageBanner
         messageTitle=""
         showIcon={true}

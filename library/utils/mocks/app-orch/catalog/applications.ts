@@ -263,6 +263,106 @@ export const appWithParameterTemplates: catalog.ApplicationRead = {
   defaultProfileName: "cpu",
 };
 
+export const appForEditDeployment1: catalog.ApplicationRead = {
+  chartName: "foobar",
+  chartVersion: "0.5.43",
+  helmRegistryName: "harbor",
+  name: "app-edit-deployment1",
+  displayName: "App Edit Deployment 1",
+  version: "1.0.0-dev",
+  profiles: [
+    {
+      name: "cpu",
+      chartValues: "cores: 2\ngpu: false",
+    },
+    {
+      name: "gpu",
+      chartValues: "cores: 12\ngpu: true",
+      parameterTemplates: [
+        {
+          name: "cores",
+          displayName: "Number of Cores",
+          default: "12",
+          suggestedValues: ["6", "18", "24"],
+          type: "number",
+          mandatory: true,
+          secret: false,
+        },
+        {
+          name: "gpu",
+          displayName: "Enable GPU?",
+          default: "true",
+          suggestedValues: ["false"],
+          type: "boolean",
+          mandatory: false,
+          secret: false,
+        },
+      ],
+    },
+  ],
+  defaultProfileName: "cpu",
+};
+
+export const appForEditDeployment2: catalog.ApplicationRead = {
+  chartName: "foobar",
+  chartVersion: "0.5.43",
+  helmRegistryName: "harbor",
+  name: "app-edit-deployment2",
+  displayName: "App Edit Deployment 2",
+  version: "2.0.0-dev",
+  profiles: [
+    {
+      name: "home",
+      chartValues: "key: 1234\nrooms: 3\nnested: {\ntest: 20\n}",
+      parameterTemplates: [
+        {
+          name: "key",
+          displayName: "Key",
+          default: "1234",
+          suggestedValues: ["1", "2", "3", "4"],
+          type: "number",
+          mandatory: true,
+          secret: false,
+        },
+      ],
+    },
+    {
+      name: "office",
+      chartValues: "key: 33556688\nrooms: 30\nnested: {\ntest: 20\n}",
+      parameterTemplates: [
+        {
+          name: "key",
+          displayName: "Key",
+          default: "33556688",
+          suggestedValues: ["80001"],
+          type: "number",
+          mandatory: true,
+          secret: false,
+        },
+        {
+          name: "rooms",
+          displayName: "Rooms",
+          default: "30",
+          suggestedValues: ["40", "50"],
+          type: "number",
+          mandatory: true,
+          secret: false,
+        },
+        {
+          name: "nested.test",
+          displayName: "nestedTest",
+          default: "20",
+          suggestedValues: ["40", "50"],
+          type: "number",
+          mandatory: true,
+          secret: false,
+        },
+      ],
+    },
+  ],
+  defaultProfileName: "office",
+};
+
 export const multipleExtensionsResponse: catalog.ListApplicationsResponse = {
   applications: [applicationExtensionOne, applicationExtensionTwo],
   totalElements: 2,
@@ -284,6 +384,8 @@ export class ApplicationsStore extends CatalogBaseStore<catalog.ApplicationRead>
       appWithParameterTemplates,
       applicationExtensionOne,
       applicationExtensionTwo,
+      appForEditDeployment1,
+      appForEditDeployment2,
     ]);
   }
 

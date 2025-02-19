@@ -6,15 +6,21 @@
 import { catalog } from "@orch-ui/apis";
 import { MetadataForm, MetadataPair } from "@orch-ui/components";
 import { Heading, Icon, Text, TextField } from "@spark-design/react";
-import { InputSize } from "@spark-design/tokens";
+import { InputSize, TextSize } from "@spark-design/tokens";
 import { Controller, useForm } from "react-hook-form";
 import { getDisplayNameValidationErrorMessage } from "../../../../utils/global";
 import MetadataMessage from "../../../atoms/MetadataMessage/MetadataMessage";
 import "./SetupMetadata.scss";
 
+export enum SetupMetadataMode {
+  CREATE = "CREATE",
+  EDIT = "EDIT",
+}
+
 export interface SetupMetadataProps {
+  mode: SetupMetadataMode;
   metadataPairs: MetadataPair[];
-  applicationPackage: catalog.DeploymentPackage;
+  applicationPackage?: catalog.DeploymentPackage;
   currentDeploymentName?: string;
   onDeploymentNameChange?: (name: string) => void;
   onMetadataUpdate: (metadataPairs: MetadataPair[]) => void;
@@ -23,6 +29,7 @@ export interface SetupMetadataProps {
 const sm = "setup-metadata";
 const ap = "application-package";
 const SetupMetadata = ({
+  mode = SetupMetadataMode.CREATE,
   metadataPairs,
   applicationPackage,
   currentDeploymentName,
@@ -41,23 +48,31 @@ const SetupMetadata = ({
 
   return (
     <div className={sm} data-cy="setupMetadata">
-      <div className="description">
-        <Text className={`${sm}__package`}>Package</Text>
-      </div>
-      <div className={`${sm}__${ap}`}>
-        <Icon icon="cube" />
-        <div className={ap}>
-          <Heading semanticLevel={6} className={`${ap}__name`} data-cy="name">
-            {applicationPackage.name}
-          </Heading>
-          <Text className={`${ap}__version`} data-cy="version">
-            Version: {applicationPackage.version}
-          </Text>
-          <Text className={`${ap}__description`} data-cy="description">
-            {applicationPackage.description}
-          </Text>
+      <Text size={TextSize.Large}>
+        {mode === SetupMetadataMode.EDIT ? "Change" : "Enter"} Deployment
+        Details
+      </Text>
+      {mode === SetupMetadataMode.CREATE && (
+        <div className="description">
+          <Text className={`${sm}__package`}>Package</Text>
         </div>
-      </div>
+      )}
+      {mode === SetupMetadataMode.CREATE && (
+        <div className={`${sm}__${ap}`}>
+          <Icon icon="cube" />
+          <div className={ap}>
+            <Heading semanticLevel={6} className={`${ap}__name`} data-cy="name">
+              {applicationPackage?.name}
+            </Heading>
+            <Text className={`${ap}__version`} data-cy="version">
+              Version: {applicationPackage?.version}
+            </Text>
+            <Text className={`${ap}__description`} data-cy="description">
+              {applicationPackage?.description}
+            </Text>
+          </div>
+        </div>
+      )}
       <div className={`${sm}__metadata`}>
         <Controller
           name="name"
@@ -93,6 +108,14 @@ const SetupMetadata = ({
           )}
         />
       </div>
+      {mode === SetupMetadataMode.EDIT && (
+        <>
+          <Text size={TextSize.Large}>Deployment Type</Text>
+          <p>
+            <Text size={TextSize.Medium}>Automatic</Text>
+          </p>
+        </>
+      )}
       <div className={`${sm}__metadata-docs`}>
         <MetadataMessage />
       </div>

@@ -4,12 +4,14 @@
  */
 
 import { arm } from "@orch-ui/apis";
+import { MetadataPair } from "@orch-ui/components";
 import { parseError } from "@orch-ui/utils";
 import ApplicationDetailsServicePom, {
   mockEndpointData,
 } from "../components/organisms/deployments/ApplicationDetailsServices/ApplicationDetailsServices.pom";
 import { RootState, store } from "../store";
 import {
+  generateMetadataPair,
   generateName,
   invalidateCacheByTagname,
   printName,
@@ -106,6 +108,26 @@ describe("the global utilities", () => {
       // This will be `pending` as no api response will yeild `error` prompting to retry
       expect(status).not.to.be.eq("fulfilled");
       expect(parseError(error).status).to.be.eq(400);
+    });
+  });
+  describe("generateMetadataPair", () => {
+    const expectedPairs: MetadataPair[] = [
+      {
+        key: "oneKey",
+        value: "one-value",
+      },
+      {
+        key: "twoKey",
+        value: "two-value",
+      },
+    ];
+    it("should return expected metadata pairs", () => {
+      expect(
+        generateMetadataPair({
+          oneKey: "one-value",
+          twoKey: "two-value",
+        }),
+      ).to.deep.equal(expectedPairs);
     });
   });
 });

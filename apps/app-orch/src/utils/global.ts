@@ -4,6 +4,7 @@
  */
 
 import { arm } from "@orch-ui/apis";
+import { MetadataPair } from "@orch-ui/components";
 import { FullTagDescription } from "@reduxjs/toolkit/dist/cjs";
 import { AppDispatch } from "../store";
 
@@ -120,4 +121,34 @@ export const getDisplayNameValidationErrorMessage = (
       )}.`;
   }
   return nameDefaultErrorMsg;
+};
+
+export const generateMetadataPair = (labels?: any): MetadataPair[] => {
+  const result: MetadataPair[] = [];
+  if (labels) {
+    Object.keys(labels).map((key) => {
+      if (typeof key === "string" && typeof labels[key] === "string") {
+        result.push({ key: key, value: labels[key] });
+      }
+    });
+  }
+  return result;
+};
+
+export const flattenObject = (
+  obj: Record<string, any>,
+  parentKey = "",
+  result: Record<string, any> = {},
+): Record<string, any> => {
+  for (const key in obj) {
+    if (Object.hasOwn(obj, key)) {
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        flattenObject(obj[key], newKey, result);
+      } else {
+        result[newKey] = obj[key];
+      }
+    }
+  }
+  return result;
 };

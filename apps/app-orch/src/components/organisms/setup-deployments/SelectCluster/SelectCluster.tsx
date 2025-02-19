@@ -6,7 +6,7 @@
 import { ecm } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
 import { Text, TextField } from "@spark-design/react";
-import { InputSize } from "@spark-design/tokens";
+import { InputSize, TextSize } from "@spark-design/tokens";
 import React, { Suspense, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { getDisplayNameValidationErrorMessage } from "../../../../utils/global";
@@ -24,7 +24,13 @@ const ClusterListRemote = React.lazy(() => {
 
 export const dataCy = "selectCluster";
 
+export enum SelectClusterMode {
+  CREATE = "CREATE",
+  EDIT = "EDIT",
+}
+
 interface SelectClusterProps {
+  mode: SelectClusterMode;
   selectedIds: string[];
   onSelect: (selectedRowData: ecm.ClusterInfo, isSelected: boolean) => void;
   currentDeploymentName?: string;
@@ -33,6 +39,7 @@ interface SelectClusterProps {
 }
 
 const SelectCluster = ({
+  mode = SelectClusterMode.CREATE,
   selectedIds,
   onSelect,
   currentDeploymentName,
@@ -59,7 +66,8 @@ const SelectCluster = ({
       {isForm && (
         <>
           <Text size="l" data-cy="title">
-            Enter Deployment Details
+            {mode === SelectClusterMode.EDIT ? "Change" : "Enter"} Deployment
+            Details
           </Text>
           <Controller
             name="name"
@@ -93,6 +101,14 @@ const SelectCluster = ({
               />
             )}
           />
+          {mode === SelectClusterMode.EDIT && (
+            <>
+              <Text size={TextSize.Large}>Deployment Type</Text>
+              <p>
+                <Text size={TextSize.Medium}>Manual</Text>
+              </p>
+            </>
+          )}
         </>
       )}
       <Suspense fallback={<SquareSpinner />}>

@@ -5,6 +5,7 @@
 
 import { adm } from "@orch-ui/apis";
 import { BaseStore } from "../../baseStore";
+import { clusterFiveId, clusterThreeId } from "../../cluster-orch";
 import {
   customersKey,
   customersOne,
@@ -17,9 +18,11 @@ import {
 } from "../../metadata-broker/metadata";
 import { StoreUtils } from "../../utils";
 import {
+  appForEditDeployment2,
   applicationOne,
   applicationTwo,
   deploymentProfileTwo,
+  packageForEditDeployment,
   packageFour,
   packageOne,
   packageThree,
@@ -241,12 +244,82 @@ export const deploymentUpdating: adm.DeploymentRead = {
   },
 };
 
+export const deploymentEditAutomatic: adm.DeploymentRead = {
+  deployId: "deployment-for-edit-auto",
+  name: "deployment-for-edit-name-auto",
+  displayName: "Deployment for edit auto",
+  appName: packageForEditDeployment.name,
+  appVersion: packageForEditDeployment.version,
+  profileName: "min",
+  overrideValues: [
+    {
+      appName: appForEditDeployment2.name,
+      values: {
+        key: "3",
+      },
+    },
+  ],
+  status: {
+    state: "RUNNING",
+    summary: {
+      down: 0,
+      running: 3,
+      total: 3,
+    },
+  },
+  createTime: "2025-02-04T12:29:10Z",
+  deploymentType: "auto-scaling",
+  targetClusters: packageForEditDeployment.applicationReferences.map((ar) => ({
+    appName: ar.name,
+    labels: deploymentOneMetadata,
+  })),
+};
+
+export const deploymentEditManual: adm.DeploymentRead = {
+  deployId: "deployment-for-edit-manual",
+  name: "deployment-for-edit-name-manual",
+  displayName: "Deployment for edit manual",
+  appName: packageForEditDeployment.name,
+  appVersion: packageForEditDeployment.version,
+  profileName: "min",
+  overrideValues: [
+    {
+      appName: appForEditDeployment2.name,
+      values: {
+        key: "3",
+      },
+    },
+  ],
+  status: {
+    state: "RUNNING",
+    summary: {
+      down: 0,
+      running: 3,
+      total: 3,
+    },
+  },
+  createTime: "2025-02-07T12:29:10Z",
+  deploymentType: "targeted",
+  targetClusters: [clusterThreeId, clusterFiveId].flatMap((clusterId) =>
+    packageForEditDeployment.applicationReferences.map((ar) => ({
+      appName: ar.name,
+      clusterId,
+    })),
+  ),
+};
+
 export class DeploymentsStore extends BaseStore<
   "deployId",
   adm.DeploymentRead
 > {
   constructor() {
-    super("deployId", [deploymentOne, deploymentTwo, deploymentThree]);
+    super("deployId", [
+      deploymentOne,
+      deploymentTwo,
+      deploymentThree,
+      deploymentEditAutomatic,
+      deploymentEditManual,
+    ]);
   }
 
   post(body: adm.DeploymentRead): adm.DeploymentRead {

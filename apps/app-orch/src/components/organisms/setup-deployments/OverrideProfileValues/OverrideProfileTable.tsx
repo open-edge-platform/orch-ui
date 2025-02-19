@@ -101,7 +101,7 @@ const OverrideProfileTable = ({
         .catch(setParsedErr)
         .finally(() => setIsloading(false));
     }
-  }, [selectedPackage]);
+  }, [selectedPackage, selectedProfile, overrideValues]);
 
   const columns: TableColumn<catalog.Application>[] = [
     {
@@ -186,12 +186,17 @@ const OverrideProfileTable = ({
     if (parsedErr) return <ApiError error={parsedErr} />;
 
     return (
-      <Table
-        columns={columns}
-        data={applications ?? []}
-        totalOverallRowsCount={applications.length}
-        subRow={(row) => <RenderSubComponent row={row} />}
-      />
+      <>
+        {applications.length && (
+          <Table
+            columns={columns}
+            data={applications ?? []}
+            totalOverallRowsCount={applications.length}
+            canPaginate={false}
+            subRow={(row) => <RenderSubComponent row={row} />}
+          />
+        )}
+      </>
     );
   };
 

@@ -17,7 +17,7 @@ describe("<Deployments />", () => {
     pom.table.interceptApis([pom.table.api.getDeploymentsList]);
     cy.mount(<Deployments />);
     pom.waitForApis();
-    pom.table.tablePom.getRows().should("have.length", 3);
+    pom.table.tablePom.getRows().should("have.length", 5);
   });
   it("should goto setup deployment page when list is empty", () => {
     pom.table.interceptApis([pom.table.api.getEmptyDeploymentsList]);

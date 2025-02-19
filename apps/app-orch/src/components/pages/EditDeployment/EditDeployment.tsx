@@ -3,9 +3,14 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { adm, catalog } from "@orch-ui/apis";
-import { Empty, setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { adm, catalog, ecm, mbApi } from "@orch-ui/apis";
+import {
+  Empty,
+  MetadataPair,
+  setActiveNavItem,
+  setBreadcrumb,
+} from "@orch-ui/components";
+import { logError, parseError, SharedStorage } from "@orch-ui/utils";
 import {
   Button,
   ButtonGroup,
@@ -18,6 +23,9 @@ import {
   ButtonGroupAlignment,
   ButtonSize,
   ButtonVariant,
+  ToastPosition,
+  ToastState,
+  ToastVisibility,
 } from "@spark-design/tokens";
 import { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -26,8 +34,21 @@ import {
   deploymentsNavItem,
   homeBreadcrumb,
 } from "../../../routes/const";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { setupDeploymentHasEmptyMandatoryParams } from "../../../store/reducers/setupDeployment";
+import { setProps } from "../../../store/reducers/toast";
+import { generateMetadataPair } from "../../../utils/global";
 import ChangePackageProfile from "../../organisms/edit-deployments/ChangePackageProfile/ChangePackageProfile";
+import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
+import Review from "../../organisms/edit-deployments/Review/Review";
+import { OverrideValuesList } from "../../organisms/setup-deployments/OverrideProfileValues/OverrideProfileTable";
+import SelectCluster, {
+  SelectClusterMode,
+} from "../../organisms/setup-deployments/SelectCluster/SelectCluster";
+import SetupMetadata, {
+  SetupMetadataMode,
+} from "../../organisms/setup-deployments/SetupMetadata/SetupMetadata";
+import { DeploymentType } from "../SetupDeployment/SetupDeployment";
 import "./EditDeployment.scss";
 
 export const dataCy = "editDeployment";
@@ -47,11 +68,21 @@ const EditDeployment = () => {
   const cy = { "data-cy": dataCy };
   const className = "edit-deployment";
   const projectName = SharedStorage.project?.name ?? "";
+  const toastProps = {
+    state: ToastState.Success,
+    visibility: ToastVisibility.Hide,
+    duration: 3000,
+    position: ToastPosition.TopRight,
+  };
 
   const { id } = useParams<keyof params>();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const [updateDeployment] = adm.useDeploymentServiceUpdateDeploymentMutation();
+  const [updateMetadata] =
+    mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 
   // Stepper: Overall state controls
   const [currentStep, setCurrentStep] = useState(0);
@@ -108,13 +139,32 @@ const EditDeployment = () => {
     dispatch(setActiveNavItem(deploymentsNavItem));
   }, [breadcrumb]);
 
+  const [deploymentPackage, setDeploymentPackage] = useState<
+    catalog.DeploymentPackage | undefined
+  >();
+
   // Step 1: Change Package Profile
-  const [currentPackageProfile, setCurrentPackageProfile] =
-    useState<catalog.DeploymentProfile | null>(null);
+  const [currentPackageProfile, setCurrentPackageProfile] = useState<
+    catalog.DeploymentProfile | undefined
+  >();
 
   // Step 2: Override Profile Values
+  const [profileParameterOverrides, setProfileParameterOverrides] =
+    useState<OverrideValuesList>({});
+  //console.log("top lvl overrides val ", profileParameterOverrides);
+
+  const emptyMandatoryParams = useAppSelector(
+    setupDeploymentHasEmptyMandatoryParams,
+  );
 
   // Step 3: Change Deployment Details
+  const [currentDeploymentName, setCurrentDeploymentName] = useState<
+    string | undefined
+  >(apiDeployment?.deployment.displayName ?? apiDeployment?.deployment.name);
+  const [currentMetadata, setCurrentMetadata] = useState<MetadataPair[]>([]);
+  const [selectedClusters, setSelectedClusters] = useState<
+    ecm.ClusterInfoRead[]
+  >([]);
 
   // Step 4: Review
 
@@ -140,23 +190,158 @@ const EditDeployment = () => {
             deployment={apiDeployment.deployment}
             selectedProfile={currentPackageProfile ?? undefined}
             onProfileSelect={setCurrentPackageProfile}
+            onDeploymentPackageLoaded={setDeploymentPackage}
           />
         );
         break;
       case EditDeploymentSteps["Override Profile Values"]:
-        nextJsx = <div>Override Profile Values</div>;
+        nextJsx = (
+          <ChangeProfileValues
+            deployment={apiDeployment.deployment}
+            deploymentPackage={deploymentPackage}
+            deploymentProfile={currentPackageProfile}
+            overrideValues={profileParameterOverrides}
+            onOverrideValuesUpdate={(updatedOverrideValues, clear) => {
+              if (clear) {
+                setProfileParameterOverrides(updatedOverrideValues);
+              } else {
+                setProfileParameterOverrides((prevOverrideValues) => ({
+                  ...prevOverrideValues,
+                  ...updatedOverrideValues,
+                }));
+              }
+            }}
+          />
+        );
         break;
       case EditDeploymentSteps["Change Deployment Details"]:
-        nextJsx = <div>Change Deployment Details</div>;
+        if (apiDeployment.deployment.deploymentType === DeploymentType.MANUAL) {
+          nextJsx = (
+            <SelectCluster
+              mode={SelectClusterMode.EDIT}
+              selectedIds={selectedClusters.map(
+                (cluster) => cluster.clusterID!,
+              )}
+              onSelect={(cluster: ecm.ClusterInfoRead, isSelected: boolean) => {
+                setSelectedClusters((prev) => {
+                  if (isSelected) {
+                    return prev.concat(cluster);
+                  } else {
+                    return prev.filter(
+                      (c) => c.clusterID !== cluster.clusterID,
+                    );
+                  }
+                });
+              }}
+              currentDeploymentName={currentDeploymentName ?? ""}
+              onDeploymentNameChange={setCurrentDeploymentName}
+            />
+          );
+        } else {
+          nextJsx = (
+            <SetupMetadata
+              mode={SetupMetadataMode.EDIT}
+              metadataPairs={currentMetadata}
+              currentDeploymentName={currentDeploymentName}
+              onMetadataUpdate={setCurrentMetadata}
+              onDeploymentNameChange={setCurrentDeploymentName}
+            />
+          );
+        }
         break;
       case EditDeploymentSteps["Review"]:
-        nextJsx = <div>Review</div>;
+        nextJsx = (
+          <Review
+            deployment={apiDeployment.deployment}
+            deploymentType={apiDeployment.deployment.deploymentType}
+            selectedPackage={deploymentPackage}
+            selectedProfile={currentPackageProfile}
+            selectedParameterOverrides={profileParameterOverrides}
+            selectedDeploymentName={currentDeploymentName}
+            selectedMetadata={currentMetadata}
+            selectedClusters={selectedClusters}
+          />
+        );
         break;
     }
     if (nextJsx !== null) {
       setStepJsx(nextJsx);
     }
-  }, [availableSteps, currentStep, apiDeployment, isDeploymentSuccess]);
+  }, [
+    availableSteps,
+    currentStep,
+    apiDeployment,
+    isDeploymentSuccess,
+    profileParameterOverrides,
+    currentDeploymentName,
+    currentMetadata,
+    selectedClusters,
+  ]);
+
+  useEffect(() => {
+    if (isDeploymentSuccess) {
+      setCurrentDeploymentName(
+        apiDeployment.deployment.displayName ?? apiDeployment.deployment.name,
+      );
+      if (apiDeployment.deployment.deploymentType === DeploymentType.AUTO) {
+        setCurrentMetadata(
+          generateMetadataPair(
+            apiDeployment.deployment.targetClusters?.find(
+              (tc) => Object.keys(tc.labels ?? {}).length > 0,
+            )?.labels ?? {},
+          ),
+        );
+      }
+      if (apiDeployment.deployment.deploymentType === DeploymentType.MANUAL) {
+        if (apiDeployment.deployment.targetClusters) {
+          setSelectedClusters(
+            apiDeployment.deployment.targetClusters.map((tc) => {
+              const cluster: ecm.ClusterInfoRead = {
+                // to save deployment we just need ClusterId
+                // therefore no need to load cluster data
+                clusterID: tc.clusterId,
+              };
+              return cluster;
+            }),
+          );
+        }
+      }
+    }
+  }, [isDeploymentSuccess]);
+
+  useEffect(() => {
+    if (
+      availableSteps[currentStep] ===
+      EditDeploymentSteps["Change Package Profile"]
+    ) {
+      setIsNextDisabled(false);
+    }
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (
+      availableSteps[currentStep] ===
+      EditDeploymentSteps["Override Profile Values"]
+    ) {
+      setIsNextDisabled(emptyMandatoryParams);
+    }
+  }, [profileParameterOverrides, currentStep, emptyMandatoryParams]);
+
+  useEffect(() => {
+    if (
+      availableSteps[currentStep] ===
+      EditDeploymentSteps["Change Deployment Details"]
+    ) {
+      setIsNextDisabled(
+        !currentDeploymentName ||
+          currentDeploymentName === "" ||
+          (apiDeployment?.deployment.deploymentType === DeploymentType.MANUAL &&
+            selectedClusters.length === 0) ||
+          (apiDeployment?.deployment.deploymentType === DeploymentType.AUTO &&
+            currentMetadata.length === 0),
+      );
+    }
+  }, [currentStep, currentMetadata, selectedClusters, currentDeploymentName]);
 
   // Rendering Logic
   if (isDeploymentLoading) {
@@ -178,10 +363,116 @@ const EditDeployment = () => {
   // if isSuccess
   const deployment = apiDeployment.deployment;
 
+  // TODO: move this to utils, other occurrence: SetupDeployment.tsx
+  const convertMetadataPairsToObject = (
+    metadataPairs: MetadataPair[],
+  ): { [key: string]: string } =>
+    metadataPairs.reduce(
+      (accumulator: any, currentValue: MetadataPair) => ({
+        ...accumulator,
+        [currentValue.key]: currentValue.value,
+      }),
+      {},
+    );
+
+  const updateDeploymentApi = async (): Promise<boolean> => {
+    if (!deployment.deployId) return false;
+    let isUpdated = true;
+
+    const labels = convertMetadataPairsToObject(currentMetadata);
+
+    const overrideValues: adm.OverrideValues[] = [];
+    Object.keys(profileParameterOverrides).forEach((key) => {
+      const appName = key.split(" ")[0];
+      overrideValues.push({
+        appName: appName,
+        values: profileParameterOverrides[key]?.values || {},
+      });
+    });
+
+    // TODO: move this to utils, other occurrence: SetupDeployment.tsx
+    const targetClusters =
+      deploymentPackage && deploymentPackage.applicationReferences
+        ? deploymentPackage.applicationReferences.reduce(
+            (p: adm.TargetClusters[], app: catalog.ApplicationReference) => {
+              if (selectedClusters && selectedClusters.length > 0) {
+                return p.concat(
+                  selectedClusters.map((c: ecm.ClusterInfoRead) => {
+                    return {
+                      appName: app.name,
+                      clusterId: c.clusterID ?? "",
+                    };
+                  }),
+                );
+              } else {
+                p.push({
+                  appName: app.name,
+                  labels: labels,
+                });
+                return p;
+              }
+            },
+            [],
+          )
+        : [];
+
+    await updateDeployment({
+      projectName,
+      deplId: deployment.deployId,
+      deployment: {
+        appName: deployment.appName,
+        appVersion: deployment.appVersion,
+        profileName: currentPackageProfile ? currentPackageProfile.name : "",
+        displayName: currentDeploymentName,
+        targetClusters,
+        overrideValues: overrideValues || [],
+        publisherName: "intel", // FIXME remove once the API support it
+      },
+    })
+      .unwrap()
+      .then((response) => {
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Success,
+            message: `Deployment ${response.deployment.displayName} updated successfully`,
+            visibility: ToastVisibility.Show,
+          }),
+        );
+        navigate("/applications/deployments");
+      })
+      .catch((error) => {
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Danger,
+            message: parseError(error).data,
+            visibility: ToastVisibility.Show,
+          }),
+        );
+        isUpdated = false;
+      });
+
+    return isUpdated;
+  };
+
+  const updateMetadataApi = async (): Promise<void> => {
+    await updateMetadata({
+      projectName: SharedStorage.project?.name ?? "",
+      metadataList: { metadata: currentMetadata },
+    })
+      .unwrap()
+      .catch((error) => {
+        logError(error, "Failed to update Metadata.");
+      });
+  };
+
   const edit = async (): Promise<void> => {
     setIsEditing(true);
-    // TODO: edit api calls here
+    const isDeploymentUpdated = await updateDeploymentApi();
     setIsEditing(false);
+    if (!isDeploymentUpdated) return;
+    await updateMetadataApi(); // TODO: Should this be executed in manual setup?
   };
 
   return (

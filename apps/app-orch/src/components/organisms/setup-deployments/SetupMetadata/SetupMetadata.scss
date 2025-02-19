@@ -34,7 +34,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin: 1.5rem auto;
 
     .spark-fieldlabel {
       line-height: 2 !important;
@@ -101,5 +101,9 @@
 
   &__tooltip-position {
     transform: translateX(-4.85rem);
+  }
+
+  span + p {
+    margin: 0.5rem auto 1.5rem;
   }
 }

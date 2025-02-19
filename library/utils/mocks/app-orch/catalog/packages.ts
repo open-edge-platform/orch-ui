@@ -5,6 +5,8 @@
 
 import { catalog, CatalogKinds } from "@orch-ui/apis";
 import {
+  appForEditDeployment1,
+  appForEditDeployment2,
   applicationEight,
   applicationFive,
   applicationFour,
@@ -327,6 +329,41 @@ export const packageWithParameterTemplates: catalog.DeploymentPackageRead = {
   kind: "KIND_NORMAL",
 };
 
+export const packageForEditDeployment: catalog.DeploymentPackageRead = {
+  name: "package-for-edit-deployment",
+  version: "1.0.0",
+  kind: "KIND_NORMAL",
+  artifacts: [],
+  extensions: [],
+  applicationReferences: [
+    {
+      name: appForEditDeployment1.name,
+      version: appForEditDeployment1.version,
+    },
+    {
+      name: appForEditDeployment2.name,
+      version: appForEditDeployment2.version,
+    },
+  ],
+  defaultProfileName: "min",
+  profiles: [
+    {
+      name: "min",
+      applicationProfiles: {
+        [appForEditDeployment1.name]: appForEditDeployment1.profiles![0].name,
+        [appForEditDeployment2.name]: appForEditDeployment2.profiles![0].name,
+      },
+    },
+    {
+      name: "max",
+      applicationProfiles: {
+        [appForEditDeployment1.name]: appForEditDeployment1.profiles![1].name,
+        [appForEditDeployment2.name]: appForEditDeployment2.profiles![1].name,
+      },
+    },
+  ],
+};
+
 export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPackageRead> {
   constructor() {
     super([
@@ -337,6 +374,7 @@ export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPack
       packageWithParameterTemplates,
       packageOneExtension,
       packageTwoExtension,
+      packageForEditDeployment,
     ]);
   }
 

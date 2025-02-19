@@ -20,11 +20,13 @@ type MandatoryParams = { [key: string]: string };
 type SetupDeploymentState = {
   applications: catalog.Application[];
   mandatoryParams: MandatoryParams;
+  editPrevProfileName: string;
 };
 
 const initialState: SetupDeploymentState = {
   applications: [],
   mandatoryParams: {},
+  editPrevProfileName: "",
 };
 
 export const setupDeployment = createSlice({
@@ -73,6 +75,15 @@ export const setupDeployment = createSlice({
     ) {
       state.mandatoryParams[action.payload.param] = action.payload.value;
     },
+    setEditPrevProfileName(
+      state: SetupDeploymentState,
+      action: PayloadAction<string>,
+    ) {
+      state.editPrevProfileName = action.payload;
+    },
+    clearMandatoryParams(state: SetupDeploymentState) {
+      state.mandatoryParams = {};
+    },
   },
 });
 
@@ -93,7 +104,14 @@ export const setupDeploymentEmptyMandatoryParams = (state: RootState) =>
     .filter((k) => k[1] === "")
     .map((v) => v[0]);
 
-export const { setDeploymentApplications, updateMandatoryParam } =
-  setupDeployment.actions;
+export const editDeploymentPrevProfileName = (state: RootState) =>
+  state.setupDeployment.editPrevProfileName;
+
+export const {
+  setDeploymentApplications,
+  updateMandatoryParam,
+  clearMandatoryParams,
+  setEditPrevProfileName,
+} = setupDeployment.actions;
 
 export default setupDeployment.reducer;

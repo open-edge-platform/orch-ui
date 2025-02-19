@@ -7,6 +7,7 @@ import "./src/components/atoms/ApplicationDetailsProfilesInfoSubRow/ApplicationD
 import "./src/components/atoms/ApplicationName/ApplicationName.cy.tsx";
 import "./src/components/atoms/ApplicationProfileOverrideValueComboBoxCell/ApplicationProfileOverrideValueComboBoxCell.cy.tsx";
 import "./src/components/atoms/ApplicationProfileParameterOverrideForm/ApplicationProfileParameterOverrideForm.cy.tsx";
+import "./src/components/atoms/DeploymentPackage/DeploymentPackage.cy.tsx";
 import "./src/components/atoms/DeploymentUpgradeAvailabilityStatus/DeploymentUpgradeAvailabilityStatus.cy.tsx";
 import "./src/components/atoms/ProfileName/ProfileName.cy.tsx";
 import "./src/components/organisms/applications/ApplicationAddRegistryDrawer/ApplicationAddRegistryDrawer.cy.tsx";

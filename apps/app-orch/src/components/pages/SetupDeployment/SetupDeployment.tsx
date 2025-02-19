@@ -39,18 +39,20 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setupDeploymentHasEmptyMandatoryParams } from "../../../store/reducers/setupDeployment";
 import { setProps } from "../../../store/reducers/toast";
-import DeploymentProfileForm from "../../organisms/profiles/DeploymentProfileForm/DeploymentProfileForm";
+import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
 import NetworkInterconnect from "../../organisms/setup-deployments/NetworkInterconnect/NetworkInterconnect";
 import { OverrideValuesList } from "../../organisms/setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import Review from "../../organisms/setup-deployments/Review/Review";
-import SelectCluster from "../../organisms/setup-deployments/SelectCluster/SelectCluster";
+import SelectCluster, {
+  SelectClusterMode,
+} from "../../organisms/setup-deployments/SelectCluster/SelectCluster";
 import SelectDeploymentType from "../../organisms/setup-deployments/SelectDeploymentType/SelectDeploymentType";
 import SelectPackage from "../../organisms/setup-deployments/SelectPackage/SelectPackage";
 import SelectProfilesTable from "../../organisms/setup-deployments/SelectProfileTable/SelectProfileTable";
-import SetupMetadata from "../../organisms/setup-deployments/SetupMetadata/SetupMetadata";
+import SetupMetadata, {
+  SetupMetadataMode,
+} from "../../organisms/setup-deployments/SetupMetadata/SetupMetadata";
 import "./SetupDeployment.scss";
-
-const { useDeploymentServiceCreateDeploymentMutation } = adm;
 
 type params = {
   appName: string;
@@ -209,7 +211,7 @@ const SetupDeployment = () => {
     }
   }, [selectedApp]);
 
-  const [createDeployment] = useDeploymentServiceCreateDeploymentMutation();
+  const [createDeployment] = adm.useDeploymentServiceCreateDeploymentMutation();
   const [createMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
   // NOTE that this call only happens if the currentDeploymentPackage is set
@@ -253,17 +255,20 @@ const SetupDeployment = () => {
         break;
       case SetupDeploymentSteps["Override Profile Values"]:
         nextJsx = (
-          <DeploymentProfileForm
-            // TODO: replace null in state above with undefined and remove the null check to undefined below
-            selectedPackage={currentDeploymentPackage ?? undefined}
-            selectedProfile={currentPackageProfile ?? undefined}
-            onOverrideValuesUpdate={(updatedOverrideValues) =>
-              setProfileParameterOverrides((prevOverrideValues) => ({
-                ...prevOverrideValues,
-                ...updatedOverrideValues,
-              }))
-            }
+          <ChangeProfileValues
+            deploymentPackage={currentDeploymentPackage ?? undefined}
+            deploymentProfile={currentPackageProfile ?? undefined}
             overrideValues={profileParameterOverrides}
+            onOverrideValuesUpdate={(updatedOverrideValues, clear) => {
+              if (clear) {
+                setProfileParameterOverrides(updatedOverrideValues);
+              } else {
+                setProfileParameterOverrides((prevOverrideValues) => ({
+                  ...prevOverrideValues,
+                  ...updatedOverrideValues,
+                }));
+              }
+            }}
           />
         );
         break;
@@ -316,6 +321,7 @@ const SetupDeployment = () => {
         if (type === DeploymentType.MANUAL) {
           nextJsx = (
             <SelectCluster
+              mode={SelectClusterMode.CREATE}
               selectedIds={selectedClusters.map(
                 (cluster) => cluster.clusterID!,
               )}
@@ -338,6 +344,7 @@ const SetupDeployment = () => {
           nextJsx = (
             <>
               <SetupMetadata
+                mode={SetupMetadataMode.CREATE}
                 metadataPairs={currentMetadata}
                 applicationPackage={currentDeploymentPackage}
                 currentDeploymentName={currentDeploymentName ?? ""}
@@ -424,7 +431,7 @@ const SetupDeployment = () => {
         !currentDeploymentName ||
           currentDeploymentName === "" ||
           (type === DeploymentType.MANUAL && selectedClusters.length === 0) ||
-          (type !== DeploymentType.MANUAL && currentMetadata.length === 0),
+          (type == DeploymentType.AUTO && currentMetadata.length === 0),
       );
     }
   }, [currentStep, currentMetadata, selectedClusters, currentDeploymentName]);
@@ -444,18 +451,13 @@ const SetupDeployment = () => {
 
   const convertMetadataPairsToObject = (
     metadataPairs: MetadataPair[],
-  ): { [key: string]: string } => {
-    const result = metadataPairs.reduce(
-      (accumulator: any, currentValue: MetadataPair) => {
-        return {
-          ...accumulator,
-          [currentValue.key]: currentValue.value,
-        };
-      },
-      {},
-    );
-    return result;
-  };
+  ): { [key: string]: string } =>
+    metadataPairs.reduce((accumulator: any, currentValue: MetadataPair) => {
+      return {
+        ...accumulator,
+        [currentValue.key]: currentValue.value,
+      };
+    }, {});
 
   const createDeploymentApi = async (
     applicationPackage: catalog.DeploymentPackage | null,
