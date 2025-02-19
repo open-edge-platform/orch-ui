@@ -44,7 +44,7 @@ describe("<HostConfig/>", () => {
       pom.missingHostMessage.should("be.visible");
       pom.missingHostMessageConfirmButton.click();
 
-      cy.get("#pathname").contains("/unconfigured-hosts");
+      cy.get("#pathname").contains("/hosts");
     });
   });
   describe("buttons", () => {

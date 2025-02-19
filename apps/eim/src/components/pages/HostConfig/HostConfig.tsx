@@ -193,7 +193,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
 
   const goToListPage = () => {
     dispatch(resetTree(location.pathname + location.search));
-    navigate("../../unconfigured-hosts", { relative: "path" });
+    navigate("../../hosts", { relative: "path" });
   };
 
   if (!containsHosts) {

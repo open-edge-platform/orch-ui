@@ -23,7 +23,8 @@ const Hosts = () => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
-  const [, setSelectedHosts] = useState<eim.HostRead[]>([]);
+
+  const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
 
   //Triggers the initial query of the Hosts table
@@ -57,7 +58,12 @@ const Hosts = () => {
       />
 
       <HostsTable
-        selectable={true}
+        selectable={
+          hostFilterState.lifeCycleState === LifeCycleState.Onboarded ||
+          hostFilterState.lifeCycleState === LifeCycleState.Registered
+        }
+        selectedHosts={selectedHosts}
+        unsetSelectedHosts={() => setSelectedHosts([])}
         onHostSelect={(row: eim.HostRead, isSelected: boolean) => {
           setSelectedHosts((prev) => {
             if (isSelected) {

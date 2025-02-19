@@ -289,6 +289,7 @@ export const Table = <T extends object>({
     setPageSize,
     toggleAllRowsExpanded,
     toggleRowSelected,
+    selectedFlatRows,
   } = useTable<T>(
     tableOptions,
     useGlobalFilter,
@@ -319,6 +320,12 @@ export const Table = <T extends object>({
       const id = getRowId ? getRowId(row) : index.toString();
       if (selectedIds && selectedIds.includes(id)) {
         toggleRowSelected(id, true);
+      }
+    });
+    // To deselect items in the table
+    selectedFlatRows.forEach((item) => {
+      if (!selectedIds.includes(item.id)) {
+        toggleRowSelected(item.id, false);
       }
     });
   }, [selectedIds, localData]);

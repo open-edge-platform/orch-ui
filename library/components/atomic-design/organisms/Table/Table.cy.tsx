@@ -135,6 +135,9 @@ const TestComponent = ({
       <span data-cy="testSelectedList">
         Selected: {JSON.stringify(selectedIds)}
       </span>
+      <button data-cy="unsetSelected" onClick={() => setSelectedIds([])}>
+        Unset selected rows
+      </button>
       <Table
         data={customData}
         columns={customColumns}
@@ -757,7 +760,23 @@ describe("<Table/>", () => {
         );
       });
 
-      it("should perform deselections", () => {
+      it("should perform deselections when preselected rows are unset", () => {
+        cy.mount(
+          <TestComponent
+            preselectedRows={["Data 0,1.0.0", "Data 1,1.0.0"]}
+            getRowId={getMultiColumnKeyIdFromRow}
+          />,
+        );
+
+        pom.el.rowSelectCheckbox.eq(0).should("be.checked");
+        pom.el.rowSelectCheckbox.eq(1).should("be.checked");
+
+        cyGet("unsetSelected").click();
+        pom.el.rowSelectCheckbox.eq(0).should("not.be.checked");
+        pom.el.rowSelectCheckbox.eq(1).should("not.be.checked");
+      });
+
+      it("should perform deselections on page change", () => {
         cy.mount(
           <TestComponent
             preselectedRows={[

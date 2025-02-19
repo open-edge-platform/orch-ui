@@ -9,20 +9,34 @@ import {
   columnDisplayNameToApiName,
   Empty,
   EmptyActionProps,
+  Flex,
   SortDirection,
   Table,
   TableColumn,
 } from "@orch-ui/components";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 import {
   API_INTERVAL,
+  checkAuthAndRole,
   Direction,
   getOrder,
+  Role,
   SharedStorage,
 } from "@orch-ui/utils";
+import { Button } from "@spark-design/react";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { reset, setHosts } from "../../../store/configureHost";
+
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setSearchTerm } from "../../../store/hostFilterBuilder";
+import {
+  LifeCycleState,
+  setSearchTerm,
+} from "../../../store/hostFilterBuilder";
+import {
+  showErrorMessageBanner,
+  showSuccessMessageBanner,
+} from "../../../store/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
 import HostPopup from "../hosts/HostPopup/HostPopup";
@@ -49,7 +63,7 @@ interface HostsTableProps {
   /** enable checkbox select feature on this table component */
   selectable?: boolean;
   /** initial selected rows */
-  selectedHostIds?: string[];
+  selectedHosts?: eim.HostRead[];
   /** manually skip polling */
   poll?: boolean;
   emptyActionProps?: EmptyActionProps[];
@@ -57,6 +71,8 @@ interface HostsTableProps {
   onHostSelect?: (selectedHost: eim.HostRead, isSelected: boolean) => void;
   /** Invoked when data is loaded */
   onDataLoad?: (data: eim.HostRead[]) => void;
+  unsetSelectedHosts?: () => void;
+  provisionHosts?: () => void;
 }
 
 const columns: TableColumn<eim.HostRead>[] = [
@@ -74,11 +90,12 @@ const HostsTable = ({
   poll,
   onDataLoad,
   selectable,
-  selectedHostIds,
+  selectedHosts,
   expandable,
   actionsJsx,
   emptyActionProps,
   onHostSelect,
+  unsetSelectedHosts,
 }: HostsTableProps) => {
   const cy = { "data-cy": dataCy };
   const defaultPageSize = {
@@ -87,6 +104,10 @@ const HostsTable = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [onboardHost] =
+    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
 
   // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
@@ -96,7 +117,9 @@ const HostsTable = ({
   const sortDirection = (searchParams.get("direction") as Direction) ?? "asc";
   const searchTerm = searchParams.get("searchTerm") ?? "";
 
-  const { filter } = useAppSelector((state) => state.hostFilterBuilder);
+  const { filter, lifeCycleState } = useAppSelector(
+    (state) => state.hostFilterBuilder,
+  );
 
   const { data, isSuccess, isError, isLoading, error } =
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
@@ -117,6 +140,13 @@ const HostsTable = ({
     );
 
   useEffect(() => {
+    // clear selections when tab changes
+    if (selectedHosts?.length && unsetSelectedHosts) {
+      unsetSelectedHosts();
+    }
+  }, [lifeCycleState]);
+
+  useEffect(() => {
     if (onDataLoad && isSuccess && data) {
       onDataLoad(data.hosts);
     }
@@ -128,6 +158,101 @@ const HostsTable = ({
 
   const isEmptyError = () =>
     isSuccess && data.hosts.length === 0 && !searchTerm;
+
+  const provisionHosts = () => {
+    if (selectedHosts) {
+      // reset the HostConfig form
+      dispatch(reset());
+      // store the current Host in Redux, so we don't have to fetch it again
+      dispatch(setHosts({ hosts: selectedHosts }));
+      const path = "../unconfigured-host/configure";
+      navigate(path, {
+        relative: "path",
+      });
+    }
+  };
+
+  const onOnboard = async () => {
+    const failedHosts = new Set<string>();
+    let firstErrorMessage: string | undefined = undefined;
+    if (!selectedHosts) return;
+    for (const host of selectedHosts) {
+      await onboardHost({
+        projectName: SharedStorage.project?.name ?? "",
+        hostId: host.resourceId!,
+      })
+        .unwrap()
+        .catch((e) => {
+          failedHosts.add(host.name);
+          if (firstErrorMessage === undefined) {
+            firstErrorMessage = e.data?.message;
+          }
+        });
+    }
+
+    if (failedHosts.size > 0) {
+      showErrorMessageBanner(
+        dispatch,
+        `Failed to onboard hosts ${[...failedHosts].join(", ")} !`,
+      );
+    } else {
+      const successMessage =
+        selectedHosts && selectedHosts?.length > 1
+          ? "Hosts are now being onboarded."
+          : "Host is now being onboarded.";
+      showSuccessMessageBanner(dispatch, successMessage);
+      unsetSelectedHosts && unsetSelectedHosts();
+    }
+  };
+
+  const renderSelectedItemsBanner = () => {
+    const hasWritePermission = checkAuthAndRole([Role.INFRA_MANAGER_WRITE]);
+    return selectedHosts?.length ? (
+      <Flex
+        dataCy="selectedHostsBanner"
+        justify="end"
+        cols={[4, 8]}
+        className="selected-hosts-banner"
+      >
+        <div>{selectedHosts?.length} item selected</div>
+        <div className="action-btns-container">
+          <Button
+            isDisabled={
+              !hasWritePermission || lifeCycleState === LifeCycleState.Onboarded
+            }
+            className="hosts-action-btn"
+            data-cy="onboardBtn"
+            onPress={() => {
+              onOnboard();
+            }}
+          >
+            Onboard
+          </Button>
+          <Button
+            isDisabled={
+              !hasWritePermission ||
+              lifeCycleState === LifeCycleState.Registered
+            }
+            className="hosts-action-btn"
+            data-cy="provisionBtn"
+            onPress={() => {
+              provisionHosts();
+            }}
+          >
+            Provision
+          </Button>
+          <span className="btn-seperator">|</span>
+          <Button
+            onPress={() => unsetSelectedHosts && unsetSelectedHosts()}
+            className="hosts-action-btn"
+            data-cy="cancelBtn"
+          >
+            Cancel
+          </Button>
+        </div>
+      </Flex>
+    ) : null;
+  };
 
   if (isError) {
     return <ApiError error={error} />;
@@ -142,10 +267,14 @@ const HostsTable = ({
       </div>
     );
   }
+
+  const selectedIds = selectedHosts?.map((host) => host.resourceId!);
   return (
     <div {...cy} className="hosts-table">
+      {renderSelectedItemsBanner()}
       <Table
         // Basic Table data
+        key={selectable ? "selectable" : "non-selectable"}
         columns={columns}
         data={data.hosts}
         // Pagination
@@ -186,7 +315,7 @@ const HostsTable = ({
           });
         }}
         // Searching
-        canSearch={true}
+        canSearch={!selectedIds?.length} // If selctedItems banner is shown, hiding the search
         getRowId={(row) => row.resourceId!}
         searchTerm={searchTerm}
         onSearch={(searchTerm: string) => {
@@ -203,7 +332,7 @@ const HostsTable = ({
         // Checkbox Selection
         canSelectRows={selectable}
         onSelect={onHostSelect}
-        selectedIds={selectedHostIds}
+        selectedIds={selectedIds}
         canExpandRows={expandable}
         subRow={(row: { original: eim.HostRead }) => {
           const host = row.original;

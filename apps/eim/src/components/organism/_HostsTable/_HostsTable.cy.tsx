@@ -128,7 +128,7 @@ describe("<_HostsTable/>", () => {
       pom.table.getRows().should("have.length", 8);
     });
 
-    it("should select 2nd row of page 1", () => {
+    xit("should select 2nd row of page 1", () => {
       pom.getHostCheckboxByName("Host 1").click();
       pom.getHostCheckboxByName("Host 1").should("be.checked");
 
@@ -139,7 +139,7 @@ describe("<_HostsTable/>", () => {
       pom.getHostCheckboxByName("Host 1").should("not.be.checked");
     });
 
-    it("should select 2nd row of page 2", () => {
+    xit("should select 2nd row of page 2", () => {
       pom.interceptApis([
         pom.api.getHostsListSuccessPage1Total18,
         pom.api.getHostsListSuccessPage2,

@@ -29,7 +29,12 @@ export const configuredColumns: TableColumn<eim.HostRead>[] = [
   HostTableColumn.site,
 ];
 
-const dataCySelectors = [] as const;
+const dataCySelectors = [
+  "selectedHostsBanner",
+  "provisionBtn",
+  "onboardBtn",
+  "cancelBtn",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type GenericHostSuccessApiAliases =
@@ -40,7 +45,8 @@ type GenericHostSuccessApiAliases =
   | "getHostsListSuccessWithSiteFilter"
   | "getHostsListSuccessWithSearchFilter"
   | "getHostsListSuccessWithOrderAsc"
-  | "getHostsListSuccessWithOrderDesc";
+  | "getHostsListSuccessWithOrderDesc"
+  | "patchOnboardHost";
 type SpecificHostSuccessApiAliases =
   | "getOnboardedHosts"
   | "getConfiguredHosts"
@@ -49,7 +55,7 @@ type SpecificHostSuccessApiAliases =
 type HostSuccessApiAliases =
   | GenericHostSuccessApiAliases
   | SpecificHostSuccessApiAliases;
-type HostErrorApiAliases = "getHostsListError500";
+type HostErrorApiAliases = "getHostsListError500" | "patchOnboardHostError";
 
 type ApiAliases = HostSuccessApiAliases | HostErrorApiAliases;
 
@@ -157,6 +163,11 @@ const genericHostSuccessEndpoints: CyApiDetails<
       hosts: hostResponseOfSize10Total10.hosts.reverse(),
     },
   },
+  patchOnboardHost: {
+    method: "patch",
+    route: "**/compute/hosts/**",
+    statusCode: 200,
+  },
 };
 
 const specificHostSuccessApiEndpoints: CyApiDetails<
@@ -188,6 +199,11 @@ const specificHostSuccessApiEndpoints: CyApiDetails<
 const errorEndpoints: CyApiDetails<HostErrorApiAliases> = {
   getHostsListError500: {
     route: route,
+    statusCode: 500,
+  },
+  patchOnboardHostError: {
+    method: "patch",
+    route: "**/compute/hosts/**",
     statusCode: 500,
   },
 };

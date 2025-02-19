@@ -2,9 +2,14 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: LicenseRef-Intel
  */
-
+import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, RibbonPom } from "@orch-ui/components";
+import { cyGet } from "@orch-ui/tests";
+import { useState } from "react";
+import { useAppSelector } from "../../../store/hooks";
 import { LifeCycleState } from "../../../store/hostFilterBuilder";
+import { setupStore } from "../../../store/store";
+import { HostConfigPom } from "../../pages/HostConfig/HostConfig.pom";
 import HostsTable from "./HostsTable";
 import HostsTablePom from "./HostsTable.pom";
 
@@ -12,6 +17,37 @@ const pom = new HostsTablePom();
 const ribbonPom = new RibbonPom("table");
 const emptyPom = new EmptyPom();
 const apiErrorPom = new ApiErrorPom();
+const hostConfigPom = new HostConfigPom();
+interface TestComponentProps {
+  selectable: boolean;
+}
+
+const TestCompoent = ({ selectable }: TestComponentProps) => {
+  const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
+  const { messageBanner } = useAppSelector(
+    (state) => state.notificationStatusList,
+  );
+
+  return (
+    <>
+      <p data-cy="testMessage">{messageBanner?.text}</p>
+      <HostsTable
+        selectable={selectable}
+        unsetSelectedHosts={() => setSelectedHosts([])}
+        onHostSelect={(row: eim.HostRead, isSelected: boolean) => {
+          setSelectedHosts((prev) => {
+            return isSelected
+              ? prev.concat(row)
+              : prev.filter((host) => host.resourceId !== row.resourceId);
+          });
+        }}
+        selectedHosts={selectedHosts}
+      />
+      ,
+    </>
+  );
+};
+
 describe("<HostsTable/>", () => {
   describe("when the API return a list of hosts", () => {
     beforeEach(() => {
@@ -93,7 +129,7 @@ describe("<HostsTable/>", () => {
   describe("pagination tests", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.getHostsListSuccessPage1Total18]);
-      cy.mount(<HostsTable selectable />);
+      cy.mount(<TestCompoent selectable />);
       pom.waitForApis();
     });
 
@@ -144,6 +180,121 @@ describe("<HostsTable/>", () => {
     });
     it("should invoke the callback", () => {
       cy.get("@onDataLoad").should("have.been.calledOnce");
+    });
+  });
+
+  describe("when the Onboarded hosts listed", () => {
+    beforeEach(() => {
+      pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+      cy.mount(<TestCompoent selectable />, {
+        reduxStore: setupStore({
+          hostFilterBuilder: {
+            lifeCycleState: LifeCycleState.Onboarded,
+          },
+        }),
+      });
+      pom.waitForApis();
+    });
+    it("should show selection banner", () => {
+      pom.getHostCheckboxByName("Host 0").click();
+      pom.getHostCheckboxByName("Host 0").should("be.checked");
+
+      pom.el.selectedHostsBanner.should("be.visible");
+      pom.el.selectedHostsBanner.contains("1 item selected");
+      pom.el.onboardBtn.should("have.class", "spark-button-disabled");
+      pom.el.provisionBtn.should("not.have.class", "spark-button-disabled");
+      pom.el.cancelBtn.should("be.visible").click();
+
+      pom.el.selectedHostsBanner.should("not.exist");
+      pom.getHostCheckboxByName("Host 0").should("not.be.checked");
+    });
+
+    it("should allow user to provision the hosts", () => {
+      hostConfigPom.interceptApis([
+        hostConfigPom.api.patchComputeHostsAndHostId,
+      ]);
+
+      pom.getHostCheckboxByName("Host 0").click();
+      pom.getHostCheckboxByName("Host 0").should("be.checked");
+
+      pom.el.provisionBtn.click();
+      cy.get("#pathname").contains("/unconfigured-host/configure");
+    });
+  });
+
+  describe("when the Registred hosts are listed", () => {
+    beforeEach(() => {
+      pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+      cy.mount(<TestCompoent selectable />, {
+        reduxStore: setupStore({
+          hostFilterBuilder: {
+            lifeCycleState: LifeCycleState.Registered,
+          },
+        }),
+      });
+      pom.waitForApis();
+    });
+    it("should show selection banner", () => {
+      pom.getHostCheckboxByName("Host 0").click();
+      pom.getHostCheckboxByName("Host 0").should("be.checked");
+
+      pom.el.selectedHostsBanner.should("be.visible");
+      pom.el.selectedHostsBanner.contains("1 item selected");
+      pom.el.onboardBtn.should("not.have.class", "spark-button-disabled");
+      pom.el.provisionBtn.should("have.class", "spark-button-disabled");
+      pom.el.cancelBtn.should("be.visible").click();
+
+      pom.el.selectedHostsBanner.should("not.exist");
+      pom.getHostCheckboxByName("Host 0").should("not.be.checked");
+    });
+
+    it("should allow user to onboard the hosts", () => {
+      pom.interceptApis([pom.api.patchOnboardHost]);
+
+      pom.getHostCheckboxByName("Host 0").click();
+      pom.getHostCheckboxByName("Host 1").click();
+      pom.getHostCheckboxByName("Host 0").should("be.checked");
+      pom.getHostCheckboxByName("Host 1").should("be.checked");
+
+      pom.el.onboardBtn.click();
+      pom.waitForApi([pom.api.patchOnboardHost]);
+      cyGet("testMessage").should(
+        "contain.text",
+        "Hosts are now being onboarded.",
+      );
+    });
+
+    it("should handle onboarding error", () => {
+      pom.interceptApis([pom.api.patchOnboardHostError]);
+
+      pom.getHostCheckboxByName("Host 0").click();
+      pom.getHostCheckboxByName("Host 1").click();
+      pom.getHostCheckboxByName("Host 0").should("be.checked");
+      pom.getHostCheckboxByName("Host 1").should("be.checked");
+
+      pom.el.onboardBtn.click();
+      pom.waitForApi([pom.api.patchOnboardHostError]);
+      cyGet("testMessage").should(
+        "contain.text",
+        "Failed to onboard hosts Host 0, Host 1 !",
+      );
+    });
+  });
+
+  describe("when the Provisioned hosts, All the hosts are listed", () => {
+    beforeEach(() => {
+      pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+      cy.mount(<TestCompoent selectable={false} />, {
+        reduxStore: setupStore({
+          hostFilterBuilder: {
+            lifeCycleState: LifeCycleState.Provisioned,
+          },
+        }),
+      });
+      pom.waitForApis();
+    });
+    it("should not allow selection", () => {
+      pom.table.el.rowSelectCheckbox.should("not.exist");
     });
   });
 });
