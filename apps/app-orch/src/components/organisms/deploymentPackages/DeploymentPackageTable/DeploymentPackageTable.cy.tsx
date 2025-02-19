@@ -115,7 +115,9 @@ describe("<DeploymentPackageTable />", () => {
           <DeploymentPackageTable kind="KIND_NORMAL" hasPermission={false} />,
         );
         pom.waitForApis();
-        pom.openPopupBySearchText(targetApp.displayName ?? targetApp.name);
+        pom
+          .getActionPopupBySearchText(targetApp.displayName ?? targetApp.name)
+          .click();
         cy.contains("Edit").should("have.class", "popup__option-item-disable");
         cy.contains("Delete").should(
           "have.class",
@@ -174,7 +176,9 @@ describe("<DeploymentPackageTable />", () => {
         });
 
         it("should deploy a deployment package", () => {
-          pom.openPopupBySearchText(targetApp.displayName ?? targetApp.name);
+          pom
+            .getActionPopupBySearchText(targetApp.displayName ?? targetApp.name)
+            .click();
           pom.clickPopupOption("Deploy");
           pom
             .getPath()
@@ -185,7 +189,9 @@ describe("<DeploymentPackageTable />", () => {
         });
 
         it("should edit an item", () => {
-          pom.openPopupBySearchText(targetApp.displayName ?? targetApp.name);
+          pom
+            .getActionPopupBySearchText(targetApp.displayName ?? targetApp.name)
+            .click();
           pom.clickPopupOption("Edit");
           pom
             .getPath()
@@ -202,7 +208,9 @@ describe("<DeploymentPackageTable />", () => {
         });
 
         it("should delete an item", () => {
-          pom.openPopupBySearchText(targetApp.displayName ?? targetApp.name);
+          pom
+            .getActionPopupBySearchText(targetApp.displayName ?? targetApp.name)
+            .click();
           cy.get(".popup__options").contains("Delete");
 
           // TODO: after fixing confirmation dialog .contains error

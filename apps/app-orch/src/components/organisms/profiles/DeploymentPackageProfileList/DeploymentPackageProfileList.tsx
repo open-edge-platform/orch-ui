@@ -95,11 +95,12 @@ const DeploymentPackageProfileList = () => {
   return (
     <div {...cy} className="deployment-package-profile-list">
       {deploymentPackageProfiles?.map((profile) => (
-        <DeploymentPackageProfileListItem
-          key={profile.name}
-          profile={profile}
-          defaultProfileName={defaultProfileName}
-        />
+        <div key={profile.name} data-cy={`dpProfileListItem_${profile.name}`}>
+          <DeploymentPackageProfileListItem
+            profile={profile}
+            defaultProfileName={defaultProfileName}
+          />
+        </div>
       ))}
     </div>
   );

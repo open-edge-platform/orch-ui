@@ -14,7 +14,7 @@ import {
 import { DeploymentsTablePom } from "../../organisms/deployments/DeploymentsTable/DeploymentsTable.pom";
 import { DeploymentUpgradeModalPom } from "../../organisms/deployments/DeploymentUpgradeModal/DeploymentUpgradeModal.pom";
 
-const dataCySelectors = ["aside", "deploymentsSearch"] as const;
+const dataCySelectors = ["deploymentsSearch"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases =

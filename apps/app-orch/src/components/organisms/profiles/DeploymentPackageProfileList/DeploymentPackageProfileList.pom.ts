@@ -67,5 +67,13 @@ class DeploymentPackageProfileListPom extends CyPom<Selectors, ApiAliases> {
     super(rootCy, [...dataCySelectors], apis);
     this.listItem = new DeploymentPackageProfileListItemPom();
   }
+
+  public getProfileEntryByProfileName(profileName: string) {
+    // TODO: convert this to below line after opensource is deployable to coder
+    // return this.listItem.find(`[data-cy='dpProfileListItem_${profile.name}'] [data-cy='deploymentPackageTableUtils']`).contains(profileName).closest("tr");
+    return this.listItem.deploymentPackageTableUtils.getRowBySearchText(
+      profileName,
+    );
+  }
 }
 export default DeploymentPackageProfileListPom;

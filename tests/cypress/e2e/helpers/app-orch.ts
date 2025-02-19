@@ -22,6 +22,11 @@ export function isRegistry(arg: any): arg is Partial<catalog.Registry> {
 export function isApplication(arg: any): arg is Partial<catalog.Application> {
   return "name" in arg && "version" in arg;
 }
+export function isDeploymentPackage(
+  arg: any,
+): arg is Partial<catalog.DeploymentPackage> {
+  return "displayName" in arg && "version" in arg && "description" in arg;
+}
 
 // --- Test Data Checking (let your test know if your `data/*.json` is completely provided) ---
 export function isRegistryTestDataPresent(arg: any) {
@@ -48,7 +53,9 @@ export function isApplicationProfileTestDataPresent(arg: any) {
 }
 
 export function isDeploymentPackageTestDataPresent(arg: any) {
-  return "deploymentPackage" in arg; // && isDeploymentPackage(arg.deploymentPackage)
+  return (
+    "deploymentPackage" in arg && isDeploymentPackage(arg.deploymentPackage)
+  );
 }
 export function isDeploymentTestDataPresent(arg: any) {
   return "deployment" in arg; // && isDeployment(arg.deployment);

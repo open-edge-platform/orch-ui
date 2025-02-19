@@ -17,6 +17,9 @@ artifacts
 src/api/observability.monitor
 trivy.yaml
 
+# App-orch test to execute in order
+tests/cypress/e2e/app-orch/app-orch-smoke.cy.ts
+
 # NOTE there are dependency import order in these files,
 # we can't automatically sort the imports with prettier until those are resolved
 library/utils/index.ts

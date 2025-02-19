@@ -11,10 +11,10 @@ const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageCreatePom extends CyPom<Selectors> {
-  dpEditPom: DeploymentPackageCreateEditPom;
+  deploymentPackageCreateEditPom: DeploymentPackageCreateEditPom;
   constructor(public rootCy = dataCy) {
     super(rootCy, [...dataCySelectors]);
-    this.dpEditPom = new DeploymentPackageCreateEditPom();
+    this.deploymentPackageCreateEditPom = new DeploymentPackageCreateEditPom();
   }
 }
 

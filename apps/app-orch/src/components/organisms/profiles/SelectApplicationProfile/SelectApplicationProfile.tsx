@@ -8,6 +8,7 @@ import { Flex, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Combobox, Item, Text } from "@spark-design/react";
 import { ComboboxSize, ComboboxVariant } from "@spark-design/tokens";
+import React from "react";
 import "./SelectApplicationProfile.scss";
 
 interface SelectApplicationProfileProps {
@@ -85,9 +86,9 @@ const SelectApplicationProfile = ({
         size={ComboboxSize.Large}
         variant={ComboboxVariant.Primary}
         defaultInputValue={selectedProfile}
-        onSelectionChange={(value: string) => {
+        onSelectionChange={(value: React.Key | null) => {
           if (onProfileChange) {
-            onProfileChange(applicationReference.name, value);
+            onProfileChange(applicationReference.name, value as string);
           }
         }}
         data-cy="advSettingsAppProfile"

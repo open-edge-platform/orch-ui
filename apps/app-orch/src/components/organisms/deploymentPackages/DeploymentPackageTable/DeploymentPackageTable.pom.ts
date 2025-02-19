@@ -113,8 +113,8 @@ class DeploymentPackageTablePom extends CyPom<Selectors, CompositeApiAliases> {
     this.table = new TablePom();
     this.tableUtils = new SiTablePom();
   }
-  public openPopupBySearchText(searchText: string): void {
-    this.tableUtils
+  public getActionPopupBySearchText(searchText: string) {
+    return this.tableUtils
       .getRowBySearchText(searchText)
       .find("[data-cy='popup']")
       .click();

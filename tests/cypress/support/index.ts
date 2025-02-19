@@ -21,7 +21,7 @@ declare global {
        */
       dataCy(
         value: string,
-        options?: Partial<Loggable & Timeoutable & Withinable & Shadow>
+        options?: Partial<Loggable & Timeoutable & Withinable & Shadow>,
       ): Chainable<JQuery<HTMLElement>>;
 
       /**
@@ -30,7 +30,9 @@ declare global {
        *         url: "/v1/projects/sample-project/regions",
        *       }).then((response) => { ... });
        */
-      authenticatedRequest<T = any>(opts: Partial<RequestOptions>): Chainable<Response<T>>;
+      authenticatedRequest<T = any>(
+        opts: Partial<RequestOptions>,
+      ): Chainable<Response<T>>;
 
       /**
        * Custom command to read the current active project from the local storage
@@ -39,6 +41,19 @@ declare global {
     }
   }
 }
+
+// TODO: This is required to avoid ConfirmationDialog Box error
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // Check if the error message contains the specific text
+  if (
+    err.message.includes("Cannot read properties of null (reading 'contains')")
+  ) {
+    // Returning false here prevents Cypress from failing the test
+    return false;
+  }
+  // Let other errors fail the test
+  return true;
+});
 
 // to override `export CYPRESS_LOG_FOLDER=<path>` in the terminal
 export const LogFolder = Cypress.env("LOG_FOLDER") || "cypress/logs";

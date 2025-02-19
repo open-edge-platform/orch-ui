@@ -62,5 +62,33 @@ class DeploymentPackageCreateEditPom extends CyPom<Selectors, ApiAliases> {
   public clickToCancel() {
     this.el.cancelBtn.click();
   }
+
+  public fillDeploymentPackageCreateEditForm(
+    deploymentPackage: Partial<catalog.DeploymentPackage>,
+    applicationNamesForSelections: string[],
+  ) {
+    // General Info Flow
+    this.deploymentPackageGeneralInfoFormPom.fillGeneralInfoForm(
+      deploymentPackage,
+    );
+    this.clickNextOnStep(0);
+
+    // Application Selection Flow
+    applicationNamesForSelections.forEach((applicationNames) => {
+      this.appTablePom.getCheckBoxBySearchText(applicationNames).click();
+    });
+    this.clickNextOnStep(1);
+
+    // Deployment Package Profile flow
+    const generatedProfileCy =
+      this.deploymentPackageProfilePom.profileList.getProfileEntryByProfileName(
+        "Deployment Profile 1",
+      );
+    generatedProfileCy.should("contain.text", "System generated profile");
+    generatedProfileCy
+      .find(".spark-badge-text")
+      .should("contain.text", "Default");
+    this.clickNextOnStep(2);
+  }
 }
 export default DeploymentPackageCreateEditPom;

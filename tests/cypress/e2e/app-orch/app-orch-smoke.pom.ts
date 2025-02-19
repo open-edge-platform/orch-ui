@@ -12,6 +12,8 @@ import { catalog } from "@orch-ui/apis";
 import {
   ApplicationCreateEditPom,
   ApplicationsPom,
+  DeploymentPackageCreatePom,
+  DeploymentPackagesPom,
 } from "@orch-ui/app-orch-poms";
 import { cyGet, CyPom } from "@orch-ui/tests";
 import { RegistryChart } from "../helpers/app-orch";
@@ -22,12 +24,16 @@ type Selectors = (typeof dataCySelectors)[number];
 class AppOrchPom extends CyPom<Selectors> {
   public applicationsPom: ApplicationsPom;
   public applicationCreateEditPom: ApplicationCreateEditPom;
+  public deploymentPackagesPom: DeploymentPackagesPom;
+  public deploymentPackageCreatePom: DeploymentPackageCreatePom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
 
-    // All Page POMs in Deployment MFE
+    // All Page POMs in Deployments MFE
     this.applicationsPom = new ApplicationsPom();
     this.applicationCreateEditPom = new ApplicationCreateEditPom();
+    this.deploymentPackagesPom = new DeploymentPackagesPom();
+    this.deploymentPackageCreatePom = new DeploymentPackageCreatePom();
   }
 
   /**
@@ -77,6 +83,10 @@ class AppOrchPom extends CyPom<Selectors> {
     application: catalog.Application,
     applicationProfile: catalog.Profile,
   ) {
+    if (!registry.name) {
+      throw Error("Registry name is missing in parameter registry.");
+    }
+
     // Step 1: Application Source (Registry) Info
     this.applicationCreateEditPom.sourceForm.fillApplicationCreateEditSourceInfo(
       registry,
@@ -105,11 +115,47 @@ class AppOrchPom extends CyPom<Selectors> {
 
   /**
    * Remove given Application name in E2E Applications UI.
-   * Note: Make sure you are in the Application Create/Edit page before performing below operation.
+   * Note: Make sure you are in the Application table page before performing below operation.
    * Warning: Also this doesnot check the version of the application (for testing only)
    */
   removeApplication(name: string) {
     this.applicationsPom.tabs.appTablePom
+      .getActionPopupBySearchText(name)
+      .click()
+      .as("popup");
+    cy.get("@popup").contains("Delete").as("deleteBtn");
+    cy.get("@deleteBtn").click();
+    cyGet("confirmBtn").click(); // click confirm button (Delete) in spark-modal (ConfirmationDialog)
+  }
+
+  /**
+   * Add given Deployment Package into E2E Deployment Package UI.
+   * Note: Make sure you are in the Deployment Package Create/Edit page before performing below operation.
+   * Warning: The Deployment package creation relies on system-generated profiles
+   */
+  addDeploymentPackage(
+    deploymentPackage: Partial<catalog.DeploymentPackage>,
+    applicationNamesForSelections: string[],
+  ) {
+    this.deploymentPackagesPom.createButtonPom.el.button.click();
+
+    // Fill Deployment Package Creation form flow
+    this.deploymentPackageCreatePom.deploymentPackageCreateEditPom.fillDeploymentPackageCreateEditForm(
+      deploymentPackage,
+      applicationNamesForSelections,
+    );
+
+    // Submit at Review step
+    this.deploymentPackageCreatePom.deploymentPackageCreateEditPom.el.submitButton.click();
+  }
+
+  /**
+   * Remove given Deployment Package name in E2E Deployment Package UI.
+   * Note: Make sure you are in the Deployment Package table page before performing below operation.
+   * Warning: Also this doesnot check the version of the deploymentPackage (for testing only)
+   */
+  removeDeploymentPackage(name: string) {
+    this.deploymentPackagesPom.deploymentPackageTable
       .getActionPopupBySearchText(name)
       .click()
       .as("popup");

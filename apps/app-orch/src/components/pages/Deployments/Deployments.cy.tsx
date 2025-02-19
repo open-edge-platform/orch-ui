@@ -7,7 +7,7 @@ import Deployments from "./Deployments";
 import DeploymentsPom from "./Deployments.pom";
 
 const pom = new DeploymentsPom();
-describe("<DeploymentInstanceDetail />", () => {
+describe("<Deployments />", () => {
   it("should render empty", () => {
     pom.table.interceptApis([pom.table.api.getEmptyDeploymentsList]);
     cy.mount(<Deployments />);
@@ -33,7 +33,7 @@ describe("<DeploymentInstanceDetail />", () => {
     pom.table.interceptApis([pom.table.api.getDeploymentsList]);
     cy.mount(<Deployments />);
     pom.waitForApis();
-    pom.table.el.actions.contains("Setup a Deployment").click();
+    pom.table.el.addDeploymentButton.contains("Setup a Deployment").click();
     pom.getPath().should("eq", "/deployments/setup-deployment");
   });
 });

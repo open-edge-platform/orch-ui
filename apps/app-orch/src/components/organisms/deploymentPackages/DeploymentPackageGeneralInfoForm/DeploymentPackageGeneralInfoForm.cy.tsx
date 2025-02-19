@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { CompositeApplicationOneVersionOne as DeploymentPackageOneVersionOne } from "@orch-ui/utils";
+import { packageOne } from "@orch-ui/utils";
 import { useForm } from "react-hook-form";
 import { setupStore } from "../../../../store";
 import { nameErrorMsgForRequired } from "../../../../utils/global";
@@ -19,8 +19,8 @@ const WrapperComponent = () => {
   } = useForm<PackageInputs>({
     mode: "all",
     defaultValues: {
-      name: DeploymentPackageOneVersionOne.displayName,
-      version: DeploymentPackageOneVersionOne.version,
+      name: packageOne.displayName,
+      version: packageOne.version,
     },
   });
   return (
@@ -41,7 +41,7 @@ const displayNameErrMsgForInvalidCharacter =
 describe("<DeploymentPackageGeneralInfoForm />", () => {
   beforeEach(() => {
     const store = setupStore({
-      deploymentPackage: { ...DeploymentPackageOneVersionOne },
+      deploymentPackage: { ...packageOne },
     });
     cy.mount(<WrapperComponent />, {
       routerProps: { initialEntries: ["/packages/create"] },
@@ -55,17 +55,9 @@ describe("<DeploymentPackageGeneralInfoForm />", () => {
     });
   });
   it("should render the ca creation table", () => {
-    pom.el.name.should(
-      "have.attr",
-      "value",
-      DeploymentPackageOneVersionOne.name,
-    );
-    pom.el.version.should(
-      "have.attr",
-      "value",
-      DeploymentPackageOneVersionOne.version,
-    );
-    pom.el.desc.contains(DeploymentPackageOneVersionOne?.description ?? "");
+    pom.el.name.should("have.attr", "value", packageOne.name);
+    pom.el.version.should("have.attr", "value", packageOne.version);
+    pom.el.desc.contains(packageOne?.description ?? "");
   });
   describe("should validate name", () => {
     beforeEach(() => {

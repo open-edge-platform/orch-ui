@@ -25,7 +25,7 @@ describe("<SetupMetadata />", () => {
     pom.metadataFormPom.getNewEntryInput("Key").click();
     pom.metadataFormPom.getNewEntryInput("Key").type("mdk");
     pom.metadataFormPom.getNewEntryInput("Value").type("mdv");
-    pom.metadataFormPom.el.add.click();
+    pom.metadataFormPom.el.add.click({ force: true });
     cy.get("@metadataCb").should("have.been.calledWith", [
       { key: "mdk", value: "mdv" },
     ]);

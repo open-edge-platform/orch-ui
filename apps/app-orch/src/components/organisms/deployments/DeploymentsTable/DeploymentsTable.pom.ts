@@ -10,12 +10,7 @@ import { deploymentOne, DeploymentsStore } from "@orch-ui/utils";
 import DeploymentUpgradeAvailabilityStatusPom from "../../../atoms/DeploymentUpgradeAvailabilityStatus/DeploymentUpgradeAvailabilityStatus.pom";
 import { DeploymentUpgradeModalPom } from "../DeploymentUpgradeModal/DeploymentUpgradeModal.pom";
 
-const dataCySelectors = [
-  "empty",
-  "search",
-  "actions",
-  "addDeploymentButton",
-] as const;
+const dataCySelectors = ["empty", "search", "addDeploymentButton"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type SuccessDeploymentsApiAliases =

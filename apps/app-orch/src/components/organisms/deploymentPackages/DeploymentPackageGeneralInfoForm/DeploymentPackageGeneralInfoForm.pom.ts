@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { catalog } from "@orch-ui/apis";
 import { CyPom } from "@orch-ui/tests";
 import { dataCy } from "./DeploymentPackageGeneralInfoForm";
 
-const dataCySelectors = ["name", "version", "desc", "publisher"] as const;
+const dataCySelectors = ["name", "version", "desc"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageGeneralInfoFormPom extends CyPom<Selectors> {
@@ -20,6 +21,12 @@ class DeploymentPackageGeneralInfoFormPom extends CyPom<Selectors> {
 
   get nameTextInvalidIndicator() {
     return this.nameTextField.find(".spark-fieldtext-wrapper-is-invalid");
+  }
+
+  fillGeneralInfoForm(deploymentPackage: Partial<catalog.DeploymentPackage>) {
+    this.el.name.type(deploymentPackage.displayName!);
+    this.el.version.type(deploymentPackage.version!);
+    this.el.desc.type(deploymentPackage.description ?? "");
   }
 }
 
