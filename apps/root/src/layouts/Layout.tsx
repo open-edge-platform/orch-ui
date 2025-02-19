@@ -13,20 +13,11 @@ import "@orch-ui/styles/Global.scss";
 import "@orch-ui/styles/spark-global.scss";
 import "@orch-ui/styles/transitions.scss";
 import { Role, SharedStorage, StorageItems } from "@orch-ui/utils";
-import Cookies from "js-cookie";
 import { useEffect, useReducer } from "react";
-import { useAuth } from "react-oidc-context";
 import { useOutlet } from "react-router-dom";
 
 const Layout = () => {
   const currentOutlet = useOutlet();
-
-  const { isAuthenticated, user } = useAuth();
-  if (isAuthenticated && user?.access_token) {
-    Cookies.set("keycloak-token", user.access_token, {
-      domain: window.location.hostname.replace("web-ui.", ""),
-    });
-  }
 
   // NOTE that it's possible that when the Layout renders an "Active Project" is not stored in the local storage yet
   // if that's the case the hasRole(..) method used by the RBACWrapper returns false.
