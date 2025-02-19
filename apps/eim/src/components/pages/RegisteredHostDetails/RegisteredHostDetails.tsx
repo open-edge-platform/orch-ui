@@ -4,7 +4,6 @@
  */
 
 import { eim } from "@orch-ui/apis";
-
 import { AggregatedStatuses, Flex, SquareSpinner } from "@orch-ui/components";
 import {
   CONSTANTS,
@@ -15,26 +14,15 @@ import {
 import { Button, Heading, Icon } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import moment from "moment";
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { RegisteredHostsPopup } from "../../../components/organism/hosts/RegisteredHostsPopup/RegisteredHostsPopup";
-import { RegisterHostDrawer } from "../../../components/organism/RegisterHostDrawer/RegisterHostDrawer";
-import { useAppDispatch } from "../../../store/hooks";
-import {
-  showErrorMessageBanner,
-  showSuccessMessageBanner,
-} from "../../../store/utils";
+import HostDetailsActions from "../../organism/hosts/HostDetailsActions/HostDetailsActions";
 import "./RegisteredHostDetails.scss";
+
 export const dataCy = "registeredHostDetails";
 export const RegisteredHostDetails = () => {
   const cy = { "data-cy": dataCy };
   const className = "registered-host-details";
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [onboardHost] =
-    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
-  const [isRegisterHostDrawerOpen, setIsRegisterHostDrawerOpen] =
-    useState<boolean>(false);
   const { resourceId } = useParams();
 
   const { data: host } =
@@ -78,7 +66,7 @@ export const RegisteredHostDetails = () => {
             />
           </div>
           <div className={`${className}__header-content-right`}>
-            <RegisteredHostsPopup
+            <HostDetailsActions
               host={host}
               jsx={
                 <button
@@ -91,33 +79,6 @@ export const RegisteredHostDetails = () => {
                   </span>
                 </button>
               }
-              onEdit={() => {
-                setIsRegisterHostDrawerOpen(true);
-              }}
-              onDelete={() => {
-                navigate("../registered-hosts");
-              }}
-              onOnboard={(resourceId: string) => {
-                onboardHost({
-                  projectName: SharedStorage.project?.name ?? "",
-                  hostId: resourceId,
-                  body: { autoOnboard: true },
-                })
-                  .unwrap()
-                  .then(() => {
-                    showSuccessMessageBanner(
-                      dispatch,
-                      "Host is now being onboarded.",
-                    );
-                    navigate("../registered-hosts");
-                  })
-                  .catch(() => {
-                    showErrorMessageBanner(
-                      dispatch,
-                      "Failed to onboard host !",
-                    );
-                  });
-              }}
             />
           </div>
         </div>
@@ -144,13 +105,6 @@ export const RegisteredHostDetails = () => {
             Back
           </Button>
         </div>
-        <RegisterHostDrawer
-          host={host}
-          isOpen={isRegisterHostDrawerOpen}
-          onHide={() => {
-            setIsRegisterHostDrawerOpen(false);
-          }}
-        />
       </div>
     );
   }

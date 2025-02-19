@@ -13,9 +13,10 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Button, ButtonGroup, Icon } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useRef, useState } from "react";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   AggregatedStatus,
+  LifeCycleState,
   setOsProfiles,
   setStatuses,
 } from "../../../store/hostFilterBuilder";
@@ -25,21 +26,35 @@ export const dataCy = "hostSearchFilters";
 
 const HostSearchFilters = () => {
   const cy = { "data-cy": dataCy };
+  const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
+  const reassignFilterState = () => {
+    return [
+      "Ready",
+      "InProgress",
+      "Error",
+      "Unknown",
+      ...(hostFilterState.lifeCycleState === LifeCycleState.All
+        ? ["Deauthorized"]
+        : []),
+    ].map((name) => ({
+      id: name,
+      name,
+      isSelected: false,
+    }));
+  };
 
   const dispatch = useAppDispatch();
   const [statusSelections, setStatusSelection] = useState<
     CheckboxSelectionOption[]
-  >(
-    // Initialize status selection list
-    ["Ready", "InProgress", "Error", "Unknown", "Deauthorized"].map((name) => ({
-      id: name,
-      name,
-      isSelected: false,
-    })),
-  );
+  >(reassignFilterState());
+  // Initialize status selection list
   const [osProfileSelections, setOsProfileSelection] = useState<
     CheckboxSelectionOption[]
   >([]);
+
+  useEffect(() => {
+    setStatusSelection(reassignFilterState());
+  }, [hostFilterState.lifeCycleState]);
 
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const ribbonFilterRef = useRef<HTMLDivElement>(null);

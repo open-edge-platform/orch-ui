@@ -7,7 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { ApiError, Empty, Table, TableColumn } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { HostTableColumn } from "../../../../utils/HostTableColumns";
-import HostPopup from "../../../organism/hosts/HostPopup/HostPopup";
+import HostPopup from "../../ProvisionedHostPopup/ProvisionedHostPopup";
 import "./SiteViewHostTable.scss";
 
 export const dataCy = "siteViewHostTable";
@@ -25,7 +25,7 @@ export const SiteViewHostTable = ({
     HostTableColumn.name("../"),
     HostTableColumn.status,
     HostTableColumn.actions((host: eim.HostRead) => (
-      <HostPopup host={host} instance={host.instance} basePath={basePath} />
+      <HostPopup host={host} basePath={basePath} />
     )),
   ];
 

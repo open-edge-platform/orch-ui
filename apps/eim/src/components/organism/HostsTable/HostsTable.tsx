@@ -10,6 +10,7 @@ import {
   Empty,
   EmptyActionProps,
   Flex,
+  Ribbon,
   SortDirection,
   Table,
   TableColumn,
@@ -39,7 +40,7 @@ import {
 } from "../../../store/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
-import HostPopup from "../hosts/HostPopup/HostPopup";
+import HostDetailsActions from "../hosts/HostDetailsActions/HostDetailsActions";
 import "./HostsTable.scss";
 export const dataCy = "hostsTable";
 interface HostsTableProps {
@@ -83,7 +84,7 @@ const columns: TableColumn<eim.HostRead>[] = [
   HostTableColumn.siteWithCustomBasePath("../"),
   HostTableColumn.workload,
   HostTableColumn.actions((host: eim.HostRead) => (
-    <HostPopup host={host} instance={host.instance} />
+    <HostDetailsActions host={host} />
   )),
 ];
 const HostsTable = ({
@@ -138,6 +139,18 @@ const HostsTable = ({
         skip: !SharedStorage.project?.name,
       },
     );
+
+  const onSearchChange = (searchTerm: string) => {
+    setSearchParams((prev) => {
+      // reset page offset before getting search result
+      prev.set("offset", "0");
+      //apply search
+      if (searchTerm) prev.set("searchTerm", searchTerm);
+      else prev.delete("searchTerm");
+      return prev;
+    });
+    dispatch(setSearchTerm(searchTerm));
+  };
 
   useEffect(() => {
     // clear selections when tab changes
@@ -259,6 +272,11 @@ const HostsTable = ({
   } else if (!data || isEmptyError()) {
     return (
       <div {...cy} className="pa-1">
+        <Ribbon
+          defaultValue={searchTerm}
+          onSearchChange={onSearchChange}
+          customButtons={actionsJsx}
+        />
         <Empty
           title="No hosts are available here."
           icon="information-circle"
@@ -318,17 +336,7 @@ const HostsTable = ({
         canSearch={!selectedIds?.length} // If selctedItems banner is shown, hiding the search
         getRowId={(row) => row.resourceId!}
         searchTerm={searchTerm}
-        onSearch={(searchTerm: string) => {
-          setSearchParams((prev) => {
-            // reset page offset before getting search result
-            prev.set("offset", "0");
-            //apply search
-            if (searchTerm) prev.set("searchTerm", searchTerm);
-            else prev.delete("searchTerm");
-            return prev;
-          });
-          dispatch(setSearchTerm(searchTerm));
-        }}
+        onSearch={onSearchChange}
         // Checkbox Selection
         canSelectRows={selectable}
         onSelect={onHostSelect}

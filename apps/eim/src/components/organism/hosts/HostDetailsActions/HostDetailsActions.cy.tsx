@@ -4,7 +4,13 @@
  */
 
 import { cyGet } from "@orch-ui/tests";
-import { hostOne, IRuntimeConfig, unconfiguredHostOne } from "@orch-ui/utils";
+import {
+  hostOne,
+  instanceOne,
+  IRuntimeConfig,
+  unassignedHostOne as provisionedHostOne,
+  unconfiguredHostOne as onboardedHostOne,
+} from "@orch-ui/utils";
 import HostDetailsActions from "./HostDetailsActions";
 import HostDetailsActionsPom from "./HostDetailsActions.pom";
 
@@ -24,53 +30,136 @@ describe("Host Details Action component testing", () => {
     VERSIONS: {},
   };
 
-  it("should render configured host popup for a configured host.", () => {
-    cy.mount(<HostDetailsActions host={hostOne} />, { runtimeConfig });
-    pom.hostPopup.root.should("exist");
-  });
-
-  it("should render unconfigured host popup for a unconfigured host.", () => {
-    cy.mount(<HostDetailsActions host={unconfiguredHostOne} />, {
-      runtimeConfig,
-    });
-    pom.unconfiguredHostPopup.root.should("exist");
-    pom.el.unconfiguredActions.click();
-  });
-
-  xit("should display the delete confirmation dialog for unconfigured host", () => {
-    cy.mount(<HostDetailsActions host={unconfiguredHostOne} />, {
-      runtimeConfig,
-    });
-    pom.unconfiguredHostPopup.root.should("exist");
-    pom.el.unconfiguredActions.click();
-    cyGet("Delete").click();
-    pom.confirmationDialog.el.title.should("be.visible");
-    pom.confirmationDialog.el.subtitle.contains(
-      unconfiguredHostOne.resourceId!,
+  it("should render popup for `provisioned host with assigned workload/cluster`", () => {
+    pom.interceptApis([pom.api.getInstanceWithWorkload]);
+    cy.mount(
+      <HostDetailsActions
+        host={{
+          ...hostOne,
+          instance: { ...instanceOne, workloadMembers: undefined },
+        }}
+      />,
+      { runtimeConfig },
     );
+    pom.waitForApis();
+    pom.provisionedHostPopupPom.hostPopupPom.root.should("exist");
+    // Note: Delete is not possible in host with assigned cluster. until its made unassigned to that cluster.
+    pom.provisionedHostPopupPom.hostPopupPom
+      .getActionPopupBySearchText("Delete")
+      .should("not.exist");
   });
 
-  xit("should cancel the delete confirmation dialog for unconfigured host", () => {
-    cy.mount(<HostDetailsActions host={unconfiguredHostOne} />, {
-      runtimeConfig,
-    });
-    pom.unconfiguredHostPopup.root.should("exist");
-    pom.el.unconfiguredActions.click();
-    cyGet("Delete").click();
-    pom.confirmationDialog.el.cancelBtn.click();
-    pom.confirmationDialog.root.should("not.be.visible");
+  it("should render popup for `provisioned host without assigned workload/cluster`", () => {
+    pom.interceptApis([pom.api.getInstanceWithoutWorkload]);
+    cy.mount(
+      <HostDetailsActions
+        host={{
+          ...provisionedHostOne,
+          instance: { ...instanceOne, workloadMembers: undefined },
+        }}
+      />,
+      {
+        runtimeConfig,
+      },
+    );
+    pom.waitForApis();
+    pom.provisionedHostPopupPom.hostPopupPom.root.should("exist");
+    // Note: Delete is possible in host without assigned cluster.
+    pom.provisionedHostPopupPom.hostPopupPom
+      .getActionPopupBySearchText("Delete")
+      .should("exist");
   });
 
-  xit("should delete the host", () => {
-    cy.stub(HostDetailsActions);
+  describe("Delete", () => {
+    it("should display the delete confirmation dialog", () => {
+      cy.mount(<HostDetailsActions host={onboardedHostOne} />, {
+        runtimeConfig,
+      });
+      pom.onboardedHostPopupPom.hostPopupPom.root.should("exist");
+      pom.onboardedHostPopupPom.hostPopupPom.root.click();
+      pom.onboardedHostPopupPom.hostPopupPom
+        .getActionPopupBySearchText("Delete")
+        .click();
 
-    cy.mount(<HostDetailsActions host={unconfiguredHostOne} />, {
-      runtimeConfig,
+      cyGet("dialog").contains(
+        `Are you sure you want to delete Host "${onboardedHostOne.resourceId!}"?`,
+      );
     });
-    pom.unconfiguredHostPopup.root.should("exist");
-    pom.el.unconfiguredActions.click();
-    cyGet("Delete").click();
-    pom.confirmationDialog.el.confirmBtn.click();
-    pom.confirmationDialog.root.should("not.be.visible");
+
+    it("should cancel the delete confirmation dialog", () => {
+      cy.mount(<HostDetailsActions host={onboardedHostOne} />, {
+        runtimeConfig,
+      });
+      pom.onboardedHostPopupPom.hostPopupPom.root.should("exist");
+      pom.onboardedHostPopupPom.hostPopupPom.root.click();
+      pom.onboardedHostPopupPom.hostPopupPom
+        .getActionPopupBySearchText("Delete")
+        .click();
+
+      cyGet("dialog").find("[data-cy='cancelBtn']").click();
+      cyGet("dialog").should("not.exist");
+    });
+
+    it("should delete the onboarded host", () => {
+      cy.mount(<HostDetailsActions host={onboardedHostOne} />, {
+        runtimeConfig,
+      });
+      pom.onboardedHostPopupPom.hostPopupPom.root.should("exist");
+      pom.onboardedHostPopupPom.hostPopupPom.root.click();
+      pom.onboardedHostPopupPom.hostPopupPom
+        .getActionPopupBySearchText("Delete")
+        .click();
+
+      pom.interceptApis([pom.api.deleteHost]);
+      cyGet("dialog").find("[data-cy='confirmBtn']").click();
+      pom.waitForApis();
+      cyGet("dialog").should("not.exist");
+
+      cy.get(`@${pom.api.deleteHost}`)
+        .its("request.url")
+        .then((url: string) => {
+          // This name should not match entered name, instead it will be the old name
+          const match = url.match(onboardedHostOne.resourceId!);
+          expect(match && match.length > 0).to.be.equal(true);
+        });
+    });
+
+    it("should delete the provisioned host", () => {
+      pom.interceptApis([pom.api.getInstanceWithoutWorkload]);
+      cy.mount(
+        <HostDetailsActions
+          host={{
+            ...provisionedHostOne,
+            instance: {
+              ...provisionedHostOne.instance,
+              workloadMembers: undefined,
+            },
+          }}
+        />,
+        {
+          runtimeConfig,
+        },
+      );
+      pom.waitForApis();
+
+      pom.onboardedHostPopupPom.hostPopupPom.root.should("exist");
+      pom.onboardedHostPopupPom.hostPopupPom.root.click();
+      pom.onboardedHostPopupPom.hostPopupPom
+        .getActionPopupBySearchText("Delete")
+        .click();
+
+      pom.interceptApis([pom.api.deleteHost, pom.api.deleteInstance]);
+      cyGet("dialog").find("[data-cy='confirmBtn']").click();
+      pom.waitForApis();
+      cyGet("dialog").should("not.exist");
+
+      cy.get(`@${pom.api.deleteHost}`)
+        .its("request.url")
+        .then((url: string) => {
+          // This name should not match entered name, instead it will be the old name
+          const match = url.match(provisionedHostOne.resourceId!);
+          expect(match && match.length > 0).to.be.equal(true);
+        });
+    });
   });
 });

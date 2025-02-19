@@ -14,7 +14,7 @@ import {
   unconfiguredHosts,
 } from "@orch-ui/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
-import HostPopupPom from "../hosts/HostPopup/HostPopup.pom";
+import HostPopupPom from "../../molecules/ProvisionedHostPopup/ProvisionedHostPopup.pom";
 import { dataCy } from "./_HostsTable";
 
 export const unconfiguredColumn: TableColumn<eim.HostRead>[] = [

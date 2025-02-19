@@ -7,8 +7,8 @@ import { eim } from "@orch-ui/apis";
 import { ContextSwitcherPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { hostOne } from "@orch-ui/utils";
-import { HostRead } from "library/apis/eim/eim";
 import HostSearchFiltersPom from "../../organism/HostSearchFilters/HostSearchFilters.pom";
+import HostsTablePom from "../../organism/HostsTable/HostsTable.pom";
 import { dataCy } from "./Hosts";
 
 const dataCySelectors = [] as const;
@@ -19,7 +19,7 @@ export const encodeURLQuery = (str: string) =>
 
 type ApiAliases = "getHost";
 
-const generateHosts = (size = 10, hostMock: HostRead = hostOne) =>
+const generateHosts = (size = 10, hostMock: eim.HostRead = hostOne) =>
   [...Array(size).keys()].map((i) => ({
     ...hostMock,
     name: `Host ${i}`,
@@ -45,10 +45,12 @@ const endpoints: CyApiDetails<
 class HostsPom extends CyPom<Selectors, ApiAliases> {
   hostContextSwitcherPom: ContextSwitcherPom;
   hostSearchFilterPom: HostSearchFiltersPom;
+  hostTablePom: HostsTablePom;
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors], endpoints);
     this.hostContextSwitcherPom = new ContextSwitcherPom();
     this.hostSearchFilterPom = new HostSearchFiltersPom();
+    this.hostTablePom = new HostsTablePom();
   }
 }
 export default HostsPom;

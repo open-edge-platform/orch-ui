@@ -16,6 +16,7 @@ import {
 } from "../../../store/hostFilterBuilder";
 import HostSearchFilters from "../../organism/HostSearchFilters/HostSearchFilters";
 import HostsTable from "../../organism/HostsTable/HostsTable";
+import { RegisterHostDrawer } from "../../organism/RegisterHostDrawer/RegisterHostDrawer";
 import "./Hosts.scss";
 export const dataCy = "hosts";
 
@@ -26,6 +27,7 @@ const Hosts = () => {
 
   const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
+  const [showRegisterDrawer, setShowRegisterDrawer] = useState<boolean>(false);
 
   //Triggers the initial query of the Hosts table
   useEffect(() => {
@@ -35,7 +37,27 @@ const Hosts = () => {
   const hostTableActionButtons = (
     <>
       <HostSearchFilters />
-      <Button variant={ButtonVariant.Action}>Configure</Button>
+      {hostFilterState.lifeCycleState === LifeCycleState.Registered && (
+        <Button
+          variant={ButtonVariant.Action}
+          onPress={() => {
+            // TODO: Register Host navigation here
+            setShowRegisterDrawer(true);
+          }}
+        >
+          Register Host
+        </Button>
+      )}
+      {hostFilterState.lifeCycleState === LifeCycleState.Onboarded && (
+        <Button
+          variant={ButtonVariant.Action}
+          onPress={() => {
+            // TODO: Register Host navigation here
+          }}
+        >
+          Provision Host
+        </Button>
+      )}
     </>
   );
 
@@ -78,6 +100,15 @@ const Hosts = () => {
         }}
         actionsJsx={hostTableActionButtons}
       />
+
+      {showRegisterDrawer && (
+        <RegisterHostDrawer
+          isOpen={showRegisterDrawer}
+          onHide={() => {
+            setShowRegisterDrawer(false);
+          }}
+        />
+      )}
     </div>
   );
 };

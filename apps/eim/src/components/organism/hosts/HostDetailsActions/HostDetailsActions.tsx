@@ -4,54 +4,181 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { Icon } from "@spark-design/react";
-import HostPopup from "../HostPopup/HostPopup";
-import UnconfiguredHostPopup from "../UnconfiguredHostPopup/UnconfiguredHostPopup";
+import { ConfirmationDialog } from "@orch-ui/components";
+import { SharedStorage } from "@orch-ui/utils";
+import { ButtonVariant } from "@spark-design/tokens";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../../store/hooks";
+import {
+  deleteHostInstanceFn,
+  showErrorMessageBanner,
+  showSuccessMessageBanner,
+} from "../../../../store/utils";
+import { GenericHostPopupProps } from "../../../atom/GenericHostPopup/GenericHostPopup";
+import OnboardedHostPopup from "../../../molecules/OnboardedHostPopup/OnboardedHostPopup";
+import ProvisionedHostPopup from "../../../molecules/ProvisionedHostPopup/ProvisionedHostPopup";
+import RegisteredHostPopup from "../../../molecules/RegisteredHostPopup/RegisteredHostPopup";
+import { RegisterHostDrawer } from "../../RegisterHostDrawer/RegisterHostDrawer";
+import { ScheduleMaintenanceDrawer } from "../../ScheduleMaintenanceDrawer/ScheduleMaintenanceDrawer";
+import DeauthorizeHostStandalone from "../DeauthorizeHostStandalone/DeauthorizeHostStandalone";
 
-interface HostDetailsActionsProp {
-  host: eim.HostRead;
-  instance?: eim.InstanceRead;
-}
+export const dataCy = "hostDetailsActions";
+export type HostDetailsActionsProp = Omit<
+  GenericHostPopupProps,
+  // Below props are all ready applied within HostDetailsActions
+  "additionalPopupOptions" | "onDeauthorize" | "onDelete"
+>;
 
 /** This renders buttons for all host actions based on configured/unconfigured property of host */
-const HostDetailsActions = ({ host, instance }: HostDetailsActionsProp) => {
-  // Else decide actions supported for a host based on configured/unconfigured
-  return (
-    <div className="host-details-actions" data-cy="hostDetailsActions">
-      {host.site ? (
-        <HostPopup
-          host={host}
-          instance={instance}
-          showViewDetailsOption={false}
-          basePath="../"
-          jsx={
-            <button
-              data-cy="configuredActions"
-              className="spark-button spark-button-action spark-button-size-l spark-focus-visible spark-focus-visible-self spark-focus-visible-snap"
-              type="button"
-            >
-              <span className="spark-button-content">
-                Host Actions <Icon className="pa-1 mb-1" icon="chevron-down" />
-              </span>
-            </button>
-          }
+const HostDetailsActions = (props: HostDetailsActionsProp) => {
+  const cy = { "data-cy": dataCy };
+  const { host, basePath } = props;
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
+    useState<boolean>(false);
+  const [deauthorizeConfirmationOpen, setDeauthorizeConfirmationOpen] =
+    useState<boolean>(false);
+  const [isScheduleMaintenanceDrawerOpen, setIsScheduleMaintenanceDrawerOpen] =
+    useState<boolean>(false);
+  const [isRegisterHostDrawerOpen, setIsRegisterHostDrawerOpen] =
+    useState<boolean>(false);
+
+  const [onboardHost] =
+    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
+
+  const onDelete = () => {
+    setDeleteConfirmationOpen(true);
+  };
+  const onDeauthorize = () => {
+    setDeauthorizeConfirmationOpen(true);
+  };
+  const onRegisterHostEdit = () => {
+    setIsRegisterHostDrawerOpen(true);
+  };
+  const onRegisterHostOnboard = () => {
+    onboardHost({
+      projectName: SharedStorage.project?.name ?? "",
+      hostId: host.resourceId!,
+      body: { autoOnboard: true },
+    })
+      .unwrap()
+      .then(() => {
+        showSuccessMessageBanner(dispatch, "Host is now being onboarded.");
+        navigate("../registered-hosts");
+      })
+      .catch(() => {
+        showErrorMessageBanner(dispatch, "Failed to onboard host !");
+      });
+  };
+
+  // Note: By default upon GET `compute/hosts` doesnot specify existance of workloadMember within `host.instance`.
+  // We need to make seperate instance call to fetch complete instance data by `host.instance.resourceId`.
+  const { data: instanceRef } =
+    eim.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        instanceId: host.instance?.resourceId ?? "",
+      },
+      { skip: !host.instance?.resourceId },
+    );
+
+  const getHostPopup = () => {
+    if (host.instance) {
+      // if its a provisioned host (with/without assigned workload/cluster)
+      return (
+        <ProvisionedHostPopup
+          {...props}
+          // Passing host with complete instance (having workloadMember details)... as per props Note.
+          host={{ ...host, instance: instanceRef }}
+          onDelete={onDelete}
+          onDeauthorizeHostWithoutWorkload={onDeauthorize}
+          onScheduleMaintenance={() => {
+            setIsScheduleMaintenanceDrawerOpen(true);
+          }}
         />
-      ) : (
-        <UnconfiguredHostPopup
+      );
+    } else if (
+      host.currentState === "HOST_STATE_REGISTERED" ||
+      host.currentState === "HOST_STATE_UNSPECIFIED"
+    ) {
+      // else if its a registered host
+      return (
+        <RegisteredHostPopup
+          {...props}
+          onDelete={onDelete}
+          onDeauthorize={onDeauthorize}
+          onEdit={onRegisterHostEdit}
+          onOnboard={onRegisterHostOnboard}
+        />
+      );
+    }
+    // else its onboarded host
+    return (
+      <OnboardedHostPopup
+        {...props}
+        onDelete={onDelete}
+        onDeauthorize={onDeauthorize}
+      />
+    );
+  };
+
+  return (
+    <div className="host-details-actions" {...cy}>
+      {getHostPopup()}
+
+      {deleteConfirmationOpen && (
+        <ConfirmationDialog
+          title="Confirm Host Deletion"
+          subTitle={`Are you sure you want to delete Host "${
+            host.name || host.resourceId
+          }"?`}
+          content="This will permanently remove the host from the system and cannot be undone."
+          isOpen={deleteConfirmationOpen}
+          buttonPlacement="left-reverse"
+          confirmCb={() => {
+            deleteHostInstanceFn(dispatch, host).then(() => {
+              navigate(`${basePath}../hosts`, {
+                relative: "path",
+              });
+            });
+            setDeleteConfirmationOpen(false);
+          }}
+          confirmBtnText="Delete"
+          confirmBtnVariant={ButtonVariant.Alert}
+          cancelCb={() => setDeleteConfirmationOpen(false)}
+        />
+      )}
+
+      {deauthorizeConfirmationOpen && host.resourceId && (
+        <DeauthorizeHostStandalone
+          basePath={basePath}
+          hostId={host.resourceId}
+          hostName={host.name}
+          setDeauthorizeConfirmationOpen={setDeauthorizeConfirmationOpen}
+          isDeauthConfirmationOpen={deauthorizeConfirmationOpen}
+        />
+      )}
+
+      {/* Schedule Maintenance Drawer */}
+      {isScheduleMaintenanceDrawerOpen && (
+        <ScheduleMaintenanceDrawer
+          targetEntity={host}
+          isDrawerShown
+          setHideDrawer={() => setIsScheduleMaintenanceDrawerOpen(false)}
+        />
+      )}
+
+      {isRegisterHostDrawerOpen && (
+        <RegisterHostDrawer
           host={host}
-          basePath="../"
-          showViewDetailsOption={false}
-          jsx={
-            <button
-              data-cy="unconfiguredActions"
-              className="spark-button spark-button-action spark-button-size-l spark-focus-visible spark-focus-visible-self spark-focus-visible-snap"
-              type="button"
-            >
-              <span className="spark-button-content">
-                Host Actions <Icon className="pa-1 mb-1" icon="chevron-down" />
-              </span>
-            </button>
-          }
+          isOpen={isRegisterHostDrawerOpen}
+          onHide={() => {
+            setIsRegisterHostDrawerOpen(false);
+          }}
         />
       )}
     </div>

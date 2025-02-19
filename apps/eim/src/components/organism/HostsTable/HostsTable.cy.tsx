@@ -10,6 +10,7 @@ import { useAppSelector } from "../../../store/hooks";
 import { LifeCycleState } from "../../../store/hostFilterBuilder";
 import { setupStore } from "../../../store/store";
 import { HostConfigPom } from "../../pages/HostConfig/HostConfig.pom";
+
 import HostsTable from "./HostsTable";
 import HostsTablePom from "./HostsTable.pom";
 
@@ -52,7 +53,7 @@ describe("<HostsTable/>", () => {
   describe("when the API return a list of hosts", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
-      cy.mount(<HostsTable lifecycleState={LifeCycleState.All} />);
+      cy.mount(<HostsTable />);
       pom.waitForApis();
     });
     it("should render the hosts correctly", () => {

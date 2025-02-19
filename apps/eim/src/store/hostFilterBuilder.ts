@@ -56,7 +56,7 @@ lifeCycleStateQuery.set(
 );
 lifeCycleStateQuery.set(
   LifeCycleState.Registered,
-  "(currentState=HOST_STATE_REGISTERED)",
+  "(currentState=HOST_STATE_UNSPECIFIED OR currentState=HOST_STATE_REGISTERED)",
 );
 lifeCycleStateQuery.set(LifeCycleState.All, undefined);
 

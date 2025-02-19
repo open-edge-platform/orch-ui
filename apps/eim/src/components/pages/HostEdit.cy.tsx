@@ -26,7 +26,7 @@ describe("HostEdit", () => {
       routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
       routerRule: [
         { path: "/host/:id/edit", element: <HostEdit /> },
-        { path: "/hosts", element: <HostsTable columns={[]} /> },
+        { path: "/hosts", element: <HostsTable /> },
       ],
       reduxStore: store,
     });

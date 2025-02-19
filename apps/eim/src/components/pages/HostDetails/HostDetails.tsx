@@ -377,12 +377,13 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <HostDetailsActions
-          host={host}
-          instance={
-            isInstanceSuccess && instance.instances.length > 0
-              ? instance.instances[0]
-              : undefined
-          }
+          host={{
+            ...host,
+            instance:
+              isInstanceSuccess && instance.instances.length > 0
+                ? instance.instances[0]
+                : undefined,
+          }}
         />
       </div>
 
