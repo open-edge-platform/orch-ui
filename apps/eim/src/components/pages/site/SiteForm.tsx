@@ -110,7 +110,6 @@ const SiteForm = () => {
   } = eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
     {
       telemetryMetricsGroupId: "group-id", //TODO: not used in real endpoint
-      regionId: regionId ?? "",
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -127,7 +126,7 @@ const SiteForm = () => {
     isLoading: profileLogLoading,
   } = eim.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
     {
-      telemetryLogsGroupId: "group-id", //TODO: evaluate if possible
+      telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
