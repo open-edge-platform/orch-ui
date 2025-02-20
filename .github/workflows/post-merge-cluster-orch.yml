@@ -1,0 +1,29 @@
+---
+  # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+  # SPDX-License-Identifier: Apache-2.0
+
+name: Post-Merge Cluster Orch
+
+on:
+  push:
+    branches:
+      - main
+      - release-*
+    paths:
+      - 'apps/cluster-orch/**'
+  workflow_dispatch:
+
+jobs:
+  post-merge-pipeline:
+    uses: intel-tiber/orch-ci/.github/workflows/post-merge.yml@main
+    with:
+      run_security_scans: true
+      run_version_check: true
+      run_dep_version_check: false
+      run_build: true
+      run_docker_build: true
+      run_docker_push: true
+      run_version_tag: true
+      run_artifact: false
+      project_folder: ./apps/cluster-orch
+    secrets: inherit

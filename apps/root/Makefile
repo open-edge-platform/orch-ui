@@ -1,17 +1,17 @@
 # SPDX-FileCopyrightText: (C) 2022 Intel Corporation
 # SPDX-License-Identifier: LicenseRef-Intel
 
-# Configure shell
-SHELL = bash -e -o pipefail
-
-.PHONY: help dist
+include ../../common.mk
 
 # Variables
+PROJECT_NAME       			:= root
 VERSION                 ?= $(shell cat ./VERSION)
-DOCKER_TAG              ?= $(VERSION)
 VERSION_DEV_SUFFIX      :=
-DOCKER_REPOSITORY       ?= apps/orch-ui-root
-DOCKER_REGISTRY         ?= amr-registry.caas.intel.com/one-intel-edge/
+DOCKER_VERSION 					?= $(shell git branch --show-current)
+DOCKER_IMG_NAME    			:= $(PROJECT_NAME)
+DOCKER_TAG              := $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME):$(VERSION)
+DOCKER_TAG_BRANCH	    	:= $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME):$(DOCKER_VERSION)
+
 DOCKER_FILE             = "$(shell pwd)/build/Dockerfile"
 DOCKER_CONTEXT          = "$(shell pwd)/../.."
 
@@ -66,19 +66,15 @@ $(VENV_NAME): requirements.txt
 	  python3 -m pip install -r requirements.txt
 	echo "To enter virtualenv, run 'source $@/bin/activate'"
 
-docker-build: dist ## @HELP Build the orch-ui docker image
-	docker build $(DOCKER_BUILD_ARGS) --platform=linux/x86_64 ${DOCKER_EXTRA_ARGS} \
-	  -t ${DOCKER_REGISTRY}${DOCKER_REPOSITORY}:${DOCKER_TAG} \
-	  -f ${DOCKER_FILE} ${DOCKER_CONTEXT}
-
 node_modules:
 	npm ci
 
 dist: node_modules ## @HELP Builds the react application using webpack
 	NODE_ENV=production npm run app:root:build
 
-docker-push: ## @HELP Push the docker image to a registry
-	docker push ${DOCKER_REGISTRY}${DOCKER_REPOSITORY}:${DOCKER_TAG}
+docker-build: common-docker-build
+
+docker-push: common-docker-push
 
 KIND_CLUSTER_NAME="kind"
 docker-kind-load: ## @HELP Loads the docker image on a kind cluster

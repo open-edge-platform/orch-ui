@@ -13,7 +13,7 @@ VERSION                 ?= $(shell python3 -c 'import json,sys;obj=json.load(sys
 DOCKER_TAG              ?= $(VERSION)
 VERSION_DEV_SUFFIX      :=
 DOCKER_REPOSITORY       ?= apps/orch-ui-admin
-DOCKER_REGISTRY         ?=
+DOCKER_REGISTRY         ?= 080137407410.dkr.ecr.us-west-2.amazonaws.com
 DOCKER_FILE             = "$(shell pwd)/build/Dockerfile"
 DOCKER_CONTEXT          = "$(shell pwd)/"
 

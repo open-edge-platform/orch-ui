@@ -1,0 +1,45 @@
+# # Keeping this for later. Once discover-changed-subfolders@main works with push events, this will be uncommented and individual post-merge workflows will be deleted.
+# name: Post-Merge CI Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - release-*
+#   workflow_dispatch:
+
+# jobs:
+#   pre-checks:
+#     runs-on: 'ubuntu-latest'
+#     outputs:
+#       changed_apps: ${{ steps.discover-changes-apps.outputs.changed_projects }}
+#     steps:
+#       - name: Git safe directory
+#         run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+#       - name: Discover changed apps
+#         uses: intel-tiber/orch-ci/discover-changed-subfolders@main
+#         id: discover-changes-apps
+#         with:
+#           project_folder: "apps"
+
+#   post-merge-pipeline:
+#     needs: pre-checks
+#     # if: fromJson(needs.pre-checks.outputs.changed_apps)[0] != null
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         # project_folder: ${{ fromJson(needs.pre-checks.outputs.changed_apps) }}
+#         project_folder: ["admin", "app-orch", "cluster-orch", "eim", "root"]
+#     uses: intel-tiber/orch-ci/.github/workflows/post-merge.yml@main
+#     with:
+#       run_security_scans: true
+#       run_version_check: true
+#       run_dep_version_check: false
+#       run_build: true
+#       run_docker_build: true
+#       run_docker_push: true
+#       run_version_tag: true
+#       run_artifact: false
+#       project_folder: ./apps/${{ matrix.project_folder }}
+#     secrets: inherit
