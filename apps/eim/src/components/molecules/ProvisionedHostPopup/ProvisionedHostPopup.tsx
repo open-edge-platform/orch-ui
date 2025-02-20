@@ -57,6 +57,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     DeauthorizeHostConfirmationDialogRemote,
     setDeauthorizeHostConfirmationDialogRemote,
   ] = useState<React.ComponentType<any> | null>(null);
+
   useEffect(() => {
     // Update mfe component only if component is not active.
     // This will avoid flickering render of remote component upon polling.
