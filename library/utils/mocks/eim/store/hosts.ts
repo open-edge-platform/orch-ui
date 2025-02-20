@@ -472,6 +472,11 @@ export const hostFive: HostMock = {
     message: "Running",
     timestamp: 1717761389,
   },
+  registrationStatus: {
+    indicator: "STATUS_INDICATION_IDLE",
+    message: "Registered",
+    timestamp: 1728574343137,
+  },
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
 };

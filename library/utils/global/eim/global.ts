@@ -4,7 +4,7 @@
  */
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
-import { GenericStatus } from "@orch-ui/components";
+import { GenericStatus, Status as IconStatus } from "@orch-ui/components";
 import { capitalize } from "lodash";
 
 export type HostGenericStatuses = {
@@ -239,3 +239,140 @@ export enum WorkloadMemberKind {
   Cluster = "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
   Unspecified = "WORKLOAD_MEMBER_KIND_UNSPECIFIED",
 }
+
+export const statusIndicatorToIconStatus = (
+  statusIndicator: eim.StatusIndicator,
+): IconStatus => {
+  switch (statusIndicator) {
+    case "STATUS_INDICATION_IN_PROGRESS":
+      return IconStatus.NotReady;
+    case "STATUS_INDICATION_IDLE":
+      return IconStatus.Ready;
+    case "STATUS_INDICATION_ERROR":
+      return IconStatus.Error;
+    case "STATUS_INDICATION_UNSPECIFIED":
+      return IconStatus.Unknown;
+    default:
+      return IconStatus.Unknown;
+  }
+};
+
+const getHostProvisionMessages = (
+  provisioningStatus: eim.GenericStatusRead,
+) => {
+  const provisionedMsg = {
+    title: "Host is provisioned",
+    subTitle:
+      "Host is configured and ready to use. Add a site and cluster to activate.",
+  };
+  switch (provisioningStatus.indicator) {
+    case "STATUS_INDICATION_IN_PROGRESS":
+      return {
+        title: "Host provisioning in progress",
+        subTitle: "Host is provisioning.",
+      };
+    case "STATUS_INDICATION_ERROR":
+      return {
+        title: "Host has provisioning error",
+        subTitle: "Host has an error when provisioning OS.",
+      };
+    case "STATUS_INDICATION_IDLE":
+      return provisionedMsg;
+    default:
+      return provisionedMsg;
+  }
+};
+
+const getHostOnboardingMessages = (onboardingStatus: eim.GenericStatusRead) => {
+  const onboardingMsg = {
+    title: "Host is onboarded",
+    subTitle: "Host is onboarded and ready to be provisioned.",
+  };
+  switch (onboardingStatus.indicator) {
+    case "STATUS_INDICATION_IN_PROGRESS":
+      return {
+        title: "Host onboarding in progress",
+        subTitle:
+          "Host is registered and set to auto-onboard. Onboarding is in progress.",
+      };
+    case "STATUS_INDICATION_ERROR":
+      return {
+        title: "Host has onboarding error",
+      };
+    case "STATUS_INDICATION_IDLE":
+      return onboardingMsg;
+    default:
+      return onboardingMsg;
+  }
+};
+
+const getHostRegistrationMessages = (
+  registrationStatus: eim.GenericStatusRead,
+) => {
+  const registrationMsg = {
+    title: "Host is registered",
+    subTitle: "Host is registered and ready to be onboarded.",
+  };
+  switch (registrationStatus.indicator) {
+    case "STATUS_INDICATION_IN_PROGRESS":
+      return {
+        title: "Host registration in progress",
+      };
+    case "STATUS_INDICATION_ERROR":
+      return {
+        title: "Host has registration error",
+      };
+    case "STATUS_INDICATION_IDLE":
+      return registrationMsg;
+    default:
+      return registrationMsg;
+  }
+};
+
+export const genericHostStatusMessages = (
+  host: eim.HostRead,
+): {
+  title?: string;
+  subTitle?: string;
+} => {
+  // active host
+  if (
+    host.currentState === "HOST_STATE_ONBOARDED" &&
+    host.instance?.resourceId &&
+    host.site?.resourceId
+  ) {
+    return { title: "Host is active" };
+  }
+
+  // Provisioned host
+  if (
+    host.currentState === "HOST_STATE_ONBOARDED" &&
+    host.instance?.resourceId &&
+    host.instance?.provisioningStatus
+  ) {
+    return getHostProvisionMessages(host.instance?.provisioningStatus);
+  }
+
+  // onboarded host
+  if (
+    host.currentState === "HOST_STATE_ONBOARDED" &&
+    !host.instance &&
+    host.onboardingStatus
+  ) {
+    return getHostOnboardingMessages(host.onboardingStatus);
+  }
+
+  // registered host
+  if (
+    host.currentState === "HOST_STATE_REGISTERED" &&
+    host.registrationStatus
+  ) {
+    return getHostRegistrationMessages(host.registrationStatus);
+  }
+
+  // Not connected host
+  return {
+    title: "Host is not connected",
+    subTitle: "Waiting for host to connect.",
+  };
+};

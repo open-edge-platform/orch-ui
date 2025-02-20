@@ -4,14 +4,11 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import {
-  AggregatedStatuses,
-  aggregateStatuses,
-  TableColumn,
-} from "@orch-ui/components";
-import { CONSTANTS, HostGenericStatuses, hostToStatuses } from "@orch-ui/utils";
+import { aggregateStatuses, TableColumn } from "@orch-ui/components";
+import { hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost";
+import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 
@@ -129,19 +126,9 @@ const status: TableColumn<eim.HostRead> = {
   accessor: (host) =>
     aggregateStatuses(hostToStatuses(host, host.instance), "hostStatus")
       .message || "-",
-  Cell: (table: { row: { original: eim.HostRead } }) => {
-    return (
-      <AggregatedStatuses<HostGenericStatuses>
-        defaultStatusName="hostStatus"
-        statuses={hostToStatuses(
-          table.row.original,
-          table.row.original.instance,
-        )}
-        //if the host is evaluated to be idle and hostStatus message is not present
-        defaultMessages={{ idle: CONSTANTS.HOST_STATUS.NOT_CONNECTED }}
-      />
-    );
-  },
+  Cell: (table: { row: { original: eim.HostRead } }) => (
+    <HostStatusPopover data={table.row.original} />
+  ),
 };
 
 const os: TableColumn<eim.HostRead> = {

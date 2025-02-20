@@ -7,83 +7,86 @@
   position: relative;
   display: inline-block;
 
-  .popover-content {
-    visibility: hidden;
-    background-color: #f9f9f9;
-    color: #2b2c30;
-    box-shadow: 0 0.125rem 0.25rem 0 #00000040;
-    padding: 0.625rem;
-    position: absolute;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.3s;
+  .popover-trigger {
+    cursor: pointer;
+  }
 
-    &.show {
-      visibility: visible;
-      opacity: 1;
-    }
+  .popover-content {
+    position: absolute;
+    padding: 1rem;
+    background: var(--spark-color-theme-light-gray75);
+    color: var(--spark-color-theme-light-gray900);
+    box-shadow: 0rem 0.25rem 0.625rem #00000040;
+    border-radius: 0.313rem;
+    z-index: 1000;
 
     &.top {
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 120%;
+      left: 10%;
+      transform: translateX(-10%);
     }
 
     &.right {
-      top: 50%;
-      left: 125%;
-      transform: translateY(-50%);
+      left: 120%;
+      top: 10%;
+      transform: translateY(-10%);
     }
 
     &.bottom {
-      top: 125%;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 120%;
+      left: 10%;
+      transform: translateX(-10%);
     }
 
     &.left {
-      top: 50%;
-      right: 125%;
-      transform: translateY(-50%);
+      right: 120%;
+      top: 10%;
+      transform: translateY(-10%);
+    }
+
+    .popover-header {
+      display: flex;
+      margin-bottom: 1rem;
+      justify-content: space-between;
+
+      .title {
+        color: var(--spark-color-theme-light-gray900);
+        font-size: 1rem;
+        font-weight: 500;
+      }
     }
   }
 
   .popover-arrow {
     position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
+    width: 0.625rem;
+    height: 0.625rem;
+    background: var(--spark-color-theme-light-gray75);
+    box-shadow: -0.063rem -0.063rem 0.313rem #00000040;
+    transform: rotate(45deg);
 
     &.top {
-      bottom: -0.625rem;
-      left: 50%;
-      margin-left: -0.625rem;
-      border-width: 0.625rem 0.625rem 0 0.625rem;
-      border-color: #f9f9f9 transparent transparent transparent;
+      bottom: -0.313rem;
+      left: 10%;
+      transform: translateX(-10%) rotate(45deg);
     }
 
     &.right {
-      top: 50%;
-      left: -0.625rem;
-      margin-top: -0.625rem;
-      border-width: 0.625rem 0.625rem 0.625rem 0;
-      border-color: transparent #f9f9f9 transparent transparent;
+      left: -0.313rem;
+      top: 10%;
+      transform: translateY(-10%) rotate(45deg);
     }
 
     &.bottom {
-      top: -0.625rem;
-      left: 50%;
-      margin-left: -0.625rem;
-      border-width: 0 0.625rem 0.625rem 0.625rem;
-      border-color: transparent transparent #f9f9f9 transparent;
+      top: -0.313rem;
+      left: 10%;
+      transform: translateX(-10%) rotate(45deg);
     }
 
     &.left {
-      top: 50%;
-      right: -0.625rem;
-      margin-top: -0.625rem;
-      border-width: 0.625rem 0 0.625rem 0.625rem;
-      border-color: transparent transparent transparent #f9f9f9;
+      right: -0.313rem;
+      top: 10%;
+      transform: translateY(-10%) rotate(45deg);
     }
   }
 }

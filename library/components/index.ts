@@ -75,6 +75,10 @@ export {
   PopupProps,
 } from "./atomic-design/atoms/Popup/Popup";
 export {
+  Popover,
+  PopoverProps
+} from "./atomic-design/atoms/Popover/Popover";
+export {
   Status,
   StatusIcon,
 } from "./atomic-design/atoms/StatusIcon/StatusIcon";
@@ -216,6 +220,7 @@ export { ConfirmationDialogPom } from "./atomic-design/atoms/ConfirmationDialog/
 export { EChartPom } from "./atomic-design/atoms/EChart/EChart.pom";
 export { ModalPom } from "./atomic-design/atoms/Modal/Modal.pom";
 export { PopupPom } from "./atomic-design/atoms/Popup/Popup.pom";
+export { PopoverPom } from "./atomic-design/atoms/Popover/Popover.pom";
 export { DragDropPom } from "./atomic-design/molecules/DragDrop/DragDrop.pom";
 export { EmptyPom } from "./atomic-design/molecules/Empty/Empty.pom";
 export { InfoPopupPom } from "./atomic-design/molecules/InfoPopup/InfoPopup.pom";

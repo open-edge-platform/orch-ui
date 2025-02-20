@@ -3,22 +3,28 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { Button, Icon, Text } from "@spark-design/react";
+import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import React, { useEffect, useRef, useState } from "react";
 import "./Popover.scss";
 export const dataCy = "popover";
-interface PopoverProps {
+export interface PopoverProps {
   children: React.ReactNode;
   content: React.ReactNode;
   placement?: "top" | "right" | "bottom" | "left";
   contentRootClassName?: string; // style to apply for content-root
   popoverArrowClassName?: string; // style to apply for arrow
+  onToggle?: (isToggled: boolean) => void;
+  title?: string;
 }
-const Popover = ({
+export const Popover = ({
   children,
   content,
   placement = "right",
   contentRootClassName = "",
   popoverArrowClassName = "",
+  onToggle,
+  title = "",
 }: PopoverProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -43,6 +49,11 @@ const Popover = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (onToggle) onToggle(show);
+  }, [show]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const adjustPlacement = () => {
     if (!contentRef.current) return;
 
@@ -70,25 +81,48 @@ const Popover = ({
     setAdjustedPlacement(newPlacement);
   };
 
-  useEffect(() => {
-    if (show) {
-      adjustPlacement();
-    }
-  }, [show, placement]);
+  /*
+   TODO: Needs more debugging to have dynamic placements
+   when available space is lesser for popover
+   */
+  // useEffect(() => {
+  //   if (show) {
+  //     adjustPlacement();
+  //   }
+  // }, [show, placement]);
 
   return (
     <div {...cy} className="popover" ref={popoverRef}>
-      <div onClick={() => setShow(!show)}>{children}</div>
-      <div
-        data-cy="popover-content"
-        ref={contentRef}
-        className={`popover-content ${show ? "show" : ""} ${adjustedPlacement} ${contentRootClassName}`}
-      >
-        {content}
-        <div
-          className={`popover-arrow ${adjustedPlacement} ${popoverArrowClassName}`}
-        />
+      <div onClick={() => setShow(!show)} className="popover-trigger">
+        {children}
       </div>
+      {show && (
+        <div
+          data-cy="popoverContent"
+          ref={contentRef}
+          className={`popover-content ${adjustedPlacement} ${contentRootClassName}`}
+        >
+          <div className="popover-header">
+            <Text className="title" data-cy="popoverTitle">
+              {title}
+            </Text>
+            <Button
+              size={ButtonSize.Small}
+              variant={ButtonVariant.Ghost}
+              aria-label="dismiss"
+              onPress={() => setShow(!show)}
+              iconOnly
+              data-cy="closePopover"
+            >
+              <Icon altText="Close Modal" icon="cross" />
+            </Button>
+          </div>
+          {content}
+          <div
+            className={`popover-arrow ${adjustedPlacement} ${popoverArrowClassName}`}
+          />
+        </div>
+      )}
     </div>
   );
 };

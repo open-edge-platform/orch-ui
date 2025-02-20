@@ -6,12 +6,15 @@
 import { CyPom } from "@orch-ui/tests";
 import { dataCy } from "./Popover";
 
-const dataCySelectors = [] as const;
+const dataCySelectors = [
+  "popoverContent",
+  "popoverTitle",
+  "closePopover",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-class PopoverPom extends CyPom<Selectors> {
+export class PopoverPom extends CyPom<Selectors> {
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors]);
   }
 }
-export default PopoverPom;
