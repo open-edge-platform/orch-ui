@@ -71,12 +71,6 @@ const DeploymentUpgradeModal = ({
       : [];
 
   const [upgradeDeployment] = useDeploymentServiceUpdateDeploymentMutation();
-  const selectedVersionInfo = compositeAppVersionList?.deploymentPackages.find(
-    (compositeApp) =>
-      compositeApp.version === upgradeModalState.selectedVersion,
-  );
-
-  const profileName = selectedVersionInfo?.defaultProfileName;
 
   return (
     <div className="deployment-upgrade" data-cy="deploymentUpgradeModal">
@@ -154,7 +148,6 @@ const DeploymentUpgradeModal = ({
                     const deploymentUpgradeInfo = { ...deployment };
                     deploymentUpgradeInfo.appVersion =
                       upgradeModalState.selectedVersion;
-                    deploymentUpgradeInfo.profileName = profileName;
                     upgradeDeployment({
                       deplId: deployment.deployId,
                       deployment: deploymentUpgradeInfo,
