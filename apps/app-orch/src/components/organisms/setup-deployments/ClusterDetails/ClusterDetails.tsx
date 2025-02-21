@@ -55,7 +55,7 @@ const ClusterDetails = ({
     const result =
       clusterDetail?.nodes?.nodeInfoList?.reduce(
         (l, n) => (n.guid ? [n.guid, ...l] : l),
-        [],
+        [] as string[],
       ) ?? [];
     return result;
   };

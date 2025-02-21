@@ -24,5 +24,8 @@
     "displayName": "Deployment-Package Test 1",
     "version": "1.0.1",
     "description": "This deployment package is for testing purpose only..."
+  },
+  "deployments": {
+    "displayName": "Deployment Test 1"
   }
 }

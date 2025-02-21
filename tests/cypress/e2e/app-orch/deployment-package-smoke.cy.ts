@@ -35,12 +35,15 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
     getDeploymentsMFETab().click();
   };
 
-  /** Prereq: Add Application Registry */
+  /** Prereq: Add Application Registry, Application */
   const initPrequisite = () => {
     initPageByUser(); // Get to Applications Tab
     getSidebarTabByName("Applications").click();
+    // Add registry
     pom.applicationsPom.tabs.getTab("Registries").click();
     pom.addRegistry(testData.registry!);
+
+    // Add application
     pom.applicationsPom.tabs.getTab("Applications").click();
     pom.applicationsPom.el.addApplicationButton.click();
     pom.addApplication(
@@ -51,12 +54,14 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
     );
   };
 
-  /** Prereq: Remove Application Registry (that was added in initPrequisite) */
+  /** Prereq: Remove Application Registry, Application (that was added in initPrequisite) */
   const deinitPrequisite = () => {
     initPageByUser(); // Get to Applications Tab
+    // Remove Application
     getSidebarTabByName("Applications").click();
     pom.removeApplication(testData.application!.name);
 
+    // Remove Registry
     cy.visit("/");
     getDeploymentsMFETab().click();
     getSidebarTabByName("Applications").click();
@@ -106,7 +111,7 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   describe(`the ${APP_ORCH_READWRITE_USER.username}`, () => {
     beforeEach(() => {
       initPageByUser();
-      getSidebarTabByName("Deployment Package").click();
+      getSidebarTabByName("Deployment Packages").click();
     });
     describe("on create deployment package", () => {
       let displayName: string;
@@ -176,7 +181,7 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   describe(`the ${APP_ORCH_READ_USER.username}`, () => {
     beforeEach(() => {
       initPageByUser(APP_ORCH_READ_USER);
-      getSidebarTabByName("Deployment Package").click();
+      getSidebarTabByName("Deployment Packages").click();
     });
     describe("on create deployment package", () => {
       it("should not be able to create", () => {

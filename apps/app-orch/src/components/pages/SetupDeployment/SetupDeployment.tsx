@@ -325,10 +325,10 @@ const SetupDeployment = () => {
               selectedIds={selectedClusters.map(
                 (cluster) => cluster.clusterID!,
               )}
-              onSelect={(cluster: ecm.ClusterInfoRead, isSelected: boolean) => {
+              onSelect={(cluster: ecm.ClusterInfo, isSelected: boolean) => {
                 setSelectedClusters((prev) => {
                   if (isSelected) {
-                    return prev.concat(cluster);
+                    return prev.concat(cluster as ecm.ClusterInfoRead);
                   } else {
                     return prev.filter(
                       (c) => c.clusterID !== cluster.clusterID,

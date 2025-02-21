@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-/*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
- */
-
-import { catalog } from "@orch-ui/apis";
+import { adm, catalog } from "@orch-ui/apis";
 import {
   ApplicationCreateEditPom,
   ApplicationsPom,
   DeploymentPackageCreatePom,
   DeploymentPackagesPom,
+  DeploymentsPom,
 } from "@orch-ui/app-orch-poms";
 import { cyGet, CyPom } from "@orch-ui/tests";
 import { RegistryChart } from "../helpers/app-orch";
@@ -26,6 +22,8 @@ class AppOrchPom extends CyPom<Selectors> {
   public applicationCreateEditPom: ApplicationCreateEditPom;
   public deploymentPackagesPom: DeploymentPackagesPom;
   public deploymentPackageCreatePom: DeploymentPackageCreatePom;
+  public deploymentsPom: DeploymentsPom;
+  // public setupDeploymentPom: SetupDeploymentPom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
 
@@ -34,6 +32,8 @@ class AppOrchPom extends CyPom<Selectors> {
     this.applicationCreateEditPom = new ApplicationCreateEditPom();
     this.deploymentPackagesPom = new DeploymentPackagesPom();
     this.deploymentPackageCreatePom = new DeploymentPackageCreatePom();
+    this.deploymentsPom = new DeploymentsPom();
+    // this.setupDeploymentPom = new SetupDeploymentPom();
   }
 
   /**
@@ -137,8 +137,6 @@ class AppOrchPom extends CyPom<Selectors> {
     deploymentPackage: Partial<catalog.DeploymentPackage>,
     applicationNamesForSelections: string[],
   ) {
-    this.deploymentPackagesPom.createButtonPom.el.button.click();
-
     // Fill Deployment Package Creation form flow
     this.deploymentPackageCreatePom.deploymentPackageCreateEditPom.fillDeploymentPackageCreateEditForm(
       deploymentPackage,
@@ -157,6 +155,60 @@ class AppOrchPom extends CyPom<Selectors> {
   removeDeploymentPackage(name: string) {
     this.deploymentPackagesPom.deploymentPackageTable
       .getActionPopupBySearchText(name)
+      .click()
+      .as("popup");
+    cy.get("@popup").contains("Delete").as("deleteBtn");
+    cy.get("@deleteBtn").click();
+    cyGet("confirmBtn").click(); // click confirm button (Delete) in spark-modal (ConfirmationDialog)
+  }
+
+  addDeployment(
+    deployment: Partial<adm.Deployment>,
+    deploymentPackageName: string,
+  ) {
+    // Select Package
+    cyGet(`${deploymentPackageName}Selector`).click();
+    cyGet("nextBtn").click();
+
+    // Select Profiles
+    cyGet("selectProfileTable")
+      // this was system-generated in add deployment package
+      .contains("deployment-profile-1")
+      .closest("tr")
+      .find("[data-cy='radioButtonCy']")
+      .click();
+    cyGet("nextBtn").click();
+
+    // Override Profiles
+    cyGet("nextBtn").click();
+
+    // Select Deployment type
+    cyGet("selectDeploymentType")
+      .find("[data-cy='radioCardAutomatic'] label")
+      .click();
+    cyGet("nextBtn").click();
+
+    // Enter Deployment Details
+    cyGet("deploymentNameField").type(deployment.displayName!);
+    cyGet("setupMetadata")
+      .find("[data-cy='rhfComboboxEntryKey']")
+      .first()
+      .type("color");
+    cy.get(".spark-popover").contains("color").click();
+    cyGet("setupMetadata")
+      .find("[data-cy='rhfComboboxEntryValue']")
+      .first()
+      .type("blue");
+    cy.get(".spark-popover").contains("blue").click();
+    cyGet("setupMetadata").find("[data-cy='add']").click();
+    cyGet("nextBtn").click();
+
+    cyGet("nextBtn").contains("Deploy").click();
+  }
+
+  removeDeployment(deploymentName: string) {
+    this.deploymentsPom.deploymentTablePom
+      .getActionPopupBySearchText(deploymentName)
       .click()
       .as("popup");
     cy.get("@popup").contains("Delete").as("deleteBtn");
