@@ -42,13 +42,12 @@ describe(\"<${name}/>\", () => {
 
 POM="
 import { CyPom } from \"@orch-ui/tests\";
-import { dataCy } from \"./${name}\";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class ${name}Pom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = \"${lowerName}\") {
     super(rootCy, [...dataCySelectors]);
   }
 }

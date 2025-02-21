@@ -96,7 +96,7 @@ describe("<HostConfig/>", () => {
           .then(() => {
             expect(
               store.getState().configureHost.formStatus.currentStep,
-            ).to.equal(1);
+            ).to.equal(2);
             expect(
               store.getState().configureHost.formStatus.enableNextBtn,
             ).to.equal(false);
@@ -234,7 +234,7 @@ describe("<HostConfig/>", () => {
           expect(
             // @ts-ignore : Object is possibly 'undefined'.
             store.getState().configureHost.formStatus.currentStep,
-          ).to.equal(0);
+          ).to.equal(1);
         });
       cy.window()
         .its("store")

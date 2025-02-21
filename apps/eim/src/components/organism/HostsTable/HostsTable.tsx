@@ -271,7 +271,7 @@ const HostsTable = ({
     return <ApiError error={error} />;
   } else if (!data || isEmptyError()) {
     return (
-      <div {...cy} className="pa-1">
+      <div {...cy}>
         <Ribbon
           defaultValue={searchTerm}
           onSearchChange={onSearchChange}

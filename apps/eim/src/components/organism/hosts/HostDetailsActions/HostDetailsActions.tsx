@@ -68,7 +68,6 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
       .unwrap()
       .then(() => {
         showSuccessMessageBanner(dispatch, "Host is now being onboarded.");
-        navigate("../registered-hosts");
       })
       .catch(() => {
         showErrorMessageBanner(dispatch, "Failed to onboard host !");
