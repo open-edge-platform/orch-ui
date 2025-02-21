@@ -9,6 +9,10 @@ on:
     branches:
       - main
       - release-*
+    # temp - need to delete
+    paths:
+      - 'apps/admin/**'
+      - 'library/**'
   workflow_dispatch:
 
 jobs:
