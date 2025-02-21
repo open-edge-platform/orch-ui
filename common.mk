@@ -6,6 +6,7 @@ SHELL = bash -e -o pipefail
 DOCKER_REGISTRY         ?= 080137407410.dkr.ecr.us-west-2.amazonaws.com
 DOCKER_REPOSITORY       ?= edge-orch
 DOCKER_SUB_REPOSITORY   ?= orch-ui
+CHART_PREFIX    				?= charts
 
 common-docker-build: dist ## @HELP Build the orch-ui docker image
 	docker build $(DOCKER_BUILD_ARGS) --platform=linux/x86_64 ${DOCKER_EXTRA_ARGS} \
@@ -18,3 +19,7 @@ common-docker-push: ## @HELP Push the docker image to a registry
 	docker tag $(DOCKER_IMG_NAME):$(DOCKER_VERSION) $(DOCKER_TAG)
 	docker push $(DOCKER_TAG)
 	docker push $(DOCKER_TAG_BRANCH)
+
+common-helm-push: ## @HELP Push helm charts.
+	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(CHART_PREFIX)/$(CHART_NAME) || true
+	helm push ${CHART_NAME}-${VERSION}.tgz oci://$(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(CHART_PREFIX)

@@ -49,7 +49,9 @@ DOCKER_BUILD_ARGS ?= \
 	${DOCKER_EXTRA_ARGS} \
 	${DOCKER_LABEL_ARGS}
 
-HELM_CHART = "$(shell pwd)/deploy/"
+HELM_CHART 							= "$(shell pwd)/deploy/"
+CHART_NAME              ?= orch-ui-eim
+
 IS_RELEASED_VERSION=$(shell MY_STRING="${VERSION}"; MY_REGEX='^([0-9]+)\.([0-9]+)\.([0-9]+)$$'; if [[ $$MY_STRING =~ $$MY_REGEX ]]; then echo true; else echo false; fi)
 
 HELM_DIR = ./deploy/
@@ -94,13 +96,15 @@ helm-version-check: ## @HELP validates that the version is the same in the packa
 	@echo "Verify VERSION (${VERSION}) matches Helm Chart App Version (${helm_version})"
 	@bash -c "diff -u <(echo ${VERSION}) <(echo ${helm_version})"
 
-helm-package: helm-clean helm-annotate ## @HELP Package helm charts.
+helm-build: helm-clean helm-annotate ## @HELP Package helm charts.
 	make helm-annotate
 	# package MFE charts
 	helm package --app-version=${VERSION} --version=${VERSION} --debug -u "$(shell pwd)/deploy/"
 	# package umbrella chart
 	helm dep update ${HELM_CHART}
 	helm package --app-version=${DOCKER_TAG} --version=${VERSION} --debug -u ${HELM_CHART}
+
+helm-push: common-helm-push
 
 helm-clean: helm-reset-annotations ## @HELP Clean helm chart build annotations.
 	make helm-reset-annotations
@@ -115,10 +119,6 @@ helm-reset-annotations: ## @HELP Clear build context annotations and appVersion
 	yq eval -i 'del(.annotations.revision)' ${HELM_CHART}Chart.yaml
 	yq eval -i 'del(.annotations.created)' ${HELM_CHART}Chart.yaml
 	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
-
-helm-push: ## @HELP Push helm charts.
-	# publish MFE chart
-	helm push orch-ui-iaas-${VERSION}.tgz $(HELM_REGISTRY)/$(HELM_REPOSITORY) --debug
 
 helm-lint:
 	helm dep update $(HELM_DIR)

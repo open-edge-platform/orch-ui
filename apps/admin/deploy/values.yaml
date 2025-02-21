@@ -9,7 +9,7 @@ replicaCount: 1
 
 global:
   registry:
-    name: amr-registry.caas.intel.com
+    name: open-registry.espdprod.infra-host.com
     imagePullSecrets: []
   auth:
     enabled: true
@@ -35,7 +35,7 @@ api:
   tenantManager: "https://api.kind.internal"
 
 image:
-  repository: one-intel-edge/apps/orch-ui-admin
+  repository: edge-orch/orch-ui/admin
   pullPolicy: IfNotPresent
   tag: "{{ .Chart.AppVersion }}"
 

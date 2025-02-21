@@ -15,7 +15,9 @@ DOCKER_TAG_BRANCH	    	:= $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_R
 DOCKER_FILE             = "$(shell pwd)/build/Dockerfile"
 DOCKER_CONTEXT          = "$(shell pwd)/"
 
-HELM_CHART = "$(shell pwd)/deploy/"
+HELM_CHART 							= "$(shell pwd)/deploy/"
+CHART_NAME              ?= orch-ui-app-orch
+
 IS_RELEASED_VERSION=$(shell MY_STRING="${VERSION}"; MY_REGEX='^([0-9]+)\.([0-9]+)\.([0-9]+)$$'; if [[ $$MY_STRING =~ $$MY_REGEX ]]; then echo true; else echo false; fi)
 
 help: # @HELP Print the command options
@@ -51,15 +53,21 @@ helm-annotate: ## @HELP Apply build context to chart annotations and appVersion
 	yq eval -i '.annotations.created = "${DOCKER_LABEL_BUILD_DATE}"' ${HELM_CHART}Chart.yaml
 	yq eval -i '.appVersion = "${DOCKER_TAG}"' ${HELM_CHART}Chart.yaml
 
+helm-reset-annotations: ## @HELP Clear build context annotations and appVersion
+	yq eval -i 'del(.annotations.revision)' ${HELM_CHART}Chart.yaml
+	yq eval -i 'del(.annotations.created)' ${HELM_CHART}Chart.yaml
+	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
 
 helm_version = $(shell helm show chart ${HELM_CHART} | yq e '.appVersion' -)
 helm-version-check: ## @HELP validates that the version is the same in the package.json and in the helm-chart
 	@echo "Verify package.json VERSION (${VERSION}) matches Helm Chart App Version (${helm_version})"
 	@bash -c "diff -u <(echo ${VERSION}) <(echo ${helm_version})"
 
-helm-package: helm-clean helm-annotate ## @HELP Package helm charts.
+helm-build: helm-clean helm-annotate ## @HELP Package helm charts.
 	helm dep update ${HELM_CHART}
 	helm package --app-version=${DOCKER_TAG} --version=${VERSION} --debug -u ${HELM_CHART}
+
+helm-push: common-helm-push
 
 dist: node_modules ## @HELP Builds the react application using webpack
 	NODE_ENV=production npm run app:app-orch:build

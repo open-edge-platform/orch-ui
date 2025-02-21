@@ -9,7 +9,7 @@ replicaCount: 1
 
 global:
   registry:
-    name: amr-registry.caas.intel.com
+    name: open-registry.espdprod.infra-host.com
     imagePullSecrets: []
   auth:
     enabled: true
@@ -135,7 +135,7 @@ versions:
   orchestrator: unknown
 
 image:
-  repository: one-intel-edge/apps/orch-ui-root
+  repository: edge-orch/orch-ui/root
   pullPolicy: IfNotPresent
   tag: "{{ .Chart.AppVersion }}"
 

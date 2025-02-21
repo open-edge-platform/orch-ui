@@ -15,7 +15,9 @@ DOCKER_TAG_BRANCH	    	:= $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_R
 DOCKER_FILE             = "$(shell pwd)/build/Dockerfile"
 DOCKER_CONTEXT          = "$(shell pwd)/../.."
 
-HELM_CHART = "$(shell pwd)/deploy/"
+HELM_CHART 							= "$(shell pwd)/deploy/"
+CHART_NAME              ?= orch-ui-root
+
 IS_RELEASED_VERSION=$(shell MY_STRING="${VERSION}"; MY_REGEX='^([0-9]+)\.([0-9]+)\.([0-9]+)$$'; if [[ $$MY_STRING =~ $$MY_REGEX ]]; then echo true; else echo false; fi)
 
 root_version = $(VERSION)
@@ -91,13 +93,11 @@ helm-lint:
 helm-clean: helm-reset-annotations ## @HELP Clean helm chart build annotations.
 	rm orch-ui-*.tgz || true
 
-helm-package: helm-clean helm-annotate ## @HELP Package helm charts.
+helm-build: helm-clean helm-annotate ## @HELP Package helm charts.
 	helm dep update ${HELM_CHART}
 	helm package --app-version=${DOCKER_TAG} --version=${VERSION} --debug -u ${HELM_CHART}
 
-helm-push: ## @HELP Push helm charts.
-	# publish Root MFEs charts
-	helm push orch-ui-${VERSION}.tgz $(HELM_REGISTRY)/$(HELM_REPOSITORY) --debug
+helm-push: common-helm-push
 
 helm_version = $(shell helm show chart ${HELM_CHART} | yq e '.appVersion' -)
 helm-version-check: ## @HELP validates that the version is the same in the package.json and in the helm-chart

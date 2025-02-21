@@ -21,6 +21,8 @@ jobs:
       run_build: true
       run_docker_build: true
       run_docker_push: true
+      run_helm_build: true
+      run_helm_push: true
       run_version_tag: true
       run_artifact: false
       project_folder: ./apps/root
