@@ -1,6 +1,6 @@
 {
   "name": "itep-ui",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Intel Tiber Edge Platform User Interface",
   "main": "index.js",
   "scripts": {
