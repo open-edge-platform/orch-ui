@@ -29,5 +29,5 @@ jobs:
       run_version_tag: true
       run_artifact: false
       prefix_tag_separator: "/"
-      project_folder: ./apps/app-orch
+      project_folder: apps/app-orch
     secrets: inherit
