@@ -8,10 +8,9 @@ on:
   push:
     branches:
       - main
-      - release-*
-    # paths:
-    #   - 'apps/eim/**'
-    #   - 'library/**'
+    paths:
+      - 'apps/eim/**'
+      - 'library/**'
   workflow_dispatch:
 
 jobs:
