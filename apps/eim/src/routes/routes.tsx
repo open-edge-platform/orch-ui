@@ -30,6 +30,7 @@ import { BreadcrumbWrapper } from "../components/atom/BreadcrumbWrapper/Breadcru
 import { HostConfig } from "../components/pages/HostConfig/HostConfig";
 import HostEdit from "../components/pages/HostEdit";
 import { Locations } from "../components/pages/Locations/Locations";
+import RegisterHosts from "../components/pages/RegisterHosts/RegisterHosts";
 
 type RemoteComponent = LazyExoticComponent<ComponentType<any>> | null;
 
@@ -89,7 +90,10 @@ export const createChildRoutes = () => {
       path: hostsRoute,
       element: <Hosts />,
     },
-
+    {
+      path: "register-hosts",
+      element: <RegisterHosts />,
+    },
     {
       path: `${hostDetailsRoute}/edit`,
       element: <HostEdit />,

@@ -69,6 +69,7 @@ jobs:
       run_scan_containers: true
       run_artifact: false
       run_helm_build: false
+      run_reuse_check: false
       project_folder: ./apps/${{ matrix.project_folder }}
     secrets: inherit
 
@@ -92,6 +93,7 @@ jobs:
       run_scan_containers: true
       run_artifact: false
       run_helm_build: false
+      run_reuse_check: false
       project_folder: ./apps/${{ matrix.project_folder }}
     secrets: inherit
 

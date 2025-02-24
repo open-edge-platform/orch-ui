@@ -7,7 +7,7 @@ import { adm, catalog } from "@orch-ui/apis";
 import { Flex, Table, TableColumn } from "@orch-ui/components";
 import { Combobox, Item, MessageBanner } from "@spark-design/react";
 import { ComboboxSize, ComboboxVariant } from "@spark-design/tokens";
-import { useState } from "react";
+import React, { useState } from "react";
 import "./NetworkInterconnect.scss";
 
 export const dataCy = "networkInterconnect";
@@ -67,9 +67,9 @@ const NetworkInterconnect = ({
           size={ComboboxSize.Large}
           variant={ComboboxVariant.Primary}
           defaultInputValue={networkValue}
-          onSelectionChange={(value: string) => {
-            setNetworkValue(value);
-            onNetworkUpdate(value);
+          onSelectionChange={(value: React.Key | null) => {
+            setNetworkValue(value as string);
+            onNetworkUpdate(value as string);
           }}
           errorMessage="Registry Name is required"
           data-cy="networkInterconnectCombobox"

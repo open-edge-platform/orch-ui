@@ -33,7 +33,7 @@ const apis: CyApiDetails<
     route: deploymentsApiUrl,
     response: {
       deployments: deplStore.list(),
-      totalElements: 3,
+      totalElements: deplStore.list().length,
     },
   },
   deploymentsSingleListMock: {
@@ -53,7 +53,7 @@ const apis: CyApiDetails<
 };
 
 class DeploymentsPom extends CyPom<Selectors, ApiAliases> {
-  public table = new DeploymentsTablePom();
+  public deploymentTablePom = new DeploymentsTablePom();
   public deploymentUpgradeModal = new DeploymentUpgradeModalPom();
 
   constructor(public rootCy: string = "deployments") {

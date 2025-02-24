@@ -4,8 +4,9 @@
  */
 
 import { adm } from "@orch-ui/apis";
-import { RibbonPom, TablePom } from "@orch-ui/components";
-import { Cy, CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
+import { EmptyPom, RibbonPom, TablePom } from "@orch-ui/components";
+import { SiTablePom } from "@orch-ui/poms";
+import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import { deploymentOne, DeploymentsStore } from "@orch-ui/utils";
 import DeploymentUpgradeAvailabilityStatusPom from "../../../atoms/DeploymentUpgradeAvailabilityStatus/DeploymentUpgradeAvailabilityStatus.pom";
 import { DeploymentUpgradeModalPom } from "../DeploymentUpgradeModal/DeploymentUpgradeModal.pom";
@@ -147,8 +148,10 @@ export const successDeleteDeploymentEndpoints: CyApiDetails<
 export class DeploymentsTablePom extends CyPom<Selectors, ApiAliases> {
   public ribbon: RibbonPom;
   public tablePom: TablePom;
+  public tableUtils: SiTablePom;
   public upgradePom: DeploymentUpgradeModalPom;
   public upgradeStatusPom: DeploymentUpgradeAvailabilityStatusPom;
+  public emptyPom: EmptyPom;
   constructor(public rootCy: string = "deploymentsTable") {
     super(rootCy, [...dataCySelectors], {
       ...successDeploymentsEndpoints,
@@ -156,14 +159,15 @@ export class DeploymentsTablePom extends CyPom<Selectors, ApiAliases> {
       ...successDeleteDeploymentEndpoints,
     });
     this.tablePom = new TablePom();
+    this.tableUtils = new SiTablePom();
     this.ribbon = new RibbonPom();
     this.upgradePom = new DeploymentUpgradeModalPom();
     this.upgradeStatusPom = new DeploymentUpgradeAvailabilityStatusPom();
+    this.emptyPom = new EmptyPom();
   }
 
-  // TODO: Move this to @orch-ui/components Table component
-  public getRowBySearchText(searchFor: string): Cy<HTMLTableRowElement> {
-    return this.root.contains(searchFor).closest("tr");
+  public getActionPopupBySearchText(search: string) {
+    return this.tableUtils.getRowBySearchText(search).find("[data-cy='popup']");
   }
 
   public getConfirmationDialog() {

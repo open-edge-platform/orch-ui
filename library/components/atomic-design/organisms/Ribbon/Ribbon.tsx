@@ -85,16 +85,14 @@ export const Ribbon = ({
 
   // Effect to send search request when user stop typing for 1.5 seconds
   useEffect(() => {
-    if (search) {
-      debouncedSearch(search);
-    }
+    debouncedSearch(search);
 
     // Cleanup function to cancel the debounced call if the component unmounts
     // or if the dependencies change
     return () => {
       debouncedSearch.cancel();
     };
-  }, [search, debouncedSearch]);
+  }, [search]);
 
   const getButton = (
     button: RibbonButtonProps,

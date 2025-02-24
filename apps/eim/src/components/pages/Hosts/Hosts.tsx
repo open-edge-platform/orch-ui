@@ -8,6 +8,7 @@ import { ContextSwitcher } from "@orch-ui/components";
 import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   buildFilter,
@@ -18,12 +19,14 @@ import HostSearchFilters from "../../organism/HostSearchFilters/HostSearchFilter
 import HostsTable from "../../organism/HostsTable/HostsTable";
 import { RegisterHostDrawer } from "../../organism/RegisterHostDrawer/RegisterHostDrawer";
 import "./Hosts.scss";
+
 export const dataCy = "hosts";
 
 const Hosts = () => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
@@ -37,27 +40,14 @@ const Hosts = () => {
   const hostTableActionButtons = (
     <>
       <HostSearchFilters />
-      {hostFilterState.lifeCycleState === LifeCycleState.Registered && (
-        <Button
-          variant={ButtonVariant.Action}
-          onPress={() => {
-            // TODO: Register Host navigation here
-            setShowRegisterDrawer(true);
-          }}
-        >
-          Register Host
-        </Button>
-      )}
-      {hostFilterState.lifeCycleState === LifeCycleState.Onboarded && (
-        <Button
-          variant={ButtonVariant.Action}
-          onPress={() => {
-            // TODO: Register Host navigation here
-          }}
-        >
-          Provision Host
-        </Button>
-      )}
+      <Button
+        variant={ButtonVariant.Action}
+        onPress={() => {
+          navigate("../register-hosts");
+        }}
+      >
+        Register Host(s)
+      </Button>
     </>
   );
 

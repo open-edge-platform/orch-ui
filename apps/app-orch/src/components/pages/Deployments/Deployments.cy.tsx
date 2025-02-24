@@ -9,31 +9,41 @@ import DeploymentsPom from "./Deployments.pom";
 const pom = new DeploymentsPom();
 describe("<Deployments />", () => {
   it("should render empty", () => {
-    pom.table.interceptApis([pom.table.api.getEmptyDeploymentsList]);
+    pom.deploymentTablePom.interceptApis([
+      pom.deploymentTablePom.api.getEmptyDeploymentsList,
+    ]);
     cy.mount(<Deployments />);
-    pom.table.el.empty.should("exist");
+    pom.deploymentTablePom.el.empty.should("exist");
   });
   it("should render component", () => {
-    pom.table.interceptApis([pom.table.api.getDeploymentsList]);
+    pom.deploymentTablePom.interceptApis([
+      pom.deploymentTablePom.api.getDeploymentsList,
+    ]);
     cy.mount(<Deployments />);
     pom.waitForApis();
-    pom.table.tablePom.getRows().should("have.length", 5);
+    pom.deploymentTablePom.tablePom.getRows().should("have.length", 5);
   });
   it("should goto setup deployment page when list is empty", () => {
-    pom.table.interceptApis([pom.table.api.getEmptyDeploymentsList]);
+    pom.deploymentTablePom.interceptApis([
+      pom.deploymentTablePom.api.getEmptyDeploymentsList,
+    ]);
     cy.mount(<Deployments />);
     pom.waitForApis();
-    pom.table.el.empty
+    pom.deploymentTablePom.el.empty
       .find("[data-cy='emptyActionBtn']")
       .contains("Setup a Deployment")
       .click();
     pom.getPath().should("eq", "/deployments/setup-deployment");
   });
   it("should goto setup deployment page when table is showing data", () => {
-    pom.table.interceptApis([pom.table.api.getDeploymentsList]);
+    pom.deploymentTablePom.interceptApis([
+      pom.deploymentTablePom.api.getDeploymentsList,
+    ]);
     cy.mount(<Deployments />);
     pom.waitForApis();
-    pom.table.el.addDeploymentButton.contains("Setup a Deployment").click();
+    pom.deploymentTablePom.el.addDeploymentButton
+      .contains("Setup a Deployment")
+      .click();
     pom.getPath().should("eq", "/deployments/setup-deployment");
   });
 });

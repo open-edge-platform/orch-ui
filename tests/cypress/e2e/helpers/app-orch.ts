@@ -58,7 +58,7 @@ export function isDeploymentPackageTestDataPresent(arg: any) {
   );
 }
 export function isDeploymentTestDataPresent(arg: any) {
-  return "deployment" in arg; // && isDeployment(arg.deployment);
+  return "deployments" in arg; // && isDeployment(arg.deployment);
 }
 
 // --- Helper Functions ---

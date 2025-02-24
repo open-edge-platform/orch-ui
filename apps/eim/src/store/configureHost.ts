@@ -11,7 +11,8 @@ import { RootState } from "./store";
 export const ROOT_REGIONS: string = "null";
 
 export enum HostConfigSteps {
-  "Select Site" = 0,
+  "Register Host" = 0,
+  "Select Site",
   "Enter Host Details",
   "Add Host Labels",
   "Complete Configuration",
@@ -36,6 +37,8 @@ export interface HostConfigForm {
   hosts: {
     [id: string]: HostData;
   };
+  autoOnboard: boolean;
+  autoProvision: boolean;
 }
 
 export const initialState: HostConfigForm = {
@@ -48,6 +51,8 @@ export const initialState: HostConfigForm = {
     hasValidationError: false,
   },
   hosts: {},
+  autoOnboard: false,
+  autoProvision: false,
 };
 
 const containsHosts = (state: HostConfigForm) => {
@@ -235,6 +240,12 @@ export const configureHost = createSlice({
       state.formStatus.hasValidationError = action.payload;
       configureHost.caseReducers.validateStep(state);
     },
+    setAutoOnboardValue(state, action: PayloadAction<boolean>) {
+      state.autoOnboard = action.payload;
+    },
+    setAutoProvisionValue(state, action: PayloadAction<boolean>) {
+      state.autoProvision = action.payload;
+    },
     validateStep,
   },
 });
@@ -254,6 +265,8 @@ export const {
   setGlobalOsValue,
   setGlobalSecurityValue,
   setValidationError,
+  setAutoOnboardValue,
+  setAutoProvisionValue,
 } = configureHost.actions;
 
 // selectors
