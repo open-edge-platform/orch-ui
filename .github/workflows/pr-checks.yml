@@ -94,6 +94,7 @@ jobs:
       run_artifact: false
       run_helm_build: false
       run_reuse_check: false
+      prefix_tag_separator: "/"
       project_folder: ./apps/${{ matrix.project_folder }}
     secrets: inherit
 
