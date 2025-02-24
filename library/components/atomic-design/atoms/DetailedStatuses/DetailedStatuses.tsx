@@ -10,6 +10,7 @@ import {
   StatusIcon,
 } from "@orch-ui/components";
 import { Text } from "@spark-design/react";
+import moment from "moment";
 import "./DetailedStatuses.scss";
 
 export const dataCy = "clusterStatusDetails";
@@ -37,22 +38,31 @@ export type FieldLabels<T> = {
   [field in keyof T]: FieldLabel;
 };
 
-interface ClusterStatusDetailsProps<T extends AggregatedStatusesMap> {
+interface DetailedStatusesProps<T extends AggregatedStatusesMap> {
   data: T;
   statusFields: FieldLabels<T>;
+  showTimestamp?: boolean;
 }
 export const DetailedStatuses = <T extends AggregatedStatusesMap>({
   data,
   statusFields,
-}: ClusterStatusDetailsProps<T>) => {
+  showTimestamp = false,
+}: DetailedStatusesProps<T>) => {
   const cy = { "data-cy": dataCy };
 
   const fieldToRow = (data: T, key: string, field: FieldLabel) => {
     if (data[key] === undefined) {
       return <></>;
     }
+    const humanReadableTimestamp =
+      data[key] && data[key]?.timestamp
+        ? moment(new Date(data[key].timestamp)).format(
+            "MMM DD, YYYY hh:mm:ss A",
+          )
+        : "Unavailable";
     return (
       <>
+        <span className="line"></span>
         <div data-cy={`label-${key}`}>
           <Text>{field.label}</Text>
         </div>
@@ -64,19 +74,30 @@ export const DetailedStatuses = <T extends AggregatedStatusesMap>({
             }
           />
         </div>
+        {showTimestamp && (
+          <div data-cy={`timestamp-${key}`}>
+            <Text>{humanReadableTimestamp}</Text>
+          </div>
+        )}
       </>
     );
   };
-
   return (
     <div {...cy} className="cluster-status-details">
-      <div className="cluster-status-details__grid-wrapper">
+      <div
+        className={`cluster-status-details__grid-wrapper ${showTimestamp ? "col3" : "col2"}`}
+      >
         <div>
           <Text style={{ fontWeight: "500" }}>Source</Text>
         </div>
         <div>
           <Text style={{ fontWeight: "500" }}>Status</Text>
         </div>
+        {showTimestamp && (
+          <div data-cy="last-change">
+            <Text style={{ fontWeight: "500" }}>Last Change</Text>
+          </div>
+        )}
         {Object.entries(statusFields).map(([key, field]) =>
           fieldToRow(data, key, field),
         )}
