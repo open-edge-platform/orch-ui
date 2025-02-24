@@ -7,7 +7,6 @@ import { eim } from "@orch-ui/apis";
 import {
   DetailedStatuses,
   Empty,
-  FieldLabels,
   Flex,
   MetadataDisplay,
   SquareSpinner,
@@ -15,6 +14,7 @@ import {
 import {
   API_INTERVAL,
   HostGenericStatuses,
+  hostStatusFields,
   hostToStatuses,
   humanFileSize,
   RuntimeConfig,
@@ -71,7 +71,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   const tabItems = [
     {
       id: 1,
-      title: "Status",
+      title: "Status Details",
     },
     {
       id: 2,
@@ -95,29 +95,12 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     },
   ];
 
-  const hostStatusFields: FieldLabels<HostGenericStatuses> = {
-    hostStatus: {
-      label: "Host Status",
-    },
-    onboardingStatus: {
-      label: "Onboarding Status",
-    },
-    instanceStatus: {
-      label: "Instance Status",
-    },
-    provisioningStatus: {
-      label: "Provisioning Status",
-    },
-    updateStatus: {
-      label: "Update Status",
-    },
-  };
-
   const itemList = [
     <Item title={tabItems[0].title}>
       <DetailedStatuses<HostGenericStatuses>
         data={hostToStatuses(host, instance)}
         statusFields={hostStatusFields}
+        showTimestamp
       />
     </Item>,
     <Item title={tabItems[1].title}>

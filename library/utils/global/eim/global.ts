@@ -4,7 +4,11 @@
  */
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
-import { GenericStatus, Status as IconStatus } from "@orch-ui/components";
+import {
+  FieldLabels,
+  GenericStatus,
+  Status as IconStatus,
+} from "@orch-ui/components";
 import { capitalize } from "lodash";
 
 export type HostGenericStatuses = {
@@ -239,6 +243,24 @@ export enum WorkloadMemberKind {
   Cluster = "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
   Unspecified = "WORKLOAD_MEMBER_KIND_UNSPECIFIED",
 }
+
+export const hostStatusFields: FieldLabels<HostGenericStatuses> = {
+  hostStatus: {
+    label: "Host",
+  },
+  instanceStatus: {
+    label: "Software(OS/Agents)",
+  },
+  updateStatus: {
+    label: "Update",
+  },
+  provisioningStatus: {
+    label: "Provisioning",
+  },
+  onboardingStatus: {
+    label: "Onboarding",
+  },
+};
 
 export const statusIndicatorToIconStatus = (
   statusIndicator: eim.StatusIndicator,

@@ -384,6 +384,17 @@ const HostDetails: React.FC = () => {
                 ? instance.instances[0]
                 : undefined,
           }}
+          jsx={
+            <button
+              className="spark-button spark-button-action spark-button-size-l spark-focus-visible spark-focus-visible-self spark-focus-visible-snap"
+              type="button"
+            >
+              <span className="spark-button-content">
+                Host Actions
+                <Icon className="pa-1 mb-1" icon="chevron-down" />
+              </span>
+            </button>
+          }
         />
       </div>
 
@@ -441,8 +452,8 @@ const HostDetails: React.FC = () => {
       {/* Host-Details: Description table (shown only when host is CONFIGURED) */}
       <Flex
         className={`${cssSelectorIhd}__host-description`}
-        cols={[12, 12]}
-        colsLg={[6, 6]}
+        cols={[6, 6]}
+        colsSm={[12, 12]}
       >
         <div>
           <table
@@ -458,15 +469,26 @@ const HostDetails: React.FC = () => {
               <td data-cy="guid">{host.uuid || "-"}</td>
             </tr>
             {host.site && (
-              <tr>
-                <td>OS Profile</td>
-                <td data-cy="osProfiles">
-                  {(isInstanceSuccess &&
-                    instance.instances.length > 0 &&
-                    instance.instances[0].os?.name) ||
-                    "-"}
-                </td>
-              </tr>
+              <>
+                <tr>
+                  <td>OS</td>
+                  <td data-cy="osProfiles">
+                    {(isInstanceSuccess &&
+                      instance.instances.length > 0 &&
+                      instance.instances[0].os?.name) ||
+                      "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Updates</td>
+                  <td data-cy="desiredOsProfiles">
+                    {(isInstanceSuccess &&
+                      instance.instances.length > 0 &&
+                      instance.instances[0].desiredOs?.name) ||
+                      "-"}
+                  </td>
+                </tr>
+              </>
             )}
             {host.site && (
               <tr>

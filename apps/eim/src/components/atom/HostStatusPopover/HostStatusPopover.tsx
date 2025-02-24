@@ -14,6 +14,7 @@ import {
   CONSTANTS,
   genericHostStatusMessages,
   HostGenericStatuses,
+  hostStatusFields,
   hostToStatuses,
   statusIndicatorToIconStatus,
 } from "@orch-ui/utils";
@@ -33,23 +34,6 @@ type FieldLabel = {
 type HostGenericStatusKeys = keyof HostGenericStatuses;
 
 // For rendering of statuses iteratively
-const hostStatusFields: FieldLabels<HostGenericStatuses> = {
-  hostStatus: {
-    label: "Host",
-  },
-  instanceStatus: {
-    label: "Software(OS/Agents)",
-  },
-  updateStatus: {
-    label: "Update",
-  },
-  provisioningStatus: {
-    label: "Provisioning",
-  },
-  onboardingStatus: {
-    label: "Onboarding",
-  },
-};
 
 export const HostStatusPopover = ({ data }: HostStatusPopoverProps) => {
   const cy = { "data-cy": dataCy };

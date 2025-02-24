@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { cyGet } from "@orch-ui/tests";
 import { GenericStatus } from "../AggregatedStatuses/AggregatedStatuses";
 import { DetailedStatuses, FieldLabels } from "./DetailedStatuses";
 import DetailedStatusesPom from "./DetailedStatuses.pom";
@@ -73,5 +74,20 @@ describe("<DetailedStatuses/>", () => {
     pom
       .icon("statusTwo")
       .should("contain.text", statusFields.statusTwo.formatter!(statusTwo));
+  });
+
+  it("should not render the Last Change column by default", () => {
+    cyGet("last-change").should("not.exist");
+  });
+
+  it("should render the Last Change column on demand", () => {
+    cy.mount(
+      <DetailedStatuses<TestStatus>
+        statusFields={statusFields}
+        data={statuses}
+        showTimestamp
+      />,
+    );
+    cyGet("last-change").should("be.visible");
   });
 });
