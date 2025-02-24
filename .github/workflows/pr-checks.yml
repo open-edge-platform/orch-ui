@@ -4,13 +4,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   workflow_dispatch:
-
-
 jobs:
   detect-changed-folders:
     runs-on: 'ubuntu-latest'
