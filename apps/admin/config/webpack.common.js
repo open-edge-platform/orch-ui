@@ -39,13 +39,16 @@ module.exports = {
       //     "css-loader",
       //   ],
       //   exclude: [/node_modules/]
-      // },      
+      // },
       // Webpack 5 image loading https://webpack.js.org/guides/asset-management/#loading-images
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
       },
     ],
+  },
+  output: {
+    uniqueName: "admin",
   },
   resolve: {
     //https://webpack.js.org/configuration/resolve/#resolveextensions
@@ -67,7 +70,7 @@ module.exports = {
         "@spark-design/tokens": {singleton: true},
         react: {
           singleton: true,
-          requiredVersion: dependencies['react'] 
+          requiredVersion: dependencies['react']
         },
         "react-dom": {
           singleton:true,

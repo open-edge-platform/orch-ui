@@ -44,6 +44,9 @@ module.exports = {
       },
     ],
   },
+  output: {
+    uniqueName: "appOrch",
+  },
   resolve: {
     //https://webpack.js.org/configuration/resolve/#resolveextensions
     // webpack by itself resolves js/json/wasm files but if you override it like
@@ -66,7 +69,7 @@ module.exports = {
         "@spark-design/tokens": {singleton: true},
         react: {
           singleton: true,
-          requiredVersion: dependencies['react'] 
+          requiredVersion: dependencies['react']
         },
         "react-dom": {
           singleton:true,

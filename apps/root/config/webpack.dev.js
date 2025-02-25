@@ -27,7 +27,6 @@ const devConfig = {
     publicPath: process.env.REACT_LP_REMOTE_EP
       ? `http://${process.env.REACT_LP_REMOTE_EP}:8080/`
       : "http://localhost:8080/",
-    uniqueName: "root"
   },
   devServer: {
     port: 8080,
