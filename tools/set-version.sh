@@ -22,7 +22,7 @@ else
   exit 1
 fi
 
-echo "$new_version" > "VERSION"
+echo "$new_version" > "apps/$app/VERSION"
 make apply-version APP=$app VERSION=$new_version
 helm dep update apps/$app/deploy/
 

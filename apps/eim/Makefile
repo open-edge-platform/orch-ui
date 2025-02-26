@@ -102,7 +102,7 @@ helm-build: helm-clean helm-annotate ## @HELP Package helm charts.
 	helm package --app-version=${VERSION} --version=${VERSION} --debug -u "$(shell pwd)/deploy/"
 	# package umbrella chart
 	helm dep update ${HELM_CHART}
-	helm package --app-version=${DOCKER_TAG} --version=${VERSION} --debug -u ${HELM_CHART}
+	helm package --app-version=${VERSION} --version=${VERSION} --debug -u ${HELM_CHART}
 
 helm-push: common-helm-push
 
