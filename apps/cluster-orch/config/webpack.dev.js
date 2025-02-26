@@ -16,7 +16,6 @@ const devConfig = {
     publicPath: process.env.REACT_LP_REMOTE_EP
       ? `http://${process.env.REACT_LP_REMOTE_EP}:8083/`
       : "http://localhost:8083/",
-    uniqueName: "clusterOrch"
   },
   devServer: {
     port: 8083,

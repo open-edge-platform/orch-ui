@@ -16,7 +16,6 @@ const devConfig = {
     publicPath: process.env.REACT_LP_REMOTE_EP
       ? `http://${process.env.REACT_LP_REMOTE_EP}:8081/`
       : "http://localhost:8081/",
-    uniqueName:"appOrch"
   },
   devServer: {
     port: 8081,

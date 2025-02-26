@@ -43,6 +43,9 @@ module.exports = {
       },
     ],
   },
+  output: {
+    uniqueName: "clusterOrch",
+  },
   resolve: {
     //https://webpack.js.org/configuration/resolve/#resolveextensions
     // webpack by itself resolves js/json/wasm files but if you override it like
