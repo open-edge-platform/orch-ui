@@ -123,12 +123,6 @@ helm-reset-annotations: ## @HELP Clear build context annotations and appVersion
 	yq eval -i 'del(.annotations.created)' ${HELM_CHART}Chart.yaml
 	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
 
-PACKAGE_FILES = ./package.json \
-	./api/src/observabilityMonitor/package.json \
-
-apply-version-x:
-	@echo "hi"
-
 apply-version: helm-clean ## @HELP apply version from the top level package.json to all sub-projectsare the same across the different projects
 	@echo "Setting all chart versions to ${VERSION}"
 	for d in $(HELM_DIRS); do \

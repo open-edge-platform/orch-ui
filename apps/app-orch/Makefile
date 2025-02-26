@@ -51,7 +51,7 @@ helm-clean: helm-reset-annotations ## @HELP Clean helm chart build annotations.
 helm-annotate: ## @HELP Apply build context to chart annotations and appVersion
 	yq eval -i '.annotations.revision = "${DOCKER_LABEL_VCS_REF}"' ${HELM_CHART}Chart.yaml
 	yq eval -i '.annotations.created = "${DOCKER_LABEL_BUILD_DATE}"' ${HELM_CHART}Chart.yaml
-	yq eval -i '.appVersion = "${DOCKER_TAG}"' ${HELM_CHART}Chart.yaml
+	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
 
 helm-reset-annotations: ## @HELP Clear build context annotations and appVersion
 	yq eval -i 'del(.annotations.revision)' ${HELM_CHART}Chart.yaml
@@ -80,8 +80,10 @@ KIND_CLUSTER_NAME="kind"
 docker-kind-load: ## @HELP Loads the docker image on a kind cluster
 	kind load docker-image ${DOCKER_REGISTRY}${DOCKER_REPOSITORY}:${DOCKER_TAG} --name=${KIND_CLUSTER_NAME}
 
-apply-version-x:
-	@echo "hi"
+apply-version: helm-clean ## @HELP apply version from the top level package.json to all sub-projectsare the same across the different projects
+	@echo "Setting chart version to ${VERSION}"
+	yq eval -i '.version = "${VERSION}"' ./deploy/Chart.yaml ;
+	yq eval -i '.appVersion = "${VERSION}"' ./deploy/Chart.yaml ;
 
 app-version: ## @HELP ensure that all version are the same across the different projects
 	@echo "App Orchestration version is: ${VERSION}"

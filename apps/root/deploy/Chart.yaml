@@ -4,11 +4,11 @@ apiVersion: v2
 name: orch-ui-root
 description: Deploy Edge Orchestrator UI pods on Kubernetes
 type: application
-version: 1.0.2-dev
+version: 1.0.3
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "1.0.2-dev"
+appVersion: "1.0.3"
 annotations:
   api_iaas_maestro_infra_api: "1.9.1-dev"
   api_app_orch_maestro_app_application_catalog: "0.10.8"
@@ -17,3 +17,5 @@ annotations:
   api_app_orch_maestro_app_app_resource_manager: "2.0.4"
   api_metadata_broker_metadata_service: "0.1.11"
   api_cluster_orch_cluster_template_manager: "0.9.1"
+  revision: 70788f19620d888bc24abe7d400cd39bdd9eef94
+  created: "2025-02-26T02:02:09Z"

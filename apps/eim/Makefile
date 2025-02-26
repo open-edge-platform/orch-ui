@@ -113,7 +113,7 @@ helm-clean: helm-reset-annotations ## @HELP Clean helm chart build annotations.
 helm-annotate: ## @HELP Apply build context to chart annotations and appVersion
 	yq eval -i '.annotations.revision = "${DOCKER_LABEL_VCS_REF}"' ${HELM_CHART}Chart.yaml
 	yq eval -i '.annotations.created = "${DOCKER_LABEL_BUILD_DATE}"' ${HELM_CHART}Chart.yaml
-	yq eval -i '.appVersion = "${DOCKER_TAG}"' ${HELM_CHART}Chart.yaml
+	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
 
 helm-reset-annotations: ## @HELP Clear build context annotations and appVersion
 	yq eval -i 'del(.annotations.revision)' ${HELM_CHART}Chart.yaml
@@ -141,8 +141,8 @@ license: $(VENV_NAME) ## @HELP Check licensing with the reuse tool
 
 apply-version: helm-clean ## @HELP apply version from the top level package.json to all sub-projectsare the same across the different projects
 	@echo "Setting chart version to ${VERSION}"
-	yq eval -i '.version = "${VERSION}"' $(HELM_DIR)/Chart.yaml ;
-	yq eval -i '.appVersion = "${VERSION}"' $(HELM_DIR)/Chart.yaml ;
+	yq eval -i '.version = "${VERSION}"' ./deploy/Chart.yaml ;
+	yq eval -i '.appVersion = "${VERSION}"' ./deploy/Chart.yaml ;
 
 check-valid-api:
 	bash ./tools/api-versions.sh validate
