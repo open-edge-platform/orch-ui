@@ -96,7 +96,7 @@ helm-clean: helm-reset-annotations ## @HELP Clean helm chart build annotations.
 
 helm-build: helm-clean helm-annotate ## @HELP Package helm charts.
 	helm dep update ${HELM_CHART}
-	helm package --app-version=${DOCKER_TAG} --version=${VERSION} --debug -u ${HELM_CHART}
+	helm package --app-version=${VERSION} --version=${VERSION} --debug -u ${HELM_CHART}
 
 helm-push: common-helm-push
 
@@ -108,28 +108,17 @@ helm-version-check: ## @HELP validates that the version is the same in the packa
 helm-annotate: ## @HELP Apply build context to chart annotations and appVersion
 	yq eval -i '.annotations.revision = "${DOCKER_LABEL_VCS_REF}"' ${HELM_CHART}Chart.yaml
 	yq eval -i '.annotations.created = "${DOCKER_LABEL_BUILD_DATE}"' ${HELM_CHART}Chart.yaml
-	yq eval -i '.appVersion = "${DOCKER_TAG}"' ${HELM_CHART}Chart.yaml
+	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
 
 helm-reset-annotations: ## @HELP Clear build context annotations and appVersion
 	yq eval -i 'del(.annotations.revision)' ${HELM_CHART}Chart.yaml
 	yq eval -i 'del(.annotations.created)' ${HELM_CHART}Chart.yaml
 	yq eval -i '.appVersion = "${VERSION}"' ${HELM_CHART}Chart.yaml
 
-PACKAGE_FILES = ./package.json \
-	./api/src/observabilityMonitor/package.json \
-
 apply-version: helm-clean ## @HELP apply version from the top level package.json to all sub-projectsare the same across the different projects
-	@echo "Setting all UI sub-package versions to ${VERSION}"
-	for pkg in $(PACKAGE_FILES); do \
-		echo -E "$$(jq '.version = "${VERSION}"' $$pkg)" > $$pkg ; \
-	done
-
-	@echo "Setting all chart versions to ${VERSION}"
-	for d in $(HELM_DIRS); do \
-		yq eval -i '.version = "${VERSION}"' $$d/Chart.yaml ; \
-		yq eval -i '.appVersion = "${VERSION}"' $$d/Chart.yaml ; \
-	done
-	yq eval -i '.dependencies[].version = "${VERSION}"' ./deploy/Chart.yaml
+	@echo "Setting chart version to ${VERSION}"
+	yq eval -i '.version = "${VERSION}"' ./deploy/Chart.yaml ;
+	yq eval -i '.appVersion = "${VERSION}"' ./deploy/Chart.yaml ;
 
 version-check: ## @HELP ensure that all version are the same across the different projects
 	@echo "Checking that all versions match ${VERSION}"

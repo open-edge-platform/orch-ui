@@ -63,7 +63,8 @@ jobs:
       run_artifact: false
       run_helm_build: false
       run_reuse_check: false
-      project_folder: ./apps/${{ matrix.project_folder }}
+      prefix_tag_separator: "/"
+      project_folder: apps/${{ matrix.project_folder }}
     secrets: inherit
 
   pre-merge-pipeline-all:
@@ -87,7 +88,8 @@ jobs:
       run_artifact: false
       run_helm_build: false
       run_reuse_check: false
-      project_folder: ./apps/${{ matrix.project_folder }}
+      prefix_tag_separator: "/"
+      project_folder: apps/${{ matrix.project_folder }}
     secrets: inherit
 
 

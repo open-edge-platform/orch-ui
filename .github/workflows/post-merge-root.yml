@@ -25,5 +25,6 @@ jobs:
       run_helm_push: true
       run_version_tag: true
       run_artifact: false
-      project_folder: ./apps/root
+      prefix_tag_separator: "/"
+      project_folder: apps/root
     secrets: inherit

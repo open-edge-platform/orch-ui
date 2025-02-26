@@ -9,7 +9,7 @@ replicaCount: 1
 
 global:
   registry:
-    name: open-registry.espdprod.infra-host.com
+    name: open-registry.espdprod.infra-host.com/edge-orch
     imagePullSecrets: []
   auth:
     enabled: false
@@ -32,7 +32,7 @@ header:
   title: "ESPD App Orch"
 
 image:
-  repository: edge-orch/orch-ui/app-orch
+  repository: orch-ui/app-orch
   pullPolicy: IfNotPresent
   tag: "{{ .Chart.AppVersion }}"
 

@@ -9,7 +9,7 @@ replicaCount: 1
 
 global:
   registry:
-    name: open-registry.espdprod.infra-host.com
+    name: open-registry.espdprod.infra-host.com/edge-orch
     imagePullSecrets: []
   auth:
     enabled: true
@@ -130,7 +130,7 @@ api:
   alertManager: "https://alerting-monitor.kind.internal"
 
 image:
-  repository: edge-orch/orch-ui/eim
+  repository: orch-ui/eim
   pullPolicy: IfNotPresent
   tag: "{{ .Chart.AppVersion }}"
 
