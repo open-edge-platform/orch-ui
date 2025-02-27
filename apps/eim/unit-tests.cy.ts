@@ -50,6 +50,7 @@ import "./src/components/organism/locations/RegionSiteTree/RegionSiteTree.cy.tsx
 import "./src/components/organism/locations/RegionSiteTree/RegionSiteTree.helpers.cy.tsx";
 import "./src/components/organism/locations/RegionView/RegionView.cy.tsx";
 import "./src/components/organism/locations/SiteView/SiteView.cy.tsx";
+import "./src/components/organism/OSProfileDetails/OSProfileDetails.cy.tsx";
 import "./src/components/organism/OsProfileDropdown/OsProfileDropdown.cy.tsx";
 import "./src/components/organism/region/RegionsDropdown/RegionsDropdown.cy.tsx";
 import "./src/components/organism/region/RegionsTable.cy.tsx";

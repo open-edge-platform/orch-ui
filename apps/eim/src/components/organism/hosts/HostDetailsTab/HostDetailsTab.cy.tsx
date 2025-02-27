@@ -89,5 +89,10 @@ describe("The HostDetailsTab component", () => {
       cy.contains(hostWithResource.productName!);
       cy.contains(hostWithResource.biosVendor!);
     });
+    it("should display OS profile details on tab click", () => {
+      cy.contains("OS Profile").click();
+      cy.contains("Profile Name");
+      cy.contains("Security Features");
+    });
   });
 });

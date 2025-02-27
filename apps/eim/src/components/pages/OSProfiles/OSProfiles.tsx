@@ -11,12 +11,14 @@ import {
   TableColumn,
   TableLoader,
 } from "@orch-ui/components";
+import { SharedStorage } from "@orch-ui/utils";
 import { Heading, Icon, Text } from "@spark-design/react";
 import { useState } from "react";
-import OSProfileDetailsDrawer from "./OsProfileDrawer";
+import { OSProfileSecurityFeatures } from "../../organism/OSProfileDetails/OSProfileDetails";
+import OSProfileDetailsDrawer from "./OSProfilesDrawer";
 
-import { SharedStorage } from "@orch-ui/utils";
 import "./OSProfiles.scss";
+
 export const dataCy = "oSProfiles";
 
 const OSProfiles = () => {
@@ -125,14 +127,6 @@ const OSProfiles = () => {
       )}
     </div>
   );
-};
-
-export const OSProfileSecurityFeatures: {
-  [key in eim.SecurityFeature]: string;
-} = {
-  SECURITY_FEATURE_UNSPECIFIED: "Unspecified",
-  SECURITY_FEATURE_NONE: "None",
-  SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION: "Secure Boot / FDE",
 };
 
 export default OSProfiles;

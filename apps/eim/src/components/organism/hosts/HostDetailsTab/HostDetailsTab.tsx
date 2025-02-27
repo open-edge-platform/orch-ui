@@ -22,6 +22,7 @@ import {
 } from "@orch-ui/utils";
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
+import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
@@ -40,7 +41,7 @@ const ClusterSummaryRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
 
 const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   const { host, onShowCategoryDetails } = props;
-
+  const currentOs = host.instance?.currentOs;
   // NOTE we can't use Host.instance as it's not always available (the list API does not return it)
   const { data: instanceList, isSuccess: isInstanceSuccess } =
     eim.useGetV1ProjectsByProjectNameComputeInstancesQuery(
@@ -87,10 +88,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     },
     {
       id: 5,
-      title: "Cluster",
+      title: "OS Profile",
     },
     {
       id: 6,
+      title: "Cluster",
+    },
+    {
+      id: 7,
       title: "Host Labels",
     },
   ];
@@ -234,6 +239,9 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
         />
       )}
     </Item>,
+    <Item title={tabItems[4].title}>
+      {currentOs && <OSProfileDetails os={currentOs} />}
+    </Item>,
   ];
 
   if (
@@ -244,7 +252,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     ClusterSummaryRemote !== null
   ) {
     itemList.push(
-      <Item title={tabItems[4].title}>
+      <Item title={tabItems[5].title}>
         <Suspense fallback={<SquareSpinner />}>
           <ClusterSummaryRemote uuid={host.uuid} site={host.site.name} />
         </Suspense>
@@ -253,7 +261,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   }
 
   itemList.push(
-    <Item title={tabItems[5].title}>
+    <Item title={tabItems[6].title}>
       <div className="host-label" data-cy="hostLabelMetadata">
         {host.metadata && host.metadata.length > 0 && (
           <MetadataDisplay metadata={host.metadata} />

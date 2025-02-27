@@ -61,6 +61,7 @@ export const instanceOne: enhancedEimSlice.InstanceReadModified = {
   },
   kind: "INSTANCE_KIND_METAL",
   os: osUbuntu,
+  currentOs: osUbuntu,
   securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   workloadMembers: [
     {
