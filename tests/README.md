@@ -26,7 +26,12 @@ npx cypress run --e2e -s cypress/e2e/admin-smoke.cy.ts
 To customize the `logs` folder location, use:
 
 ```shell
-CYPRESS_LOG_FOLDER=logs npx cypress run
+CYPRESS_LOG_FOLDER=logs npx cypress run --e2e
+```
+
+To customize the orchestrator password
+```shell
+CYPRESS_ORCH_DEFAULT_PASSWORD="Pleaseletme1n\!" npx cypress run --e2e
 ```
 
 ## Best practices

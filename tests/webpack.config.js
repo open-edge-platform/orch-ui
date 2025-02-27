@@ -27,7 +27,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [new DefinePlugin({ process: {}, "process.env": {} })],
+  plugins: [new DefinePlugin({ process: {}, "process.env": { test: true } })],
   resolve: {
     extensions: [".tsx", ".ts", "..."],
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.json" })],

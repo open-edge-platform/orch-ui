@@ -40,6 +40,13 @@ import RequestOptions = Cypress.RequestOptions;
 
 // Login with session
 Cypress.Commands.add("login", ({ username, password }: IUser) => {
+
+  // somehow the intel log cannot be loaded in an headless browser, we also don't care about it
+  // just replace it with a local image
+  cy.intercept("logo-intel-tiber-edge-platform-on-dark.png", {
+    fixture: "logo.png",
+  }).as("intelLogo");
+
   cy.session(
     [username, password],
     () => {
@@ -88,7 +95,7 @@ Cypress.Commands.add(
           bearer: cookie!.value,
         },
         body: body,
-        failOnStatusCode: false
+        failOnStatusCode: false,
       });
     });
   },

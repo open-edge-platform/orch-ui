@@ -3,21 +3,23 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-const path = require("path");const CopyPlugin = require("copy-webpack-plugin");
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const DefinePlugin = require("webpack/lib/DefinePlugin");
 
 const mode = "development";
 module.exports = {
   mode: mode,
   cache: {
-    type: 'filesystem', // Use filesystem caching
+    type: "filesystem", // Use filesystem caching
   },
   module: {
     rules: [
       {
         test: /\.(ts|tsx)$/,
         exclude: [/node_modules/],
-        use: ["@jsdevtools/coverage-istanbul-loader","ts-loader"],
+        use: ["@jsdevtools/coverage-istanbul-loader", "ts-loader"],
       },
       {
         test: /\.(s[ac]ss|css)$/i,
@@ -26,21 +28,22 @@ module.exports = {
           "css-loader", // Translates CSS into CommonJS
           "sass-loader", // Compiles Sass to CSS
         ],
-      },     
+      },
     ],
   },
-  plugins: [   
+  plugins: [
     new CopyPlugin({
       patterns: [{ from: "../../apps/eim/public/runtime-config.js", to: "." }],
     }),
+    new DefinePlugin({ process: {}, "process.env": {} }),
   ],
   resolve: {
     extensions: [".tsx", ".ts", "..."],
-    alias:{
+    alias: {
       //TEMP: need this so that @spark-design's react version is not picked up
-      react: path.resolve(__dirname, '../../node_modules/react'),
+      react: path.resolve(__dirname, "../../node_modules/react"),
     },
-    plugins: [new TsconfigPathsPlugin({ configFile: "../tsconfig.json"})],
+    plugins: [new TsconfigPathsPlugin({ configFile: "../tsconfig.json" })],
   },
   devServer: {
     historyApiFallback: true,

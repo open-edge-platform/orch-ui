@@ -6,6 +6,7 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const DefinePlugin = require("webpack/lib/DefinePlugin");
 
 const mode = "development";
 module.exports = {
@@ -31,6 +32,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: "../../apps/root/public/runtime-config.js", to: "." }],
     }),
+    new DefinePlugin({ process: {}, "process.env": {} }),
   ],
   resolve: {
     extensions: [".tsx", ".ts", "..."],

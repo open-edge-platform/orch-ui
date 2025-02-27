@@ -14,6 +14,9 @@ export type Cy<T = HTMLElement> = Cypress.Chainable<JQuery<T>>;
 
 // FIXME refactor to return the appropriate element and move into the base POM,
 // see CyPom.cyGetByAttr for an example
+/*
+ @deprecated use cy.dataCy() instead
+ */
 export const cyGet = (selector: string): Cy => {
   const dataCy = `[data-cy='${selector}']`;
   return cy.get(dataCy);

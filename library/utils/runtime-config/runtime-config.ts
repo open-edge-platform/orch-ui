@@ -163,10 +163,13 @@ export class RuntimeConfig {
    */
   private static getApiUrl(server: ApiServer): string {
     const env = { ...process.env, ...window.process?.env };
-    if (
-      env.REACT_LP_MOCK_API === "true" ||
-      window.Cypress?.testingType == "e2e"
-    ) {
+
+    // FIXME somehow this method is invoked during the E2E tests,
+    // and the RuntimeConfig is not loaded, so it would throw an error
+    // by returning the default URL when running in the test setup (process.env.test is set via webpack config in tests/webpack.config.js) we can avoid the error
+    // NOTE that this is a workaround, the correct solution would be to avoid call this method when its not needed (eg during E2E tests)
+
+    if (env.REACT_LP_MOCK_API === "true" || process.env.test) {
       return window.location.origin;
     }
     const urls = window.__RUNTIME_CONFIG__?.API;

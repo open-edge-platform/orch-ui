@@ -8,8 +8,8 @@ export default defineConfig({
   trashAssetsBeforeRuns: true,
   video: true,
   videosFolder: "cypress/videos",
-  defaultCommandTimeout: 20000,
-  pageLoadTimeout: 60000,
+  defaultCommandTimeout: 3000,
+  pageLoadTimeout: 10000,
   reporter: "../node_modules/cypress-mochawesome-reporter",
   reporterOptions: {
     charts: true,

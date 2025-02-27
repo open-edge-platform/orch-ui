@@ -7,7 +7,7 @@ include ../../common.mk
 PROJECT_NAME       			:= app-orch
 VERSION                 ?= $(shell cat ./VERSION)
 VERSION_DEV_SUFFIX      :=
-DOCKER_VERSION 					?= $(shell git branch --show-current)
+DOCKER_VERSION 					?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')
 DOCKER_IMG_NAME    			:= $(PROJECT_NAME)
 DOCKER_TAG              := $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME):$(VERSION)
 DOCKER_TAG_BRANCH	    	:= $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME):$(DOCKER_VERSION)
