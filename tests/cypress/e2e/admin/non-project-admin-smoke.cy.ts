@@ -2,7 +2,6 @@ import { NetworkLog } from "../../support/network-logs";
 import {
   APP_ORCH_READWRITE_USER,
   EIM_USER,
-  KUBECTL_POD,
 } from "../../support/utilities";
 import {
   validateDefaultProject,
@@ -47,9 +46,5 @@ describe("Non Project Admin Smoke", () => {
   afterEach(() => {
     netLog.save();
     netLog.clear();
-  });
-  after(() => {
-    // get all the running K8s PODS, just as an example
-    cy.execAndSaveOutput(KUBECTL_POD, "pods.txt");
   });
 });

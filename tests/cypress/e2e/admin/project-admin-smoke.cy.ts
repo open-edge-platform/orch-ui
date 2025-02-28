@@ -1,17 +1,22 @@
-import { tm } from "@orch-ui/apis";
 import { NetworkLog } from "../../support/network-logs";
-import { ADMIN_USER, KUBECTL_POD } from "../../support/utilities";
-import {
-  createProject,
-  deleteProjectViaApi,
-  deleteProjectViaUI,
-  isProjectTestData,
-  reanameProject,
-} from "../helpers";
+import { ADMIN_USER } from "../../support/utilities";
+import AdminPom from "./admin.pom";
 
-describe("Project Admin Smoke", () => {
+interface ProjectTestData {
+  description: string;
+  updatedDescription: string;
+}
+
+const isProjectTestData = (arg: any): arg is ProjectTestData => {
+  if (!arg.description) return false;
+  if (!arg.updatedDescription) return false;
+  return true;
+};
+
+describe("Org Admin Smoke", () => {
   const netLog = new NetworkLog();
-  let testData: tm.ProjectProjectPost;
+  const pom = new AdminPom("admin");
+  let testData: ProjectTestData;
 
   before(() => {
     const dataFile =
@@ -36,15 +41,58 @@ describe("Project Admin Smoke", () => {
       cy.dataCy("menuSettings").click();
     });
     it("should create a project", () => {
-      createProject(testData.description);
+      cy.contains("Create Project").should("be.visible");
+
+      // we select by text so it supports both the empty and full table
+      cy.contains("Create Project").click();
+
+      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.projectName.type(
+        testData.description,
+      );
+      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
+
+      // wait for the project to be ready
+
+      pom.projectsPom.projectsTablePom.tablePom
+        .getCell(1, 3)
+        .contains(`Project ${testData.description}`, { timeout: 60 * 1000 })
+        .should("contain.text", "CREATE is complete");
     });
 
     it("should rename the project", () => {
-      reanameProject("sample-project", "sample-project1");
+      cy.contains("Project Name").should("be.visible");
+      pom.projectsPom.projectsTablePom.tablePom.el.search.type(
+        testData.description,
+      );
+      // wait for search to complete
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
+
+      pom.projectsPom.projectsTablePom.renameProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
+      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
+      cy.contains(testData.updatedDescription).should("exist");
     });
 
     it("should delete the project", () => {
-      deleteProjectViaUI(testData.description);
+      cy.contains("Project Name").should("be.visible");
+      pom.projectsPom.projectsTablePom.tablePom.el.search.type(
+        testData.description,
+      );
+      // wait for search to complete
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
+
+      pom.projectsPom.projectsTablePom.deleteProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
+      pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
+      cy.contains("Deletion in process").should("be.visible");
     });
   });
 
@@ -53,9 +101,19 @@ describe("Project Admin Smoke", () => {
     netLog.clear();
   });
   after(() => {
-    // get all the running K8s PODS, just as an example
-    cy.execAndSaveOutput(KUBECTL_POD, "pods.txt");
     // Cleanup all the new entries created
-    deleteProjectViaApi(testData.description);
+    // cy.authenticatedRequest({
+    //   method: "DELETE",
+    //   url: `/v1/projects/${name}`,
+    // }).then((response) => {
+    //   // we only care that the created region is  not there,
+    //   // if the test failed before creating it we're fine with a 400, 404
+    //   const success =
+    //     response.status === 200 ||
+    //     response.status === 204 ||
+    //     response.status === 400 ||
+    //     response.status === 404;
+    //   expect(success).to.be.true;
+    // });
   });
 });
