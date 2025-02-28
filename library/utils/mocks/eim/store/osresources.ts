@@ -4,8 +4,8 @@
  */
 
 import { eim } from "@orch-ui/apis";
+import { osRedHatId, osTiberId, osTiberUpdateId, osUbuntuId } from "../data";
 import { BaseStore } from "./baseStore";
-import { osRedHatId, osTiberId, osTiberUpdateId, osUbuntuId } from "./iaasIds";
 
 export const createOsResource = (
   id: string,
@@ -93,6 +93,15 @@ export class OsResourceStore extends BaseStore<
     body: eim.OperatingSystemResource,
     //id: string | undefined
   ): eim.OperatingSystemResourceRead {
-    return body;
+    const currentTime = new Date().toISOString();
+    return {
+      ...body,
+      sha256: "",
+      updateSources: [],
+      timestamps: {
+        createdAt: currentTime,
+        updatedAt: currentTime,
+      },
+    };
   }
 }

@@ -54,12 +54,10 @@ export const DetailedStatuses = <T extends AggregatedStatusesMap>({
     if (data[key] === undefined) {
       return <></>;
     }
-    const humanReadableTimestamp =
-      data[key] && data[key]?.timestamp
-        ? moment(new Date(data[key].timestamp)).format(
-            "MMM DD, YYYY hh:mm:ss A",
-          )
-        : "Unavailable";
+    const timestamp = data[key].timestamp;
+    const humanReadableTimestamp = timestamp
+      ? moment(new Date(timestamp)).format("MMM DD, YYYY hh:mm:ss A")
+      : "Unavailable";
     return (
       <>
         <span className="line"></span>

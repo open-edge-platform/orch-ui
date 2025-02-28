@@ -4,7 +4,7 @@
  */
 
 import { cyGet, defaultActiveProject } from "@orch-ui/tests";
-import { hostOne } from "@orch-ui/utils";
+import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import DeauthorizeHostStandalone from "./DeauthorizeHostStandalone";
 import DeauthorizeHostStandalonePom from "./DeauthorizeHostStandalone.pom";
 

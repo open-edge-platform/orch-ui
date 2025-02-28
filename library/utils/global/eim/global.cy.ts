@@ -5,7 +5,7 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import {
-  hostOne,
+  assignedWorkloadHostOne,
   instanceOne,
   instanceTwo,
   regionPortland,
@@ -14,6 +14,8 @@ import {
   repeatedScheduleOnSite,
   siteBoston,
 } from "../../mocks";
+import { IRuntimeConfig } from "../../runtime-config/runtime-config";
+import { getObservabilityUrl } from "../global";
 import {
   generateClusterName,
   inheritedScheduleToString,
@@ -44,16 +46,16 @@ describe("The Utils", () => {
         cronMonth: maintenance.cronMonth,
         durationSeconds: maintenance.durationSeconds,
       },
-      targetSite: maintenance.targetSite,
+      targetSite: maintenance.targetSite as eim.SiteRead,
       targetHost: maintenance.targetHost as eim.HostRead,
-      targetRegion: maintenance.targetRegion,
+      targetRegion: maintenance.targetRegion as eim.RegionRead,
     });
     it("should show the inheritance of site maintenance for a host", () => {
       expect(
         inheritedScheduleToString(
           convertSingleSchedule2ToScheduleMaintenance(repeatedScheduleOnSite),
           "host",
-          hostOne,
+          assignedWorkloadHostOne,
         ),
       ).eq(siteBoston.name);
     });
@@ -94,6 +96,33 @@ describe("The Utils", () => {
     });
     it("should return false if no update available for os", () => {
       expect(isOSUpdateAvailable(instanceOne)).eq(false);
+    });
+  });
+
+  describe("getObservabilityUrl", () => {
+    beforeEach(() => {
+      const config: IRuntimeConfig = {
+        AUTH: "",
+        KC_CLIENT_ID: "",
+        KC_REALM: "",
+        KC_URL: "",
+        SESSION_TIMEOUT: 0,
+        OBSERVABILITY_URL: "",
+        MFE: {},
+        TITLE: "",
+        API: {},
+        DOCUMENTATION: [],
+        VERSIONS: {},
+      };
+      window.__RUNTIME_CONFIG__ = config;
+    });
+    it("if set, should return the URL", () => {
+      window.__RUNTIME_CONFIG__.OBSERVABILITY_URL = "testUrl";
+      expect(getObservabilityUrl()).to.equal("testUrl");
+    });
+    it("if NOT set, should return undefined", () => {
+      window.__RUNTIME_CONFIG__.OBSERVABILITY_URL = "";
+      expect(getObservabilityUrl()).to.equal(undefined);
     });
   });
 });

@@ -7,7 +7,7 @@ const injectedRtkApi = api
   .injectEndpoints({
     endpoints: (build) => ({
       listV1Orgs: build.query<ListV1OrgsApiResponse, ListV1OrgsApiArg>({
-        query: () => ({ url: `/v1/orgs` }),
+        query: () => ({ url: "/v1/orgs" }),
         providesTags: ["Org"],
       }),
       deleteV1OrgsOrgOrg: build.mutation<
@@ -186,7 +186,7 @@ const injectedRtkApi = api
         ListV1ProjectsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects`,
+          url: "/v1/projects",
           // FIXME this parameter has been manually added,
           // we need to have it in the openapi specs or it will be overridden everytime we auto-generate the code
           params: { "member-role": queryArg["member-role"] },

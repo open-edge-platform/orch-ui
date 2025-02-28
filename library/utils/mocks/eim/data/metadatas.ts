@@ -6,7 +6,7 @@
 export const metadataExample = [
   {
     key: "clustername",
-    value: "testIaaSClient",
+    value: "testEimClient",
   },
   {
     key: "template",

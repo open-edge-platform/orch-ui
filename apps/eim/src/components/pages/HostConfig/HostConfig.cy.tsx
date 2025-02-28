@@ -7,11 +7,11 @@ import { eim } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import {
   IRuntimeConfig,
+  onboardedHostOne,
   osUbuntu,
   regionUsWest,
   sitePortland,
   StoreUtils,
-  unconfiguredHostOne,
 } from "@orch-ui/utils";
 
 import {
@@ -55,8 +55,10 @@ describe("<HostConfig/>", () => {
             configureHost: {
               formStatus: { ...initialState.formStatus, enableNextBtn: false },
               hosts: {
-                [unconfiguredHostOne.resourceId!]: unconfiguredHostOne,
+                [onboardedHostOne.resourceId!]: onboardedHostOne,
               },
+              autoOnboard: false,
+              autoProvision: false,
             },
           }),
         });
@@ -70,8 +72,10 @@ describe("<HostConfig/>", () => {
         configureHost: {
           formStatus: { ...initialState.formStatus, enableNextBtn: true },
           hosts: {
-            [unconfiguredHostOne.resourceId!]: unconfiguredHostOne,
+            [onboardedHostOne.resourceId!]: onboardedHostOne,
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
       beforeEach(() => {
@@ -114,8 +118,10 @@ describe("<HostConfig/>", () => {
                 currentStep: 1,
               },
               hosts: {
-                [unconfiguredHostOne.resourceId!]: unconfiguredHostOne,
+                [onboardedHostOne.resourceId!]: onboardedHostOne,
               },
+              autoOnboard: false,
+              autoProvision: false,
             },
           }),
         });
@@ -133,8 +139,10 @@ describe("<HostConfig/>", () => {
             currentStep: 1,
           },
           hosts: {
-            [unconfiguredHostOne.resourceId!]: unconfiguredHostOne,
+            [onboardedHostOne.resourceId!]: onboardedHostOne,
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
       beforeEach(() => {
@@ -171,8 +179,10 @@ describe("<HostConfig/>", () => {
             currentStep: HostConfigSteps["Add Host Labels"],
           },
           hosts: {
-            [unconfiguredHostOne.resourceId!]: unconfiguredHostOne,
+            [onboardedHostOne.resourceId!]: onboardedHostOne,
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
       beforeEach(() => {
@@ -210,8 +220,10 @@ describe("<HostConfig/>", () => {
             enableNextBtn: false,
           },
           hosts: {
-            [unconfiguredHostOne.resourceId!]: unconfiguredHostOne,
+            [onboardedHostOne.resourceId!]: onboardedHostOne,
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
       // @ts-ignore
@@ -242,9 +254,8 @@ describe("<HostConfig/>", () => {
         .then(() => {
           expect(
             // @ts-ignore : Object is possibly 'undefined'. Disabled as its step-2 in config, Host is expected to be present
-            store.getState().configureHost.hosts[
-              unconfiguredHostOne.resourceId!
-            ].site.name,
+            store.getState().configureHost.hosts[onboardedHostOne.resourceId!]
+              .site.name,
           ).to.equal("Site 1");
         });
     });
@@ -267,7 +278,7 @@ describe("<HostConfig/>", () => {
     };
     // convert to a WriteHost and set the values that the form would set
     const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
-      structuredClone(unconfiguredHostOne),
+      structuredClone(onboardedHostOne),
     );
     mockHost.siteId = sitePortland.resourceId;
     mockHost.site = sitePortland;
@@ -280,11 +291,13 @@ describe("<HostConfig/>", () => {
           configureHost: {
             formStatus,
             hosts: {
-              [unconfiguredHostOne.resourceId!]: {
-                ...unconfiguredHostOne,
+              [onboardedHostOne.resourceId!]: {
+                ...onboardedHostOne,
                 region: regionUsWest,
               },
             },
+            autoOnboard: false,
+            autoProvision: false,
           },
         });
         // @ts-ignore
@@ -312,6 +325,8 @@ describe("<HostConfig/>", () => {
               originalOs: osUbuntu,
             },
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
       beforeEach(() => {
@@ -331,7 +346,7 @@ describe("<HostConfig/>", () => {
         pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
 
         const expectedResult: eim.HostWrite = {
-          name: unconfiguredHostOne.name,
+          name: onboardedHostOne.name,
           siteId: sitePortland.resourceId,
           metadata: testMetadata,
         };
@@ -375,9 +390,11 @@ describe("<HostConfig/>", () => {
               // region is only part of the redux state, not eim.HostWrite
               region: regionUsWest,
               // hostId is only part of the redux state, not eim.HostWrite
-              resourceId: unconfiguredHostOne.resourceId,
+              resourceId: onboardedHostOne.resourceId,
             },
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
 
@@ -399,8 +416,8 @@ describe("<HostConfig/>", () => {
         pom.waitForApis();
 
         const expectedResult: eim.InstanceWrite = {
-          name: `${unconfiguredHostOne.name}-instance`,
-          hostID: unconfiguredHostOne.resourceId,
+          name: `${onboardedHostOne.name}-instance`,
+          hostID: onboardedHostOne.resourceId,
           kind: "INSTANCE_KIND_METAL",
           securityFeature: testInstance.securityFeature,
           osID: testInstance.osID,
@@ -470,11 +487,13 @@ describe("<HostConfig/>", () => {
             enableNextBtn: true,
           },
           hosts: {
-            [unconfiguredHostOne.resourceId!]: {
-              ...unconfiguredHostOne,
+            [onboardedHostOne.resourceId!]: {
+              ...onboardedHostOne,
               originalOs: osUbuntu,
             },
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
 
@@ -517,7 +536,7 @@ describe("<HostConfig/>", () => {
       cyGet("confirmBtn").click();
       cy.get("#pathname").contains("/infrastructure/clusters/create");
       cy.get("#search").contains(
-        "?regionId=1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=host-sjwhb72u",
+        `?regionId=1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=${onboardedHostOne.resourceId}`,
       );
     });
 
@@ -540,7 +559,7 @@ describe("<HostConfig/>", () => {
       cyGet("confirmBtn").click();
       pom.getPath().should("equal", "/infrastructure/clusters/create");
       cy.get("#search").contains(
-        "?regionId=region-1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=host-sjwhb72u",
+        `?regionId=region-1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=${onboardedHostOne.resourceId}`,
       );
     });
   });
@@ -573,11 +592,13 @@ describe("<HostConfig/>", () => {
             enableNextBtn: true,
           },
           hosts: {
-            [unconfiguredHostOne.resourceId!]: {
-              ...unconfiguredHostOne,
+            [onboardedHostOne.resourceId!]: {
+              ...onboardedHostOne,
               originalOs: osUbuntu,
             },
           },
+          autoOnboard: false,
+          autoProvision: false,
         },
       });
 
@@ -638,11 +659,13 @@ describe("<HostConfig/>", () => {
           enableNextBtn: false,
         },
         hosts: {
-          [unconfiguredHostOne.resourceId!]: {
-            ...unconfiguredHostOne,
+          [onboardedHostOne.resourceId!]: {
+            ...onboardedHostOne,
             site: sitePortland,
           },
         },
+        autoOnboard: false,
+        autoProvision: false,
       },
     });
     // @ts-ignore

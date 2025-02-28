@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { eim } from "@orch-ui/apis";
 import { ConfirmationDialogPom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { allSites } from "@orch-ui/utils";
+import { SiteStore } from "@orch-ui/utils";
 import { ScheduleMaintenanceDrawerPom } from "../../../components/organism/ScheduleMaintenanceDrawer/ScheduleMaintenanceDrawer.pom";
 
 const dataCySelectors = ["add"] as const;
@@ -20,37 +21,53 @@ type ApiAliases =
   | "deleteSite"
   | "deleteSiteMocked";
 
+const siteStore = new SiteStore();
+const sites = siteStore.list();
+
 const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites`;
 
-const allSitesUpdated = structuredClone(allSites);
-if (allSitesUpdated.sites)
-  allSitesUpdated.sites[0].name = allSitesUpdated.sites
-    ? `${allSitesUpdated.sites[0].name} Updated`
+const allSitesUpdated = structuredClone(sites);
+if (allSitesUpdated)
+  allSitesUpdated[0].name = allSitesUpdated
+    ? `${allSitesUpdated[0].name} Updated`
     : "Updated";
 
-const oneSiteRemoved = structuredClone(allSites);
-oneSiteRemoved.sites = oneSiteRemoved.sites
-  ? oneSiteRemoved.sites.slice(1)
-  : [];
+let oneSiteRemoved = structuredClone(sites);
+oneSiteRemoved = oneSiteRemoved ? oneSiteRemoved.slice(1) : [];
 
-const endpoints: CyApiDetails<ApiAliases> = {
+const endpoints: CyApiDetails<
+  ApiAliases,
+  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse | undefined
+> = {
   getSites: {
     route: `${route}?*`,
   },
   getSitesMocked: {
     route: `${route}?*`,
     statusCode: 200,
-    response: allSites,
+    response: {
+      hasNext: false,
+      sites,
+      totalElements: sites.length,
+    },
   },
   getSitesAfterDeleteMocked: {
     route: `${route}?*`,
     statusCode: 200,
-    response: oneSiteRemoved,
+    response: {
+      hasNext: false,
+      sites: oneSiteRemoved,
+      totalElements: oneSiteRemoved.length,
+    },
   },
   getSitesUpdatedMocked: {
     route: `${route}?*`,
     statusCode: 200,
-    response: allSitesUpdated,
+    response: {
+      hasNext: false,
+      sites: allSitesUpdated,
+      totalElements: allSitesUpdated.length,
+    },
   },
   deleteSite: {
     route: `${route}/*`,

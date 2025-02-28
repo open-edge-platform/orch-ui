@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: LicenseRef-Intel
  */
-import { siteRestaurantOne } from "../../../../../../../../library/utils/mocks/iaas/sites";
+import { siteRestaurantOne } from "@orch-ui/utils";
 import SelectSite from "./SelectSite";
 import { SelectSitePom } from "./SelectSite.pom";
 

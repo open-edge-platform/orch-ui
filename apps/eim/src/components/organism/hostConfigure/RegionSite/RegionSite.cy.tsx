@@ -18,6 +18,8 @@ describe("<RegionSite/>", () => {
           name: "",
         },
       },
+      autoOnboard: false,
+      autoProvision: false,
     },
   });
   it("should render component", () => {

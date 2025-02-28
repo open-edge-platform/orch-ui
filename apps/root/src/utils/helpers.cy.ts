@@ -79,31 +79,25 @@ describe("DeploymentsContainer helpers functions", () => {
         resourceId: "host-1",
         name: "host-1",
         uuid: "node1-guid",
-        hostStatus: {
-          indicator: "STATUS_INDICATION_IDLE",
-          message: "Running",
-          timestamp: 123,
-        },
+        hostStatusIndicator: "STATUS_INDICATION_IDLE",
+        hostStatus: "Running",
+        hostStatusTimestamp: 123,
       },
       {
         resourceId: "host-2",
         name: "host-2",
         uuid: "node2-guid",
-        hostStatus: {
-          indicator: "STATUS_INDICATION_UNSPECIFIED",
-          message: "Unknown",
-          timestamp: 123,
-        },
+        hostStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
+        hostStatus: "Unknown",
+        hostStatusTimestamp: 123,
       },
       {
         resourceId: "host-3",
         name: "host-3",
         uuid: "node3-guid",
-        hostStatus: {
-          indicator: "STATUS_INDICATION_UNSPECIFIED",
-          message: "Unknown",
-          timestamp: 123,
-        },
+        hostStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
+        hostStatus: "Unknown",
+        hostStatusTimestamp: 123,
       },
     ];
 

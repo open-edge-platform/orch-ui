@@ -8,10 +8,10 @@ import { TableColumn, TablePom } from "@orch-ui/components";
 import { Cy, CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
   assignedHosts,
-  hostOne,
+  assignedWorkloadHostOne as hostOne,
+  onboardedHosts,
+  provisionedHosts,
   registeredHosts,
-  unassignedHosts,
-  unconfiguredHosts,
 } from "@orch-ui/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetailPom from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail.pom";
@@ -177,12 +177,12 @@ const specificHostSuccessApiEndpoints: CyApiDetails<
   getOnboardedHosts: {
     route: `${route}filter=${encodeURLQuery("((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR (currentState=HOST_STATE_ERROR AND NOT desiredState=HOST_STATE_REGISTERED)) AND (NOT has(site) OR NOT has(instance) OR NOT instance.desiredState=INSTANCE_STATE_RUNNING)")}**`,
     statusCode: 200,
-    response: unconfiguredHosts,
+    response: onboardedHosts,
   },
   getConfiguredHosts: {
     route: `${route}filter=${encodeURLQuery("((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR currentState=HOST_STATE_ERROR) AND ((instance.desiredState=INSTANCE_STATE_RUNNING OR instance.currentState=INSTANCE_STATE_RUNNING) OR instance.currentState=INSTANCE_STATE_ERROR) AND has(site) AND NOT has(instance.workloadMembers)")}**`,
     statusCode: 200,
-    response: unassignedHosts,
+    response: provisionedHosts,
   },
   getActiveHosts: {
     route: `${route}filter=${encodeURLQuery("((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR currentState=HOST_STATE_ERROR) AND ((instance.desiredState=INSTANCE_STATE_RUNNING OR instance.currentState=INSTANCE_STATE_RUNNING) OR instance.currentState=INSTANCE_STATE_ERROR) AND has(site) AND has(instance.workloadMembers)")}**`,

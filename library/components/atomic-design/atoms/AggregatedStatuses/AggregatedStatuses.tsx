@@ -17,7 +17,7 @@ export type GenericStatus = {
   /** A textual message describing carrying a status message. */
   message: string;
   /** A Unix, UTC timestamp when the status was last updated. */
-  timestamp: number;
+  timestamp?: number;
 };
 
 export interface AggregatedStatusesMap {

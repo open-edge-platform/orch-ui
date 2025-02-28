@@ -4,20 +4,23 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { BaseStore } from "../store/baseStore";
 import {
   telemetryLogsGroup1,
   telemetryLogsGroup2,
   telemetryLogsGroup3,
-} from "./TelemetryLogsGroupRead";
+} from "../data";
+import { BaseStore } from "./baseStore";
 
-export const telemetryLogsGroupList1: eim.TelemetryLogsGroupList = {
-  TelemetryLogsGroups: [
-    telemetryLogsGroup1,
-    telemetryLogsGroup2,
-    telemetryLogsGroup3,
-  ],
-  hasNext: "true",
+const TelemetryLogsGroups: eim.TelemetryLogsGroupRead[] = [
+  telemetryLogsGroup1,
+  telemetryLogsGroup2,
+  telemetryLogsGroup3,
+];
+
+export const telemetryLogsGroupList: eim.TelemetryLogsGroupListRead = {
+  TelemetryLogsGroups,
+  hasNext: true,
+  totalElements: TelemetryLogsGroups.length,
 };
 
 export class TelemetryLogsGroupListStore extends BaseStore<
@@ -25,11 +28,7 @@ export class TelemetryLogsGroupListStore extends BaseStore<
   eim.TelemetryLogsGroupRead
 > {
   constructor() {
-    super("telemetryLogsGroupId", [
-      telemetryLogsGroup1,
-      telemetryLogsGroup2,
-      telemetryLogsGroup3,
-    ]);
+    super("telemetryLogsGroupId", TelemetryLogsGroups);
   }
 
   convert(body: eim.TelemetryLogsGroupRead): eim.TelemetryLogsGroupRead {

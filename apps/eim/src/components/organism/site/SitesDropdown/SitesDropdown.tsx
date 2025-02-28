@@ -10,16 +10,16 @@ import { Dropdown, Item } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
 
 interface SitesDropdownProps {
+  regionId: string;
   value?: string;
   pageSize?: number;
-  regionId?: string;
   onSelectionChange?: (value: eim.SiteRead) => void;
   disable?: boolean;
 }
 const SitesDropdown = ({
+  regionId,
   value,
   pageSize = 100,
-  regionId,
   onSelectionChange,
   disable,
 }: SitesDropdownProps) => {

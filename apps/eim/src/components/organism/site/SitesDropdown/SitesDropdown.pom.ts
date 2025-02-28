@@ -11,7 +11,7 @@ import {
   CyPom,
   defaultActiveProject,
 } from "@orch-ui/tests";
-import { allSites, regionUsWestId, SiteStore } from "@orch-ui/utils";
+import { regionUsWestId, SiteStore } from "@orch-ui/utils";
 
 const dataCySelectors = ["empty"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -25,6 +25,7 @@ export type ApiAliases =
   | "getSites404";
 
 const sitesStore = new SiteStore();
+const sites = sitesStore.list();
 
 const getSites: CyApiDetail<eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse> =
   {
@@ -41,13 +42,24 @@ const routeAll = `${route}?*`;
 const routeSingle = `${route}/site-**`;
 const routeByRegion = `**/v1/projects/${defaultActiveProject.name}/regions/${regionUsWestId}/sites?pageSize=*`;
 
-export const endpoints: CyApiDetails<ApiAliases> = {
+interface ErrorResponse {
+  detail?: string;
+  status?: number;
+}
+
+export const endpoints: CyApiDetails<
+  ApiAliases,
+  | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  | ErrorResponse
+> = {
   getAllSites: getSites,
   getAllSitesEmpty: {
     route: routeAll,
     statusCode: 200,
     response: {
       sites: [],
+      hasNext: false,
+      totalElements: 0,
     },
   },
   getSingleSite: {
@@ -65,12 +77,15 @@ export const endpoints: CyApiDetails<ApiAliases> = {
   getSitesError500: {
     route: routeAll,
     statusCode: 500,
-    response: allSites,
   },
   getSitesByRegion: {
     route: routeByRegion,
     statusCode: 200,
-    response: allSites,
+    response: {
+      sites: sites,
+      hasNext: false,
+      totalElements: sites.length,
+    },
   },
 };
 

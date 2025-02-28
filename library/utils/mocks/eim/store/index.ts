@@ -4,7 +4,6 @@
  */
 
 export * from "./hosts";
-export * from "./iaasIds";
 export * from "./instances";
 export * from "./locations";
 export * from "./osresources";
@@ -12,4 +11,9 @@ export * from "./regions";
 export * from "./repeatedSchedule";
 export * from "./schedule";
 export * from "./sites";
+export * from "./TelemetryLogsGroupListRead";
+export * from "./TelemetryLogsProfiles";
+export * from "./TelemetryMetricsGroupListRead";
+export * from "./TelemetryMetricsProfiles";
 export * from "./utils";
+export * from "./workload";

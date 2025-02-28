@@ -5,7 +5,7 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { BaseStore } from "./baseStore";
-import { hostFour, hostOne } from "./hosts";
+import { assignedWorkloadHostFour, assignedWorkloadHostOne } from "./hosts";
 import { regionUsWest } from "./regions";
 import { siteBoston } from "./sites";
 
@@ -14,7 +14,7 @@ export const repeatedScheduleOne: eim.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule1",
   name: "r-schedule1",
   scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
-  targetHost: hostFour,
+  targetHost: assignedWorkloadHostFour,
   cronDayMonth:
     "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30",
   cronDayWeek: "*",
@@ -30,7 +30,7 @@ export const repeatWeeklyMaintenanceFor11PMUTC: enhancedEimSlice.ScheduleMainten
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
     type: "repeat-weekly",
-    targetHost: hostOne,
+    targetHost: assignedWorkloadHostOne,
     repeated: {
       cronDayMonth: "*",
       cronDayWeek: "2,4,6",
@@ -46,7 +46,7 @@ export const repeatWeeklyMaintenanceFor11AMUTC: enhancedEimSlice.ScheduleMainten
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
     type: "repeat-weekly",
-    targetHost: hostOne,
+    targetHost: assignedWorkloadHostOne,
     repeated: {
       cronDayMonth: "*",
       cronDayWeek: "2,4,6",
@@ -62,7 +62,7 @@ export const maintenanceRepeatDaysFor11PMUTC: enhancedEimSlice.ScheduleMaintenan
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
     type: "repeat-monthly",
-    targetHost: hostOne,
+    targetHost: assignedWorkloadHostOne,
     repeated: {
       cronDayMonth:
         "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30",
@@ -79,7 +79,7 @@ export const maintenanceRepeatDaysFor11AMUTC: enhancedEimSlice.ScheduleMaintenan
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
     type: "repeat-monthly",
-    targetHost: hostOne,
+    targetHost: assignedWorkloadHostOne,
     repeated: {
       cronDayMonth:
         "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30",
@@ -97,7 +97,7 @@ const repeatedScheduleTwo: eim.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule2",
   name: "r-schedule2",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
-  targetHost: hostFour,
+  targetHost: assignedWorkloadHostFour,
   cronDayMonth: "*",
   cronDayWeek: "0,1,2,4,5,6",
   cronHours: "8",
@@ -111,7 +111,7 @@ const repeatedScheduleThree: eim.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule3",
   name: "r-schedule3",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
-  targetHost: hostFour,
+  targetHost: assignedWorkloadHostFour,
   cronDayMonth: "*",
   cronDayWeek: "*",
   cronHours: "0",
@@ -147,7 +147,8 @@ export const repeatedScheduleOnRegion: eim.SingleScheduleRead = {
 
 export class RepeatedScheduleStore extends BaseStore<
   "repeatedScheduleID",
-  eim.SingleScheduleRead
+  eim.SingleScheduleRead,
+  eim.SingleSchedule
 > {
   repeatedScheduleIndex = 0;
   constructor() {
@@ -155,7 +156,48 @@ export class RepeatedScheduleStore extends BaseStore<
       repeatedScheduleOne,
       repeatedScheduleTwo,
       repeatedScheduleThree,
+      repeatedScheduleOnSite,
+      repeatedScheduleOnRegion,
     ]);
+  }
+
+  convert(
+    repeatedSchedule: eim.SingleSchedule,
+    id?: string,
+    targetRegion?: eim.RegionRead,
+    targetSite?: eim.SiteRead,
+    targetHost?: eim.HostRead,
+  ): eim.SingleScheduleRead {
+    const currentTimeStr = new Date().toISOString();
+    return {
+      ...repeatedSchedule,
+      repeatedScheduleID: id ?? `schedule${this.repeatedScheduleIndex++}`,
+      resourceId: id ?? `schedule${this.repeatedScheduleIndex++}`,
+      targetHost,
+      targetRegion,
+      targetSite,
+      timestamps: {
+        createdAt: currentTimeStr,
+        updatedAt: currentTimeStr,
+      },
+    };
+  }
+
+  post(
+    repeatedSchedule: eim.SingleScheduleWrite,
+    targetRegion?: eim.RegionRead,
+    targetSite?: eim.SiteRead,
+    targetHost?: eim.HostRead,
+  ): eim.SingleScheduleRead {
+    const newSchedule = this.convert(
+      repeatedSchedule,
+      undefined,
+      targetRegion,
+      targetSite,
+      targetHost,
+    );
+    this.resources.push(newSchedule);
+    return newSchedule;
   }
 
   list(host?: eim.HostRead | null): eim.SingleScheduleRead[] {
@@ -163,46 +205,5 @@ export class RepeatedScheduleStore extends BaseStore<
       return this.resources.filter((h) => h.targetHost === host);
     }
     return this.resources;
-  }
-
-  post(repeatedSchedule: eim.SingleScheduleWrite): eim.SingleScheduleRead {
-    const currentTime = +new Date();
-    const newSchedule = {
-      ...repeatedSchedule,
-      targetHost: {
-        ...repeatedSchedule.targetHost,
-        name: repeatedSchedule.targetHost?.name ?? "",
-        onboardingStatus: {
-          indicator:
-            repeatedSchedule.targetHost?.onboardingStatus?.indicator ??
-            "STATUS_INDICATION_UNSPECIFIED",
-          message: "Host executing normally!",
-          timestamp: currentTime,
-        },
-        hostStatus: {
-          indicator:
-            repeatedSchedule.targetHost?.hostStatus?.indicator ??
-            "STATUS_INDICATION_UNSPECIFIED",
-          message: "Host executing normally!",
-          timestamp: currentTime,
-        },
-        registrationStatus: {
-          indicator:
-            repeatedSchedule.targetHost?.registrationStatus?.indicator ??
-            "STATUS_INDICATION_UNSPECIFIED",
-          message: "Host executing normally!",
-          timestamp: currentTime,
-        },
-        instance: undefined,
-        state: undefined,
-      },
-      repeatedScheduleID: `schedule${this.repeatedScheduleIndex++}`,
-    };
-    this.resources.push(newSchedule);
-    return newSchedule;
-  }
-
-  convert(body: eim.SingleScheduleRead): eim.SingleScheduleRead {
-    return body;
   }
 }

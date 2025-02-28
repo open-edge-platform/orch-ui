@@ -10,8 +10,8 @@ import {
   setSite,
 } from "../../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-
 import { RegionSiteSelectTree } from "../RegionSiteSelectTree/RegionSiteSelectTree";
+
 export const dataCy = "hostSiteSelect";
 
 export const RegionSite = () => {
@@ -29,7 +29,10 @@ export const RegionSite = () => {
   return (
     <div {...cy}>
       <RegionSiteSelectTree
-        selectedSite={selectedSite}
+        // The selected site is stored as SiteWrite within redux of HostConfigure having HostWrite.
+        // The eim.ts enforces HostWrite to have RegionWrite or SiteWrite.
+        // removing below line would cause error in eslint.
+        selectedSite={selectedSite as eim.SiteRead}
         handleOnSiteSelected={handleOnSiteSelected}
       />
     </div>

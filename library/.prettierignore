@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+# SPDX-License-Identifier: LicenseRef-Intel
+
+# ignore needed for npm library:fix
+components/index.ts
+utils/index.ts
+utils/mocks/app-orch/index.ts
+utils/mocks/app-orch/adm/index.ts
+@spark-design
+@orch-utils

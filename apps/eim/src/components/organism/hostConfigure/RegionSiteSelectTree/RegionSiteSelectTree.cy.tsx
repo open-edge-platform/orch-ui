@@ -20,6 +20,8 @@ describe("<RegionSiteSelectTree/>", () => {
           name: "",
         },
       },
+      autoOnboard: false,
+      autoProvision: false,
     },
   });
   it("should render component", () => {

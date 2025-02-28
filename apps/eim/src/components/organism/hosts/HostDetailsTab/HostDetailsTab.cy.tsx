@@ -4,7 +4,10 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { hostOne, IRuntimeConfig } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostOne as hostOne,
+  IRuntimeConfig,
+} from "@orch-ui/utils";
 import HostDetailsTab from "./HostDetailsTab";
 import HostDetailsTabPom from "./HostDetailsTab.pom";
 

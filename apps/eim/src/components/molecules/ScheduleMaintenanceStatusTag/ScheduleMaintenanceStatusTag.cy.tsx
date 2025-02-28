@@ -3,7 +3,11 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { hostOne, regionAshland, siteBoston } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostOne as hostOne,
+  regionAshland,
+  siteBoston,
+} from "@orch-ui/utils";
 import { ScheduleMaintenanceStatusTag } from "./ScheduleMaintenanceStatusTag";
 import { ScheduleMaintenanceStatusTagPom } from "./ScheduleMaintenanceStatusTag.pom";
 

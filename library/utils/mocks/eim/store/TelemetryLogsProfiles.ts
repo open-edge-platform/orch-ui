@@ -4,8 +4,8 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { BaseStore } from "../store/baseStore";
-import { telemetryLogsGroup1 } from "./TelemetryLogsGroupRead";
+import { telemetryLogsGroup1 } from "../data";
+import { BaseStore } from "./baseStore";
 
 export const TelemetryLogsProfile1: eim.TelemetryLogsProfileRead = {
   profileId: "tmprofile1",
@@ -16,23 +16,40 @@ export const TelemetryLogsProfile1: eim.TelemetryLogsProfileRead = {
   logsGroupId: "telemetryloggroup1",
   logsGroup: telemetryLogsGroup1,
 };
-let index = 0;
+
 export class TelemetryLogsProfilesStore extends BaseStore<
   "profileId",
-  eim.TelemetryLogsProfileRead
+  eim.TelemetryLogsProfileRead,
+  eim.TelemetryLogsProfile
 > {
-  convert(
-    body: eim.TelemetryLogsProfileRead,
-    id?: string | undefined,
-  ): eim.TelemetryLogsProfileRead {
-    return { profileId: id, ...body };
-  }
+  index = 0;
+
   constructor() {
     super("profileId", [TelemetryLogsProfile1]);
   }
 
+  convert(
+    body: eim.TelemetryLogsProfile,
+    id?: string | undefined,
+  ): eim.TelemetryLogsProfileRead {
+    const currentTime = new Date().toISOString();
+    return {
+      ...body,
+      profileId: id,
+      logsGroup: {
+        collectorKind: "TELEMETRY_COLLECTOR_KIND_UNSPECIFIED",
+        groups: [],
+        name: `loggroup-${id}`,
+      },
+      timestamps: {
+        createdAt: currentTime,
+        updatedAt: currentTime,
+      },
+    };
+  }
+
   create(body: eim.TelemetryLogsProfile): eim.TelemetryLogsProfileRead {
-    const id = index++;
+    const id = this.index++;
     const pid = `profile-${id}`;
     const data = this.convert(body, pid);
     this.resources.push(data);

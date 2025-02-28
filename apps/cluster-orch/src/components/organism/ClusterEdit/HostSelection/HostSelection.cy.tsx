@@ -5,7 +5,7 @@
 
 import { ecm, eim } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
-import { clusterOne, unassignedHostTwo } from "@orch-ui/utils";
+import { clusterOne, provisionedHostTwo } from "@orch-ui/utils";
 import React from "react";
 import HostSelection from "./HostSelection";
 import HostSelectionPom from "./HostSelection.pom";
@@ -25,7 +25,7 @@ const HostTableRemoteMock = ({
   return (
     <Table
       columns={columns}
-      data={[unassignedHostTwo]}
+      data={[provisionedHostTwo]}
       canSelectRows
       selectedIds={selectedHostIds}
       onSelect={(host, isSelected) => {
@@ -156,11 +156,11 @@ describe("<HostSelection/>", () => {
             },
           },
           {
-            id: unassignedHostTwo.resourceId,
-            serial: unassignedHostTwo.serialNumber,
-            os: unassignedHostTwo.instance?.os?.name,
-            name: unassignedHostTwo.name,
-            guid: unassignedHostTwo.uuid,
+            id: provisionedHostTwo.resourceId,
+            serial: provisionedHostTwo.serialNumber,
+            os: provisionedHostTwo.instance?.os?.name,
+            name: provisionedHostTwo.name,
+            guid: provisionedHostTwo.uuid,
             role: "all",
           },
         ]);
@@ -168,7 +168,7 @@ describe("<HostSelection/>", () => {
 
       it("should update role of selected host in the drawer", () => {
         pom.clusterAddNodeDrawerPom.setNodeDropdownValueByName(
-          unassignedHostTwo.name ?? unassignedHostTwo.resourceId,
+          provisionedHostTwo.name ?? provisionedHostTwo.resourceId,
           "Control Plane",
         );
         pom.clusterAddNodeDrawerPom.el.okBtn.click();
@@ -182,11 +182,11 @@ describe("<HostSelection/>", () => {
             },
           },
           {
-            id: unassignedHostTwo.resourceId,
-            serial: unassignedHostTwo.serialNumber,
-            os: unassignedHostTwo.instance?.os?.name,
-            name: unassignedHostTwo.name,
-            guid: unassignedHostTwo.uuid,
+            id: provisionedHostTwo.resourceId,
+            serial: provisionedHostTwo.serialNumber,
+            os: provisionedHostTwo.instance?.os?.name,
+            name: provisionedHostTwo.name,
+            guid: provisionedHostTwo.uuid,
             role: "controlplane",
           },
         ]);

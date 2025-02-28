@@ -4,8 +4,8 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { BaseStore } from "../store/baseStore";
-import { telemetryMetricsGroup1 } from "./TelemetryMetricsGroupRead";
+import { telemetryMetricsGroup1 } from "../data";
+import { BaseStore } from "./baseStore";
 
 export const TelemetryMetricsProfile1: eim.TelemetryMetricsProfileRead = {
   profileId: "tmprofile1",
@@ -20,13 +20,26 @@ export const TelemetryMetricsProfile1: eim.TelemetryMetricsProfileRead = {
 let index = 0;
 export class TelemetryMetricsProfilesStore extends BaseStore<
   "profileId",
-  eim.TelemetryMetricsProfileRead
+  eim.TelemetryMetricsProfileRead,
+  eim.TelemetryMetricsProfile
 > {
   convert(
-    body: eim.TelemetryMetricsProfileRead,
+    body: eim.TelemetryMetricsProfile,
     id?: string | undefined,
   ): eim.TelemetryMetricsProfileRead {
-    return { profileId: id, ...body };
+    return {
+      ...body,
+      profileId: id,
+      metricsGroup: {
+        collectorKind: "TELEMETRY_COLLECTOR_KIND_UNSPECIFIED",
+        groups: [],
+        name: `metricgroup-${id}`,
+      },
+      timestamps: {
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    };
   }
   constructor() {
     super("profileId", [TelemetryMetricsProfile1]);

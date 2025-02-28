@@ -143,40 +143,35 @@ export class StoreUtils {
   }
 
   public static convertToWriteSite(site: eim.SiteRead): eim.SiteWrite {
-    const newSite = { ...site };
+    const copySite = { ...site };
 
     // Remove all read-only values
-    if (newSite.resourceId !== undefined) delete newSite.resourceId;
-    if (newSite.siteID !== undefined) delete newSite.siteID;
+    if (copySite.resourceId !== undefined) delete copySite.resourceId;
+    if (copySite.siteID !== undefined) delete copySite.siteID;
 
-    const newOu = newSite.ou ? this.convertToGeneralOu(newSite.ou) : undefined;
-    if (newOu) newSite.ou = newOu;
+    const newSite: eim.SiteWrite = { ...copySite };
+    if (copySite.ou) newSite.ou = this.convertToGeneralOu(copySite.ou);
+    if (copySite.region)
+      newSite.region = this.convertToWriteRegion(copySite.region);
 
-    const newRegion = newSite.region
-      ? this.convertToWriteRegion(newSite.region)
-      : undefined;
-    if (newRegion) newSite.region = newRegion;
     return newSite;
   }
 
   public static convertToWriteRegion(region: eim.RegionRead): eim.RegionWrite {
-    const newRegion = { ...region };
+    const copyRegion = { ...region };
 
     // Remove all read-only values
-    if (newRegion.resourceId !== undefined) delete newRegion.resourceId;
-    if (newRegion.regionID !== undefined) delete newRegion.regionID;
+    if (copyRegion.resourceId !== undefined) delete copyRegion.resourceId;
+    if (copyRegion.regionID !== undefined) delete copyRegion.regionID;
 
-    const newParentRegion = newRegion.parentRegion
-      ? this.convertToWriteRegion(newRegion.parentRegion)
-      : undefined;
+    const newRegion: eim.RegionWrite = { ...copyRegion };
+    if (copyRegion.parentRegion !== undefined)
+      newRegion.parentRegion = this.convertToWriteRegion(
+        copyRegion.parentRegion,
+      );
+    else delete newRegion.parentRegion;
 
-    if (newParentRegion !== undefined) {
-      newRegion.parentRegion = newParentRegion;
-      return newRegion;
-    } else {
-      delete newRegion.parentRegion;
-      return newRegion;
-    }
+    return newRegion;
   }
 
   public static convertToGeneralOu(ou: eim.OuRead): eim.Ou {

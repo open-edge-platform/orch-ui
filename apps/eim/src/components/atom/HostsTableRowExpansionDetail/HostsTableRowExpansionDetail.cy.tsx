@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { hostThree } from "@orch-ui/utils";
+import { assignedWorkloadHostThree as hostThree } from "@orch-ui/utils";
 import HostsTableRowExpansionDetail from "./HostsTableRowExpansionDetail";
 import HostsTableRowExpansionDetailPom from "./HostsTableRowExpansionDetail.pom";
 const pom = new HostsTableRowExpansionDetailPom();

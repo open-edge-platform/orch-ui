@@ -31,8 +31,8 @@ import { setupWorker } from "msw";
 async function prepare() {
   /* devblock:start */
   if (process.env.REACT_LP_MOCK_API === "true") {
-    const { handlers: iaas_handlers } = await import(
-      "../../../library/utils/mocks/iaas/mocks/mocks"
+    const { handlers: eim_handlers } = await import(
+      "../../../library/utils/mocks/eim/mocks"
     );
     const { handlers: applicationCatalogHandlers } = await import(
       "../../../library/utils/mocks/app-orch/catalog/applicationCatalog"
@@ -51,7 +51,7 @@ async function prepare() {
     );
 
     const worker = setupWorker(
-      ...iaas_handlers,
+      ...eim_handlers,
       ...applicationCatalogHandlers,
       ...deploymentManagerHandlers,
       ...appResourceManagerHandlers,

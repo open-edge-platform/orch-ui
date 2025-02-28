@@ -4,25 +4,24 @@
  */
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { GenericStatus } from "@orch-ui/components";
 import { rest } from "msw";
 import { SearchResult } from "../../../../apps/eim/src/store/locations";
 import { SharedStorage } from "../../../utils";
-import {
-  TelemetryLogsGroupListStore,
-  TelemetryLogsProfilesStore,
-  TelemetryMetricsGroupListStore,
-  TelemetryMetricsProfilesStore,
-} from "./data";
+import { osUbuntuId } from "./data";
 import {
   HostMock,
   HostStore,
   InstanceStore,
   OsResourceStore,
-  osUbuntuId,
   RegionStore,
   RepeatedScheduleStore,
   SingleSchedule2Store,
   SiteStore,
+  TelemetryLogsGroupListStore,
+  TelemetryLogsProfilesStore,
+  TelemetryMetricsGroupListStore,
+  TelemetryMetricsProfilesStore,
 } from "./store";
 import { WorkloadStore } from "./store/workload";
 
@@ -49,7 +48,7 @@ export const workloadStore = new WorkloadStore();
 // Mock: Dynamic Table Rendering (Ex: HeartBeat, Polling change)
 const IS_MOCK_RANDOMIZE_ENABLED = true;
 
-const hostStatuses: eim.HostRead["hostStatus"][] = [
+const hostStatuses: GenericStatus[] = [
   {
     indicator: "STATUS_INDICATION_IDLE",
     message: "Running",
@@ -96,7 +95,10 @@ const randomizeInstanceHostList = (
     return instanceList.map((instance, i) => {
       if (i == 0 && instance.host?.resourceId) {
         hostStore.get(instance.host.resourceId);
-        instance.host.hostStatus = randomizeHostStatus();
+        const randomHostStatus = randomizeHostStatus();
+        instance.host.hostStatus = randomHostStatus.message;
+        instance.host.hostStatusIndicator = randomHostStatus.indicator;
+        instance.host.hostStatusTimestamp = randomHostStatus.timestamp;
       }
       return instance;
     });
@@ -474,7 +476,7 @@ export const handlers = [
       );
     };
 
-    let host = hostStore.get(hostId);
+    let host: eim.HostRead | void = hostStore.get(hostId);
     if (host) {
       try {
         host = hostStore.put(hostId, { ...host, ...body } as HostMock);
@@ -623,6 +625,9 @@ export const handlers = [
     hostStore.registerHost({
       ...hostRegisterInfo,
       name: hostRegisterInfo.name ?? "default",
+      timestamps: {
+        createdAt: new Date().toISOString(),
+      },
     });
 
     return await res(
@@ -697,11 +702,9 @@ export const handlers = [
           kind,
           name,
           securityFeature,
-          instanceStatus: {
-            indicator: "STATUS_INDICATION_IDLE",
-            message: "Running",
-            timestamp: 1717761389,
-          },
+          instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+          instanceStatus: "Running",
+          instanceStatusTimestamp: 1717761389,
           currentState: "INSTANCE_STATE_RUNNING",
           host,
         };

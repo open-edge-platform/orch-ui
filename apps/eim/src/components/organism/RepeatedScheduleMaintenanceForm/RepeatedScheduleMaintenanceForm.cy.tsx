@@ -5,7 +5,7 @@
 
 import { enhancedEimSlice } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
-import { hostOne } from "@orch-ui/utils";
+import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Timezone } from "../../../utils/worldTimezones";

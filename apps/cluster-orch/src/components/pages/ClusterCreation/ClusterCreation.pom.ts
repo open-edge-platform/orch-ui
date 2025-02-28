@@ -171,11 +171,9 @@ const siteEndpoint: CyApiDetails<
 const instanceOne: ModifiedInstance = {
   instanceID: "instance-dh38bjw9",
   name: "Instance One",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: {
     osResourceID: "os-ubuntu",
@@ -191,11 +189,9 @@ const instanceOne: ModifiedInstance = {
     uuid: "4c4c4544-0044-4210-8031-c2c04f305233",
     site: siteRestaurantOne,
     metadata: [],
-    hostStatus: {
-      indicator: "STATUS_INDICATION_IDLE",
-      message: "Running",
-      timestamp: 1717761389,
-    },
+    hostStatusIndicator: "STATUS_INDICATION_IDLE",
+    hostStatus: "Running",
+    hostStatusTimestamp: 1717761389,
     desiredState: "HOST_STATE_ONBOARDED",
     currentState: "HOST_STATE_ONBOARDED",
     currentPowerState: "POWER_STATE_ON",
@@ -288,7 +284,7 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
     );
   }
 
-  public selectSites(store) {
+  public selectSites(store: any) {
     store.dispatch(setClusterSelectedSite(siteOne));
     store.dispatch(updateSiteId(siteOne.resourceId));
     store.dispatch(updateSiteName(siteOne.name));
@@ -296,7 +292,7 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
     store.dispatch(updateRegionName(siteOne.region.name));
   }
 
-  public selectHostNode(store) {
+  public selectHostNode(store: any) {
     store.dispatch(
       setNodes([
         {
@@ -317,7 +313,7 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
     );
   }
 
-  public fillMetadata(key, value) {
+  public fillMetadata(key: string, value: string) {
     this.metadataForm.getNewEntryInput("Key").type(key);
     this.metadataForm.getNewEntryInput("Value").type(value);
   }

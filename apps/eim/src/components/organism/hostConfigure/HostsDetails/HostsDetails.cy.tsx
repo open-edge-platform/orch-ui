@@ -31,6 +31,8 @@ describe("<HostsDetails/>", () => {
           serialNumber: "SN1234AC",
         },
       },
+      autoOnboard: false,
+      autoProvision: false,
     },
   });
   beforeEach(() => {

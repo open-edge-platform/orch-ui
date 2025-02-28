@@ -7,8 +7,8 @@ import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 
 import { MetadataFormPom } from "@orch-ui/components";
 import {
+  assignedWorkloadHostTwo as hostTwo,
   HostStore,
-  hostTwo,
   InstanceStore,
   RegionStore,
   siteSantaClara,

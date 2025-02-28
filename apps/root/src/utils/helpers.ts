@@ -102,7 +102,7 @@ export const getHostStatus = async (
         }
         const h = hosts.hosts[0];
 
-        switch (h.hostStatus?.indicator) {
+        switch (h.hostStatusIndicator) {
           case "STATUS_INDICATION_IDLE":
             count.running++;
             break;

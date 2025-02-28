@@ -5,7 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { hostOne } from "@orch-ui/utils";
+import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import { dataCy } from "./ScheduleMaintenanceStatusTag";
 
 const dataCySelectors = [] as const;

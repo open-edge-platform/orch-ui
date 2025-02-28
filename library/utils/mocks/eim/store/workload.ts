@@ -4,7 +4,20 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { BaseStore } from "./baseStore";
+import {
+  clusterFiveId,
+  clusterFiveName,
+  clusterFourId,
+  clusterFourName,
+  clusterOneId,
+  clusterOneName,
+  clusterSixId,
+  clusterSixName,
+  clusterThreeId,
+  clusterThreeName,
+  clusterTwoId,
+  clusterTwoName,
+} from "../../cluster-orch/data/clusterOrchIds";
 import {
   workloadFiveId,
   workloadFourId,
@@ -13,26 +26,8 @@ import {
   workloadThreeId,
   workloadTwoId,
   workloadUnspecifiedOneId,
-} from "./iaasIds";
-
-/** Cluster Details */
-export const clusterOneName = "restaurant-portland";
-export const clusterOneId = "r-p-n98bt7tm";
-
-export const clusterTwoName = "restaurant-salem";
-export const clusterTwoId = "r-b-v83hy29f";
-
-export const clusterThreeName = "restaurant-ashland";
-export const clusterThreeId = "r-a-b28h1kbz";
-
-export const clusterFourName = "minimart-columbus";
-export const clusterFourId = "m-c-i48qdv94";
-
-export const clusterFiveName = "minimart-dayton";
-export const clusterFiveId = "m-d-ljmy921f";
-
-export const clusterSixName = "store-chicago";
-export const clusterSixId = "c-m-iusz73yr";
+} from "../data";
+import { BaseStore } from "./baseStore";
 
 // Cluster workloads
 export const workloadOne: eim.WorkloadRead = {
@@ -128,11 +123,17 @@ export class WorkloadStore extends BaseStore<
   }
 
   convert(body: eim.Workload): eim.WorkloadRead {
+    const currentTime = new Date().toISOString();
     return {
       ...body,
       workloadId: `workload${this.workloadIndex}`,
       resourceId: `workload${this.workloadIndex}`,
       members: [],
+      kind: "WORKLOAD_KIND_CLUSTER",
+      timestamps: {
+        createdAt: currentTime,
+        updatedAt: currentTime,
+      },
     };
   }
 

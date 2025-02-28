@@ -8,7 +8,7 @@ import { Table, TableColumn } from "@orch-ui/components";
 import {
   clusterOneName,
   IRuntimeConfig,
-  unassignedHostTwo,
+  provisionedHostTwo,
 } from "@orch-ui/utils";
 import React from "react";
 import ClusterTemplatesDropdownPom from "../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown.pom";
@@ -30,7 +30,7 @@ const HostTableRemoteMock = ({
   return (
     <Table
       columns={columns}
-      data={[unassignedHostTwo]}
+      data={[provisionedHostTwo]}
       canSelectRows
       selectedIds={selectedHostIds}
       onSelect={(host, isSelected) => {
@@ -153,7 +153,7 @@ describe("<ClusterEdit/>", () => {
               nodeRole: "worker",
             },
             {
-              nodeGuid: "4c4c4544-0056-4810-8053-b8c04f595238",
+              nodeGuid: "4c4c4544-0056-4810-8053-b8c04f5952pb",
               nodeRole: "all",
             },
           ],

@@ -36,7 +36,9 @@
     "library:cy:component": "cd tests/library && cypress run --component --spec ./unit-tests.cy.ts",
     "tests:component": "cd tests && cypress open --component",
     "tests:e2e": "cd tests && cypress open --e2e --env EN_UUID=398395da-c10e-7c47-9b4f-efb34c0b261e",
-    "tests:build": "cd tests && webpack build --config webpack.config.js"
+    "tests:build": "cd tests && webpack build --config webpack.config.js",
+    "api:generate": "bash ./library/apis/generate-api.sh --prefix library/apis/",
+    "prettify": "npm run app:admin:fix & npm run app:eim:fix & npm run app:cluster-orch:fix & npm run app:app-orch:fix & npm run app:root:fix"
   },
   "author": "ITEP UI Team",
   "license": "Intel",

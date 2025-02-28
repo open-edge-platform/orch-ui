@@ -4,9 +4,8 @@
  */
 
 import { ecm } from "@orch-ui/apis";
-import { GenericStatus } from "@orch-ui/components";
 import { BaseStore } from "../baseStore";
-import HostStore from "../iaas/store/hosts";
+import { HostStore } from "../eim/store";
 import {
   customersKey,
   customersOne,
@@ -48,7 +47,7 @@ import {
 
 export type ClusterComplete = ecm.ClusterInfoRead & ecm.ClusterDetailInfoRead;
 
-const lifecyclePhase: GenericStatus = {
+const lifecyclePhase: ecm.GenericStatusRead = {
   indicator: "STATUS_INDICATION_IDLE",
   message: "Running",
   timestamp: new Date().getTime(),

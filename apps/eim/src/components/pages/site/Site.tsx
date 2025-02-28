@@ -32,6 +32,7 @@ import { setErrorInfo, showToast } from "../../../store/notifications";
 import SiteTable from "../../organism/site/SitesTable";
 import "./Site.scss";
 
+/** @deprecated  */
 const Site = () => {
   const { regionId } = useParams();
   const dispatch = useAppDispatch();
@@ -121,15 +122,17 @@ const Site = () => {
         Sites
       </Heading>
 
-      <SiteTable
-        regionId={regionId}
-        actions={actions}
-        hasPermission={checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
-        hiddenColumns={["select"]}
-        basePath={"../regions"}
-        sort={[0]}
-        source="site"
-      />
+      {regionId && (
+        <SiteTable
+          regionId={regionId}
+          actions={actions}
+          hasPermission={checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
+          hiddenColumns={["select"]}
+          basePath={"../regions"}
+          sort={[0]}
+          source="site"
+        />
+      )}
 
       {deleteConfirmationOpen && (
         <ConfirmationDialog

@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { hostThree, humanFileSize } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostThree as hostThree,
+  humanFileSize,
+} from "@orch-ui/utils";
 import { ResourceTypeTitle } from "./ResourceDetails";
 import { HostResourcesCpuRead } from "./resourcedetails/Cpu";
 import ResourceIndicator from "./ResourceIndicator";

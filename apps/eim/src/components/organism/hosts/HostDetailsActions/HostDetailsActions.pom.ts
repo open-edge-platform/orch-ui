@@ -5,8 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { instanceOne, workloadOneId } from "@orch-ui/utils";
-import { workloadOne } from "library/utils/mocks/eim/store/workload";
+import { instanceOne, workloadOne, workloadOneId } from "@orch-ui/utils";
 import OnboardedHostPopupPom from "../../../molecules/OnboardedHostPopup/OnboardedHostPopup.pom";
 import ProvisionedHostPopupPom from "../../../molecules/ProvisionedHostPopup/ProvisionedHostPopup.pom";
 import RegisteredHostPopupPom from "../../../molecules/RegisteredHostPopup/RegisteredHostPopup.pom";

@@ -5,68 +5,75 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { Operator } from "../../../interfaces/Pagination";
+import { BaseStore } from "../../baseStore";
 import * as metadataBrokerMocks from "../../metadata-broker";
-import { BaseStore } from "./baseStore";
 import {
-  hostFiveId,
-  hostFiveSerial,
-  hostFiveUuid,
-  hostFourId,
-  hostFourSerial,
-  hostFourUuid,
-  hostOneId,
-  hostOneSerial,
-  hostOneUuid,
-  hostSixId,
-  hostSixSerial,
-  hostSixUuid,
-  hostThreeId,
-  hostThreeSerial,
-  hostThreeUuid,
-  hostTwoId,
-  hostTwoSerial,
-  hostTwoUuid,
-  unassignedHostOneId,
-  unassignedHostOneUuid,
-  unassignedHostThreeId,
-  unassignedHostThreeUuid,
-  unassignedHostTwoId,
-  unassignedHostTwoUuid,
-  unconfiguredHostOneId,
-  unconfiguredHostOneSerial,
-  unconfiguredHostOneUuid,
-  unconfiguredHostThreeId,
-  unconfiguredHostThreeSerial,
-  unconfiguredHostThreeUuid,
-  unconfiguredHostTwoId,
-  unconfiguredHostTwoSerial,
-  unconfiguredHostTwoUuid,
-  unconfiguredHostWithInstanceOneId,
-  unconfiguredHostWithInstanceOneSerial,
-  unconfiguredHostWithInstanceOneUuid,
-} from "./iaasIds";
+  assignedWorkloadHostFourId,
+  assignedWorkloadHostOneId,
+  assignedWorkloadHostOneSerial,
+  assignedWorkloadHostOneUuid,
+  assignedWorkloadHostThreeId,
+  assignedWorkloadHostThreeSerial,
+  assignedWorkloadHostThreeUuid,
+  assignedWorkloadHostTwoId,
+  assignedWorkloadHostTwoSerial,
+  assignedWorkloadHostTwoUuid,
+  hostResourceGpus,
+  hostResourceNics,
+  hostResourceStorage,
+  hostResourceUsb,
+  onboardedHostOneId,
+  onboardedHostOneSerial,
+  onboardedHostOneUuid,
+  onboardedHostThreeId,
+  onboardedHostThreeSerial,
+  onboardedHostThreeUuid,
+  onboardedHostTwoId,
+  onboardedHostTwoSerial,
+  onboardedHostTwoUuid,
+  provisionedHostOneId,
+  provisionedHostOneUuid,
+  provisionedHostThreeId,
+  provisionedHostThreeUuid,
+  provisionedHostTwoId,
+  provisionedHostTwoUuid,
+} from "../data";
 import {
-  instanceFive,
   instanceFour,
   instanceOne,
-  instanceSix,
   instanceThree,
   instanceTwo,
-  instanceUnassignedOne,
-  instanceUnassignedThree,
-  instanceUnassignedTwo,
-  instanceUnconfiguredOne,
   instanceUnspecified,
+  provisionedInstanceOne,
+  provisionedInstanceThree,
+  provisionedInstanceTwo,
 } from "./instances";
 import {
   siteMinimartOne,
-  siteMinimartTwo,
   siteRestaurantOne,
   siteRestaurantThree,
   siteRestaurantTwo,
-  siteStore,
 } from "./sites";
 import { StoreUtils } from "./utils";
+
+// hostFiveId,
+// hostFiveSerial,
+// hostFiveUuid,
+// hostFourId,
+// hostFourSerial,
+// hostFourUuid,
+// hostOneId,
+// hostOneSerial,
+// hostOneUuid,
+// hostSixId,
+// hostSixSerial,
+// hostSixUuid,
+// hostThreeId,
+// hostThreeSerial,
+// hostThreeUuid,
+// hostTwoId,
+// hostTwoSerial,
+// hostTwoUuid,
 
 type KeyValuePairs = { [key: string]: string };
 
@@ -150,42 +157,43 @@ export interface HostMock extends eim.HostRead {
   instance?: enhancedEimSlice.InstanceReadModified;
 }
 
-export const hostNoName: HostMock = {
-  resourceId: hostTwoId,
-  name: "",
-  uuid: hostTwoUuid,
-  serialNumber: hostTwoSerial,
-  site: siteRestaurantTwo,
-  inheritedMetadata: {
-    location: hostFourMetadata,
-  },
-  metadata: hostTwoMetadata,
-  desiredState: "HOST_STATE_ONBOARDED",
-  currentState: "HOST_STATE_ONBOARDED",
-};
+// export const hostNoName: HostMock = {
+//   resourceId: hostTwoId,
+//   name: "",
+//   uuid: hostTwoUuid,
+//   serialNumber: hostTwoSerial,
+//   site: siteRestaurantTwo,
+//   inheritedMetadata: {
+//     location: hostFourMetadata,
+//   },
+//   metadata: hostTwoMetadata,
+//   desiredState: "HOST_STATE_ONBOARDED",
+//   currentState: "HOST_STATE_ONBOARDED",
+// };
 
-export const hostOne: HostMock = {
-  resourceId: hostOneId,
-  name: hostOneId,
-  uuid: hostOneUuid,
-  serialNumber: hostOneSerial,
+export const assignedWorkloadHostOne: HostMock = {
+  resourceId: assignedWorkloadHostOneId,
+  name: "Assigned Host 1",
+  uuid: assignedWorkloadHostOneUuid,
+  serialNumber: assignedWorkloadHostOneSerial,
   site: siteRestaurantOne,
   metadata: hostOneMetadata,
   instance: instanceOne,
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
-  hostStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
+  hostStatus: "Provisioned",
+  hostStatusIndicator: "STATUS_INDICATION_IDLE",
+  timestamps: {
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 };
 
-export const hostTwo: HostMock = {
-  resourceId: hostTwoId,
-  name: "Host 2",
-  uuid: hostTwoUuid,
-  serialNumber: hostTwoSerial,
+export const assignedWorkloadHostTwo: HostMock = {
+  resourceId: assignedWorkloadHostTwoId,
+  name: "Assigned Host 2",
+  uuid: assignedWorkloadHostTwoUuid,
+  serialNumber: assignedWorkloadHostTwoSerial,
   site: siteRestaurantTwo,
   inheritedMetadata: {
     location: hostFourMetadata,
@@ -200,335 +208,99 @@ export const hostTwo: HostMock = {
   },
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
+  hostStatus: "Provisioned",
+  hostStatusIndicator: "STATUS_INDICATION_IDLE",
+  timestamps: {
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
 };
 
-export const hostThree: HostMock = {
-  resourceId: hostThreeId,
-  name: hostThreeId,
-  uuid: hostThreeUuid,
-  serialNumber: hostThreeSerial,
+export const assignedWorkloadHostThree: HostMock = {
+  resourceId: assignedWorkloadHostThreeId,
+  name: "",
+  uuid: assignedWorkloadHostThreeUuid,
+  serialNumber: assignedWorkloadHostThreeSerial,
   site: siteRestaurantThree,
   metadata: hostThreeMetadata,
   instance: instanceThree,
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
-  // TODO: Create a Host Resource store
+  hostStatus: "Provisioned",
+  hostStatusIndicator: "STATUS_INDICATION_IDLE",
+  timestamps: {
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
   cpuCores: 4,
   cpuModel: "i7-6770HQ",
   cpuThreads: 8,
   cpuSockets: 2,
   cpuArchitecture: "x64",
-  hostGpus: [
-    {
-      deviceName: "Device 1",
-      vendor: "Vendor A",
-      product: "Model 1",
-      capabilities: ["a", "b", "c"],
-    },
-    {
-      deviceName: "Device 2",
-      vendor: "Vendor B",
-      product: "Model 2",
-      capabilities: ["e", "d", "c"],
-    },
-    {
-      deviceName: "Device 3",
-      vendor: "Vendor C",
-      product: "Model 3",
-      capabilities: ["f", "t", "h"],
-    },
-    {
-      deviceName: "Device 4",
-      vendor: "Vendor D",
-      product: "Model 4",
-      capabilities: ["f", "t", "h"],
-    },
-    {
-      deviceName: "Device 5",
-      vendor: "Vendor E",
-      product: "Model 5",
-      capabilities: ["f", "t", "h"],
-    },
-  ],
-  hostNics: [
-    {
-      bmcInterface: false,
-      ipaddresses: [
-        {
-          configMethod: "IP_ADDRESS_CONFIG_MODE_STATIC",
-          address: "2345:0425:2CA1::0567:5673:23b5/64",
-          status: "IP_ADDRESS_STATUS_ASSIGNED",
-          statusDetail: "",
-        },
-        {
-          configMethod: "IP_ADDRESS_CONFIG_MODE_DYNAMIC",
-          address: "192.168.0.11/24",
-          status: "IP_ADDRESS_STATUS_ASSIGNMENT_ERROR",
-          statusDetail: "",
-        },
-      ],
-      linkState: { timestamp: "", type: "LINK_STATE_DOWN" },
-      macAddr: "90:49:fa:07:6c:fd",
-      mtu: "1500",
-      deviceName: "eth0",
-      pciIdentifier: "0000:00:1f.6",
-      sriovEnabled: false,
-      sriovVfsNum: 0,
-      sriovVfsTotal: 0,
-      status: {
-        timestamp: "",
-        condition: "HOST_COMPONENT_STATE_EXISTS",
-        type: "STATUS_CONDITION_RUNNING",
-      },
-    },
-    {
-      deviceName: "Network Interface",
-      ipaddresses: [
-        {
-          address: "192.168.11.1",
-          configMethod: "IP_ADDRESS_CONFIG_MODE_STATIC",
-        },
-        {
-          address: "192.168.11.2",
-          configMethod: "IP_ADDRESS_CONFIG_MODE_STATIC",
-        },
-      ],
-      macAddr: "123478329",
-      pciIdentifier: "Cdsaf23",
-      sriovEnabled: true,
-      sriovVfsNum: 321,
-      sriovVfsTotal: 500,
-      mtu: "2",
-      bmcInterface: true,
-      status: {
-        timestamp: "1683624877",
-        condition: "condition 1",
-        reason: "Reason 1",
-        type: "STATUS_CONDITION_RUNNING",
-        details: "Details on status",
-      },
-    },
-    {
-      deviceName: "Interface 2",
-      ipaddresses: [
-        {
-          address: "343232",
-          configMethod: "IP_ADDRESS_CONFIG_MODE_STATIC",
-        },
-      ],
-      macAddr: "44345",
-      pciIdentifier: "Dser432",
-      sriovEnabled: false,
-      sriovVfsNum: 234,
-      status: {
-        timestamp: "1683624877",
-        condition: "Condition 2",
-        type: "STATUS_CONDITION_DELETED",
-      },
-      mtu: "2",
-      bmcInterface: true,
-      linkState: {
-        timestamp: "1985‑09‑25 17:45:30.005",
-        type: "LINK_STATE_UP",
-      },
-    },
-    {
-      deviceName: "Interface 3",
-      ipaddresses: [
-        {
-          address: "12232",
-          configMethod: "IP_ADDRESS_CONFIG_MODE_UNSPECIFIED",
-        },
-      ],
-      macAddr: "97656",
-      pciIdentifier: "Ferr3r",
-      sriovEnabled: true,
-      sriovVfsNum: 34,
-      status: {
-        timestamp: "1683624877",
-        condition: "Condition 3",
-        type: "STATUS_CONDITION_ERROR",
-      },
-    },
-  ],
   memoryBytes: "1073741824",
-  hostStorages: [
-    {
-      // 3.8 TB
-      vendor: "23423",
-      model: "24234",
-      serial: "324234",
-      wwid: "423432",
-      status: {
-        timestamp: "23432",
-        type: "STATUS_CONDITION_DELETED",
-        condition: "rew",
-      },
-      capacityBytes: "3840755982336",
-    },
-    {
-      // 3.8 TB
-      vendor: "43423",
-      model: "64543",
-      serial: "75453",
-      wwid: "423432",
-      status: {
-        timestamp: "2432",
-        type: "STATUS_CONDITION_RUNNING",
-        condition: "ertert",
-      },
-      capacityBytes: "54354389",
-    },
-    {
-      // 3.8 TB
-      vendor: "3rer",
-      model: "23fg",
-      serial: "wer324",
-      wwid: "4rewerg4",
-      status: {
-        timestamp: "2432",
-        type: "STATUS_CONDITION_ERROR",
-        condition: "ertert",
-      },
-      capacityBytes: "994358843",
-    },
-  ],
-  hostUsbs: [
-    {
-      addr: "32412351",
-      bus: "100004",
-      class: "0Eh",
-      idProduct: "0x0A12",
-      idVendor: "0x07GH",
-      serial: "3AAB-AA16",
-      status: {
-        condition: "Running",
-        timestamp: "20230304",
-        type: "STATUS_CONDITION_RUNNING",
-        details: "In Use",
-        reason: "N/A",
-      },
-    },
-    {
-      addr: "31000003",
-      bus: "99999999",
-      class: "00h",
-      idProduct: "0x0A12",
-      idVendor: "0x08FF",
-      serial: "3AAB-AA16",
-      status: {
-        condition: "Running",
-        timestamp: "20230304",
-        type: "STATUS_CONDITION_RUNNING",
-        details: "In Use",
-        reason: "N/A",
-      },
-    },
-    {
-      addr: "10000045",
-      bus: "100006",
-      class: "07h",
-      idProduct: "0x0A12",
-      idVendor: "0x07AB",
-      serial: "3AAB-AA16",
-      status: {
-        condition: "Running",
-        timestamp: "20230304",
-        type: "STATUS_CONDITION_RUNNING",
-        details: "In Use",
-        reason: "N/A",
-      },
-    },
-  ],
+  hostGpus: hostResourceGpus,
+  hostStorages: hostResourceStorage,
+  hostUsbs: hostResourceUsb,
+  hostNics: hostResourceNics,
 };
 
-export const hostFour: HostMock = {
-  resourceId: hostFourId,
-  name: hostFourId,
-  uuid: hostFourUuid,
-  serialNumber: hostFourSerial,
+export const assignedWorkloadHostFour: HostMock = {
+  resourceId: assignedWorkloadHostFourId,
+  name: assignedWorkloadHostFourId,
+  uuid: "",
+  serialNumber: "",
   site: siteMinimartOne,
   metadata: hostFourMetadata,
   instance: instanceFour,
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
-};
-
-export const hostFive: HostMock = {
-  resourceId: hostFiveId,
-  instance: instanceFive,
-  name: hostFiveId,
-  uuid: hostFiveUuid,
-  serialNumber: hostFiveSerial,
-  site: siteMinimartTwo,
-  metadata: hostFiveMetadata,
-  onboardingStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Onboarded",
-    timestamp: 1717761389,
+  onboardingStatusIndicator: "STATUS_INDICATION_IDLE",
+  onboardingStatus: "Onboarded",
+  onboardingStatusTimestamp: 1717761389,
+  hostStatus: "Provisioned",
+  hostStatusIndicator: "STATUS_INDICATION_IDLE",
+  registrationStatusIndicator: "STATUS_INDICATION_IDLE",
+  registrationStatus: "Registered",
+  registrationStatusTimestamp: 1728574343137,
+  timestamps: {
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
-  hostStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
-  registrationStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Registered",
-    timestamp: 1728574343137,
-  },
-  desiredState: "HOST_STATE_ONBOARDED",
+};
+
+// Provisioned Host
+export const provisionedHostOne: HostMock = {
+  ...assignedWorkloadHostOne,
+  resourceId: provisionedHostOneId,
+  uuid: provisionedHostOneUuid,
+  name: provisionedHostOneId,
+  instance: provisionedInstanceOne,
   currentState: "HOST_STATE_ONBOARDED",
 };
 
-export const hostSix: HostMock = {
-  resourceId: hostSixId,
-  name: hostSixId,
-  uuid: hostSixUuid,
-  serialNumber: hostSixSerial,
-  site: siteStore,
-  metadata: hostSixMetadata,
-  instance: instanceSix,
-  desiredState: "HOST_STATE_ONBOARDED",
+export const provisionedHostTwo: HostMock = {
+  ...assignedWorkloadHostOne,
+  resourceId: provisionedHostTwoId,
+  uuid: provisionedHostTwoUuid,
+  name: provisionedHostTwoId,
+  instance: provisionedInstanceTwo,
   currentState: "HOST_STATE_ONBOARDED",
 };
 
-// Unassigned Host
-export const unassignedHostOne: HostMock = {
-  ...hostOne,
-  resourceId: unassignedHostOneId,
-  uuid: unassignedHostOneUuid,
-  name: unassignedHostOneId,
-  instance: instanceUnassignedOne,
+export const provisionedHostThree: HostMock = {
+  ...assignedWorkloadHostOne,
+  resourceId: provisionedHostThreeId,
+  uuid: provisionedHostThreeUuid,
+  name: provisionedHostThreeId,
+  instance: provisionedInstanceThree,
+  hostStatusIndicator: "STATUS_INDICATION_ERROR",
+  hostStatus: "Error",
+  hostStatusTimestamp: 123123,
   currentState: "HOST_STATE_ONBOARDED",
-};
-
-export const unassignedHostTwo: HostMock = {
-  ...hostTwo,
-  resourceId: unassignedHostTwoId,
-  uuid: unassignedHostTwoUuid,
-  name: unassignedHostTwoId,
-  instance: instanceUnassignedTwo,
-  currentState: "HOST_STATE_ONBOARDED",
-};
-
-export const unassignedHostThree: HostMock = {
-  ...hostThree,
-  resourceId: unassignedHostThreeId,
-  uuid: unassignedHostThreeUuid,
-  name: unassignedHostThreeId,
-  instance: instanceUnassignedThree,
-  hostStatus: {
-    indicator: "STATUS_INDICATION_ERROR",
-    message: "Error",
-    timestamp: 123123,
-  },
-  currentState: "HOST_STATE_ONBOARDED",
-  //metadata: [{ key: "customer", value: "culvers" }], TODO: needed for metadata cypress test ?
 };
 
 // Unconfigured Hosts
-const unconfiguredHostMetadata: eim.Metadata = [
+const onboardedHostMetadata: eim.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -539,65 +311,42 @@ const unconfiguredHostMetadata: eim.Metadata = [
   },
 ];
 
-export const unconfiguredHostOne: HostMock = {
-  resourceId: unconfiguredHostOneId,
+export const onboardedHostOne: HostMock = {
+  resourceId: onboardedHostOneId,
   // Parent metadata
   inheritedMetadata: {
-    location: unconfiguredHostMetadata,
+    location: onboardedHostMetadata,
   },
-  name: unconfiguredHostOneId,
-  uuid: unconfiguredHostOneUuid,
-  serialNumber: unconfiguredHostOneSerial,
+  name: onboardedHostOneId,
+  uuid: onboardedHostOneUuid,
+  serialNumber: onboardedHostOneSerial,
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
 };
 
-export const unconfiguredHostTwo: HostMock = {
-  resourceId: unconfiguredHostTwoId,
-  name: unconfiguredHostTwoId,
-  uuid: unconfiguredHostTwoUuid,
-  serialNumber: unconfiguredHostTwoSerial,
+export const onboardedHostTwo: HostMock = {
+  resourceId: onboardedHostTwoId,
+  name: onboardedHostTwoId,
+  uuid: onboardedHostTwoUuid,
+  serialNumber: onboardedHostTwoSerial,
   // Host-Specific metadataa
-  metadata: unconfiguredHostMetadata,
+  metadata: onboardedHostMetadata,
   note: "",
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
 };
 
-export const unconfiguredHostThree: HostMock = {
-  resourceId: unconfiguredHostThreeId,
+export const onboardedHostThree: HostMock = {
+  resourceId: onboardedHostThreeId,
   inheritedMetadata: { location: hostSixMetadata, ou: [] },
-  name: unconfiguredHostThreeId,
-  uuid: unconfiguredHostThreeUuid,
-  serialNumber: unconfiguredHostThreeSerial,
+  name: onboardedHostThreeId,
+  uuid: onboardedHostThreeUuid,
+  serialNumber: onboardedHostThreeSerial,
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
 };
 
-/* Unconfigured host with instance. */
-export const unconfiguredHostWithInstanceOne: HostMock = {
-  resourceId: unconfiguredHostWithInstanceOneId,
-  name: unconfiguredHostWithInstanceOneId,
-  uuid: unconfiguredHostWithInstanceOneUuid,
-  serialNumber: unconfiguredHostWithInstanceOneSerial,
-  instance: instanceUnconfiguredOne,
-  desiredState: "HOST_STATE_ONBOARDED",
-  currentState: "HOST_STATE_ONBOARDED",
-};
-
-/* host with unspecified status */
-export const unspecifiedStatusHost: HostMock = {
-  ...unconfiguredHostOne,
-  hostStatus: {
-    indicator: "STATUS_INDICATION_UNSPECIFIED",
-    message: "Unknown",
-    timestamp: 1717761389,
-  },
-  desiredState: "HOST_STATE_ONBOARDED",
-  currentState: "HOST_STATE_ONBOARDED",
-};
-
-export const unconfiguredHostWithInstanceNoName: HostMock = {
+export const onboardedHostWithInstanceNoName: HostMock = {
   resourceId: "host-ed7c5735",
   cpuArchitecture: "",
   cpuCapabilities: "",
@@ -667,12 +416,10 @@ export const registeredHostFourError: HostMock = {
   serialNumber: "ec269d77-9b98-bda3-2f68-34342w23432c",
   uuid: "ec26b1ed-311b-0da0-5f2b-fc17f60f35e3",
   name: "test-error-host-zl5c5736",
-  registrationStatus: {
-    message:
-      "Host Registration Failed due to mismatch of Serial Number, Correct Serial Number is: JFSRQR3",
-    indicator: "STATUS_INDICATION_ERROR",
-    timestamp: 1728574343137,
-  },
+  registrationStatus:
+    "Host Registration Failed due to mismatch of Serial Number, Correct Serial Number is: JFSRQR3",
+  registrationStatusIndicator: "STATUS_INDICATION_ERROR",
+  registrationStatusTimestamp: 1728574343137,
 };
 
 export const registeredHostFiveIdle: HostMock = {
@@ -685,32 +432,28 @@ export const registeredHostFiveIdle: HostMock = {
   serialNumber: "ec269d77-9b98-bda3-2f68-34342w23432c",
   uuid: "ec26b1ed-311b-0da0-5f2b-fc17f60f35e3",
   name: "",
-  registrationStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Provisioned",
-    timestamp: 1728574343137,
-  },
+  registrationStatusIndicator: "STATUS_INDICATION_IDLE",
+  registrationStatus: "Provisioned",
+  registrationStatusTimestamp: 1728574343137,
 };
 
 export class HostStore extends BaseStore<"resourceId", HostMock> {
   constructor() {
     super("resourceId", [
       // Configured hosts
-      hostOne,
-      hostTwo,
-      hostThree,
-      hostFour,
-      hostFive,
-      hostSix,
+      assignedWorkloadHostOne,
+      assignedWorkloadHostTwo,
+      assignedWorkloadHostThree,
+      assignedWorkloadHostFour,
       // Unassigned hosts
-      unassignedHostOne,
-      unassignedHostTwo,
-      unassignedHostThree,
+      provisionedHostOne,
+      provisionedHostTwo,
+      provisionedHostThree,
       // Unconfigured Hosts
-      unconfiguredHostOne,
-      unconfiguredHostTwo,
-      unconfiguredHostThree,
-      unconfiguredHostWithInstanceOne,
+      onboardedHostOne,
+      onboardedHostTwo,
+      onboardedHostThree,
+      // onboardedHostWithInstanceOne,
       // Registered hosts
       registeredHostOne,
       registeredHostTwo,
@@ -721,6 +464,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
   }
 
   convert(body: HostMock, id?: string): HostMock {
+    const currentTime = new Date().toISOString();
     return {
       ...body,
       resourceId: id ?? `host-${StoreUtils.randomString()}`,
@@ -730,6 +474,10 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
       instance: body.instance,
       note: body.note,
       deauthorized: body.deauthorized,
+      timestamps: {
+        createdAt: body.timestamps?.createdAt ?? currentTime,
+        updatedAt: currentTime,
+      },
     };
   }
 
@@ -898,7 +646,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
           hostStat.unallocated! += 1;
         }
 
-        switch (host.hostStatus?.indicator) {
+        switch (host.hostStatusIndicator) {
           case "STATUS_INDICATION_ERROR":
             hostStat.error! += 1;
             break;
@@ -930,15 +678,26 @@ export const assignedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiRespons
     totalElements: assignedHostList.length,
   };
 
-const unassignedHostList = new HostStore().list({
+const provisionedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(instance.workloadMembers) AND has(site)",
 });
-export const unassignedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
+export const provisionedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
   {
     hasNext: false,
-    hosts: unassignedHostList,
-    totalElements: unassignedHostList.length,
+    hosts: provisionedHostList,
+    totalElements: provisionedHostList.length,
+  };
+
+const onboardedHostList = new HostStore().list({
+  deviceUuid: null,
+  filter: "NOT has(site)",
+});
+export const onboardedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
+  {
+    hasNext: false,
+    hosts: onboardedHostList,
+    totalElements: onboardedHostList.length,
   };
 
 const registeredHostList = new HostStore().list({
@@ -950,15 +709,4 @@ export const registeredHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiRespo
     hasNext: false,
     hosts: registeredHostList,
     totalElements: registeredHostList.length,
-  };
-
-const unconfiguredHostList = new HostStore().list({
-  deviceUuid: null,
-  filter: "NOT has(site)",
-});
-export const unconfiguredHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: unconfiguredHostList,
-    totalElements: unconfiguredHostList.length,
   };

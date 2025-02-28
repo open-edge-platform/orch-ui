@@ -37,6 +37,8 @@ describe("<Details/>", () => {
             serialNumber: "SN1234AB",
           },
         },
+        autoOnboard: false,
+        autoProvision: false,
       },
     });
     beforeEach(() => {
@@ -83,6 +85,8 @@ describe("<Details/>", () => {
             originalOs: osUbuntu,
           },
         },
+        autoOnboard: false,
+        autoProvision: false,
       },
     });
     beforeEach(() => {
@@ -117,6 +121,8 @@ describe("<Details/>", () => {
             },
           },
         },
+        autoOnboard: false,
+        autoProvision: false,
       },
     });
     beforeEach(() => {

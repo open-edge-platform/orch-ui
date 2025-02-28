@@ -4,14 +4,16 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { StoreUtils } from "../../utils";
-import { hostTwoGuid } from "../data/ids";
+import {
+  assignedWorkloadHostTwoUuid as hostTwoGuid,
+  regionUsWestId,
+} from "../data";
 import { metadataExample } from "../data/metadatas";
-import { hostFourMetadata, hostTwo } from "./hosts";
-import { regionUsWestId } from "./iaasIds";
+import { assignedWorkloadHostFour as hostTwo, hostFourMetadata } from "./hosts";
 import { instanceOne, instanceTwo } from "./instances";
 import { osUbuntu } from "./osresources";
 import { siteRestaurantTwo, siteSantaClara } from "./sites";
+import { StoreUtils } from "./utils";
 
 describe("The Utils", () => {
   describe("convert host", () => {

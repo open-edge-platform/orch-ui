@@ -4,7 +4,11 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { hostTwo, siteMinimartTwo, siteMinimartTwoName } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostTwo as hostTwo,
+  siteMinimartTwo,
+  siteMinimartTwoName,
+} from "@orch-ui/utils";
 import { store } from "../../store/store";
 import HostsTable from "../organism/HostsTable/HostsTable";
 import HostEdit from "./HostEdit";

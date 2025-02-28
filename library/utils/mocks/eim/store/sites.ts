@@ -4,13 +4,11 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { BaseStore } from "./baseStore";
 import {
   regionAshlandId,
   regionChicagoId,
   regionColumbusId,
   regionDaytonId,
-  regionEuId,
   regionPortlandId,
   regionSalemId,
   regionUsEastId,
@@ -31,7 +29,8 @@ import {
   siteSantaClaraId,
   siteStoreId,
   siteStoreName,
-} from "./iaasIds";
+} from "../data";
+import { BaseStore } from "./baseStore";
 import {
   regionAshland,
   regionChicago,
@@ -304,48 +303,12 @@ export const updateSite = {
   siteLng: 0,
 };
 
-/**
- * @deprecated
- */
-export const sites: { [regionId: string]: eim.Site[] } = {
-  [regionUsWestId]: [sitePortland, siteSantaClara, siteRestaurantOne],
-  [regionUsEastId]: [siteBoston],
-  [regionEuId]: [],
-};
-
-/**
- * @deprecated
- */
-export const getSitesByRegion = (
-  regionId: string,
-): eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse => {
-  return {
-    hasNext: false,
-    sites: sites[regionId],
-    totalElements: 9,
-  };
-};
-
-/**
- * @deprecated
- */
-const all: eim.Site[] = Object.keys(sites).reduce((s: eim.Site[], regionId) => {
-  return [...s, ...sites[regionId]];
-}, []);
-
-/**
- * @deprecated
- */
-export const allSites: eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse =
-  {
-    hasNext: false,
-    sites: all,
-    totalElements: 9,
-  };
-
 export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
   constructor() {
     super("resourceId", [
+      sitePortland,
+      siteSantaClara,
+      siteBoston,
       siteRestaurantOne,
       siteRestaurantTwo,
       siteRestaurantThree,
@@ -366,10 +329,37 @@ export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
 
   convert(body: eim.SiteWrite, id?: string): eim.SiteRead {
     const randomString = StoreUtils.randomString();
-    return {
-      siteID: id ?? `site-${randomString}`,
-      resourceId: id ?? `site-${randomString}`,
-      ...body,
+    const siteID = id ?? `site-${randomString}`;
+    const currentTime = new Date().toISOString();
+    const timestamps = {
+      createdAt: currentTime,
+      updatedAt: currentTime,
     };
+    const resultSite: eim.SiteRead = {
+      siteID,
+      resourceId: siteID,
+      ...body,
+      timestamps,
+      provider: {
+        // TODO: Create a store for Providers
+        name: `provider-${siteID}`,
+        apiEndpoint: "",
+        providerKind: "PROVIDER_KIND_BAREMETAL",
+        timestamps,
+      },
+      ou: {
+        // TODO: Create a store for OUs
+        resourceId: `ou-${siteID}`,
+        ouID: `ou-${siteID}`,
+        name: `ou-${siteID}`,
+        parentOu: undefined,
+        inheritedMetadata: [],
+        metadata: [],
+        timestamps,
+      },
+      region: body.region as eim.RegionRead,
+    };
+
+    return resultSite;
   }
 }

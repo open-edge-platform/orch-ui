@@ -6,7 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import { CounterWheelPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { unconfiguredHostOne, unconfiguredHostTwo } from "@orch-ui/utils";
+import { onboardedHostOne, onboardedHostTwo } from "@orch-ui/utils";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
@@ -27,7 +27,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
     route,
     statusCode: 200,
     response: {
-      hosts: [unconfiguredHostOne, unconfiguredHostTwo],
+      hosts: [onboardedHostOne, onboardedHostTwo],
     } as eim.GetV1ProjectsByProjectNameComputeHostsApiResponse,
   },
   hostsListError400: {

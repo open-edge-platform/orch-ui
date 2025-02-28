@@ -15,13 +15,6 @@ describe("<Gpu />", () => {
     deviceName: "deviceName",
     product: "model",
     pciId: "pci_identifier",
-    status: {
-      condition: "condition",
-      timestamp: "timestamp",
-      type: "STATUS_CONDITION_RUNNING",
-      details: "details",
-      reason: "reason",
-    },
     vendor: "vendor",
   };
   describe("with well formatted data", () => {

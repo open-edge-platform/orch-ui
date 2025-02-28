@@ -12,12 +12,41 @@ import {
 import { capitalize } from "lodash";
 
 export type HostGenericStatuses = {
+  /** indicator: host.hostStatusIndicator, message: host.hostStatus, timestamp: host.hostStatusTimestamp */
   hostStatus?: GenericStatus;
+  /** indicator: host.onboardingStatusIndicator, message: host.onboardingStatus, timestamp: host.onboardingStatusTimestamp */
   onboardingStatus?: GenericStatus;
+  /** indicator: host.instanceStatusIndicator, message: host.instanceStatus, timestamp: host.instanceStatusTimestamp */
   instanceStatus?: GenericStatus;
+  /** indicator: host.provisioningStatusIndicator, message: host.provisioningStatus, timestamp: host.provisioningStatusTimestamp */
   provisioningStatus?: GenericStatus;
+  /** indicator: host.updateStatusIndicator, message: host.updateStatus, timestamp: host.updateStatusTimestamp */
   updateStatus?: GenericStatus;
+  /** indicator: host.registrationStatusIndicator, message: host.registrationStatus, timestamp: host.registrationStatusTimestamp */
   registrationStatus?: GenericStatus;
+};
+
+export const hostStatusIndicatorToIconStatus = (
+  host: eim.HostRead,
+): IconStatus => {
+  switch (host.hostStatusIndicator) {
+    case "STATUS_INDICATION_IN_PROGRESS":
+      return IconStatus.NotReady;
+    case "STATUS_INDICATION_IDLE":
+      return IconStatus.Ready;
+    case "STATUS_INDICATION_ERROR":
+      return IconStatus.Error;
+    case "STATUS_INDICATION_UNSPECIFIED":
+      return IconStatus.Unknown;
+    default:
+      return IconStatus.Unknown;
+  }
+};
+
+/** TODO: This is created to avoid any error on new api and old coder environment */
+const getMessageByGenericStatus = (status: any) => {
+  // in below line message: host.hostStatus; This will show Error in Old coder of MI API (in orch-deploy)
+  return typeof status == "string" ? status : (status as GenericStatus).message;
 };
 
 export const hostToStatuses = (
@@ -27,67 +56,58 @@ export const hostToStatuses = (
   const hgs: HostGenericStatuses = {};
   if (host.hostStatus) {
     hgs.hostStatus = {
-      indicator: host.hostStatus.indicator,
-      message: host.hostStatus.message,
-      timestamp: host.hostStatus.timestamp,
+      indicator: host.hostStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
+      message: getMessageByGenericStatus(host.hostStatus),
+      timestamp: host.hostStatusTimestamp,
     };
   }
   if (host.onboardingStatus) {
     hgs.onboardingStatus = {
-      indicator: host.onboardingStatus.indicator,
-      message: host.onboardingStatus.message,
-      timestamp: host.onboardingStatus.timestamp,
+      indicator:
+        host.onboardingStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
+      message: getMessageByGenericStatus(host.onboardingStatus),
+      timestamp: host.onboardingStatusTimestamp,
     };
   }
 
   if (host.registrationStatus) {
     hgs.registrationStatus = {
-      indicator: host.registrationStatus.indicator,
-      message: host.registrationStatus.message,
-      timestamp: host.registrationStatus.timestamp,
+      indicator:
+        host.registrationStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
+      message: getMessageByGenericStatus(host.registrationStatus),
+      timestamp: host.registrationStatusTimestamp,
     };
   }
 
   if (instance) {
     if (instance.instanceStatus) {
       hgs.instanceStatus = {
-        indicator: instance.instanceStatus.indicator,
-        message: instance.instanceStatus.message,
-        timestamp: instance.instanceStatus.timestamp,
+        indicator:
+          instance.instanceStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
+        message: getMessageByGenericStatus(instance.instanceStatus),
+        timestamp: instance.instanceStatusTimestamp,
       };
     }
     if (instance.provisioningStatus) {
       hgs.provisioningStatus = {
-        indicator: instance.provisioningStatus.indicator,
-        message: instance.provisioningStatus.message,
-        timestamp: instance.provisioningStatus.timestamp,
+        indicator:
+          instance.provisioningStatusIndicator ??
+          "STATUS_INDICATION_UNSPECIFIED",
+        message: getMessageByGenericStatus(instance.provisioningStatus),
+        timestamp: instance.provisioningStatusTimestamp,
       };
     }
     if (instance.updateStatus) {
       hgs.updateStatus = {
-        indicator: instance.updateStatus.indicator,
-        message: instance.updateStatus.message,
-        timestamp: instance.updateStatus.timestamp,
+        indicator:
+          instance.updateStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
+        message: getMessageByGenericStatus(instance.updateStatus),
+        timestamp: instance.updateStatusTimestamp,
       };
     }
   }
   return hgs;
 };
-
-/**
- * @deprecated
- */
-type HostStatus = eim.HostRead["hostStatus"];
-
-/**
- * @deprecated
- */
-export enum Status {
-  Ready = "ready",
-  NotReady = "not-ready",
-  Error = "error",
-  Unknown = "unknown",
-}
 
 /** Generate cluster name on the spot for a single-host, via site name and host name. */
 export const generateClusterName = (siteName: string, hostName: string) =>
@@ -103,15 +123,6 @@ export const isHostAssigned = (instances: eim.InstanceRead[]): boolean => {
     ),
   );
   return result;
-};
-
-export const hostStatusToString = (
-  status?: eim.Status["type"] | eim.GenericStatusRead["indicator"],
-) => {
-  if (!status) {
-    return "Unspecified";
-  }
-  return capitalize(status.replace("STATUS_CONDITION_", "").toLowerCase());
 };
 
 export const inheritedScheduleToString = (
@@ -145,92 +156,6 @@ export const scheduleStatusToString = (status?: eim.ScheduleStatus) => {
     .split(" ")
     .map(capitalize)
     .join(" ");
-};
-
-export const hostStatusToIconStatus = (status?: eim.Status["type"]): Status => {
-  switch (status) {
-    case "STATUS_CONDITION_RUNNING":
-      return Status.Ready;
-
-    case "STATUS_CONDITION_ERROR":
-    case "STATUS_CONDITION_STOPPED":
-    case "STATUS_CONDITION_DELETED":
-      return Status.Error;
-    default:
-      return Status.Unknown;
-  }
-};
-
-/** Decide the text to display for aggregated host status (actual host status, host in maintenance and host licensing) */
-export const hostProviderStatusToString = (host?: eim.HostRead): string => {
-  if (!host) {
-    return "Unspecified";
-  }
-
-  // If License is IDLE (or good or active),
-  // Priority 2: Show Maintenance if activated (Note: This case is handled as a seperate Logic with the use of `/schedules` apis, single or repeated).
-  // Priority 3: Display providerStatusDetails, if present.
-  else if (host.hostStatus?.indicator === "STATUS_INDICATION_UNSPECIFIED") {
-    return "Unspecified";
-  } else if (
-    host.instance?.provisioningStatus?.indicator != "STATUS_INDICATION_IDLE"
-  ) {
-    return host.instance?.provisioningStatus?.message || "Unspecified";
-  }
-  // Priority 3: Display Actual Host status
-  return capitalize(host.hostStatus?.message);
-};
-
-/**
- * @deprecated
- * Decide the icon color to display for aggregated host status (actual host status, host in maintenance and host licensing)
- * */
-export const hostProviderStatusToIconStatus = (
-  status?: HostStatus | eim.ScheduleStatus | eim.StatusIndicatorRead | string,
-): Status => {
-  switch (status) {
-    case "HOST_STATUS_BOOTING":
-    case "HOST_STATUS_PROVISIONING":
-    case "HOST_STATUS_REGISTERING":
-    case "HOST_STATUS_UPDATING":
-    case "STATUS_INDICATION_IN_PROGRESS":
-      return Status.NotReady;
-
-    case "HOST_STATUS_PROVISIONED":
-    case "HOST_STATUS_RUNNING":
-    case "STATUS_INDICATION_IDLE":
-      return Status.Ready;
-
-    case "HOST_STATUS_BOOT_FAILED":
-    case "HOST_STATUS_PROVISION_FAILED":
-    case "HOST_STATUS_ERROR":
-    case "HOST_STATUS_UPDATE_FAILED":
-    case "HOST_STATUS_CONNECTION_LOST":
-    case "STATUS_INDICATION_ERROR":
-      return Status.Error;
-
-    case "STATUS_INDICATION_UNSPECIFIED":
-      return Status.Unknown;
-
-    default:
-      return Status.Unknown;
-  }
-};
-
-// export const getObservabilityUrl = (): string | undefined => {
-//   return window.__RUNTIME_CONFIG__ &&
-//     window.__RUNTIME_CONFIG__.OBSERVABILITY_URL !== ""
-//     ? window.__RUNTIME_CONFIG__.OBSERVABILITY_URL
-//     : undefined;
-// };
-
-export const isOSUpdateAvailable = (instance: eim.InstanceRead | undefined) => {
-  const desiredOsId = instance?.desiredOs?.resourceId;
-  const currentOs = instance?.currentOs;
-  return (
-    currentOs?.osType === "OPERATING_SYSTEM_TYPE_IMMUTABLE" &&
-    currentOs?.resourceId !== desiredOsId
-  );
 };
 
 export const CONSTANTS = {
@@ -279,15 +204,24 @@ export const statusIndicatorToIconStatus = (
   }
 };
 
+export const isOSUpdateAvailable = (instance: eim.InstanceRead | undefined) => {
+  const desiredOsId = instance?.desiredOs?.resourceId;
+  const currentOs = instance?.currentOs;
+  return (
+    currentOs?.osType === "OPERATING_SYSTEM_TYPE_IMMUTABLE" &&
+    currentOs?.resourceId !== desiredOsId
+  );
+};
+
 const getHostProvisionMessages = (
-  provisioningStatus: eim.GenericStatusRead,
+  provisioningStatusIndicator?: eim.StatusIndicatorRead,
 ) => {
   const provisionedMsg = {
     title: "Host is provisioned",
     subTitle:
       "Host is configured and ready to use. Add a site and cluster to activate.",
   };
-  switch (provisioningStatus.indicator) {
+  switch (provisioningStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
       return {
         title: "Host provisioning in progress",
@@ -305,12 +239,14 @@ const getHostProvisionMessages = (
   }
 };
 
-const getHostOnboardingMessages = (onboardingStatus: eim.GenericStatusRead) => {
+const getHostOnboardingMessages = (
+  onboardingStatusIndicator?: eim.StatusIndicatorRead,
+) => {
   const onboardingMsg = {
     title: "Host is onboarded",
     subTitle: "Host is onboarded and ready to be provisioned.",
   };
-  switch (onboardingStatus.indicator) {
+  switch (onboardingStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
       return {
         title: "Host onboarding in progress",
@@ -329,13 +265,13 @@ const getHostOnboardingMessages = (onboardingStatus: eim.GenericStatusRead) => {
 };
 
 const getHostRegistrationMessages = (
-  registrationStatus: eim.GenericStatusRead,
+  registrationStatusIndicator?: eim.StatusIndicatorRead,
 ) => {
   const registrationMsg = {
     title: "Host is registered",
     subTitle: "Host is registered and ready to be onboarded.",
   };
-  switch (registrationStatus.indicator) {
+  switch (registrationStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
       return {
         title: "Host registration in progress",
@@ -372,7 +308,7 @@ export const genericHostStatusMessages = (
     host.instance?.resourceId &&
     host.instance?.provisioningStatus
   ) {
-    return getHostProvisionMessages(host.instance?.provisioningStatus);
+    return getHostProvisionMessages(host.instance?.provisioningStatusIndicator);
   }
 
   // onboarded host
@@ -381,7 +317,7 @@ export const genericHostStatusMessages = (
     !host.instance &&
     host.onboardingStatus
   ) {
-    return getHostOnboardingMessages(host.onboardingStatus);
+    return getHostOnboardingMessages(host.onboardingStatusIndicator);
   }
 
   // registered host
@@ -389,7 +325,7 @@ export const genericHostStatusMessages = (
     host.currentState === "HOST_STATE_REGISTERED" &&
     host.registrationStatus
   ) {
-    return getHostRegistrationMessages(host.registrationStatus);
+    return getHostRegistrationMessages(host.registrationStatusIndicator);
   }
 
   // Not connected host
@@ -397,4 +333,35 @@ export const genericHostStatusMessages = (
     title: "Host is not connected",
     subTitle: "Waiting for host to connect.",
   };
+};
+
+// --------------------------------------
+
+/** @deprecated  */
+export const hostStatusToString = (status?: eim.StatusIndicatorRead) => {
+  if (!status) {
+    return "Unspecified";
+  }
+  return capitalize(status.replace("STATUS_INDICATION_", "").toLowerCase());
+};
+
+/** Decide the text to display for aggregated host status (actual host status, host in maintenance and host licensing) */
+/** @deprecated  */
+export const hostProviderStatusToString = (host?: eim.HostRead): string => {
+  if (!host) {
+    return "Unspecified";
+  }
+
+  // If License is IDLE (or good or active),
+  // Priority 2: Show Maintenance if activated (Note: This case is handled as a seperate Logic with the use of `/schedules` apis, single or repeated).
+  // Priority 3: Display providerStatusDetails, if present.
+  else if (host.hostStatusIndicator === "STATUS_INDICATION_UNSPECIFIED") {
+    return "Unspecified";
+  } else if (
+    host.instance?.provisioningStatusIndicator != "STATUS_INDICATION_IDLE"
+  ) {
+    return host.instance?.provisioningStatus || "Unspecified";
+  }
+  // Priority 3: Display Actual Host status
+  return capitalize(host.hostStatus);
 };

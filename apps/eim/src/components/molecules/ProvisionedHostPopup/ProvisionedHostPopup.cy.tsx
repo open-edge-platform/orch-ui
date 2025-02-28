@@ -4,13 +4,13 @@
  */
 
 import {
-  hostOne,
+  assignedWorkloadHostOne as hostOne,
   IRuntimeConfig,
-  unconfiguredHostOne as provisionedHostOne,
+  provisionedHostOne,
+  workloadOne,
   workloadOneId,
 } from "@orch-ui/utils";
 // import { store } from "../../../store/store";
-import { workloadOne } from "library/utils/mocks/eim/store/workload";
 import ProvisionedHostPopup, {
   ProvisionedHostPopupProps,
 } from "./ProvisionedHostPopup";

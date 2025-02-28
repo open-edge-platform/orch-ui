@@ -4,7 +4,6 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { BaseStore } from "./baseStore";
 import {
   regionAshlandId,
   regionCaliforniaId,
@@ -19,7 +18,8 @@ import {
   regionUsEastId,
   regionUsMidwestId,
   regionUsWestId,
-} from "./iaasIds";
+} from "../data";
+import { BaseStore } from "./baseStore";
 import { SiteStore } from "./sites";
 import { StoreUtils } from "./utils";
 
@@ -210,10 +210,16 @@ export class RegionStore extends BaseStore<
 
   convert(body: eim.Region, id?: string): eim.RegionRead {
     const randomString = StoreUtils.randomString();
+    const currentTime = new Date().toISOString();
     return {
       ...body,
       regionID: id ?? `region-${randomString}`,
       resourceId: id ?? `region-${randomString}`,
+      timestamps: {
+        createdAt: currentTime,
+        updatedAt: currentTime,
+      },
+      parentRegion: body.parentRegion as eim.RegionRead,
     };
   }
 }

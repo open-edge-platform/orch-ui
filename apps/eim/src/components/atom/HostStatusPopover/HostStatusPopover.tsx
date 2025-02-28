@@ -20,8 +20,8 @@ import {
 } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import { useMemo } from "react";
-
 import "./HostStatusPopover.scss";
+
 export const dataCy = "hostStatusPopover";
 export interface HostStatusPopoverProps {
   data: eim.HostRead;

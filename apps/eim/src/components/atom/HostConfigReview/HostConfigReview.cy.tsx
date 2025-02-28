@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 import {
-  hostOne,
-  hostOneId,
-  hostSix,
-  hostSixId,
+  assignedWorkloadHostOne as hostOne,
+  assignedWorkloadHostOneId as hostOneId,
+  assignedWorkloadHostTwo as hostTwo,
+  assignedWorkloadHostTwoId as hostTwoId,
+  osRedHat,
+  osUbuntu,
   siteRestaurantOne,
   StoreUtils,
 } from "@orch-ui/utils";
@@ -30,18 +32,29 @@ describe("<HostConfigReview/>", () => {
           [hostOneId]: {
             ...hostOne,
             site: siteRestaurantOne, // multi configure is expected to have same site
-            instance: StoreUtils.convertToWriteInstance({
-              ...hostOne.instance, // ubuntu OS instance
-            }),
+            instance: {
+              ...StoreUtils.convertToWriteInstance({
+                ...hostOne.instance, // ubuntu OS instance
+              }),
+              os: osUbuntu,
+              securityFeature:
+                "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+            },
           },
-          [hostSixId]: {
-            ...hostSix,
+          [hostTwoId]: {
+            ...hostTwo,
             site: siteRestaurantOne,
-            instance: StoreUtils.convertToWriteInstance({
-              ...hostSix.instance, // redhat OS instance
-            }),
+            instance: {
+              ...StoreUtils.convertToWriteInstance({
+                ...hostTwo.instance, // redhat OS instance
+              }),
+              os: osRedHat,
+              securityFeature: "SECURITY_FEATURE_NONE",
+            },
           },
         },
+        autoOnboard: false,
+        autoProvision: false,
       },
     });
 

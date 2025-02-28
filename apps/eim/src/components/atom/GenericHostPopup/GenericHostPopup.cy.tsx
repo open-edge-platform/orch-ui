@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { hostOne } from "@orch-ui/utils";
+import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import GenericHostPopup from "./GenericHostPopup";
 import GenericHostPopupPom from "./GenericHostPopup.pom";
 

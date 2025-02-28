@@ -3,64 +3,83 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { eim } from "@orch-ui/apis";
+import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
-  allSites,
-  getSitesByRegion,
   regionUsWest,
-  regionUsWestId,
   sitePortland,
+  siteSantaClara,
+  SiteStore,
 } from "@orch-ui/utils";
 
-import { eim } from "@orch-ui/apis";
-import { TablePom } from "@orch-ui/components";
+interface ErrorResponse {
+  status?: number;
+  detail?: string;
+}
+
 const dataCySelectors = ["empty", "addSiteButton"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-type ApiAliases =
+type SiteListApiAliases =
   | "getAllSites"
+  | "getAllSitesEmpty"
   | "getAllSitesMocked"
   | "getAllSitesMockedWithFilter"
   | "getAllSitesMockedWithOffset"
   | "getAllSitesMockedSingle"
+  | "getSites404"
+  | "getSitesError500";
+type SiteApiAliases =
   | "getSitesByRegion"
   | "getSitesByRegionMocked"
   | "getSingleSite"
-  | "getSitesError500"
-  | "getAllSitesEmpty"
-  | "getSingleSiteMocked"
-  | "getSingleRegionMocked"
-  | "getSites404";
+  | "getSingleSiteMocked";
+type RegionApiAliases = "getSingleRegionMocked";
+type ApiAliases = SiteListApiAliases | SiteApiAliases | RegionApiAliases;
+
 const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites`;
 const routeAll = `${route}?*`;
 const routeSingle = `${route}/site-**`;
 const routeByRegion = `${route}?*regionID=**`;
+const siteStore = new SiteStore();
+const siteMocks = siteStore.list();
+const siteResponse = {
+  sites: siteMocks,
+  hasNext: false,
+  totalElements: siteMocks.length,
+};
 
-const endpoints: CyApiDetails<ApiAliases> = {
+const sitesEndpoints: CyApiDetails<
+  SiteListApiAliases,
+  | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  | ErrorResponse
+> = {
   getAllSites: {
     route: routeAll,
   },
   getAllSitesMocked: {
     route: routeAll,
     statusCode: 200,
-    response: { ...allSites, totalElements: 20 },
+    response: siteResponse,
   },
   getAllSitesMockedWithFilter: {
     route: `${routeAll}filter=name%3D%22testingSearch%22%20OR%20resourceId%3D%22testingSearch%22%20OR%20region.name%3D%22testingSearch%22%20OR%20region.resourceId%3D%22testingSearch%22&offset=0&orderBy=name%20asc&pageSize=10`,
     statusCode: 200,
-    response: allSites,
+    response: siteResponse,
   },
   getAllSitesMockedWithOffset: {
     route: `${routeAll}offset=10&pageSize=10`,
     statusCode: 200,
-    response: { ...allSites, totalElements: 20 },
+    response: siteResponse,
   },
   getAllSitesEmpty: {
     route: routeAll,
     statusCode: 200,
     response: {
       sites: [],
+      hasNext: false,
       totalElements: 0,
     },
   },
@@ -69,36 +88,19 @@ const endpoints: CyApiDetails<ApiAliases> = {
     statusCode: 200,
     response: {
       sites: [sitePortland],
+      hasNext: false,
       totalElements: 1,
     },
-  },
-  getSitesByRegion: {
-    route: routeByRegion,
-  },
-  getSitesByRegionMocked: {
-    route: routeByRegion,
-    statusCode: 200,
-    response: getSitesByRegion(regionUsWestId),
-  },
-  getSingleSite: {
-    route: routeSingle,
-  },
-  getSingleSiteMocked: {
-    route: routeSingle,
-    statusCode: 200,
-    response: sitePortland,
-  },
-  getSingleRegionMocked: {
-    route: "**/regions/*",
-    statusCode: 200,
-    response: regionUsWest,
   },
   getSitesError500: {
     route: routeAll,
     statusCode: 500,
-    response: allSites,
+    response: {
+      detail:
+        'rpc error: code = NotFound desc = No resources found for filter: client_uuid:"9dfa85f8-1e80-4c13-bc57-020ad8d49177"  filter:{kind:RESOURCE_KIND_REGION  limit:20}',
+      status: 404,
+    },
   },
-
   getSites404: {
     route: routeAll,
     statusCode: 404,
@@ -110,11 +112,48 @@ const endpoints: CyApiDetails<ApiAliases> = {
   },
 };
 
+const singleSiteEndpoints: CyApiDetails<
+  SiteApiAliases,
+  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+> = {
+  getSingleSite: {
+    route: routeSingle,
+  },
+  getSingleSiteMocked: {
+    route: routeSingle,
+    statusCode: 200,
+    response: sitePortland,
+  },
+  getSitesByRegion: {
+    route: routeByRegion,
+  },
+  getSitesByRegionMocked: {
+    route: routeByRegion,
+    statusCode: 200,
+    response: siteSantaClara,
+  },
+};
+
+const singleRegionEndpoints: CyApiDetails<
+  RegionApiAliases,
+  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse
+> = {
+  getSingleRegionMocked: {
+    route: "**/regions/*",
+    statusCode: 200,
+    response: regionUsWest,
+  },
+};
+
 class SitesTablePom extends CyPom<Selectors, ApiAliases> {
   public table = new SiTablePom("sitesTable");
   public _table = new TablePom("sitesTable");
   constructor(public rootCy: string = "sitesTable") {
-    super(rootCy, [...dataCySelectors], endpoints);
+    super(rootCy, [...dataCySelectors], {
+      ...singleRegionEndpoints,
+      ...singleSiteEndpoints,
+      ...sitesEndpoints,
+    });
   }
 
   public select(site: eim.SiteRead) {

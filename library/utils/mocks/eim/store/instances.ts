@@ -4,42 +4,38 @@
  */
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
-import { BaseStore } from "./baseStore";
-import {
-  hostFive,
-  hostFour,
-  hostOne,
-  hostSix,
-  hostThree,
-  hostTwo,
-  registeredHostOne,
-  unassignedHostOne,
-  unassignedHostThree,
-  unassignedHostTwo,
-  unconfiguredHostWithInstanceNoName,
-  unconfiguredHostWithInstanceOne,
-} from "./hosts";
+import { clusterFiveName } from "../../cluster-orch/data/clusterOrchIds";
 import {
   instanceFiveId,
   instanceFourId,
+  instanceOnboardedOneId,
   instanceOneId,
   instanceSixId,
   instanceThreeId,
   instanceTwoId,
-  instanceUnassignedOneId,
-  instanceUnassignedThreeId,
-  instanceUnassignedTwoId,
-  instanceUnconfiguredOneId,
+  provisionedInstanceOneId,
+  provisionedInstanceThreeId,
+  provisionedInstanceTwoId,
   workloadFourId,
   workloadOneId,
   workloadSixId,
   workloadThreeId,
   workloadTwoId,
   workloadUnspecifiedOneId,
-} from "./iaasIds";
+} from "../data";
+import { BaseStore } from "./baseStore";
+import {
+  assignedWorkloadHostFour,
+  assignedWorkloadHostOne,
+  assignedWorkloadHostThree,
+  assignedWorkloadHostTwo,
+  provisionedHostOne,
+  provisionedHostThree,
+  provisionedHostTwo,
+  registeredHostOne,
+} from "./hosts";
 import { osRedHat, osTiber, osTiberUpdate, osUbuntu } from "./osresources";
 import {
-  clusterFiveName,
   workloadFive,
   workloadFour,
   workloadOne,
@@ -54,11 +50,9 @@ export const instanceOne: enhancedEimSlice.InstanceReadModified = {
   instanceID: instanceOneId,
   resourceId: instanceOneId,
   name: "Instance One",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: osUbuntu,
   currentOs: osUbuntu,
@@ -78,11 +72,9 @@ export const instanceTwo: enhancedEimSlice.InstanceReadModified = {
   instanceID: instanceTwoId,
   resourceId: instanceTwoId,
   name: "Instance Two",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: osTiber,
   currentOs: osTiber,
@@ -108,13 +100,11 @@ export const instanceThree: enhancedEimSlice.InstanceReadModified = {
   instanceID: instanceThreeId,
   resourceId: instanceThreeId,
   name: "Instance Three",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
-  os: osUbuntu,
+  os: osRedHat,
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
@@ -130,11 +120,9 @@ export const instanceFour: enhancedEimSlice.InstanceReadModified = {
   instanceID: instanceFourId,
   resourceId: instanceFourId,
   name: "Instance Four",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: osUbuntu,
   workloadMembers: [
@@ -162,21 +150,15 @@ export const instanceFive: enhancedEimSlice.InstanceReadModified = {
       workload: workloadFive,
     },
   ],
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: +new Date(),
-  },
-  updateStatus: {
-    indicator: "STATUS_INDICATION_ERROR",
-    message: "Update Failed",
-    timestamp: +new Date(),
-  },
-  provisioningStatus: {
-    indicator: "STATUS_INDICATION_IN_PROGRESS",
-    message: "Provisioning In Progress",
-    timestamp: +new Date(),
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: +new Date(),
+  updateStatusIndicator: "STATUS_INDICATION_ERROR",
+  updateStatus: "Update Failed",
+  updateStatusTimestamp: +new Date(),
+  provisioningStatusIndicator: "STATUS_INDICATION_IN_PROGRESS",
+  provisioningStatus: "Provisioning In Progress",
+  provisioningStatusTimestamp: +new Date(),
   desiredState: "INSTANCE_STATE_RUNNING",
 };
 
@@ -184,11 +166,9 @@ export const instanceSix: enhancedEimSlice.InstanceReadModified = {
   instanceID: instanceSixId,
   resourceId: instanceSixId,
   name: "Instance Six",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   securityFeature: "SECURITY_FEATURE_NONE",
   os: osRedHat,
@@ -210,57 +190,49 @@ export const instanceSix: enhancedEimSlice.InstanceReadModified = {
 };
 
 // Unassigned Hosts: Below Instance must have no workloadMemberIds
-export const instanceUnassignedOne: enhancedEimSlice.InstanceReadModified = {
-  instanceID: instanceUnassignedOneId,
-  resourceId: instanceUnassignedOneId,
+export const provisionedInstanceOne: enhancedEimSlice.InstanceReadModified = {
+  instanceID: provisionedInstanceOneId,
+  resourceId: provisionedInstanceOneId,
   name: "Instance Unassign One",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   desiredState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
 };
 
-export const instanceUnassignedTwo: enhancedEimSlice.InstanceReadModified = {
-  instanceID: instanceUnassignedTwoId,
-  resourceId: instanceUnassignedTwoId,
+export const provisionedInstanceTwo: enhancedEimSlice.InstanceReadModified = {
+  instanceID: provisionedInstanceTwoId,
+  resourceId: provisionedInstanceTwoId,
   name: "Instance Unassign Two",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   desiredState: "INSTANCE_STATE_RUNNING",
   os: osRedHat,
 };
 
-export const instanceUnassignedThree: enhancedEimSlice.InstanceReadModified = {
-  instanceID: instanceUnassignedThreeId,
-  resourceId: instanceUnassignedThreeId,
+export const provisionedInstanceThree: enhancedEimSlice.InstanceReadModified = {
+  instanceID: provisionedInstanceThreeId,
+  resourceId: provisionedInstanceThreeId,
   name: "Instance Unassign Three",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_ERROR",
-    message: "Error message",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_ERROR",
+  instanceStatus: "Error message",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_UNSPECIFIED",
   desiredState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
 };
 
-export const instanceUnconfiguredOne: enhancedEimSlice.InstanceReadModified = {
-  instanceID: instanceUnconfiguredOneId,
-  resourceId: instanceUnconfiguredOneId,
-  name: "Instance Unconfigured One",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_ERROR",
-    message: "Error message",
-    timestamp: 1717761389,
-  },
+export const instanceOnboardedOne: enhancedEimSlice.InstanceReadModified = {
+  instanceID: instanceOnboardedOneId,
+  resourceId: instanceOnboardedOneId,
+  name: "Instance Onboarded One",
+  instanceStatusIndicator: "STATUS_INDICATION_ERROR",
+  instanceStatus: "Error message",
+  instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_UNSPECIFIED",
   os: osUbuntu,
 };
@@ -272,22 +244,18 @@ export const instanceUnspecified: enhancedEimSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   name: "",
   os: osUbuntu,
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_UNSPECIFIED",
-    message: "Unknown",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
+  instanceStatus: "Unknown",
+  instanceStatusTimestamp: 1717761389,
 };
 
 export const registeredInstanceOne: enhancedEimSlice.InstanceReadModified = {
   instanceID: "registered-host-1",
   resourceId: "registered-host-1",
   name: "Instance One",
-  instanceStatus: {
-    indicator: "STATUS_INDICATION_IDLE",
-    message: "Running",
-    timestamp: 1717761389,
-  },
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
+  instanceStatus: "Running",
+  instanceStatusTimestamp: 1717761389,
   desiredState: "INSTANCE_STATE_UNTRUSTED",
   kind: "INSTANCE_KIND_METAL",
   os: osUbuntu,
@@ -311,7 +279,7 @@ export class InstanceStore extends BaseStore<
 
   constructor() {
     const instanceList = [
-      // Assigned Instance: with workload not null
+      // Instance for Provisioned Host with cluster/workload
       instanceOne,
       instanceTwo,
       instanceThree,
@@ -319,36 +287,23 @@ export class InstanceStore extends BaseStore<
       instanceFive,
       instanceSix,
 
-      // Unassigned Instance: With no associated workload
-      instanceUnassignedOne,
-      instanceUnassignedTwo,
-      instanceUnassignedThree,
-
-      // Unconfigured Host Instance
-      instanceUnconfiguredOne,
-      instanceUnspecified,
-
-      //registered
-      registeredInstanceOne,
+      // Instance for Provisioned Host without cluster/workload
+      provisionedInstanceOne,
+      provisionedInstanceTwo,
+      provisionedInstanceThree,
     ];
 
     const hostList = [
-      // Assigned Host: with workload not null
-      hostOne,
-      hostTwo,
-      hostThree,
-      hostFour,
-      hostFive,
-      hostSix, //host-v9eyx73m
+      // Instance for Provisioned Host with cluster/workload
+      assignedWorkloadHostOne,
+      assignedWorkloadHostTwo,
+      assignedWorkloadHostThree,
+      assignedWorkloadHostFour,
 
-      // Unassigned Host: With no associated workload
-      unassignedHostOne,
-      unassignedHostTwo,
-      unassignedHostThree,
-
-      // Unconfigured Host
-      unconfiguredHostWithInstanceOne,
-      unconfiguredHostWithInstanceNoName,
+      // Instance for Provisioned Host without cluster/workload
+      provisionedHostOne,
+      provisionedHostTwo,
+      provisionedHostThree,
 
       registeredHostOne,
     ];
@@ -370,56 +325,56 @@ export class InstanceStore extends BaseStore<
     }
   }
 
-  convert(body: eim.Instance): enhancedEimSlice.InstanceReadModified {
+  convert(
+    body: eim.Instance,
+    id?: string,
+    host?: eim.HostRead,
+    os?: eim.OperatingSystemResourceRead,
+    localAccount?: eim.LocalAccountRead,
+  ): enhancedEimSlice.InstanceReadModified {
     const currentTime = +new Date();
     return {
       ...body,
-      instanceStatus: {
-        indicator: body.instanceStatus?.indicator ?? "STATUS_INDICATION_IDLE",
-        message: "Running",
-        timestamp: currentTime,
-      },
-      updateStatus: {
-        indicator: body.updateStatus?.indicator ?? "STATUS_INDICATION_ERROR",
-        message: "Failed",
-        timestamp: currentTime,
-      },
-      provisioningStatus: {
-        indicator:
-          body.provisioningStatus?.indicator ?? "STATUS_INDICATION_IN_PROGRESS",
-        message: "Provisioning In Progress",
-        timestamp: currentTime,
-      },
-      host: {
-        ...body.host,
-        resourceId:
-          (body.host as eim.HostRead).resourceId ??
-          `host-${this.instanceIndex++}`,
-        name: body.host?.name ?? `host-${this.instanceIndex++}-name`,
-        currentPowerState: "POWER_STATE_ON",
-        instance: undefined,
-        onboardingStatus: {
-          indicator:
-            body.host?.onboardingStatus?.indicator ??
-            "STATUS_INDICATION_UNSPECIFIED",
-          message: "Host executing normally!",
-          timestamp: currentTime,
-        },
-        hostStatus: {
-          indicator:
-            body.host?.hostStatus?.indicator ?? "STATUS_INDICATION_UNSPECIFIED",
-          message: "Host executing normally!",
-          timestamp: currentTime,
-        },
-        registrationStatus: {
-          indicator:
-            body.host?.registrationStatus?.indicator ??
-            "STATUS_INDICATION_UNSPECIFIED",
-          message: "Host executing normally!",
-          timestamp: currentTime,
-        },
+      resourceId: id,
+      instanceStatusIndicator:
+        body.instanceStatusIndicator ?? "STATUS_INDICATION_IDLE",
+      instanceStatus: "Running",
+      instanceStatusTimestamp: currentTime,
+      updateStatusIndicator:
+        body.updateStatusIndicator ?? "STATUS_INDICATION_ERROR",
+      updateStatus: "Failed",
+      updateStatusTimestamp: currentTime,
+      provisioningStatusIndicator:
+        body.provisioningStatusIndicator ?? "STATUS_INDICATION_IN_PROGRESS",
+      provisioningStatus: "Provisioning In Progress",
+      provisioningStatusTimestamp: currentTime,
+      host: host ?? (body.host as eim.HostRead),
+      os: os ?? (body.currentOs as eim.OperatingSystemResourceRead),
+      currentOs: os ?? (body.currentOs as eim.OperatingSystemResourceRead),
+      desiredOs: os ?? (body.desiredOs as eim.OperatingSystemResourceRead),
+      localAccount: localAccount ?? (body.localAccount as eim.LocalAccountRead),
+      timestamps: {
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       },
     };
+  }
+
+  post(
+    body: eim.Instance,
+    host?: eim.HostRead,
+    os?: eim.OperatingSystemResourceRead,
+    localAccount?: eim.LocalAccountRead,
+  ) {
+    const data = this.convert(
+      body,
+      `instance-${this.instanceIndex++}`,
+      host,
+      os,
+      localAccount,
+    );
+    this.resources.push(data);
+    return data;
   }
 
   list(params?: {

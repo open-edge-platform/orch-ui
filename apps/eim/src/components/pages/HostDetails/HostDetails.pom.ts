@@ -3,18 +3,15 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { eim } from "@orch-ui/apis";
+import { MetadataDisplayPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
-  hostNoName,
-  hostTwo,
+  assignedWorkloadHostTwo as hostTwo,
   instanceTwo,
   repeatedScheduleOne,
   SiteStore,
 } from "@orch-ui/utils";
-
-import { eim } from "@orch-ui/apis";
-
-import { MetadataDisplayPom } from "@orch-ui/components";
 import HostDetailsActionsPom from "../../organism/hosts/HostDetailsActions/HostDetailsActions.pom";
 import HostDetailsTabPom from "../../organism/hosts/HostDetailsTab/HostDetailsTab.pom";
 
@@ -70,6 +67,10 @@ mockHostNoHostLabels.metadata = [];
 
 const mockHostNoSite = structuredClone(mockHost);
 mockHostNoSite.site = undefined;
+export const hostNoName: eim.HostRead = {
+  ...mockHost,
+  name: "",
+};
 
 // Maintenance Schedule test mock
 const emptyResponse = {

@@ -23,17 +23,6 @@ describe("<ScheduleMaintenanceSubComponent/>", () => {
     pom.root.should("exist");
   });
 
-  it("for open-ended disabled maintenance", () => {
-    cy.mount(
-      <ScheduleMaintenanceSubComponent maintenance={noRepeatMaintenance} />,
-    );
-    pom.el.scheduleType.should("have.text", "Does not Repeat");
-    pom.el.startTime.should("have.text", "11:43 PM");
-    pom.el.startDate.should("have.text", "6/30/2023");
-    pom.el.endTime.should("have.text", "11:46 PM");
-    pom.el.endDate.should("have.text", "6/30/2023");
-  });
-
   describe("Local timezone testing", () => {
     // NOTE: timezone test doesnot work on windows due to a cypress bug in `cyVersion > 9.1.1`
     // Refer to Issue: https://github.com/cypress-io/cypress/issues/1043
@@ -41,6 +30,17 @@ describe("<ScheduleMaintenanceSubComponent/>", () => {
       // TODO: Timezone/time tests are skipped on Windows environment! Check alternative way to set timezone for cypress in windows.
       return;
     }
+
+    it("for open-ended disabled maintenance", () => {
+      cy.mount(
+        <ScheduleMaintenanceSubComponent maintenance={noRepeatMaintenance} />,
+      );
+      pom.el.scheduleType.should("have.text", "Does not Repeat");
+      pom.el.startTime.should("have.text", "11:43 PM");
+      pom.el.startDate.should("have.text", "6/30/2023");
+      pom.el.endTime.should("have.text", "11:46 PM");
+      pom.el.endDate.should("have.text", "6/30/2023");
+    });
 
     describe("should render subcomponent single-schedule maintenance (with no end-time)", () => {
       beforeEach(() => {

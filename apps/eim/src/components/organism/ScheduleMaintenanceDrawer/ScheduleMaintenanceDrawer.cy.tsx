@@ -4,7 +4,11 @@
  */
 
 import { enhancedEimSlice } from "@orch-ui/apis";
-import { hostFour, hostOne, hostTwo } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostFour as hostFour,
+  assignedWorkloadHostOne as hostOne,
+  assignedWorkloadHostTwo as hostTwo,
+} from "@orch-ui/utils";
 import { ScheduleMaintenanceDrawer } from "./ScheduleMaintenanceDrawer";
 import { ScheduleMaintenanceDrawerPom } from "./ScheduleMaintenanceDrawer.pom";
 

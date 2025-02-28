@@ -4,7 +4,7 @@
  */
 
 import { cyGet } from "@orch-ui/tests";
-import { hostThree } from "@orch-ui/utils";
+import { assignedWorkloadHostThree as hostThree } from "@orch-ui/utils";
 import ResourceDetails, { ResourceTypeTitle } from "./ResourceDetails";
 import ResourceDetailsPom from "./ResourceDetails.pom";
 

@@ -130,10 +130,13 @@ export const RegionSiteTree = ({
     {
       projectName: SharedStorage.project?.name ?? "",
       orderBy: ORDER_BY,
-      regionId: currentRegionId,
+      regionId: currentRegionId ?? "",
       filter: `region.resourceId="${currentRegionId}"`,
     },
-    { skip: shouldSkipSiteApi || !SharedStorage.project?.name },
+    {
+      // This will skip above api if region or project is missing
+      skip: shouldSkipSiteApi || !SharedStorage.project?.name,
+    },
   );
 
   const hasRegionResults = !isFetchingRegions && regions;

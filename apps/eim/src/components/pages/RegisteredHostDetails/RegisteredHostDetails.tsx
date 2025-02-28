@@ -44,13 +44,12 @@ export const RegisteredHostDetails = () => {
       serialNumber = "N/A",
       uuid = "N/A",
       desiredState,
-      hostStatus,
+      hostStatusTimestamp,
     } = host;
 
-    const humanReadableTimestamp =
-      hostStatus && hostStatus?.timestamp
-        ? moment.unix(hostStatus.timestamp).format("YYYY-DD-MM HH:mm:ss")
-        : "Unavailable";
+    const humanReadableTimestamp = hostStatusTimestamp
+      ? moment.unix(hostStatusTimestamp).format("YYYY-DD-MM HH:mm:ss")
+      : "Unavailable";
 
     return (
       <div {...cy} className={className}>

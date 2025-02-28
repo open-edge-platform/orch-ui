@@ -8,11 +8,17 @@ import { AppDispatch } from "../../../store/store";
 import HostsStatusByCluster from "./HostsStatusByCluster";
 import HostsStatusByClusterPom from "./HostsStatusByCluster.pom";
 
-const createMockHost = (status: eim.GenericStatusRead): eim.HostRead => {
+const createMockHost = (status: {
+  indicator?: eim.StatusIndicatorRead;
+  message?: string;
+  timestamp?: number;
+}): eim.HostRead => {
   return {
     resourceId: "test-host",
     name: "Test Host",
-    hostStatus: status,
+    hostStatus: status.message,
+    hostStatusIndicator: status.indicator,
+    hostStatusTimestamp: status.timestamp,
   };
 };
 

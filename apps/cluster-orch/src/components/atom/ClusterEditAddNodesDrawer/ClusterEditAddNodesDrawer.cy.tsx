@@ -5,7 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
-import { clusterOne, unassignedHostOne } from "@orch-ui/utils";
+import { clusterOne, provisionedHostOne } from "@orch-ui/utils";
 import React from "react";
 import { store } from "../../../store";
 import ClusterEditAddNodesDrawer from "./ClusterEditAddNodesDrawer";
@@ -26,7 +26,7 @@ const HostTableRemoteMock = ({
   return (
     <Table
       columns={columns}
-      data={[unassignedHostOne]}
+      data={[provisionedHostOne]}
       canSelectRows
       selectedIds={selectedHostIds}
       onSelect={(host, isSelected) => {
@@ -37,7 +37,7 @@ const HostTableRemoteMock = ({
 };
 
 const pom = new ClusterEditAddNodesDrawerPom();
-describe("<ClusterEditNodeDetailsDrawer/>", () => {
+describe("<ClusterEditAddNodeDetailsDrawer/>", () => {
   const LazyHostTableMockRemote: React.LazyExoticComponent<
     React.ComponentType<any>
   > | null = React.lazy(() =>
@@ -76,12 +76,12 @@ describe("<ClusterEditNodeDetailsDrawer/>", () => {
       pom.el.okBtn.click();
       cy.get("@saveNode").should("be.calledWith", [
         {
-          id: "host-unassign1",
-          serial: "ec269d77-9b98-bda3-2f68-61fe4428a8da",
+          guid: "4c4c4544-0044-4210-8031-c2c04f3052pa",
+          id: "host-provisioned-1",
+          name: "host-provisioned-1",
           os: "Ubuntu",
-          name: "host-unassign1",
-          guid: "4c4c4544-0044-4210-8031-c2c04f305239",
           role: "all",
+          serial: "CYTDAA",
         },
       ]);
     });

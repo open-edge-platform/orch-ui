@@ -6,7 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, MetadataFormPom } from "@orch-ui/components";
 import { CyApiDetail, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { instanceUnconfiguredOne, unconfiguredHostOne } from "@orch-ui/utils";
+import { provisionedHostOne, provisionedInstanceOne } from "@orch-ui/utils";
 import { HostsDetailsPom } from "../../organism/hostConfigure/HostsDetails/HostsDetails.pom";
 import { RegionAndSitePom } from "../../organism/hostConfigure/RegionSite/RegionSite.pom";
 import { RegionSiteTreePom } from "../../organism/locations/RegionSiteTree/RegionSiteTree.pom";
@@ -28,7 +28,7 @@ const patchComputeHostsAndHostId: CyApiDetail<
   eim.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
 > = {
   route,
-  response: unconfiguredHostOne,
+  response: provisionedHostOne,
   method: "PATCH",
 };
 
@@ -46,7 +46,7 @@ const postInstances: CyApiDetail<
   eim.PostV1ProjectsByProjectNameComputeInstancesApiResponse
 > = {
   route: instancesRoute,
-  response: instanceUnconfiguredOne,
+  response: provisionedInstanceOne,
   method: "POST",
 };
 const postInstances400: CyApiDetail<eim.ProblemDetailsRead> = {

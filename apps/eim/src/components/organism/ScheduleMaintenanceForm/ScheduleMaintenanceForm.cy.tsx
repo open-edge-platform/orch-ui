@@ -5,7 +5,11 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
-import { hostOne, regionAshland, siteBoston } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostOne as hostOne,
+  regionAshland,
+  siteBoston,
+} from "@orch-ui/utils";
 import { useState } from "react";
 import { store } from "../../../store/store";
 import {

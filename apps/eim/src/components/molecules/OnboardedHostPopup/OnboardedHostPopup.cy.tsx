@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { unconfiguredHostOne as onboardedHostOne } from "@orch-ui/utils";
+import { onboardedHostOne } from "@orch-ui/utils";
 import { store } from "../../../store/store";
 import OnboardedHostPopup, {
   OnboardedHostPopupProps,

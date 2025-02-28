@@ -4,12 +4,8 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { StatusIcon, TableColumn } from "@orch-ui/components";
-import {
-  hostStatusToIconStatus,
-  hostStatusToString,
-  humanFileSize,
-} from "@orch-ui/utils";
+import { TableColumn } from "@orch-ui/components";
+import { humanFileSize } from "@orch-ui/utils";
 import { Table } from "@spark-design/react";
 
 import { ResourceDetailsDisplayProps } from "../ResourceDetails";
@@ -30,19 +26,6 @@ const Storage = ({
     { Header: "Model", accessor: "model" },
     { Header: "Serial", accessor: "serial" },
     { Header: "Vendor", accessor: "vendor" },
-    {
-      Header: "Status",
-      accessor: (data: eim.HostResourcesStorageRead) => {
-        if (data && data.status?.type && data.status) {
-          return (
-            <StatusIcon
-              status={hostStatusToIconStatus(data.status.type)}
-              text={hostStatusToString(data.status.type)}
-            />
-          );
-        }
-      },
-    },
   ];
 
   return (

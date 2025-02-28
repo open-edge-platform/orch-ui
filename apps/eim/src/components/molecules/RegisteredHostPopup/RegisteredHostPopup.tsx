@@ -29,7 +29,7 @@ const RegisteredHostPopup = (props: RegisteredHostPopupProps) => {
 
   const registeredHostPopup: PopupOption[] = [];
 
-  if (host.registrationStatus?.indicator === "STATUS_INDICATION_ERROR") {
+  if (host.registrationStatusIndicator === "STATUS_INDICATION_ERROR") {
     registeredHostPopup.push({
       displayText: "View Error",
       onSelect: () => setShowErrorDrawer(true),
@@ -60,7 +60,7 @@ const RegisteredHostPopup = (props: RegisteredHostPopupProps) => {
         />
         <div className="error-details">
           <Text className="error-label error-mb">
-            {host.registrationStatus?.message}
+            {host.registrationStatus}
           </Text>
           <div className="error-mb">
             <Text className="error-label">Host Name: {host.name}</Text>

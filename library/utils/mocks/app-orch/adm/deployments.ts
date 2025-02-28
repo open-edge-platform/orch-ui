@@ -16,7 +16,7 @@ import {
   statesOne,
   statesThree,
 } from "../../metadata-broker/metadata";
-import { StoreUtils } from "../../utils";
+import { StoreUtils } from "../../storeUtils";
 import {
   appForEditDeployment2,
   applicationOne,

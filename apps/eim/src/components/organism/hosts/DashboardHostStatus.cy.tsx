@@ -14,9 +14,9 @@ describe("<DashboardHostStatus>", () => {
     cy.mount(<DashboardHostStatus />);
     pom.waitForApis();
 
-    pom.hostStat.el.dashboardStatusTotal.should("contain.text", "18");
+    pom.hostStat.el.dashboardStatusTotal.should("contain.text", "15");
+    pom.hostStat.el.dashboardStatusRunning.should("contain.text", "6");
     pom.hostStat.el.dashboardStatusError.should("contain.text", "1");
-    pom.hostStat.el.dashboardStatusRunning.should("contain.text", "3");
   });
   it("should render component on 500 error for API data", () => {
     pom.interceptApis([pom.api.getHostSummaryError]);
@@ -50,8 +50,8 @@ describe("<DashboardHostStatus>", () => {
     );
     pom.waitForApis();
     pom.hostStat.el.dashboardStatusTotal.should("contain.text", "8");
+    pom.hostStat.el.dashboardStatusRunning.should("contain.text", "5");
     pom.hostStat.el.dashboardStatusError.should("contain.text", "1");
-    pom.hostStat.el.dashboardStatusRunning.should("contain.text", "2");
   });
 
   it("shows component on multiple metadata label filter", () => {
@@ -69,8 +69,8 @@ describe("<DashboardHostStatus>", () => {
       />,
     );
     pom.waitForApis();
-    pom.hostStat.el.dashboardStatusTotal.should("contain.text", "2");
-    pom.hostStat.el.dashboardStatusError.should("contain.text", "-");
+    pom.hostStat.el.dashboardStatusTotal.should("contain.text", "1");
     pom.hostStat.el.dashboardStatusRunning.should("contain.text", "-");
+    pom.hostStat.el.dashboardStatusError.should("contain.text", "-");
   });
 });

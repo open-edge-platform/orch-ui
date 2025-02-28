@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { hostOne } from "../../../../../../library/utils/mocks/iaas/store";
+import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import ClusterNodeDetailsDrawer from "./ClusterNodeDetailsDrawer";
 import ClusterNodeDetailsDrawerPom from "./ClusterNodeDetailsDrawer.pom";
 

@@ -4,7 +4,10 @@
  */
 
 import { cyGet } from "@orch-ui/tests";
-import { hostOne, scheduleFour } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostOne as hostOne,
+  scheduleFour,
+} from "@orch-ui/utils";
 import { useState } from "react";
 import { ScheduleMaintenanceList } from "./ScheduleMaintenanceList";
 import { ScheduleMaintenanceListPom } from "./ScheduleMaintenanceList.pom";
@@ -38,7 +41,7 @@ describe("<ScheduleMaintenanceList/>", () => {
   });
 
   it("should render component", () => {
-    pom.maintenanceTable.getRows().should("have.length", 7);
+    pom.maintenanceTable.getRows().should("have.length", 9);
   });
 
   it("should close the drawer", () => {

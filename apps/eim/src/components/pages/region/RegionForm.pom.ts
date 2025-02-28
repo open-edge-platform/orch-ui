@@ -7,12 +7,7 @@ import { eim, mbApi } from "@orch-ui/apis";
 import { ConfirmationDialogPom } from "@orch-ui/components";
 import { SiComboboxPom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import {
-  getSitesByRegion,
-  regions,
-  regionSalem,
-  regionUsWest,
-} from "@orch-ui/utils";
+import { regions, regionSalem, regionUsWest, SiteStore } from "@orch-ui/utils";
 
 import {
   TelemetryGroupsLogsApis,
@@ -47,11 +42,20 @@ const route = `**/v1/projects/${defaultActiveProject.name}/regions*`;
 const route_sites = `**/v1/projects/${defaultActiveProject.name}/sites`;
 
 type SiteApis = "getSites" | "deleteSite";
-const siteEndpoints: CyApiDetails<SiteApis, any, any> = {
+const siteStore = new SiteStore();
+const sites = siteStore.list();
+const siteEndpoints: CyApiDetails<
+  SiteApis,
+  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+> = {
   getSites: {
     route: `${route_sites}?*regionID=${regionUsWest.resourceId}`,
     statusCode: 200,
-    response: getSitesByRegion(regionUsWest.resourceId!),
+    response: {
+      sites,
+      hasNext: false,
+      totalElements: sites.length,
+    },
   },
   deleteSite: {
     route: `${route_sites}/*`,

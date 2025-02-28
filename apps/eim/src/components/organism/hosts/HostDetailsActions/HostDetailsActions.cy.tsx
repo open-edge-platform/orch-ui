@@ -5,11 +5,11 @@
 
 import { cyGet } from "@orch-ui/tests";
 import {
-  hostOne,
+  assignedWorkloadHostOne as hostOne,
   instanceOne,
   IRuntimeConfig,
-  unassignedHostOne as provisionedHostOne,
-  unconfiguredHostOne as onboardedHostOne,
+  onboardedHostOne,
+  provisionedHostOne,
 } from "@orch-ui/utils";
 import HostDetailsActions from "./HostDetailsActions";
 import HostDetailsActionsPom from "./HostDetailsActions.pom";

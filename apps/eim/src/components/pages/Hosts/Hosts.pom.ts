@@ -6,7 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import { ContextSwitcherPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { hostOne } from "@orch-ui/utils";
+import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import HostSearchFiltersPom from "../../organism/HostSearchFilters/HostSearchFilters.pom";
 import HostsTablePom from "../../organism/HostsTable/HostsTable.pom";
 import { dataCy } from "./Hosts";

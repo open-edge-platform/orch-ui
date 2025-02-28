@@ -32,7 +32,7 @@ import "./SiteTable.scss";
 export type SiteSource = "site" | "region";
 
 interface SiteTableProps {
-  regionId?: string;
+  regionId: string;
   actions?: TableColumn<eim.SiteRead>;
   hiddenColumns?: string[];
   hasPermission?: boolean;
@@ -68,6 +68,7 @@ const SiteTable = ({
   const queryArgs: eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg =
     {
       projectName: SharedStorage.project?.name ?? "",
+      regionId,
       pageSize: searchParams.get("pageSize")
         ? parseInt(searchParams.get("pageSize")!)
         : 10,
@@ -89,9 +90,6 @@ const SiteTable = ({
         (searchParams.get("direction") as Direction) ?? "asc",
       ),
     };
-  if (regionId) {
-    queryArgs.regionId = regionId;
-  }
   const {
     data: { sites, totalElements } = {},
     isError,

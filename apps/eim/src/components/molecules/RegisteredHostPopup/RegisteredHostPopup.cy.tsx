@@ -86,7 +86,7 @@ describe("<RegisteredHostPopup />", () => {
 
       pom.el.hostRegisterErrorDrawer.should("exist");
       pom.el.hostRegisterErrorDrawer.contains(
-        registeredHostFourError.registrationStatus!.message,
+        registeredHostFourError.registrationStatus!,
       );
       pom.el.footerOkButton.should("exist");
       pom.el.footerOkButton.click();

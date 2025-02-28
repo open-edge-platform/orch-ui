@@ -25,7 +25,12 @@ describe("<SitesTable />", () => {
     });
     it("should render a list of sites", () => {
       cy.mount(
-        <SitesTable source="site" hiddenColumns={["select"]} sort={[0]} />,
+        <SitesTable
+          source="site"
+          hiddenColumns={["select"]}
+          sort={[0]}
+          regionId={"testRegion"}
+        />,
       );
       pom._table.getCell(1, 1).contains(sitePortland.name!);
       pom._table.getCell(1, 2).contains("customer: Culvers");
@@ -43,12 +48,19 @@ describe("<SitesTable />", () => {
           actions={actions}
           hiddenColumns={["select"]}
           sort={[0]}
+          regionId={"testRegion"}
         />,
       );
       cy.contains("Action Column");
     });
     it("should show the subtitle", () => {
-      cy.mount(<SitesTable source="site" subtitle="Test Subtitle" />);
+      cy.mount(
+        <SitesTable
+          source="site"
+          subtitle="Test Subtitle"
+          regionId={"testRegion"}
+        />,
+      );
       cy.contains("Test Subtitle");
     });
   });
@@ -62,6 +74,7 @@ describe("<SitesTable />", () => {
           hasPermission={false}
           hiddenColumns={["select"]}
           sort={[0]}
+          regionId={"testRegion"}
         />,
       );
       pom.waitForApis();
@@ -76,6 +89,7 @@ describe("<SitesTable />", () => {
           hasPermission={true}
           hiddenColumns={["select"]}
           sort={[0]}
+          regionId={"testRegion"}
         />,
       );
       pom.waitForApis();
@@ -87,7 +101,12 @@ describe("<SitesTable />", () => {
     it("handle empty", () => {
       pom.interceptApis([pom.api.getAllSitesEmpty]);
       cy.mount(
-        <SitesTable source="site" hiddenColumns={["select"]} sort={[0]} />,
+        <SitesTable
+          source="site"
+          hiddenColumns={["select"]}
+          sort={[0]}
+          regionId={"testRegion"}
+        />,
       );
       pom.waitForApis();
       cy.get("[data-cy='emptyTitle']").should("have.text", "No sites found");
@@ -97,7 +116,12 @@ describe("<SitesTable />", () => {
     it("handle 500 error", () => {
       pom.interceptApis([pom.api.getSitesError500]);
       cy.mount(
-        <SitesTable source="site" hiddenColumns={["select"]} sort={[0]} />,
+        <SitesTable
+          source="site"
+          hiddenColumns={["select"]}
+          sort={[0]}
+          regionId={"testRegion"}
+        />,
       );
       pom.waitForApis();
       apiErrorPom.root.should("be.visible");
@@ -106,7 +130,12 @@ describe("<SitesTable />", () => {
     it("display table when data is loaded", () => {
       pom.interceptApis([pom.api.getAllSitesMocked]);
       cy.mount(
-        <SitesTable source="site" hiddenColumns={["select"]} sort={[0]} />,
+        <SitesTable
+          source="site"
+          hiddenColumns={["select"]}
+          sort={[0]}
+          regionId={"testRegion"}
+        />,
       );
       pom.waitForApis();
       pom.root.should("be.visible");
@@ -116,7 +145,13 @@ describe("<SitesTable />", () => {
   describe("<SiteTable /> pagination, fiter and order should", () => {
     it("pass search value to GET request", () => {
       pom.interceptApis([pom.api.getAllSitesMocked]);
-      cy.mount(<SitesTable source="site" hiddenColumns={["select"]} />);
+      cy.mount(
+        <SitesTable
+          source="site"
+          hiddenColumns={["select"]}
+          regionId={"testRegion"}
+        />,
+      );
       pom.waitForApis();
       pom.interceptApis([pom.api.getAllSitesMockedWithFilter]);
       cyGet("search").type("testingSearch");
@@ -128,7 +163,12 @@ describe("<SitesTable />", () => {
     xit("pass page value to GET request", () => {
       pom.interceptApis([pom.api.getAllSitesMocked]);
       cy.mount(
-        <SitesTable source="site" hiddenColumns={["select"]} sort={[0]} />,
+        <SitesTable
+          source="site"
+          hiddenColumns={["select"]}
+          sort={[0]}
+          regionId={"testRegion"}
+        />,
       );
       pom.waitForApis();
       pom.interceptApis([pom.api.getAllSitesMockedWithOffset]);

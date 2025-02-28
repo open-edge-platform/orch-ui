@@ -25,6 +25,8 @@ describe("configureHost Reducer", () => {
               siteId: undefined,
             } as eim.HostWrite,
           },
+          autoOnboard: false,
+          autoProvision: false,
         };
       });
       it("should disable the next button when the Site is selected", () => {
@@ -49,6 +51,8 @@ describe("configureHost Reducer", () => {
               name: "",
             } as eim.HostWrite,
           },
+          autoOnboard: false,
+          autoProvision: false,
         };
       });
       it("should disable the next button when the name is empty", () => {

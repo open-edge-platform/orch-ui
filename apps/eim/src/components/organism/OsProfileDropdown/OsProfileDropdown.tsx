@@ -13,7 +13,7 @@ import "./OsProfileDropdown.scss";
 
 interface OsProfileDropdownProps {
   // the OS assigned to the Host, if any
-  hostOs?: eim.OperatingSystemResource;
+  hostOs?: eim.OperatingSystemResourceRead;
   value?: string;
   pageSize?: number;
   onSelectionChange?: (
