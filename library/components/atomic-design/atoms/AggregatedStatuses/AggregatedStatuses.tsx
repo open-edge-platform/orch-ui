@@ -30,18 +30,26 @@ interface DefaultMessages {
   idle?: string;
 }
 
+export type AggregatedStatus = { status: Status; message: string };
+
+export type CustomAggregationStatus = {
+  idle?: () => AggregatedStatus;
+};
 export interface AggregatedStatusesProps<T extends AggregatedStatusesMap> {
   statuses: T;
   defaultStatusName: keyof T;
   // used to customize message when multiple statuses match a specific state
   defaultMessages?: DefaultMessages;
+  customAggregationStatus?: CustomAggregationStatus;
 }
 
 export const aggregateStatuses = <T extends AggregatedStatusesMap>(
   statuses: T,
   defaultStatusName: keyof T,
   defaultMessage?: DefaultMessages,
-): { status: Status; message: string } => {
+  // This method returns custom status and message to be displayed
+  customAggregationStatus?: CustomAggregationStatus,
+): AggregatedStatus => {
   const customErrMsg = defaultMessage?.error ?? "Error";
   const customInProgressMsg = defaultMessage?.inProgress ?? "In Progress";
   const customIdleMsg = defaultMessage?.idle ?? "Status message not found";
@@ -60,6 +68,10 @@ export const aggregateStatuses = <T extends AggregatedStatusesMap>(
   );
 
   if (allIdle) {
+    if (customAggregationStatus?.idle) {
+      // To return different status and msg when aggregate status is evaluated to idle
+      return customAggregationStatus.idle();
+    }
     return {
       status: Status.Ready,
       message: statuses[defaultStatusName]?.message || customIdleMsg,
@@ -102,6 +114,7 @@ export const AggregatedStatuses = <T extends AggregatedStatusesMap>({
   statuses,
   defaultStatusName,
   defaultMessages,
+  customAggregationStatus,
 }: AggregatedStatusesProps<T>) => {
   const cy = { "data-cy": dataCy };
 
@@ -109,6 +122,7 @@ export const AggregatedStatuses = <T extends AggregatedStatusesMap>({
     statuses,
     defaultStatusName,
     defaultMessages,
+    customAggregationStatus,
   );
 
   return (

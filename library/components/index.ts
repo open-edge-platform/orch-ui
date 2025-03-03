@@ -27,7 +27,12 @@ export {
   AggregatedStatusesMap,
   GenericStatus,
   StatusIndicator,
+  AggregatedStatus
 } from "./atomic-design/atoms/AggregatedStatuses/AggregatedStatuses";
+export {
+  Status,
+  StatusIcon,
+} from "./atomic-design/atoms/StatusIcon/StatusIcon";
 export { ApiError } from "./atomic-design/atoms/ApiError/ApiError";
 export {
   DetailedStatuses,
@@ -78,10 +83,6 @@ export {
   Popover,
   PopoverProps
 } from "./atomic-design/atoms/Popover/Popover";
-export {
-  Status,
-  StatusIcon,
-} from "./atomic-design/atoms/StatusIcon/StatusIcon";
 export { ContextSwitcher } from "./atomic-design/atoms/ContextSwitcher/ContextSwitcher";
 
 /************************** Molecules *****************************************/

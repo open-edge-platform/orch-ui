@@ -11,8 +11,8 @@ import {
   StatusIcon,
 } from "@orch-ui/components";
 import {
-  CONSTANTS,
   genericHostStatusMessages,
+  getCustomStatusOnIdleAggregation,
   HostGenericStatuses,
   hostStatusFields,
   hostToStatuses,
@@ -32,8 +32,6 @@ type FieldLabel = {
 };
 
 type HostGenericStatusKeys = keyof HostGenericStatuses;
-
-// For rendering of statuses iteratively
 
 export const HostStatusPopover = ({ data }: HostStatusPopoverProps) => {
   const cy = { "data-cy": dataCy };
@@ -85,8 +83,9 @@ export const HostStatusPopover = ({ data }: HostStatusPopoverProps) => {
         <AggregatedStatuses<HostGenericStatuses>
           defaultStatusName="hostStatus"
           statuses={hostToStatuses(data, data.instance)}
-          //if the host is evaluated to be idle and hostStatus message is not present
-          defaultMessages={{ idle: CONSTANTS.HOST_STATUS.NOT_CONNECTED }}
+          customAggregationStatus={{
+            idle: () => getCustomStatusOnIdleAggregation(data),
+          }}
         />
       </Popover>
     </div>

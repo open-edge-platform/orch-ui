@@ -54,6 +54,7 @@ export const instanceOne: enhancedEimSlice.InstanceReadModified = {
   instanceStatus: "Running",
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
+  currentState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
   currentOs: osUbuntu,
   securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
@@ -134,6 +135,12 @@ export const instanceFour: enhancedEimSlice.InstanceReadModified = {
     },
   ],
   desiredState: "INSTANCE_STATE_RUNNING",
+  provisioningStatusIndicator: "STATUS_INDICATION_IDLE",
+  provisioningStatus: "Provisioned",
+  provisioningStatusTimestamp: +new Date(),
+  updateStatusIndicator: "STATUS_INDICATION_ERROR",
+  updateStatus: "Update Failed",
+  updateStatusTimestamp: +new Date(),
 };
 
 export const instanceFive: enhancedEimSlice.InstanceReadModified = {

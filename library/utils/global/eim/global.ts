@@ -5,6 +5,7 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import {
+  AggregatedStatus,
   FieldLabels,
   GenericStatus,
   Status as IconStatus,
@@ -364,4 +365,41 @@ export const hostProviderStatusToString = (host?: eim.HostRead): string => {
   }
   // Priority 3: Display Actual Host status
   return capitalize(host.hostStatus);
+};
+
+// currentState mapping for host to messages
+export const hostStateMapping: Record<eim.HostState, any> = {
+  HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
+  HOST_STATE_DELETING: { status: IconStatus.Error, message: "Deleting" },
+  HOST_STATE_DELETED: { status: IconStatus.Error, message: "Deleted" },
+  HOST_STATE_ONBOARDED: { status: IconStatus.Ready, message: "Onboarded" },
+  HOST_STATE_REGISTERED: { status: IconStatus.Ready, message: "Registered" },
+  HOST_STATE_UNTRUSTED: { status: IconStatus.Unknown, message: "Deauthorized" },
+  HOST_STATE_UNSPECIFIED: { status: IconStatus.Unknown, message: "Unknown" },
+};
+
+// Host status and messages when all modern statuses are in idle status
+export const getCustomStatusOnIdleAggregation = (
+  host: eim.HostRead,
+): AggregatedStatus => {
+  const hostCurrentState = host.currentState;
+  if (!hostCurrentState)
+    return { status: IconStatus.Unknown, message: "Unknown" };
+
+  const isInstanceRunning =
+    hostCurrentState === "HOST_STATE_ONBOARDED" &&
+    host.instance?.currentState == "INSTANCE_STATE_RUNNING";
+
+  // if workload members are assigned in Instance
+  if (isInstanceRunning && host.instance?.workloadMembers?.length) {
+    return { status: IconStatus.Ready, message: "Active" };
+  }
+
+  // if workload members are not assigned in Instance but instance is running
+  if (isInstanceRunning && !host.instance?.workloadMembers?.length) {
+    return { status: IconStatus.Ready, message: "Provisioned" };
+  }
+
+  // other current statuses
+  return hostStateMapping[hostCurrentState];
 };

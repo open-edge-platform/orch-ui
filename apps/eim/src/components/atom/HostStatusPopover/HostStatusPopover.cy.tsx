@@ -5,7 +5,11 @@
 import { eim } from "@orch-ui/apis";
 import { PopoverPom } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
-import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostOne as hostOne,
+  instanceOne,
+  registeredHostOne,
+} from "@orch-ui/utils";
 import { HostStatusPopover } from "./HostStatusPopover";
 import HostStatusPopoverPom from "./HostStatusPopover.pom";
 const pom = new HostStatusPopoverPom();
@@ -176,6 +180,143 @@ describe("<HostStatusPopover/>", () => {
         "contain",
         "Waiting for host to connect",
       );
+    });
+  });
+
+  describe("Should render aggregate status", () => {
+    it("when host is registered", () => {
+      const host = structuredClone(registeredHostOne);
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Registered");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+    });
+
+    it("when host has registration error", () => {
+      const host = structuredClone(registeredHostOne);
+      host.registrationStatusIndicator = "STATUS_INDICATION_ERROR";
+      host.registrationStatus = "Failed to register host";
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Failed to register host");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+    });
+
+    it("when host is onboarding", () => {
+      const host = structuredClone(registeredHostOne);
+      host.currentState = "HOST_STATE_ONBOARDED";
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IN_PROGRESS";
+      host.onboardingStatus = "Onboarding";
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Onboarding");
+      cyGet("statusIcon")
+        .find(".spark-icon")
+        .should("have.class", "spark-icon-spin");
+    });
+
+    it("when host has onboarding error", () => {
+      const host = structuredClone(registeredHostOne);
+      host.currentState = "HOST_STATE_ONBOARDED";
+      host.onboardingStatusIndicator = "STATUS_INDICATION_ERROR";
+      host.onboardingStatus = "Error";
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Error");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+    });
+
+    it("when host is onboarded and not provisioned", () => {
+      const host = structuredClone(registeredHostOne);
+      host.currentState = "HOST_STATE_ONBOARDED";
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.onboardingStatus = "Onboarded";
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Onboarded");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+    });
+
+    it("when host provisioning in progress", () => {
+      const host = structuredClone(registeredHostOne);
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.currentState = "HOST_STATE_ONBOARDED";
+
+      const instance = structuredClone(instanceOne);
+      instance.provisioningStatusIndicator = "STATUS_INDICATION_IN_PROGRESS";
+      instance.provisioningStatus = "Provisioning";
+      host.instance = instance;
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Provisioning");
+      cyGet("statusIcon")
+        .find(".spark-icon")
+        .should("have.class", "spark-icon-spin");
+    });
+
+    it("when host has provisioning error", () => {
+      const host = structuredClone(registeredHostOne);
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.currentState = "HOST_STATE_ONBOARDED";
+
+      const instance = structuredClone(instanceOne);
+      instance.provisioningStatusIndicator = "STATUS_INDICATION_ERROR";
+      instance.provisioningStatus = "Error";
+      host.instance = instance;
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Error");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+    });
+
+    it("when host is provisioned and no workloadMember assigned", () => {
+      const host = structuredClone(registeredHostOne);
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.currentState = "HOST_STATE_ONBOARDED";
+
+      const instance = structuredClone(instanceOne);
+      instance.provisioningStatusIndicator = "STATUS_INDICATION_IDLE";
+      delete instance.workloadMembers; // workloadmember deleted from test data
+      host.instance = instance;
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Provisioned");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+    });
+
+    it("when host is provisioned and workloadMember assigned", () => {
+      const host = structuredClone(registeredHostOne);
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.currentState = "HOST_STATE_ONBOARDED";
+
+      const instance = structuredClone(instanceOne);
+      instance.provisioningStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.instance = instance;
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Active");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+    });
+
+    it("when host is de-authorised", () => {
+      const host = structuredClone(registeredHostOne);
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.registrationStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.currentState = "HOST_STATE_UNTRUSTED";
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Deauthorized");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-unknown");
+    });
+
+    it("when host is deleted", () => {
+      const host = structuredClone(registeredHostOne);
+      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.registrationStatusIndicator = "STATUS_INDICATION_IDLE";
+      host.currentState = "HOST_STATE_DELETED";
+
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Deleted");
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
     });
   });
 });

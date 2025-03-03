@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { AggregatedStatusesPom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
 import { dataCy } from "./HostStatusPopover";
 
@@ -16,8 +17,10 @@ type GenericStatusType =
   | "provisioningStatus"
   | "updateStatus";
 class HostStatusPopoverPom extends CyPom<Selectors> {
+  public aggregateStatusPom = new AggregatedStatusesPom();
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors]);
+    this.aggregateStatusPom = new AggregatedStatusesPom();
   }
 
   getIconByStatus(status: GenericStatusType) {
