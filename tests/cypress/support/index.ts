@@ -35,6 +35,11 @@ declare global {
       ): Chainable<Response<T>>;
 
       /**
+       * Returns true if the tests are running against a mock server
+       */
+      isMockEnv(): boolean;
+
+      /**
        * Custom command to read the current active project from the local storage
        */
       currentProject(): Chainable<string>;

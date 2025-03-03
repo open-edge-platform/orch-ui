@@ -50,6 +50,10 @@ Cypress.Commands.add("login", ({ username, password }: IUser) => {
   cy.session(
     [username, password],
     () => {
+      if (cy.isMockEnv()) {
+        return;
+      }
+
       cy.visit("/");
 
       cy.url().should("include", "/openid-connect");
@@ -61,6 +65,9 @@ Cypress.Commands.add("login", ({ username, password }: IUser) => {
     },
     {
       validate() {
+        if (cy.isMockEnv()) {
+          return;
+        }
         cy.visit("/");
         cy.dataCy("profile", { timeout: 10 * 1000 }).click();
         cy.contains(username);
@@ -102,6 +109,15 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("currentProject", () => {
+  if (cy.isMockEnv()) {
+    window.localStorage.setItem(
+      "project",
+      JSON.stringify({ name: "mock-project" }),
+    );
+    cy.reload();
+    return cy.wrap<string>("mock-project");
+  }
+
   cy.intercept("/v1/projects?member-role=true").as("getProjects");
   cy.url().should("contain", Cypress.config().baseUrl!);
   cy.contains("Edge Orchestrator").should("be.visible");
@@ -116,4 +132,8 @@ Cypress.Commands.add("currentProject", () => {
       JSON.parse(`${result[Cypress.config().baseUrl!]["project"]}`).name,
     );
   });
+});
+
+Cypress.Commands.add("isMockEnv", () => {
+  return Cypress.env("MOCK") === true;
 });
