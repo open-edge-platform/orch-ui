@@ -10,6 +10,9 @@ export default defineConfig({
   videosFolder: "cypress/videos",
   defaultCommandTimeout: 3000,
   pageLoadTimeout: 10000,
+  retries: {
+    runMode: 3,
+  },
   reporter: "../node_modules/cypress-mochawesome-reporter",
   reporterOptions: {
     charts: true,

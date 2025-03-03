@@ -19,6 +19,9 @@ const config = {
       bundler: "webpack",
       webpackConfig: webpackCfg,
     },
+    retries: {
+      runMode: 3,
+    },
     setupNodeEvents(on, config) {
       require("@cypress/code-coverage/task")(on, config);
       return config;

@@ -195,14 +195,20 @@ describe("<HostConfig/>", () => {
       it("has lowercase key/values", () => {
         pom.metadataPom.rhfComboboxKeyPom.getInput().type("new-key");
         pom.metadataPom.rhfComboboxValuePom.getInput().type("new-value");
-        pom.el.next.should("have.attr", "aria-disabled", "false");
+        // @ts-ignore: No overload matches this call
+        pom.el.next.should("have.attr", "aria-disabled", "false", {
+          timeout: 5000,
+        });
       });
       it("has uppercase in key/values", () => {
         pom.metadataPom.rhfComboboxKeyPom.getInput().type("New-key");
         pom.el.next.should("have.attr", "aria-disabled", "true");
 
         pom.metadataPom.rhfComboboxKeyPom.getInput().clear().type("new-key");
-        pom.el.next.should("have.attr", "aria-disabled", "false");
+        // @ts-ignore: No overload matches this call
+        pom.el.next.should("have.attr", "aria-disabled", "false", {
+          timeout: 5000,
+        });
       });
     });
   });

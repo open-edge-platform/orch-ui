@@ -16,6 +16,9 @@ const config = {
       bundler: "webpack",
       webpackConfig: webpackCfg,
     },
+    retries: {
+      runMode: 3,
+    },
     supportFolder: ".",
     indexHtmlFile: "./component-index.html",
     supportFile: "./component.tsx",

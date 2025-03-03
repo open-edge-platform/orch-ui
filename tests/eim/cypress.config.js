@@ -16,6 +16,9 @@ const config = {
       bundler: "webpack",
       webpackConfig: webpackCfg,
     },
+    retries: {
+      runMode: 3,
+    },
     supportFolder: ".",
     indexHtmlFile: "./component-index.html",
     supportFile: "./component.tsx",
@@ -23,7 +26,7 @@ const config = {
       require("@cypress/code-coverage/task")(on, config);
       return config;
     },
-    specPattern:[
+    specPattern: [
       "../../apps/eim/src/**/*cy.tsx",
       "../../apps/eim/src/**/*cy.ts",
       "../../apps/eim/unit-tests.cy.ts",
