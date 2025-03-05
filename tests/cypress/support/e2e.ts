@@ -19,6 +19,18 @@ import "../../../apps/eim/src/remotes.ts";
 import "./commands";
 import "./network-logs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-require("cypress-terminal-report/src/installLogsCollector")();
+require("cypress-terminal-report/src/installLogsCollector")({
+  collectTypes: [
+    // "cons:log",
+    // "cons:info",
+    // "cons:warn",
+    "cons:error",
+    "cy:log",
+    "cy:xhr",
+    "cy:request",
+    "cy:intercept",
+    "cy:command",
+  ],
+});
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

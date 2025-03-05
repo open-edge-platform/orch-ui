@@ -7,6 +7,7 @@ import {
   validateDefaultProject,
   validateNoAccessToProjectTab,
 } from "../helpers";
+import {cyGet} from "@orch-ui/tests";
 
 describe("Non Project Admin Smoke", () => {
   const netLog = new NetworkLog();
@@ -21,7 +22,10 @@ describe("Non Project Admin Smoke", () => {
       cy.login(EIM_USER);
       cy.visit("/");
     });
-    it("should have a default project set", () => {
+    it("should have a default project set", function () {
+      if (cy.isMockEnv()) {
+        this.skip();
+      }
       validateDefaultProject();
     });
     it("should not have acces to projects tab ", () => {
@@ -35,7 +39,10 @@ describe("Non Project Admin Smoke", () => {
       cy.login(APP_ORCH_READWRITE_USER);
       cy.visit("/");
     });
-    it("should have a default project set", () => {
+    it("should have a default project set", function () {
+      if (cy.isMockEnv()) {
+        this.skip();
+      }
       validateDefaultProject();
     });
     it("should not have acces to projects tab ", () => {

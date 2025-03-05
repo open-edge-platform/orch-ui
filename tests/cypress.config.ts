@@ -1,4 +1,7 @@
 import { defineConfig } from "cypress";
+import {
+  PluginOptions
+} from "cypress-terminal-report/src/installLogsPrinter.types";
 const fs = require("fs");
 const webpackPreprocessor = require("@cypress/webpack-preprocessor");
 
@@ -17,6 +20,7 @@ export default defineConfig({
   reporterOptions: {
     charts: true,
     reportPageTitle: "e2e-report",
+    reportFilename: "[status]_[datetime]-[name]-report",
     embeddedScreenshots: true,
     inlineAssets: true,
     saveAllAttempts: false,
@@ -35,7 +39,8 @@ export default defineConfig({
 
       // implement node event listeners here
       require("../node_modules/cypress-mochawesome-reporter/plugin")(on);
-      const options = {
+      // TODO can we customize the output by test name?
+      const options: PluginOptions = {
         outputRoot: config.projectRoot + "/cypress/logs/",
         outputTarget: {
           "results.txt": "txt",
