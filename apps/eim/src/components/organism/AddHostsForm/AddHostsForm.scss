@@ -1,0 +1,69 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.add-hosts-form {
+  &__form {
+    border: 0.1rem solid var(--spark-color-theme-light-gray300);
+  }
+  .spark-text-field-container {
+    height: 2.8rem;
+  }
+  .spark-fieldtext-wrapper-is-invalid {
+    margin-top: 0.4rem;
+  }
+  .spark-input {
+    height: 2.5rem;
+  }
+  .spark-input::placeholder {
+    font-style: italic;
+  }
+
+  &__headers,
+  &__item-row,
+  &__entry-row {
+    display: flex;
+    gap: 1rem;
+    > span:not(:last-child),
+    > .spark-text-field-container {
+      flex: 1;
+    }
+
+    > span:last-child,
+    .spark-button {
+      width: 2rem;
+    }
+
+    > span:not(:last-child) {
+      font-weight: 600;
+    }
+  }
+
+  &__headers,
+  &__item-row {
+    border-bottom: 0.1rem solid var(--spark-color-theme-light-gray300);
+  }
+  &__headers {
+    padding: 1rem 0.6rem;
+  }
+  &__item-row,
+  &__entry-row {
+    padding: 1rem;
+  }
+
+  &__add {
+    margin-top: 1rem;
+  }
+  &__error {
+    //overriding the spark classes would over-complicate rule specifity
+    color: var(--spark-color-coral-shade1) !important;
+    border-color: var(--spark-color-coral-shade1) !important;
+  }
+  &__api-error {
+    padding: 0 1rem;
+    margin-top: -1.2rem;
+    color: var(--spark-color-coral-shade1);
+    font-size: 0.8rem;
+  }
+}

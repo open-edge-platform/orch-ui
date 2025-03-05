@@ -76,7 +76,7 @@ export const HostsDetails = () => {
     <div {...cy} className="hosts-details">
       <Flex cols={[3, 3, 3, 3]} className="top-row">
         <b>Host Name</b>
-        <b>Serial Number</b>
+        <b>Serial Number and UUID</b>
         <GlobalOsDropdown
           isDisabled={allOsPreinstalled}
           value={globalOsValue}

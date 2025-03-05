@@ -91,6 +91,10 @@ export const createChildRoutes = () => {
       element: <Hosts />,
     },
     {
+      path: `${hostsRoute}/set-up-provisioning`,
+      element: <HostConfig />,
+    },
+    {
       path: "register-hosts",
       element: <RegisterHosts />,
     },

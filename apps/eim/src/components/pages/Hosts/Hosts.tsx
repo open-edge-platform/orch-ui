@@ -27,6 +27,7 @@ const Hosts = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const className = "hosts";
 
   const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
@@ -46,13 +47,13 @@ const Hosts = () => {
           navigate("../register-hosts");
         }}
       >
-        Register Host(s)
+        Register Hosts
       </Button>
     </>
   );
 
   return (
-    <div {...cy} className="hosts">
+    <div {...cy} className={className}>
       <Heading semanticLevel={1} size="l">
         Hosts
       </Heading>

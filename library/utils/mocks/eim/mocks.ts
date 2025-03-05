@@ -78,12 +78,7 @@ const randomizeHostStatus = () => {
 const randomizeHostList = (hosts: eim.HostRead[]) => {
   if (IS_MOCK_RANDOMIZE_ENABLED) {
     return hosts.map((host, i) =>
-      i === 0
-        ? {
-            ...host,
-            hostStatus: randomizeHostStatus(),
-          }
-        : host,
+      i === 0 ? { ...host, hostStatus: randomizeHostStatus() } : host,
     );
   }
   return hosts;
@@ -113,18 +108,9 @@ export const handlers = [
       ctx.status(200),
       ctx.json<{ nodes: SearchResult[]; totalElements: number }>({
         nodes: [
-          {
-            resourceId: "region-1",
-            name: "root-region-1",
-          },
-          {
-            resourceId: "region-2",
-            name: "root-region-2",
-          },
-          {
-            resourceId: "region-3",
-            name: "root-region-3",
-          },
+          { resourceId: "region-1", name: "root-region-1" },
+          { resourceId: "region-2", name: "root-region-2" },
+          { resourceId: "region-3", name: "root-region-3" },
           {
             resourceId: "region-11",
             name: "child-region-1",
@@ -145,11 +131,7 @@ export const handlers = [
             name: "child-region-3.2",
             parentId: "region-3",
           },
-          {
-            resourceId: "site-1",
-            name: "site-region-1",
-            parentId: "region-1",
-          },
+          { resourceId: "site-1", name: "site-region-1", parentId: "region-1" },
           {
             resourceId: "site-21",
             name: "site-region-21",
@@ -480,9 +462,7 @@ export const handlers = [
     if (host) {
       try {
         host = hostStore.put(hostId, { ...host, ...body } as HostMock);
-        const instanceMatchList = instanceStore.list({
-          hostId,
-        });
+        const instanceMatchList = instanceStore.list({ hostId });
         const instance =
           instanceMatchList.length > 0 ? instanceMatchList[0] : undefined;
         if (instance && host) {
@@ -592,9 +572,7 @@ export const handlers = [
       if (instances && instances.length > 0 && host) {
         instanceStore.put(instances[0].instanceID!, {
           ...instances[0],
-          host: {
-            ...host,
-          },
+          host: { ...host },
         });
       }
 
@@ -625,15 +603,19 @@ export const handlers = [
     hostStore.registerHost({
       ...hostRegisterInfo,
       name: hostRegisterInfo.name ?? "default",
-      timestamps: {
-        createdAt: new Date().toISOString(),
-      },
+      timestamps: { createdAt: new Date().toISOString() },
     });
 
     return await res(
       ctx.status(hostRegisterInfo.name === "fail" ? 500 : 201),
-      ctx.json<eim.PostV1ProjectsByProjectNameComputeHostsRegisterApiResponse>({
+      ctx.json<
+        eim.PostV1ProjectsByProjectNameComputeHostsRegisterApiResponse & {
+          message?: string;
+        }
+      >({
         name: hostRegisterInfo.name ?? "default",
+        resourceId: hostRegisterInfo.name ?? "default",
+        message: hostRegisterInfo.name === "fail" ? "failed" : undefined,
       }),
     );
   }),

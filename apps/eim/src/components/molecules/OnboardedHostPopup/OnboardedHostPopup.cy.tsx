@@ -60,7 +60,7 @@ describe("<OnboardedHostPopup />", () => {
         });
         // make sure we reset the form step to the first on
         expect(store.getState().configureHost.formStatus.currentStep).to.equal(
-          1,
+          0,
         );
       });
   });

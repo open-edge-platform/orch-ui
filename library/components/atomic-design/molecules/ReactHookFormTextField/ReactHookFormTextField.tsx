@@ -30,6 +30,7 @@ export interface ReactHookFormTextFieldProps<T extends FieldValues> {
   onError?: (message: string) => void;
   onValid?: () => void;
   onChange?: (value: string) => void;
+  value?: string;
 }
 
 export const ReactHookFormTextField = <T extends FieldValues>({
@@ -46,6 +47,7 @@ export const ReactHookFormTextField = <T extends FieldValues>({
   className,
   onError,
   onValid,
+
   onChange: onChangeProp,
 }: ReactHookFormTextFieldProps<T>): JSX.Element => {
   const rhftf = "react-hook-form-text-field";
@@ -55,7 +57,7 @@ export const ReactHookFormTextField = <T extends FieldValues>({
       control={control}
       rules={{
         required: { value: isRequired, message: "Is Required" },
-        validate: isRequired ? validate : undefined,
+        validate,
         // Example of how to create a validate block, || statement turns into displayed error message
         // validate: {
         //   banana: (value) => value !== "Banana" || "No banana",

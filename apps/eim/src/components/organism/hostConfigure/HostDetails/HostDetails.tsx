@@ -56,7 +56,7 @@ export const HostDetails = ({
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
-  const { name, resourceId, instance, serialNumber, originalOs } =
+  const { name, resourceId, instance, serialNumber, originalOs, uuid } =
     useAppSelector(selectHostById(hostId));
 
   const [localName, setLocalName] = useState<string>();
@@ -160,7 +160,14 @@ export const HostDetails = ({
             dispatch(setHostName({ hostId: hostId, name: value }));
           }}
         />
-        <div className="serial">{serialNumber}</div>
+        <div className="sn-uuid">
+          <p className="sn-uuid__sn">
+            {serialNumber == "" ? "No serial number present" : serialNumber}
+          </p>
+          <p className="sn-uuid__uuid">
+            {uuid === "" ? "No UUID value present" : uuid}
+          </p>
+        </div>
         <OsProfileDropdown
           hostOs={originalOs}
           value={localOsOptionValue}

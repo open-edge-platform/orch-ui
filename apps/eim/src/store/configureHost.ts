@@ -11,8 +11,7 @@ import { RootState } from "./store";
 export const ROOT_REGIONS: string = "null";
 
 export enum HostConfigSteps {
-  "Register Host" = 0,
-  "Select Site",
+  "Select Site" = 0,
   "Enter Host Details",
   "Add Host Labels",
   "Complete Configuration",
@@ -30,13 +29,13 @@ export interface HostConfigFormStatus {
 
 export type HostData = eim.HostWrite & { region?: eim.RegionRead } & {
   serialNumber?: string;
-} & { resourceId?: string } & { originalOs?: eim.OperatingSystemResourceRead };
+} & { resourceId?: string } & {
+  originalOs?: eim.OperatingSystemResourceRead;
+} & { error?: string };
 
 export interface HostConfigForm {
   formStatus: HostConfigFormStatus;
-  hosts: {
-    [id: string]: HostData;
-  };
+  hosts: { [id: string]: HostData };
   autoOnboard: boolean;
   autoProvision: boolean;
 }
@@ -112,6 +111,13 @@ export const validateStep = (state: HostConfigForm) => {
   return state;
 };
 
+export const _setAutoOnboardValue = (
+  state: HostConfigForm,
+  action: PayloadAction<boolean>,
+) => {
+  state.autoOnboard = action.payload;
+};
+
 export const configureHost = createSlice({
   name: "configureHost",
   initialState: initialState,
@@ -134,6 +140,58 @@ export const configureHost = createSlice({
       return initialState;
     },
     // host related
+    setHostErrorMessage(
+      state,
+      action: PayloadAction<{ hostName: string; message: string }>,
+    ) {
+      const { hostName, message } = action.payload;
+      state.hosts[hostName].error = message;
+    },
+    setNewRegisteredHosts(
+      state,
+      action: PayloadAction<{ hosts: eim.HostRead[] }>,
+    ) {
+      const { hosts } = action.payload;
+      state.hosts = {};
+      hosts.forEach((host) => {
+        state.hosts[host.name] = {
+          name: host.name,
+          serialNumber: host.serialNumber,
+          uuid: host.uuid,
+        };
+      });
+    },
+    updateNewRegisteredHost(
+      state,
+      action: PayloadAction<{ host: eim.HostRead }>,
+    ) {
+      const { hosts } = state;
+      const { host: newHost } = action.payload;
+
+      //Get rid of the temporary version that used name as identifier
+      //Since API completed there is a resourceId to use
+      delete state.hosts[newHost.name];
+
+      hosts[newHost.resourceId!] = {
+        name: newHost.name,
+        siteId: newHost.site?.resourceId,
+        site: newHost.site,
+        metadata: newHost.metadata,
+        uuid: newHost.uuid,
+        inheritedMetadata: newHost.inheritedMetadata,
+        instance: newHost.instance,
+        serialNumber: newHost.serialNumber,
+        resourceId: newHost.resourceId,
+      };
+
+      // If the Instance existed in the API, the Host already had a OS
+      if (newHost.instance) {
+        hosts[newHost.resourceId!] = {
+          ...hosts[newHost.resourceId!],
+          originalOs: newHost.instance.os,
+        };
+      }
+    },
     setHosts(state, action: PayloadAction<{ hosts: eim.HostRead[] }>) {
       const { hosts } = state;
       const { hosts: selectedHosts } = action.payload;
@@ -159,6 +217,9 @@ export const configureHost = createSlice({
           };
         }
       });
+    },
+    removeHost(state, action: PayloadAction<string>) {
+      delete state.hosts[action.payload];
     },
     setHostName(
       state,
@@ -240,9 +301,7 @@ export const configureHost = createSlice({
       state.formStatus.hasValidationError = action.payload;
       configureHost.caseReducers.validateStep(state);
     },
-    setAutoOnboardValue(state, action: PayloadAction<boolean>) {
-      state.autoOnboard = action.payload;
-    },
+    setAutoOnboardValue: _setAutoOnboardValue,
     setAutoProvisionValue(state, action: PayloadAction<boolean>) {
       state.autoProvision = action.payload;
     },
@@ -254,7 +313,10 @@ export const {
   goToNextStep,
   goToPrevStep,
   reset,
+  setNewRegisteredHosts,
+  updateNewRegisteredHost,
   setHosts,
+  removeHost,
   setHostName,
   setMetadata,
   setSecurity,
@@ -264,6 +326,7 @@ export const {
   setRegion,
   setGlobalOsValue,
   setGlobalSecurityValue,
+  setHostErrorMessage,
   setValidationError,
   setAutoOnboardValue,
   setAutoProvisionValue,
@@ -272,6 +335,17 @@ export const {
 // selectors
 export const selectHostConfigForm = (state: RootState) => state.configureHost;
 export const selectHosts = (state: RootState) => state.configureHost.hosts;
+export const selectUnregisteredHosts = (
+  state: RootState,
+): { [id: string]: HostData } => {
+  const unRegistered = {};
+  const { hosts } = state.configureHost;
+  Object.keys(hosts).forEach((key) => {
+    const host = hosts[key];
+    if (!host.resourceId) unRegistered[key] = host;
+  });
+  return unRegistered;
+};
 
 export const selectFirstHost = (state: RootState) => {
   const hosts = state.configureHost.hosts;
@@ -313,12 +387,7 @@ export const getHostWrite = (
     hostId,
   );
 
-  return {
-    name,
-    siteId,
-    uuid,
-    metadata,
-  };
+  return { name, siteId, uuid, metadata };
 };
 
 export default configureHost.reducer;
