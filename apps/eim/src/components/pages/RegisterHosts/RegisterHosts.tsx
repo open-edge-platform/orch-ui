@@ -3,19 +3,47 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { Flex } from "@orch-ui/components";
-import { Heading, ToggleSwitch } from "@spark-design/react";
+import { eim } from "@orch-ui/apis";
+import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
+  Button,
+  ButtonGroup,
+  Heading,
+  ToggleSwitch,
+} from "@spark-design/react";
+import {
+  ButtonGroupAlignment,
+  ButtonSize,
+  ButtonVariant,
+} from "@spark-design/tokens";
+import { useNavigate } from "react-router-dom";
+import {
+  reset,
+  selectUnregisteredHosts,
   setAutoOnboardValue,
   setAutoProvisionValue,
 } from "../../../store/configureHost";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { setMessageBanner } from "../../../store/notifications";
+import AutoPropertiesMessageBanner from "../../molecules/AutoPropertiesMessageBanner/AutoPropertiesMessageBanner";
+import AddHostsForm from "../../organism/AddHostsForm/AddHostsForm";
+import "./RegisterHosts.scss";
+import { registerHostPost } from "./RegisterHosts.utils";
 export const dataCy = "registerHosts";
 
 const RegisterHosts = () => {
   const cy = { "data-cy": dataCy };
   const className = "register-hosts";
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { autoOnboard, autoProvision, hosts } = useAppSelector(
+    (state) => state.configureHost,
+  );
+  const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
+
+  const [registerHost] =
+    eim.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+
   return (
     <div {...cy} className={className}>
       <Heading semanticLevel={4}>Register Hosts</Heading>
@@ -23,13 +51,14 @@ const RegisterHosts = () => {
         To register your hosts enter either the serial number or the UUID for
         each host in the respective fields
       </p>
+      <AddHostsForm />
       <Flex cols={[6]}>
         <div className={`${className}__auto-onboard`}>
           <Heading semanticLevel={6}>Auto Onboard</Heading>
           <p>Hosts will be onboarded once they connect</p>
           <ToggleSwitch
             data-cy="isAutoOnboarded"
-            isSelected={true}
+            isSelected={autoOnboard}
             onChange={(value) => {
               dispatch(setAutoOnboardValue(value));
             }}
@@ -45,7 +74,7 @@ const RegisterHosts = () => {
           </p>
           <ToggleSwitch
             data-cy="isAutoProvisioned"
-            isSelected={true}
+            isSelected={autoProvision}
             onChange={(value) => {
               dispatch(setAutoProvisionValue(value));
             }}
@@ -55,6 +84,51 @@ const RegisterHosts = () => {
           </ToggleSwitch>
         </div>
       </Flex>
+      <AutoPropertiesMessageBanner />
+      <ButtonGroup
+        align={ButtonGroupAlignment.End}
+        className={`${className}__button-group`}
+      >
+        <Button
+          size={ButtonSize.Large}
+          variant={ButtonVariant.Primary}
+          onPress={() => {
+            dispatch(reset());
+            navigate("../hosts");
+          }}
+        >
+          Cancel
+        </Button>
+
+        <Button
+          size={ButtonSize.Large}
+          variant={ButtonVariant.Action}
+          onPress={async () => {
+            if (!autoProvision) {
+              const successCount = await registerHostPost(
+                dispatch,
+                registerHost,
+                unregisteredHosts,
+                autoOnboard,
+              );
+              setTimeout(() => {
+                const totalCount = Object.keys(unregisteredHosts).length;
+                dispatch(
+                  setMessageBanner({
+                    icon: "check-circle",
+                    text: `Sucessfully registered ${successCount} out of ${totalCount} host(s)`,
+                    title: "Hosts Registered",
+                    variant: MessageBannerAlertState.Success,
+                  }),
+                );
+              }, 10);
+            } else navigate("../hosts/set-up-provisioning");
+          }}
+          isDisabled={Object.keys(hosts).length === 0}
+        >
+          {autoProvision ? "Continue" : "Register Hosts"}
+        </Button>
+      </ButtonGroup>
     </div>
   );
 };

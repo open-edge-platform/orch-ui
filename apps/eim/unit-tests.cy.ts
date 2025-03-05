@@ -19,7 +19,9 @@ import "./src/components/atom/OsConfig/OsConfig.cy.tsx";
 import "./src/components/atom/RegionCell/RegionCell.cy.tsx";
 import "./src/components/atom/ScheduleMaintenanceSubComponent/ScheduleMaintenanceSubComponent.cy.tsx";
 import "./src/components/atom/SiteCell/SiteCell.cy.tsx";
+import "./src/components/molecules/AutoPropertiesMessageBanner/AutoPropertiesMessageBanner.cy.tsx";
 import "./src/components/molecules/DrawerHeader/DrawerHeader.cy.tsx";
+import "./src/components/molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog.cy.tsx";
 import "./src/components/molecules/locations/Search/Search.cy.tsx";
 import "./src/components/molecules/locations/SiteViewHostTable/SiteViewHostTable.cy.tsx";
 import "./src/components/molecules/locations/TelemetryProfileLogs/TelemetryProfileLogs.cy.tsx";
@@ -28,6 +30,7 @@ import "./src/components/molecules/OnboardedHostPopup/OnboardedHostPopup.cy.tsx"
 import "./src/components/molecules/ProvisionedHostPopup/ProvisionedHostPopup.cy.tsx";
 import "./src/components/molecules/RegisteredHostPopup/RegisteredHostPopup.cy.tsx";
 import "./src/components/molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag.cy.tsx";
+import "./src/components/organism/AddHostsForm/AddHostsForm.cy.tsx";
 import "./src/components/organism/ClusterConfiguration/ClusterConfiguration.cy.tsx";
 import "./src/components/organism/hostConfigure/AddHostLabels/AddHostLabels.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalOsDropdown/GlobalOsDropdown.cy.tsx";

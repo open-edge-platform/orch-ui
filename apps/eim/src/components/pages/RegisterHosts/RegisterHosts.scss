@@ -1,0 +1,19 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.register-hosts {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 9rem);
+  .auto-properties-message-banner {
+    margin-top: 1rem;
+  }
+
+  &__button-group {
+    border-top: 0.1rem solid var(--spark-color-theme-light-gray300);
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+}

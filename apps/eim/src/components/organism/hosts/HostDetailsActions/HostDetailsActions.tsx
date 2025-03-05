@@ -8,7 +8,6 @@ import { ConfirmationDialog } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../../store/hooks";
 import {
   deleteHostInstanceFn,
@@ -35,7 +34,6 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const cy = { "data-cy": dataCy };
   const { host, basePath } = props;
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
@@ -139,11 +137,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
           isOpen={deleteConfirmationOpen}
           buttonPlacement="left-reverse"
           confirmCb={() => {
-            deleteHostInstanceFn(dispatch, host).then(() => {
-              navigate(`${basePath}../hosts`, {
-                relative: "path",
-              });
-            });
+            deleteHostInstanceFn(dispatch, host);
             setDeleteConfirmationOpen(false);
           }}
           confirmBtnText="Delete"

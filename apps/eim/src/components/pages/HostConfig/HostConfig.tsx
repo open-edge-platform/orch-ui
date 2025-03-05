@@ -39,6 +39,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { resetTree } from "../../../store/locations";
 import { setMessageBanner } from "../../../store/notifications";
 import { HostConfigReview } from "../../atom/HostConfigReview/HostConfigReview";
+import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import { AddHostLabels } from "../../organism/hostConfigure/AddHostLabels/AddHostLabels";
 import { HostsDetails } from "../../organism/hostConfigure/HostsDetails/HostsDetails";
 import { RegionSite } from "../../organism/hostConfigure/RegionSite/RegionSite";
@@ -82,7 +83,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     hosts,
     formStatus: { currentStep, enableNextBtn, enablePrevBtn },
   } = useAppSelector(selectHostConfigForm);
-
+  const { autoProvision } = useAppSelector((store) => store.configureHost);
   const containsHosts = useAppSelector(selectContainsHosts);
   const firstHost =
     Object.keys(hosts).length > 0 ? useAppSelector(selectFirstHost) : undefined;
@@ -100,6 +101,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     eim.usePostV1ProjectsByProjectNameComputeInstancesMutation();
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
     useState<boolean>(false);
+  const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [createdInstances, setCreatedInstances] = useState<Set<string>>(
     new Set(),
   );
@@ -214,11 +216,12 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
       </div>
     );
   }
-
   return (
     <div {...cy} className="host-config">
       <Flex cols={[6, 6]}>
-        <Heading semanticLevel={4}>Configure Host</Heading>
+        <Heading semanticLevel={4}>
+          {autoProvision ? "Set Up Provisioning" : "Configure Host"}
+        </Heading>
       </Flex>
       <Stepper
         steps={steps}
@@ -259,7 +262,11 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           <Button
             size={ButtonSize.Large}
             variant={ButtonVariant.Secondary}
-            onPress={goToListPage}
+            onPress={() => {
+              if (autoProvision) {
+                setShowContinueDialog(true);
+              } else goToListPage();
+            }}
           >
             Cancel
           </Button>
@@ -271,7 +278,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
               onPress={handlePrev}
               isDisabled={!enablePrevBtn}
             >
-              Back
+              Previous
             </Button>
           )}
           <Button
@@ -284,7 +291,12 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           </Button>
         </ButtonGroup>
       </div>
-
+      {showContinueDialog && (
+        <HostRegistrationAndProvisioningCancelDialog
+          isOpen={showContinueDialog}
+          onClose={() => setShowContinueDialog(false)}
+        />
+      )}
       {clusterConfirmationOpen && (
         <ConfirmationDialog
           title="Create a cluster now?"

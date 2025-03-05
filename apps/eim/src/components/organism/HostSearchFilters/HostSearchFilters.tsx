@@ -140,6 +140,7 @@ const HostSearchFilters = () => {
   return (
     <div {...cy} className="host-search-filters">
       <Button
+        iconOnly
         className="host-search-filters__button"
         variant={ButtonVariant.Ghost}
         onPress={() => setShowFilter(!showFilter)}
