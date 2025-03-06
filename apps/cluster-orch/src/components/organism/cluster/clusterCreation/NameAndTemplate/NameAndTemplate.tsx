@@ -87,10 +87,7 @@ const NameAndTemplate = () => {
           clusterTemplateVersion={useAppSelector(getTemplateVersion)}
           templateName={selectTemplateName}
           isDisabled={
-            currentCluster.clusterTemplateName &&
-            currentCluster.clusterTemplateName.length > 0
-              ? false
-              : true
+            !(currentCluster.template && currentCluster.template.length > 0)
           }
           onSelectionChange={(value: string) => {
             setSelectTemplateVersion(value);

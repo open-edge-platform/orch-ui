@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
 import { ButtonVariant } from "@spark-design/tokens";
 import React, { useEffect, useState } from "react";
@@ -16,9 +16,9 @@ import "./HostSelection.scss";
 export const dataCy = "hostSelection";
 
 interface HostSelectionProps {
-  cluster: ecm.ClusterDetailInfo & ecm.ClusterInfo;
-  configuredClusterNodes?: ecm.NodeInfo[];
-  onNodesSave: (nodeInfoList: ecm.NodeInfo[]) => void;
+  cluster: cm.ClusterDetailInfo & cm.ClusterInfo;
+  configuredClusterNodes?: cm.NodeInfo[];
+  onNodesSave: (nodeInfoList: cm.NodeInfo[]) => void;
   onRemoveLastNode: (removed: boolean) => void;
 
   // This is needed for testing purpose
@@ -37,10 +37,10 @@ const HostSelection = ({
   const [, setSearchParam] = useSearchParams();
 
   // Final cluster node info seen on the Nodes/Hosts review table (`configured nodes` + `newly selected but unconfigured nodes`)
-  const [clusterNodeList, setClusterNodeList] = useState<ecm.NodeInfo[]>([]);
+  const [clusterNodeList, setClusterNodeList] = useState<cm.NodeInfo[]>([]);
   useEffect(() => {
-    setClusterNodeList(cluster.nodes?.nodeInfoList ?? []);
-  }, [cluster.nodes?.nodeInfoList]);
+    setClusterNodeList(cluster.nodes ?? []);
+  }, [cluster.nodes]);
 
   // Host selection in the drawer
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
@@ -48,7 +48,7 @@ const HostSelection = ({
   // Remove host modal
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [deletedHostName, setDeletedHostName] = useState<string>();
-  const [removedRowSelect, setRemovedRowSelect] = useState<ecm.NodeInfo>();
+  const [removedRowSelect, setRemovedRowSelect] = useState<cm.NodeInfo>();
 
   return (
     <>
@@ -58,7 +58,7 @@ const HostSelection = ({
           configuredClusterNode={configuredClusterNodes}
           onNodeUpdate={(node, value) => {
             // Update role of the specific node which is controlled by nodeRoleDropdown
-            const updatedNodeRoleList: ecm.NodeInfo[] = clusterNodeList.map(
+            const updatedNodeRoleList: cm.NodeInfo[] = clusterNodeList.map(
               (clusterNodes) =>
                 clusterNodes.id === node.id
                   ? {
@@ -87,7 +87,7 @@ const HostSelection = ({
 
         <ClusterEditAddNodesDrawer
           // Cluster with updated node list
-          cluster={{ ...cluster, nodes: { nodeInfoList: clusterNodeList } }}
+          cluster={{ ...cluster, nodes: clusterNodeList }}
           isOpen={showDrawer}
           onAddNodeSave={(additionalNodes) => {
             // Append new node to old nodeList
@@ -115,14 +115,14 @@ const HostSelection = ({
             }?`}
             buttonPlacement="left-reverse"
             confirmCb={() => {
-              let updatedNodes: ecm.NodeInfo[] = [];
-              const updatedInitialNodes: ecm.NodeInfo[] = [];
+              let updatedNodes: cm.NodeInfo[] = [];
+              const updatedInitialNodes: cm.NodeInfo[] = [];
 
               if (clusterNodeList?.length == 0) {
                 updatedNodes = [];
               }
 
-              clusterNodeList?.forEach((node: ecm.NodeInfo) => {
+              clusterNodeList?.forEach((node: cm.NodeInfo) => {
                 if (node.id != removedRowSelect?.id) {
                   updatedNodes.push(node);
                 }

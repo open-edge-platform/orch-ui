@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm, eim, mbApi } from "@orch-ui/apis";
+import { cm, eim, mbApi } from "@orch-ui/apis";
 import { MetadataFormPom, TablePom } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -35,7 +35,7 @@ const dataCySelectors = [
 ] as const;
 
 type Selectors = (typeof dataCySelectors)[number];
-const route = "**/v1/**/clusters";
+const route = "**/v2/**/clusters";
 const metadataRoute = "**/v1/projects/**/metadata";
 const schedulesRoute = "**/v1/schedules*";
 
@@ -68,7 +68,7 @@ const successScheduleEndpoint: CyApiDetails<SuccessSchedules> = {
 };
 const successClusterEndpoint: CyApiDetails<
   SuccessClusterApiAliases,
-  ecm.PostV1ProjectsByProjectNameClustersApiResponse
+  cm.PostV2ProjectsByProjectNameClustersApiResponse
 > = {
   createClusterSuccess: {
     route,
@@ -81,7 +81,7 @@ const successClusterEndpoint: CyApiDetails<
 };
 const errorClusterEndpoint: CyApiDetails<
   ErrorClusterApiAliases,
-  ecm.PostV1ProjectsByProjectNameClustersApiResponse
+  cm.PostV2ProjectsByProjectNameClustersApiResponse
 > = {
   createClusterFail: {
     route,
@@ -296,18 +296,15 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
     store.dispatch(
       setNodes([
         {
-          role: "worker",
-          guid: "4c4c4544-0044-4210-8031-c2c04f305233",
-          id: "host-1234",
-          name: "Host 1234",
+          id: "4c4c4544-0044-4210-8031-c2c04f305233",
         },
       ]),
     );
     store.dispatch(
       setNodesSpec([
         {
-          nodeGuid: "4c4c4544-0044-4210-8031-c2c04f305233",
-          nodeRole: "worker",
+          id: "4c4c4544-0044-4210-8031-c2c04f305233",
+          role: "worker",
         },
       ]),
     );

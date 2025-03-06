@@ -5,8 +5,7 @@
 
 import {
   adm,
-  ctm,
-  ecm,
+  cm,
   enhancedEimSlice as miApi,
   mbApi,
   tmSlice,
@@ -46,10 +45,8 @@ const rootReducer = combineReducers({
   templateVersion: templateVersionReducer,
   selectSite: selectSiteReducer,
   selectRegion: selectRegionReducer,
-  [ecm.clusterManagerApis.reducerPath]: ecm.clusterManagerApis.reducer,
+  [cm.clusterManagerApis.reducerPath]: cm.clusterManagerApis.reducer,
   [adm.deploymentManager.reducerPath]: adm.deploymentManager.reducer,
-  [ctm.clusterTemplateManagerApis.reducerPath]:
-    ctm.clusterTemplateManagerApis.reducer,
   [miApi.miEnhancedApi.reducerPath]: miApi.miEnhancedApi.reducer,
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
   [uiSliceName]: UiSlice,
@@ -66,8 +63,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         serializableCheck: false,
         immutableCheck: false,
       })
-        .concat(ecm.clusterManagerApis.middleware)
-        .concat(ctm.clusterTemplateManagerApis.middleware)
+        .concat(cm.clusterManagerApis.middleware)
         .concat(miApi.miEnhancedApi.middleware)
         .concat(mbApi.metadataBroker.middleware)
         .concat(adm.deploymentManager.middleware)
@@ -83,8 +79,7 @@ export const store = configureStore({
       serializableCheck: true,
       immutableCheck: true,
     })
-      .concat(ecm.clusterManagerApis.middleware)
-      .concat(ctm.clusterTemplateManagerApis.middleware)
+      .concat(cm.clusterManagerApis.middleware)
       .concat(miApi.miEnhancedApi.middleware)
       .concat(mbApi.metadataBroker.middleware)
       .concat(adm.deploymentManager.middleware)

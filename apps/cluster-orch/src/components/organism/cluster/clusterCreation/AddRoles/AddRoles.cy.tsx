@@ -14,12 +14,10 @@ describe("<AddRoles/>", () => {
     const store = setupStore({
       nodes: [
         {
-          guid: "guid1",
           id: "node-1",
           name: "nodeOne",
           role: "all",
           os: "linux",
-          serial: "serialNumberOne",
         },
       ],
     });

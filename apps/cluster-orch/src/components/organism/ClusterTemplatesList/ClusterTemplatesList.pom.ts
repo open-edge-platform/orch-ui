@@ -23,7 +23,7 @@ type ApiAliases =
   | "setAsDefault"
   | "deleteTemplate";
 
-const route = "**/v1/**/templates**";
+const route = "**/v2/**/templates**";
 
 const endpoints: CyApiDetails<ApiAliases> = {
   getAllTemplatesEmpty: {

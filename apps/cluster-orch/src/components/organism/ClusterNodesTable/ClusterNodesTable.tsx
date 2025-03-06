@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 
 export const dataCy = "clusterNodesTable";
 interface ClusterNodesTableProps {
-  nodes?: ecm.NodeInfo[];
-  columns: TableColumn<ecm.NodeInfo>[];
+  nodes?: cm.NodeInfo[];
+  columns: TableColumn<cm.NodeInfo>[];
 }
 const ClusterNodesTable = ({ nodes, columns }: ClusterNodesTableProps) => {
   const cy = { "data-cy": dataCy };

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ctm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { BaseStore } from "../baseStore";
 import {
   clusterTemplateFiveName,
@@ -31,13 +31,13 @@ export const selectClusterThreeV1 = `${clusterTemplateThreeName}-${clusterTempla
 export const selectClusterFourV1 = `${clusterTemplateFourName}-${clusterTemplateFourV1Info.version}`;
 export const selectClusterFiveV1 = `${clusterTemplateFiveName}-${clusterTemplateFiveV1Info.version}`;
 
-export const clusterTemplateOneV1: ctm.TemplateInfo = {
-  id: clusterTemplateOneV1Info.id,
+export const clusterTemplateOneV1: cm.TemplateInfo = {
   name: clusterTemplateOneName,
   version: clusterTemplateOneV1Info.version,
   description: "example description 1",
-  clustertype: "rke2",
-  providertype: "Rancher",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: {
       apiVersion: "provisioning.cattle.io/v1",
@@ -169,13 +169,13 @@ export const clusterTemplateOneV1: ctm.TemplateInfo = {
   },
 };
 
-export const clusterTemplateOneV2: ctm.TemplateInfo = {
-  id: clusterTemplateOneV2Info.id,
+export const clusterTemplateOneV2: cm.TemplateInfo = {
   name: clusterTemplateOneName,
   version: clusterTemplateOneV2Info.version,
   description: "Lorem ipsum dolor sit amet",
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: {
       status: "disabled",
@@ -205,12 +205,12 @@ export const clusterTemplateOneV2: ctm.TemplateInfo = {
   },
 };
 
-const clusterTemplateOneV3: ctm.TemplateInfo = {
-  id: clusterTemplateOneV3Info.id,
+const clusterTemplateOneV3: cm.TemplateInfo = {
   name: clusterTemplateOneName,
   version: clusterTemplateOneV3Info.version,
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -240,13 +240,13 @@ const clusterTemplateOneV3: ctm.TemplateInfo = {
   },
 };
 
-export const clusterTemplateTwoV1: ctm.TemplateInfo = {
-  id: clusterTemplateTwoV1Info.id,
+export const clusterTemplateTwoV1: cm.TemplateInfo = {
   name: clusterTemplateTwoName,
   version: clusterTemplateTwoV1Info.version,
   description: "Vivamus aliquam dolor nec aliquet",
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -276,12 +276,12 @@ export const clusterTemplateTwoV1: ctm.TemplateInfo = {
   },
 };
 
-const clusterTemplateTwoV2: ctm.TemplateInfo = {
-  id: clusterTemplateTwoV2Info.id,
+const clusterTemplateTwoV2: cm.TemplateInfo = {
   name: clusterTemplateTwoName,
   version: clusterTemplateTwoV2Info.version,
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -311,13 +311,13 @@ const clusterTemplateTwoV2: ctm.TemplateInfo = {
   },
 };
 
-const clusterTemplateThreeV1: ctm.TemplateInfo = {
-  id: clusterTemplateThreeV1Info.id,
+const clusterTemplateThreeV1: cm.TemplateInfo = {
   name: clusterTemplateThreeName,
   version: clusterTemplateThreeV1Info.version,
   description: "Etiam tristique sollicitudin rutrum",
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -347,71 +347,71 @@ const clusterTemplateThreeV1: ctm.TemplateInfo = {
   },
 };
 
-const clusterTemplateFourV1: ctm.TemplateInfo = {
-  id: clusterTemplateFourV1Info.id,
+const clusterTemplateFourV1: cm.TemplateInfo = {
   name: clusterTemplateFourName,
   version: clusterTemplateFourV1Info.version,
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: undefined,
   },
 };
-const clusterTemplateFourV2: ctm.TemplateInfo = {
-  id: clusterTemplateFourV2Info.id,
+const clusterTemplateFourV2: cm.TemplateInfo = {
   name: clusterTemplateFourName,
   version: clusterTemplateFourV2Info.version,
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: undefined,
   },
 };
 
-const clusterTemplateFiveV1: ctm.TemplateInfo = {
-  id: clusterTemplateFiveV1Info.id,
+const clusterTemplateFiveV1: cm.TemplateInfo = {
   name: clusterTemplateFiveName,
   version: clusterTemplateFiveV1Info.version,
   description: "Aenean rutrum condimentum purus",
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: undefined,
   },
 };
-const clusterTemplateFiveV2: ctm.TemplateInfo = {
-  id: clusterTemplateFiveV2Info.id,
+const clusterTemplateFiveV2: cm.TemplateInfo = {
   name: clusterTemplateFiveName,
   version: clusterTemplateFiveV2Info.version,
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: undefined,
   },
 };
-const clusterTemplateFiveV3: ctm.TemplateInfo = {
-  id: clusterTemplateFiveV3Info.id,
+const clusterTemplateFiveV3: cm.TemplateInfo = {
   name: clusterTemplateFiveName,
   version: clusterTemplateFiveV3Info.version,
   description: "Praesent ligula felis",
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: undefined,
   },
 };
-const clusterTemplateFiveV4: ctm.TemplateInfo = {
-  id: clusterTemplateFiveV4Info.id,
+const clusterTemplateFiveV4: cm.TemplateInfo = {
   name: clusterTemplateFiveName,
   version: clusterTemplateFiveV4Info.version,
-  clustertype: "test",
-  providertype: "test",
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
   clusterconfiguration: {
     rke2: undefined,
   },
 };
 
-export const templates: ctm.TemplateInfoList = {
+export const templates: cm.TemplateInfoList = {
   templateInfoList: [
     clusterTemplateOneV1,
     clusterTemplateOneV2,
@@ -423,22 +423,22 @@ export const templates: ctm.TemplateInfoList = {
 
 export default class ClusterTemplatesStore extends BaseStore<
   "name",
-  ctm.TemplateInfo
+  cm.TemplateInfo
 > {
-  private defaultTemplate: ctm.DefaultTemplateInfo = {
+  private defaultTemplate: cm.DefaultTemplateInfo = {
     name: clusterTemplateOneV1.name,
     version: clusterTemplateOneV1.version!,
   };
 
-  convert(body: ctm.TemplateInfo) {
+  convert(body: cm.TemplateInfo) {
     return body;
   }
 
-  getTemplate(name: string, version: string): ctm.TemplateInfo | undefined {
+  getTemplate(name: string, version: string): cm.TemplateInfo | undefined {
     return this.resources.find((r) => r.name === name && r.version === version);
   }
 
-  getDefault(): ctm.DefaultTemplateInfo {
+  getDefault(): cm.DefaultTemplateInfo {
     return this.defaultTemplate;
   }
 
@@ -447,7 +447,7 @@ export default class ClusterTemplatesStore extends BaseStore<
     this.defaultTemplate.version = version;
   }
 
-  deleteTemplate(template: ctm.TemplateInfo): boolean {
+  deleteTemplate(template: cm.TemplateInfo): boolean {
     if (this.getTemplate(template.name, template.version!) === undefined) {
       return false;
     }

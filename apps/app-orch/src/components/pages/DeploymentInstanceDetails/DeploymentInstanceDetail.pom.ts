@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { adm, ecm } from "@orch-ui/apis";
+import { adm, cm } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterA, deploymentOne } from "@orch-ui/utils";
@@ -22,7 +22,7 @@ type ClusterApiAliases =
   | "clustersListError";
 
 const deploymentDetailsApiUrl = "**/v1/projects/**/appdeployment/deployments/*";
-const kubeconfigApiUrl = "**/v1/**/clusters/**/kubeconfigs";
+const kubeconfigApiUrl = "**/v2/**/clusters/**/kubeconfigs";
 const clusterApiUrl =
   "**/v1/projects/**/appdeployment/deployments/**/clusters?filter=id%3D**";
 
@@ -45,7 +45,7 @@ const deploymentEndpoints: CyApiDetails<
 
 const kubeconfigEndpoints: CyApiDetails<
   KubeconfigApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameKubeconfigsApiResponse
 > = {
   kubeconfigSuccess: {
     route: kubeconfigApiUrl,

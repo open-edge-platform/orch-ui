@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   aggregateStatuses,
   ApiErrorPom,
@@ -39,21 +39,19 @@ describe("<ClusterList />", () => {
   const emptyPom = new EmptyPom();
   const clusterDetailPom = new ClusterDetailPom();
   const ribbonPom = new RibbonPom("table");
-  const clusterList: ecm.GetV1ProjectsByProjectNameClustersApiResponse =
+  const clusterList: cm.GetV2ProjectsByProjectNameClustersApiResponse =
     pom.getDetailOfApi(pom.api.clusterListSuccess, "response");
-  const clusterListNoLocationInfo: ecm.GetV1ProjectsByProjectNameClustersApiResponse =
+  const clusterListNoLocationInfo: cm.GetV2ProjectsByProjectNameClustersApiResponse =
     pom.getDetailOfApi(pom.api.clusterListNoLocationInfo, "response");
   describe("when the API are responding correctly should", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.clusterListSuccess]);
       cy.mount(<ClusterList hasPermission={true} />, { runtimeConfig });
       pom.waitForApis();
-      pom.table
-        .getRows()
-        .should("have.length", clusterList.clusterInfoList!.length);
+      pom.table.getRows().should("have.length", clusterList.clusters!.length);
     });
     it("render a list of clusters", () => {
-      clusterList.clusterInfoList!.forEach((c) => {
+      clusterList.clusters!.forEach((c) => {
         pom.root.contains(c.name!);
         // Check Status
         const statusMessage = aggregateStatuses<ClusterGenericStatuses>(
@@ -61,40 +59,20 @@ describe("<ClusterList />", () => {
           "lifecyclePhase",
         ).message;
         pom.root.contains(statusMessage);
-
-        // Check Node Quantity
-        if (c.nodeQuantity && c.nodeQuantity === 1) {
-          pom.root.contains("1 Host");
-        } else {
-          pom.root.contains(`${c.nodeQuantity} Hosts`);
-        }
-
-        // Check Site
-        if (
-          c.locationList &&
-          c.locationList[0].locationType === "LOCATION_TYPE_SITE_NAME"
-        ) {
-          pom.root.contains("restaurant-one");
-        }
       });
       // Check popup action
-      pom.selectPopupOption(
-        clusterList.clusterInfoList![0].name!,
-        "View Details",
-      );
-      cy.get("#pathname").contains(
-        `/cluster/${clusterList.clusterInfoList![0].name}`,
-      );
+      pom.selectPopupOption(clusterList.clusters![0].name!, "View Details");
+      cy.get("#pathname").contains(`/cluster/${clusterList.clusters![0].name}`);
     });
     it("delete a cluster", () => {
-      pom.selectPopupOption(clusterList.clusterInfoList![0].name!, "Delete");
+      pom.selectPopupOption(clusterList.clusters![0].name!, "Delete");
       pom.interceptApis([pom.api.deleteCluster]);
       cy.get(".spark-modal-footer").contains("Delete").click();
       pom.waitForApis();
       cy.get(`@${pom.api.deleteCluster}`)
         .its("request.url")
         .then((url) => {
-          const match = url.match(clusterList.clusterInfoList![0].name);
+          const match = url.match(clusterList.clusters![0].name);
           expect(match && match.length > 0).to.eq(true);
         });
     });
@@ -145,10 +123,7 @@ describe("<ClusterList />", () => {
       pom.waitForApis();
       pom.table
         .getRows()
-        .should(
-          "have.length",
-          clusterListNoLocationInfo.clusterInfoList!.length,
-        );
+        .should("have.length", clusterListNoLocationInfo.clusters!.length);
     });
   });
   describe("ClusterList exapandable list should", () => {

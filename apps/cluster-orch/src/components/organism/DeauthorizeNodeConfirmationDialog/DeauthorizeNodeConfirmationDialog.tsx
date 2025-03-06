@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
 import { LpInternalError, SharedStorage } from "@orch-ui/utils";
 import { TextField } from "@spark-design/react";
@@ -16,7 +16,7 @@ import "./DeauthorizeNodeConfirmationDialog.scss";
 export const dataCy = "deauthorizeNodeConfirmationDialog";
 
 interface DeauthorizeNodeConfirmationDialogProps {
-  clusterName: string;
+  name: string;
   hostId: string;
   hostName?: string;
   hostUuid?: string;
@@ -40,7 +40,7 @@ interface DeauthInputs {
  * as a pre-requirement for host deauthorize process.
  **/
 const DeauthorizeNodeConfirmationDialog = ({
-  clusterName,
+  name,
   hostName,
   hostId,
   hostUuid,
@@ -54,7 +54,7 @@ const DeauthorizeNodeConfirmationDialog = ({
   const navigate = useNavigate();
 
   const [removeHostNodeFromCluster] =
-    ecm.usePutV1ProjectsByProjectNameClustersAndClusterNameNodesNodeUuidMutation();
+    cm.usePutV2ProjectsByProjectNameClustersAndNameNodesMutation();
 
   const [deauthorizeReason, setDeauthorizeReason] = useState<string>();
 
@@ -66,15 +66,12 @@ const DeauthorizeNodeConfirmationDialog = ({
     try {
       const deauthorizeFnList: (() => Promise<any>)[] = [];
 
-      if (clusterName && hostUuid) {
+      if (name && hostUuid) {
         deauthorizeFnList.push(async () => {
           return await removeHostNodeFromCluster({
             projectName,
-            clusterName,
-            nodeUuid: hostUuid,
-            nodeOperation: {
-              action: "forceremove",
-            },
+            name,
+            body: [], //TODO: does it need DELETE endpoint to be implemented?
           });
         });
       }

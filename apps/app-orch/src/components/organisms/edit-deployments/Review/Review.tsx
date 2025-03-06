@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { adm, catalog, ecm } from "@orch-ui/apis";
+import { adm, catalog, cm } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -47,7 +47,7 @@ interface ReviewProps {
   selectedParameterOverrides?: OverrideValuesList;
   selectedDeploymentName?: string;
   selectedMetadata: MetadataPair[];
-  selectedClusters?: ecm.ClusterInfoRead[];
+  selectedClusters?: cm.ClusterInfoRead[];
 }
 
 const Review = ({
@@ -184,10 +184,14 @@ const Review = ({
     ({ oldPair, newPair }) => oldPair !== newPair,
   );
 
-  const clusterColumns: TableColumn<ecm.ClusterInfoRead>[] = [
+  const clusterColumns: TableColumn<cm.ClusterInfoRead>[] = [
     {
       Header: "Cluster Name",
       accessor: (item) => item.name + " *",
+    },
+    {
+      Header: "Host Count",
+      accessor: "nodeQuantity",
     },
     {
       Header: "Status",
@@ -199,27 +203,6 @@ const Review = ({
           defaultStatusName="lifecyclePhase"
         />
       ),
-    },
-    {
-      Header: "Host Count",
-      accessor: "nodeQuantity",
-    },
-    {
-      Header: "Site",
-      Cell: (table) => {
-        const row = table.row.original;
-        return (
-          <Text size="m">
-            {row.locationList?.reduce((p, c) => {
-              if (c.locationInfo) {
-                return `${p} ${c.locationInfo};`;
-              } else {
-                return p;
-              }
-            }, "")}
-          </Text>
-        );
-      },
     },
   ];
 

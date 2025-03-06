@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { ApiError, SquareSpinner } from "@orch-ui/components";
 import { RuntimeConfig, SharedStorage, SparkTableColumn } from "@orch-ui/utils";
 import React, { Suspense } from "react";
 
 interface ClusterHostsBySiteProps {
-  cluster: ecm.ClusterDetailInfo;
+  cluster: cm.ClusterDetailInfo;
   /** showcase columns from Host data */
   columns: SparkTableColumn<eim.HostRead>[];
   /** show the search ribbon above the host table */
@@ -42,22 +42,22 @@ const ClusterHostsBySite = ({
     data: clusterDetails,
     isLoading: isClusterLoading,
     isError: isClusterError,
-  } = ecm.useGetV1ProjectsByProjectNameClustersAndClusterNameQuery(
+  } = cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
     {
       projectName,
-      clusterName: cluster.name ?? "",
+      name: cluster.name ?? "",
     },
     {
       skip: !cluster.name || !projectName,
     },
   );
 
-  const clusterHostNodes = clusterDetails?.nodes?.nodeInfoList;
+  const clusterHostNodes = clusterDetails?.nodes;
   // Consider all hostsGuids belonging to cluster
   const clusterHostGuids: string[] = [];
-  clusterDetails?.nodes?.nodeInfoList?.forEach((hostNode) => {
-    if (hostNode.guid) {
-      clusterHostGuids.push(hostNode.guid);
+  clusterDetails?.nodes?.forEach((hostNode) => {
+    if (hostNode.id) {
+      clusterHostGuids.push(hostNode.id);
     }
   });
 
@@ -82,13 +82,14 @@ const ClusterHostsBySite = ({
   if (
     isClusterLoading ||
     isHostLoading ||
-    (cluster.status == "creating" && !isClusterError)
+    (cluster.providerStatus?.indicator == "STATUS_INDICATION_IN_PROGRESS" &&
+      !isClusterError)
   ) {
     return (
       <div data-cy="clusterHostBySite">
         <SquareSpinner
           message={
-            cluster.status == "creating"
+            cluster.providerStatus?.indicator == "STATUS_INDICATION_IN_PROGRESS"
               ? "Adding hosts to cluster..."
               : "One moment..."
           }

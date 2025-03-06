@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ctm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   ApiError,
   Flex,
@@ -51,7 +51,7 @@ export const ClusterTemplateDetails = () => {
     isSuccess,
     isError,
     error,
-  } = ctm.useGetV1ProjectsByProjectNameTemplatesAndNameVersionsVersionQuery(
+  } = cm.useGetV2ProjectsByProjectNameTemplatesAndNameVersionsVersionQuery(
     {
       projectName,
       name: templateName ?? "",

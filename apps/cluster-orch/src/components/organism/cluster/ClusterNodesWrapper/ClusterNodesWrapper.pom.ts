@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterOne } from "@orch-ui/utils";
 import { dataCy } from "./ClusterNodesWrapper";
@@ -18,7 +18,7 @@ type ApiAliases = SuccessClusterApiAlias;
 
 const successClusterEndpoint: CyApiDetails<
   SuccessClusterApiAlias,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusterSuccess: {
     route: route,

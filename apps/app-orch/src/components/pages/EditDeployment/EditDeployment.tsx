@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { adm, catalog, ecm, mbApi } from "@orch-ui/apis";
+import { adm, catalog, cm, mbApi } from "@orch-ui/apis";
 import {
   Empty,
   MetadataPair,
@@ -163,7 +163,7 @@ const EditDeployment = () => {
   >(apiDeployment?.deployment.displayName ?? apiDeployment?.deployment.name);
   const [currentMetadata, setCurrentMetadata] = useState<MetadataPair[]>([]);
   const [selectedClusters, setSelectedClusters] = useState<
-    ecm.ClusterInfoRead[]
+    cm.ClusterInfoRead[]
   >([]);
 
   // Step 4: Review
@@ -219,17 +219,13 @@ const EditDeployment = () => {
           nextJsx = (
             <SelectCluster
               mode={SelectClusterMode.EDIT}
-              selectedIds={selectedClusters.map(
-                (cluster) => cluster.clusterID!,
-              )}
-              onSelect={(cluster: ecm.ClusterInfoRead, isSelected: boolean) => {
+              selectedIds={selectedClusters.map((cluster) => cluster.name!)}
+              onSelect={(cluster: cm.ClusterInfoRead, isSelected: boolean) => {
                 setSelectedClusters((prev) => {
                   if (isSelected) {
                     return prev.concat(cluster);
                   } else {
-                    return prev.filter(
-                      (c) => c.clusterID !== cluster.clusterID,
-                    );
+                    return prev.filter((c) => c.name !== cluster.name);
                   }
                 });
               }}
@@ -296,10 +292,10 @@ const EditDeployment = () => {
         if (apiDeployment.deployment.targetClusters) {
           setSelectedClusters(
             apiDeployment.deployment.targetClusters.map((tc) => {
-              const cluster: ecm.ClusterInfoRead = {
-                // to save deployment we just need ClusterId
+              const cluster: cm.ClusterInfoRead = {
+                // to save deployment we just need name
                 // therefore no need to load cluster data
-                clusterID: tc.clusterId,
+                name: tc.clusterId,
               };
               return cluster;
             }),
@@ -397,10 +393,10 @@ const EditDeployment = () => {
             (p: adm.TargetClusters[], app: catalog.ApplicationReference) => {
               if (selectedClusters && selectedClusters.length > 0) {
                 return p.concat(
-                  selectedClusters.map((c: ecm.ClusterInfoRead) => {
+                  selectedClusters.map((c: cm.ClusterInfoRead) => {
                     return {
                       appName: app.name,
-                      clusterId: c.clusterID ?? "",
+                      clusterId: c.name ?? "",
                     };
                   }),
                 );

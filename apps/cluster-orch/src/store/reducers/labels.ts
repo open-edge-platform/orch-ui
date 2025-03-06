@@ -3,38 +3,38 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-const initialState: ecm.ClusterLabels = {};
+const initialState: cm.ClusterLabels = {};
 export const labels = createSlice({
   name: "labels",
   initialState,
   reducers: {
     setLabels(
-      state: ecm.ClusterLabels,
-      action: PayloadAction<ecm.ClusterLabels>,
+      state: cm.ClusterLabels,
+      action: PayloadAction<cm.ClusterLabels>,
     ) {
       state = { ...action.payload };
       return state;
     },
 
     setInitialLabels(
-      state: ecm.ClusterLabels,
-      action: PayloadAction<ecm.ClusterLabels>,
+      state: cm.ClusterLabels,
+      action: PayloadAction<cm.ClusterLabels>,
     ) {
       state = { ...action.payload };
       return state;
     },
 
-    clearLabels(state: ecm.ClusterLabels) {
+    clearLabels(state: cm.ClusterLabels) {
       state = { ...initialState };
       return state;
     },
 
     updateLabels(
-      state: ecm.ClusterLabels,
+      state: cm.ClusterLabels,
       action: PayloadAction<{ [key: string]: string }>,
     ) {
       state.labels = action.payload;

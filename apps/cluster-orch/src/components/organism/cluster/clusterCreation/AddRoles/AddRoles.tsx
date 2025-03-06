@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
 import { Heading } from "@spark-design/react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
@@ -27,20 +27,19 @@ const AddRoles = () => {
 
   // these columns define the nodes in the cluster.
   // They are used to render information about the node
-  const columns: TableColumn<ecm.NodeInfo>[] = [
+  const columns: TableColumn<cm.NodeInfo>[] = [
     NodeTableColumns.nameWithoutLink,
-    NodeTableColumns.serial,
-    NodeTableColumns.roleSelect((node: ecm.NodeInfo) => {
+    NodeTableColumns.roleSelect((node: cm.NodeInfo) => {
       return (
         <NodeRoleDropdown
           role={node.role ? node.role : ""}
           disable={false}
           onSelect={(value: string) => {
-            const newNodes: ecm.NodeInfo[] = [];
-            const newNodesSpec: ecm.NodeSpec[] = [];
-            currentNodes.forEach((nodeId: ecm.NodeInfo) => {
-              let newNode: ecm.NodeInfo = { ...nodeId };
-              if (nodeId.guid == node.guid) {
+            const newNodes: cm.NodeInfo[] = [];
+            const newNodesSpec: cm.NodeSpec[] = [];
+            currentNodes.forEach((nodeId: cm.NodeInfo) => {
+              let newNode: cm.NodeInfo = { ...nodeId };
+              if (nodeId.id == node.id) {
                 newNode = {
                   ...nodeId,
                   id: nodeId.id,
@@ -50,13 +49,13 @@ const AddRoles = () => {
 
               newNodes.push(newNode);
             });
-            currentNodesSpec.forEach((nodeSpec: ecm.NodeSpec) => {
-              let newNodeSpec: ecm.NodeSpec = { ...nodeSpec };
+            currentNodesSpec.forEach((nodeSpec: cm.NodeSpec) => {
+              let newNodeSpec: cm.NodeSpec = { ...nodeSpec };
 
-              if (nodeSpec.nodeGuid == node.guid) {
+              if (nodeSpec.id == node.id) {
                 newNodeSpec = {
-                  nodeGuid: node.guid,
-                  nodeRole: value as "all" | "worker" | "controlplane",
+                  id: node.id,
+                  role: value as "all" | "worker" | "controlplane",
                 };
               }
 

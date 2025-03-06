@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { adm, ecm } from "@orch-ui/apis";
+import { adm, cm } from "@orch-ui/apis";
 import {
   ApiError,
   Empty,
@@ -52,9 +52,9 @@ const {
 
 const DeploymentInstanceDetail = () => {
   const dispatch = useAppDispatch();
-  const { deplId, clusterId } = useParams<{
+  const { deplId, name } = useParams<{
     deplId: string;
-    clusterId: string;
+    name: string;
   }>();
   const [toastProps] = useState<ToastProps>({
     state: ToastState.Success,
@@ -76,16 +76,16 @@ const DeploymentInstanceDetail = () => {
     );
 
   const { data: kubeconfig, isLoading: isKubeconfigLoading } =
-    ecm.useGetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsQuery(
+    cm.useGetV2ProjectsByProjectNameClustersAndNameKubeconfigsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        clusterId: clusterId!,
+        name: name!,
       },
-      { skip: !clusterId || !SharedStorage.project?.name },
+      { skip: !name || !SharedStorage.project?.name },
     );
 
   const clusterFilter = getFilter<adm.ClusterRead>(
-    clusterId ?? "",
+    name ?? "",
     ["id"],
     Operator.OR,
   );
@@ -102,12 +102,12 @@ const DeploymentInstanceDetail = () => {
       filter: clusterFilter,
     },
     {
-      skip: !deplId || !clusterId || !SharedStorage.project?.name,
+      skip: !deplId || !name || !SharedStorage.project?.name,
     },
   );
   const cluster =
     isSuccess && deploymentClusters && deploymentClusters.clusters
-      ? deploymentClusters.clusters.find((c) => c.id === clusterId)
+      ? deploymentClusters.clusters.find((c) => c.id === name)
       : null;
 
   useEffect(() => {

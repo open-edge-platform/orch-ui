@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { defaultActiveProject } from "@orch-ui/tests";
 import { SharedStorage } from "@orch-ui/utils";
 import { setupStore } from "../store/store";
@@ -12,16 +12,14 @@ import { getHostsList, getHostStatus } from "./helpers";
 describe("DeploymentsContainer helpers functions", () => {
   describe("getHostsList", () => {
     describe("when the API respond correctly", () => {
-      const clusters: ecm.ClusterDetailInfo[] = [
+      const clusters: cm.ClusterDetailInfo[] = [
         {
           name: "cluster-1",
-          nodes: { nodeInfoList: [{ guid: "node1-guid" }] },
+          nodes: [{ id: "node1-guid" }],
         },
         {
           name: "cluster-2",
-          nodes: {
-            nodeInfoList: [{ guid: "node2-guid" }, { guid: "node3-guid" }],
-          },
+          nodes: [{ id: "node2-guid" }, { id: "node3-guid" }],
         },
       ];
 
@@ -30,7 +28,7 @@ describe("DeploymentsContainer helpers functions", () => {
       beforeEach(() => {
         SharedStorage.project = defaultActiveProject;
         clusters.forEach((c) => {
-          cy.intercept("GET", `**v1/**/clusters/${c.name}`, c).as("getCluster");
+          cy.intercept("GET", `**v2/**/clusters/${c.name}`, c).as("getCluster");
         });
       });
 
@@ -52,7 +50,7 @@ describe("DeploymentsContainer helpers functions", () => {
         });
       });
     });
-    describe("when ECM returns a 500 error", () => {
+    describe("when CM returns a 500 error", () => {
       it("should return an error", (done) => {
         cy.intercept("GET", "**/v1/**/clusters/*", {
           statusCode: 500,

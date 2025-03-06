@@ -8,9 +8,9 @@ import { store } from "../../../store";
 import ClusterSummary, { ClusterSummaryProps } from "./ClusterSummary";
 import "./ClusterSummary.scss";
 
-const ClusterSummaryExternal = ({ uuid, site }: ClusterSummaryProps) => (
+const ClusterSummaryExternal = ({ nodeId, site }: ClusterSummaryProps) => (
   <Provider store={store}>
-    <ClusterSummary uuid={uuid} site={site} />
+    <ClusterSummary nodeId={nodeId} site={site} />
   </Provider>
 );
 

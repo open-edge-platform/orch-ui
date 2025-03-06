@@ -14,14 +14,14 @@ describe("<ClusterNodesWrapper/>", () => {
   it("should render component", () => {
     clusterDetailPom.interceptApis([clusterDetailPom.api.getClusterSuccess]);
     pom.waitForApis();
-    cy.mount(<ClusterNodesWrapper clusterName="restaurant-portland" />);
+    cy.mount(<ClusterNodesWrapper name="restaurant-portland" />);
     pom.root.should("exist");
   });
 
   it("should render empty component", () => {
     clusterDetailPom.interceptApis([clusterDetailPom.api.getClusterEmptyNodes]);
     pom.waitForApis();
-    cy.mount(<ClusterNodesWrapper clusterName="restaurant-portland" />);
+    cy.mount(<ClusterNodesWrapper name="restaurant-portland" />);
     pom.root.should("exist");
     pom.root.should("have.text", "No nodes available.");
   });
@@ -29,7 +29,7 @@ describe("<ClusterNodesWrapper/>", () => {
   it("should render error", () => {
     clusterDetailPom.interceptApis([clusterDetailPom.api.getClusterError]);
     pom.waitForApis();
-    cy.mount(<ClusterNodesWrapper clusterName="restaurant-portland" />);
+    cy.mount(<ClusterNodesWrapper name="restaurant-portland" />);
     pom.root.should("exist");
     pom.root.should("contain", "Unfortunately an error occurred");
   });

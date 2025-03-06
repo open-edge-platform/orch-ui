@@ -3,24 +3,21 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-type ModifiedClusterDetailInfo = ecm.ClusterDetailInfo & {
+type ModifiedClusterDetailInfo = cm.ClusterDetailInfo & {
   selectedSite?: eim.SiteRead;
 };
 
 const initialState: ModifiedClusterDetailInfo = {
-  clusterID: "",
-  clusterLabels: {},
-  clusterTemplateName: "",
+  labels: {},
+  template: "",
   kubernetesVersion: "",
   name: "Add Name",
-  nodes: {},
-  resources: {},
-  status: undefined,
-  userDefinedLabelKeys: [],
+  nodes: [],
+  providerStatus: undefined,
   selectedSite: {},
 };
 export const cluster = createSlice({
@@ -52,18 +49,18 @@ export const cluster = createSlice({
       state: ModifiedClusterDetailInfo,
       action: PayloadAction<string>,
     ) {
-      state.clusterTemplateName = action.payload;
+      state.template = action.payload;
     },
     setClusterLabels(
       state: ModifiedClusterDetailInfo,
       action: PayloadAction<object>,
     ) {
-      state.clusterLabels = action.payload;
+      state.labels = action.payload;
     },
 
     setClusterNodes(
       state: ModifiedClusterDetailInfo,
-      action: PayloadAction<ecm.NodeInfoList>,
+      action: PayloadAction<cm.NodeInfo[]>,
     ) {
       state.nodes = action.payload;
     },
@@ -79,29 +76,22 @@ export const cluster = createSlice({
       state: ModifiedClusterDetailInfo,
       action: PayloadAction<string>,
     ) {
-      state.clusterTemplateName = action.payload;
+      state.template = action.payload;
     },
 
     updateClusterLabels(
       state: ModifiedClusterDetailInfo,
       action: PayloadAction<{ [key: string]: string }>,
     ) {
-      state.clusterLabels = action.payload;
-    },
-
-    updateUserDefinedLabels(
-      state: ModifiedClusterDetailInfo,
-      action: PayloadAction<string[]>,
-    ) {
-      state.userDefinedLabelKeys = action.payload;
+      state.labels = action.payload;
     },
 
     updateClusterNodes(
       state: ModifiedClusterDetailInfo,
-      action: PayloadAction<ecm.NodeInfoList>,
+      action: PayloadAction<cm.NodeInfo[]>,
     ) {
-      if (action.payload.nodeInfoList) {
-        state.nodes = { nodeInfoList: action.payload.nodeInfoList };
+      if (action.payload) {
+        state.nodes = action.payload;
       }
     },
 
@@ -116,18 +106,13 @@ export const cluster = createSlice({
 
 export const getCluster = (state: RootState) => state.cluster;
 export const getInitial = () => initialState;
-export const getNodes = (state: RootState) => state.cluster.nodes?.nodeInfoList;
-export const selectTemplate = (state: RootState) =>
-  state.cluster.clusterTemplateName;
+export const getNodes = (state: RootState) => state.cluster.nodes;
+export const selectTemplate = (state: RootState) => state.cluster.template;
 
-export const getTemplateName = (state: RootState) => {
-  const name = state.cluster.clusterTemplateName?.split("-")[0];
-  return name;
-};
-export const getTemplateVersion = (state: RootState) => {
-  const version = state.cluster.clusterTemplateName?.split("-")[1];
-  return version;
-};
+export const getTemplateName = (state: RootState) =>
+  state.cluster.template?.split("-")[0];
+export const getTemplateVersion = (state: RootState) =>
+  state.cluster.template?.split("-")[1];
 
 export const getSelectedSite = (state: RootState) => state.cluster.selectedSite;
 
@@ -138,7 +123,6 @@ export const {
   updateClusterTemplate,
   updateClusterNodes,
   updateClusterLabels,
-  updateUserDefinedLabels,
   updateClusterName,
   setClusterSelectedSite,
 } = cluster.actions;

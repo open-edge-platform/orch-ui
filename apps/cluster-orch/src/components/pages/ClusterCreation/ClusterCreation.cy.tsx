@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { MetadataDisplayPom } from "@orch-ui/components";
 import {
   clusterTemplateOneName,
@@ -145,36 +145,18 @@ describe("<ClusterCreation/>", () => {
 
       // Upon clicking `Create` button test various with api response
       describe("when cluster create is clicked in review", () => {
-        const expectedClusterReq: ecm.ClusterSpec = {
-          clusterName: "Cluster1",
-          clusterLabels: {
+        const expectedClusterReq: cm.ClusterSpec = {
+          name: "Cluster1",
+          labels: {
             customer: "culvers",
             region: "region-uswest",
             meta: "data",
           },
-          clusterTemplateName: "5G Template1-v1.0.1",
-          nodeList: [
+          template: "5G Template1-v1.0.1",
+          nodes: [
             {
-              nodeRole: "worker",
-              nodeGuid: "4c4c4544-0044-4210-8031-c2c04f305233",
-            },
-          ],
-          locationList: [
-            {
-              locationType: "LOCATION_TYPE_REGION_NAME",
-              locationInfo: "Oregon",
-            },
-            {
-              locationType: "LOCATION_TYPE_REGION_ID",
-              locationInfo: "region-portland",
-            },
-            {
-              locationType: "LOCATION_TYPE_SITE_ID",
-              locationInfo: "site-portland",
-            },
-            {
-              locationType: "LOCATION_TYPE_SITE_NAME",
-              locationInfo: "Portland",
+              role: "worker",
+              id: "4c4c4544-0044-4210-8031-c2c04f305233",
             },
           ],
         };

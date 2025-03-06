@@ -13,12 +13,12 @@ export const orchAppOrchError = {
   },
 };
 
-// ECM errors
+// CM errors
 export const orchECMError = {
   status: 400,
   data: {
     code: 400,
-    message: "ecm error example message",
+    message: "cm error example message",
   },
 };
 

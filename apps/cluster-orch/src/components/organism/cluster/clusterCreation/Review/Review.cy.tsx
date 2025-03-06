@@ -11,7 +11,7 @@ const pom = new ReviewPom();
 describe("<Review/>", () => {
   beforeEach(() => {
     const store = setupStore({
-      cluster: { name: "name", clusterTemplateName: "template-v1.3.4" },
+      cluster: { name: "name", template: "template-v1.3.4" },
     });
     // @ts-ignore
     window.store = store;

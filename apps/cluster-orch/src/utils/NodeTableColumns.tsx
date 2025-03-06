@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { StatusIcon, TableColumn } from "@orch-ui/components";
 import { nodeStatusToIconStatus, nodeStatusToText } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 
-const name: TableColumn<ecm.NodeInfo> = {
+const name: TableColumn<cm.NodeInfo> = {
   Header: "Host Name",
   accessor: (node) => {
     if (node.name) {
@@ -17,7 +17,7 @@ const name: TableColumn<ecm.NodeInfo> = {
       return node.id;
     }
   },
-  Cell: (table: { row: { original: ecm.NodeInfo } }) => (
+  Cell: (table: { row: { original: cm.NodeInfo } }) => (
     <Link to={`/infrastructure/host/${table.row.original.id}`}>
       {table.row.original.name !== ""
         ? table.row.original.name
@@ -26,15 +26,15 @@ const name: TableColumn<ecm.NodeInfo> = {
   ),
 };
 
-const nameWithoutLink: TableColumn<ecm.NodeInfo> = {
+const nameWithoutLink: TableColumn<cm.NodeInfo> = {
   Header: "Host Name",
   accessor: (node) => node.name ?? node.id,
 };
 
-const status: TableColumn<ecm.NodeInfo> = {
+const status: TableColumn<cm.NodeInfo> = {
   Header: "Readiness",
-  accessor: (item: ecm.NodeInfo) => nodeStatusToText(item.status),
-  Cell: (table: { row: { original: ecm.NodeInfo } }) => {
+  accessor: (item: cm.NodeInfo) => nodeStatusToText(item.status),
+  Cell: (table: { row: { original: cm.NodeInfo } }) => {
     const row = table.row.original;
     return (
       <StatusIcon
@@ -45,22 +45,17 @@ const status: TableColumn<ecm.NodeInfo> = {
   },
 };
 
-const guid: TableColumn<ecm.NodeInfo> = {
+const guid: TableColumn<cm.NodeInfo> = {
   Header: "Guid",
-  accessor: (nodes) => nodes.guid ?? "-",
+  accessor: (nodes) => nodes.id ?? "-",
 };
 
-const serial: TableColumn<ecm.NodeInfo> = {
-  Header: "Serial Number",
-  accessor: (nodes) => nodes.serial ?? "-",
-};
-
-const os: TableColumn<ecm.NodeInfo> = {
+const os: TableColumn<cm.NodeInfo> = {
   Header: "Operating System",
   accessor: (nodes) => nodes.os ?? "-",
 };
 
-const role: TableColumn<ecm.NodeInfo> = {
+const role: TableColumn<cm.NodeInfo> = {
   Header: "Role",
   accessor: (nodes) => {
     let roleUpdate = "";
@@ -80,8 +75,8 @@ const role: TableColumn<ecm.NodeInfo> = {
 };
 
 const roleSelect = (
-  popupFn: (node: ecm.NodeInfo) => JSX.Element,
-): TableColumn<ecm.NodeInfo> => ({
+  popupFn: (node: cm.NodeInfo) => JSX.Element,
+): TableColumn<cm.NodeInfo> => ({
   Header: "Role",
   textAlign: "left",
   padding: "0",
@@ -89,8 +84,8 @@ const roleSelect = (
 });
 
 const actions = (
-  popupFn: (node: ecm.NodeInfo) => JSX.Element,
-): TableColumn<ecm.NodeInfo> => ({
+  popupFn: (node: cm.NodeInfo) => JSX.Element,
+): TableColumn<cm.NodeInfo> => ({
   Header: "Actions",
   textAlign: "center",
   padding: "0",
@@ -100,7 +95,6 @@ const actions = (
 export const NodeTableColumns = {
   name,
   nameWithoutLink,
-  serial,
   status,
   os,
   guid,

@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { StatusIcon, TableColumn } from "@orch-ui/components";
 import { nodeStatusToIconStatus, nodeStatusToText } from "@orch-ui/utils";
 import ClusterNodesTable from "./ClusterNodesTable";
 import ClusterNodesTablePom from "./ClusterNodesTable.pom";
 
 // Nodes Table Columns
-const columns: TableColumn<ecm.NodeInfo>[] = [
+const columns: TableColumn<cm.NodeInfo>[] = [
   {
     Header: "Host Name",
     accessor: (node) => node.name,
@@ -18,8 +18,8 @@ const columns: TableColumn<ecm.NodeInfo>[] = [
 
   {
     Header: "Status",
-    accessor: (item: ecm.NodeInfo) => nodeStatusToText(item.status),
-    Cell: (table: { row: { original: ecm.NodeInfo } }) => {
+    accessor: (item: cm.NodeInfo) => nodeStatusToText(item.status),
+    Cell: (table: { row: { original: cm.NodeInfo } }) => {
       const row = table.row.original;
 
       return (
@@ -31,19 +31,14 @@ const columns: TableColumn<ecm.NodeInfo>[] = [
     },
   },
   {
-    Header: "Serial",
-    accessor: (nodes) => nodes.serial ?? "-",
-  },
-  {
     Header: "Operating System",
     accessor: (nodes) => nodes.os ?? "-",
   },
 ];
 
-const nodes: ecm.NodeInfo[] = [
+const nodes: cm.NodeInfo[] = [
   {
     name: "Node 1",
-    serial: "21jemf31",
     os: "linux",
     status: { condition: "STATUS_CONDITION_READY" },
   },
@@ -61,7 +56,6 @@ describe("<ClusterNodesTable/> should", () => {
 
   it("load data", () => {
     pom.root.should("contain", "Node 1");
-    pom.root.should("contain", "21jemf31");
     pom.root.should("contain", "linux");
     pom.root.should("contain", "CONDITION READY");
   });

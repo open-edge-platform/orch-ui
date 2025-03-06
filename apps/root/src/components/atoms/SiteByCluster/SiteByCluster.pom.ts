@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterTwo, regionUsWest, regionUsWestId } from "@orch-ui/utils";
 
@@ -70,14 +70,14 @@ const hostEndpoints: CyApiDetails<
 
 const clusterEndpoints: CyApiDetails<
   ClusterApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusterSuccess: {
-    route: `**v1/**/clusters/${clusterTwo.name}`,
+    route: `**v2/**/clusters/${clusterTwo.name}`,
     response: clusterTwo,
   },
   getCluster500: {
-    route: `**v1/**/clusters/${clusterTwo.name}`,
+    route: `**v2/**/clusters/${clusterTwo.name}`,
     networkError: true,
   },
 };

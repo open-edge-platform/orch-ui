@@ -3,11 +3,21 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-const initialState: ecm.Location[] = [
+// TODO: removed cm.Location
+// is there any type in eim that we can use?
+type Location = {
+  locationInfo?: string;
+  locationType?:
+    | "LOCATION_TYPE_SITE_ID"
+    | "LOCATION_TYPE_SITE_NAME"
+    | "LOCATION_TYPE_REGION_ID"
+    | "LOCATION_TYPE_REGION_NAME";
+};
+
+const initialState: Location[] = [
   {
     locationType: "LOCATION_TYPE_REGION_NAME",
     locationInfo: "",
@@ -29,46 +39,43 @@ export const locations = createSlice({
   name: "locations",
   initialState,
   reducers: {
-    setLocations(state: ecm.Location[], action: PayloadAction<ecm.Location[]>) {
+    setLocations(state: Location[], action: PayloadAction<Location[]>) {
       state = action.payload;
       return state;
     },
 
-    setInitialLocations(
-      state: ecm.Location[],
-      action: PayloadAction<ecm.Location[]>,
-    ) {
+    setInitialLocations(state: Location[], action: PayloadAction<Location[]>) {
       state = action.payload;
       return state;
     },
 
-    clearLocations(state: ecm.Location[]) {
+    clearLocations(state: Location[]) {
       state = initialState;
       return state;
     },
 
-    updateSiteName(state: ecm.Location[], action: PayloadAction<string>) {
+    updateSiteName(state: Location[], action: PayloadAction<string>) {
       state.forEach((location) => {
         if (location.locationType === "LOCATION_TYPE_SITE_NAME") {
           location.locationInfo = action.payload;
         }
       });
     },
-    updateSiteId(state: ecm.Location[], action: PayloadAction<string>) {
+    updateSiteId(state: Location[], action: PayloadAction<string>) {
       state.forEach((location) => {
         if (location.locationType === "LOCATION_TYPE_SITE_ID") {
           location.locationInfo = action.payload;
         }
       });
     },
-    updateRegionName(state: ecm.Location[], action: PayloadAction<string>) {
+    updateRegionName(state: Location[], action: PayloadAction<string>) {
       state.forEach((location) => {
         if (location.locationType === "LOCATION_TYPE_REGION_NAME") {
           location.locationInfo = action.payload;
         }
       });
     },
-    updateRegionId(state: ecm.Location[], action: PayloadAction<string>) {
+    updateRegionId(state: Location[], action: PayloadAction<string>) {
       state.forEach((location) => {
         if (location.locationType === "LOCATION_TYPE_REGION_ID") {
           location.locationInfo = action.payload;
@@ -78,6 +85,7 @@ export const locations = createSlice({
   },
 });
 
+// TODO: is this needed anymore?
 export const getLocations = (state: RootState) => state.locations;
 export const getInitialLabels = () => initialState;
 

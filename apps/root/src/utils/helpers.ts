@@ -4,7 +4,7 @@
  */
 
 // import { miEnhancedApi as miApi } from "@orch-api/iaas/enhancedApiSlice";
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { AppDispatch } from "../store/store";
@@ -29,10 +29,10 @@ export const getHostsList = async (
   // fetch details from all clusters at the same time
   const clusters = clusterNames.map((name) => {
     return dispatch(
-      ecm.clusterManagerApis.endpoints.getV1ProjectsByProjectNameClustersAndClusterName.initiate(
+      cm.clusterManagerApis.endpoints.getV2ProjectsByProjectNameClustersAndName.initiate(
         {
           projectName: SharedStorage.project?.name ?? "",
-          clusterName: name,
+          name,
         },
       ),
     );
@@ -50,8 +50,8 @@ export const getHostsList = async (
         );
       }
 
-      const ids = clustersDetail?.nodes?.nodeInfoList?.reduce(
-        (l, n) => (n.guid ? [n.guid, ...l] : l),
+      const ids = clustersDetail?.nodes?.reduce(
+        (l, n) => (n.id ? [n.id, ...l] : l),
         [],
       );
       if (!ids) {

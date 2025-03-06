@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   EChartBar,
   EChartBarSeries,
@@ -12,11 +12,16 @@ import {
 import { EChartColorSetNames, SharedStorage } from "@orch-ui/utils";
 import { useEffect, useState } from "react";
 
+type IndicatorType = cm.ClusterInfo["providerStatus"] extends {
+  indicator: infer I;
+}
+  ? I
+  : undefined;
 type ClusterStatusTotals = {
-  [key in ecm.ClusterInfo["status"] as string]: number;
+  [key in IndicatorType as string]: number;
 };
 type ClusterStatusColor = {
-  [key in ecm.ClusterInfo["status"] as string]: string;
+  [key in IndicatorType as string]: string;
 };
 
 const clusterStatusColor: ClusterStatusColor = {
@@ -27,14 +32,15 @@ const clusterStatusColor: ClusterStatusColor = {
 
 const ClustersBarChart = () => {
   const projectName = SharedStorage.project?.name ?? "";
-  const { data: clusters } = ecm.useGetV1ProjectsByProjectNameClustersQuery(
-    {
-      projectName,
-    },
-    {
-      skip: !projectName,
-    },
-  );
+  const { data: clustersResponse } =
+    cm.useGetV2ProjectsByProjectNameClustersQuery(
+      {
+        projectName,
+      },
+      {
+        skip: !projectName,
+      },
+    );
 
   const [barSeries, setBarSeries] = useState<EChartBarSeries<number>>({
     data: new Map<string, EChartBarSeriesItem<number>[]>(),
@@ -68,18 +74,20 @@ const ClustersBarChart = () => {
   };
 
   useEffect(() => {
-    if (!clusters || !clusters.clusterInfoList) return;
+    if (!clustersResponse || !clustersResponse.clusters) return;
 
     let newTotals: ClusterStatusTotals = { Active: 0, Unkown: 0, Updating: 0 };
-    newTotals = clusters.clusterInfoList.reduce(
-      (accumulator: ClusterStatusTotals, cluster: ecm.ClusterInfo) => {
-        accumulator[cluster.status ?? "unknown"]++;
+    newTotals = clustersResponse.clusters.reduce(
+      (accumulator: ClusterStatusTotals, cluster: cm.ClusterInfo) => {
+        accumulator[
+          cluster.providerStatus?.indicator ?? "STATUS_INDICATION_UNSPECIFIED"
+        ]++;
         return accumulator;
       },
       newTotals,
     );
     updateBarSeries(newTotals);
-  }, [clusters]);
+  }, [clustersResponse]);
 
   return (
     <EChartBar

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { catalog, ecm } from "@orch-ui/apis";
+import { catalog, cm } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -26,7 +26,7 @@ export interface ReviewProps {
   selectedProfileName: string;
   type: string;
   selectedMetadata: MetadataPair[];
-  selectedClusters?: ecm.ClusterInfoRead[];
+  selectedClusters?: cm.ClusterInfoRead[];
 }
 
 const Review = ({
@@ -42,10 +42,14 @@ const Review = ({
     { Header: "Value", accessor: "value" },
   ];
 
-  const clusterColumns: TableColumn<ecm.ClusterInfoRead>[] = [
+  const clusterColumns: TableColumn<cm.ClusterInfoRead>[] = [
     {
       Header: "Cluster Name",
       accessor: (item) => item.name,
+    },
+    {
+      Header: "Host Count",
+      accessor: "nodeQuantity",
     },
     {
       Header: "Status",
@@ -57,35 +61,6 @@ const Review = ({
           defaultStatusName="lifecyclePhase"
         />
       ),
-    },
-    {
-      Header: "Host Count",
-      accessor: "nodeQuantity",
-    },
-    {
-      Header: "Site",
-      accessor: (row: ecm.ClusterInfo) =>
-        row.locationList?.reduce((p, c) => {
-          if (c.locationInfo) {
-            return `${p} ${c.locationInfo};`;
-          } else {
-            return p;
-          }
-        }, ""),
-      Cell: (table) => {
-        const row = table.row.original;
-        return (
-          <Text size="m">
-            {row.locationList?.reduce((p, c) => {
-              if (c.locationInfo) {
-                return `${p} ${c.locationInfo};`;
-              } else {
-                return p;
-              }
-            }, "")}
-          </Text>
-        );
-      },
     },
   ];
 

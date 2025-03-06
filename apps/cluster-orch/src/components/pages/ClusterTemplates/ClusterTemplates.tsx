@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ctm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ConfirmationDialog, PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
@@ -35,14 +35,14 @@ export const ClusterTemplates = () => {
   const navigate = useNavigate();
 
   const [templateToDelete, setTemplateToDelete] = useState<
-    ctm.TemplateInfo | undefined
+    cm.TemplateInfo | undefined
   >();
 
-  const [addTemplate] = ctm.usePostV1ProjectsByProjectNameTemplatesMutation();
+  const [addTemplate] = cm.usePostV2ProjectsByProjectNameTemplatesMutation();
   const [setTemplateDefault] =
-    ctm.usePutV1ProjectsByProjectNameTemplatesAndTemplateNameDefaultMutation();
+    cm.usePutV2ProjectsByProjectNameTemplatesAndNameDefaultMutation();
   const [deleteTemplate] =
-    ctm.useDeleteV1ProjectsByProjectNameTemplatesAndNameVersionsVersionMutation();
+    cm.useDeleteV2ProjectsByProjectNameTemplatesAndNameVersionsVersionMutation();
 
   const toastProps: ToastProps = {
     state: ToastState.Success,
@@ -54,8 +54,8 @@ export const ClusterTemplates = () => {
   const [toastPros, setToastProps] = useState<ToastProps>();
 
   const isDefaultTemplate = (
-    tpl: ctm.TemplateInfo,
-    defaultTemplateInfo: ctm.DefaultTemplateInfo | undefined,
+    tpl: cm.TemplateInfo,
+    defaultTemplateInfo: cm.DefaultTemplateInfo | undefined,
   ) =>
     defaultTemplateInfo &&
     defaultTemplateInfo.name === tpl.name &&
@@ -63,8 +63,8 @@ export const ClusterTemplates = () => {
 
   const getPopupOptions = useCallback(
     (
-      tpl: ctm.TemplateInfo,
-      defaultTemplateInfo: ctm.DefaultTemplateInfo | undefined,
+      tpl: cm.TemplateInfo,
+      defaultTemplateInfo: cm.DefaultTemplateInfo | undefined,
     ): PopupOption[] => [
       {
         displayText: "View Details",
@@ -100,27 +100,27 @@ export const ClusterTemplates = () => {
     [],
   );
 
-  const onViewDetails = (tpl: ctm.TemplateInfo) => {
+  const onViewDetails = (tpl: cm.TemplateInfo) => {
     navigate(`./${tpl.name}/${tpl.version}/view`);
   };
 
-  const onSetDefault = (tpl: ctm.TemplateInfo) => {
+  const onSetDefault = (tpl: cm.TemplateInfo) => {
     setTemplateDefault({
       projectName,
-      templateName: tpl.name,
+      name: tpl.name,
       defaultTemplateInfo: {
         version: tpl.version!,
       },
     });
   };
 
-  const onExportTemplate = (tpl: ctm.TemplateInfo) =>
+  const onExportTemplate = (tpl: cm.TemplateInfo) =>
     downloadFile(
       JSON.stringify(tpl, null, 2),
       `${tpl.name}-${tpl.version}-template.json`,
     );
 
-  const onDelete = async (tpl: ctm.TemplateInfo) => {
+  const onDelete = async (tpl: cm.TemplateInfo) => {
     await deleteTemplate({
       projectName,
       name: tpl.name,
@@ -166,9 +166,7 @@ export const ClusterTemplates = () => {
         const template = JSON.parse(e.target?.result as string);
         await addTemplate({
           projectName,
-          importTemplateBody: {
-            templateConfigurations: [template],
-          },
+          templateInfo: template,
         })
           .unwrap()
           .then(() => {

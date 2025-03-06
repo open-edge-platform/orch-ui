@@ -3,21 +3,12 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { ApiError } from "@orch-ui/components";
 import { LpInternalError, SharedStorage } from "@orch-ui/utils";
-import {
-  Button,
-  ButtonGroup,
-  Drawer,
-  Dropdown,
-  Icon,
-  Item,
-  MessageBanner,
-} from "@spark-design/react";
+import { Button, ButtonGroup, Drawer } from "@spark-design/react";
 import { ButtonVariant, DrawerSize } from "@spark-design/tokens";
 import { useState } from "react";
-import ClusterDetail from "../ClusterDetail/ClusterDetail";
 import "./AddToClusterDrawer.scss";
 
 export const dataCy = "addToClusterDrawer";
@@ -36,37 +27,15 @@ const AddToClusterDrawer = ({
   const [error, setError] = useState<LpInternalError | undefined>();
 
   const cy = { "data-cy": dataCy };
-  const [selectedClusterName, setSelectedClusterName] = useState<string>();
+  const [selectedClusterName] = useState<string>();
 
   const [addNodeToCluster] =
-    ecm.usePutV1ProjectsByProjectNameClustersAndClusterNameNodesMutation();
-
-  // For the Dropdown
-  const { data: clusterList, isSuccess: isClusterSuccess } =
-    ecm.useGetV1ProjectsByProjectNameClustersQuery(
-      { projectName: SharedStorage.project?.name ?? "" },
-      { skip: !SharedStorage.project?.name },
-    );
-
-  const filteredClusterList = clusterList?.clusterInfoList?.filter(
-    (cluster) => {
-      const siteLocation = cluster.locationList?.filter(
-        (location) => location.locationType === "LOCATION_TYPE_SITE_ID",
-      );
-
-      const clusterSiteId =
-        siteLocation && siteLocation.length > 0
-          ? siteLocation[0].locationInfo
-          : undefined;
-
-      return clusterSiteId && clusterSiteId === host.site?.siteID;
-    },
-  );
+    cm.usePutV2ProjectsByProjectNameClustersAndNameNodesMutation();
 
   const { data: selectedCluster, isSuccess: isSelectedClusterDataSuccess } =
-    ecm.useGetV1ProjectsByProjectNameClustersAndClusterNameQuery(
+    cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
       {
-        clusterName: selectedClusterName!,
+        name: selectedClusterName!,
         projectName: SharedStorage.project?.name ?? "",
       },
       { skip: !selectedClusterName || !SharedStorage.project?.name },
@@ -76,32 +45,30 @@ const AddToClusterDrawer = ({
     if (
       selectedClusterName &&
       isSelectedClusterDataSuccess &&
-      selectedCluster.nodes?.nodeInfoList &&
+      selectedCluster.nodes &&
       host.uuid
     ) {
-      const nodeList: ecm.NodeSpec[] = [];
+      const nodeList: cm.NodeSpec[] = [];
 
       // Make NodeSpec list with cluster's old nodeList
-      selectedCluster.nodes.nodeInfoList.forEach((node) => {
+      selectedCluster.nodes.forEach((node) => {
         nodeList.push({
-          nodeGuid: node.guid,
-          nodeRole: "worker",
-        } as ecm.NodeSpec);
+          id: node.id,
+          role: "worker",
+        } as cm.NodeSpec);
       });
 
       // Add new node/host to the cluster's nodeList
       nodeList.push({
-        nodeGuid: host.uuid,
-        nodeRole: "worker",
+        id: host.uuid,
+        role: "worker",
       });
 
       // Notify nodes to cluster
       addNodeToCluster({
         projectName: SharedStorage.project?.name ?? "",
-        clusterName: selectedClusterName,
-        clusterNodes: {
-          nodeList: nodeList,
-        },
+        name: selectedClusterName,
+        body: nodeList,
       })
         .unwrap()
         .then(() => {
@@ -113,42 +80,6 @@ const AddToClusterDrawer = ({
         });
     }
   };
-
-  const drawerContent = (
-    <>
-      <div className="selected-cluster-info" data-cy="clusterDropdown">
-        <MessageBanner
-          icon={<Icon icon="information-circle" />}
-          messageBody="Clusters are determined based on matching Region and Site between host and cluster."
-          showIcon
-          variant="info"
-        />
-        {filteredClusterList && (
-          <Dropdown
-            className="selected-cluster"
-            label="Select a Cluster"
-            placeholder="Select a Cluster"
-            name="selectedCluster"
-            selectedKey={selectedClusterName}
-            onSelectionChange={(key: string) => setSelectedClusterName(key)}
-            items={filteredClusterList}
-          >
-            {(item: ecm.ClusterInfo) => (
-              <Item key={item.name} textValue={item.name}>
-                {item.name}
-              </Item>
-            )}
-          </Dropdown>
-        )}
-      </div>
-
-      {selectedClusterName && (
-        <div className="cluster-details-content">
-          <ClusterDetail hasHeader={false} name={selectedClusterName} />
-        </div>
-      )}
-    </>
-  );
 
   return (
     <div {...cy} className="add-to-cluster-drawer">
@@ -162,9 +93,7 @@ const AddToClusterDrawer = ({
           onHide: setHideDrawer,
           closable: true,
         }}
-        bodyContent={
-          isClusterSuccess ? drawerContent : <>Unable to fetch Cluster List!</>
-        }
+        bodyContent={<>Unable to fetch Cluster List!</>}
         footerContent={
           <>
             <ButtonGroup className="footer-btn-group">

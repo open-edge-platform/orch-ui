@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
-import { ctm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ApiError, Empty, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item } from "@spark-design/react";
@@ -27,7 +27,7 @@ const ClusterTemplatesDropdown = ({
     isLoading: isTemplateLoading,
     isError: isTemplateError,
     error,
-  } = ctm.useGetV1ProjectsByProjectNameTemplatesQuery({ projectName });
+  } = cm.useGetV2ProjectsByProjectNameTemplatesQuery({ projectName });
 
   const [templateNames, setTemplateNames] = useState<string[]>();
 
