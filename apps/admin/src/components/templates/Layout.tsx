@@ -58,6 +58,13 @@ export const projectsNavItem: CollapsableListItem<string> = {
   divider: true,
 };
 
+export const sshNavItem: CollapsableListItem<string> = {
+  route: "ssh-keys",
+  icon: "key",
+  value: "SSH Keys",
+  divider: true,
+};
+
 export const aboutNavItem: CollapsableListItem<string> = {
   route: "about",
   icon: "gear",
@@ -118,6 +125,7 @@ const Layout = () => {
     ) {
       items.push(osProfilesNavItem);
     }
+    items.push(sshNavItem);
     items.push(aboutNavItem);
     return items;
   };
@@ -138,6 +146,9 @@ const Layout = () => {
     }
     if (pathname.includes("projects")) {
       return projectsNavItem;
+    }
+    if (pathname.includes("ssh-keys")) {
+      return sshNavItem;
     }
     return null;
   };

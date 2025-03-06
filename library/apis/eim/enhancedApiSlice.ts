@@ -21,6 +21,8 @@ const OSListTag = "OSList";
 const WorkloadTag = "Workload";
 const WorkloadListTag = "WorkloadList";
 const InstanceListTag = "InstanceList";
+const LocalAccountListTag = "LocalAccountList";
+const LocalAccountTag = "LocalAccount";
 
 export interface InstanceReadModified extends eim.InstanceRead {
   host?: eim.HostRead;
@@ -113,6 +115,8 @@ export const miEnhancedApi = eimSlice.enhanceEndpoints({
     OSListTag,
     WorkloadListTag,
     InstanceListTag,
+    LocalAccountListTag,
+    LocalAccountTag,
   ],
   endpoints: {
     // Regions
@@ -253,6 +257,17 @@ export const miEnhancedApi = eimSlice.enhanceEndpoints({
     },
     deleteV1ProjectsByProjectNameComputeInstancesAndInstanceId: {
       invalidatesTags: [InstanceListTag],
+    },
+
+    // Local Account
+    getV1ProjectsByProjectNameLocalAccounts: {
+      providesTags: [LocalAccountListTag],
+    },
+    postV1ProjectsByProjectNameLocalAccounts: {
+      invalidatesTags: [LocalAccountListTag],
+    },
+    deleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountId: {
+      invalidatesTags: [LocalAccountListTag],
     },
   },
 });
