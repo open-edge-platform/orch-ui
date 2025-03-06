@@ -61,7 +61,7 @@ jobs:
       run_docker_build: true
       run_scan_containers: true
       run_artifact: false
-      run_helm_build: false
+      run_helm_build: true
       run_reuse_check: false
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
@@ -86,7 +86,7 @@ jobs:
       run_docker_build: true
       run_scan_containers: true
       run_artifact: false
-      run_helm_build: false
+      run_helm_build: true
       run_reuse_check: false
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
