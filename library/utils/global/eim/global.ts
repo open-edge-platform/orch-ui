@@ -214,49 +214,45 @@ export const isOSUpdateAvailable = (instance: eim.InstanceRead | undefined) => {
   );
 };
 
-const getHostProvisionMessages = (
+const getHostProvisionTitles = (
+  hostName: string,
   provisioningStatusIndicator?: eim.StatusIndicatorRead,
 ) => {
-  const provisionedMsg = {
-    title: "Host is provisioned",
-    subTitle:
-      "Host is configured and ready to use. Add a site and cluster to activate.",
-  };
   switch (provisioningStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
       return {
-        title: "Host provisioning in progress",
-        subTitle: "Host is provisioning.",
+        title: `${hostName} provisioning in progress`,
+        subTitle: `${hostName} is provisioning.`,
       };
     case "STATUS_INDICATION_ERROR":
       return {
-        title: "Host has provisioning error",
-        subTitle: "Host has an error when provisioning OS.",
+        title: `${hostName} has provisioning error`,
+        subTitle: `${hostName} has an error when provisioning OS.`,
       };
     case "STATUS_INDICATION_IDLE":
-      return provisionedMsg;
-    default:
-      return provisionedMsg;
+      return {
+        title: `${hostName} is provisioned`,
+      };
   }
 };
 
-const getHostOnboardingMessages = (
+const getHostOnboardingTitles = (
+  hostName: string,
   onboardingStatusIndicator?: eim.StatusIndicatorRead,
 ) => {
   const onboardingMsg = {
-    title: "Host is onboarded",
-    subTitle: "Host is onboarded and ready to be provisioned.",
+    title: `${hostName} is onboarded`,
+    subTitle: `${hostName} is onboarded and ready to be provisioned.`,
   };
   switch (onboardingStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
       return {
-        title: "Host onboarding in progress",
-        subTitle:
-          "Host is registered and set to auto-onboard. Onboarding is in progress.",
+        title: `${hostName} onboarding in progress`,
+        subTitle: `${hostName} is registered and set to auto-onboard. Onboarding is in progress.`,
       };
     case "STATUS_INDICATION_ERROR":
       return {
-        title: "Host has onboarding error",
+        title: `${hostName} has onboarding error`,
       };
     case "STATUS_INDICATION_IDLE":
       return onboardingMsg;
@@ -265,21 +261,22 @@ const getHostOnboardingMessages = (
   }
 };
 
-const getHostRegistrationMessages = (
+const getHostRegistrationTitles = (
+  hostName: string,
   registrationStatusIndicator?: eim.StatusIndicatorRead,
 ) => {
   const registrationMsg = {
-    title: "Host is registered",
-    subTitle: "Host is registered and ready to be onboarded.",
+    title: `${hostName} is registered`,
+    subTitle: `${hostName} is registered and ready to be onboarded.`,
   };
   switch (registrationStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
       return {
-        title: "Host registration in progress",
+        title: `${hostName} registration in progress`,
       };
     case "STATUS_INDICATION_ERROR":
       return {
-        title: "Host has registration error",
+        title: `${hostName} has registration error`,
       };
     case "STATUS_INDICATION_IDLE":
       return registrationMsg;
@@ -288,52 +285,78 @@ const getHostRegistrationMessages = (
   }
 };
 
-export const genericHostStatusMessages = (
+const getHostCurrentStateTitles = (
+  hostName: string,
+  currenState?: eim.HostState,
+) => {
+  switch (currenState) {
+    case "HOST_STATE_UNTRUSTED":
+      return {
+        title: `${hostName} is deauthorized`,
+      };
+    case "HOST_STATE_ERROR":
+      return {
+        title: `${hostName} has error`,
+      };
+    case "HOST_STATE_DELETED":
+      return {
+        title: `${hostName} is deleted`,
+      };
+    default:
+      return {
+        title: `${hostName} is not connected`,
+        subTitle: `Waiting for ${hostName} to connect.`,
+      };
+  }
+};
+
+/* Titles to be displayed in Host Status popover */
+export const getPopOverTitles = (
   host: eim.HostRead,
 ): {
   title?: string;
   subTitle?: string;
 } => {
+  const hostCurrentState = host.currentState;
+  const hostName = host.name || "Host";
+
+  const isInstanceRunning =
+    hostCurrentState === "HOST_STATE_ONBOARDED" &&
+    host.instance?.currentState == "INSTANCE_STATE_RUNNING";
+
   // active host
-  if (
-    host.currentState === "HOST_STATE_ONBOARDED" &&
-    host.instance?.resourceId &&
-    host.site?.resourceId
-  ) {
-    return { title: "Host is active" };
+  if (isInstanceRunning && host.instance?.workloadMembers?.length) {
+    return { title: `${hostName} is active` };
   }
 
   // Provisioned host
-  if (
-    host.currentState === "HOST_STATE_ONBOARDED" &&
-    host.instance?.resourceId &&
-    host.instance?.provisioningStatus
-  ) {
-    return getHostProvisionMessages(host.instance?.provisioningStatusIndicator);
+  if (isInstanceRunning && !host.instance?.workloadMembers?.length) {
+    return {
+      title: `${hostName} is provisioned`,
+      subTitle: `${hostName} is configured and ready to use. Add a site and cluster to activate.`,
+    };
   }
 
   // onboarded host
-  if (
-    host.currentState === "HOST_STATE_ONBOARDED" &&
-    !host.instance &&
-    host.onboardingStatus
-  ) {
-    return getHostOnboardingMessages(host.onboardingStatusIndicator);
+  if (host.currentState === "HOST_STATE_ONBOARDED") {
+    return (
+      getHostProvisionTitles(
+        hostName,
+        host.instance?.provisioningStatusIndicator,
+      ) ?? getHostOnboardingTitles(hostName, host.onboardingStatusIndicator)
+    );
   }
 
   // registered host
-  if (
-    host.currentState === "HOST_STATE_REGISTERED" &&
-    host.registrationStatus
-  ) {
-    return getHostRegistrationMessages(host.registrationStatusIndicator);
+  if (host.currentState === "HOST_STATE_REGISTERED") {
+    return getHostRegistrationTitles(
+      hostName,
+      host.registrationStatusIndicator,
+    );
   }
 
-  // Not connected host
-  return {
-    title: "Host is not connected",
-    subTitle: "Waiting for host to connect.",
-  };
+  // other currentStatus
+  return getHostCurrentStateTitles(hostName, host.currentState);
 };
 
 // --------------------------------------

@@ -11,8 +11,8 @@ import {
   StatusIcon,
 } from "@orch-ui/components";
 import {
-  genericHostStatusMessages,
   getCustomStatusOnIdleAggregation,
+  getPopOverTitles,
   HostGenericStatuses,
   hostStatusFields,
   hostToStatuses,
@@ -63,16 +63,16 @@ export const HostStatusPopover = ({ data }: HostStatusPopoverProps) => {
       },
     );
 
-  const hostMessage = genericHostStatusMessages(data);
+  const hostPopoverTitle = getPopOverTitles(data);
   return (
     <div {...cy} className="host-status-popover">
       <Popover
-        title={hostMessage.title}
+        title={hostPopoverTitle.title}
         content={
           <div className="status-popover">
-            {hostMessage.subTitle && (
+            {hostPopoverTitle.subTitle && (
               <div className="subtitle">
-                <Text>{hostMessage.subTitle}</Text>
+                <Text>{hostPopoverTitle.subTitle}</Text>
               </div>
             )}
             {renderStatus(hostStatusFields)}
