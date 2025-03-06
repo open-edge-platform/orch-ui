@@ -13,7 +13,7 @@ on:
 
 jobs:
   post-merge-pipeline:
-    uses: intel-tiber/orch-ci/.github/workflows/post-merge.yml@main
+    uses: intel-tiber/orch-ci/.github/workflows/post-merge.yml@hotfix/version-check
     with:
       run_security_scans: true
       run_version_check: true
@@ -27,4 +27,5 @@ jobs:
       run_artifact: false
       prefix_tag_separator: "/"
       project_folder: apps/root
+      orch_ci_repo_ref: hotfix/version-check
     secrets: inherit
