@@ -13,6 +13,7 @@ import "./src/components/organisms/AlertDrawer/AlertDrawer.cy.tsx";
 import "./src/components/organisms/AlertsList/AlertsList.cy.tsx";
 import "./src/components/organisms/CreateEditProject/CreateEditProject.cy.tsx";
 import "./src/components/organisms/DeleteProjectDialog/DeleteProjectDialog.cy.tsx";
+import "./src/components/organisms/DeleteSSHDialog/DeleteSSHDialog.cy.tsx";
 import "./src/components/organisms/NoProjectsDialog/NoProjectsDialog.cy.tsx";
 import "./src/components/organisms/ProjectPopup/ProjectPopup.cy.tsx";
 import "./src/components/organisms/ProjectsTable/ProjectsTable.cy.tsx";

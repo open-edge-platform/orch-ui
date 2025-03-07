@@ -45,6 +45,9 @@ const SshKeysTable = ({
   const cy = { "data-cy": dataCy };
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState<boolean>(false);
+  const [selectedSshToDelete, setSelectedSshToDelete] = useState<
+    eim.LocalAccountRead | undefined
+  >();
   const dispatch = useDispatch();
 
   const columns: TableColumn<eim.LocalAccountRead>[] = [
@@ -77,7 +80,7 @@ const SshKeysTable = ({
     },
     {
       Header: "Action",
-      accessor: () => (
+      accessor: (ssh) => (
         <Popup
           jsx={<Icon artworkStyle="light" icon="ellipsis-v" />}
           options={[
@@ -90,7 +93,7 @@ const SshKeysTable = ({
             {
               displayText: "Delete",
               onSelect: () => {
-                // TODO: Open Delete Confirmation Dialog box
+                setSelectedSshToDelete(ssh);
               },
               disable: false, //ssh.isInUse,
             },
@@ -264,6 +267,32 @@ const SshKeysTable = ({
         }}
         onAdd={onSshAdd}
       />
+      {selectedSshToDelete && (
+        <DeleteSSHDialog
+          ssh={selectedSshToDelete}
+          onCancel={() => setSelectedSshToDelete(undefined)}
+          onDelete={() => {
+            dispatch(
+              showMessageNotification({
+                messageTitle: "Deletion in process",
+                messageBody: `SSH ${selectedSshToDelete.username} is being deleted.`,
+                variant: MessageBannerAlertState.Success,
+              }),
+            );
+            setSelectedSshToDelete(undefined);
+          }}
+          onError={(errorMessage) => {
+            dispatch(
+              showMessageNotification({
+                messageTitle: "Error",
+                messageBody: `Error in deleting ssh ${selectedSshToDelete.username}. ${errorMessage}`,
+                variant: MessageBannerAlertState.Error,
+              }),
+            );
+            setSelectedSshToDelete(undefined);
+          }}
+        />
+      )}
     </div>
   );
 };
