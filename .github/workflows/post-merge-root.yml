@@ -9,6 +9,8 @@ on:
     branches:
       - main
       - release-*
+    paths:
+      - 'apps/root/**'
   workflow_dispatch:
 
 jobs:

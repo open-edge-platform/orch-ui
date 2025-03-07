@@ -4,7 +4,7 @@
   "description": "Intel Tiber Edge Platform User Interface",
   "main": "index.js",
   "scripts": {
-    "app:all": "concurrently \"npm run app:admin\" \"npm run app:eim\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
+    "start": "concurrently \"npm run app:admin\" \"npm run app:eim\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
     "app:admin": "cd apps/admin && webpack serve --config=config/webpack.dev.js",
     "app:admin:build": "cd apps/admin && webpack --config=config/webpack.prod.js",
     "app:admin:lint": "cd apps/admin && prettier --check ./src && eslint ./src",
