@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { clusterA, deploymentTwo } from "@orch-ui/utils";
@@ -29,7 +29,7 @@ describe("<DeploymentSiteSummary/>", () => {
         `/applications/deployment/${deploymentTwo.deployId}/cluster/${clusterA.id}`,
       );
   });
-  describe("DeploymentClusters table pagination, fiter and order should", () => {
+  describe("DeploymentClusters table pagination, filter and order should", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.clustersListPage1]);
       cy.mount(<DeploymentSiteSummary deployment={deploymentTwo} />);

@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne, clusterOneCreating } from "@orch-ui/utils";
 
@@ -20,12 +20,12 @@ type ApiAliases =
   | CreatingHostApiAliases
   | ErrorApiAliases;
 
-const clusterRoute = "**/v1/**/clusters/**";
+const clusterRoute = "**/v2/**/clusters/**";
 const firstHostRoute = `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`;
 
 const successClusterEndpoint: CyApiDetails<
   SuccessClusterApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusterDetails: {
     route: clusterRoute,
@@ -36,7 +36,7 @@ const successClusterEndpoint: CyApiDetails<
 
 const successCreatingClusterHostEndpoint: CyApiDetails<
   CreatingHostApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getCreatingHostData: {
     route: clusterRoute,
@@ -87,7 +87,7 @@ const errorEndpoints: CyApiDetails<ErrorApiAliases> = {
 };
 
 export class ClusterHostsBySitePom extends CyPom<Selectors, ApiAliases> {
-  public testClusterId = clusterOne.clusterID;
+  public testClusterId = clusterOne.name;
   public testCluster = clusterOne;
   public testClusterCreating = clusterOneCreating;
 

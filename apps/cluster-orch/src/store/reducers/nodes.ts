@@ -1,31 +1,31 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-const initialState: ecm.NodeInfo[] = [];
+const initialState: cm.NodeInfo[] = [];
 export const nodes = createSlice({
   name: "nodes",
   initialState,
   reducers: {
-    setNodes(state: ecm.NodeInfo[], action: PayloadAction<ecm.NodeInfo[]>) {
+    setNodes(state: cm.NodeInfo[], action: PayloadAction<cm.NodeInfo[]>) {
       state = action.payload;
       return state;
     },
 
     setInitialNodes(
-      state: ecm.NodeInfo[],
-      action: PayloadAction<ecm.NodeInfo[]>,
+      state: cm.NodeInfo[],
+      action: PayloadAction<cm.NodeInfo[]>,
     ) {
       state = action.payload;
       return state;
     },
 
-    clearNodes(state: ecm.NodeInfo[]) {
+    clearNodes(state: cm.NodeInfo[]) {
       state = initialState;
       return state;
     },

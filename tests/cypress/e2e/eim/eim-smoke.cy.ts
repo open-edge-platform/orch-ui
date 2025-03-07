@@ -1,3 +1,8 @@
+/*
+* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+* SPDX-License-Identifier: Apache-2.0
+*/
+
 import { TablePom } from "@orch-ui/components";
 import * as _ from "lodash";
 import { LocationsPom } from "../../../../apps/eim/src/components/pages/Locations/Locations.pom";

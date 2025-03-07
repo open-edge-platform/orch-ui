@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { Status } from "@orch-ui/components";
 import { clusterStatusToIconStatus, clusterStatusToText } from "./global";
 
@@ -11,7 +11,7 @@ describe("The Utils", () => {
   describe("clusterStatusToText", () => {
     it("should convert status to text correctly", () => {
       const assertions: {
-        [key in Exclude<ecm.ClusterInfo["status"], undefined>]: string;
+        [key in Exclude<cm.ClusterInfo["status"], undefined>]: string;
       } = {
         init: "Init",
         creating: "Creating",
@@ -25,9 +25,9 @@ describe("The Utils", () => {
       for (const key in assertions) {
         expect(
           clusterStatusToText(
-            key as Exclude<ecm.ClusterInfo["status"], undefined>,
+            key as Exclude<cm.ClusterInfo["status"], undefined>,
           ),
-        ).eq(assertions[key as Exclude<ecm.ClusterInfo["status"], undefined>]);
+        ).eq(assertions[key as Exclude<cm.ClusterInfo["status"], undefined>]);
       }
       expect(clusterStatusToText()).eq("unknown");
     });
@@ -36,7 +36,7 @@ describe("The Utils", () => {
   describe("clusterStatusToIconStatus", () => {
     it("should return status correctly", () => {
       const assertions: {
-        [key in Exclude<ecm.ClusterInfo["status"], undefined>]: string;
+        [key in Exclude<cm.ClusterInfo["status"], undefined>]: string;
       } = {
         init: Status.Ready,
         creating: Status.NotReady,
@@ -50,9 +50,9 @@ describe("The Utils", () => {
       for (const key in assertions) {
         expect(
           clusterStatusToIconStatus(
-            key as Exclude<ecm.ClusterInfo["status"], undefined>,
+            key as Exclude<cm.ClusterInfo["status"], undefined>,
           ),
-        ).eq(assertions[key as Exclude<ecm.ClusterInfo["status"], undefined>]);
+        ).eq(assertions[key as Exclude<cm.ClusterInfo["status"], undefined>]);
       }
       expect(clusterStatusToIconStatus()).eq(Status.Unknown);
     });

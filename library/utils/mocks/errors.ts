@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 // App Orch errors
@@ -13,12 +13,12 @@ export const orchAppOrchError = {
   },
 };
 
-// ECM errors
+// CM errors
 export const orchECMError = {
   status: 400,
   data: {
     code: 400,
-    message: "ecm error example message",
+    message: "cm error example message",
   },
 };
 

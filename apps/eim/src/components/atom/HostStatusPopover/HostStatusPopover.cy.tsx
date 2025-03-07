@@ -1,8 +1,7 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
 import { PopoverPom } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
 import {
@@ -88,107 +87,17 @@ describe("<HostStatusPopover/>", () => {
     popOverPom.el.popoverContent.should("not.exist");
   });
 
-  describe("Should render title", () => {
-    it("when host has site associated", () => {
-      cy.mount(
-        <HostStatusPopover
-          data={{
-            ...hostOne,
-            currentState: "HOST_STATE_ONBOARDED",
-          }}
-        />,
-      );
-      cyGet("popover").click();
-      popOverPom.el.popoverContent.should("be.visible");
-      popOverPom.el.popoverTitle.should("contain", "Host is active");
-    });
-
-    it("when host does not have a site and  have instance provisioning", () => {
-      const host: eim.HostRead = structuredClone({
-        ...hostOne,
-        currentState: "HOST_STATE_ONBOARDED",
-        instance: {
-          ...hostOne.instance,
-          instanceStatus: "Running",
-          instanceStatusIndicator: "STATUS_INDICATION_IDLE",
-          provisioningStatus: "Provisioning",
-          provisioningStatusIndicator: "STATUS_INDICATION_IN_PROGRESS",
-        },
-      });
-      delete host.site;
-      cy.mount(<HostStatusPopover data={host} />);
-      cyGet("popover").click();
-      popOverPom.el.popoverContent.should("be.visible");
-      popOverPom.el.popoverTitle.should(
-        "contain",
-        "Host provisioning in progress",
-      );
-      popOverPom.el.popoverContent.should("contain", "Host is provisioning.");
-    });
-
-    it("when host does not have a instance, site associated", () => {
-      const host: eim.HostRead = structuredClone({
-        ...hostOne,
-        currentState: "HOST_STATE_ONBOARDED",
-        instance: undefined,
-        onboardingStatus: "Onboarded",
-        onboardingStatusIndicator: "STATUS_INDICATION_IDLE",
-      });
-      delete host.site;
-      delete host.instance;
-      cy.mount(<HostStatusPopover data={host} />);
-      cyGet("popover").click();
-      popOverPom.el.popoverContent.should("be.visible");
-      popOverPom.el.popoverTitle.should("contain", "Host is onboarded");
-      popOverPom.el.popoverContent.should(
-        "contain",
-        "Host is onboarded and ready to be provisioned",
-      );
-    });
-
-    it("when host is in registered state", () => {
-      const host: eim.HostRead = structuredClone({
-        ...hostOne,
-        instance: undefined,
-        currentState: "HOST_STATE_REGISTERED",
-        registrationStatus: "Registered",
-        registrationStatusIndicator: "STATUS_INDICATION_IDLE",
-      });
-      delete host.site;
-      delete host.instance;
-      host.currentState = "HOST_STATE_REGISTERED";
-      cy.mount(<HostStatusPopover data={host} />);
-      cyGet("popover").click();
-      popOverPom.el.popoverContent.should("be.visible");
-      popOverPom.el.popoverTitle.should("contain", "Host is registered");
-      popOverPom.el.popoverContent.should(
-        "contain",
-        "Host is registered and ready to be onboarded.",
-      );
-    });
-
-    it("when no appropriate status is received", () => {
-      const host = structuredClone(hostOne);
-      delete host.site;
-      delete host.instance;
-      host.currentState = "HOST_STATE_UNSPECIFIED";
-      cy.mount(<HostStatusPopover data={host} />);
-      cyGet("popover").click();
-      popOverPom.el.popoverContent.should("be.visible");
-      popOverPom.el.popoverTitle.should("contain", "Host is not connected");
-      popOverPom.el.popoverContent.should(
-        "contain",
-        "Waiting for host to connect",
-      );
-    });
-  });
-
   describe("Should render aggregate status", () => {
     it("when host is registered", () => {
       const host = structuredClone(registeredHostOne);
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Registered");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+
+      pom.validatePopOverTitle(
+        `${host.name} is registered`,
+        `${host.name} is registered and ready to be onboarded.`,
+      );
     });
 
     it("when host has registration error", () => {
@@ -199,6 +108,7 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Failed to register host");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+      pom.validatePopOverTitle(`${host.name} has registration error`);
     });
 
     it("when host is onboarding", () => {
@@ -212,6 +122,7 @@ describe("<HostStatusPopover/>", () => {
       cyGet("statusIcon")
         .find(".spark-icon")
         .should("have.class", "spark-icon-spin");
+      pom.validatePopOverTitle(`${host.name} onboarding in progress`);
     });
 
     it("when host has onboarding error", () => {
@@ -223,6 +134,7 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Error");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+      pom.validatePopOverTitle(`${host.name} has onboarding error`);
     });
 
     it("when host is onboarded and not provisioned", () => {
@@ -234,6 +146,10 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Onboarded");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+      pom.validatePopOverTitle(
+        `${host.name} is onboarded`,
+        `${host.name} is onboarded and ready to be provisioned`,
+      );
     });
 
     it("when host provisioning in progress", () => {
@@ -242,6 +158,7 @@ describe("<HostStatusPopover/>", () => {
       host.currentState = "HOST_STATE_ONBOARDED";
 
       const instance = structuredClone(instanceOne);
+      instance.currentState = "INSTANCE_STATE_UNSPECIFIED";
       instance.provisioningStatusIndicator = "STATUS_INDICATION_IN_PROGRESS";
       instance.provisioningStatus = "Provisioning";
       host.instance = instance;
@@ -251,6 +168,8 @@ describe("<HostStatusPopover/>", () => {
       cyGet("statusIcon")
         .find(".spark-icon")
         .should("have.class", "spark-icon-spin");
+
+      pom.validatePopOverTitle(`${host.name} provisioning in progress`);
     });
 
     it("when host has provisioning error", () => {
@@ -259,6 +178,7 @@ describe("<HostStatusPopover/>", () => {
       host.currentState = "HOST_STATE_ONBOARDED";
 
       const instance = structuredClone(instanceOne);
+      instance.currentState = "INSTANCE_STATE_ERROR";
       instance.provisioningStatusIndicator = "STATUS_INDICATION_ERROR";
       instance.provisioningStatus = "Error";
       host.instance = instance;
@@ -266,6 +186,7 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Error");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+      pom.validatePopOverTitle(`${host.name} has provisioning error`);
     });
 
     it("when host is provisioned and no workloadMember assigned", () => {
@@ -281,6 +202,7 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Provisioned");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+      pom.validatePopOverTitle(`${host.name} is provisioned`);
     });
 
     it("when host is provisioned and workloadMember assigned", () => {
@@ -295,6 +217,7 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Active");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-ready");
+      pom.validatePopOverTitle(`${host.name} is active`);
     });
 
     it("when host is de-authorised", () => {
@@ -306,6 +229,7 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Deauthorized");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-unknown");
+      pom.validatePopOverTitle(`${host.name} is deauthorized`);
     });
 
     it("when host is deleted", () => {
@@ -317,6 +241,20 @@ describe("<HostStatusPopover/>", () => {
       cy.mount(<HostStatusPopover data={host} />);
       pom.aggregateStatusPom.root.should("contain", "Deleted");
       cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+      pom.validatePopOverTitle(`${host.name} is deleted`);
+    });
+
+    it("when no appropriate status is received", () => {
+      const host = structuredClone(registeredHostOne);
+      delete host.site;
+      delete host.instance;
+      host.currentState = "HOST_STATE_UNSPECIFIED";
+      cy.mount(<HostStatusPopover data={host} />);
+      pom.aggregateStatusPom.root.should("contain", "Unknown");
+      pom.validatePopOverTitle(
+        `${host.name} is not connected`,
+        `Waiting for ${host.name} to connect`,
+      );
     });
   });
 });

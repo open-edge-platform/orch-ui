@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, mbApi } from "@orch-ui/apis";
+import { cm, mbApi } from "@orch-ui/apis";
 import {
   Empty,
   MetadataPair,
@@ -42,10 +42,7 @@ import {
   getSelectedSite,
 } from "../../../store/reducers/cluster";
 import { clearLabels, getLabels } from "../../../store/reducers/labels";
-import {
-  clearLocations,
-  getLocations,
-} from "../../../store/reducers/locations";
+import { clearLocations } from "../../../store/reducers/locations";
 import { clearNodes } from "../../../store/reducers/nodes";
 import { clearNodesSpec, getNodesSpec } from "../../../store/reducers/nodeSpec";
 import { clearTemplateName } from "../../../store/reducers/templateName";
@@ -68,7 +65,6 @@ const ClusterCreation = () => {
   const dispatch = useAppDispatch();
 
   const currentCluster = useAppSelector(getCluster);
-  const currentLocations = useAppSelector(getLocations);
   const currentLabels = useAppSelector(getLabels);
   const currentNodesSpec = useAppSelector(getNodesSpec);
   const selectedClusterSite = useAppSelector(getSelectedSite);
@@ -171,8 +167,8 @@ const ClusterCreation = () => {
         currentCluster.name &&
         currentCluster.name !== "Add Name" &&
         currentCluster.name.length > 0 &&
-        currentCluster.clusterTemplateName &&
-        currentCluster.clusterTemplateName.indexOf("-v") > -1
+        currentCluster.template &&
+        currentCluster.template.indexOf("-v") > -1
       ) {
         completedCheck(step, true);
         setIsNextDisabled(false);
@@ -209,7 +205,7 @@ const ClusterCreation = () => {
       step == 4 &&
       (inheritedMeta.length > 0 || currentMetadata.length > 0) &&
       currentCluster.name &&
-      currentCluster.clusterTemplateName
+      currentCluster.template
     ) {
       completedCheck(step, false);
       setIsNextDisabled(false);
@@ -222,7 +218,7 @@ const ClusterCreation = () => {
     step,
   ]);
 
-  const [createCluster] = ecm.usePostV1ProjectsByProjectNameClustersMutation();
+  const [createCluster] = cm.usePostV2ProjectsByProjectNameClustersMutation();
   const [createMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 
@@ -301,11 +297,10 @@ const ClusterCreation = () => {
     createCluster({
       projectName,
       clusterSpec: {
-        clusterName: currentCluster.name,
-        clusterLabels: combinedClusterLabels,
-        clusterTemplateName: currentCluster.clusterTemplateName,
-        nodeList: currentNodesSpec,
-        locationList: currentLocations,
+        name: currentCluster.name,
+        labels: combinedClusterLabels,
+        template: currentCluster.template,
+        nodes: currentNodesSpec,
       },
     })
       .unwrap()

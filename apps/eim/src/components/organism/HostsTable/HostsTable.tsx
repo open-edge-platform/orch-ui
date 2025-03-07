@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { eim } from "@orch-ui/apis";
@@ -43,7 +43,9 @@ import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetai
 import HostDetailsActions from "../hosts/HostDetailsActions/HostDetailsActions";
 import "./HostsTable.scss";
 export const dataCy = "hostsTable";
-interface HostsTableProps {
+export interface HostsTableProps {
+  /** columns to show from Host object */
+  columns?: TableColumn<eim.HostRead>[];
   /** API filters */
   filters?: eim.GetV1ProjectsByProjectNameComputeHostsApiArg & {
     workloadMemberId?: string | undefined;
@@ -76,7 +78,7 @@ interface HostsTableProps {
   provisionHosts?: () => void;
 }
 
-const columns: TableColumn<eim.HostRead>[] = [
+const hostColumns: TableColumn<eim.HostRead>[] = [
   HostTableColumn.name("../"),
   HostTableColumn.status,
   HostTableColumn.serialNumber,
@@ -88,6 +90,7 @@ const columns: TableColumn<eim.HostRead>[] = [
   )),
 ];
 const HostsTable = ({
+  columns = hostColumns,
   poll,
   onDataLoad,
   selectable,

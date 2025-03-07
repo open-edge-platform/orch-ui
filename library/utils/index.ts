@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2024 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 export * from "./runtime-config/runtime-config";
 
@@ -13,7 +13,7 @@ export * from "./route-helpers/routeHelpers";
 export * from "./shared-storage/shared-storage";
 export * from "./global";
 
-// //interfaces
+//interfaces
 export * from "./interfaces/Item";
 export * from "./interfaces/Pagination";
 export * from "./interfaces/Role";

@@ -1,13 +1,13 @@
 # SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-# SPDX-License-Identifier: LicenseRef-Intel
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: v2
 name: orch-ui-cluster-orch
 description: Deploy the Edge Orchestrator cluster-orch pod
 type: application
-version: 1.0.7-dev
+version: 2.0.2-dev
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "1.0.7-dev"
+appVersion: "2.0.2-dev"
 annotations: {}
 dependencies: []

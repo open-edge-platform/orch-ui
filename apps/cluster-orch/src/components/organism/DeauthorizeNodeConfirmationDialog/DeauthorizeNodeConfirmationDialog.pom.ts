@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { dataCy } from "./DeauthorizeNodeConfirmationDialog";
 
@@ -14,10 +14,10 @@ type ApiAliases = "putClusterNode";
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  ecm.PutV1ProjectsByProjectNameClustersAndClusterNameNodesNodeUuidApiResponse
+  cm.PutV2ProjectsByProjectNameClustersAndNameNodesApiResponse
 > = {
   putClusterNode: {
-    route: "**/clusters/*/nodes/**",
+    route: "**/clusters/*/nodes",
     method: "PUT",
     statusCode: 200,
     response: undefined,

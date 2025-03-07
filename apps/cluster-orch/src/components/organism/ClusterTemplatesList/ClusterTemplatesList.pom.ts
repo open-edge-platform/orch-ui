@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { TablePom } from "@orch-ui/components";
@@ -23,7 +23,7 @@ type ApiAliases =
   | "setAsDefault"
   | "deleteTemplate";
 
-const route = "**/v1/**/templates**";
+const route = "**/v2/**/templates**";
 
 const endpoints: CyApiDetails<ApiAliases> = {
   getAllTemplatesEmpty: {

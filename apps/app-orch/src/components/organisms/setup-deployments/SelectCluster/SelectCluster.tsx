@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
 import { Text, TextField } from "@spark-design/react";
 import { InputSize, TextSize } from "@spark-design/tokens";
@@ -32,7 +32,7 @@ export enum SelectClusterMode {
 interface SelectClusterProps {
   mode: SelectClusterMode;
   selectedIds: string[];
-  onSelect: (selectedRowData: ecm.ClusterInfo, isSelected: boolean) => void;
+  onSelect: (selectedRowData: cm.ClusterInfo, isSelected: boolean) => void;
   currentDeploymentName?: string;
   onDeploymentNameChange?: (name: string) => void;
   isForm?: boolean;

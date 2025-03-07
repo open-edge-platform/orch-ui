@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim, mbApi } from "@orch-ui/apis";
+import { cm, eim, mbApi } from "@orch-ui/apis";
 import {
   BreadcrumbPiece,
   MetadataPair,
@@ -54,7 +54,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
   const dispatch = useAppDispatch();
 
   //initial nodes
-  const [initialCluster, setInitialCluster] = useState<ecm.ClusterDetailInfo>(
+  const [initialCluster, setInitialCluster] = useState<cm.ClusterDetailInfo>(
     {},
   );
   const currentCluster = useAppSelector(getCluster);
@@ -85,9 +85,9 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
   // Initiate api calls
   const { data: clusterDetail, isSuccess } =
-    ecm.useGetV1ProjectsByProjectNameClustersAndClusterNameQuery(
+    cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
       {
-        clusterName: clusterName,
+        name: clusterName,
         projectName: SharedStorage.project?.name ?? "",
       },
       { skip: false, refetchOnMountOrArgChange: true },
@@ -115,17 +115,17 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
   const [
     editClusterByTemplateName,
     { isSuccess: isEditTemplateSuccess, isError: isEditTemplateError },
-  ] = ecm.usePutV1ProjectsByProjectNameClustersAndClusterNameMutation();
+  ] = cm.usePutV2ProjectsByProjectNameClustersAndNameNodesMutation();
 
   const [
     editClusterByLabels,
     { isSuccess: isLabelsSuccess, isError: isLabelsError },
-  ] = ecm.usePutV1ProjectsByProjectNameClustersAndClusterNameLabelsMutation();
+  ] = cm.usePutV2ProjectsByProjectNameClustersAndNameLabelsMutation();
 
   const [
     editClusterByNodes,
     { isSuccess: isEditNodesSuccess, isError: isEditNodesError },
-  ] = ecm.usePutV1ProjectsByProjectNameClustersAndClusterNameNodesMutation();
+  ] = cm.usePutV2ProjectsByProjectNameClustersAndNameNodesMutation();
 
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
@@ -133,7 +133,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
   // set initial cluster state
   useEffect(() => {
     setInitialCluster(clusterDetail ?? {});
-    updateClusterNodes(clusterDetail?.nodes ?? { nodeInfoList: [] });
+    updateClusterNodes(clusterDetail?.nodes ?? []);
   }, [isSuccess, clusterDetail]);
 
   // Component states
@@ -147,34 +147,28 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     const initial = initialCluster;
     const current = currentCluster;
 
-    const compareNodes = (nodesA: ecm.NodeInfo[], nodesB: ecm.NodeInfo[]) => {
+    const compareNodes = (nodesA: cm.NodeInfo[], nodesB: cm.NodeInfo[]) => {
       return (
         nodesB.length != nodesA.length ||
-        nodesB.some((value, index) => value.guid != nodesA[index].guid)
+        nodesB.some((value, index) => value.id != nodesA[index].id)
       );
     };
 
-    if (
-      current.clusterTemplateName &&
-      current.clusterTemplateName != initial.clusterTemplateName
-    ) {
+    if (current.template && current.template != initial.template) {
       setTemplateUpdated(true);
     }
     if (
-      currentCluster.clusterLabels &&
-      initialCluster.clusterLabels &&
-      currentCluster.clusterLabels != initialCluster.clusterLabels
+      currentCluster.labels &&
+      initialCluster.labels &&
+      currentCluster.labels != initialCluster.labels
     ) {
       setLabelsUpdated(true);
     }
 
     if (
-      currentCluster.nodes?.nodeInfoList &&
-      initialCluster.nodes?.nodeInfoList &&
-      compareNodes(
-        currentCluster.nodes.nodeInfoList,
-        initialCluster.nodes.nodeInfoList,
-      )
+      currentCluster.nodes &&
+      initialCluster.nodes &&
+      compareNodes(currentCluster.nodes, initialCluster.nodes)
     ) {
       setNodesUpdated(true);
     }
@@ -182,7 +176,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
   // template name and version state
   useEffect(() => {
-    const fullTemplateName = currentCluster.clusterTemplateName;
+    const fullTemplateName = currentCluster.template;
     let name = "";
     let version = "";
     if (fullTemplateName) {
@@ -197,15 +191,12 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       setClusterTemplateName(name);
       setClusterTemplateVersion(version);
     }
-  }, [currentCluster.clusterTemplateName]);
+  }, [currentCluster.template]);
 
   // region and site state
   useEffect(() => {
-    if (
-      initialCluster.nodes?.nodeInfoList &&
-      initialCluster.nodes.nodeInfoList[0].id
-    ) {
-      setFirstHostId(initialCluster.nodes.nodeInfoList[0].id);
+    if (initialCluster.nodes && initialCluster.nodes[0].id) {
+      setFirstHostId(initialCluster.nodes[0].id);
     }
     dispatch(setCluster({ ...initialCluster }));
   }, [initialCluster]);
@@ -268,10 +259,10 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
   // Converters
   // convert nodes type
-  const convertNodes = (nodes: ecm.NodeInfo[]) => {
-    const newNodes: ecm.NodeSpec[] = nodes.map((i) => ({
-      nodeGuid: i.guid ?? "",
-      nodeRole: i.role as "all" | "controlplane" | "worker",
+  const convertNodes = (nodes: cm.NodeInfo[]) => {
+    const newNodes: cm.NodeSpec[] = nodes.map((i) => ({
+      id: i.id ?? "",
+      role: i.role as "all" | "controlplane" | "worker",
     }));
 
     return newNodes;
@@ -311,23 +302,18 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     if (templateUpdated) {
       const p = editClusterByTemplateName({
         projectName: SharedStorage.project?.name ?? "",
-        clusterName: currentCluster.name ?? "",
-        // clusterTemplateInfo: {
-        //   name: clusterTemplateName,
-        //   version: clusterTemplateVersion,
-        // },
+        name: currentCluster.name ?? "",
         //TODO: what to update with ?
-        clusterConfig: { metadata: {}, spec: {} },
+        body: [],
       }).unwrap();
       promises.push(p);
     }
     if (labelsUpdated) {
       const p = editClusterByLabels({
         projectName: SharedStorage.project?.name ?? "",
-        clusterName: currentCluster.name ?? "",
+        name: currentCluster.name ?? "",
         clusterLabels: {
-          labels: labelsToObject(objectToLabels(currentCluster.clusterLabels)),
-          userDefinedLabelKeys: currentCluster.userDefinedLabelKeys,
+          labels: labelsToObject(objectToLabels(currentCluster.labels)),
         },
       }).unwrap();
       promises.push(p);
@@ -343,18 +329,14 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     if (nodesUpdated) {
       const p = editClusterByNodes({
         projectName: SharedStorage.project?.name ?? "",
-        clusterName: currentCluster.name ?? "",
-        clusterNodes: {
-          nodeList: convertNodes(currentCluster.nodes?.nodeInfoList ?? []),
-        },
+        name: currentCluster.name ?? "",
+        body: convertNodes(currentCluster.nodes ?? []),
       }).unwrap();
       promises.push(p);
     }
 
     await Promise.all(promises);
   };
-
-  console.log(siteData, siteData?.region);
 
   return (
     <div {...cy} className="cluster-edit">
@@ -367,10 +349,9 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
       {/** TODO: MetadataLabel needs to be refactored. This causing a performance issue with rerendering in circle. */}
       <MetadataLabels
-        userDefinedLabelKeys={currentCluster.userDefinedLabelKeys ?? []}
         regionMeta={siteData?.inheritedMetadata?.location ?? []}
         siteMeta={siteData?.metadata ?? []}
-        clusterLabels={currentCluster.clusterLabels ?? {}}
+        clusterLabels={currentCluster.labels ?? {}}
         getInheritedMeta={(meta) => setInheritedMeta(meta)}
         getUserDefinedMeta={(meta) => setUserDefinedMeta(meta)}
       />
@@ -379,28 +360,10 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         <HostSelection
           cluster={{
             ...currentCluster,
-            locationList: [
-              {
-                locationType: "LOCATION_TYPE_REGION_ID",
-                locationInfo: siteData.region.resourceId,
-              },
-              {
-                locationType: "LOCATION_TYPE_REGION_NAME",
-                locationInfo: siteData.region.name,
-              },
-              {
-                locationType: "LOCATION_TYPE_SITE_ID",
-                locationInfo: siteData.resourceId,
-              },
-              {
-                locationType: "LOCATION_TYPE_SITE_NAME",
-                locationInfo: siteData.name,
-              },
-            ],
           }}
-          configuredClusterNodes={initialCluster.nodes?.nodeInfoList}
-          onNodesSave={(nodeInfoList) => {
-            dispatch(updateClusterNodes({ nodeInfoList }));
+          configuredClusterNodes={initialCluster.nodes}
+          onNodesSave={(nodeInfo) => {
+            dispatch(updateClusterNodes(nodeInfo));
           }}
           onRemoveLastNode={(removed) => setRemoveLast(removed)}
           HostsTableRemote={HostsTableRemote}

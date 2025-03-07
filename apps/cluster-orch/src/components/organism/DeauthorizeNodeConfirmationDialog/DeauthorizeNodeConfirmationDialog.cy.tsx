@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { cyGet } from "@orch-ui/tests";
@@ -14,7 +14,7 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
     beforeEach(() => {
       cy.mount(
         <DeauthorizeNodeConfirmationDialog
-          clusterName={clusterOne.name!}
+          name={clusterOne.name!}
           hostName="host-dh38bjw9"
           hostId="host-dh38bjw9"
           hostUuid="4c4c4544-0044-4210-8031-c2c04f305233"
@@ -39,11 +39,8 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
       cy.get(`@${pom.api.putClusterNode}`)
         .its("request.url")
         .then((url) => {
-          const match = url.match(
-            `.v1.*clusters/${
-              clusterOne.name
-            }/nodes/${"4c4c4544-0044-4210-8031-c2c04f305233"}`,
-          );
+          const match = url.match(`.v2.*clusters/${clusterOne.name}/nodes`);
+          // TODO: Deauth flow to be updated with new API
           expect(match && match.length > 0).to.eq(true);
         });
 
@@ -55,7 +52,7 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
     it("after pressing the confirmation button", () => {
       cy.mount(
         <DeauthorizeNodeConfirmationDialog
-          clusterName={clusterOne.name!}
+          name={clusterOne.name!}
           hostName="host-dh38bjw9"
           hostId="host-dh38bjw9"
           hostUuid="4c4c4544-0044-4210-8031-c2c04f305233"

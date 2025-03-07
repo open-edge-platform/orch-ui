@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { clusterA, deploymentOne } from "@orch-ui/utils";
@@ -18,12 +18,12 @@ describe("<DeploymentInstanceDetail />", () => {
     cy.mount(<DeploymentInstanceDetail />, {
       routerProps: {
         initialEntries: [
-          `/deployment/${deploymentOne.deployId}/${clusterA.id!}`,
+          `/deployment/${deploymentOne.deployId}/cluster/${clusterA.id!}`,
         ],
       },
       routerRule: [
         {
-          path: "/deployment/:deplId/:clusterId",
+          path: "/deployment/:deplId/cluster/:name",
           element: <DeploymentInstanceDetail />,
         },
       ],
@@ -41,12 +41,12 @@ describe("<DeploymentInstanceDetail />", () => {
     cy.mount(<DeploymentInstanceDetail />, {
       routerProps: {
         initialEntries: [
-          `/deployment/${deploymentOne.deployId}/${clusterA.id!}`,
+          `/deployment/${deploymentOne.deployId}/cluster/${clusterA.id!}`,
         ],
       },
       routerRule: [
         {
-          path: "/deployment/:deplId/:clusterId",
+          path: "/deployment/:deplId/cluster/:name",
           element: <DeploymentInstanceDetail />,
         },
       ],
@@ -64,12 +64,12 @@ describe("<DeploymentInstanceDetail />", () => {
     cy.mount(<DeploymentInstanceDetail />, {
       routerProps: {
         initialEntries: [
-          `/deployment/${deploymentOne.deployId}/${clusterA.id!}`,
+          `/deployment/${deploymentOne.deployId}/cluster/${clusterA.id!}`,
         ],
       },
       routerRule: [
         {
-          path: "/deployment/:deplId/:clusterId",
+          path: "/deployment/:deplId/cluster/:name",
           element: <DeploymentInstanceDetail />,
         },
       ],

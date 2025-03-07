@@ -2,7 +2,7 @@
 
 #
 # SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-# SPDX-License-Identifier: LicenseRef-Intel
+# SPDX-License-Identifier: Apache-2.0
 #
 
 set -e
@@ -27,17 +27,14 @@ NC='\033[0m' # No Color
 
 echo -e "${CYAN}Generate RTK endpoints APIs${NC}"
 
-# echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
+#echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
+#npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
 
 echo -e "${CYAN}Generate EDGE_INFRA_MANAGER RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}eim/eimApis.config.json
 
-# echo -e "${CYAN}Generate EDGE_CLUSTER_MANAGER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}edge-cluster-manager/clusterManagerApis.config.json
-
-# echo -e "${CYAN}Generate CLUSTER_TEMPLATE_MANAGER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}cluster-template-manager/clusterTemplateApis.config.json
+echo -e "${CYAN}Generate CLUSTER_MANAGER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}cluster-manager/clusterManagerApis.config.json
 
 # echo -e "${CYAN}Generate APP_CATALOG RTK endpoints APIs${NC}"
 # npx @rtk-query/codegen-openapi ${prefix}app-catalog/appCatalogApis.config.json

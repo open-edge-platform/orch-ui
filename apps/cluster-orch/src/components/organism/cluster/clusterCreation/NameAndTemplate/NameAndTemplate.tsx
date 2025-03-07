@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Heading, TextField } from "@spark-design/react";
@@ -87,10 +87,7 @@ const NameAndTemplate = () => {
           clusterTemplateVersion={useAppSelector(getTemplateVersion)}
           templateName={selectTemplateName}
           isDisabled={
-            currentCluster.clusterTemplateName &&
-            currentCluster.clusterTemplateName.length > 0
-              ? false
-              : true
+            !(currentCluster.template && currentCluster.template.length > 0)
           }
           onSelectionChange={(value: string) => {
             setSelectTemplateVersion(value);

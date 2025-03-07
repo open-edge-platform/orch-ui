@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
@@ -17,7 +17,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "getTemplate" | "getTemplateError";
 
-const route = "**/v1/**/templates";
+const route = "**/v2/**/templates";
 
 const endpoints: CyApiDetails<ApiAliases> = {
   getTemplate: {

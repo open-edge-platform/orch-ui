@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -69,15 +69,15 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
   };
 
   const [deleteCluster] =
-    ecm.useDeleteV1ProjectsByProjectNameClustersAndClusterNameMutation();
+    cm.useDeleteV2ProjectsByProjectNameClustersAndNameMutation();
 
   const { data, isLoading, error, isError, isSuccess } =
-    ecm.useGetV1ProjectsByProjectNameClustersQuery(
+    cm.useGetV2ProjectsByProjectNameClustersQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        filter: getFilter<ecm.ClusterInfoRead>(
+        filter: getFilter<cm.ClusterInfoRead>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "status", "kubernetesVersion"],
+          ["name", "providerStatus.indicator", "kubernetesVersion"],
           Operator.OR,
         ),
         orderBy: getOrder(
@@ -105,20 +105,17 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
     );
 
   const [trigger] =
-    ecm.clusterManagerApis.endpoints.getV1ProjectsByProjectNameClustersAndClusterIdKubeconfigs.useLazyQuery();
+    cm.clusterManagerApis.endpoints.getV2ProjectsByProjectNameClustersAndNameKubeconfigs.useLazyQuery();
 
-  const handleKubeconfig = async (
-    clusterId: string,
-    type: "download" | "copy",
-  ) => {
+  const handleKubeconfig = async (name: string, type: "download" | "copy") => {
     trigger({
       projectName: SharedStorage.project?.name ?? "",
-      clusterId: clusterId,
+      name,
     })
       .unwrap()
       .then(
         (
-          response: ecm.GetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsApiResponse,
+          response: cm.GetV2ProjectsByProjectNameClustersAndNameKubeconfigsApiResponse,
         ) => {
           if (type === "download") {
             downloadFile(response.kubeconfig ?? "");
@@ -145,7 +142,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       );
   };
 
-  const getDropdownItems = (cluster: ecm.ClusterInfoRead): PopupOption[] => {
+  const getDropdownItems = (cluster: cm.ClusterInfoRead): PopupOption[] => {
     return [
       {
         displayText: "View Details",
@@ -170,28 +167,28 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       {
         displayText: "Download Kubeconfig File",
         onSelect: async () => {
-          handleKubeconfig(cluster.clusterID ?? "", "download");
+          handleKubeconfig(cluster.name ?? "", "download");
         },
       },
       {
         displayText: "Copy Kubeconfig File",
         onSelect: async () => {
-          handleKubeconfig(cluster.clusterID ?? "", "copy");
+          handleKubeconfig(cluster.name ?? "", "copy");
         },
       },
     ];
   };
 
-  const deleteClusterFn = async (clusterName: string) => {
+  const deleteClusterFn = async (name: string) => {
     deleteCluster({
       projectName: SharedStorage.project?.name ?? "",
-      clusterName,
+      name,
     })
       .unwrap()
       .then(() => {
         setToast((p) => ({
           ...p,
-          message: `Cluster ${clusterName} deleted`,
+          message: `Cluster ${name} deleted`,
           state: ToastState.Success,
           visibility: ToastVisibility.Show,
         }));
@@ -200,9 +197,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       .catch((e) => {
         setToast((p) => ({
           ...p,
-          message: `Failed to delete cluster ${clusterName}: ${
-            parseError(e).data
-          }`,
+          message: `Failed to delete cluster ${name}: ${parseError(e).data}`,
           state: ToastState.Danger,
           visibility: ToastVisibility.Show,
         }));
@@ -210,12 +205,12 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
     setClusterToDelete(undefined);
   };
 
-  const columns: TableColumn<ecm.ClusterInfoRead>[] = [
+  const columns: TableColumn<cm.ClusterInfoRead>[] = [
     {
       Header: "Cluster Name",
       accessor: (item) => item.name,
       apiName: "name",
-      Cell: (table: { row: { original: ecm.ClusterInfoRead } }) => {
+      Cell: (table: { row: { original: cm.ClusterInfoRead } }) => {
         return (
           <Link to={`../cluster/${table.row.original.name}`}>
             {table.row.original.name}
@@ -247,24 +242,6 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
         }
       },
     },
-    {
-      Header: "Site",
-      accessor: (item) => {
-        let site = "-";
-        item.locationList?.forEach((label) => {
-          if (
-            label.locationInfo &&
-            label.locationType === "LOCATION_TYPE_SITE_NAME"
-          ) {
-            const newSite = label.locationInfo;
-            site = newSite;
-          }
-        });
-
-        return site;
-      },
-    },
-
     {
       Header: "Actions",
       textAlign: "center",
@@ -304,7 +281,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
   const offset = parseInt(searchParams.get("offset") ?? "0");
 
   const getContent = () => {
-    if (isSuccess && data?.clusterInfoList?.length === 0 && !searchTerm) {
+    if (isSuccess && data?.clusters?.length === 0 && !searchTerm) {
       return (
         <Empty
           icon="document-gear"
@@ -326,7 +303,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
     return (
       <Table
         columns={columns}
-        data={data.clusterInfoList ?? []}
+        data={data.clusters ?? []}
         initialState={{
           pageSize,
           pageIndex: Math.floor(offset / pageSize),
@@ -353,9 +330,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
           });
         }}
         key="clusters-table"
-        subRow={(row) => (
-          <ClusterNodesWrapper clusterName={row.original.name ?? ""} />
-        )}
+        subRow={(row) => <ClusterNodesWrapper name={row.original.name ?? ""} />}
         canPaginate
         isServerSidePaginated
         totalOverallRowsCount={data.totalElements}

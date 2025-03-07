@@ -1,5 +1,5 @@
 {
-  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-maestro-caas-services-edge-cluster-manager.yaml",
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-cluster-manager-openapi.yaml",
   "apiFile": "./apiSlice.ts",
   "apiImport": "coApi",
   "outputFile": "./clusterManagerApis.ts",

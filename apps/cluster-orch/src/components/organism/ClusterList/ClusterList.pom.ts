@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterInfo1, clusterInfo2 } from "@orch-ui/utils";
@@ -19,9 +19,12 @@ type ApiAliases =
   | "clusterMockedWithFilter"
   | "clusterMockedWithOffset";
 
-const route = "**/v1/**/clusters**";
+const route = "**/v2/**/clusters**";
 
-const endpoints: CyApiDetails<ApiAliases, ecm.ClusterInfoList> = {
+const endpoints: CyApiDetails<
+  ApiAliases,
+  cm.GetV2ProjectsByProjectNameClustersApiResponse
+> = {
   cluster: {
     route,
   },
@@ -29,7 +32,7 @@ const endpoints: CyApiDetails<ApiAliases, ecm.ClusterInfoList> = {
     route,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterInfo1, clusterInfo2],
+      clusters: [clusterInfo1, clusterInfo2],
       totalElements: 20,
     },
   },
@@ -37,7 +40,7 @@ const endpoints: CyApiDetails<ApiAliases, ecm.ClusterInfoList> = {
     route: `${route}filter=name%3Dtesting+OR+status%3Dtesting+OR+kubernetesVersion%3Dtesting`,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterInfo1, clusterInfo2],
+      clusters: [clusterInfo1, clusterInfo2],
       totalElements: 2,
     },
   },
@@ -45,7 +48,7 @@ const endpoints: CyApiDetails<ApiAliases, ecm.ClusterInfoList> = {
     route: `${route}offset=10*`,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterInfo1, clusterInfo2],
+      clusters: [clusterInfo1, clusterInfo2],
       totalElements: 20,
     },
   },

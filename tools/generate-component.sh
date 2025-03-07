@@ -6,7 +6,7 @@ NC='\033[0m' # No Color
 
 LICENSE="/*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 "
 usage() { echo "Usage: /bin/bash $0 -p <path> -n <name>" 1>&2; exit 1; }

@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { ConfirmationDialogPom, MetadataDisplayPom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { Cy, CyApiDetails, CyPom } from "@orch-ui/tests";
@@ -41,8 +41,8 @@ type ApiAliases =
   | ClusterErrorApiAliases
   | KubeconfigApiAliases;
 
-const route = "**v1/**/clusters/**";
-const kubeconfigRoute = "**/v1/**/clusters/kubeconfigs/**";
+const route = "**v2/**/clusters/**";
+const kubeconfigRoute = "**/v2/**/clusters/kubeconfigs/**";
 const firstHostRoute = "**/v1/projects/**/compute/hosts/**";
 const siteRoute = "/v1/projects/**/regions/**/sites/**";
 
@@ -54,7 +54,7 @@ const siteRestaurantOne: eim.SiteRead = {
 
 const successClusterEndpoints: CyApiDetails<
   ClusterSuccessApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusterSuccess: {
     route: route,
@@ -111,7 +111,7 @@ const errorClusterEndpoint: CyApiDetails<ClusterErrorApiAliases> = {
 
 const kubeconfigEndpoint: CyApiDetails<
   KubeconfigApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameKubeconfigsApiResponse
 > = {
   getKubeconfig: {
     route: kubeconfigRoute,
@@ -124,7 +124,7 @@ const kubeconfigEndpoint: CyApiDetails<
 
 export class ClusterDetailPom extends CyPom<Selectors, ApiAliases> {
   public table: SiTablePom;
-  public testClusterId = clusterOne.clusterID;
+  public testClusterId = clusterOne.name;
   public testCluster = clusterOne;
   public testSite = siteRestaurantOne;
   public deploymentMetadataPom: MetadataDisplayPom;

@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm, catalog, ecm, mbApi, tm } from "@orch-ui/apis";
+import { adm, catalog, cm, mbApi, tm } from "@orch-ui/apis";
 import {
   MetadataPair,
   setActiveNavItem,
@@ -137,7 +137,7 @@ const SetupDeployment = () => {
   const [currentMetadata, setCurrentMetadata] = useState<MetadataPair[]>([]); // upon DeploymentType.Automatic
 
   const [selectedClusters, setSelectedClusters] = useState<
-    ecm.ClusterInfoRead[]
+    cm.ClusterInfoRead[]
   >([]); // upon DeploymentType.Manual
 
   // Step 6: Enter Deployment Details states
@@ -322,17 +322,13 @@ const SetupDeployment = () => {
           nextJsx = (
             <SelectCluster
               mode={SelectClusterMode.CREATE}
-              selectedIds={selectedClusters.map(
-                (cluster) => cluster.clusterID!,
-              )}
-              onSelect={(cluster: ecm.ClusterInfo, isSelected: boolean) => {
+              selectedIds={selectedClusters.map((cluster) => cluster.name!)}
+              onSelect={(cluster: cm.ClusterInfo, isSelected: boolean) => {
                 setSelectedClusters((prev) => {
                   if (isSelected) {
-                    return prev.concat(cluster as ecm.ClusterInfoRead);
+                    return prev.concat(cluster as cm.ClusterInfoRead);
                   } else {
-                    return prev.filter(
-                      (c) => c.clusterID !== cluster.clusterID,
-                    );
+                    return prev.filter((c) => c.name !== cluster.name);
                   }
                 });
               }}
@@ -484,29 +480,34 @@ const SetupDeployment = () => {
       });
     });
 
-    const targetClusters =
+    const targetClusters: adm.TargetClusters[] =
       currentDeploymentPackage && currentDeploymentPackage.applicationReferences
-        ? currentDeploymentPackage.applicationReferences.reduce(
-            (p: adm.TargetClusters[], app: catalog.ApplicationReference) => {
-              if (selectedClusters && selectedClusters.length > 0) {
-                return p.concat(
-                  selectedClusters.map((c: ecm.ClusterInfoRead) => {
-                    return {
-                      appName: app.name,
-                      clusterId: c.clusterID ?? "",
-                    };
-                  }),
-                );
-              } else {
-                p.push({
+        ? currentDeploymentPackage.applicationReferences.reduce<
+            adm.TargetClusters[]
+          >((p: adm.TargetClusters[], app: catalog.ApplicationReference) => {
+            if (selectedClusters && selectedClusters.length > 0) {
+              return [
+                ...p,
+                ...selectedClusters.map((c) => {
+                  // NOTE whitout explicitly typing the variable,
+                  // the compiler will not throw errors if the interface is wrong
+                  const tc: adm.TargetClusters = {
+                    appName: app.name,
+                    clusterId: c.name ?? "",
+                  };
+                  return tc;
+                }),
+              ];
+            } else {
+              return [
+                ...p,
+                {
                   appName: app.name,
                   labels: labels,
-                });
-                return p;
-              }
-            },
-            [],
-          )
+                },
+              ];
+            }
+          }, [])
         : [];
     await createDeployment({
       projectName,

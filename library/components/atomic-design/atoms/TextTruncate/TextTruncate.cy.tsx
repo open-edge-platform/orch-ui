@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { TextTruncate } from "./TextTruncate";
@@ -33,6 +33,14 @@ describe("<TextTruncate/>", () => {
     it("should show full text after read more click", () => {
       pom.el.label.click();
       pom.el.content.should("contain.text", alpha);
+    });
+
+    it("should hide read more", () => {
+      cy.mount(
+        <TextTruncate id="abc" maxLength={20} text={alpha} hideReadMore />,
+      );
+      pom.el.content.should("contain.text", alpha.slice(0, 20));
+      pom.el.label.should("not.exist");
     });
   });
 

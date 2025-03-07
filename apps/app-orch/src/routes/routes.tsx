@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { PageNotFound, SquareSpinner } from "@orch-ui/components";
@@ -96,11 +96,11 @@ export const childRoutes = [
     element: <EditDeployment />,
   },
   {
-    path: "deployment/:deplId/cluster/:clusterId",
+    path: "deployment/:deplId/cluster/:name",
     element: <DeploymentInstanceDetail />,
   },
   {
-    path: "app/:appId/cluster/:clusterId/vm/:vmId/console",
+    path: "app/:appId/cluster/:name/vm/:vmId/console",
     element: <VMRemoteWindow />,
   },
   // DEBUG Route: This path is not on the UI but can be used to test out the

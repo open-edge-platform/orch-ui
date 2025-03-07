@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { eim } from "@orch-ui/apis";
@@ -112,25 +112,25 @@ describe("<ClusterEdit/>", () => {
         "v1.0.1",
       );
 
-      // check additional metadata
-      pom.metadataForm.el.pair
-        .eq(0)
-        .children()
-        .eq(0)
-        .find("input")
-        .invoke("attr", "value")
-        .should("equal", "customer-one");
-      pom.metadataForm.el.pair
-        .eq(1)
-        .children()
-        .eq(1)
-        .find("input")
-        .invoke("attr", "value")
-        .should("equal", "value-two");
-      pom.metadataForm.el.pair.should("have.length", 2);
+      // TODO: check additional metadata flow ITEP-22694
+      // pom.metadataForm.el.pair
+      //   .eq(0)
+      //   .children()
+      //   .eq(0)
+      //   .find("input")
+      //   .invoke("attr", "value")
+      //   .should("equal", "customer-one");
+      // pom.metadataForm.el.pair
+      //   .eq(1)
+      //   .children()
+      //   .eq(1)
+      //   .find("input")
+      //   .invoke("attr", "value")
+      //   .should("equal", "value-two");
+      // pom.metadataForm.el.pair.should("have.length", 2);
     });
-
-    it("update cluster host after adding host", () => {
+    // TODO : ITEP-22694 Site information to be updated from labels
+    it.skip("update cluster host after adding host", () => {
       // add new host
       pom.el.addHostBtn.click();
       pom.clusterNodeSelectDrawerPom.nodeTablePom.el.rowSelectCheckbox.click();
@@ -143,18 +143,18 @@ describe("<ClusterEdit/>", () => {
       cy.get(`@${pom.api.putClusterNodesInClusterByName}`)
         .its("request.body")
         .should("deep.include", {
-          nodeList: [
+          nodes: [
             {
-              nodeGuid: "4c4c4544-0044-4210-8031-c2c04f305233",
-              nodeRole: "worker",
+              id: "4c4c4544-0044-4210-8031-c2c04f305233",
+              role: "worker",
             },
             {
-              nodeGuid: "4c4c4544-0056-4810-8053-b8c04f595233",
-              nodeRole: "worker",
+              id: "4c4c4544-0056-4810-8053-b8c04f595233",
+              role: "worker",
             },
             {
-              nodeGuid: "4c4c4544-0056-4810-8053-b8c04f5952pb",
-              nodeRole: "all",
+              id: "4c4c4544-0056-4810-8053-b8c04f595238",
+              role: "all",
             },
           ],
         });

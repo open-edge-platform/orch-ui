@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { Flex, MetadataDisplay, SquareSpinner } from "@orch-ui/components";
 import {
   hostProviderStatusToString,
@@ -21,7 +21,7 @@ export const dataCy = "clusterDetails";
 interface ClusterDetailsProps {
   isOpen: boolean;
   onCloseDrawer: () => void;
-  cluster: ecm.ClusterInfo;
+  cluster: cm.ClusterInfo;
 }
 
 const HostsTableRemote = RuntimeConfig.isEnabled("FM")
@@ -43,22 +43,19 @@ const ClusterDetails = ({
   const cy = { "data-cy": dataCy };
   const projectName = SharedStorage.project?.name ?? "";
   const { data: clusterDetail } =
-    ecm.useGetV1ProjectsByProjectNameClustersAndClusterNameQuery(
+    cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
       {
         projectName,
-        clusterName: cluster.name!,
+        name: cluster.name!,
       },
       { skip: !cluster.name || !projectName },
     );
 
-  const guids = (): string[] => {
-    const result =
-      clusterDetail?.nodes?.nodeInfoList?.reduce(
-        (l, n) => (n.guid ? [n.guid, ...l] : l),
-        [] as string[],
-      ) ?? [];
-    return result;
-  };
+  const guids = (): string[] =>
+    clusterDetail?.nodes?.reduce(
+      (l, n) => (n.id ? [n.id, ...l] : l),
+      [] as string[],
+    ) ?? [];
 
   const columns: SparkTableColumn<eim.HostRead>[] = [
     {
@@ -102,29 +99,19 @@ const ClusterDetails = ({
           <div className="cluster-details-basic">
             <Flex cols={[4, 8]}>
               <Text data-cy="status">Status</Text>
-              <Text data-cy="statusValue">{clusterDetail?.status}</Text>
+              <Text data-cy="statusValue">
+                {clusterDetail?.providerStatus?.indicator}
+              </Text>
             </Flex>
             <Flex cols={[4, 8]}>
               <Text data-cy="id">Cluster ID</Text>
-              <Text data-cy="idValue">{clusterDetail?.clusterID}</Text>
-            </Flex>
-            <Flex cols={[4, 8]}>
-              <Text data-cy="site">Site</Text>
-              <Text data-cy="siteValue">
-                {cluster.locationList?.reduce((p, c) => {
-                  if (c.locationInfo) {
-                    return c.locationInfo + "; " + p;
-                  } else {
-                    return p;
-                  }
-                }, "")}
-              </Text>
+              <Text data-cy="idValue">{clusterDetail?.name}</Text>
             </Flex>
           </div>
           <div className="cluster-details-label" data-cy="labels">
             <Text size="l">Cluster Labels</Text>
             <MetadataDisplay
-              metadata={generateMetadataPair(clusterDetail?.clusterLabels)}
+              metadata={generateMetadataPair(clusterDetail?.labels)}
             />
           </div>
           <div className="cluster-details-host" data-cy="hosts">

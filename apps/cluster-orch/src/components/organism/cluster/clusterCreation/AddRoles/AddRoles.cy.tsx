@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { setupStore } from "../../../../../store";
@@ -14,12 +14,10 @@ describe("<AddRoles/>", () => {
     const store = setupStore({
       nodes: [
         {
-          guid: "guid1",
           id: "node-1",
           name: "nodeOne",
           role: "all",
           os: "linux",
-          serial: "serialNumberOne",
         },
       ],
     });

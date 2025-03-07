@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { appCatalogApis as api } from "./apiSlice";
 export const addTagTypes = ["CatalogService"] as const;
 const injectedRtkApi = api

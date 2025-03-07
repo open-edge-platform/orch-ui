@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { clusterOne } from "@orch-ui/utils";
@@ -12,14 +12,14 @@ describe("<ClusterSummary/>", () => {
   describe("should render component", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.clusterMocked]);
-      cy.mount(<ClusterSummary uuid="uuid" site="site" />);
+      cy.mount(<ClusterSummary nodeId="uuid" site="site" />);
       pom.waitForApis();
     });
     it("with mocked properties displayed", () => {
       pom.root.should("exist");
       pom.el.name.contains(clusterOne.name!);
-      pom.el.status.contains(clusterOne.status!);
-      pom.el.hosts.contains(clusterOne.nodes!.nodeInfoList!.length);
+      pom.el.status.contains(clusterOne.providerStatus!.indicator!);
+      pom.el.hosts.contains(clusterOne.nodes!.length);
     });
 
     it("navigates to the cluster details page", () => {
@@ -31,7 +31,7 @@ describe("<ClusterSummary/>", () => {
   describe("Should render error", () => {
     it("on 500 response", () => {
       pom.interceptApis([pom.api.cluster500]);
-      cy.mount(<ClusterSummary uuid="uuid" site="site" />);
+      cy.mount(<ClusterSummary nodeId="uuid" site="site" />);
       pom.waitForApis();
     });
   });

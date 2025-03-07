@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2024 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 export { default as ClusterNodesTableBySitePom } from "./src/components/organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite.pom";

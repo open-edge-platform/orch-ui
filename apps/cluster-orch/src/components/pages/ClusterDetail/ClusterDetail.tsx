@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -28,10 +28,8 @@ import {
   API_INTERVAL,
   checkAuthAndRole,
   clusterToStatuses,
-  convertDataUnitsToBytes,
   copyToClipboard,
   downloadFile,
-  getDefinedFloatValue,
   parseError,
   Role,
   SharedStorage,
@@ -58,7 +56,6 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { NodeTableColumns } from "../../../utils/NodeTableColumns";
-import ClusterPerformanceCard from "../../atom/ClusterPerformanceCard/ClusterPerformanceCard";
 import DeploymentInstancesTable from "../../organism/clusterDetail/DeploymentInstancesTable/DeploymentInstancesTable";
 import ClusterNodesTable from "../../organism/ClusterNodesTable/ClusterNodesTable";
 import "./ClusterDetail.scss";
@@ -78,10 +75,9 @@ export interface ClusterDetailProps {
 
 // these columns define the nodes in the cluster.
 // They are used to render information about the node
-const nodesTableColumns: TableColumn<ecm.NodeInfo>[] = [
+const nodesTableColumns: TableColumn<cm.NodeInfo>[] = [
   NodeTableColumns.name,
   NodeTableColumns.status,
-  NodeTableColumns.serial,
   NodeTableColumns.role,
   NodeTableColumns.actions((node) => (
     <Link to={`/infrastructure/host/${node.id}`}>
@@ -124,10 +120,10 @@ function ClusterDetail({
     isLoading,
     isError,
     error,
-  } = ecm.useGetV1ProjectsByProjectNameClustersAndClusterNameQuery(
+  } = cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      clusterName: (hasHeader ? clusterName : name) ?? "",
+      name: (hasHeader ? clusterName : name) ?? "",
     },
     {
       skip: (!name && !clusterName) || !SharedStorage.project?.name,
@@ -136,23 +132,23 @@ function ClusterDetail({
   );
   // Get Kubeconfig
   const { data: kubeconfig, isLoading: isKubeconfigLoading } =
-    ecm.useGetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsQuery(
+    cm.useGetV2ProjectsByProjectNameClustersAndNameKubeconfigsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        clusterId: clusterDetail?.clusterID ?? "",
+        name: clusterDetail?.name ?? "",
       },
       { skip: !clusterDetail || !SharedStorage.project?.name },
     );
 
   const [deleteCluster] =
-    ecm.useDeleteV1ProjectsByProjectNameClustersAndClusterNameMutation();
+    cm.useDeleteV2ProjectsByProjectNameClustersAndNameMutation();
 
-  const clusterStatusFields: FieldLabels<ecm.ClusterDetailInfo> = {
-    appAgentStatus: { label: "Application Agent" },
+  const clusterStatusFields: FieldLabels<cm.ClusterDetailInfo> = {
     lifecyclePhase: { label: "Lifecycle Phase" },
-    nodeHealth: { label: "Node Health" },
-    providerStatus: { label: "Readiness" },
-    resourceStatus: { label: "Resources" },
+    providerStatus: { label: "Cluster Ready" },
+    controlPlaneReady: { label: "Control Plane Ready" },
+    infrastructureReady: { label: "Infrastructure Ready" },
+    nodeHealth: { label: "Node Healthy" },
   };
 
   useEffect(() => {
@@ -160,10 +156,10 @@ function ClusterDetail({
     if (
       isSuccess &&
       clusterDetail.nodes &&
-      clusterDetail.nodes.nodeInfoList &&
-      clusterDetail.nodes.nodeInfoList.length > 0
+      clusterDetail.nodes &&
+      clusterDetail.nodes.length > 0
     ) {
-      setClusterFirstHostId(clusterDetail.nodes.nodeInfoList[0].id);
+      setClusterFirstHostId(clusterDetail.nodes[0].id);
     }
   }, [clusterDetail]);
   const { data: firstClusterHost, isSuccess: isFirstHostSuccess } =
@@ -226,21 +222,11 @@ function ClusterDetail({
   // if the metadata is also present in site.inheritedMetadata we mark it as a Region metadata
   const combinedMetadata = useMemo(() => {
     const metadata: TypedMetadata[] =
-      clusterDetail &&
-      clusterDetail.clusterLabels &&
-      clusterDetail.userDefinedLabelKeys
-        ? Object.entries(clusterDetail.clusterLabels)
-            .filter((kv) => {
-              const userDefinedLabelKeys =
-                clusterDetail.userDefinedLabelKeys ?? [];
-              if (userDefinedLabelKeys.some((k) => k === kv[0])) {
-                return kv;
-              }
-            })
-            .map((kv) => ({
-              key: kv[0],
-              value: kv[1],
-            }))
+      clusterDetail && clusterDetail.labels
+        ? Object.entries(clusterDetail.labels).map((kv) => ({
+            key: kv[0],
+            value: kv[1],
+          }))
         : [];
 
     return metadata.map((md) => {
@@ -260,11 +246,7 @@ function ClusterDetail({
       }
       return md;
     });
-  }, [
-    clusterDetail?.userDefinedLabelKeys,
-    clusterDetail?.clusterLabels,
-    siteData,
-  ]);
+  }, [clusterDetail?.labels, siteData]);
 
   if (isLoading) {
     return <TableLoader />;
@@ -333,43 +315,20 @@ function ClusterDetail({
     },
   ];
 
-  // Get Cluster Performance chart data
-  let cpuAvail = 0,
-    memAvail = 0,
-    cpuCapacity = 0,
-    memCapacity = 0;
-
-  if (clusterDetail.resources) {
-    // Available Capacity
-    if (clusterDetail.resources.availability) {
-      cpuAvail = getDefinedFloatValue(clusterDetail.resources.availability.cpu);
-      memAvail = convertDataUnitsToBytes(
-        clusterDetail.resources.availability.memory,
-      );
-    }
-    // Maximum Capacity
-    if (clusterDetail.resources.capacity) {
-      cpuCapacity = getDefinedFloatValue(clusterDetail.resources.capacity.cpu);
-      memCapacity = convertDataUnitsToBytes(
-        clusterDetail.resources.capacity.memory,
-      );
-    }
-  }
-
-  const deleteClusterFn = async (clusterName: string) => {
-    if (!clusterName) {
+  const deleteClusterFn = async (name: string) => {
+    if (!name) {
       // NOTE we know this never happens,
       return;
     }
     deleteCluster({
       projectName: SharedStorage.project?.name ?? "",
-      clusterName,
+      name,
     })
       .unwrap()
       .then(() => {
         setToast((p) => ({
           ...p,
-          message: `Cluster ${clusterName} deleted`,
+          message: `Cluster ${name} deleted`,
           state: ToastState.Success,
           visibility: ToastVisibility.Show,
         }));
@@ -481,7 +440,7 @@ function ClusterDetail({
           >
             <tr>
               <td>Cluster ID</td>
-              <td>{clusterDetail.clusterID || "-"}</td>
+              <td>{clusterDetail.name || "-"}</td>
             </tr>
             <tr>
               <td>Kubernetes version</td>
@@ -529,37 +488,12 @@ function ClusterDetail({
           </Item>
           <Item title={<Text>Hosts</Text>}>
             <ClusterNodesTable
-              nodes={clusterDetail.nodes?.nodeInfoList ?? []}
+              nodes={clusterDetail.nodes ?? []}
               columns={nodesTableColumns}
             />
           </Item>
-          <Item title={<Text>Performance</Text>}>
-            <Flex
-              className="perf-charts-container"
-              cols={[12, 12, 12]}
-              colsLg={[3, 3, 3]}
-            >
-              <ClusterPerformanceCard
-                rootCy="cpuChart"
-                title="CPU"
-                // CPU performance refers to CPU usage
-                count={cpuCapacity - cpuAvail}
-                max={cpuCapacity}
-              />
-              <ClusterPerformanceCard
-                rootCy="memoryChart"
-                title="Memory"
-                // Memory performance refers to Memory usage
-                count={memCapacity - memAvail}
-                max={memCapacity}
-              />
-              <div>
-                {/* This div is required for the third column in Flex*/}
-              </div>
-            </Flex>
-          </Item>
           <Item title={<Text>Deployment Instances</Text>}>
-            <DeploymentInstancesTable clusterId={clusterDetail.clusterID} />
+            <DeploymentInstancesTable clusterId={clusterDetail.name} />
           </Item>
         </Tabs>
       )}

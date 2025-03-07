@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ctm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { EmptyPom } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetail, CyApiDetails, CyPom } from "@orch-ui/tests";
@@ -18,10 +18,10 @@ type ApiAliases =
   | "getTemplatesError500"
   | "getSingleTemplates"
   | "getTemplatesEmpty";
-const route = "**/v1/**/templates?*";
+const route = "**/v2/**/templates?*";
 const singleRoute = `${route}/*`;
 
-const getTemplatesSuccess: CyApiDetail<ctm.GetV1ProjectsByProjectNameTemplatesApiResponse> =
+const getTemplatesSuccess: CyApiDetail<cm.GetV2ProjectsByProjectNameTemplatesApiResponse> =
   {
     route: route,
     statusCode: 200,

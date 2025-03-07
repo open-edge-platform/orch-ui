@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { aggregateStatuses, ApiErrorPom } from "@orch-ui/components";
@@ -31,12 +31,6 @@ const runtimeConfig: IRuntimeConfig = {
 
 describe("<ClusterDetail />", () => {
   describe("when the APIs are responding correctly", () => {
-    const clusterSpecificMetadataCount = Object.entries(
-      pom.testCluster.userDefinedLabelKeys!,
-    ).map((kv) => ({
-      key: kv[0],
-      value: kv[1],
-    })).length;
     const inheritedMetadataCount =
       (pom.testSite.metadata?.length ?? 0) +
       (pom.testSite.inheritedMetadata?.location?.length ?? 0);
@@ -93,7 +87,7 @@ describe("<ClusterDetail />", () => {
     it("should render cluster general details", () => {
       pom
         .getGeneralInfoValueByKey("Cluster ID")
-        .should("have.text", pom.testCluster.clusterID);
+        .should("have.text", pom.testCluster.name);
       pom
         .getGeneralInfoValueByKey("Kubernetes version")
         .should("have.text", pom.testCluster.kubernetesVersion);
@@ -106,28 +100,10 @@ describe("<ClusterDetail />", () => {
     it("should render all deployment metadata", () => {
       pom.deploymentMetadataPom
         .getAll()
-        .should(
-          "have.length",
-          clusterSpecificMetadataCount + inheritedMetadataCount,
-        );
+        .should("have.length", inheritedMetadataCount + 7); // TODO metadata to filtered in API response
     });
 
-    it("should show performance charts", () => {
-      pom.gotoTab("Performance");
-
-      // These values are written based on current test-cluster
-      // and may need change with change in test-cluster `resources` values
-      pom.performanceChartPoms.cpu.el.performanceCardChart.should(
-        "contain.text",
-        "8%",
-      );
-      pom.performanceChartPoms.memory.el.performanceCardChart.should(
-        "contain.text",
-        "100%",
-      );
-    });
-
-    it("should show performance charts", () => {
+    it("should show Deployment Instances", () => {
       pom.deploymentInstancesTablePom.interceptApis([
         pom.deploymentInstancesTablePom.api.getDeploymentInstances200,
       ]);

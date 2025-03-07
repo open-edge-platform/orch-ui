@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -29,11 +29,8 @@ import { useSearchParams } from "react-router-dom";
 export const dataCy = "clusterList";
 export interface ClusterListProps {
   selectedClusterIds?: string[];
-  onSelect?: (
-    selectedRowData: ecm.ClusterInfoRead,
-    isSelected: boolean,
-  ) => void;
-  onShowDetails?: (cluster: ecm.ClusterInfoRead) => void;
+  onSelect?: (selectedRowData: cm.ClusterInfoRead, isSelected: boolean) => void;
+  onShowDetails?: (cluster: cm.ClusterInfoRead) => void;
   isForm?: boolean;
 }
 const ClusterList = ({
@@ -46,7 +43,7 @@ const ClusterList = ({
   const projectName = SharedStorage.project?.name ?? "";
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const columns: TableColumn<ecm.ClusterInfoRead>[] = [
+  const columns: TableColumn<cm.ClusterInfoRead>[] = [
     {
       Header: "Cluster Name",
       accessor: (item) => item.name,
@@ -62,7 +59,7 @@ const ClusterList = ({
       Header: "Status",
       accessor: (item) =>
         aggregateStatuses(
-          clusterToStatuses(item as ecm.ClusterInfoRead),
+          clusterToStatuses(item as cm.ClusterInfoRead),
           "lifecyclePhase",
         ).message,
       apiName: "status",
@@ -77,31 +74,6 @@ const ClusterList = ({
       Header: "Host Count",
       accessor: "nodeQuantity",
     },
-    {
-      Header: "Site",
-      accessor: (row) =>
-        row.locationList?.reduce((p, c) => {
-          if (c.locationInfo) {
-            return `${p} ${c.locationInfo};`;
-          } else {
-            return p;
-          }
-        }, ""),
-      Cell: (table) => {
-        const row = table.row.original;
-        return (
-          <Text size="m">
-            {row.locationList?.reduce((p, c) => {
-              if (c.locationInfo) {
-                return `${p} ${c.locationInfo};`;
-              } else {
-                return p;
-              }
-            }, "")}
-          </Text>
-        );
-      },
-    },
   ];
 
   const sortColumn = columnApiNameToDisplayName(
@@ -112,26 +84,27 @@ const ClusterList = ({
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
   const offset = parseInt(searchParams.get("offset") ?? "0");
 
-  const { data: clusters } = ecm.useGetV1ProjectsByProjectNameClustersQuery(
-    {
-      projectName,
-      filter: getFilter<ecm.ClusterInfo>(
-        searchParams.get("searchTerm") ?? "",
-        ["name", "status"],
-        Operator.OR,
-      ),
-      orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
-      pageSize: searchParams.get("pageSize")
-        ? parseInt(searchParams.get("pageSize")!)
-        : 10,
-      offset: searchParams.get("offset")
-        ? parseInt(searchParams.get("offset")!)
-        : 0,
-    },
-    {
-      skip: !projectName,
-    },
-  );
+  const { data: clustersResponse } =
+    cm.useGetV2ProjectsByProjectNameClustersQuery(
+      {
+        projectName,
+        filter: getFilter<cm.ClusterInfo>(
+          searchParams.get("searchTerm") ?? "",
+          ["name", "providerStatus.indicator"],
+          Operator.OR,
+        ),
+        orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
+        pageSize: searchParams.get("pageSize")
+          ? parseInt(searchParams.get("pageSize")!)
+          : 10,
+        offset: searchParams.get("offset")
+          ? parseInt(searchParams.get("offset")!)
+          : 0,
+      },
+      {
+        skip: !projectName,
+      },
+    );
 
   return (
     <div {...cy} className="cluster-list">
@@ -140,7 +113,7 @@ const ClusterList = ({
       </Text>
       <Table
         columns={columns}
-        data={clusters?.clusterInfoList}
+        data={clustersResponse?.clusters}
         initialState={{
           pageIndex: Math.floor(offset / pageSize),
         }}
@@ -168,7 +141,7 @@ const ClusterList = ({
         key="deployment-table"
         canPaginate
         isServerSidePaginated
-        totalOverallRowsCount={clusters?.totalElements ?? 0}
+        totalOverallRowsCount={clustersResponse?.totalElements ?? 0}
         onChangePage={(index: number) => {
           setSearchParams((prev) => {
             prev.set("offset", (index * pageSize).toString());
@@ -177,7 +150,7 @@ const ClusterList = ({
         }}
         // Selection feature
         canSelectRows={isForm}
-        getRowId={(cluster) => cluster.clusterID!}
+        getRowId={(cluster) => cluster.name!}
         selectedIds={selectedClusterIds}
         onSelect={onSelect}
       />

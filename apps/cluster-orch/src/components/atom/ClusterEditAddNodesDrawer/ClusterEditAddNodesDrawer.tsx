@@ -1,21 +1,21 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Button, Drawer } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import ClusterNodesTableBySite, {
   NodeRoles,
 } from "../../organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite";
 
 export const dataCy = "clusterEditAddNodesDrawer";
 
-type ClusterCompleteInfo = ecm.ClusterDetailInfo & ecm.ClusterInfo;
-const convertEimHostToEcmNode = (host: eim.HostRead, role?: NodeRoles) => ({
+type ClusterCompleteInfo = cm.ClusterDetailInfo & cm.ClusterInfo;
+const convertEimHostToCmNode = (host: eim.HostRead, role?: NodeRoles) => ({
   id: host.resourceId,
   serial: host.serialNumber,
   os: host.instance?.os?.name,
@@ -29,7 +29,7 @@ interface ClusterEditAddNodesDrawerProps {
   cluster: ClusterCompleteInfo;
   isOpen: boolean;
   onCancel: () => void;
-  onAddNodeSave: (additionalSelectedNodes: ecm.NodeInfo[]) => void;
+  onAddNodeSave: (additionalSelectedNodes: cm.NodeInfo[]) => void;
 
   // This is needed for testing purpose
   HostsTableRemote?: React.LazyExoticComponent<React.ComponentType<any>> | null;
@@ -48,38 +48,12 @@ const ClusterEditAddNodesDrawer = ({
   const [selectedHosts, setSelectedHosts] = useState<HostRole[]>([]);
   // This will be used to check duplicate selections
   const clusterNodeGuids = useMemo(
-    () => (cluster.nodes?.nodeInfoList ?? []).map((node) => node.guid),
-    [cluster.nodes?.nodeInfoList],
+    () => (cluster.nodes ?? []).map((node) => node.id),
+    [cluster.nodes],
   );
 
-  // Getting locations details
-  const [site, setSite] = useState<eim.SiteRead>();
-  useEffect(() => {
-    if (cluster.locationList) {
-      const site: eim.SiteRead = {};
-      cluster.locationList.forEach((location) => {
-        switch (location.locationType) {
-          case "LOCATION_TYPE_SITE_ID":
-            site.siteID = location.locationInfo;
-            site.resourceId = location.locationInfo;
-            break;
-          case "LOCATION_TYPE_SITE_NAME":
-            site.name = location.locationInfo;
-            break;
-          case "LOCATION_TYPE_REGION_ID":
-            site.region = site.region ?? {};
-            site.region.regionID = location.locationInfo;
-            site.region.resourceId = location.locationInfo;
-            break;
-          case "LOCATION_TYPE_REGION_NAME":
-            site.region = site.region ?? {};
-            site.region.name = location.locationInfo;
-            break;
-        }
-      });
-      setSite(site);
-    }
-  }, [cluster.locationList]);
+  //TODO : ITEP-22694 Site information to be updated from labels
+  const [site] = useState<eim.SiteRead>();
 
   return (
     <div {...cy} className="cluster-edit-add-nodes-drawer">
@@ -148,10 +122,10 @@ const ClusterEditAddNodesDrawer = ({
               isDisabled={selectedHosts.length === 0}
               variant={ButtonVariant.Secondary}
               onPress={() => {
-                // Convert selected eim host to ecm nodes
+                // Convert selected eim host to cm nodes
                 const selectedNodes = selectedHosts
                   .filter((host) => !clusterNodeGuids.includes(host.uuid))
-                  .map((host) => convertEimHostToEcmNode(host, host.role));
+                  .map((host) => convertEimHostToCmNode(host, host.role));
                 // Notify selected node data upon select completion
                 onAddNodeSave(selectedNodes);
               }}

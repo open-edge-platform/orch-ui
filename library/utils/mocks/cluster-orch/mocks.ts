@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ctm, ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { rest, setupWorker } from "msw";
 import { SharedStorage } from "../../shared-storage/shared-storage";
 import { ClusterStore } from "./clusters";
@@ -14,21 +14,21 @@ const projectName = SharedStorage.project?.name;
 
 const cts = new ClusterTemplatesStore();
 export const clusterTemplateHandlers = [
-  rest.get(`/v1/projects/${projectName}/templates`, (_, res, ctx) => {
+  rest.get(`/v2/projects/${projectName}/templates`, (_, res, ctx) => {
     const templates = cts.list();
     return res(
       ctx.status(200),
-      ctx.json<ctm.GetV1ProjectsByProjectNameTemplatesApiResponse>({
+      ctx.json<cm.GetV2ProjectsByProjectNameTemplatesApiResponse>({
         defaultTemplateInfo: cts.getDefault(),
         templateInfoList: templates,
       }),
     );
   }),
   rest.get(
-    `/v1/projects/${projectName}/templates/:name/:version`,
+    `/v2/projects/${projectName}/templates/:name/versions/:version`,
     (req, res, ctx) => {
       const { name, version } =
-        req.params as ctm.GetV1ProjectsByProjectNameTemplatesAndNameVersionsVersionApiArg;
+        req.params as cm.GetV2ProjectsByProjectNameTemplatesAndNameVersionsVersionApiArg;
 
       const templates = cts
         .list()
@@ -42,49 +42,47 @@ export const clusterTemplateHandlers = [
 
       return res(
         ctx.status(200),
-        ctx.json<ctm.GetV1ProjectsByProjectNameTemplatesAndNameVersionsVersionApiResponse>(
+        ctx.json<cm.GetV2ProjectsByProjectNameTemplatesAndNameVersionsVersionApiResponse>(
           template,
         ),
       );
     },
   ),
-  rest.post(`/v1/projects/${projectName}/templates`, async (req, res, ctx) => {
-    const { templateConfigurations } =
-      (await req.json()) as ctm.PostV1ProjectsByProjectNameTemplatesApiArg["importTemplateBody"];
-    const template = templateConfigurations?.[0] ?? null;
-
-    if (!template || !template.version) {
+  rest.post(`/v2/projects/${projectName}/templates`, async (req, res, ctx) => {
+    const templateInfo =
+      (await req.json()) as cm.PostV2ProjectsByProjectNameTemplatesApiArg["templateInfo"];
+    if (!templateInfo || !templateInfo.version) {
       return res(
         ctx.status(400),
         ctx.json({
           message:
-            'request body has an error: doesn\'t match schema #/components/schemas/ImportTemplateBody: Error at "/templateConfigurations/0/version": string doesn\'t match the regular expression "^v([0-9]+)\\.([0-9]+)\\.([0-9]+)$"',
+            'request body has an error: doesn\'t match schema #/components/schemas/TemplateInfo: Error at "/TemplateInfo/version": string doesn\'t match the regular expression "^v(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"',
         }),
       );
     }
 
-    cts.post(template);
+    cts.post(templateInfo);
     return res(ctx.status(200));
   }),
   rest.put(
-    `/v1/projects/${projectName}/templates/:templateName/default`,
+    `/v2/projects/${projectName}/templates/:name/default`,
     async (req, res, ctx) => {
-      const { templateName } =
-        req.params as unknown as ctm.PutV1ProjectsByProjectNameTemplatesAndTemplateNameDefaultApiArg;
+      const { name } =
+        req.params as unknown as cm.PutV2ProjectsByProjectNameTemplatesAndNameDefaultApiArg;
 
       const body =
-        (await req.json()) as ctm.PutV1ProjectsByProjectNameTemplatesAndTemplateNameDefaultApiArg["defaultTemplateInfo"];
+        (await req.json()) as cm.PutV2ProjectsByProjectNameTemplatesAndNameDefaultApiArg["defaultTemplateInfo"];
 
-      cts.setDefault(templateName, body.version);
+      cts.setDefault(name, body.version);
 
       return res(ctx.status(200));
     },
   ),
   rest.delete(
-    `/v1/projects/${projectName}/templates/:name/:version`,
+    `/v2/projects/${projectName}/templates/:name/versions/:version`,
     (req, res, ctx) => {
       const { name, version } =
-        req.params as ctm.DeleteV1ProjectsByProjectNameTemplatesAndNameVersionsVersionApiArg;
+        req.params as cm.DeleteV2ProjectsByProjectNameTemplatesAndNameVersionsVersionApiArg;
 
       const template = cts.getTemplate(name, version);
 
@@ -108,7 +106,7 @@ export const clusterTemplateHandlers = [
 const cs = new ClusterStore();
 
 export const clusterHandlers = [
-  rest.get(`/v1/projects/${projectName}/clusters`, (req, res, ctx) => {
+  rest.get(`/v2/projects/${projectName}/clusters`, (req, res, ctx) => {
     const clusters = cs.list();
     const url = new URL(req.url);
     const offset = parseInt(url.searchParams.get("offset")!) || 0;
@@ -125,95 +123,74 @@ export const clusterHandlers = [
     return res(
       ctx.status(200),
       //This is turning an expected ClusterInfo[] response into a ClusterInfoList[]
-      ctx.json<ecm.GetV1ProjectsByProjectNameClustersApiResponse>({
-        clusterInfoList: page,
+      ctx.json<cm.GetV2ProjectsByProjectNameClustersApiResponse>({
+        clusters: page,
         totalElements: 20,
       }),
     );
   }),
 
-  rest.get(
-    `/v1/projects/${projectName}/clusters/:clusterName`,
-    (req, res, ctx) => {
-      const { clusterName } =
-        req.params as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiArg;
-      const c = cs.get(clusterName);
-      if (c) {
-        return res(
-          ctx.status(200),
-          ctx.json<ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse>(
-            c,
-          ),
-        );
-      }
+  rest.get(`/v2/projects/${projectName}/clusters/:name`, (req, res, ctx) => {
+    const { name } =
+      req.params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
+    const c = cs.get(name);
+    if (c) {
+      return res(
+        ctx.status(200),
+        ctx.json<cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse>(c),
+      );
+    }
 
-      return res(ctx.status(404));
-    },
-  ),
+    return res(ctx.status(404));
+  }),
 
   //post cluster
-  rest.post(`/v1/projects/${projectName}/clusters`, async (req, res, ctx) => {
-    const body = await req.json<ecm.ClusterSpec>();
+  rest.post(`/v2/projects/${projectName}/clusters`, async (req, res, ctx) => {
+    const body = await req.json<cm.ClusterSpec>();
     const r = cs.post(body);
     if (!r) return res(ctx.status(500));
     return res(
       ctx.status(200),
-      ctx.json<ecm.PostV1ProjectsByProjectNameClustersApiResponse>(
-        r.clusterID ?? "",
-      ),
+      ctx.json<cm.PostV2ProjectsByProjectNameClustersApiResponse>(r.name ?? ""),
     );
   }),
 
   //put cluster nodes
   rest.put(
-    `/v1/projecs/${projectName}/clusters/:clusterName/nodes`,
+    `/v2/projects/${projectName}/clusters/:name/nodes`,
     async (req, res, ctx) => {
-      const { clusterName } =
-        req.params as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiArg;
-      const body = await req.json<ecm.ClusterSpec>();
+      const { name } =
+        req.params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
+      const body = await req.json<cm.ClusterSpec>();
 
-      const matchedCluster = cs.get(clusterName);
+      const matchedCluster = cs.get(name);
 
       const clusterLabels: {
         [key: string]: string;
-      } = { ...matchedCluster?.clusterLabels };
+      } = { ...matchedCluster?.labels };
 
-      const defaultClusterSpecBody: ecm.ClusterSpec = {
-        clusterName: matchedCluster?.name,
-        clusterTemplateName: matchedCluster?.clusterTemplateName,
-        clusterLabels: clusterLabels ?? {},
-        locationList: matchedCluster?.locationList ?? [],
-        nodeList: [],
+      const defaultClusterSpecBody: cm.ClusterSpec = {
+        name: matchedCluster?.name,
+        template: matchedCluster?.template,
+        labels: clusterLabels ?? {},
+        nodes: [],
       };
 
-      const r = cs.put(clusterName, { ...defaultClusterSpecBody, ...body });
+      const r = cs.put(name, { ...defaultClusterSpecBody, ...body });
       if (!r) return res(ctx.status(500));
 
-      return res(ctx.status(200), ctx.json(r));
-    },
-  ),
-
-  //put cluster name
-  rest.put(
-    `/v1/projects/${projectName}/clusters/:clusterName`,
-    async (req, res, ctx) => {
-      const { clusterName } =
-        req.params as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiArg;
-      const body = await req.json<ecm.ClusterConfig>();
-      const r = cs.put(clusterName, body);
-      if (!r) return res(ctx.status(500));
       return res(ctx.status(200), ctx.json(r));
     },
   ),
 
   //put cluster templates
   rest.put(
-    `/v1/projects/${projectName}/clusters/:clusterName/template`,
+    `/v2/projects/${projectName}/clusters/:name/template`,
     async (req, res, ctx) => {
-      const { clusterName } =
-        req.params as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiArg;
-      const body = await req.json<ecm.ClusterTemplateInfo>();
-      const r = cs.put(clusterName, body);
+      const { name } =
+        req.params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
+      const body = await req.json<cm.ClusterTemplateInfo>();
+      const r = cs.put(name, body);
       if (!r) return res(ctx.status(500));
       return res(ctx.status(200), ctx.json(r));
     },
@@ -221,28 +198,28 @@ export const clusterHandlers = [
 
   //put cluster labels
   rest.put(
-    `/v1/projects/${projectName}/clusters/:clusterName/labels`,
+    `/v2/projects/${projectName}/clusters/:name/labels`,
     async (req, res, ctx) => {
-      const { clusterName } =
-        req.params as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiArg;
-      const body = await req.json<ecm.ClusterLabels>();
-      const r = cs.put(clusterName, body);
+      const { name } =
+        req.params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
+      const body = await req.json<cm.ClusterLabels>();
+      const r = cs.put(name, body);
       if (!r) return res(ctx.status(500));
       return res(ctx.status(200), ctx.json(r));
     },
   ),
 
   rest.get(
-    `/v1/projects/${projectName}/clusters/:nodeUuid/clusterdetail`,
+    `/v2/projects/${projectName}/clusters/:nodeId/clusterdetail`,
     (req, res, ctx) => {
-      const { nodeUuid } =
-        req.params as ecm.GetV1ProjectsByProjectNameClustersAndNodeUuidClusterdetailApiArg;
-      const c = cs.getByNodeUuid(nodeUuid);
+      const { nodeId } =
+        req.params as cm.GetV2ProjectsByProjectNameClustersAndNodeIdClusterdetailApiArg;
+      const c = cs.getByNodeUuid(nodeId);
 
       if (c) {
         return res(
           ctx.status(200),
-          ctx.json<ecm.GetV1ProjectsByProjectNameClustersAndNodeUuidClusterdetailApiResponse>(
+          ctx.json<cm.GetV2ProjectsByProjectNameClustersAndNodeIdClusterdetailApiResponse>(
             c,
           ),
         );
@@ -252,18 +229,15 @@ export const clusterHandlers = [
     },
   ),
   //delete cluster
-  rest.delete(
-    `/v1/projects/${projectName}/clusters/:clusterName`,
-    (req, res, ctx) => {
-      const { clusterName } =
-        req.params as ecm.DeleteV1ProjectsByProjectNameClustersAndClusterNameApiArg;
-      const result = cs.delete(clusterName);
-      return res(ctx.status(result ? 200 : 404));
-    },
-  ),
+  rest.delete(`/v2/projects/${projectName}/clusters/:name`, (req, res, ctx) => {
+    const { name } =
+      req.params as cm.DeleteV2ProjectsByProjectNameClustersAndNameApiArg;
+    const result = cs.delete(name);
+    return res(ctx.status(result ? 200 : 404));
+  }),
 
   rest.get(
-    `/v1/projects/${projectName}/clusters/:clusterName/kubeconfigs`,
+    `/v2/projects/${projectName}/clusters/:name/kubeconfigs`,
     (_, res, ctx) => {
       const r = {
         id: "c-m-rkrwlcws",
@@ -272,7 +246,7 @@ export const clusterHandlers = [
       };
       return res(
         ctx.status(200),
-        ctx.json<ecm.GetV1ProjectsByProjectNameClustersAndClusterIdKubeconfigsApiResponse>(
+        ctx.json<cm.GetV2ProjectsByProjectNameClustersAndNameKubeconfigsApiResponse>(
           r,
         ),
       );
@@ -280,47 +254,23 @@ export const clusterHandlers = [
   ),
 
   rest.put(
-    `/v1/projects/${projectName}/clusters/:clusterName`,
+    `/v2/projects/${projectName}/clusters/:clusterName`,
     (_, res, ctx) => {
       return res(ctx.status(501));
     },
   ),
 
   rest.put(
-    `/v1/projects/${projectName}/clusters/:clusterName/nodes/:nodeUuid`,
+    `/v2/projects/${projectName}/clusters/:name/nodes`,
     async (req, res, ctx) => {
-      const { clusterName, nodeUuid } =
-        req.params as unknown as ecm.PutV1ProjectsByProjectNameClustersAndClusterNameNodesNodeUuidApiArg;
-      const body = await req.json<ecm.NodeOperation>();
-      const cluster = cs.get(clusterName);
-      if (cluster && nodeUuid && cluster.name) {
-        switch (body.action) {
-          case "remove":
-            if (cluster.nodes && cluster.nodes.nodeInfoList) {
-              const updatedNodeList = cluster.nodes.nodeInfoList
-                .filter((node) => node.guid !== nodeUuid)
-                .map(
-                  (node) =>
-                    ({
-                      nodeGuid: node.guid ?? "mock-node",
-                      nodeRole: node.role ?? "all",
-                    }) as ecm.NodeSpec,
-                );
-
-              const clusterLabels: {
-                [key: string]: string;
-              } = { ...cluster.clusterLabels };
-
-              // cluster data is edited
-              cs.put(cluster.name, {
-                clusterName: cluster.name,
-                clusterLabels: clusterLabels,
-                clusterTemplateName: cluster.clusterTemplateName,
-                locationList: cluster.locationList ?? [],
-                nodeList: updatedNodeList,
-              });
-            }
-        }
+      const { name } =
+        req.params as unknown as cm.PutV2ProjectsByProjectNameClustersAndNameNodesApiArg;
+      const nodeSpecs = await req.json<cm.NodeSpec[]>();
+      const cluster = cs.get(name);
+      if (cluster && cluster.name) {
+        cs.put(cluster.name, {
+          nodes: nodeSpecs,
+        });
         return res(ctx.status(200), ctx.json(undefined));
       }
       return res(ctx.status(400));

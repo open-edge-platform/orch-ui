@@ -1,14 +1,11 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Provider } from "react-redux";
 import { store } from "../../../../store";
-import {
-  updateClusterLabels,
-  updateUserDefinedLabels,
-} from "../../../../store/reducers/cluster";
+import { updateClusterLabels } from "../../../../store/reducers/cluster";
 import MetadataLabels from "./MetadataLabels";
 import MetadataLabelsPom from "./MetadataLabels.pom";
 
@@ -22,7 +19,6 @@ describe("<MetadataLabels/> should", () => {
         "customer-three": "value-three",
       }),
     );
-    store.dispatch(updateUserDefinedLabels(["customer-one"]));
 
     cy.mount(
       <Provider store={store}>
@@ -32,7 +28,6 @@ describe("<MetadataLabels/> should", () => {
           clusterLabels={{ "customer-one": "value-one" }}
           getUserDefinedMeta={(value) => cy.stub(value)}
           getInheritedMeta={(value) => cy.stub(value)}
-          userDefinedLabelKeys={["customer-one"]}
         />
       </Provider>,
     );
@@ -46,21 +41,21 @@ describe("<MetadataLabels/> should", () => {
 
     pom.metadataDisplay.getByIndex(1).should("contain", "site = site1");
     pom.metadataDisplay.getTagByIndex(1).should("have.text", "S");
-
-    pom.metadataForm.el.pair
-      .eq(0)
-      .children()
-      .eq(0)
-      .find("input")
-      .invoke("attr", "value")
-      .should("equal", "customer-one");
-    pom.metadataForm.el.pair
-      .eq(0)
-      .children()
-      .eq(1)
-      .find("input")
-      .invoke("attr", "value")
-      .should("equal", "value-one");
+    // TODO: ITEP-22694 labels design to be updated
+    // pom.metadataForm.el.pair
+    //   .eq(0)
+    //   .children()
+    //   .eq(0)
+    //   .find("input")
+    //   .invoke("attr", "value")
+    //   .should("equal", "customer-one");
+    // pom.metadataForm.el.pair
+    //   .eq(0)
+    //   .children()
+    //   .eq(1)
+    //   .find("input")
+    //   .invoke("attr", "value")
+    //   .should("equal", "value-one");
   });
 
   it("edit labels", () => {

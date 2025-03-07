@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { MetadataDisplayPom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -27,7 +27,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
   getClusterDetailSuccess: {
     route: "**v1/**/clusters/*",
     response:
-      clusterOne as ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse,
+      clusterOne as cm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse,
   },
   getHostsSuccess: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`,

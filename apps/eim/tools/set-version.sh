@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Copyright 2023 Intel Corp.
-# SPDX-License-Identifier: LicenseRef-Intel
+# SPDX-License-Identifier: Apache-2.0
 
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color

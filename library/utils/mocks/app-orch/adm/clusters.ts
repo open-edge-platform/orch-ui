@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { adm } from "@orch-ui/apis";
@@ -16,8 +16,8 @@ import {
 import { packageFour, packageOne, packageThree } from "../catalog/packages";
 
 export const clusterA: adm.ClusterRead = {
+  id: "cluster-a-id",
   name: clusterOne.name,
-  id: clusterOne.clusterID,
   status: {
     state: "RUNNING",
     summary: {
@@ -36,8 +36,8 @@ export const clusterA: adm.ClusterRead = {
 };
 
 export const clusterB: adm.ClusterRead = {
+  id: "cluster-b-id",
   name: clusterTwo.name,
-  id: clusterTwo.clusterID,
   status: {
     state: "RUNNING",
     summary: {
@@ -49,8 +49,8 @@ export const clusterB: adm.ClusterRead = {
 };
 
 export const clusterC: adm.ClusterRead = {
+  id: "cluster-c-id",
   name: clusterThree.name,
-  id: clusterThree.clusterID,
   status: {
     state: "RUNNING",
     summary: {
@@ -62,8 +62,8 @@ export const clusterC: adm.ClusterRead = {
 };
 
 export const clusterD: adm.ClusterRead = {
+  id: "cluster-d-id",
   name: clusterFour.name,
-  id: clusterFour.clusterID,
   status: {
     state: "RUNNING",
     summary: {
@@ -75,8 +75,8 @@ export const clusterD: adm.ClusterRead = {
 };
 
 export const clusterE: adm.ClusterRead = {
+  id: "cluster-e-id",
   name: clusterFive.name,
-  id: clusterFive.clusterID,
   status: {
     state: "RUNNING",
     summary: {
@@ -88,8 +88,8 @@ export const clusterE: adm.ClusterRead = {
 };
 
 export const clusterF: adm.ClusterRead = {
+  id: "cluster-f-id",
   name: clusterSix.name,
-  id: clusterSix.clusterID,
   status: {
     state: "DOWN",
     summary: {
@@ -101,8 +101,8 @@ export const clusterF: adm.ClusterRead = {
 };
 
 export const clusterNotReady: adm.ClusterRead = {
+  id: "cluster-not-ready-id",
   name: clusterOne.name,
-  id: clusterOne.clusterID,
   status: {
     state: "DOWN",
     summary: {

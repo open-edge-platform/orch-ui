@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
 import { Button, Heading, Table } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
@@ -15,15 +15,15 @@ export type NodeRoles = "all" | "controlplane" | "worker";
 
 interface ClusterEditNodeReviewProps {
   /** final list of cluster nodes that will be seen in the table */
-  clusterNodeList: ecm.NodeInfo[];
+  clusterNodeList: cm.NodeInfo[];
   /** list of immutable cluster nodes, that were already present in cluster, i.e., before edit */
-  configuredClusterNode?: ecm.NodeInfo[];
+  configuredClusterNode?: cm.NodeInfo[];
   /** Notify any changes to node via the node dropdown */
-  onNodeUpdate: (node: ecm.NodeInfo, value: NodeRoles) => void;
+  onNodeUpdate: (node: cm.NodeInfo, value: NodeRoles) => void;
   /** Notify click on Add Host button */
   onAddNode: () => void;
   /** Notify click on Remove Host button */
-  onRemoveNode: (node: ecm.NodeInfo) => void;
+  onRemoveNode: (node: cm.NodeInfo) => void;
 }
 
 const ClusterEditNodeReview = ({
@@ -37,15 +37,14 @@ const ClusterEditNodeReview = ({
 
   // these columns define the nodes in the cluster.
   // They are used to render information about the node
-  const columns: TableColumn<ecm.NodeInfo>[] = [
+  const columns: TableColumn<cm.NodeInfo>[] = [
     NodeTableColumns.nameWithoutLink,
-    NodeTableColumns.serial,
     NodeTableColumns.os,
-    NodeTableColumns.roleSelect((node: ecm.NodeInfo) => {
+    NodeTableColumns.roleSelect((node: cm.NodeInfo) => {
       // If node is present as part of cluster then disable role edit on it
       const isDisabled =
         configuredClusterNode.find(
-          (clusterNode) => node.guid === clusterNode.guid,
+          (clusterNode) => node.id === clusterNode.id,
         ) !== undefined;
       return (
         <NodeRoleDropdown

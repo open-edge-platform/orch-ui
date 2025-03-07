@@ -1,3 +1,8 @@
+/*
+* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+* SPDX-License-Identifier: Apache-2.0
+*/
+
 import { adm, catalog } from "@orch-ui/apis";
 import { cyGet } from "../../support/cyBase";
 

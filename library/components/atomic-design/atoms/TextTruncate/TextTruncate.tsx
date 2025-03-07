@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { useState } from "react";
@@ -10,11 +10,13 @@ export interface TextTruncateProps {
   id: string;
   text: string;
   maxLength?: number;
+  hideReadMore?: boolean;
 }
 export const TextTruncate = ({
   id,
   text,
   maxLength = 200,
+  hideReadMore,
 }: TextTruncateProps) => {
   const cy = { "data-cy": dataCy };
   const className = "text-truncate";
@@ -22,12 +24,14 @@ export const TextTruncate = ({
   const [shouldTruncate] = useState<boolean>(text.length > maxLength);
   const [isTruncated, setIsTruncated] = useState<boolean>(shouldTruncate);
 
-  if (!shouldTruncate)
+  if (!shouldTruncate) {
     return (
       <div {...cy} className={className}>
         {text}
       </div>
     );
+  }
+
   return (
     <div {...cy} className={className}>
       <input
@@ -41,13 +45,16 @@ export const TextTruncate = ({
         <span data-cy="content">
           {isTruncated ? `${text.slice(0, maxLength)}...` : text}
         </span>
-        <label
-          data-cy="label"
-          htmlFor={id}
-          className={`${className}__label ${className}__label-${isTruncated ? "more" : "less"}`}
-        >
-          Read {isTruncated ? "more" : "less"}
-        </label>
+
+        {!hideReadMore && (
+          <label
+            data-cy="label"
+            htmlFor={id}
+            className={`${className}__label ${className}__label-${isTruncated ? "more" : "less"}`}
+          >
+            Read {isTruncated ? "more" : "less"}
+          </label>
+        )}
       </div>
     </div>
   );

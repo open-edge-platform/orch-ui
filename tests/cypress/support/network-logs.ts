@@ -1,3 +1,8 @@
+/*
+* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+* SPDX-License-Identifier: Apache-2.0
+*/
+
 import { CyHttpMessages } from "cypress/types/net-stubbing";
 import * as path from "path";
 import { LogFolder } from "./index";

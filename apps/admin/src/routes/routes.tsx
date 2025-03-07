@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
@@ -17,6 +17,7 @@ import {
 } from "@orch-ui/utils";
 import React, { ComponentType, createRef, LazyExoticComponent } from "react";
 import { Navigate, RouteObject } from "react-router-dom";
+import SshKeys from "src/components/pages/SshKeys/SshKeys";
 import About from "../components/pages/About/About";
 import AlertDefinitions from "../components/pages/AlertDefinitions/AlertDefinitions";
 import Alerts from "../components/pages/Alerts/Alerts";
@@ -102,6 +103,10 @@ export const childRoutes = [
         <AlertDefinitions />
       </RBACWrapper>
     ),
+  },
+  {
+    path: "ssh-keys",
+    element: <SshKeys />,
   },
   {
     path: "about",

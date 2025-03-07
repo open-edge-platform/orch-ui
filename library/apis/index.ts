@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 export {
@@ -17,10 +17,8 @@ export * as adm from "./app-deploy-mgr/deploymentManagerApis";
 export { appResourceManagerApi as armSlice } from "./app-resource-mgr/apiSlice";
 export * as arm from "./app-resource-mgr/resourceManagerApis";
 export * as appUtilities from "./app-utilities/appUtilitiesServiceApis";
-export { ctmApi as ctmSlice } from "./cluster-template-manager/apiSlice";
-export * as ctm from "./cluster-template-manager/clusterTemplateManagerApis";
-export { coApi as ecmSlice } from "./edge-cluster-manager/apiSlice";
-export * as ecm from "./edge-cluster-manager/clusterManagerApis";
+export { coApi as cmSlice } from "./cluster-manager/apiSlice";
+export * as cm from "./cluster-manager/clusterManagerApis";
 export { eimApi as eimSlice } from "./eim/apiSlice";
 export * as eim from "./eim/eim";
 // Enhanced Api Slice

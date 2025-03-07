@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim, mbApi } from "@orch-ui/apis";
+import { cm, eim, mbApi } from "@orch-ui/apis";
 import {
   ConfirmationDialogPom,
   MetadataDisplayPom,
@@ -29,14 +29,14 @@ const dataCySelectors = [
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-const route = "**/v1/**/clusters/**";
-const routeName = `**/v1/**/clusters/${clusterOneName}`;
-const labelRoute = `**/v1/**/clusters/${clusterOneName}/labels`;
-const nodesRoute = `**/v1/**/clusters/${clusterOneName}/nodes`;
+const route = "**/clusters/**";
+const routeName = `**/clusters/${clusterOneName}`;
+const labelRoute = `**/clusters/${clusterOneName}/labels`;
+const nodesRoute = `**/clusters/${clusterOneName}/nodes`;
 const siteByIdRoute = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites/**`;
 const firstHostRoute = `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`;
 const templateRoute = "**/template";
-const metadataRoute = "**/v1/projects/**/metadata";
+const metadataRoute = "**/projects/**/metadata";
 const schedulesRoute = "**/v1/schedules*";
 
 type SuccessClusterApiAlias = "getClusterSuccess";
@@ -70,7 +70,7 @@ type ApiAliases =
 
 const successClusterEndpoint: CyApiDetails<
   SuccessClusterApiAlias,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusterSuccess: {
     route: route,
@@ -80,7 +80,7 @@ const successClusterEndpoint: CyApiDetails<
 };
 const errorClusterEndpoint: CyApiDetails<
   ErrorClusterApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusterError: {
     route: route,
@@ -90,7 +90,7 @@ const errorClusterEndpoint: CyApiDetails<
 
 const successClusterNodesEndpoint: CyApiDetails<
   SuccessNodesApiAliase,
-  ecm.PutV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   putNodesSuccess: {
     route: nodesRoute,
@@ -101,7 +101,7 @@ const successClusterNodesEndpoint: CyApiDetails<
 
 const successClusterNameEndpoint: CyApiDetails<
   SuccessNameApiAliase,
-  ecm.PutV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   putClusterByNameSuccess: {
     route: routeName,
@@ -117,7 +117,7 @@ const successClusterNameEndpoint: CyApiDetails<
 
 const successClusterLabelEndpoint: CyApiDetails<
   SuccessLabelApiAliase,
-  ecm.PutV1ProjectsByProjectNameClustersAndClusterNameLabelsApiResponse
+  cm.PutV2ProjectsByProjectNameClustersAndNameLabelsApiResponse
 > = {
   putClusterByLabelSuccess: {
     route: labelRoute,
@@ -128,7 +128,7 @@ const successClusterLabelEndpoint: CyApiDetails<
 
 const successClusterTemplateEndpoint: CyApiDetails<
   SuccessTemplateApiAliase,
-  ecm.PutV1ProjectsByProjectNameClustersAndClusterNameTemplateApiResponse
+  cm.PutV2ProjectsByProjectNameClustersAndNameTemplateApiResponse
 > = {
   putTemplateSuccess: {
     route: templateRoute,

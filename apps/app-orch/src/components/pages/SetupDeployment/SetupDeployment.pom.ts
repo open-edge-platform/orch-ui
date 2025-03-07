@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { catalog, ecm, tm } from "@orch-ui/apis";
+import { catalog, cm, tm } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { Cy, CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -154,7 +154,7 @@ const apis: CyApiDetails<ApiAliases> = {
     statusCode: 200,
     response: {
       clusterInfoList: cs.list(),
-    } as ecm.GetV1ProjectsByProjectNameClustersApiResponse,
+    } as cm.GetV1ProjectsByProjectNameClustersApiResponse,
   },
 };
 

@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
@@ -13,15 +13,11 @@ import {
 import { Heading, MessageBanner } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../store/hooks";
-import {
-  updateClusterLabels,
-  updateUserDefinedLabels,
-} from "../../../../store/reducers/cluster";
+import { updateClusterLabels } from "../../../../store/reducers/cluster";
 
 export const dataCy = "metadataLabels";
 
 interface MetadataLabelsProps {
-  userDefinedLabelKeys: string[];
   regionMeta: TypedMetadata[];
   siteMeta: TypedMetadata[];
   clusterLabels: object;
@@ -33,9 +29,7 @@ const MetadataLabels = ({
   regionMeta,
   siteMeta,
   clusterLabels,
-  userDefinedLabelKeys,
   getInheritedMeta,
-  getUserDefinedMeta,
 }: MetadataLabelsProps) => {
   const dispatch = useAppDispatch();
 
@@ -78,20 +72,9 @@ const MetadataLabels = ({
     const hidLabels: { [key: string]: string } = {};
     Object.entries(clusterLabels).forEach((label) => {
       hidLabels[label[0]] = label[1];
-      userDefinedLabelKeys.forEach((item) => {
-        if (label[0].toString() == item) {
-          userDefinedLabels[item] = label[1];
-        } else {
-          hidLabels[label[0]] = label[1];
-        }
-      });
-      userDefinedLabelKeys.forEach((item) => {
-        delete hidLabels[item];
-      });
     });
     setUserLabels(labelsToPair(userDefinedLabels));
     setHiddenLabels(labelsToPair(hidLabels));
-    getUserDefinedMeta(labelsToPair(userDefinedLabels));
   }, [clusterLabels]);
 
   // Typed to meta
@@ -162,12 +145,6 @@ const MetadataLabels = ({
                   labelsToObject(kv.concat(hiddenLabels ?? [])),
                 ),
               );
-
-              const userDefined: string[] = [];
-              kv.forEach((label) => {
-                userDefined.push(label.key);
-              });
-              dispatch(updateUserDefinedLabels(userDefined));
             }}
           />
         </Flex>

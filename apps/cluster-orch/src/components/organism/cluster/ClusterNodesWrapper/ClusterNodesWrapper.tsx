@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ApiError, SquareSpinner, TableColumn } from "@orch-ui/components";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -13,9 +13,9 @@ import ClusterNodesTable from "../../ClusterNodesTable/ClusterNodesTable";
 
 export const dataCy = "clusterNodesWrapper";
 interface ClusterNodesWrapperProps {
-  clusterName: string;
+  name: string;
 }
-const ClusterNodesWrapper = ({ clusterName }: ClusterNodesWrapperProps) => {
+const ClusterNodesWrapper = ({ name }: ClusterNodesWrapperProps) => {
   const cy = { "data-cy": dataCy };
 
   const {
@@ -24,23 +24,22 @@ const ClusterNodesWrapper = ({ clusterName }: ClusterNodesWrapperProps) => {
     isError,
     error,
     isLoading,
-  } = ecm.useGetV1ProjectsByProjectNameClustersAndClusterNameQuery(
+  } = cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      clusterName: clusterName,
+      name: name,
     },
     {
-      skip: !clusterName || !SharedStorage.project?.name,
+      skip: !name || !SharedStorage.project?.name,
       pollingInterval: API_INTERVAL,
     },
   );
 
   // these columns define the nodes in the cluster.
   // They are used to render information about the node
-  const nodeColumns: TableColumn<ecm.NodeInfo>[] = [
+  const nodeColumns: TableColumn<cm.NodeInfo>[] = [
     NodeTableColumns.nameWithoutLink,
     NodeTableColumns.status,
-    NodeTableColumns.serial,
     NodeTableColumns.os,
     NodeTableColumns.actions((node) => (
       <Link to={`/infrastructure/host/${node.id}`}>
@@ -51,17 +50,12 @@ const ClusterNodesWrapper = ({ clusterName }: ClusterNodesWrapperProps) => {
 
   return (
     <div {...cy} className="cluster-nodes-wrapper">
-      {isSuccess &&
-        clusterDetail.nodes?.nodeInfoList &&
-        clusterDetail.nodes.nodeInfoList.length > 0 && (
-          <ClusterNodesTable
-            nodes={clusterDetail.nodes.nodeInfoList}
-            columns={nodeColumns}
-          />
-        )}
+      {isSuccess && clusterDetail.nodes && clusterDetail.nodes.length > 0 && (
+        <ClusterNodesTable nodes={clusterDetail.nodes} columns={nodeColumns} />
+      )}
       {isLoading && <SquareSpinner />}
       {isError && <ApiError error={error} />}
-      {clusterDetail?.nodes?.nodeInfoList?.length == 0 && "No nodes available."}
+      {clusterDetail?.nodes?.length == 0 && "No nodes available."}
     </div>
   );
 };

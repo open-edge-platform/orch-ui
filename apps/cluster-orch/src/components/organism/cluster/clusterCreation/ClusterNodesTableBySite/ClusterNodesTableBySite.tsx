@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { SquareSpinner, TableColumn, TypedMetadata } from "@orch-ui/components";
 import { hostProviderStatusToString, RuntimeConfig } from "@orch-ui/utils";
 import { Tooltip } from "@spark-design/react";
@@ -91,12 +91,12 @@ const ClusterNodesTableBySite = ({
       const prevSelectedRoles: SelectedRole[] = [];
       currentNodes.forEach((node) => {
         // This needs to be independent of row selection toggle until this step is completed.
-        if (node.id && node.role && node.guid) {
+        if (node.id && node.role && node.id) {
           prevSelectedHostIds.push(node.id);
           prevSelectedRoles.push({
             hostId: node.id,
             selectedRole: node.role as NodeRoles,
-            uuid: node.guid,
+            uuid: node.id,
           });
         }
       });
@@ -152,7 +152,7 @@ const ClusterNodesTableBySite = ({
           dispatch(
             setNodesSpec(
               currentNodesSpec.map((selectedNodeSpec) => {
-                if (selectedNodeSpec.nodeGuid === host.uuid!) {
+                if (selectedNodeSpec.id === host.uuid!) {
                   return {
                     ...selectedNodeSpec,
                     nodeRole: value,
@@ -168,23 +168,21 @@ const ClusterNodesTableBySite = ({
     );
   };
 
-  const eimNodeToECMNode = (host: eim.HostRead): ecm.NodeInfo => {
+  const eimNodeToCMNode = (host: eim.HostRead): cm.NodeInfo => {
     return {
-      id: host.resourceId,
-      serial: host.serialNumber,
+      id: host.uuid, //TODO: is this resourceId or uuid?
       os: host.instance?.os?.name,
       name: host.name,
-      guid: host.uuid,
       role: "all",
     };
   };
 
   const handleNodeSelection = (host: eim.HostRead, isSelected: boolean) => {
     // Make Cluster-Orch Node from the updated host row
-    const selectedNode: ecm.NodeInfo = eimNodeToECMNode(host);
-    const selectedNodeSpec: ecm.NodeSpec = {
-      nodeGuid: host.uuid ?? "",
-      nodeRole: "all",
+    const selectedNode: cm.NodeInfo = eimNodeToCMNode(host);
+    const selectedNodeSpec: cm.NodeSpec = {
+      id: host.uuid ?? "",
+      role: "all",
     };
 
     // Update Node selection store
@@ -200,7 +198,7 @@ const ClusterNodesTableBySite = ({
       dispatch(
         setNodesSpec(
           currentNodesSpec.filter(
-            (nodeSpec) => nodeSpec.nodeGuid !== selectedNodeSpec.nodeGuid,
+            (nodeSpec) => nodeSpec.id !== selectedNodeSpec.id,
           ),
         ),
       );
@@ -219,12 +217,12 @@ const ClusterNodesTableBySite = ({
       // and the user have not selected any host yet
       const host = hosts.find((h) => h.resourceId === hostIdUrlParam);
       if (host) {
-        dispatch(setNodes([eimNodeToECMNode(host)]));
+        dispatch(setNodes([eimNodeToCMNode(host)]));
         dispatch(
           setNodesSpec([
             {
-              nodeGuid: host.uuid!,
-              nodeRole: "all",
+              id: host.uuid!,
+              role: "all",
             },
           ]),
         );

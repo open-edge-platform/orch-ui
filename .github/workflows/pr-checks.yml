@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+---
 name: PR Checks
 
 on:
@@ -24,6 +28,15 @@ jobs:
         with:
           project_folder: "apps"
 
+  license-check:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: License check
+        run: make license
+
   setup-conditions:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
@@ -49,7 +62,7 @@ jobs:
       fail-fast: false
       matrix:
         project_folder: ${{ fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
-    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@main
+    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@hotfix/version-check
     with:
       run_security_scans: true
       run_version_check: true
@@ -61,10 +74,11 @@ jobs:
       run_docker_build: true
       run_scan_containers: true
       run_artifact: false
-      run_helm_build: false
-      run_reuse_check: false
+      run_helm_build: true
+      run_reuse_check: true
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
+      orch_ci_repo_ref: hotfix/version-check
     secrets: inherit
 
   pre-merge-pipeline-all:
@@ -74,7 +88,7 @@ jobs:
       fail-fast: false
       matrix:
         project_folder: ["admin", "app-orch", "cluster-orch", "eim", "root"]
-    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@main
+    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@hotfix/version-check
     with:
       run_security_scans: true
       run_version_check: true
@@ -86,10 +100,9 @@ jobs:
       run_docker_build: true
       run_scan_containers: true
       run_artifact: false
-      run_helm_build: false
-      run_reuse_check: false
+      run_helm_build: true
+      run_reuse_check: true
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
+      orch_ci_repo_ref: hotfix/version-check
     secrets: inherit
-
-

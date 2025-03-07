@@ -1,13 +1,13 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
   adm,
   arm,
   catalog,
-  ecm,
+  cm,
   enhancedEimSlice as miApi,
   mbApi,
   tmSlice,
@@ -46,7 +46,7 @@ const rootReducer = combineReducers({
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
   [uiSliceName]: uiSlice.reducer,
   [hostStatusSliceName]: hostStatusList.reducer,
-  [ecm.clusterManagerApis.reducerPath]: ecm.clusterManagerApis.reducer,
+  [cm.clusterManagerApis.reducerPath]: cm.clusterManagerApis.reducer,
   [miApi.miEnhancedApi.reducerPath]: miApi.miEnhancedApi.reducer,
   [tmSlice.reducerPath]: tmSlice.reducer,
 });
@@ -59,7 +59,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         serializableCheck: false,
         immutableCheck: false,
       })
-        .concat(ecm.clusterManagerApis.middleware)
+        .concat(cm.clusterManagerApis.middleware)
         .concat(miApi.miEnhancedApi.middleware)
         .concat(catalog.catalogServiceApis.middleware)
         .concat(appDeploymentManager.middleware)
@@ -77,7 +77,7 @@ export const store = configureStore({
       serializableCheck: true,
       immutableCheck: true,
     })
-      .concat(ecm.clusterManagerApis.middleware)
+      .concat(cm.clusterManagerApis.middleware)
       .concat(miApi.miEnhancedApi.middleware)
       .concat(catalog.catalogServiceApis.middleware)
       .concat(appDeploymentManager.middleware)

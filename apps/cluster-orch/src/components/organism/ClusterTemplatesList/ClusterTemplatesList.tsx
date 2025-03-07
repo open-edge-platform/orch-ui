@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ctm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   ApiError,
   Empty,
@@ -24,10 +24,10 @@ export const dataCy = "clusterTemplatesList";
 
 interface ClusterTemplateListProps {
   getPopupOptions: (
-    tpl: ctm.TemplateInfo,
-    defaultTemplateInfo: ctm.DefaultTemplateInfo | undefined,
+    tpl: cm.TemplateInfo,
+    defaultTemplateInfo: cm.DefaultTemplateInfo | undefined,
   ) => PopupOption[];
-  onDelete: (tpl: ctm.TemplateInfo) => void;
+  onDelete: (tpl: cm.TemplateInfo) => void;
   onAddTemplate?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -44,7 +44,7 @@ const ClusterTemplatesList = ({
     error,
     isLoading,
     isError,
-  } = ctm.useGetV1ProjectsByProjectNameTemplatesQuery(
+  } = cm.useGetV2ProjectsByProjectNameTemplatesQuery(
     {
       projectName,
       default: false,
@@ -54,7 +54,7 @@ const ClusterTemplatesList = ({
     },
   );
 
-  const columns: TableColumn<ctm.TemplateInfo>[] = [
+  const columns: TableColumn<cm.TemplateInfo>[] = [
     {
       Header: "Template Name",
       accessor: (tpl) => tpl.name,
@@ -69,7 +69,7 @@ const ClusterTemplatesList = ({
     },
     {
       Header: " ",
-      Cell: (table: { row: { original: ctm.TemplateInfo } }) => {
+      Cell: (table: { row: { original: cm.TemplateInfo } }) => {
         const rowTpl = table.row.original;
         if (
           templates &&

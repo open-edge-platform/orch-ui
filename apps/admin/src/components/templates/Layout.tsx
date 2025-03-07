@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
@@ -10,8 +10,6 @@ import {
   Flex,
   SidebarMain,
 } from "@orch-ui/components";
-import { useLocation, useNavigate, useOutlet } from "react-router-dom";
-
 import {
   checkAuthAndRole,
   getChildRoute,
@@ -21,6 +19,7 @@ import {
 } from "@orch-ui/utils";
 import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
+import { useLocation, useNavigate, useOutlet } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { childRoutesWithRef } from "../../routes/routes";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -55,6 +54,13 @@ export const projectsNavItem: CollapsableListItem<string> = {
   route: "projects",
   icon: "globe",
   value: "Projects",
+  divider: true,
+};
+
+export const sshNavItem: CollapsableListItem<string> = {
+  route: "ssh-keys",
+  icon: "key",
+  value: "SSH Keys",
   divider: true,
 };
 
@@ -118,6 +124,7 @@ const Layout = () => {
     ) {
       items.push(osProfilesNavItem);
     }
+    items.push(sshNavItem);
     items.push(aboutNavItem);
     return items;
   };
@@ -138,6 +145,9 @@ const Layout = () => {
     }
     if (pathname.includes("projects")) {
       return projectsNavItem;
+    }
+    if (pathname.includes("ssh-keys")) {
+      return sshNavItem;
     }
     return null;
   };

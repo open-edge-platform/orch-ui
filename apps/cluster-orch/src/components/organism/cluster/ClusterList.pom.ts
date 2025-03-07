@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ConfirmationDialogPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import {
@@ -34,25 +34,25 @@ type ClusterErrorApiAliases = "clusterListError500";
 
 type ApiAliases = ClusterSuccessApiAliases | ClusterErrorApiAliases;
 
-const route = "**/v1/**/clusters**";
-const routeDelete = "**/v1/**/clusters/**";
+const route = "**/v2/**/clusters**";
+const routeDelete = "**/v2/**/clusters/**";
 const successEndpoints: CyApiDetails<
   ClusterSuccessApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersApiResponse
+  cm.GetV2ProjectsByProjectNameClustersApiResponse
 > = {
   clusterListSuccess: {
     route,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterOne, clusterTwo],
+      clusters: [clusterOne, clusterTwo],
       totalElements: 20,
     },
   },
   clusterListWithFilter: {
-    route: `${route}filter=name%3Dtesting+OR+status%3Dtesting+OR+kubernetesVersion%3Dtesting`,
+    route: `${route}filter=name%3Dtesting+OR+providerStatus.indicator%3Dtesting+OR+kubernetesVersion%3Dtesting`,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterOne, clusterTwo],
+      clusters: [clusterOne, clusterTwo],
       totalElements: 2,
     },
   },
@@ -60,7 +60,7 @@ const successEndpoints: CyApiDetails<
     route: `${route}offset=10`,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterOne, clusterTwo],
+      clusters: [clusterOne, clusterTwo],
       totalElements: 2,
     },
   },
@@ -68,7 +68,7 @@ const successEndpoints: CyApiDetails<
     route,
     statusCode: 200,
     response: {
-      clusterInfoList: [
+      clusters: [
         clusterOne,
         clusterTwo,
         clusterThree,
@@ -84,7 +84,7 @@ const successEndpoints: CyApiDetails<
     route,
     statusCode: 200,
     response: {
-      clusterInfoList: [],
+      clusters: [],
       totalElements: 0,
     },
   },
@@ -92,7 +92,7 @@ const successEndpoints: CyApiDetails<
     route,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterEmptyLocationInfo],
+      clusters: [clusterEmptyLocationInfo],
       totalElements: 0,
     },
   },
@@ -105,7 +105,7 @@ const successEndpoints: CyApiDetails<
     route,
     statusCode: 200,
     response: {
-      clusterInfoList: [clusterOneCreating],
+      clusters: [clusterOneCreating],
       totalElements: 1,
     },
   },
@@ -113,7 +113,7 @@ const successEndpoints: CyApiDetails<
 
 const errorEndpoints: CyApiDetails<
   ClusterErrorApiAliases,
-  ecm.GetV1ProjectsByProjectNameClustersApiResponse
+  cm.GetV2ProjectsByProjectNameClustersApiResponse
 > = {
   clusterListError500: { route, statusCode: 500 },
 };

@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm, eim } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne, ClusterStore, regionPortlandId } from "@orch-ui/utils";
 import { dataCy } from "./AddToClusterDrawer";
@@ -104,14 +104,14 @@ const siteByIdRoute = `**/v1/projects/${defaultActiveProject.name}/regions/**/si
 const clusterList = new ClusterStore().list();
 const clusterSuccessEndpoint: CyApiDetails<
   SuccessClusterApiAliases,
-  | ecm.GetV1ProjectsByProjectNameClustersApiResponse
-  | ecm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse
+  | cm.GetV2ProjectsByProjectNameClustersApiResponse
+  | cm.GetV2ProjectsByProjectNameClustersAndNameApiResponse
 > = {
   getClusters: {
     route: `${clusterRoute}*`,
     statusCode: 200,
     response: {
-      clusterInfoList: clusterList,
+      clusters: clusterList,
       totalElements: clusterList.length,
     },
   },

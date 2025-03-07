@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterOne } from "@orch-ui/utils";
 import { dataCy } from "./ClusterSummary";
@@ -13,9 +13,9 @@ type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "cluster" | "clusterMocked" | "cluster500";
 
-const route = "**v1/**/clusters/**";
+const route = "**v2/**/clusters/**";
 
-const endpoints: CyApiDetails<ApiAliases, ecm.ClusterDetailInfo> = {
+const endpoints: CyApiDetails<ApiAliases, cm.ClusterDetailInfo> = {
   cluster: {
     route,
   },

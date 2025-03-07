@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   Flex,
   MetadataDisplay,
@@ -28,9 +28,8 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
   const currentNodes = useAppSelector(getNodes);
 
   const cy = { "data-cy": dataCy };
-  const columns: TableColumn<ecm.NodeInfo>[] = [
+  const columns: TableColumn<cm.NodeInfo>[] = [
     NodeTableColumns.nameWithoutLink,
-    NodeTableColumns.serial,
     NodeTableColumns.role,
     NodeTableColumns.os,
   ];
@@ -59,9 +58,7 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
             <p className="labelName">Cluster Template</p>
           </td>
           <td>
-            <span data-cy="clusterTemplateName">
-              {currentCluster.clusterTemplateName}
-            </span>
+            <span data-cy="clusterTemplateName">{currentCluster.template}</span>
           </td>
         </tr>
       </table>

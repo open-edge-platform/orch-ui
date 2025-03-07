@@ -1,9 +1,9 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ecm } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import {
   GenericStatus,
   Status as IconStatus,
@@ -14,18 +14,21 @@ import {
  * @deprecated remove before 25.03
  * */
 export const clusterStatusToText = (
-  clusterStatus?: ecm.ClusterInfoRead["status"],
+  clusterStatus?: cm.ClusterInfoRead["providerStatus"],
 ): string => {
   if (!clusterStatus) {
     return "unknown";
   }
 
-  if (clusterStatus === "active") {
+  if (clusterStatus.message === "active") {
     return "Running";
-  } else if (clusterStatus === "inactive") {
+  } else if (clusterStatus.message === "inactive") {
     return "Down";
   } else {
-    return clusterStatus.charAt(0).toUpperCase() + clusterStatus.slice(1);
+    return (
+      clusterStatus.message.charAt(0).toUpperCase() +
+      clusterStatus.message.slice(1)
+    );
   }
 };
 
@@ -33,10 +36,10 @@ export const clusterStatusToText = (
  * @deprecated remove before 25.03
  * */
 export const clusterStatusToIconStatus = (
-  clusterStatus?: ecm.ClusterInfoRead["status"],
+  clusterStatus?: cm.ClusterInfoRead["providerStatus"],
 ): IconStatus => {
   let state = Status.Unknown;
-  switch (clusterStatus) {
+  switch (clusterStatus?.message) {
     // green dot
     case "init":
     case "active":
@@ -57,7 +60,7 @@ export const clusterStatusToIconStatus = (
   return state;
 };
 
-export const nodeStatusToText = (status?: ecm.StatusInfo): string => {
+export const nodeStatusToText = (status?: cm.StatusInfo): string => {
   if (!status?.condition) {
     return "unknown";
   }
@@ -65,19 +68,19 @@ export const nodeStatusToText = (status?: ecm.StatusInfo): string => {
 };
 
 export type ClusterGenericStatuses = {
-  appAgentStatus?: GenericStatus;
+  infrastructureReady?: GenericStatus;
   lifecyclePhase?: GenericStatus;
   nodeHealth?: GenericStatus;
   providerStatus?: GenericStatus;
-  resourceStatus?: GenericStatus;
+  controlPlaneReady?: GenericStatus;
 };
 
 export const clusterToStatuses = (
-  cluster: ecm.ClusterInfoRead,
+  cluster: cm.ClusterInfoRead,
 ): ClusterGenericStatuses => {
   const cgs: ClusterGenericStatuses = {};
-  if (cluster.appAgentStatus !== undefined) {
-    cgs["appAgentStatus"] = cluster.appAgentStatus;
+  if (cluster.infrastructureReady !== undefined) {
+    cgs["infrastructureReady"] = cluster.infrastructureReady;
   }
   if (cluster.lifecyclePhase !== undefined) {
     cgs["lifecyclePhase"] = cluster.lifecyclePhase;
@@ -88,13 +91,13 @@ export const clusterToStatuses = (
   if (cluster.providerStatus !== undefined) {
     cgs["providerStatus"] = cluster.providerStatus;
   }
-  if (cluster.resourceStatus !== undefined) {
-    cgs["resourceStatus"] = cluster.resourceStatus;
+  if (cluster.controlPlaneReady !== undefined) {
+    cgs["controlPlaneReady"] = cluster.controlPlaneReady;
   }
   return cgs;
 };
 
-export const nodeStatusToIconStatus = (status?: ecm.StatusInfo): IconStatus => {
+export const nodeStatusToIconStatus = (status?: cm.StatusInfo): IconStatus => {
   let state = Status.Unknown;
 
   if (!status) {
@@ -122,7 +125,7 @@ export const nodeStatusToIconStatus = (status?: ecm.StatusInfo): IconStatus => {
 export const getDefinedFloatValue = (val: string | number = "0") =>
   parseFloat(val.toString());
 
-/** ECM measurement units for data quantity in bytes */
+/** CM measurement units for data quantity in bytes */
 export type UnitMeasurement = "Ki" | "Mi" | "Gi" | "Ti" | "Pi" | "Ei";
 
 /** converts unit measurement to get actual value in bytes  */
