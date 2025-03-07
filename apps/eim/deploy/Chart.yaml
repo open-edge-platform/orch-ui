@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-# SPDX-License-Identifier: LicenseRef-Intel
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: v2
 name: orch-ui-eim
 description: Deploy the Edge-Native Software Platform iaas pod

@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 import { deploymentPackageMock } from "../../organisms/deploymentPackages/DeploymentPackageTable/DeploymentPackageTable.pom";
 import DeploymentPackages from "./DeploymentPackages";

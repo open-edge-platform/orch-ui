@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2022 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { metadataBrokerApi as mbSlice } from "../metadata-broker/apiSlice";

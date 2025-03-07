@@ -1,3 +1,8 @@
+/*
+* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+* SPDX-License-Identifier: Apache-2.0
+*/
+
 import { ProjectItem } from "@orch-ui/utils";
 export interface IUser {
   username: string;

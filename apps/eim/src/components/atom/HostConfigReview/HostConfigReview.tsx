@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 import { Flex, Table, TableColumn } from "@orch-ui/components";
 import { Icon } from "@spark-design/react";

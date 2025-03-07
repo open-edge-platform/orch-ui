@@ -2,4 +2,4 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: README.md **/*.md *.ico *.json *.svg *.png *.PNG *.jpg *.jpeg .dockerignore .trivyignore deploy/Chart.lock artifacts/* api_versions.md .eslintignore .gitmodules .npmrc requirements.txt deploy/Chart.lock deploy/charts/orch-ui-admin-0.1.0.tgz
 Copyright: 2020 Intel Corporation
-License: LicenseRef-Intel
+License: Apache-2.0

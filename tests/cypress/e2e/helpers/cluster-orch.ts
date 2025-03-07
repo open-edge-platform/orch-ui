@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 export const deleteClusterViaApi = (project: string, clusterName: string) => {

@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { coApi as api } from "./apiSlice";
 export const addTagTypes = [
   "Clusters",

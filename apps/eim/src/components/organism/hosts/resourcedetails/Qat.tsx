@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: LicenseRef-Intel
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Table } from "@spark-design/react";

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copyright 2023 Intel Corp.
-# SPDX-License-Identifier: LicenseRef-Intel
+# SPDX-License-Identifier: Apache-2.0
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 # Configure shell
 SHELL = bash -e -o pipefail
 
@@ -28,7 +31,7 @@ HELM_DIRS                	= ./deploy/
 
 ## These labels need valid content or to be blank
 LABEL_DESCRIPTION					?= $(shell echo "Orch UI")
-LABEL_LICENSE							?= $(shell echo "LicenseRef-Intel")
+LABEL_LICENSE							?= $(shell echo "Apache-2.0")
 LABEL_TITLE								?= ${DOCKER_REPOSITORY}
 LABEL_URL									?= ${DOCKER_LABEL_VCS_URL}
 LABEL_MAINTAINER					?= $(shell echo "Orch UI Maintainers <orchui-maint@intel.com>")
@@ -50,16 +53,6 @@ DOCKER_EXTRA_ARGS ?=
 DOCKER_BUILD_ARGS ?= \
 	${DOCKER_EXTRA_ARGS} \
 	${DOCKER_LABEL_ARGS}
-
-# Create the virtualenv with python tools installed
-VENV_NAME = venv-lp
-$(VENV_NAME): requirements.txt
-	echo "Creating virtualenv in $@"
-	python3 -m venv $@ ;\
-	  . ./$@/bin/activate ; set -u ;\
-	  python3 -m pip install --upgrade pip;\
-	  python3 -m pip install -r requirements.txt
-	echo "To enter virtualenv, run 'source $@/bin/activate'"
 
 # Public targets
 all: help
@@ -131,11 +124,6 @@ test: ## @HELP Run the tests
 
 check-valid-api: ## @HELP Check if the API versions are valid
 	bash ./tools/api-versions.sh validate
-
-license: $(VENV_NAME) ## @HELP Check licensing with the reuse tool
-	. ./$</bin/activate ; set -u ;\
-	reuse --version ;\
-	reuse --root . lint
 
 help: # @HELP Print the command options
 	@echo
