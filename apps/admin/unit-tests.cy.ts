@@ -17,6 +17,7 @@ import "./src/components/organisms/NoProjectsDialog/NoProjectsDialog.cy.tsx";
 import "./src/components/organisms/ProjectPopup/ProjectPopup.cy.tsx";
 import "./src/components/organisms/ProjectsTable/ProjectsTable.cy.tsx";
 import "./src/components/organisms/ReceiversList/ReceiversList.cy.tsx";
+import "./src/components/organisms/SshKeysAddEditDrawer/SshKeysAddEditDrawer.cy.tsx";
 import "./src/components/organisms/SshKeysTable/SshKeysTable.cy.tsx";
 import "./src/components/pages/About/About.cy.tsx";
 import "./src/components/pages/AlertDefinitions/AlertDefinitions.cy.tsx";

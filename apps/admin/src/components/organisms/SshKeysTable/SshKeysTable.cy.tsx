@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LicenseRef-Intel
  */
 
+import { fakeSshKey } from "../SshKeysAddEditDrawer/SshKeysAddEditDrawer.pom";
 import SshKeysTable from "./SshKeysTable";
 import SshKeysTablePom from "./SshKeysTable.pom";
 
@@ -25,5 +26,30 @@ describe("<SshKeysTable/>", () => {
     cy.mount(<SshKeysTable />);
     pom.waitForApis();
     pom.emptyPom.root.should("exist");
+  });
+  it("should add ssh", () => {
+    const testLocalAccount = { username: "test-user", sshKey: fakeSshKey };
+    pom.interceptApis([pom.api.getEmptySshList]);
+    cy.mount(<SshKeysTable hasPermission />);
+    pom.waitForApis();
+
+    pom.el.ribbonButtonSshAddButton.click();
+    pom.addSshDrawerPom.root.should("exist");
+    pom.addSshDrawerPom.fillSshForm(testLocalAccount);
+
+    pom.addSshDrawerPom
+      .getDrawerBase()
+      .should("have.class", "spark-drawer-show");
+
+    pom.interceptApis([pom.api.postSsh]);
+    pom.addSshDrawerPom.el.addEditBtn.click();
+    pom.waitForApis();
+
+    cy.get(`@${pom.api.postSsh}`)
+      .its("request.body")
+      .should("deep.include", testLocalAccount);
+    pom.addSshDrawerPom
+      .getDrawerBase()
+      .should("have.class", "spark-drawer-hide");
   });
 });

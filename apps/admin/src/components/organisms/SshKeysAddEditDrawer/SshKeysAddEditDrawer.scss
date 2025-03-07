@@ -1,0 +1,18 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: LicenseRef-Intel
+ */
+
+.ssh-keys-add-edit-drawer {
+  .ssh-field-container {
+    padding: 1rem;
+    .textarea-error-message {
+      color: var(--spark-color-coral-shade1);
+    }
+    .ssh-public-key {
+      display: block;
+      width: 100%;
+      height: 10rem;
+    }
+  }
+}

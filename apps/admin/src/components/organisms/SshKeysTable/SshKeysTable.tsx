@@ -28,14 +28,24 @@ import {
   SharedStorage,
 } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
+import { ButtonSize, ButtonVariant, ToastState } from "@spark-design/tokens";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
+import { showToast } from "../../../store/notifications";
+import SshKeysAddEditDrawer from "../SshKeysAddEditDrawer/SshKeysAddEditDrawer";
 
 export const dataCy = "sshKeysTable";
 
-const SshKeysTable = () => {
+const SshKeysTable = ({
+  hasPermission = hasRole([Role.PROJECT_WRITE]),
+}: {
+  hasPermission?: boolean;
+}) => {
   const cy = { "data-cy": dataCy };
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isAddDrawerOpen, setIsAddDrawerOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const columns: TableColumn<eim.LocalAccountRead>[] = [
     {
@@ -100,6 +110,7 @@ const SshKeysTable = () => {
     getOrder(searchParams.get("column"), sortDirection) ?? "username asc";
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
 
+  const [addSshKey] = eim.usePostV1ProjectsByProjectNameLocalAccountsMutation();
   const {
     data: localAccountData,
     isSuccess,
@@ -133,14 +144,14 @@ const SshKeysTable = () => {
 
   const sshAddButton = (
     <RbacRibbonButton
-      name="sshAddButton"
+      name="SshAddButton"
       size={ButtonSize.Large}
       variant={ButtonVariant.Action}
       text="Add Key"
       onPress={() => {
-        // TODO: Open Add Drawer
+        setIsAddDrawerOpen(true);
       }}
-      disabled={!hasRole([Role.PROJECT_WRITE])}
+      disabled={!hasPermission}
       tooltip={
         checkAuthAndRole([Role.PROJECT_WRITE])
           ? ""
@@ -149,6 +160,30 @@ const SshKeysTable = () => {
       tooltipIcon="lock"
     />
   );
+
+  const onSshAdd = (localAccount: eim.LocalAccount) => {
+    const showError = (err?: any) => {
+      dispatch(
+        showToast({
+          message: `Failed to add SSHkey. ${err ? `Error: ${err}` : ""}`,
+          state: ToastState.Danger,
+        }),
+      );
+    };
+
+    if (SharedStorage.project?.name)
+      addSshKey({ localAccount, projectName: SharedStorage.project.name })
+        .unwrap()
+        .then(() => {
+          dispatch(
+            showToast({
+              message: "SSH key is successfully added!",
+              state: ToastState.Success,
+            }),
+          );
+        })
+        .catch(showError);
+  };
 
   const getTable = () => {
     if (isError) {
@@ -222,6 +257,13 @@ const SshKeysTable = () => {
   return (
     <div {...cy} className="ssh-keys-table">
       {getTable()}
+      <SshKeysAddEditDrawer
+        isOpen={isAddDrawerOpen}
+        onHide={() => {
+          setIsAddDrawerOpen(false);
+        }}
+        onAdd={onSshAdd}
+      />
     </div>
   );
 };
