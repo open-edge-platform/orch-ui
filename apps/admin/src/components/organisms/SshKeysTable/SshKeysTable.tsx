@@ -42,6 +42,7 @@ import {
   showMessageNotification,
   showToast,
 } from "../../../store/notifications";
+import SshKeyInUseByHostsCell from "../../atoms/SshKeyInUseByHostsCell/SshKeyInUseByHostsCell";
 import DeleteSSHDialog from "../DeleteSSHDialog/DeleteSSHDialog";
 import SshKeysAddEditDrawer from "../SshKeysAddEditDrawer/SshKeysAddEditDrawer";
 import SshKeysViewDrawer from "../SshKeysViewDrawer/SshKeysViewDrawer";
@@ -96,18 +97,21 @@ const SshKeysTable = ({
     {
       Header: "Key",
       apiName: "sshKey",
-      accessor: (ssh) => (
+      accessor: (ssh) => ssh.sshKey,
+      Cell: (table: { row: { original: eim.LocalAccountRead } }) => (
         <TextTruncate
           maxLength={50}
-          text={ssh.sshKey}
-          id={ssh.username}
+          text={table.row.original.sshKey}
+          id={table.row.original.username}
           hideReadMore
         />
       ),
     },
     {
       Header: "In Use",
-      accessor: () => <>No</>, //TODO: (ssh)=><>{ssh.isInUse ? "Yes" : "No"}</>,
+      Cell: (table: { row: { original: eim.LocalAccountRead } }) => (
+        <SshKeyInUseByHostsCell localAccount={table.row.original} />
+      ),
     },
     {
       Header: "Action",

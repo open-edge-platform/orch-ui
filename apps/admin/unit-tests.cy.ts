@@ -8,6 +8,7 @@ import "./src/components/atoms/AlertDefinitionEnable/AlertDefinitionEnable.cy.ts
 import "./src/components/atoms/AlertDefinitionThreshold/AlertDefinitionThreshold.cy.tsx";
 import "./src/components/atoms/AlertSource/AlertSource.cy.tsx";
 import "./src/components/atoms/SshHostsTable/SshHostsTable.cy.tsx";
+import "./src/components/atoms/SshKeyInUseByHostsCell/SshKeyInUseByHostsCell.cy.tsx";
 import "./src/components/atoms/Version/Version.cy.tsx";
 import "./src/components/organisms/AlertDefinitionsList/AlertDefinitionsList.cy.tsx";
 import "./src/components/organisms/AlertDrawer/AlertDrawer.cy.tsx";
