@@ -23,8 +23,8 @@ else
 fi
 
 echo "$new_version" > "apps/$app/VERSION"
-make apply-version APP=$app VERSION=$new_version
+make -C "apps/$app" apply-version
 helm dep update apps/$app/deploy/
 
-echo -e "${CYAN}Version has been update to $new_version$ in $app ${NC}"
+echo -e "${CYAN}Version has been update to $new_version in $app ${NC}"
 echo "Make sure all APIs point to released versions with 'make check-valid-api'"

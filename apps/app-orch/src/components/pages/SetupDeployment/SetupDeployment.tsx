@@ -480,29 +480,34 @@ const SetupDeployment = () => {
       });
     });
 
-    const targetClusters =
+    const targetClusters: adm.TargetClusters[] =
       currentDeploymentPackage && currentDeploymentPackage.applicationReferences
-        ? currentDeploymentPackage.applicationReferences.reduce(
-            (p: adm.TargetClusters[], app: catalog.ApplicationReference) => {
-              if (selectedClusters && selectedClusters.length > 0) {
-                return p.concat(
-                  selectedClusters.map((c: cm.ClusterInfoRead) => {
-                    return {
-                      appName: app.name,
-                      name: c.name ?? "",
-                    };
-                  }),
-                );
-              } else {
-                p.push({
+        ? currentDeploymentPackage.applicationReferences.reduce<
+            adm.TargetClusters[]
+          >((p: adm.TargetClusters[], app: catalog.ApplicationReference) => {
+            if (selectedClusters && selectedClusters.length > 0) {
+              return [
+                ...p,
+                ...selectedClusters.map((c) => {
+                  // NOTE whitout explicitly typing the variable,
+                  // the compiler will not throw errors if the interface is wrong
+                  const tc: adm.TargetClusters = {
+                    appName: app.name,
+                    clusterId: c.name ?? "",
+                  };
+                  return tc;
+                }),
+              ];
+            } else {
+              return [
+                ...p,
+                {
                   appName: app.name,
                   labels: labels,
-                });
-                return p;
-              }
-            },
-            [],
-          )
+                },
+              ];
+            }
+          }, [])
         : [];
     await createDeployment({
       projectName,
