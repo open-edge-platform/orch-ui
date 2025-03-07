@@ -15,6 +15,7 @@ import {
   ButtonGroupAlignment,
   ButtonSize,
   ButtonVariant,
+  FieldLabelSize,
   InputSize,
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
@@ -89,7 +90,7 @@ const SshKeysAddEditDrawer = ({
   const sshAddEditFormBody = (
     <form data-cy="drawerFormBody" onSubmit={handleSubmit(handleSshSubmit)}>
       <div className="ssh-field-container">
-        <FieldLabel>Key Name *</FieldLabel>
+        <FieldLabel size={FieldLabelSize.Large}>Key Name *</FieldLabel>
         <Controller
           name="username"
           control={control}
@@ -123,7 +124,7 @@ const SshKeysAddEditDrawer = ({
         />
       </div>
       <div className="ssh-field-container">
-        <FieldLabel>Public Key *</FieldLabel>
+        <FieldLabel size={FieldLabelSize.Large}>Public Key *</FieldLabel>
         <Controller
           name="sshKey"
           control={control}

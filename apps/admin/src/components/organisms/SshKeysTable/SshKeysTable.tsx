@@ -18,6 +18,7 @@ import {
   TextTruncate,
 } from "@orch-ui/components";
 import {
+  API_INTERVAL,
   checkAuthAndRole,
   Direction,
   getFilter,
@@ -28,27 +29,54 @@ import {
   SharedStorage,
 } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import { ButtonSize, ButtonVariant, ToastState } from "@spark-design/tokens";
+import {
+  ButtonSize,
+  ButtonVariant,
+  MessageBannerAlertState,
+  ToastState,
+} from "@spark-design/tokens";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
-import { showToast } from "../../../store/notifications";
+import { useAppDispatch } from "../../../store/hooks";
+import {
+  showMessageNotification,
+  showToast,
+} from "../../../store/notifications";
+import DeleteSSHDialog from "../DeleteSSHDialog/DeleteSSHDialog";
 import SshKeysAddEditDrawer from "../SshKeysAddEditDrawer/SshKeysAddEditDrawer";
+import SshKeysViewDrawer from "../SshKeysViewDrawer/SshKeysViewDrawer";
 
 export const dataCy = "sshKeysTable";
 
+interface SshDrawerControl {
+  isOpen: boolean;
+  localAccount?: eim.LocalAccountRead;
+}
+
 const SshKeysTable = ({
   hasPermission = hasRole([Role.PROJECT_WRITE]),
+  poll,
 }: {
   hasPermission?: boolean;
+  poll?: boolean;
 }) => {
   const cy = { "data-cy": dataCy };
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState<boolean>(false);
+  const [isViewDrawerOpen, setIsViewDrawerOpen] = useState<SshDrawerControl>({
+    isOpen: false,
+  });
   const [selectedSshToDelete, setSelectedSshToDelete] = useState<
     eim.LocalAccountRead | undefined
   >();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  const openViewDrawer = (localAccount: eim.LocalAccountRead) => {
+    setIsViewDrawerOpen({
+      isOpen: true,
+      localAccount: localAccount,
+    });
+  };
 
   const columns: TableColumn<eim.LocalAccountRead>[] = [
     {
@@ -59,9 +87,7 @@ const SshKeysTable = ({
         <Link
           data-cy={`${table.row.original.username}SshLink`}
           to=""
-          onClick={() => {
-            // TODO: Open View Details drawer
-          }}
+          onClick={() => openViewDrawer(table.row.original)}
         >
           {table.row.original.username}
         </Link>
@@ -71,7 +97,12 @@ const SshKeysTable = ({
       Header: "Key",
       apiName: "sshKey",
       accessor: (ssh) => (
-        <TextTruncate maxLength={50} text={ssh.sshKey} id={ssh.username} />
+        <TextTruncate
+          maxLength={50}
+          text={ssh.sshKey}
+          id={ssh.username}
+          hideReadMore
+        />
       ),
     },
     {
@@ -80,26 +111,27 @@ const SshKeysTable = ({
     },
     {
       Header: "Action",
-      accessor: (ssh) => (
-        <Popup
-          jsx={<Icon artworkStyle="light" icon="ellipsis-v" />}
-          options={[
-            {
-              displayText: "View Details",
-              onSelect: () => {
-                // TODO: Open View Details drawer
+      Cell: (table: { row: { original: eim.LocalAccountRead } }) => {
+        const localAccount = table.row.original;
+        return (
+          <Popup
+            jsx={<Icon artworkStyle="light" icon="ellipsis-v" />}
+            options={[
+              {
+                displayText: "View Details",
+                onSelect: () => openViewDrawer(localAccount),
               },
-            },
-            {
-              displayText: "Delete",
-              onSelect: () => {
-                setSelectedSshToDelete(ssh);
+              {
+                displayText: "Delete",
+                onSelect: () => {
+                  setSelectedSshToDelete(localAccount);
+                },
+                disable: false, //ssh.isInUse,
               },
-              disable: false, //ssh.isInUse,
-            },
-          ]}
-        />
-      ),
+            ]}
+          />
+        );
+      },
     },
   ];
 
@@ -131,7 +163,10 @@ const SshKeysTable = ({
         Operator.OR,
       ),
     },
-    { skip: !SharedStorage.project?.name },
+    {
+      skip: !SharedStorage.project?.name,
+      ...(poll ? { pollingInterval: API_INTERVAL } : {}),
+    },
   );
 
   const sshList = localAccountData?.localAccounts;
@@ -267,6 +302,15 @@ const SshKeysTable = ({
         }}
         onAdd={onSshAdd}
       />
+      {isViewDrawerOpen.isOpen && isViewDrawerOpen.localAccount && (
+        <SshKeysViewDrawer
+          isOpen
+          localAccount={isViewDrawerOpen.localAccount}
+          onHide={() => {
+            setIsViewDrawerOpen({ isOpen: false, localAccount: undefined });
+          }}
+        />
+      )}
       {selectedSshToDelete && (
         <DeleteSSHDialog
           ssh={selectedSshToDelete}

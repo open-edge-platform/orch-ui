@@ -28,7 +28,7 @@ const SshKeys = () => {
         hasRole={hasRole}
         missingRoleContent={<PermissionDenied />}
       >
-        <SshKeysTable />
+        <SshKeysTable poll />
       </RBACWrapper>
     </div>
   );

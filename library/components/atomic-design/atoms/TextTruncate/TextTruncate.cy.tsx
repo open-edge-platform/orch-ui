@@ -34,6 +34,14 @@ describe("<TextTruncate/>", () => {
       pom.el.label.click();
       pom.el.content.should("contain.text", alpha);
     });
+
+    it("should hide read more", () => {
+      cy.mount(
+        <TextTruncate id="abc" maxLength={20} text={alpha} hideReadMore />,
+      );
+      pom.el.content.should("contain.text", alpha.slice(0, 20));
+      pom.el.label.should("not.exist");
+    });
   });
 
   describe("not truncated functionality", () => {

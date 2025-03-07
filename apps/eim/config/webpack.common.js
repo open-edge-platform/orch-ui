@@ -56,6 +56,7 @@ module.exports = {
           "./src/components/organism/hosts/DashboardUnallocatedHostsWheel",
         "./HostsTableRemote":
           "./src/components/organism/_HostsTable/_HostsTableRemote",
+        "./HostsTable": "./src/components/organism/HostsTable/HostsTableRemote",
         "./SiteCellRemote": "./src/components/atom/SiteCell/SiteCellRemote",
         "./HostLink": "./src/components/atom/HostLink/HostLinkRemote",
         "./OSProfiles": "./src/components/pages/OSProfiles/OSProfilesRemote",
@@ -66,27 +67,27 @@ module.exports = {
       },
       shared: {
         "@spark-design/css": dependencies["@spark-design/css"],
-        "@spark-design/react": {singleton: true},
-        "@spark-design/tokens": {singleton: true},
+        "@spark-design/react": { singleton: true },
+        "@spark-design/tokens": { singleton: true },
         react: {
           singleton: true,
-          requiredVersion: dependencies['react']
+          requiredVersion: dependencies["react"],
         },
         "react-dom": {
-          singleton:true,
-          requiredVersion: dependencies["react-dom"]
+          singleton: true,
+          requiredVersion: dependencies["react-dom"],
         },
         "react-redux": {
           singleton: true,
-          requiredVersion: dependencies["react-redux"]
+          requiredVersion: dependencies["react-redux"],
         },
         "react-transition-group": {
           singleton: true,
-          requiredVersion: dependencies["react-transition-group"]
+          requiredVersion: dependencies["react-transition-group"],
         },
         redux: {
           singleton: true,
-          requiredVersion: dependencies["redux"]
+          requiredVersion: dependencies["redux"],
         },
         "react-router-dom": {
           singleton: true,
