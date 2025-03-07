@@ -1,7 +1,7 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import { IUser } from "./utilities";
 
@@ -38,11 +38,6 @@ declare global {
       authenticatedRequest<T = any>(
         opts: Partial<RequestOptions>,
       ): Chainable<Response<T>>;
-
-      /**
-       * Returns true if the tests are running against a mock server
-       */
-      isMockEnv(): boolean;
 
       /**
        * Custom command to read the current active project from the local storage

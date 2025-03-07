@@ -1,7 +1,7 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import { TablePom } from "@orch-ui/components";
 import * as _ from "lodash";
@@ -126,15 +126,14 @@ describe("EIM Smoke test:", () => {
             locationsPom.goToAddSubRegion(region.parentName);
             regionFormPom.submit(region);
           }
-          if (!cy.isMockEnv()) {
-            // check that the region has been created and save the id
-            cy.wait("@createRegion").then((interception) => {
-              expect(interception.response?.statusCode).to.equal(201);
-              // NOTE that we store the IDs in reverse order to make it easier to delete them
-              // (the last one created should be the first one delete to avoid dependencies)
-              testRegionIds.unshift(interception.response?.body.regionID);
-            });
-          }
+
+          // check that the region has been created and save the id
+          cy.wait("@createRegion").then((interception) => {
+            expect(interception.response?.statusCode).to.equal(201);
+            // NOTE that we store the IDs in reverse order to make it easier to delete them
+            // (the last one created should be the first one delete to avoid dependencies)
+            testRegionIds.unshift(interception.response?.body.regionID);
+          });
         });
 
         cy.url().should("contain", "locations");
@@ -149,18 +148,17 @@ describe("EIM Smoke test:", () => {
         _.forEach(testData.sites, (site) => {
           locationsPom.goToAddSite(site.parentRegions);
           siteFormPom.submit({ name: site.name });
-          if (!cy.isMockEnv()) {
-            // check that the site has been created and save the id
-            cy.wait("@createSite").then((interception) => {
-              expect(interception.response?.statusCode).to.equal(201);
-              // NOTE that we store the IDs in reverse order to make it easier to delete them
-              // (the last one created should be the first one delete to avoid dependencies)
-              testSiteIds.unshift({
-                siteId: interception.response?.body.siteID,
-                regionId: interception.response?.body.regionId,
-              });
+
+          // check that the site has been created and save the id
+          cy.wait("@createSite").then((interception) => {
+            expect(interception.response?.statusCode).to.equal(201);
+            // NOTE that we store the IDs in reverse order to make it easier to delete them
+            // (the last one created should be the first one delete to avoid dependencies)
+            testSiteIds.unshift({
+              siteId: interception.response?.body.siteID,
+              regionId: interception.response?.body.regionId,
             });
-          }
+          });
         });
       });
       after(() => {
