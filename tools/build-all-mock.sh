@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
 pushd apps/root; NODE_ENV=development REACT_LP_MOCK_API=true npx webpack --config=config/webpack.prod.mock.js; popd
 pushd apps/app-orch; NODE_ENV=development REACT_LP_MOCK_API=true npx webpack --config=config/webpack.prod.js; popd
 pushd apps/cluster-orch; NODE_ENV=development REACT_LP_MOCK_API=true npx webpack --config=config/webpack.prod.js; popd
