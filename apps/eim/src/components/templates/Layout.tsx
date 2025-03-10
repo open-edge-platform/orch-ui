@@ -23,7 +23,6 @@ import {
 import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {
