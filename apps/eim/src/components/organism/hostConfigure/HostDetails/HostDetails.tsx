@@ -7,16 +7,18 @@ import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { TextField } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   selectHostById,
+  selectIsGlobalSbFdeActive,
   setHostName,
+  setIsGlobalSbFdeActive,
   setOsProfile,
   setSecurity,
 } from "../../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import OsProfileDropdown from "../../OsProfileDropdown/OsProfileDropdown";
-import { SecurityDropdown } from "../SecurityDropdown/SecurityDropdown";
+import { SecuritySwitch } from "../SecuritySwitch/SecuritySwitch";
 import "./HostDetails.scss";
 
 export const dataCy = "details";
@@ -39,9 +41,8 @@ interface HostDetailsProps {
   hostId: string;
   duplicatedHostNames?: string[];
   osOptionValue?: string;
-  securityOptionValue?: string;
+  securityIsSbAndFdeEnabled?: boolean;
   onOsOptionChange?: (os: eim.OperatingSystemResource, effect: boolean) => void;
-  onSecurityOptionChange?: (bootOption: string) => void;
 }
 
 // eslint-disable-next-line max-statements
@@ -49,9 +50,8 @@ export const HostDetails = ({
   hostId,
   duplicatedHostNames = [],
   osOptionValue,
-  securityOptionValue,
+  securityIsSbAndFdeEnabled = false,
   onOsOptionChange,
-  onSecurityOptionChange,
 }: HostDetailsProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
@@ -59,13 +59,16 @@ export const HostDetails = ({
   const { name, resourceId, instance, serialNumber, originalOs, uuid } =
     useAppSelector(selectHostById(hostId));
 
+  const isGlobalSbFdeActive = useAppSelector(selectIsGlobalSbFdeActive);
+
   const [localName, setLocalName] = useState<string>();
   const [localOsOptionValue, setLocalOsOptionValue] = useState<string>(
     instance?.osID ?? "",
   );
-  const [localSecurityOptionValue, setLocalSecurityOptionValue] =
-    useState<string>(
-      instance?.securityFeature ?? instance?.os?.securityFeature ?? "",
+  const [localSecurityIsSbAndFdeEnabled, setLocalSecurityIsSbAndFdeEnabled] =
+    useState<boolean>(
+      instance?.securityFeature ===
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
     );
 
   useEffect(() => {
@@ -90,44 +93,20 @@ export const HostDetails = ({
   }, [osOptionValue]);
 
   useEffect(() => {
-    if (instance?.securityFeature) {
-      setLocalSecurityOptionValue(instance.securityFeature);
-    }
-  }, [instance?.securityFeature]);
-
-  useEffect(() => {
-    if (!securitySelectDisabled && securityOptionValue) {
-      setLocalSecurityOptionValue(securityOptionValue);
+    if (isGlobalSbFdeActive) {
+      setLocalSecurityIsSbAndFdeEnabled(securityIsSbAndFdeEnabled);
       dispatch(
         setSecurity({
           hostId: hostId,
-          value: securityOptionValue as eim.SecurityFeature,
+          value: securityIsSbAndFdeEnabled
+            ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+            : "SECURITY_FEATURE_NONE",
         }),
       );
-    } else if (!localSecurityOptionValue) {
-      setLocalSecurityOptionValue(
-        instance?.securityFeature ?? instance?.os?.securityFeature ?? "",
-      );
     }
-  }, [securityOptionValue]);
-
-  const isOsSbFdeCapable = useCallback(() => {
-    if (originalOs) {
-      return (
-        originalOs.securityFeature ===
-        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
-      );
-    }
-    if (!instance?.os || !instance?.os.securityFeature) return false;
-    return (
-      instance.os.securityFeature ===
-      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
-    );
-  }, [instance?.os, originalOs]);
+  }, [securityIsSbAndFdeEnabled]);
 
   const osSelectDisabled = !!originalOs;
-  const securitySelectDisabled =
-    !isOsSbFdeCapable() || originalOs !== undefined;
 
   const getErrorMessage = () => {
     if (!isValidHostName(localName)) {
@@ -174,50 +153,25 @@ export const HostDetails = ({
           hideLabel
           onSelectionChange={(os, effect) => {
             if (!os) return;
-            if (
-              os.securityFeature &&
-              (os.securityFeature === "SECURITY_FEATURE_NONE" ||
-                !instance?.securityFeature)
-            ) {
-              dispatch(
-                setSecurity({
-                  hostId: hostId,
-                  value: os.securityFeature,
-                }),
-              );
-              setLocalSecurityOptionValue(os.securityFeature);
-            }
             dispatch(setOsProfile({ hostId: hostId, os }));
 
             onOsOptionChange?.(os, effect);
             setLocalOsOptionValue(os?.resourceId ?? "");
           }}
         />
-        <SecurityDropdown
-          options={[
-            [
-              "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
-              "Full Disk Encryption",
-            ],
-            ["SECURITY_FEATURE_NONE", "None"],
-          ]}
-          value={localSecurityOptionValue}
-          isDisabled={securitySelectDisabled}
-          onSelectionChange={(value) => {
-            if (
-              instance?.securityFeature &&
-              localSecurityOptionValue === value
-            ) {
-              return;
-            }
+        <SecuritySwitch
+          value={localSecurityIsSbAndFdeEnabled}
+          onChange={(sbFdeEnabled) => {
+            dispatch(setIsGlobalSbFdeActive(false));
             dispatch(
               setSecurity({
                 hostId: hostId,
-                value: value as eim.SecurityFeature,
+                value: sbFdeEnabled
+                  ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+                  : "SECURITY_FEATURE_NONE",
               }),
             );
-            onSecurityOptionChange?.(value);
-            setLocalSecurityOptionValue(value);
+            setLocalSecurityIsSbAndFdeEnabled(sbFdeEnabled);
           }}
         />
       </Flex>

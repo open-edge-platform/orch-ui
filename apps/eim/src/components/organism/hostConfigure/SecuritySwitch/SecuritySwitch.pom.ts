@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SiDropdown } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./SecurityDropdown";
+import { dataCy } from "./SecuritySwitch";
 
-const dataCySelectors = ["security"] as const;
+const dataCySelectors = ["security", "securitySwitchToggle"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export class SecurityDropdownPom extends CyPom<Selectors> {
-  public dropdown = new SiDropdown(dataCy);
+export class SecuritySwitchPom extends CyPom<Selectors> {
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors]);
   }

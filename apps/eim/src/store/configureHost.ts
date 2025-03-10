@@ -20,7 +20,8 @@ const totalSteps = Object.keys(HostConfigSteps).length / 2;
 
 export interface HostConfigFormStatus {
   globalOsValue: string;
-  globalSecurityValue: string;
+  globalIsSbAndFdeEnabled: boolean;
+  isGlobalSbFdeActive: boolean;
   currentStep: HostConfigSteps;
   enableNextBtn: boolean;
   enablePrevBtn: boolean;
@@ -46,7 +47,8 @@ export const initialState: HostConfigForm = {
     enableNextBtn: false,
     enablePrevBtn: true,
     globalOsValue: "",
-    globalSecurityValue: "",
+    globalIsSbAndFdeEnabled: false,
+    isGlobalSbFdeActive: true,
     hasValidationError: false,
   },
   hosts: {},
@@ -248,6 +250,27 @@ export const configureHost = createSlice({
       }
 
       host.instance.securityFeature = action.payload.value;
+
+      if (
+        Object.values(state.hosts).every(
+          (hd) =>
+            hd.instance?.securityFeature ===
+            "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+        )
+      ) {
+        state.formStatus.globalIsSbAndFdeEnabled = true;
+        state.formStatus.isGlobalSbFdeActive = true;
+      }
+
+      if (
+        Object.values(state.hosts).every(
+          (hd) => hd.instance?.securityFeature === "SECURITY_FEATURE_NONE",
+        )
+      ) {
+        state.formStatus.globalIsSbAndFdeEnabled = false;
+        state.formStatus.isGlobalSbFdeActive = true;
+      }
+
       configureHost.caseReducers.validateStep(state);
     },
     unsetSecurity(state, action: PayloadAction<{ hostId: string }>) {
@@ -294,8 +317,11 @@ export const configureHost = createSlice({
     setGlobalOsValue(state, action: PayloadAction<string>) {
       state.formStatus.globalOsValue = action.payload;
     },
-    setGlobalSecurityValue(state, action: PayloadAction<string>) {
-      state.formStatus.globalSecurityValue = action.payload;
+    setGlobalIsSbAndFdeEnabled(state, action: PayloadAction<boolean>) {
+      state.formStatus.globalIsSbAndFdeEnabled = action.payload;
+    },
+    setIsGlobalSbFdeActive(state, action: PayloadAction<boolean>) {
+      state.formStatus.isGlobalSbFdeActive = action.payload;
     },
     setValidationError(state, action: PayloadAction<boolean>) {
       state.formStatus.hasValidationError = action.payload;
@@ -325,7 +351,8 @@ export const {
   setSite,
   setRegion,
   setGlobalOsValue,
-  setGlobalSecurityValue,
+  setGlobalIsSbAndFdeEnabled,
+  setIsGlobalSbFdeActive,
   setHostErrorMessage,
   setValidationError,
   setAutoOnboardValue,
@@ -371,10 +398,23 @@ const selectHost = (state: HostConfigForm, id: string) => {
 export const selectContainsHosts = (state: RootState) =>
   containsHosts(state.configureHost);
 
-export const isSecurityEnabled = (
-  securityFeature?: eim.SecurityFeature,
-): boolean =>
-  securityFeature === "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+export const selectIsGlobalSbFdeActive = (state: RootState) =>
+  state.configureHost.formStatus.isGlobalSbFdeActive;
+
+export const selectSingleHostConfig = (state: RootState) =>
+  Object.keys(state.configureHost.hosts).length === 1;
+
+export const selectAreHostsSetSecureEnabled = (state: RootState) =>
+  Object.values(state.configureHost.hosts).every(
+    (hd) =>
+      hd.instance?.securityFeature ===
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+  );
+
+export const selectAreHostsSetSecureDisabled = (state: RootState) =>
+  Object.values(state.configureHost.hosts).every(
+    (hd) => hd.instance?.securityFeature === "SECURITY_FEATURE_NONE",
+  );
 
 // takes a Host from the redux store and converts it to a Host that can be sent to the API
 // this selector might be not needed
