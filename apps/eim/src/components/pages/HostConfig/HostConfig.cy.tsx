@@ -534,7 +534,6 @@ describe("<HostConfig/>", () => {
       selectSitePom.expandFirstRootMocked();
       selectSitePom.site.el.selectSiteRadio.click();
       pom.el.next.click();
-      osProfileDropdownPom.waitForApis();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
@@ -557,7 +556,6 @@ describe("<HostConfig/>", () => {
 
       selectSitePom.site.el.selectSiteRadio.click();
       pom.el.next.click();
-      osProfileDropdownPom.waitForApis();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
@@ -645,7 +643,6 @@ describe("<HostConfig/>", () => {
 
       selectSitePom.site.el.selectSiteRadio.click();
       pom.el.next.click();
-      osProfileDropdownPom.waitForApis();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();

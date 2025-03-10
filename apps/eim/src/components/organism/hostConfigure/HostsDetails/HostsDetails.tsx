@@ -9,12 +9,12 @@ import { useEffect } from "react";
 import {
   selectHostConfigForm,
   selectHosts,
+  setGlobalIsSbAndFdeEnabled,
   setGlobalOsValue,
-  setGlobalSecurityValue,
 } from "../../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { GlobalOsDropdown } from "../GlobalOsDropdown/GlobalOsDropdown";
-import { GlobalSecurityDropdown } from "../GlobalSecurityDropdown/GlobalSecurityDropdown";
+import { GlobalSecuritySwitch } from "../GlobalSecuritySwitch/GlobalSecuritySwitch";
 import { HostDetails } from "../HostDetails/HostDetails";
 import "./HostsDetails.scss";
 
@@ -34,20 +34,10 @@ export const HostsDetails = () => {
   const allOsPreinstalled = Object.values(hosts).every(
     (host) => host.originalOs,
   );
-
-  const allSecurityOptionsUnchangeable = Object.values(hosts).every((host) => {
-    if (host.originalOs || !host.instance) {
-      return true;
-    }
-    return !!(
-      host.instance?.os &&
-      host.instance.os.securityFeature !==
-        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
-    );
-  });
+  const singleHostConfig = Object.keys(hosts).length === 1;
 
   const {
-    formStatus: { globalOsValue, globalSecurityValue },
+    formStatus: { globalOsValue, globalIsSbAndFdeEnabled },
   } = useAppSelector(selectHostConfigForm);
   const dispatch = useAppDispatch();
 
@@ -74,24 +64,34 @@ export const HostsDetails = () => {
 
   return (
     <div {...cy} className="hosts-details">
-      <Flex cols={[3, 3, 3, 3]} className="top-row">
+      <Flex
+        cols={[3]}
+        className={`top-row labels ${singleHostConfig ? "single" : ""}`}
+      >
         <b>Host Name</b>
         <b>Serial Number and UUID</b>
-        <GlobalOsDropdown
-          isDisabled={allOsPreinstalled}
-          value={globalOsValue}
-          onSelectionChange={(osOption) => {
-            dispatch(setGlobalOsValue(osOption));
-          }}
-        />
-        <GlobalSecurityDropdown
-          isDisabled={allSecurityOptionsUnchangeable}
-          value={globalSecurityValue}
-          onSelectionChange={(securityOption) => {
-            dispatch(setGlobalSecurityValue(securityOption));
-          }}
-        />
+        <b>OS Profile</b>
+        <b>Secure Boot and Full Disk Encryption</b>
       </Flex>
+      {!singleHostConfig && (
+        <Flex cols={[6, 3, 3]} className="top-row">
+          <div></div>
+          <GlobalOsDropdown
+            isDisabled={allOsPreinstalled}
+            value={globalOsValue}
+            onSelectionChange={(osOption) => {
+              dispatch(setGlobalOsValue(osOption));
+            }}
+          />
+
+          <GlobalSecuritySwitch
+            value={globalIsSbAndFdeEnabled}
+            onChange={(isEnabled) => {
+              dispatch(setGlobalIsSbAndFdeEnabled(isEnabled));
+            }}
+          />
+        </Flex>
+      )}
       {Object.keys(hosts).map((hostId) => (
         <HostDetails
           hostId={hostId}
@@ -101,13 +101,9 @@ export const HostsDetails = () => {
           onOsOptionChange={(_, effect) => {
             if (!effect) {
               dispatch(setGlobalOsValue(""));
-              dispatch(setGlobalSecurityValue(""));
             }
           }}
-          securityOptionValue={globalSecurityValue}
-          onSecurityOptionChange={() => {
-            dispatch(setGlobalSecurityValue(""));
-          }}
+          securityIsSbAndFdeEnabled={globalIsSbAndFdeEnabled}
         />
       ))}
     </div>
