@@ -11,6 +11,14 @@
     border-right: 0.0625rem solid var(--spark-color-theme-light-gray300);
     background-color: var(--spark-color-theme-light-gray300);
 
+    &.labels {
+      padding-top: 0.8rem;
+    }
+
+    &.single {
+      padding-bottom: 0.8rem;
+    }
+
     b {
       font-weight: 500;
       padding: 0 0.6rem;

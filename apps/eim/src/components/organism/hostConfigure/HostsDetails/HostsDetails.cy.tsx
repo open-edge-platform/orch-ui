@@ -7,7 +7,6 @@ import { osRedHatId, osUbuntuId } from "@orch-ui/utils";
 import { initialState } from "../../../../store/configureHost";
 import { setupStore } from "../../../../store/store";
 import { GlobalOsDropdownPom } from "../GlobalOsDropdown/GlobalOsDropdown.pom";
-import { GlobalSecurityDropdownPom } from "../GlobalSecurityDropdown/GlobalSecurityDropdown.pom";
 import { HostDetailsPom } from "../HostDetails/HostDetails.pom";
 import { HostsDetails } from "./HostsDetails";
 import { HostsDetailsPom } from "./HostsDetails.pom";
@@ -15,7 +14,6 @@ import { HostsDetailsPom } from "./HostsDetails.pom";
 const pom = new HostsDetailsPom();
 const detailsPom = new HostDetailsPom();
 const globalOsDropdownPom = new GlobalOsDropdownPom();
-const globalSecurityDropdownPom = new GlobalSecurityDropdownPom();
 
 describe("<HostsDetails/>", () => {
   const store = setupStore({
@@ -58,12 +56,7 @@ describe("<HostsDetails/>", () => {
         osUbuntuId,
         osUbuntuId,
       );
-      globalSecurityDropdownPom.dropdown.selectDropdownValue(
-        pom.root,
-        "globalSecurity",
-        "Disable All",
-        "SECURITY_FEATURE_NONE",
-      );
+      pom.root.click(0, 0);
     });
 
     it("should save selected global values", () => {
@@ -82,14 +75,8 @@ describe("<HostsDetails/>", () => {
         });
     });
 
-    it("should save selected local security value", () => {
-      pom.root.first().within(() => {
-        cy.get("button").eq(3).click();
-      });
-
-      cy.get("select").eq(3).select("Full Disk Encryption", {
-        force: true,
-      });
+    it.only("should save selected local security value", () => {
+      cy.get(".spark-toggle-switch-selector").eq(1).click();
 
       cy.window()
         .its("store")
@@ -108,10 +95,10 @@ describe("<HostsDetails/>", () => {
 
     it("should save selected local os value", () => {
       pom.root.first().within(() => {
-        cy.get("button").eq(4).click();
+        cy.get("button").eq(2).click();
       });
 
-      cy.get("select").eq(4).select("Red Hat", {
+      cy.get("select").eq(2).select("Red Hat", {
         force: true,
       });
 

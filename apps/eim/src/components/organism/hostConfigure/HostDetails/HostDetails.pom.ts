@@ -9,7 +9,6 @@ import { osUbuntu } from "@orch-ui/utils";
 import OsProfileDropdownPom, {
   getOsResources,
 } from "../../OsProfileDropdown/OsProfileDropdown.pom";
-import { SecurityDropdownPom } from "../SecurityDropdown/SecurityDropdownPom";
 import { dataCy } from "./HostDetails";
 
 const dataCySelectors = ["name", "osProfileSetting"] as const;
@@ -56,7 +55,6 @@ const getProvidersWithNoDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNamePro
 
 export class HostDetailsPom extends CyPom<Selectors, ApiAliases> {
   public osDropdown = new OsProfileDropdownPom();
-  public securityDropdown = new SecurityDropdownPom();
 
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors], {

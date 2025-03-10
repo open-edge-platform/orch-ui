@@ -912,9 +912,9 @@ export const handlers = [
   ),
 
   // os resource
-  rest.get(`${baseURL}/OSResources`, async (req, res, ctx) => {
+  rest.get(`${baseURL}/compute/os`, async (req, res, ctx) => {
     const list = osResourceStore.list();
-    return await res(
+    return res(
       ctx.status(200),
       ctx.json<eim.GetV1ProjectsByProjectNameComputeOsApiResponse>({
         hasNext: false,

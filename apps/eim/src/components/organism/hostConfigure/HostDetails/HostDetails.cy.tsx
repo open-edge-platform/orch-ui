@@ -94,17 +94,13 @@ describe("<Details/>", () => {
       window.store = store;
       cy.mount(<HostDetails hostId={"hostId"} />, { reduxStore: store });
     });
-    it("the OS dropdown and SB/FDE dropdown should be disabled", () => {
+    it("the OS dropdown should be disabled", () => {
       pom.el.name.should("have.value", "preloaded-name");
       pom.osDropdown.el.preselectedOsProfile.should(
         "have.value",
         osUbuntu.name,
       );
       pom.osDropdown.el.preselectedOsProfile.should("be.disabled");
-      pom.securityDropdown.el.security.should(
-        "have.class",
-        "spark-dropdown-is-disabled",
-      );
     });
   });
 
@@ -132,7 +128,7 @@ describe("<Details/>", () => {
       cy.mount(<HostDetails hostId={"hostId"} />, { reduxStore: store });
       pom.waitForApis();
     });
-    it("the OS dropdown and SB/FDE dropdown should be enabled", () => {
+    it("the OS dropdown should be enabled", () => {
       pom.osDropdown.el.osProfile.should(
         "not.have.class",
         "spark-dropdown-is-disabled",
@@ -146,11 +142,6 @@ describe("<Details/>", () => {
         "osProfile",
         osRedHatId,
         osRedHatId,
-      );
-
-      pom.securityDropdown.el.security.should(
-        "have.class",
-        "spark-dropdown-is-disabled",
       );
 
       cy.window()
