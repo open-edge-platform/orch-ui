@@ -62,7 +62,7 @@ jobs:
       fail-fast: false
       matrix:
         project_folder: ${{ fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
-    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@hotfix/version-check
+    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@main
     with:
       run_security_scans: true
       run_version_check: true
@@ -88,7 +88,7 @@ jobs:
       fail-fast: false
       matrix:
         project_folder: ["admin", "app-orch", "cluster-orch", "eim", "root"]
-    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@hotfix/version-check
+    uses: intel-tiber/orch-ci/.github/workflows/pre-merge.yml@main
     with:
       run_security_scans: true
       run_version_check: true
