@@ -62,7 +62,7 @@ describe("<SshKeysAddEditDrawer/>", () => {
   it("should call onEdit by footer close button", () => {
     const testLocalAccount = {
       sshKey: fakeSshKey,
-      username: "all-groups-example-user",
+      username: "test-key-name",
       resourceId: "ssh-key",
     };
 
@@ -77,7 +77,7 @@ describe("<SshKeysAddEditDrawer/>", () => {
     );
 
     pom.root.should("exist");
-    pom.el.sshKeyUsername.should("have.value", "all-groups-example-user");
+    pom.el.sshKeyUsername.should("have.value", "test-key-name");
     pom.el.sshPublicKey.should("have.value", fakeSshKey);
     pom.el.addEditBtn.should("not.have.class", "spark-button-disabled");
 

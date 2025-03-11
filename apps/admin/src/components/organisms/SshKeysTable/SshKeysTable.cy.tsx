@@ -52,4 +52,41 @@ describe("<SshKeysTable/>", () => {
       .getDrawerBase()
       .should("have.class", "spark-drawer-hide");
   });
+  it("should open view details drawer", () => {
+    pom.interceptApis([pom.api.getSshList]);
+    cy.mount(<SshKeysTable hasPermission />);
+    pom.waitForApis();
+    pom.getActionPopupBySearchText("test-key-name").click().as("popup");
+    cy.get("@popup").contains("View Details").click();
+
+    pom.viewSshDrawerPom.root.should("exist");
+  });
+
+  it("should see delete disabled for the ssh in use", () => {
+    pom.interceptApis([pom.api.getSshList]);
+    pom.viewSshDrawerPom.sshHostTablePom.interceptApis([
+      pom.viewSshDrawerPom.sshHostTablePom.api.getInstance,
+    ]);
+    cy.mount(<SshKeysTable hasPermission />);
+    pom.viewSshDrawerPom.sshHostTablePom.waitForApis();
+    pom.getActionPopupBySearchText("test-key-name").click().as("popup");
+    cy.get("@popup")
+      .contains("Delete")
+      .should("have.class", "popup__option-item-disable");
+  });
+
+  it("should see delete modal for the ssh when it's not in use", () => {
+    pom.interceptApis([pom.api.getSshList]);
+    pom.viewSshDrawerPom.sshHostTablePom.interceptApis([
+      pom.viewSshDrawerPom.sshHostTablePom.api.getInstanceEmpty,
+    ]);
+    cy.mount(<SshKeysTable hasPermission />);
+    pom.viewSshDrawerPom.sshHostTablePom.waitForApis();
+    pom.waitForApis();
+
+    pom.deleteSshModalPom.root.should("not.exist");
+    pom.getActionPopupBySearchText("test-key-name").click().as("popup");
+    cy.get("@popup").contains("Delete").click();
+    pom.deleteSshModalPom.root.should("exist");
+  });
 });

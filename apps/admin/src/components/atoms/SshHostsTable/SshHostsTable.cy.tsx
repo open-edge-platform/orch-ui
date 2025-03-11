@@ -13,7 +13,7 @@ describe("<SshHostsTable/>", () => {
   const testLocalAccount = {
     resourceId: "ssh-12kjjk1",
     sshKey: fakeSshKey,
-    username: "all-group-example-user",
+    username: "test-key-name",
   };
 
   const TestStatusComponent = () => <div>Status</div>;

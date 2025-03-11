@@ -11,7 +11,7 @@ import SshKeyInUseByHostsCellPom, {
 const pom = new SshKeyInUseByHostsCellPom();
 describe("<SshKeyInUseByHostsCell/>", () => {
   const localAccountId = "localaccount-1";
-  const sshKeyName = "all-groups-example-user";
+  const sshKeyName = "test-key-name";
   const currentTime = new Date().toISOString();
   const testLocalAccount = {
     localAccountID: localAccountId,

@@ -12,7 +12,7 @@ describe("<SshKeysViewDrawer/>", () => {
   const testLocalAccount = {
     resourceId: "ssh-12kjjk1",
     sshKey: fakeSshKey,
-    username: "all-group-example-user",
+    username: "test-key-name",
   };
 
   beforeEach(() => {

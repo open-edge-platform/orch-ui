@@ -4,6 +4,7 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
+import SshHostsTablePom from "../../atoms/SshHostsTable/SshHostsTable.pom";
 
 const dataCySelectors = [
   "sshKeyUsername",
@@ -14,8 +15,10 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class SshKeysViewDrawerPom extends CyPom<Selectors> {
+  sshHostTablePom: SshHostsTablePom;
   constructor(public rootCy: string = "sshKeysViewDrawer") {
     super(rootCy, [...dataCySelectors]);
+    this.sshHostTablePom = new SshHostsTablePom();
   }
 
   getDrawerBase() {

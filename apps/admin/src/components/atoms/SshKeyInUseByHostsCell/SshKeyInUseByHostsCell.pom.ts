@@ -18,7 +18,7 @@ export const fakeSshKey =
   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBNVFtW7BtSKrG9peh0pOdcwsDo8LtFdpFPSJUmCFQlg your_email@example.com";
 
 const localAccountId = "localaccount-1";
-const sshKeyName = "all-groups-example-user";
+const sshKeyName = "test-key-name";
 const currentTime = new Date().toISOString();
 const mockInstance: eim.InstanceRead = {
   ...instanceOne,

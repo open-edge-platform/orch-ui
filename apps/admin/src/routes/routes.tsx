@@ -17,11 +17,11 @@ import {
 } from "@orch-ui/utils";
 import React, { ComponentType, createRef, LazyExoticComponent } from "react";
 import { Navigate, RouteObject } from "react-router-dom";
-import SshKeys from "src/components/pages/SshKeys/SshKeys";
 import About from "../components/pages/About/About";
 import AlertDefinitions from "../components/pages/AlertDefinitions/AlertDefinitions";
 import Alerts from "../components/pages/Alerts/Alerts";
 import Projects from "../components/pages/Projects/Projects";
+import SshKeys from "../components/pages/SshKeys/SshKeys";
 import Layout from "../components/templates/Layout";
 
 type RemoteComponent = LazyExoticComponent<ComponentType<any>> | null;
@@ -106,7 +106,14 @@ export const childRoutes = [
   },
   {
     path: "ssh-keys",
-    element: <SshKeys />,
+    element: (
+      <RBACWrapper
+        showTo={[Role.INFRA_MANAGER_WRITE, Role.INFRA_MANAGER_READ]}
+        missingRoleContent={<PermissionDenied />}
+      >
+        <SshKeys />
+      </RBACWrapper>
+    ),
   },
   {
     path: "about",

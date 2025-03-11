@@ -9,7 +9,6 @@ import {
   columnApiNameToDisplayName,
   columnDisplayNameToApiName,
   Empty,
-  Popup,
   RbacRibbonButton,
   Ribbon,
   SortDirection,
@@ -18,7 +17,6 @@ import {
   TextTruncate,
 } from "@orch-ui/components";
 import {
-  API_INTERVAL,
   checkAuthAndRole,
   Direction,
   getFilter,
@@ -28,7 +26,6 @@ import {
   Role,
   SharedStorage,
 } from "@orch-ui/utils";
-import { Icon } from "@spark-design/react";
 import {
   ButtonSize,
   ButtonVariant,
@@ -43,9 +40,11 @@ import {
   showToast,
 } from "../../../store/notifications";
 import SshKeyInUseByHostsCell from "../../atoms/SshKeyInUseByHostsCell/SshKeyInUseByHostsCell";
+import SshKeysPopup from "../../atoms/SshKeysPopup/SshKeysPopup";
 import DeleteSSHDialog from "../DeleteSSHDialog/DeleteSSHDialog";
 import SshKeysAddEditDrawer from "../SshKeysAddEditDrawer/SshKeysAddEditDrawer";
 import SshKeysViewDrawer from "../SshKeysViewDrawer/SshKeysViewDrawer";
+import "./SshKeysTable.scss";
 
 export const dataCy = "sshKeysTable";
 
@@ -54,13 +53,13 @@ interface SshDrawerControl {
   localAccount?: eim.LocalAccountRead;
 }
 
-const SshKeysTable = ({
-  hasPermission = hasRole([Role.PROJECT_WRITE]),
-  poll,
-}: {
+interface SshKeysTableProps {
   hasPermission?: boolean;
-  poll?: boolean;
-}) => {
+}
+
+const SshKeysTable = ({
+  hasPermission = hasRole([Role.INFRA_MANAGER_WRITE]),
+}: SshKeysTableProps) => {
   const cy = { "data-cy": dataCy };
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState<boolean>(false);
@@ -118,21 +117,10 @@ const SshKeysTable = ({
       Cell: (table: { row: { original: eim.LocalAccountRead } }) => {
         const localAccount = table.row.original;
         return (
-          <Popup
-            jsx={<Icon artworkStyle="light" icon="ellipsis-v" />}
-            options={[
-              {
-                displayText: "View Details",
-                onSelect: () => openViewDrawer(localAccount),
-              },
-              {
-                displayText: "Delete",
-                onSelect: () => {
-                  setSelectedSshToDelete(localAccount);
-                },
-                disable: false, //ssh.isInUse,
-              },
-            ]}
+          <SshKeysPopup
+            localAccount={localAccount}
+            onViewDetails={() => openViewDrawer(localAccount)}
+            onDelete={() => setSelectedSshToDelete(localAccount)}
           />
         );
       },
@@ -169,7 +157,6 @@ const SshKeysTable = ({
     },
     {
       skip: !SharedStorage.project?.name,
-      ...(poll ? { pollingInterval: API_INTERVAL } : {}),
     },
   );
 
@@ -195,7 +182,7 @@ const SshKeysTable = ({
       }}
       disabled={!hasPermission}
       tooltip={
-        checkAuthAndRole([Role.PROJECT_WRITE])
+        checkAuthAndRole([Role.INFRA_MANAGER_WRITE])
           ? ""
           : "The users with 'View Only' access can mostly view the data and do few of the Add/Edit operations."
       }
@@ -248,10 +235,13 @@ const SshKeysTable = ({
     } else {
       return (
         <Table
-          key="projectTable"
-          dataCy="projectsTableList"
+          key="sshTable"
+          dataCy="sshTableList"
           columns={columns}
           data={sshList}
+          isServerSidePaginated
+          canPaginate
+          totalOverallRowsCount={localAccountData?.totalElements ?? 0}
           initialSort={{
             column: sortColumn,
             direction: sortDirection,
@@ -296,6 +286,7 @@ const SshKeysTable = ({
       );
     }
   };
+
   return (
     <div {...cy} className="ssh-keys-table">
       {getTable()}
