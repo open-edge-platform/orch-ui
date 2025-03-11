@@ -22,9 +22,7 @@ import {
 } from "@orch-ui/utils";
 import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
-import Cookies from "js-cookie";
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {
@@ -79,13 +77,6 @@ const Layout = () => {
       navigate(item.route);
     }
   };
-
-  const { isAuthenticated, user } = useAuth();
-  if (isAuthenticated && user?.access_token) {
-    Cookies.set("keycloak-token", user.access_token, {
-      domain: window.location.hostname.replace("web-ui.", ""),
-    });
-  }
 
   useEffect(() => {
     if (!messageBanner || !messageBannerDuration) return;

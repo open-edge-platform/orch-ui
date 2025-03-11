@@ -1,7 +1,7 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import { TablePom } from "@orch-ui/components";
 import * as _ from "lodash";
@@ -114,7 +114,7 @@ describe("EIM Smoke test:", () => {
         // create the regions
         cy.intercept({
           method: "POST",
-          url: `/v1/projects/${activeProject}/regions`,
+          url: `**/v1/projects/${activeProject}/regions`,
           times: testData.regions.length,
         }).as("createRegion");
         _.forEach(testData.regions, (region) => {
@@ -126,6 +126,7 @@ describe("EIM Smoke test:", () => {
             locationsPom.goToAddSubRegion(region.parentName);
             regionFormPom.submit(region);
           }
+
           // check that the region has been created and save the id
           cy.wait("@createRegion").then((interception) => {
             expect(interception.response?.statusCode).to.equal(201);
@@ -147,6 +148,7 @@ describe("EIM Smoke test:", () => {
         _.forEach(testData.sites, (site) => {
           locationsPom.goToAddSite(site.parentRegions);
           siteFormPom.submit({ name: site.name });
+
           // check that the site has been created and save the id
           cy.wait("@createSite").then((interception) => {
             expect(interception.response?.statusCode).to.equal(201);

@@ -21,6 +21,6 @@ export const validateDefaultProject = () => {
  **/
 export const validateNoAccessToProjectTab = () => {
   cyGet("menuSettings").click();
-  cy.contains("Projects").should("not.exist");
   cy.contains("About").should("be.visible");
+  cy.contains("Projects").should("not.exist");
 };

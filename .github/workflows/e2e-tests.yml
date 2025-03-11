@@ -5,6 +5,8 @@
 name: E2E Tests Workflow
 on:
   workflow_call
+env:
+  CYPRESS_BASE_URL: "http://localhost:8080"
 
 jobs:
   run-e2e-tests-pipeline:
@@ -25,5 +27,14 @@ jobs:
           npm -v
           npm ci
 
-      - name: Build
+      - name: Build the test code
         run: npm run tests:build
+
+      # - name: Build production UI with mock server
+      #   run: bash tools/build-all-mock.sh
+
+      # - name: Serve the UI
+      #   run: npx serve dist -s --no-request-logging -p 8080 &
+
+      # - name: Run EIM tests
+      #   run: cd tests; npx cypress run --e2e -s cypress/e2e/eim/eim-smoke.cy.ts --env EN_UUID=398395da-c10e-7c47-9b4f-efb34c0b261e

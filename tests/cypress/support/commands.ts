@@ -40,7 +40,6 @@ import RequestOptions = Cypress.RequestOptions;
 
 // Login with session
 Cypress.Commands.add("login", ({ username, password }: IUser) => {
-
   // somehow the intel log cannot be loaded in an headless browser, we also don't care about it
   // just replace it with a local image
   cy.intercept("logo-intel-tiber-edge-platform-on-dark.png", {
@@ -85,14 +84,27 @@ Cypress.Commands.add("execAndSaveOutput", (command: string, file: string) => {
 Cypress.Commands.add(
   "authenticatedRequest",
   ({ method = "GET", url, body }: Partial<RequestOptions>) => {
-    cy.getCookie("keycloak-token").then((cookie) => {
-      expect(cookie).not.to.be.null;
+    cy.getAllSessionStorage({ log: true }).then((result: Cypress.Storable) => {
       expect(Cypress.config().baseUrl).not.to.be.null;
+      const oidcStorage = `oidc.user:${Cypress.config().baseUrl!.replace("web-ui", "keycloak")}/realms/master:webui-client`;
+
+      expect(result).not.to.be.null;
+      expect(result).to.haveOwnProperty(Cypress.config().baseUrl!);
+      expect(result![Cypress.config().baseUrl!]).to.haveOwnProperty(
+        oidcStorage,
+      );
+
+      const token = JSON.parse(
+        result![Cypress.config().baseUrl!][oidcStorage],
+      ).id_token;
+      Cypress.log({ message: `Token: ${JSON.stringify(token)}` });
+      expect(token).not.to.be.null;
+
       return cy.request({
         method: method,
         url: `${Cypress.config().baseUrl!.replace("web-ui", "api")}${url}`,
         auth: {
-          bearer: cookie!.value,
+          bearer: token,
         },
         body: body,
         failOnStatusCode: false,
@@ -102,6 +114,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("currentProject", () => {
+  cy.visit("/");
   cy.intercept("/v1/projects?member-role=true").as("getProjects");
   cy.url().should("contain", Cypress.config().baseUrl!);
   cy.contains("Edge Orchestrator").should("be.visible");
