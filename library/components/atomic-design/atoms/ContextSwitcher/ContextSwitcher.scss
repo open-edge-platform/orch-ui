@@ -5,8 +5,11 @@
 
 .context-switcher {
   border: 0.1rem solid var(--spark-color-theme-light-gray500);
-  border-radius: 0.375rem;
   width: fit-content;
+
+  .spark-button-group {
+    gap: 0;
+  }
 
   button {
     outline: none;
@@ -14,11 +17,11 @@
 
   &__button-container {
     position: relative;
+    width: 7rem;
 
     /* when button is not active show gray text for deselection */
     .spark-button-content {
       color: var(--spark-color-tiber-theme-light-gray700);
-      padding: 1.25rem 1rem;
       margin: 0;
       text-transform: capitalize;
     }
@@ -26,14 +29,12 @@
     /* show divider line */
     &::after {
       content: "";
-      display: inline-block;
       position: absolute;
-      top: 0;
-      left: -0.675rem;
-      margin: 0.5rem;
+      top: 0.5rem;
+      left: -0.1rem;
       height: 1rem;
       width: 0.1rem;
-      background-color: var(--spark-color-theme-light-gray500);
+      background-color: var(--spark-color-theme-light-gray200);
     }
 
     /* when button is active show white text */

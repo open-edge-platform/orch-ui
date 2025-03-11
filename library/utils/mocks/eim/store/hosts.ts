@@ -439,6 +439,14 @@ export const registeredHostFiveIdle: HostMock = {
   registrationStatusTimestamp: 1728574343137,
 };
 
+export const registeredHostNoInstance: HostMock = {
+  resourceId: "registered-host-no-instance",
+  currentState: "HOST_STATE_REGISTERED",
+  serialNumber: "ec269d77-9b98-bda3-2f68-35342w23432a",
+  uuid: "ec26b1ed-311b-0da2-5f2b-fc17160f35e3",
+  name: "registered-host-no-instance",
+};
+
 export class HostStore extends BaseStore<"resourceId", HostMock> {
   constructor() {
     super("resourceId", [
@@ -462,6 +470,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
       registeredHostThree,
       registeredHostFourError,
       registeredHostFiveIdle,
+      registeredHostNoInstance,
     ]);
   }
 

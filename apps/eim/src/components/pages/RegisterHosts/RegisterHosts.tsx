@@ -36,9 +36,8 @@ const RegisterHosts = () => {
   const className = "register-hosts";
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { autoOnboard, autoProvision, hosts } = useAppSelector(
-    (state) => state.configureHost,
-  );
+  const { autoOnboard, autoProvision, hosts, hasMultiHostValidationError } =
+    useAppSelector((state) => state.configureHost);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] =
@@ -112,19 +111,31 @@ const RegisterHosts = () => {
                 autoOnboard,
               );
               setTimeout(() => {
+                if (successCount === 0) return;
                 const totalCount = Object.keys(unregisteredHosts).length;
+                const allSucceeded = totalCount === successCount;
                 dispatch(
                   setMessageBanner({
                     icon: "check-circle",
-                    text: `Sucessfully registered ${successCount} out of ${totalCount} host(s)`,
+                    text: allSucceeded
+                      ? "All hosts registered sucessfully."
+                      : `Sucessfully registered ${successCount} out of ${totalCount} host(s)`,
                     title: "Hosts Registered",
                     variant: MessageBannerAlertState.Success,
                   }),
                 );
-              }, 10);
-            } else navigate("../hosts/set-up-provisioning");
+                if (allSucceeded) {
+                  dispatch(reset());
+                  navigate("../hosts");
+                }
+              }, 20);
+            } else {
+              navigate("../hosts/set-up-provisioning");
+            }
           }}
-          isDisabled={Object.keys(hosts).length === 0}
+          isDisabled={
+            hasMultiHostValidationError || Object.keys(hosts).length === 0
+          }
         >
           {autoProvision ? "Continue" : "Register Hosts"}
         </Button>

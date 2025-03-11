@@ -9,8 +9,6 @@ import {
   CollapsableListItem,
   Flex,
   getActiveNavItem,
-  getBreadcrumbData,
-  LPBreadcrumb,
   MessageBanner as _MessageBanner,
   SidebarMain,
 } from "@orch-ui/components";
@@ -60,7 +58,6 @@ const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const activeItem = useAppSelector(getActiveNavItem);
-  const breadcrumbPieces = useAppSelector(getBreadcrumbData);
   const activePath = location.pathname;
 
   // EIM Notification system
@@ -109,8 +106,6 @@ const Layout = () => {
                 : { margin: "-2rem", marginRight: "-2rem" }
             }
           >
-            <LPBreadcrumb breadcrumbPieces={breadcrumbPieces} />
-
             {messageBanner && (
               <_MessageBanner
                 {...messageBanner}

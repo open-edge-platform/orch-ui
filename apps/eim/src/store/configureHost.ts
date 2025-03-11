@@ -39,6 +39,7 @@ export interface HostConfigForm {
   hosts: { [id: string]: HostData };
   autoOnboard: boolean;
   autoProvision: boolean;
+  hasMultiHostValidationError;
 }
 
 export const initialState: HostConfigForm = {
@@ -51,6 +52,7 @@ export const initialState: HostConfigForm = {
     isGlobalSbFdeActive: true,
     hasValidationError: false,
   },
+  hasMultiHostValidationError: false,
   hosts: {},
   autoOnboard: false,
   autoProvision: false,
@@ -141,6 +143,19 @@ export const configureHost = createSlice({
     reset() {
       return initialState;
     },
+    resetMultiHostForm(state) {
+      state.autoOnboard = false;
+      state.autoProvision = false;
+      state.formStatus = {
+        currentStep: HostConfigSteps["Select Site"],
+        enableNextBtn: false,
+        enablePrevBtn: true,
+        globalOsValue: "",
+        globalIsSbAndFdeEnabled: false,
+        isGlobalSbFdeActive: true,
+        hasValidationError: false,
+      };
+    },
     // host related
     setHostErrorMessage(
       state,
@@ -170,29 +185,10 @@ export const configureHost = createSlice({
       const { hosts } = state;
       const { host: newHost } = action.payload;
 
-      //Get rid of the temporary version that used name as identifier
-      //Since API completed there is a resourceId to use
-      delete state.hosts[newHost.name];
-
-      hosts[newHost.resourceId!] = {
-        name: newHost.name,
-        siteId: newHost.site?.resourceId,
-        site: newHost.site,
-        metadata: newHost.metadata,
-        uuid: newHost.uuid,
-        inheritedMetadata: newHost.inheritedMetadata,
-        instance: newHost.instance,
-        serialNumber: newHost.serialNumber,
+      hosts[newHost.name] = {
+        ...hosts[newHost.name],
         resourceId: newHost.resourceId,
       };
-
-      // If the Instance existed in the API, the Host already had a OS
-      if (newHost.instance) {
-        hosts[newHost.resourceId!] = {
-          ...hosts[newHost.resourceId!],
-          originalOs: newHost.instance.os,
-        };
-      }
     },
     setHosts(state, action: PayloadAction<{ hosts: eim.HostRead[] }>) {
       const { hosts } = state;
@@ -308,6 +304,7 @@ export const configureHost = createSlice({
     },
     setSite(state, action: PayloadAction<{ site: eim.SiteRead }>) {
       const { hosts } = state;
+
       Object.values(hosts).forEach((hd) => {
         hd.siteId = action.payload.site.resourceId;
         hd.site = action.payload.site;
@@ -322,6 +319,9 @@ export const configureHost = createSlice({
     },
     setIsGlobalSbFdeActive(state, action: PayloadAction<boolean>) {
       state.formStatus.isGlobalSbFdeActive = action.payload;
+    },
+    setMultiHostValidationError(state, action: PayloadAction<boolean>) {
+      state.hasMultiHostValidationError = action.payload;
     },
     setValidationError(state, action: PayloadAction<boolean>) {
       state.formStatus.hasValidationError = action.payload;
@@ -339,6 +339,7 @@ export const {
   goToNextStep,
   goToPrevStep,
   reset,
+  resetMultiHostForm,
   setNewRegisteredHosts,
   updateNewRegisteredHost,
   setHosts,
@@ -355,6 +356,7 @@ export const {
   setIsGlobalSbFdeActive,
   setHostErrorMessage,
   setValidationError,
+  setMultiHostValidationError,
   setAutoOnboardValue,
   setAutoProvisionValue,
 } = configureHost.actions;

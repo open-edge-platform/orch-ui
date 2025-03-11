@@ -370,7 +370,6 @@ export const handlers = [
     const deviceUuid = req.url.searchParams.get("uuid");
     const metadataString = req.url.searchParams.get("metadata");
     const filter = req.url.searchParams.get("filter");
-
     let hosts = hostStore.list({
       siteID,
       deviceUuid,
@@ -421,7 +420,6 @@ export const handlers = [
     if (hosts.length > 0) {
       hosts = randomizeHostList(hosts) as HostMock[];
     }
-
     return await res(
       ctx.status(200),
       ctx.json<eim.GetV1ProjectsByProjectNameComputeHostsApiResponse>({

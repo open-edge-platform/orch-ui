@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Flex, Table, TableColumn } from "@orch-ui/components";
+import { Flex } from "@orch-ui/components";
 import { Icon } from "@spark-design/react";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
@@ -29,65 +29,92 @@ interface IProcessStat {
   osTypes: IoS;
   securityFeature: ISecurityFeature;
 }
-
-export const HostConfigReview = () => {
+export interface HostConfigReviewProps {
+  hostResults: Map<string, string | true>;
+}
+export const HostConfigReview = ({ hostResults }: HostConfigReviewProps) => {
   const cy = { "data-cy": dataCy };
   const tableRef = useRef(null);
-  const [expanded, setExpanded] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(true);
 
   const hosts = useAppSelector(selectHosts);
 
   const hostsValues: HostData[] = Object.values(hosts);
-  const columns: TableColumn<HostData>[] = [
-    {
-      Header: "Name",
-      accessor: "name",
-    },
-    {
-      Header: "Serial Number",
-      accessor: "serialNumber",
-    },
-    {
-      Header: "OS Profile",
-      accessor: (item) => {
-        if (item.instance?.os) {
-          return item.instance.os.name;
-        } else {
-          return "-";
-        }
-      },
-    },
-    {
-      Header: "Security Configuration",
-      accessor: (item) => {
-        if (item.instance?.os) {
-          return item.instance.os.securityFeature;
-        } else {
-          return "-";
-        }
-      },
-    },
-  ];
 
-  const details = (
-    <CSSTransition
-      appear={true}
-      in={expanded}
-      nodeRef={tableRef}
-      classNames="slide-down"
-      addEndListener={(done: () => void) => done}
-    >
-      <div ref={tableRef} className="slide-down">
-        <div className="scrollable-table-container">
-          <Table
-            dataCy="hostConfigReviewTable"
-            columns={columns}
-            data={hostsValues}
-          />
+  const hasFailedToProvision = (host: HostData) => {
+    return typeof hostResults.get(host.name) === "string" ? 1 : 0;
+  };
+  const details = () => {
+    const sortedHostResults = hostsValues.sort((a, b) => {
+      const aHasFailed: number = hasFailedToProvision(a);
+      const bHasFailed: number = hasFailedToProvision(b);
+      return bHasFailed - aHasFailed;
+    });
+
+    return (
+      <CSSTransition
+        appear={true}
+        in={expanded}
+        nodeRef={tableRef}
+        classNames="slide-down"
+        addEndListener={(done: () => void) => done}
+      >
+        <div ref={tableRef} className="slide-down">
+          <div className="scrollable-table-container">
+            <table className="host-provision-review-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Serial Number</th>
+                  <th>Os Profile</th>
+                  <th>Security Configuration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedHostResults.map((host) => {
+                  const rowContent = (
+                    <tr>
+                      <td>{host.name}</td>
+                      <td>{host.serialNumber}</td>
+                      <td>{host.instance?.os ? host.instance.os.name : "-"}</td>
+                      <td>
+                        {host.instance?.os
+                          ? host.instance.os.securityFeature
+                          : "-"}
+                      </td>
+                    </tr>
+                  );
+                  const hostResult = hostResults.get(host.name);
+                  let resultContent: React.ReactElement = <></>;
+                  if (typeof hostResult === "string") {
+                    resultContent = (
+                      <tr className="failed-message">
+                        <td colSpan={4}>API Error: {hostResult}</td>
+                      </tr>
+                    );
+                  }
+                  if (hostResult === true) {
+                    resultContent = (
+                      <tr className="success-message">
+                        <td colSpan={4}>Host successfully registered.</td>
+                      </tr>
+                    );
+                  }
+
+                  return (
+                    <>
+                      {rowContent}
+                      {resultContent}
+                    </>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </CSSTransition>
-  );
+      </CSSTransition>
+    );
+  };
 
   const processStats = (items: HostData[]): IProcessStat => {
     const osTypes: IoS = {};
@@ -188,7 +215,7 @@ export const HostConfigReview = () => {
           </div>
         </Flex>
       </div>
-      {details}
+      {details()}
     </div>
   );
 };

@@ -20,4 +20,9 @@
       margin-left: auto;
     }
   }
+
+  //The second button provides the same function as primary, don't need two
+  .spark-message-banner .spark-button-group .spark-button-secondary {
+    display: none;
+  }
 }

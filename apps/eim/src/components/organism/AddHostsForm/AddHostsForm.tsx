@@ -8,7 +8,10 @@ import { Button, Icon, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { setNewRegisteredHosts } from "../../../store/configureHost";
+import {
+  setMultiHostValidationError,
+  setNewRegisteredHosts,
+} from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import "./AddHostsForm.scss";
 
@@ -30,6 +33,12 @@ export enum ErrorMessages {
 }
 
 export const dataCy = "addHostsForm";
+
+const defaultHostFormItem: AddHostsFormItem = {
+  name: "",
+  serialNumber: "",
+  uuid: "",
+};
 const AddHostsForm = () => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
@@ -40,11 +49,10 @@ const AddHostsForm = () => {
     getValues,
     setValue,
     resetField,
-    reset,
     trigger,
     formState: { errors, isDirty },
   } = useForm<AddHostsFormItems>({
-    defaultValues: { hosts: [{ name: "", serialNumber: "", uuid: "" }] },
+    defaultValues: { hosts: [defaultHostFormItem] },
     mode: "onChange",
   });
 
@@ -69,15 +77,21 @@ const AddHostsForm = () => {
   const { fields, append, remove } = useFieldArray({ name: "hosts", control });
 
   const className = "add-hosts-form";
-  const canAddHost = Object.keys(errors).length === 0;
+  const hasErrors = Object.keys(errors).length > 0;
+  //Need to constantly check this to alert outside world (
+  useEffect(() => {
+    dispatch(setMultiHostValidationError(hasErrors));
+  }, [hasErrors]);
 
   useEffect(() => {
+    const hostKeys = Object.keys(hosts);
     //grab all the hosts that have a resourceId, aka succesfully registered via API
     const registered: string[] = [];
-    Object.keys(hosts).forEach((key) => {
+    hostKeys.forEach((key) => {
       const host = hosts[key];
       if (host.resourceId) registered.push(host.name);
     });
+
     //find the matching names from the fields indexes on form
     const registeredIndexes: number[] = [];
     fields.forEach((field, index) => {
@@ -85,8 +99,38 @@ const AddHostsForm = () => {
     });
     //delete these indexes
     remove(registeredIndexes);
-    reset(undefined, { keepValues: true });
+
+    //if you are left with empty row count, you need to add the default back in
+    if (registeredIndexes.length === fields.length) {
+      append(defaultHostFormItem);
+    }
   }, [hosts]);
+
+  const formSubmissionCheck = () => {
+    const lastIndex = fields.length - 1;
+
+    //Prevent adding blank entry host
+    trigger([
+      `hosts.${lastIndex}.name`,
+      `hosts.${lastIndex}.serialNumber`,
+      `hosts.${lastIndex}.uuid`,
+    ]).then(() => {
+      const hasErrors = Object.keys(errors).length > 0;
+      if (hasErrors) {
+        dispatch(setMultiHostValidationError(true));
+        return;
+      }
+      append(defaultHostFormItem);
+      dispatchNewHosts();
+
+      setTimeout(() => {
+        const el = document.querySelector(
+          `#host-${fields.length}-name`,
+        ) as HTMLElement;
+        if (el) el.focus();
+      }, 0);
+    });
+  };
 
   return (
     <div {...cy} className={className}>
@@ -105,6 +149,7 @@ const AddHostsForm = () => {
           const isLastIndex = lastIndex === index;
           const rowHasReportedError =
             hosts && hosts[field.name] && hosts[field.name].error;
+
           return (
             <>
               <div
@@ -131,7 +176,7 @@ const AddHostsForm = () => {
                     },
                   }}
                   onChange={() => {
-                    if (!isLastIndex) dispatchNewHosts();
+                    dispatchNewHosts();
                   }}
                 />
                 <ReactHookFormTextField
@@ -146,7 +191,7 @@ const AddHostsForm = () => {
                   inputsProperty={`hosts.${index}.serialNumber`}
                   onChange={() => {
                     trigger(`hosts.${index}.uuid`);
-                    if (!isLastIndex) dispatchNewHosts();
+                    dispatchNewHosts();
                   }}
                   validate={{
                     noMaxLengthExceeded: (value: string) =>
@@ -172,7 +217,7 @@ const AddHostsForm = () => {
                       hosts.splice(index, 1); // dont compare against itself
                       const hasDuplicate = hosts
                         .map((host: AddHostsFormItem) => host.serialNumber)
-                        .some((key: string) => key === value);
+                        .some((key: string) => key !== "" && key === value);
                       return !hasDuplicate || ErrorMessages.SerialNumberExists;
                     },
                   }}
@@ -187,7 +232,7 @@ const AddHostsForm = () => {
                   inputsProperty={`hosts.${index}.uuid`}
                   onChange={() => {
                     trigger(`hosts.${index}.serialNumber`);
-                    if (!isLastIndex) dispatchNewHosts();
+                    dispatchNewHosts();
                   }}
                   validate={{
                     require: (value: string) => {
@@ -217,11 +262,7 @@ const AddHostsForm = () => {
                   onPress={() => {
                     if (isLastIndex) {
                       resetField(`hosts.${lastIndex}`);
-                      setValue(`hosts.${lastIndex}`, {
-                        name: "",
-                        serialNumber: "",
-                        uuid: "",
-                      });
+                      setValue(`hosts.${lastIndex}`, defaultHostFormItem);
                     } else {
                       removeHosts(index);
                       dispatchNewHosts();
@@ -247,29 +288,8 @@ const AddHostsForm = () => {
         type="button"
         variant={ButtonVariant.Primary}
         size={ButtonSize.Large}
-        isDisabled={!canAddHost || !isDirty}
-        onPress={() => {
-          const lastIndex = fields.length - 1;
-
-          //Prevent adding blank entry host
-          trigger([
-            `hosts.${lastIndex}.name`,
-            `hosts.${lastIndex}.serialNumber`,
-            `hosts.${lastIndex}.uuid`,
-          ]).then(() => {
-            const hasErrors = Object.keys(errors).length > 0;
-            if (hasErrors) return;
-            append({ name: "", serialNumber: "", uuid: "" });
-            dispatchNewHosts();
-
-            setTimeout(() => {
-              const el = document.querySelector(
-                `#host-${fields.length}-name`,
-              ) as HTMLElement;
-              if (el) el.focus();
-            }, 0);
-          });
-        }}
+        isDisabled={hasErrors || !isDirty}
+        onPress={formSubmissionCheck}
       >
         <Icon icon="plus" />
       </Button>

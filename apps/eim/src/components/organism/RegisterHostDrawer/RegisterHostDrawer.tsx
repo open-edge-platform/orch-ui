@@ -75,7 +75,7 @@ export const RegisterHostDrawer = ({
     })
       .unwrap()
       .then(() => {
-        showSuccessMessageBanner(dispatch, "Saved registeed host.");
+        showSuccessMessageBanner(dispatch, "Saved registered host.");
         onHideDrawer();
       })
       .catch((error: { data: any }) => {

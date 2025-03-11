@@ -476,12 +476,7 @@ const HostEdit = () => {
                 variant="primary"
                 data-cy="cancelHostButton"
                 onPress={() => {
-                  navigate(
-                    `../../../${
-                      host && host.site ? "host" : "unconfigured-host"
-                    }/${host.resourceId}`,
-                    { relative: "path" },
-                  );
+                  navigate("../../hosts");
                 }}
               >
                 Cancel

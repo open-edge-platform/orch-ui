@@ -30,10 +30,14 @@ import {
   goToNextStep,
   goToPrevStep,
   HostConfigSteps,
+  HostData,
+  removeHost,
+  resetMultiHostForm,
   selectContainsHosts,
   selectFirstHost,
   selectHostConfigForm,
   setSite,
+  updateNewRegisteredHost,
 } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { resetTree } from "../../../store/locations";
@@ -44,12 +48,27 @@ import { AddHostLabels } from "../../organism/hostConfigure/AddHostLabels/AddHos
 import { HostsDetails } from "../../organism/hostConfigure/HostsDetails/HostsDetails";
 import { RegionSite } from "../../organism/hostConfigure/RegionSite/RegionSite";
 import "./HostConfig.scss";
+import {
+  createHostInstance,
+  createRegisteredHost,
+  isHostRead,
+  updateHostDetails,
+} from "./HotConfig.utils";
 
 export const dataCy = "hostConfig";
 
 interface HostConfigProps {
   // these props are used for testing purposes
   hasRole?: (roles: string[]) => boolean;
+}
+
+export enum HostProvisiongProcedures {
+  Idle,
+  Registering,
+  Updating,
+  Instantiating,
+  Results,
+  BackToHosts,
 }
 
 export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
@@ -62,6 +81,9 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     hosts: Set<string>;
     message?: string;
   }>();
+
+  const [provisioningProcedure, setProvisioningProcedure] =
+    useState<HostProvisiongProcedures>(HostProvisiongProcedures.Idle);
 
   // stepper management
   const steps: StepperStep[] = Object.keys(HostConfigSteps)
@@ -83,28 +105,143 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     hosts,
     formStatus: { currentStep, enableNextBtn, enablePrevBtn },
   } = useAppSelector(selectHostConfigForm);
-  const { autoProvision } = useAppSelector((store) => store.configureHost);
+  const {
+    autoProvision,
+    autoOnboard,
+    hosts: hostsInRedux,
+  } = useAppSelector((store) => store.configureHost);
+
   const containsHosts = useAppSelector(selectContainsHosts);
   const firstHost =
     Object.keys(hosts).length > 0 ? useAppSelector(selectFirstHost) : undefined;
   const preselectedSite = firstHost?.site as eim.SiteRead;
-  useEffect(() => {
-    if (preselectedSite) {
-      dispatch(setSite({ site: preselectedSite }));
-    }
-  }, [preselectedSite]);
 
+  // host register - used when coming in from 'autoProvision' flow, host will not exist
+  const [registerHost] =
+    eim.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
   // host update
   const [patchHost] =
     eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
   const [postInstance] =
     eim.usePostV1ProjectsByProjectNameComputeInstancesMutation();
+
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
     useState<boolean>(false);
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [createdInstances, setCreatedInstances] = useState<Set<string>>(
     new Set(),
   );
+  const [hostResults, setHostResults] = useState<Map<string, string | true>>(
+    new Map(),
+  );
+
+  const registerAllHosts = async () => {
+    for (const host of Object.values<HostData>(hostsInRedux)) {
+      //if it was already registered, skip this
+      if (hostResults.get(host.name) === true) continue;
+      const result = await createRegisteredHost(
+        host,
+        autoOnboard,
+        registerHost,
+      );
+      if (isHostRead(result)) {
+        await dispatch(updateNewRegisteredHost({ host: result })); //updating the redux store content
+      } else {
+        setHostResults(
+          (previous) =>
+            new Map(
+              previous.set(
+                host.name,
+                result || "Unknown Error while registering",
+              ),
+            ),
+        );
+      }
+    }
+  };
+
+  const updateAllHostsDetails = async () => {
+    for (const host of Object.values<HostData>(hostsInRedux)) {
+      if (!host.resourceId || hostResults.get(host.name) === true) continue;
+      const result = await updateHostDetails(host, patchHost);
+      if (!isHostRead(result)) {
+        setHostResults(
+          (previous) =>
+            new Map(
+              previous.set(host.name, result || "Unknown Error while updating"),
+            ),
+        );
+      }
+    }
+  };
+
+  const createAllHostInstances = async () => {
+    for (const host of Object.values(hostsInRedux)) {
+      if (!host.resourceId || hostResults.get(host.name) === true) continue;
+      const result = await createHostInstance(
+        host,
+        setCreatedInstances,
+        postInstance,
+      );
+
+      if (!isHostRead(result)) {
+        setHostResults(
+          (previous) =>
+            new Map(
+              previous.set(
+                host.name,
+                result || "Unknown Error creating instance",
+              ),
+            ),
+        );
+      } else {
+        setHostResults((previous) => new Map(previous.set(host.name, true)));
+      }
+    }
+  };
+
+  const displayProvisioningResults = () => {
+    let resultsHaveErrors = false;
+    for (const value of hostResults.values()) {
+      // a.k.a an error message detected in the results
+      if (typeof value === "string") {
+        resultsHaveErrors = true;
+        break;
+      }
+    }
+    if (resultsHaveErrors) {
+      dispatch(
+        setMessageBanner({
+          icon: "check-circle",
+          text: "Not all hosts were provisioned.  See results below for more information.",
+          title: "Setup complete",
+          variant: MessageBannerAlertState.Error,
+        }),
+      );
+      setProvisioningProcedure(HostProvisiongProcedures.Idle);
+    } else {
+      dispatch(
+        setMessageBanner({
+          icon: "check-circle",
+          text: "Hosts successfully registered. Provisioning will start once the hosts are connected.",
+          title: "Success",
+          variant: MessageBannerAlertState.Success,
+        }),
+      );
+
+      if (
+        RuntimeConfig.isEnabled("CLUSTER_ORCH") &&
+        Object.values(hosts).length === 1 &&
+        hasRole([Role.CLUSTERS_WRITE])
+      ) {
+        setProvisioningProcedure(HostProvisiongProcedures.BackToHosts);
+        setClusterConfirmationOpen(true);
+      } else {
+        //dispatch(reset());
+        setProvisioningProcedure(HostProvisiongProcedures.BackToHosts);
+      }
+    }
+  };
 
   const updateHost = async () => {
     const failedHosts = new Set<string>();
@@ -175,7 +312,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         setClusterConfirmationOpen(true);
       } else {
         setTimeout(() => {
-          navigate("../../unassigned-hosts", { relative: "path" });
+          navigate("../../hosts", { relative: "path" });
         }, 500);
       }
     }
@@ -183,11 +320,17 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
 
   // form buttons
   const handlePrev = () => dispatch(goToPrevStep());
-  const handleNext = () => {
+  const handleNext = async () => {
     switch (currentStep) {
       case HostConfigSteps["Complete Configuration"]:
         // TODO save Host metadata
-        updateHost();
+        if (autoProvision) {
+          //Check if anything is already registered, if so remove it from list
+          hostResults.forEach((value, key) => {
+            if (value === true) dispatch(removeHost(key));
+          });
+          setProvisioningProcedure(HostProvisiongProcedures.Registering);
+        } else updateHost();
         break;
     }
     dispatch(goToNextStep());
@@ -198,17 +341,50 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     navigate("../../hosts", { relative: "path" });
   };
 
+  useEffect(() => {
+    if (preselectedSite) {
+      dispatch(setSite({ site: preselectedSite }));
+    }
+  }, [preselectedSite]);
+
+  useEffect(() => {
+    (async () => {
+      switch (provisioningProcedure) {
+        case HostProvisiongProcedures.Registering:
+          await registerAllHosts();
+          setProvisioningProcedure(HostProvisiongProcedures.Updating);
+          break;
+        case HostProvisiongProcedures.Updating:
+          await updateAllHostsDetails();
+          setProvisioningProcedure(HostProvisiongProcedures.Instantiating);
+          break;
+        case HostProvisiongProcedures.Instantiating:
+          await createAllHostInstances();
+          setProvisioningProcedure(HostProvisiongProcedures.Results);
+          break;
+        case HostProvisiongProcedures.Results:
+          displayProvisioningResults();
+          break;
+        case HostProvisiongProcedures.BackToHosts:
+          dispatch(resetMultiHostForm());
+          navigate("../../hosts?reset"); //could do route param
+          break;
+      }
+    })();
+  }, [provisioningProcedure]);
+
   if (!containsHosts) {
     return (
-      <div {...cy}>
+      <div {...cy} className="host-config">
         <MessageBanner
           data-cy="missingHostMessage"
           variant="info"
           showActionButtons
-          messageTitle="No Host has been selected for configuration"
-          messageBody="Please go to the Onboarded Host page and select (at least) one"
+          messageTitle="No Host has been selected for provisioning"
+          messageBody="Please go to the Hosts page to select hosts."
           onClickPrimary={goToListPage}
           onClickSecondary={goToListPage}
+
           // FIXME the MessageBanner either shows two buttons or none
           // primaryText="Go to Hosts list"
           // onClickPrimary={goToListPage}
@@ -216,12 +392,17 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
       </div>
     );
   }
+
+  const nextButtonText = () => {
+    if (provisioningProcedure !== HostProvisiongProcedures.Idle)
+      return "Provisioning...";
+    return currentStep === steps.length - 1 ? "Provision" : "Next";
+  };
+
   return (
     <div {...cy} className="host-config">
       <Flex cols={[6, 6]}>
-        <Heading semanticLevel={4}>
-          {autoProvision ? "Set Up Provisioning" : "Configure Host"}
-        </Heading>
+        <Heading semanticLevel={4}>Set up Provisioning</Heading>
       </Flex>
       <Stepper
         steps={steps}
@@ -254,7 +435,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           <AddHostLabels />
         )}
         {currentStep === HostConfigSteps["Complete Configuration"] && (
-          <HostConfigReview />
+          <HostConfigReview hostResults={hostResults} />
         )}
       </div>
       <div className="host-config__btn_container">
@@ -285,9 +466,12 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
             data-cy="next"
             size={ButtonSize.Large}
             onPress={handleNext}
-            isDisabled={!enableNextBtn}
+            isDisabled={
+              !enableNextBtn ||
+              provisioningProcedure !== HostProvisiongProcedures.Idle
+            }
           >
-            {currentStep === steps.length - 1 ? "Configure" : "Next"}
+            {nextButtonText()}
           </Button>
         </ButtonGroup>
       </div>

@@ -91,8 +91,7 @@ const DeauthorizeHostStandalone = ({
       })
         .unwrap()
         .then(() => {
-          //setErrorInfo();  Why is this being called here ?
-          navigate(`${basePath}../deauthorized-hosts`, { relative: "path" });
+          navigate(`${basePath}../hosts`, { relative: "path" });
         });
     } catch (e) {
       setErrorInfo(e as LpInternalError);
