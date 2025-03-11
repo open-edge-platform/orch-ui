@@ -208,6 +208,8 @@ export const assignedWorkloadHostTwo: HostMock = {
   },
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
+  onboardingStatusIndicator: "STATUS_INDICATION_IDLE",
+  onboardingStatus: "onboarded",
   hostStatus: "Provisioned",
   hostStatusIndicator: "STATUS_INDICATION_IDLE",
   timestamps: {

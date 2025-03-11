@@ -25,6 +25,8 @@ export type HostGenericStatuses = {
   updateStatus?: GenericStatus;
   /** indicator: host.registrationStatusIndicator, message: host.registrationStatus, timestamp: host.registrationStatusTimestamp */
   registrationStatus?: GenericStatus;
+  /** indicator: instance.trustedAttestationStatus, message: instance.trustedAttestationStatus, timestamp: instance.trustedAttestationStatusTimestamp */
+  trustedAttestationStatus?: GenericStatus;
 };
 
 export const hostStatusIndicatorToIconStatus = (
@@ -106,7 +108,22 @@ export const hostToStatuses = (
         timestamp: instance.updateStatusTimestamp,
       };
     }
+
+    /*
+    by default trustedAttestationStatus is empty in which case
+    "Not Enabled" has to be shown
+    */
+    hgs.trustedAttestationStatus = {
+      indicator:
+        instance.trustedAttestationStatusIndicator ??
+        "STATUS_INDICATION_UNSPECIFIED",
+      message: instance.trustedAttestationStatus
+        ? getMessageByGenericStatus(instance.trustedAttestationStatus)
+        : "Not Enabled",
+      timestamp: instance.trustedAttestationStatusTimestamp,
+    };
   }
+
   return hgs;
 };
 
@@ -173,6 +190,9 @@ export enum WorkloadMemberKind {
 export const hostStatusFields: FieldLabels<HostGenericStatuses> = {
   hostStatus: {
     label: "Host",
+  },
+  trustedAttestationStatus: {
+    label: "Trusted Compute",
   },
   instanceStatus: {
     label: "Software(OS/Agents)",

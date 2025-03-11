@@ -15,7 +15,8 @@ type GenericStatusType =
   | "onboardingStatus"
   | "instanceStatus"
   | "provisioningStatus"
-  | "updateStatus";
+  | "updateStatus"
+  | "trustedAttestationStatus";
 class HostStatusPopoverPom extends CyPom<Selectors> {
   public aggregateStatusPom = new AggregatedStatusesPom();
   public popoverPom = new PopoverPom();

@@ -95,6 +95,10 @@ export const instanceTwo: enhancedEimSlice.InstanceReadModified = {
     },
   ],
   desiredState: "INSTANCE_STATE_RUNNING",
+  provisioningStatusIndicator: "STATUS_INDICATION_IDLE",
+  provisioningStatus: "Provisioned",
+  trustedAttestationStatusIndicator: "STATUS_INDICATION_ERROR",
+  trustedAttestationStatus: "Failed: PCR Measurement Mismatch",
 };
 
 export const instanceThree: enhancedEimSlice.InstanceReadModified = {
@@ -115,6 +119,8 @@ export const instanceThree: enhancedEimSlice.InstanceReadModified = {
     },
   ],
   desiredState: "INSTANCE_STATE_RUNNING",
+  trustedAttestationStatusIndicator: "STATUS_INDICATION_IDLE",
+  trustedAttestationStatus: "Verified",
 };
 
 export const instanceFour: enhancedEimSlice.InstanceReadModified = {

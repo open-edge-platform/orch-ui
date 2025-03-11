@@ -6,6 +6,8 @@ import { PopoverPom } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
 import {
   assignedWorkloadHostOne as hostOne,
+  assignedWorkloadHostThree,
+  assignedWorkloadHostTwo,
   instanceOne,
   registeredHostOne,
 } from "@orch-ui/utils";
@@ -85,6 +87,41 @@ describe("<HostStatusPopover/>", () => {
     popOverPom.el.popoverContent.should("be.visible");
     popOverPom.el.closePopover.click();
     popOverPom.el.popoverContent.should("not.exist");
+  });
+
+  describe("Should render trusted compute status", () => {
+    it("when instance does not have trusted compute enabled", () => {
+      cy.mount(<HostStatusPopover data={hostOne} />);
+      cyGet("popover").click();
+      popOverPom.el.popoverContent.should("be.visible");
+      pom
+        .getIconByStatus("trustedAttestationStatus")
+        .find(".status-icon .icon")
+        .should("have.class", "icon-unknown");
+    });
+
+    it("when instance has trusted compute enabled", () => {
+      cy.mount(<HostStatusPopover data={assignedWorkloadHostThree} />);
+      cyGet("popover").click();
+      popOverPom.el.popoverContent.should("be.visible");
+      pom
+        .getIconByStatus("trustedAttestationStatus")
+        .find(".status-icon .icon")
+        .should("have.class", "icon-ready");
+    });
+
+    it("when instance has trusted compute error", () => {
+      cy.mount(<HostStatusPopover data={assignedWorkloadHostTwo} />);
+      cyGet("popover").click();
+      popOverPom.el.popoverContent.should("be.visible");
+      pom
+        .getIconByStatus("trustedAttestationStatus")
+        .find(".status-icon .icon")
+        .should("have.class", "icon-error");
+      pom
+        .getIconByStatus("trustedAttestationStatus")
+        .contains("Failed: PCR Measurement Mismatch");
+    });
   });
 
   describe("Should render aggregate status", () => {
@@ -255,6 +292,21 @@ describe("<HostStatusPopover/>", () => {
         `${host.name} is not connected`,
         `Waiting for ${host.name} to connect`,
       );
+    });
+
+    it("when instance has trusted compute error", () => {
+      cy.mount(<HostStatusPopover data={assignedWorkloadHostTwo} />);
+      pom.aggregateStatusPom.root.should(
+        "contain",
+        "Failed: PCR Measurement Mismatch",
+      );
+      cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
+
+      cyGet("popover").click();
+      popOverPom.el.popoverContent.should("be.visible");
+      pom
+        .getIconByStatus("trustedAttestationStatus")
+        .contains("Failed: PCR Measurement Mismatch");
     });
   });
 });
