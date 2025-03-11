@@ -228,7 +228,6 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           variant: MessageBannerAlertState.Success,
         }),
       );
-
       if (
         RuntimeConfig.isEnabled("CLUSTER_ORCH") &&
         Object.values(hosts).length === 1 &&
@@ -237,7 +236,6 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         setProvisioningProcedure(HostProvisiongProcedures.BackToHosts);
         setClusterConfirmationOpen(true);
       } else {
-        //dispatch(reset());
         setProvisioningProcedure(HostProvisiongProcedures.BackToHosts);
       }
     }
@@ -332,8 +330,10 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           setProvisioningProcedure(HostProvisiongProcedures.Registering);
         } else updateHost();
         break;
+      default:
+        dispatch(goToNextStep());
+        break;
     }
-    dispatch(goToNextStep());
   };
 
   const goToListPage = () => {

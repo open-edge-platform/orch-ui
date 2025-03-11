@@ -8,7 +8,8 @@ import { ContextSwitcher } from "@orch-ui/components";
 import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { reset } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   buildFilter,
@@ -27,6 +28,7 @@ const Hosts = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const className = "hosts";
 
   const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
@@ -35,6 +37,9 @@ const Hosts = () => {
 
   //Triggers the initial query of the Hosts table
   useEffect(() => {
+    if (location.search.includes("?reset")) {
+      dispatch(reset());
+    }
     dispatch(buildFilter());
   }, []);
 
