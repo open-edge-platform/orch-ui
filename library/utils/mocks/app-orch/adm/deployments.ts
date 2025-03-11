@@ -5,7 +5,7 @@
 
 import { adm } from "@orch-ui/apis";
 import { BaseStore } from "../../baseStore";
-import { clusterFiveId, clusterThreeId } from "../../cluster-orch";
+import { clusterFiveName, clusterThreeName } from "../../cluster-orch";
 import {
   customersKey,
   customersOne,
@@ -300,10 +300,10 @@ export const deploymentEditManual: adm.DeploymentRead = {
   },
   createTime: "2025-02-07T12:29:10Z",
   deploymentType: "targeted",
-  targetClusters: [clusterThreeId, clusterFiveId].flatMap((clusterId) =>
+  targetClusters: [clusterThreeName, clusterFiveName].flatMap((clusterName) =>
     packageForEditDeployment.applicationReferences.map((ar) => ({
       appName: ar.name,
-      clusterId,
+      clusterId: clusterName,
     })),
   ),
 };
