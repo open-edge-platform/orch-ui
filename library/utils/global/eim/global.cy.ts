@@ -6,6 +6,8 @@
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne,
+  assignedWorkloadHostThree,
+  assignedWorkloadHostTwo,
   instanceOne,
   instanceTwo,
   regionPortland,
@@ -18,6 +20,7 @@ import { IRuntimeConfig } from "../../runtime-config/runtime-config";
 import { getObservabilityUrl } from "../global";
 import {
   generateClusterName,
+  getTrustedComputeCompatibility,
   inheritedScheduleToString,
   isOSUpdateAvailable,
 } from "./global";
@@ -123,6 +126,32 @@ describe("The Utils", () => {
     it("if NOT set, should return undefined", () => {
       window.__RUNTIME_CONFIG__.OBSERVABILITY_URL = "";
       expect(getObservabilityUrl()).to.equal(undefined);
+    });
+  });
+
+  describe("getTrustedComputeCompatibility", () => {
+    it("should return Compatible when Secure Boot and Full Disk Encryption are enabled and the host is onboarded and running", () => {
+      const result = getTrustedComputeCompatibility(assignedWorkloadHostOne);
+      expect(result).to.equal({
+        text: "Compatible",
+        tooltip: "This host has Secure Boot and Full Disk Encryption enabled.",
+      });
+    });
+
+    it("should return Not compatible when Secure Boot and Full Disk Encryption are disabled", () => {
+      const result = getTrustedComputeCompatibility(assignedWorkloadHostTwo);
+      expect(result).to.equal({
+        text: "Not compatible",
+        tooltip: "This host has Secure Boot and Full Disk Encryption disabled.",
+      });
+    });
+
+    it("should return Not compatible when the instance is not running", () => {
+      const result = getTrustedComputeCompatibility(assignedWorkloadHostThree);
+      expect(result).to.equal({
+        text: "Not compatible",
+        tooltip: "This host has Secure Boot and Full Disk Encryption disabled.",
+      });
     });
   });
 });

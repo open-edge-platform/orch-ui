@@ -26,6 +26,7 @@ const dataCySelectors = [
   "serial",
   "osProfiles",
   "site",
+  "trustedCompute",
   "provider",
   "licenseExpireDateString",
   "licenseNearExpiryNotice",

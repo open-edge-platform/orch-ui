@@ -6,7 +6,12 @@
 import { CyPom } from "@orch-ui/tests";
 import { dataCy } from "./HostsTableRowExpansionDetail";
 
-const dataCySelectors = ["hostName", "uuid", "cpuModel"] as const;
+const dataCySelectors = [
+  "hostName",
+  "uuid",
+  "cpuModel",
+  "trustedCompute",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class HostsTableRowExpansionDetailPom extends CyPom<Selectors> {

@@ -446,3 +446,36 @@ export const getCustomStatusOnIdleAggregation = (
   // other current statuses
   return hostStateMapping[hostCurrentState];
 };
+
+export type TrustedComputeCompatible = { text: string; tooltip: string };
+
+/**
+ * Determines the trusted compute compatibility of a given host.
+ *
+ * @param host - The host object to check for trusted compute compatibility.
+ * @returns An object indicating whether the host is compatible or not, along with a tooltip message.
+ *
+ * The function checks if the host has Secure Boot and Full Disk Encryption enabled,
+ * and if the host is in the onboarded state and the instance is running.
+ * If all conditions are met, it returns an object with text "Compatible" and a corresponding tooltip.
+ * Otherwise, it returns an object with text "Not compatible" and a corresponding tooltip.
+ */
+export const getTrustedComputeCompatibility = (
+  host: eim.HostRead,
+): TrustedComputeCompatible => {
+  if (
+    host?.instance?.securityFeature ===
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION" &&
+    host.currentState === "HOST_STATE_ONBOARDED" &&
+    host.instance?.currentState == "INSTANCE_STATE_RUNNING"
+  )
+    return {
+      text: "Compatible",
+      tooltip: "This host has Secure Boot and Full Disk Encryption enabled.",
+    };
+  else
+    return {
+      text: "Not compatible",
+      tooltip: "This host has Secure Boot and Full Disk Encryption disabled.",
+    };
+};

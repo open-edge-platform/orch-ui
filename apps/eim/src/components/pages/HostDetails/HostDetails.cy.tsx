@@ -61,6 +61,7 @@ describe("HostDetails", () => {
       pom.el.serial.should("have.text", mockHost.serialNumber);
       pom.el.osProfiles.should("have.text", osTiber.name);
       pom.el.site.should("have.text", "Restaurant 02");
+      pom.el.trustedCompute.should("contain.text", "Not compatible");
       pom.el.provider.should("have.text", mockHost.provider?.name);
     });
 

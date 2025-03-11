@@ -19,5 +19,6 @@ describe("<HostsTableRowExpansionDetail/>", () => {
     pom.el.cpuModel.should("be.visible");
     pom.el.hostName.should("be.visible");
     pom.el.uuid.should("be.visible");
+    pom.el.trustedCompute.should("be.visible");
   });
 });

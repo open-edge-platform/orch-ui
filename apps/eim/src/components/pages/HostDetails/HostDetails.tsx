@@ -18,6 +18,7 @@ import {
   API_INTERVAL,
   checkAuthAndRole,
   CONSTANTS,
+  getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
   isHostAssigned,
@@ -25,6 +26,7 @@ import {
   parseError,
   Role,
   SharedStorage,
+  TrustedComputeCompatible,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -369,6 +371,10 @@ const HostDetails: React.FC = () => {
     }) ?? []),
   ];
 
+  /** Trusted compute mapping as per security */
+  const trustedComputeCompatible: TrustedComputeCompatible =
+    getTrustedComputeCompatibility(host);
+
   return (
     <div className={cssSelectorIhd} data-cy={dataCyIhd}>
       {/* HostDetails Heading */}
@@ -494,6 +500,20 @@ const HostDetails: React.FC = () => {
               <tr>
                 <td>Site</td>
                 <td data-cy="site">{site?.name || "-"}</td>
+              </tr>
+            )}
+            {host.instance && (
+              <tr>
+                <td>Trusted Compute</td>
+                <td data-cy="trustedCompute">
+                  {trustedComputeCompatible.text}
+                  <Icon
+                    className="tc-info-icon"
+                    data-cy="tc-info-icon"
+                    icon="information-circle"
+                    title={trustedComputeCompatible.tooltip}
+                  />
+                </td>
               </tr>
             )}
             {(host.provider?.providerVendor === "PROVIDER_VENDOR_LENOVO_LOCA" ||

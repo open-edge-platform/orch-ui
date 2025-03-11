@@ -5,6 +5,11 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
+import {
+  getTrustedComputeCompatibility,
+  TrustedComputeCompatible,
+} from "@orch-ui/utils";
+import { Icon } from "@spark-design/react";
 import { ScheduleMaintenanceStatusTag } from "../../molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
 import { OsConfig } from "../OsConfig/OsConfig";
 import "./HostsTableRowExpansionDetail.scss";
@@ -17,11 +22,12 @@ const HostsTableRowExpansionDetail = ({
 }: HostsTableRowExpansionDetailProps) => {
   const className = "hosts-table-row-expansion-detail";
   const cy = { "data-cy": dataCy };
-
+  const trustedComputeCompatible: TrustedComputeCompatible =
+    getTrustedComputeCompatibility(host);
   return (
     <div {...cy} className={className}>
       <Flex cols={[6, 6]}>
-        <Flex cols={[2, 10]}>
+        <Flex cols={[3, 9]}>
           <b className={`${className}__label`}>Host ID</b>
           <div className={`${className}__content`} data-cy="hostName">
             <span>{host.name}</span>
@@ -41,10 +47,20 @@ const HostsTableRowExpansionDetail = ({
             {host.cpuModel}
           </div>
         </Flex>
-        <Flex cols={[2, 10]}>
+        <Flex cols={[3, 9]}>
           <b className={`${className}__label`}>Latest Updates</b>
           <div className={`${className}__content`}>
             <OsConfig instance={host.instance} iconOnly />
+          </div>
+          <b className={`${className}__label`}>Trusted Compute</b>
+          <div className={`${className}__content`} data-cy="trustedCompute">
+            {trustedComputeCompatible.text}
+            <Icon
+              className="tc-info-icon"
+              data-cy="tc-info-icon"
+              icon="information-circle"
+              title={trustedComputeCompatible.tooltip}
+            />
           </div>
         </Flex>
       </Flex>
