@@ -192,7 +192,6 @@ const AlertDefinitionsList = () => {
       accessor: "values.duration",
       Cell: (table: { row: { original: omApi.AlertDefinition } }) => (
         <>
-          <h1>Hi</h1>
           <AlertDefinitionDuration
             alertDefinition={table.row.original}
             onChange={(value: string, unit: UnitType) => {
