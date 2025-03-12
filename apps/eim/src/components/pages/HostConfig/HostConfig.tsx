@@ -454,7 +454,10 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           <AddSshPublicKey localAccounts={localAccountsList?.localAccounts} />
         )}
         {currentStep === HostConfigSteps["Complete Configuration"] && (
-          <HostConfigReview hostResults={hostResults} />
+          <HostConfigReview
+            hostResults={hostResults}
+            localAccounts={localAccountsList?.localAccounts}
+          />
         )}
       </div>
       <div className="host-config__btn_container">

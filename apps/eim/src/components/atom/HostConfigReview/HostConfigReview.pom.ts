@@ -4,7 +4,7 @@
  */
 
 import { TablePom } from "@orch-ui/components";
-import { CyPom } from "@orch-ui/tests";
+import { Cy, CyPom } from "@orch-ui/tests";
 import { dataCy } from "./HostConfigReview";
 
 const dataCySelectors = [
@@ -22,5 +22,18 @@ export class HostConfigReviewPom extends CyPom<Selectors> {
   constructor(public rootCy: string = dataCy) {
     super(rootCy, [...dataCySelectors]);
     this.table = new TablePom(rootCy);
+  }
+
+  public getRows(): Cy {
+    return this.root.find("[data-cy='tableRow']");
+  }
+
+  public getColumnHeader(index: number): Cy {
+    return this.root.find("[data-cy='tableHeaderCell']").eq(index);
+  }
+
+  public getCell(row: number, column: number) {
+    const getRow = this.getRows().eq(row - 1);
+    return getRow.find("[data-cy='tableRowCell']").eq(column - 1);
   }
 }

@@ -7,6 +7,7 @@ import {
   assignedWorkloadHostOneId as hostOneId,
   assignedWorkloadHostTwo as hostTwo,
   assignedWorkloadHostTwoId as hostTwoId,
+  generateSshMocks,
   osRedHat,
   osUbuntu,
   siteRestaurantOne,
@@ -20,11 +21,17 @@ import { HostConfigReviewPom } from "./HostConfigReview.pom";
 const pom = new HostConfigReviewPom();
 describe("<HostConfigReview/>", () => {
   it("should render component", () => {
-    cy.mount(<HostConfigReview />);
+    cy.mount(
+      <HostConfigReview
+        hostResults={new Map()}
+        localAccounts={generateSshMocks(2)}
+      />,
+    );
     pom.root.should("exist");
   });
 
   describe("Reviewing step for two hosts", () => {
+    const localAccounts = generateSshMocks(2);
     const store = setupStore({
       configureHost: {
         formStatus: initialState.formStatus,
@@ -39,6 +46,7 @@ describe("<HostConfigReview/>", () => {
               os: osUbuntu,
               securityFeature:
                 "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+              localAccountID: localAccounts[0].resourceId,
             },
           },
           [hostTwoId]: {
@@ -55,11 +63,22 @@ describe("<HostConfigReview/>", () => {
         },
         autoOnboard: false,
         autoProvision: false,
+        hasMultiHostValidationError: false,
       },
     });
 
     beforeEach(() => {
-      cy.mount(<HostConfigReview />, { reduxStore: store });
+      // @ts-ignore
+      window.store = store;
+      cy.mount(
+        <HostConfigReview
+          hostResults={new Map()}
+          localAccounts={localAccounts}
+        />,
+        {
+          reduxStore: store,
+        },
+      );
     });
 
     it("Details of the 2 hosts must be rendered", () => {
@@ -71,22 +90,33 @@ describe("<HostConfigReview/>", () => {
       pom.el.security.contains("Disabled (1)");
     });
 
-    it("Should expand panel on click of chevron icon and show the table in expandsion panel", () => {
-      pom.el.hostConfigReviewTable.should("not.be.visible");
+    it("Expansion panel should be expanded by default and show the table in expansion panel", () => {
       pom.el.expandToggle.should("exist");
-      pom.el.expandToggle.click();
       pom.el.hostConfigReviewTable.should("be.visible");
     });
 
-    it("Should expand panel on click of chevron icon and show all selected hosts details in table", () => {
-      pom.el.expandToggle.should("exist");
-      pom.el.expandToggle.click();
+    it("Table in expansion panel should contain headers", () => {
       pom.el.hostConfigReviewTable.should("be.visible");
-      pom.table.getRows().should("have.length", 2);
-      pom.table.getColumnHeader(0).contains("Name");
-      pom.table.getColumnHeader(1).contains("Serial Number");
-      pom.table.getColumnHeader(2).contains("OS Profile");
-      pom.table.getColumnHeader(3).contains("Security Configuration");
+      pom.getRows().should("have.length", 2);
+      pom.getColumnHeader(0).contains("Name");
+      pom.getColumnHeader(1).contains("Serial Number and UUID");
+      pom.getColumnHeader(2).contains("OS Profile");
+      pom.getColumnHeader(3).contains("Security Configuration");
+      pom.getColumnHeader(4).contains("Public SSH Key");
+    });
+    it("should render appropriate values in columns", () => {
+      cy.window()
+        .its("store")
+        .invoke("getState")
+        .then((state) => {
+          pom.el.hostConfigReviewTable.should("be.visible");
+          const host = state.configureHost.hosts[hostOneId];
+          pom.getCell(1, 1).should("contain", host.name);
+          pom.getCell(1, 2).should("contain", host.serialNumber);
+          pom.getCell(1, 2).should("contain", host.uuid);
+          pom.getCell(1, 4).should("contain", host.instance.securityFeature);
+          pom.getCell(1, 5).should("contain", "all-groups-example-user");
+        });
     });
   });
 });

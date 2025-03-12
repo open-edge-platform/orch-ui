@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
+import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Icon } from "@spark-design/react";
 import { useRef, useState } from "react";
@@ -31,8 +32,12 @@ interface IProcessStat {
 }
 export interface HostConfigReviewProps {
   hostResults: Map<string, string | true>;
+  localAccounts: eim.LocalAccountRead[] | undefined;
 }
-export const HostConfigReview = ({ hostResults }: HostConfigReviewProps) => {
+export const HostConfigReview = ({
+  hostResults,
+  localAccounts,
+}: HostConfigReviewProps) => {
   const cy = { "data-cy": dataCy };
   const tableRef = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(true);
@@ -61,26 +66,41 @@ export const HostConfigReview = ({ hostResults }: HostConfigReviewProps) => {
       >
         <div ref={tableRef} className="slide-down">
           <div className="scrollable-table-container">
-            <table className="host-provision-review-table">
+            <table
+              className="host-provision-review-table"
+              data-cy="hostConfigReviewTable"
+            >
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Serial Number</th>
-                  <th>Os Profile</th>
-                  <th>Security Configuration</th>
+                  <th data-cy="tableHeaderCell">Name</th>
+                  <th data-cy="tableHeaderCell">Serial Number and UUID</th>
+                  <th data-cy="tableHeaderCell">OS Profile</th>
+                  <th data-cy="tableHeaderCell">Security Configuration</th>
+                  <th data-cy="tableHeaderCell">Public SSH Key</th>
                 </tr>
               </thead>
               <tbody>
                 {sortedHostResults.map((host) => {
+                  const selectedAccount = localAccounts?.find(
+                    (acc) => acc.resourceId === host.instance?.localAccountID,
+                  );
                   const rowContent = (
-                    <tr>
-                      <td>{host.name}</td>
-                      <td>{host.serialNumber}</td>
-                      <td>{host.instance?.os ? host.instance.os.name : "-"}</td>
-                      <td>
+                    <tr data-cy="tableRow">
+                      <td data-cy="tableRowCell">{host.name}</td>
+                      <td data-cy="tableRowCell">
+                        <div className="serial-number">{host.serialNumber}</div>
+                        <div className="uuid">{host.uuid}</div>
+                      </td>
+                      <td data-cy="tableRowCell">
+                        {host.instance?.os ? host.instance.os.name : "-"}
+                      </td>
+                      <td data-cy="tableRowCell">
                         {host.instance?.os
                           ? host.instance.os.securityFeature
                           : "-"}
+                      </td>
+                      <td data-cy="tableRowCell">
+                        {selectedAccount ? selectedAccount.username : "-"}
                       </td>
                     </tr>
                   );

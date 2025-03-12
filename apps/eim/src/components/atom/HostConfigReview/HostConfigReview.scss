@@ -30,6 +30,7 @@ $transition-duration: 1s;
       opacity: 0;
     }
   }
+
   // End of CSS for slider
 
   .deployment-application-details-row {
@@ -86,6 +87,7 @@ $transition-duration: 1s;
 
     .expand-action-icon-container {
       text-align: end;
+
       .expand-toggle {
         cursor: pointer;
       }
@@ -100,13 +102,14 @@ $transition-duration: 1s;
 
     table {
       border: none;
+
       thead {
         position: sticky;
         top: -1px;
       }
 
       th {
-        background-color: var(--spark-color-theme-light-gray200);
+        background-color: var(--spark-color-theme-light-gray100);
       }
 
       .table-row-cell {
@@ -115,6 +118,16 @@ $transition-duration: 1s;
         word-break: break-all;
         border: none;
       }
+
+      .serial-number {
+        color: var(--spark-color-theme-light-gray900);
+        font-size: 0.875rem;
+      }
+
+      .uuid {
+        color: var(--spark-color-theme-light-gray700);
+        font-size: 0.75rem;
+      }
     }
 
     .host-provision-review-table {
@@ -122,31 +135,38 @@ $transition-duration: 1s;
       width: 100%;
       border-collapse: collapse;
       font-size: var(--table-cell-font-size);
+
       th,
       td {
         padding: 0.4rem 0.8rem;
       }
+
       th {
-        background-color: var(--spark-color-theme-light-gray200);
+        background-color: var(--spark-color-theme-light-gray100);
         font-weight: 500;
         text-align: left;
       }
+
       tr:hover td {
         background-color: var(--table-row-hover-color);
       }
+
       tr td {
         min-width: 5rem;
         max-width: 12rem;
         word-break: break-all;
         border: none;
       }
+
       .failed-message,
       .success-message {
         border-bottom: 0.1rem solid var(--spark-color-theme-light-gray200);
       }
+
       .failed-message {
         color: var(--spark-color-coral-shade1);
       }
+
       .success-message {
         color: var(--spark-color-moss);
       }
