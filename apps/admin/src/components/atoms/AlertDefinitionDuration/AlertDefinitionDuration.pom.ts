@@ -20,11 +20,11 @@ const endpoints: CyApiDetails<
   omApi.GetProjectAlertDefinitionRuleApiResponse
 > = {
   alertDefinitionTemplate: {
-    route: `**/projects/${activeProject.name}/alerts/definitions/*/templates?`,
+    route: `**/projects/${activeProject.name}/alerts/definitions/*/template?`,
     response: alertDefinitionTemplateOne,
   },
   alertDefinitionTemplate500Error: {
-    route: `**/projects/${activeProject.name}/alerts/definitions/*/templates?`,
+    route: `**/projects/${activeProject.name}/alerts/definitions/*/template?`,
     statusCode: 500,
   },
 };

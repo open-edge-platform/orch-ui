@@ -67,7 +67,7 @@ const injectedRtkApi = api
         GetProjectAlertDefinitionRuleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/alerts/definitions/${queryArg.alertDefinitionId}/templates`,
+          url: `/v1/projects/${queryArg.projectName}/alerts/definitions/${queryArg.alertDefinitionId}/template`,
           params: { rendered: queryArg.rendered },
         }),
         providesTags: ["alert-definition"],
@@ -105,7 +105,7 @@ const injectedRtkApi = api
         GetServiceStatusApiResponse,
         GetServiceStatusApiArg
       >({
-        query: () => ({ url: "/v1/status" }),
+        query: () => ({ url: `/v1/status` }),
         providesTags: ["service"],
       }),
     }),

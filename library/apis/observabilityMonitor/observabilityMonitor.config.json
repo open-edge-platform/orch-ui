@@ -1,5 +1,5 @@
 {
-  "schemaFile": "../tenancy/tenancy-api-mapping/openapispecs/generated/amc-frameworks-edge-one-intel-edge-observability-monitor.yaml",
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-o11y-alerting-monitor-openapi.yaml",
   "apiFile": "./apiSlice.ts",
   "apiImport": "observabilityMonitorApi",
   "outputFile": "./observabilityMonitorApi.ts",

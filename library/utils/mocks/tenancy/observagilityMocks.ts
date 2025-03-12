@@ -37,7 +37,7 @@ export const handlers = [
     },
   ),
   rest.get(
-    `${baseURL}/projects/${projectName}/alerts/definitions/:alertDefinitionId/templates`,
+    `${baseURL}/projects/${projectName}/alerts/definitions/:alertDefinitionId/template`,
     (req, res, ctx) => {
       const { alertDefinitionId } = req.params;
       return res(

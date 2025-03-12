@@ -51,7 +51,7 @@ npx @rtk-query/codegen-openapi ${prefix}cluster-manager/clusterManagerApis.confi
 # echo -e "${CYAN}Generate METADATA_BROKER RTK endpoints APIs${NC}"
 # npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
 
-# echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json
+echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json
 
 npm run library:fix
