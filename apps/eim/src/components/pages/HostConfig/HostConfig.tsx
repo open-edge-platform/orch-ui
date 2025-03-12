@@ -45,6 +45,7 @@ import { setMessageBanner } from "../../../store/notifications";
 import { HostConfigReview } from "../../atom/HostConfigReview/HostConfigReview";
 import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import { AddHostLabels } from "../../organism/hostConfigure/AddHostLabels/AddHostLabels";
+import { AddSshPublicKey } from "../../organism/hostConfigure/AddSshPublicKey/AddSshPublicKey";
 import { HostsDetails } from "../../organism/hostConfigure/HostsDetails/HostsDetails";
 import { RegionSite } from "../../organism/hostConfigure/RegionSite/RegionSite";
 import "./HostConfig.scss";
@@ -241,6 +242,11 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     }
   };
 
+  const { data: localAccountsList } =
+    eim.useGetV1ProjectsByProjectNameLocalAccountsQuery({
+      projectName: SharedStorage.project?.name ?? "",
+    });
+
   const updateHost = async () => {
     const failedHosts = new Set<string>();
     let firstErrorMessage: string | undefined = undefined;
@@ -264,16 +270,26 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         });
 
       if (!host.originalOs && !createdInstances.has(host.resourceId!)) {
-        await postInstance({
-          projectName: SharedStorage.project?.name ?? "",
-          body: {
-            securityFeature: host.instance?.securityFeature,
-            osID: host.instance?.osID,
-            kind: "INSTANCE_KIND_METAL",
-            hostID: host.resourceId,
-            name: `${host.name}-instance`,
-          },
-        })
+        const postInstancePayload: eim.PostV1ProjectsByProjectNameComputeInstancesApiArg =
+          {
+            projectName: SharedStorage.project?.name ?? "",
+            body: {
+              securityFeature: host.instance?.securityFeature,
+              osID: host.instance?.osID,
+              kind: "INSTANCE_KIND_METAL",
+              hostID: host.resourceId,
+              name: `${host.name}-instance`,
+            },
+          };
+        /* 
+          instance is associated with localAccount selected by user
+          in "SSH key" step.
+        */
+        if (host.instance?.localAccountID) {
+          postInstancePayload.body.localAccountID =
+            host.instance?.localAccountID;
+        }
+        await postInstance(postInstancePayload)
           .unwrap()
           .then(() => {
             setCreatedInstances((prevState) => prevState.add(host.resourceId!));
@@ -433,6 +449,9 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         )}
         {currentStep === HostConfigSteps["Add Host Labels"] && (
           <AddHostLabels />
+        )}
+        {currentStep === HostConfigSteps["Add SSH public key to hosts"] && (
+          <AddSshPublicKey localAccounts={localAccountsList?.localAccounts} />
         )}
         {currentStep === HostConfigSteps["Complete Configuration"] && (
           <HostConfigReview hostResults={hostResults} />

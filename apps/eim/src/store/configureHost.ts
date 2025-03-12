@@ -14,6 +14,7 @@ export enum HostConfigSteps {
   "Select Site" = 0,
   "Enter Host Details",
   "Add Host Labels",
+  "Add SSH public key to hosts",
   "Complete Configuration",
 }
 const totalSteps = Object.keys(HostConfigSteps).length / 2;
@@ -331,6 +332,18 @@ export const configureHost = createSlice({
     setAutoProvisionValue(state, action: PayloadAction<boolean>) {
       state.autoProvision = action.payload;
     },
+    setPublicSshKey(
+      state,
+      action: PayloadAction<{ hostId: string; value: eim.LocalAccountRead }>,
+    ) {
+      const id = action.payload.hostId;
+      const host = selectHost(state, id);
+      if (!host.instance) {
+        host.instance = {};
+      }
+      host.instance.localAccountID = action.payload.value.resourceId;
+      configureHost.caseReducers.validateStep(state);
+    },
     validateStep,
   },
 });
@@ -359,6 +372,7 @@ export const {
   setMultiHostValidationError,
   setAutoOnboardValue,
   setAutoProvisionValue,
+  setPublicSshKey,
 } = configureHost.actions;
 
 // selectors

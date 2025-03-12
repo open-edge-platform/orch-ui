@@ -365,6 +365,20 @@ export const handlers = [
       ),
     );
   }),
+
+  rest.get(`${baseURL}/localAccounts`, async (req, res, ctx) => {
+    const localAccounts = instanceStore.getLocalAccounts();
+    return await res(
+      ctx.status(200),
+      ctx.json<eim.GetV1ProjectsByProjectNameLocalAccountsApiResponse>({
+        hasNext: false,
+        localAccounts,
+        totalElements: localAccounts.length,
+      }),
+      ctx.delay(delay),
+    );
+  }),
+
   rest.get(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
     const siteID = req.url.searchParams.get("siteID");
     const deviceUuid = req.url.searchParams.get("uuid");

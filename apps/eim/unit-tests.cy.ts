@@ -16,6 +16,7 @@ import "./src/components/atom/locations/Site/Site.cy.tsx";
 import "./src/components/atom/locations/SiteActionsPopup/SiteActionsPopup.cy.tsx";
 import "./src/components/atom/MultiSelectDropdown/MultiSelectDropdown.cy.tsx";
 import "./src/components/atom/OsConfig/OsConfig.cy.tsx";
+import "./src/components/atom/PublicSshKeyDropdown/PublicSshKeyDropdown.cy.tsx";
 import "./src/components/atom/RegionCell/RegionCell.cy.tsx";
 import "./src/components/atom/ScheduleMaintenanceSubComponent/ScheduleMaintenanceSubComponent.cy.tsx";
 import "./src/components/atom/SiteCell/SiteCell.cy.tsx";
@@ -33,6 +34,7 @@ import "./src/components/molecules/ScheduleMaintenanceStatusTag/ScheduleMaintena
 import "./src/components/organism/AddHostsForm/AddHostsForm.cy.tsx";
 import "./src/components/organism/ClusterConfiguration/ClusterConfiguration.cy.tsx";
 import "./src/components/organism/hostConfigure/AddHostLabels/AddHostLabels.cy.tsx";
+import "./src/components/organism/hostConfigure/AddSshPublicKey/AddSshPublicKey.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalOsDropdown/GlobalOsDropdown.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalSecuritySwitch/GlobalSecuritySwitch.cy.tsx";
 import "./src/components/organism/hostConfigure/HostDetails/HostDetails.cy.tsx";

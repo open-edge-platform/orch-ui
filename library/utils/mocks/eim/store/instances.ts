@@ -283,6 +283,20 @@ export const registeredInstanceOne: enhancedEimSlice.InstanceReadModified = {
   ],
 };
 
+export const mockSsh: eim.LocalAccountRead = {
+  resourceId: "ssh-abcd81",
+  username: "all-groups-example-user",
+  sshKey:
+    "ssh-rsa AAAAB3NzaC1yc2EgQDf0nWRbXNe7UsO5PPUWWO8GAAAADAQABAAAB/950VwqkUgp851EEhNISCGKY/XVLB/sgVr9nKKoP4p0XP2v3ijAKB5dxSPGe7C0vtNLHA5fA6PAXg/IVjeZBkMFvWN6nT8OWauFzbvZwQHJNb9zL+Uoy82i8x88gEFRN7E8B8rOjmiszLIcHTrWq6E1c5w82rlNbmaozIIj7Nm6v2lQXujXJdpQTvUg7wyTuSUpnzUUV20eORF8ooDdXFCpTDBXa32RJUcgH84bVE4jttxmiYiKorTt43p428zhap3z6JthwLP4xAole6DrACwWuLQp+YPu7Ik8WmZpX/OW5q05DsYwt5YXQjE9Mze3XJnwI8HHGrn5nOWo8jmtJZMR/S4Yiv8Zvzl01c8GMcJmmr+wbWV+l14NJOgRgVmAuK+ZYte7SH6MC+MJQciqyVeNM+CVoxQh1ZueAsKgUnONTvGr2yModM0x9j4JnzUa7ZvRd01PHNZp6hcupM+zodO1UE724phNUNi5cXVOFl1= amr\fakeuser@fake-key",
+};
+
+export const generateSshMocks = (size = 10, offset = 0, mock = mockSsh) =>
+  [...Array(size).keys()].map((index) => ({
+    ...mock,
+    sshKey: `${mock.sshKey}-${index + offset}`,
+    resourceId: `ssh-mock-${index + offset}`,
+  }));
+
 export class InstanceStore extends BaseStore<
   "instanceID",
   enhancedEimSlice.InstanceReadModified,
@@ -461,5 +475,9 @@ export class InstanceStore extends BaseStore<
 
     /* --- Return final list of Instance --- */
     return result;
+  }
+
+  getLocalAccounts() {
+    return generateSshMocks(3, 0);
   }
 }

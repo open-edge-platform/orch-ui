@@ -21,6 +21,7 @@ import {
 } from "../../../store/configureHost";
 import { setupStore } from "../../../store/store";
 import { SearchPom } from "../../molecules/locations/Search/Search.pom";
+import { AddSshPublicKeyPom } from "../../organism/hostConfigure/AddSshPublicKey/AddSshPublicKey.pom";
 import { RegionSiteTreePom } from "../../organism/locations/RegionSiteTree/RegionSiteTree.pom";
 import OsProfileDropdownPom from "../../organism/OsProfileDropdown/OsProfileDropdown.pom";
 import { HostConfig } from "./HostConfig";
@@ -30,6 +31,7 @@ const pom = new HostConfigPom();
 const osProfileDropdownPom = new OsProfileDropdownPom();
 const selectSitePom = new RegionSiteTreePom();
 const searchPom = new SearchPom();
+const addSshPublicKeyPom = new AddSshPublicKeyPom();
 
 describe("<HostConfig/>", () => {
   describe("when the host is not in redux", () => {
@@ -273,6 +275,90 @@ describe("<HostConfig/>", () => {
       pom.el.next.should("have.attr", "aria-disabled", "false");
     });
   });
+
+  describe("when SSH key is selected", () => {
+    beforeEach(() => {
+      const formStatus: HostConfigFormStatus = {
+        currentStep: HostConfigSteps["Add SSH public key to hosts"],
+        enablePrevBtn: false,
+        enableNextBtn: true,
+        globalOsValue: "",
+        globalSecurityValue: "",
+        hasValidationError: false,
+      };
+      // convert to a WriteHost and set the values that the form would set
+      const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
+        structuredClone(onboardedHostOne),
+      );
+      mockHost.siteId = sitePortland.resourceId;
+      mockHost.site = sitePortland;
+      const store = setupStore({
+        configureHost: {
+          formStatus,
+          hosts: {
+            [onboardedHostOne.resourceId!]: {
+              ...onboardedHostOne,
+              region: regionUsWest,
+              instance: {
+                securityFeature:
+                  "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+                os: osUbuntu,
+                osID: osUbuntu.resourceId,
+              },
+            },
+          },
+          autoOnboard: false,
+          autoProvision: false,
+        },
+      });
+      // @ts-ignore
+      window.store = store;
+      addSshPublicKeyPom.interceptApis([
+        addSshPublicKeyPom.api.getLocalAccounts,
+      ]);
+
+      cy.mount(<HostConfig />, {
+        reduxStore: store,
+      });
+    });
+
+    it("should save the instance with ssh key", () => {
+      pom.interceptApis([
+        pom.api.patchComputeHostsAndHostId,
+        pom.api.postInstances,
+      ]);
+
+      cy.wait("@getLocalAccounts").then((interception) => {
+        const responseData = interception.response?.body;
+
+        // ssh key details
+        const selectedAccount: eim.LocalAccountRead =
+          responseData.localAccounts[0];
+
+        addSshPublicKeyPom.sshKeyDropdownPom.sshKeyDrpopdown.openDropdown(
+          addSshPublicKeyPom.tablePom.getCell(1, 3),
+        );
+        // selecting item from 0th index
+        addSshPublicKeyPom.sshKeyDropdownPom.sshKeyDrpopdown.selectDropdownValue(
+          addSshPublicKeyPom.tablePom.getCell(1, 3),
+          "sshKey",
+          "ssh-mock-0",
+          "ssh-mock-0",
+        );
+
+        pom.el.next.click(); // click to move to review step
+        pom.el.next.click(); // click to "submit" in review step
+        pom.waitForApis();
+
+        cy.get(`@${pom.api.postInstances}`)
+          .its("request.body")
+          .should((body) => {
+            expect(body.localAccountID).to.equal(selectedAccount.resourceId);
+          });
+      });
+    });
+  });
+
   describe("when saving the Host", () => {
     const formStatus: HostConfigFormStatus = {
       currentStep: HostConfigSteps["Complete Configuration"],
@@ -537,6 +623,7 @@ describe("<HostConfig/>", () => {
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
+      pom.el.next.click();
       pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
       cyGet("confirmBtn").click();
       cy.get("#pathname").contains("/infrastructure/clusters/create");
@@ -555,6 +642,7 @@ describe("<HostConfig/>", () => {
       searchPom.waitForApi([searchPom.api.getLocationsOnSearch200]);
 
       selectSitePom.site.el.selectSiteRadio.click();
+      pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
@@ -642,6 +730,7 @@ describe("<HostConfig/>", () => {
       searchPom.waitForApi([searchPom.api.getLocationsOnSearch200]);
 
       selectSitePom.site.el.selectSiteRadio.click();
+      pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();

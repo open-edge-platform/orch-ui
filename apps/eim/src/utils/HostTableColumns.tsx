@@ -11,6 +11,7 @@ import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociate
 import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
+import { HostData } from "../store/configureHost";
 
 const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
   return {
@@ -68,7 +69,7 @@ const name = (
 };
 
 const nameWithoutLink: TableColumn<eim.HostRead> = {
-  Header: "Name",
+  Header: "Host Name",
   apiName: "name",
   accessor: (item) => {
     if (item.name) {
@@ -170,6 +171,40 @@ const actions = (
   accessor: (host) => popupFn(host),
 });
 
+const hostConfigName: TableColumn<HostData> = {
+  Header: "Host Name",
+  apiName: "name",
+  accessor: (item) => {
+    if (item.name) {
+      return item.name;
+    } else if (item.resourceId) {
+      return item.resourceId;
+    }
+  },
+};
+
+const serialNumberUuid: TableColumn<HostData> = {
+  Header: "Serial Number and UUID",
+  accessor: (host) => host.serialNumber,
+  Cell: (table: { row: { original: HostData } }) => {
+    const serialNumber = table.row.original.serialNumber;
+    const uuid = table.row.original.uuid;
+    return (
+      <>
+        <div className="serial-number">{serialNumber}</div>
+        <div className="uuid">{uuid}</div>
+      </>
+    );
+  },
+};
+
+const publicSshKey = (
+  popupFn: (host: HostData) => JSX.Element,
+): TableColumn<HostData> => ({
+  Header: "Public SSH Key",
+  accessor: (host) => popupFn(host),
+});
+
 export const HostTableColumn = {
   _name,
   name,
@@ -184,4 +219,7 @@ export const HostTableColumn = {
   autoOnboard,
   actions,
   workload,
+  hostConfigName,
+  serialNumberUuid,
+  publicSshKey,
 };
