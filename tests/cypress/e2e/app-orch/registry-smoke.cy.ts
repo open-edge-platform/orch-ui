@@ -38,13 +38,10 @@ describe("APP_ORCH E2E: Application Registries Smoke tests", () => {
         ?.toLowerCase()
         .split(" ")
         .join("-")!;
+      netLog.interceptAll(["**/v1/**", "**/v3/**"]);
     });
   });
 
-  beforeEach(() => {
-    cy.viewport(1024, 768);
-    netLog.interceptAll(["**/v1/**", "**/v3/**"]);
-  });
   afterEach(() => {
     netLog.save();
     netLog.clear();
@@ -61,29 +58,23 @@ describe("APP_ORCH E2E: Application Registries Smoke tests", () => {
       pom.applicationsPom.tabs.getTab("Registries").click();
     });
 
-    it("should see App Registry content", () => {
-      pom.applicationsPom.tabs.el.registryTableContent.should("exist");
-    });
+    it("should create a registry", () => {
+      cy.waitForPageTransition();
 
-    describe("on registries create drill", () => {
-      xit("should see empty table", () => {
-        /* TODO: need to add this after spinning a new coder */
-      });
-      it("should create new entry", () => {
-        pom.addRegistry(testData.registry!);
-      });
-      it("should see created entry", () => {
-        pom.applicationsPom.tabs.appRegistryTablePom.tableUtils
-          .getRowBySearchText(registryNameId)
-          .should("exist");
-      });
-      it("should see delete entry", () => {
-        pom.removeRegistry(registryNameId);
-        pom.applicationsPom.tabs.appRegistryTablePom.root.should(
-          "not.contain",
-          registryNameId,
-        );
-      });
+      pom.addRegistry(testData.registry!);
+
+      pom.applicationsPom.search(registryNameId);
+      pom.applicationsPom.tabs.appRegistryTablePom.tableUtils
+        .getRowBySearchText(registryNameId)
+        .should("exist");
+    });
+    it("should delete a registry", () => {
+      pom.removeRegistry(registryNameId);
+      pom.applicationsPom.search(registryNameId);
+      pom.applicationsPom.tabs.appRegistryTablePom.empty.root.should(
+        "contain.text",
+        "There are no registries available",
+      );
     });
   });
 

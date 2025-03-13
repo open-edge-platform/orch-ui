@@ -1,7 +1,7 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import { adm, catalog } from "@orch-ui/apis";
 import { cyGet } from "../../support/cyBase";
@@ -69,7 +69,10 @@ export function isDeploymentTestDataPresent(arg: any) {
 // --- Helper Functions ---
 /** get Deployments navigation button */
 export function getDeploymentsMFETab() {
-  return cyGet("headerItemLink").contains("Deployments");
+  return cy
+    .dataCy("headerItemLink")
+    .contains("Deployments")
+    .should("be.visible");
 }
 
 /** get sidebar option by name */

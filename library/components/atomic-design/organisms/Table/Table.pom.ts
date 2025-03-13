@@ -282,7 +282,7 @@ export class TablePom extends CyPom<Selectors> {
     this.root.should("be.visible");
     cy
       .intercept({
-        url: "**/compute/hosts?filter*",
+        url: "**filter*", // TODO we might need to parametrize this URL
         method: "GET",
         times: 1,
       })

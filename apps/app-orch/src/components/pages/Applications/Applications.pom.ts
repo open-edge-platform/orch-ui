@@ -25,6 +25,15 @@ class ApplicationsPom extends CyPom<Selectors> {
     super(rootCy, [...dataCySelectors]);
     this.tabs = new ApplicationTabsPom();
   }
+
+  public search(searchText: string) {
+    this.el.applicationSearch.within(() => {
+      // we might be re-rendering the search input,
+      // for now let's try the workaround in this issue
+      // https://github.com/cypress-io/cypress/issues/5830
+      cy.get("input").type(searchText, { force: true });
+    });
+  }
 }
 
 export default ApplicationsPom;

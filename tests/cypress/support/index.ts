@@ -43,6 +43,11 @@ declare global {
        * Custom command to read the current active project from the local storage
        */
       currentProject(): Chainable<string>;
+
+      /**
+       * Custom command to wait for the page transition to complete
+       */
+      waitForPageTransition(): void;
     }
   }
 }

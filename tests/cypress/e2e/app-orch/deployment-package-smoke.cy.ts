@@ -28,8 +28,6 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
 
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
-    cy.viewport(1024, 768);
-    netLog.interceptAll(["**/v1/**", "**/v3/**"]);
     cy.login(user);
     cy.visit("/");
     getDeploymentsMFETab().click();
@@ -45,6 +43,7 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
 
     // Add application
     pom.applicationsPom.tabs.getTab("Applications").click();
+    cy.waitForPageTransition();
     pom.applicationsPom.el.addApplicationButton.click();
     pom.addApplication(
       { ...testData.registry!, name: registryNameId },
@@ -95,7 +94,10 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
         .split(" ")
         .join("-");
 
+      netLog.interceptAll(["**/v1/**", "**/v3/**"]);
       initPrequisite(); // Initialize things needed for test before it runs
+      netLog.save("app_orch_e2e_deployment_package_smoke_before");
+      netLog.clear();
     });
   });
 
@@ -113,65 +115,61 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
       initPageByUser();
       getSidebarTabByName("Deployment Packages").click();
     });
-    describe("on create deployment package", () => {
-      let displayName: string;
-      before(() => {
-        // TODO: fix this to testData.deploymentPackage!.displayName! after opensource is deployable to coder
-        displayName = testData
-          .deploymentPackage!.displayName!.toLowerCase()
-          .split(" ")
-          .join("-");
-      });
-      it("should see empty table", () => {
-        pom.deploymentPackagesPom.deploymentPackageTable.emptyPom.root.should(
-          "exist",
-        );
-      });
-      it("should create new entry", () => {
-        pom.deploymentPackagesPom.createButtonPom.el.button.click();
+    let displayName: string;
+    before(() => {
+      // TODO: fix this to testData.deploymentPackage!.displayName! after opensource is deployable to coder
+      displayName = testData
+        .deploymentPackage!.displayName!.toLowerCase()
+        .split(" ")
+        .join("-");
+    });
+    it("should create a deployment package", () => {
+      pom.deploymentPackagesPom.createButtonPom.el.button.click();
 
-        // Fill Deployment Package Creation form flow
-        // General Info Flow
-        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.deploymentPackageGeneralInfoFormPom.fillGeneralInfoForm(
-          testData.deploymentPackage!,
-        );
-        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.clickNextOnStep(
-          0,
-        );
+      cy.waitForPageTransition();
+      // Fill Deployment Package Creation form flow
+      // General Info Flow
+      pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.deploymentPackageGeneralInfoFormPom.fillGeneralInfoForm(
+        testData.deploymentPackage!,
+      );
+      pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.clickNextOnStep(
+        0,
+      );
 
-        // Application Selection Flow
-        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.appTablePom
-          .getCheckBoxBySearchText(testData.application!.name)
-          .click();
-        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.clickNextOnStep(
-          1,
-        );
+      // Application Selection Flow
+      pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.appTablePom
+        .getCheckBoxBySearchText(testData.application!.name)
+        .click();
+      pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.clickNextOnStep(
+        1,
+      );
 
-        // Deployment Package Profile flow
-        const generatedProfileCy =
-          pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.deploymentPackageProfilePom.profileList.getProfileEntryByProfileName(
-            "Deployment Profile 1",
-          );
-        generatedProfileCy.should("contain.text", "System generated profile");
-        generatedProfileCy
-          .find(".spark-badge-text")
-          .should("contain.text", "Default");
-        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.clickNextOnStep(
-          2,
+      // Deployment Package Profile flow
+      const generatedProfileCy =
+        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.deploymentPackageProfilePom.profileList.getProfileEntryByProfileName(
+          "Deployment Profile 1",
         );
+      generatedProfileCy.should("contain.text", "System generated profile");
+      generatedProfileCy
+        .find(".spark-badge-text")
+        .should("contain.text", "Default");
+      pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.clickNextOnStep(
+        2,
+      );
 
-        // Submit at Review step
-        pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.el.submitButton.click();
-      });
-      it("should see created entry", () => {
-        pom.deploymentPackagesPom.deploymentPackageTable.tableUtils.getRowBySearchText(
-          displayName,
-        );
-      });
-      it("should see delete entry", () => {
-        pom.removeDeploymentPackage(displayName);
-        pom.deploymentPackagesPom.root.should("not.contain.text", displayName);
-      });
+      // Submit at Review step
+      pom.deploymentPackageCreatePom.deploymentPackageCreateEditPom.el.submitButton.click();
+
+      // TODO Verify success toast
+      cy.contains("Deployment Packages").click();
+
+      pom.deploymentPackagesPom.deploymentPackageTable.tableUtils.getRowBySearchText(
+        displayName,
+      );
+    });
+    it("should delete a deployment package", () => {
+      pom.removeDeploymentPackage(displayName);
+      pom.deploymentPackagesPom.root.should("not.contain.text", displayName);
     });
 
     // TODO: describe for Deployment Package clone

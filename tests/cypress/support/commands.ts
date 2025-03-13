@@ -130,3 +130,10 @@ Cypress.Commands.add("currentProject", () => {
     );
   });
 });
+
+Cypress.Commands.add("waitForPageTransition", () => {
+  // wait for the page to be loaded
+  cy.dataCy("main").within(() => {
+    cy.get(".page").should("have.class", "page-enter-done");
+  });
+});

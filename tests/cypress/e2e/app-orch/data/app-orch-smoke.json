@@ -1,8 +1,8 @@
 {
   "registry": {
-    "displayName": "Intel Registry",
-    "rootUrl": "http://www.intel-registry.com",
-    "inventoryUrl": "http://www.intel-registry.com/inventory",
+    "displayName": "Test Registry",
+    "rootUrl": "http://www.test-registry.com",
+    "inventoryUrl": "http://www.test-registry.com/inventory",
     "type": "HELM",
     "username": "John Doe",
     "authToken": "PassWord"

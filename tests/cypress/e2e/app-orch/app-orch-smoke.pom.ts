@@ -41,10 +41,17 @@ class AppOrchPom extends CyPom<Selectors> {
    * Note: Make sure you are in the Registry Tab before performing below operation.
    **/
   addRegistry(registry: Partial<catalog.Registry>) {
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500); // Needed for the addRegistryButton to be visible on scroll/render
+    this.applicationsPom.tabs.appRegistryTablePom.root.should(
+      "not.contain.text",
+      "error",
+    );
 
-    this.applicationsPom.tabs.el.addRegistryButton.click();
+    this.applicationsPom.tabs.el.addRegistryButton
+      .should("be.visible")
+      .should("have.text", "Add a Registry");
+
+    // NOTE: is being covered by another element:`<div class="spark-toast spark-toast-placement-top-right">...</div>`
+    this.applicationsPom.tabs.el.addRegistryButton.click({ force: true });
     this.applicationsPom.tabs.registryDrawerPom
       .getDrawerBase()
       .should("have.class", "spark-drawer-show"); // This is required to wait for drawer to completely perform open render
@@ -53,10 +60,18 @@ class AppOrchPom extends CyPom<Selectors> {
     this.applicationsPom.tabs.registryDrawerPom.fillAddRegistryForm(registry);
 
     // Submit Registry
+    cy.intercept({
+      method: "POST",
+      url: "**/v3/projects/**/catalog/registries",
+      times: 1,
+    }).as("addRegistry");
     this.applicationsPom.tabs.registryDrawerPom.el.okBtn.click();
     this.applicationsPom.tabs.registryDrawerPom
       .getDrawerBase()
       .should("have.class", "spark-drawer-hide"); // This required for drawer to completely preform close render
+    cy.wait("@addRegistry").then((interception) => {
+      expect(interception.response?.statusCode).to.equal(200);
+    });
   }
 
   /**
@@ -64,13 +79,23 @@ class AppOrchPom extends CyPom<Selectors> {
    * Note: Make sure you are in the Registry Tab before performing below operation.
    **/
   removeRegistry(name: string) {
+    cy.waitForPageTransition();
+    this.applicationsPom.el.applicationSearch.type(name);
     this.applicationsPom.tabs.appRegistryTablePom
       .getActionPopupOptionBySearchText(name)
       .click()
       .as("popup");
+    cy.intercept({
+      method: "DELETE",
+      url: `**/v3/projects/**/catalog/registries/${name}`,
+      times: 1,
+    }).as("deleteRegistry");
     cy.get("@popup").contains("Delete").as("deleteBtn");
     cy.get("@deleteBtn").click();
     cyGet("confirmBtn").click(); // click confirm button (Delete) in spark-modal (ConfirmationDialog)
+    cy.wait("@deleteRegistry").then((interception) => {
+      expect(interception.response?.statusCode).to.equal(200);
+    });
   }
 
   /**
@@ -119,12 +144,15 @@ class AppOrchPom extends CyPom<Selectors> {
    * Warning: Also this doesnot check the version of the application (for testing only)
    */
   removeApplication(name: string) {
+    cy.waitForPageTransition();
     this.applicationsPom.tabs.appTablePom
       .getActionPopupBySearchText(name)
       .click()
       .as("popup");
     cy.get("@popup").contains("Delete").as("deleteBtn");
+    cy.wait(1000); // FIXME wait for the delete button to be visible
     cy.get("@deleteBtn").click();
+    cy.wait(1000); // FIXME wait for the confirm button to be visible
     cyGet("confirmBtn").click(); // click confirm button (Delete) in spark-modal (ConfirmationDialog)
   }
 
@@ -153,6 +181,7 @@ class AppOrchPom extends CyPom<Selectors> {
    * Warning: Also this doesnot check the version of the deploymentPackage (for testing only)
    */
   removeDeploymentPackage(name: string) {
+    cy.waitForPageTransition();
     this.deploymentPackagesPom.deploymentPackageTable
       .getActionPopupBySearchText(name)
       .click()

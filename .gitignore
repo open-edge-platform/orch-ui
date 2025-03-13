@@ -26,6 +26,7 @@ lib
 !library/@spark-design/react-icons/lib
 !library/@spark-design/tokens/lib
 !library/@spark-design/utils/lib
+tests/cypress-mochawesome-reporter.log
 
 #python
 __pycache__

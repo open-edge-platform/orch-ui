@@ -1,16 +1,16 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import { defineConfig } from "cypress";
-import {
-  PluginOptions
-} from "cypress-terminal-report/src/installLogsPrinter.types";
+import { PluginOptions } from "cypress-terminal-report/src/installLogsPrinter.types";
 const fs = require("fs");
 const webpackPreprocessor = require("@cypress/webpack-preprocessor");
 
 export default defineConfig({
+  viewportWidth: 1024,
+  viewportHeight: 768,
   hosts: { localhost: "127.0.0.1" },
   screenshotsFolder: "cypress/screenshots",
   trashAssetsBeforeRuns: true,
@@ -18,17 +18,18 @@ export default defineConfig({
   videosFolder: "cypress/videos",
   defaultCommandTimeout: 3000,
   pageLoadTimeout: 10000,
-  retries: {
-    runMode: 3,
-  },
   reporter: "../node_modules/cypress-mochawesome-reporter",
   reporterOptions: {
     charts: true,
     reportPageTitle: "e2e-report",
-    reportFilename: "[status]_[datetime]-[name]-report",
+    reportFilename: "[datetime]-[name]_[status]-report",
+    // timestamp: "", any format in this library is supported https://www.npmjs.com/package/dateformat
+    showHooks: "always",
     embeddedScreenshots: true,
     inlineAssets: true,
     saveAllAttempts: false,
+    debug: true,
+    overwrite: false,
   },
   e2e: {
     // to target a different environment use: CYPRESS_BASE_URL=http://localhost:8080 cypress run

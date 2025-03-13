@@ -30,7 +30,6 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
 
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
-    cy.viewport(1024, 768);
     netLog.interceptAll(["**/v1/**", "**/v3/**"]);
     cy.login(user);
     cy.visit("/");

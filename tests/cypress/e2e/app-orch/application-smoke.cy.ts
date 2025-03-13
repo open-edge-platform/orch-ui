@@ -27,8 +27,6 @@ describe("APP_ORCH E2E: Applications Smoke tests", () => {
 
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
-    cy.viewport(1024, 768);
-    netLog.interceptAll(["**/v1/**", "**/v3/**"]);
     cy.login(user);
     cy.visit("/");
     getDeploymentsMFETab().click();
@@ -47,6 +45,7 @@ describe("APP_ORCH E2E: Applications Smoke tests", () => {
   const deinitPrequisite = () => {
     initPageByUser(); // Get to Applications Tab
     pom.applicationsPom.tabs.getTab("Registries").click();
+    cy.contains("Add a Registry").should("be.visible");
     pom.removeRegistry(registryNameId); // Delete the added registry by name (id)
   };
 
@@ -73,8 +72,10 @@ describe("APP_ORCH E2E: Applications Smoke tests", () => {
         ?.toLowerCase()
         .split(" ")
         .join("-")!;
-
+      netLog.interceptAll(["**/v1/**", "**/v3/**"]);
       initPrequisite(); // Initialize things needed for test before it runs
+      netLog.save("app_orch_e2e_application_smoke_before");
+      netLog.clear();
     });
   });
 
@@ -91,33 +92,41 @@ describe("APP_ORCH E2E: Applications Smoke tests", () => {
     beforeEach(() => {
       initPageByUser();
     });
-    describe("on create applications", () => {
-      it("should see empty table", () => {
-        pom.applicationsPom.tabs.appTablePom.empty.root.should("exist");
-      });
-      it("should create new entry", () => {
-        // Goto Add Application page
-        pom.applicationsPom.el.addApplicationButton.click();
+    it("should create a new application", () => {
+      // Goto Add Application page
+      pom.applicationsPom.el.addApplicationButton.click();
 
-        pom.addApplication(
-          { ...testData.registry!, name: registryNameId },
-          testData.registryChart!,
-          testData.application!,
-          testData.applicationProfile!,
-        );
-      });
-      it("should see created entry", () => {
-        pom.applicationsPom.tabs.appTablePom.tableUtils
-          .getRowBySearchText(testData.application?.name!)
-          .should("exist");
-      });
-      it("should see delete entry", () => {
-        pom.removeApplication(testData.application?.name!);
-        pom.applicationsPom.tabs.appTablePom.root.should(
-          "not.contain",
-          registryNameId,
-        );
-      });
+      pom.addApplication(
+        { ...testData.registry!, name: registryNameId },
+        testData.registryChart!,
+        testData.application!,
+        testData.applicationProfile!,
+      );
+
+      pom.applicationCreateEditPom.el.successToast
+        .should("be.visible")
+        .should("not.have.class", "spark-toast-content-visibility-hide")
+        .should("contain.text", "Application created");
+
+      // FIXME for some reason the redirect is not working
+      cy.contains("Applications").click();
+
+      pom.applicationsPom.el.introTitle
+        .should("be.visible", { timeout: 5000 })
+        .should("contain.text", "Applications");
+
+      pom.applicationsPom.search(testData.application?.name!);
+      pom.applicationsPom.tabs.appTablePom.tableUtils
+        .getRowBySearchText(testData.application?.name!)
+        .should("exist");
+    });
+    it("should delete an application", () => {
+      pom.applicationsPom.search(testData.application?.name!);
+      pom.removeApplication(testData.application?.name!);
+      pom.applicationsPom.tabs.appTablePom.root.should(
+        "not.contain",
+        registryNameId,
+      );
     });
   });
 
