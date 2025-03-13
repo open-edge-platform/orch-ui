@@ -6,35 +6,35 @@ SHELL = bash -e -o pipefail
 
 .PHONY: help build
 
-VERSION                 	?= $(shell cat ./VERSION)
-GIT_BRANCH								?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')
+VERSION                     ?= $(shell cat ./VERSION)
+GIT_BRANCH                  ?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')
 
-DOCKER_REGISTRY         	?= 080137407410.dkr.ecr.us-west-2.amazonaws.com
-DOCKER_REPOSITORY       	?= edge-orch
-DOCKER_SUB_REPOSITORY   	?= orch-ui
-DOCKER_IMG_NAME    				:= $(PROJECT_NAME)
-DOCKER_TAG              	:= $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME):$(VERSION)
-DOCKER_TAG_BRANCH	    		:= $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME):$(GIT_BRANCH)
-DOCKER_CONTEXT			      = "$(shell pwd)/"
-DOCKER_FILE              	= "$(shell pwd)/build/Dockerfile"
+DOCKER_REGISTRY             ?= 080137407410.dkr.ecr.us-west-2.amazonaws.com/edge-orch
+DOCKER_REPOSITORY           ?= orch-ui
+DOCKER_IMG_NAME             := $(PROJECT_NAME)
+DOCKER_TAG                  := $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME):$(VERSION)
+DOCKER_TAG_BRANCH           := $(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME):$(GIT_BRANCH)
+DOCKER_CONTEXT              := "$(shell pwd)/"
+DOCKER_FILE                 := "$(shell pwd)/build/Dockerfile"
 
 ## Docker labels. Only set ref and commit date if committed
-DOCKER_LABEL_VCS_URL			?= $(shell git remote get-url $(shell git remote))
-DOCKER_LABEL_VCS_REF			= $(shell git rev-parse HEAD)
-DOCKER_LABEL_BUILD_DATE		?= $(shell date -u "+%Y-%m-%dT%H:%M:%SZ")
-DOCKER_LABEL_COMMIT_DATE	= $(shell git show -s --format=%cd --date=iso-strict HEAD)
+DOCKER_LABEL_VCS_URL        ?= $(shell git remote get-url $(shell git remote))
+DOCKER_LABEL_VCS_REF        := $(shell git rev-parse HEAD)
+DOCKER_LABEL_BUILD_DATE     ?= $(shell date -u "+%Y-%m-%dT%H:%M:%SZ")
+DOCKER_LABEL_COMMIT_DATE    := $(shell git show -s --format=%cd --date=iso-strict HEAD)
 
-HELM_CHART_PREFIX    			?= charts
-HELM_CHART_PATH 		    	= "$(shell pwd)/deploy/"
-HELM_CHART_NAME						:= orch-ui-$(PROJECT_NAME)
-HELM_DIRS                	= ./deploy/
+HELM_CHART_PREFIX           ?= charts
+HELM_CHART_PATH             := "$(shell pwd)/deploy/"
+
+HELM_CHART_NAME             := orch-ui-$(PROJECT_NAME)
+HELM_DIRS                   := ./deploy/
 
 ## These labels need valid content or to be blank
-LABEL_DESCRIPTION					?= $(shell echo "Orch UI")
-LABEL_LICENSE							?= $(shell echo "Apache-2.0")
-LABEL_TITLE								?= ${DOCKER_REPOSITORY}
-LABEL_URL									?= ${DOCKER_LABEL_VCS_URL}
-LABEL_MAINTAINER					?= $(shell echo "Orch UI Maintainers <orchui-maint@intel.com>")
+LABEL_DESCRIPTION           := $(shell echo "Orch UI")
+LABEL_LICENSE               ?= $(shell echo "Apache-2.0")
+LABEL_TITLE                 ?= ${DOCKER_REPOSITORY}
+LABEL_URL                   ?= ${DOCKER_LABEL_VCS_URL}
+LABEL_MAINTAINER            ?= $(shell echo "Orch UI Maintainers <orchui-maint@intel.com>")
 
 DOCKER_LABEL_ARGS         ?= \
 	--label org.opencontainers.image.source="${DOCKER_LABEL_VCS_URL}" \
@@ -57,23 +57,23 @@ DOCKER_BUILD_ARGS ?= \
 # Public targets
 all: help
 
-node_modules: ## @HELP Install the node modules
+../../node_modules: ## @HELP Install the node modules
 	npm ci
 
-build: node_modules ## @HELP Builds the react application using webpack
+build: ../../node_modules ## @HELP Builds the react application using webpack
 	NODE_ENV=production npm run app:$(PROJECT_NAME):build
 
 docker-build: build ## @HELP Build the docker image
 	docker build $(DOCKER_BUILD_ARGS) --platform=linux/x86_64 ${DOCKER_EXTRA_ARGS} \
-		-t $(DOCKER_IMG_NAME):$(GIT_BRANCH) \
-	  -f ${DOCKER_FILE} ${DOCKER_CONTEXT}
+		-t $(DOCKER_TAG) \
+		-f ${DOCKER_FILE} ${DOCKER_CONTEXT}
 
 docker-push: ## @HELP Push the docker image to a registry
-	aws ecr create-repository --region us-west-2 --repository-name  $(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME) || true
-	docker tag $(DOCKER_IMG_NAME):$(GIT_BRANCH) $(DOCKER_TAG_BRANCH)
-	docker tag $(DOCKER_IMG_NAME):$(GIT_BRANCH) $(DOCKER_TAG)
 	docker push $(DOCKER_TAG)
-	docker push $(DOCKER_TAG_BRANCH)
+	# NOTE do we need to push with the branch name?
+	# If we need we should modify CI so that we can run the docker push twice with different env vars
+	# docker tag $(DOCKER_TAG) $(DOCKER_TAG_BRANCH)
+	# docker push $(DOCKER_TAG_BRANCH)
 
 KIND_CLUSTER_NAME="kind"
 docker-kind-load: ## @HELP Loads the docker image on a kind cluster
@@ -113,8 +113,8 @@ apply-version: helm-clean ## @HELP apply version from the top level package.json
 	yq eval -i '.appVersion = "${VERSION}"' ./deploy/Chart.yaml ;
 
 helm-push: ## @HELP Push helm charts.
-	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(HELM_CHART_PREFIX)/$(HELM_CHART_NAME) || true
-	helm push ${HELM_CHART_NAME}-${VERSION}.tgz oci://$(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(HELM_CHART_PREFIX)
+	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)/$(HELM_CHART_NAME) || true
+	helm push ${HELM_CHART_NAME}-${VERSION}.tgz oci://$(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)
 
 lint: ## @HELP Lint the code
 	npm run app:$(PROJECT_NAME):lint
