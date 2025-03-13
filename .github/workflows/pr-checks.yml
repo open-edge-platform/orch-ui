@@ -64,6 +64,7 @@ jobs:
         project_folder: ${{ fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
     with:
+      bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
@@ -78,7 +79,7 @@ jobs:
       run_reuse_check: true
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
-      orch_ci_repo_ref: hotfix/version-check
+      orch_ci_repo_ref: main
     secrets: inherit
 
   pre-merge-pipeline-all:
@@ -90,6 +91,7 @@ jobs:
         project_folder: ["admin", "app-orch", "cluster-orch", "eim", "root"]
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
     with:
+      bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
@@ -104,5 +106,5 @@ jobs:
       run_reuse_check: true
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
-      orch_ci_repo_ref: hotfix/version-check
+      orch_ci_repo_ref: main
     secrets: inherit

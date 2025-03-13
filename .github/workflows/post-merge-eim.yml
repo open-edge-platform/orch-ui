@@ -29,5 +29,5 @@ jobs:
       run_artifact: false
       prefix_tag_separator: "/"
       project_folder: apps/eim
-      orch_ci_repo_ref: hotfix/version-check
+      orch_ci_repo_ref: main
     secrets: inherit
