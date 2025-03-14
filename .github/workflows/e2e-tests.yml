@@ -9,26 +9,39 @@ env:
   CYPRESS_BASE_URL: "http://localhost:8080"
 
 jobs:
-  run-e2e-tests-pipeline:
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
+  pre-merge-pipeline:
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
+    with:
+      bootstrap_tools: ""
+      run_version_check: true
+      run_lint: false # TODO fix lint and enable
+      run_test: false
+      run_build: true
+      run_scan_containers: false
+      prefix_tag_separator: "/"
+      project_folder: tests
+      orch_ci_repo_ref: main
+    secrets: inherit
+  # run-e2e-tests-pipeline:
+  #   runs-on: 'ubuntu-latest'
+  #   steps:
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v4
 
-      - name: Cache npm dependencies
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.17.1
-          cache: "npm"
+  #     - name: Cache npm dependencies
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18.17.1
+  #         cache: "npm"
 
-      - name: Install dependencies
-        run: |
-          node -v
-          npm -v
-          npm ci
+  #     - name: Install dependencies
+  #       run: |
+  #         node -v
+  #         npm -v
+  #         npm ci
 
-      - name: Build the test code
-        run: npm run tests:build
+  #     - name: Build the test code
+  #       run: npm run tests:build
 
       # - name: Build production UI with mock server
       #   run: bash tools/build-all-mock.sh
