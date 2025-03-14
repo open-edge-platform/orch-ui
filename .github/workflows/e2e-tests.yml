@@ -12,7 +12,7 @@ jobs:
   pre-merge-pipeline:
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
     with:
-      bootstrap_tools: ""
+      bootstrap_tools: "base"
       run_version_check: true
       run_lint: false # TODO fix lint and enable
       run_test: false

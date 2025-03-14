@@ -24,9 +24,10 @@ jobs:
       run_docker_build: false
       run_docker_push: false
       run_helm_build: false
-      run_helm_push: true
+      run_helm_push: false
       run_version_tag: true
       run_artifact: false
+      run_version_dev: true
       prefix_tag_separator: "/"
       project_folder: tests
       orch_ci_repo_ref: main
