@@ -28,7 +28,7 @@ const name: TableColumn<cm.NodeInfo> = {
 
 const nameWithoutLink: TableColumn<cm.NodeInfo> = {
   Header: "Host Name",
-  accessor: (node) => node.name ?? node.id,
+  accessor: (node) => node.name || node.id,
 };
 
 const status: TableColumn<cm.NodeInfo> = {

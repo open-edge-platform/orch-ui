@@ -97,6 +97,8 @@ export interface _HostsTableProps {
   onHostSelect?: (selectedHost: eim.HostRead, isSelected: boolean) => void;
   /** Invoked when data is loaded */
   onDataLoad?: (data: eim.HostRead[]) => void;
+  /** This will decide on what HostRead info basis is host is selected  */
+  getSelectionId?: (row: eim.HostRead) => string;
 }
 
 const _HostsTable = ({
@@ -112,6 +114,7 @@ const _HostsTable = ({
   emptyActionProps,
   onHostSelect,
   onDataLoad,
+  getSelectionId = (row) => row.resourceId!,
 }: _HostsTableProps) => {
   const cy = { "data-cy": dataCy };
   const defaultPageSize = {
@@ -251,7 +254,7 @@ const _HostsTable = ({
         }}
         // Searching
         canSearch={!searchConfig?.hideSearch}
-        getRowId={(row) => row.resourceId!}
+        getRowId={getSelectionId}
         searchTerm={searchTerm}
         searchTooltip={searchConfig?.searchTooltipContent}
         onSearch={(searchTerm: string) => {

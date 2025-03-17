@@ -64,6 +64,7 @@ const ClusterCreation = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  // TODO: reduce below redux states to single redux state
   const currentCluster = useAppSelector(getCluster);
   const currentLabels = useAppSelector(getLabels);
   const currentNodesSpec = useAppSelector(getNodesSpec);
@@ -111,6 +112,8 @@ const ClusterCreation = () => {
 
   const clearData = () => {
     localStorage.setItem("clearTree", "true");
+
+    // TODO: optimize redux states
     dispatch(clearCluster());
     dispatch(clearLocations());
     dispatch(clearNodes());

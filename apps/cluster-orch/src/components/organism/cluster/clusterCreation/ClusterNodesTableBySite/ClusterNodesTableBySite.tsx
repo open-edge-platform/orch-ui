@@ -300,6 +300,7 @@ const ClusterNodesTableBySite = ({
             category={1} /* 1: HostCategory.Configured in FM */
             selectable
             selectedHostIds={selectedHostIds}
+            getSelectionId={(row: eim.HostRead) => row.uuid}
             poll={poll}
             onHostSelect={handleNodeSelection}
             onDataLoad={onHostLoad}
