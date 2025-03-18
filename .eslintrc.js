@@ -51,9 +51,10 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "no-unsanitized/method": "error",
     "no-unsanitized/property": "error",
-    "no-unused-expressions" : "warn",
+    "no-unused-expressions": "warn",
     "@typescript-eslint/no-non-null-assertion": "warn",
-    "cypress/no-unnecessary-waiting": "warn"
+    "cypress/no-unnecessary-waiting": "warn",
+    "no-only-tests/no-only-tests": "error",
   },
   plugins: [
     "@typescript-eslint",
@@ -61,5 +62,6 @@ module.exports = {
     "cypress",
     "no-unsanitized",
     "prettier",
+    "no-only-tests",
   ],
 };

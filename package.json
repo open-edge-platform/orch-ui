@@ -67,6 +67,7 @@
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^16.4.0",
+    "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-no-unsanitized": "^4.1.2",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-promise": "^6.6.0",

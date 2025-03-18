@@ -75,7 +75,7 @@ describe("<HostsDetails/>", () => {
         });
     });
 
-    it.only("should save selected local security value", () => {
+    it("should save selected local security value", () => {
       cy.get(".spark-toggle-switch-selector").eq(1).click();
 
       cy.window()
