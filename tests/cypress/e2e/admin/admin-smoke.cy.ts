@@ -4,5 +4,5 @@
  */
 
 // organize-imports-ignore
-import "./non-org-admin-smoke.cy.js";
-import "./org-admin-smoke.cy.js";
+import "./non-org-admin-smoke.cy.ts";
+import "./org-admin-smoke.cy.ts";
