@@ -10,7 +10,7 @@ import {
   validateNoAccessToProjectTab,
 } from "../helpers";
 
-describe("Non Project Admin Smoke", () => {
+describe("Non Org Admin Smoke", () => {
   const netLog = new NetworkLog();
 
   beforeEach(() => {
