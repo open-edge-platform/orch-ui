@@ -46,10 +46,8 @@ export const hostStatusIndicatorToIconStatus = (
   }
 };
 
-/** TODO: This is created to avoid any error on new api and old coder environment */
-const getMessageByGenericStatus = (status: any) => {
-  // in below line message: host.hostStatus; This will show Error in Old coder of MI API (in orch-deploy)
-  return typeof status == "string" ? status : (status as GenericStatus).message;
+const statusWithDetails = (status: string, details?: string) => {
+  return details && details !== "" ? `${status} (${details})` : status;
 };
 
 export const hostToStatuses = (
@@ -60,7 +58,7 @@ export const hostToStatuses = (
   if (host.hostStatus) {
     hgs.hostStatus = {
       indicator: host.hostStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
-      message: getMessageByGenericStatus(host.hostStatus),
+      message: host.hostStatus,
       timestamp: host.hostStatusTimestamp,
     };
   }
@@ -68,7 +66,7 @@ export const hostToStatuses = (
     hgs.onboardingStatus = {
       indicator:
         host.onboardingStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
-      message: getMessageByGenericStatus(host.onboardingStatus),
+      message: host.onboardingStatus,
       timestamp: host.onboardingStatusTimestamp,
     };
   }
@@ -77,7 +75,7 @@ export const hostToStatuses = (
     hgs.registrationStatus = {
       indicator:
         host.registrationStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
-      message: getMessageByGenericStatus(host.registrationStatus),
+      message: host.registrationStatus,
       timestamp: host.registrationStatusTimestamp,
     };
   }
@@ -87,7 +85,10 @@ export const hostToStatuses = (
       hgs.instanceStatus = {
         indicator:
           instance.instanceStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
-        message: getMessageByGenericStatus(instance.instanceStatus),
+        message: statusWithDetails(
+          instance.instanceStatus,
+          instance.instanceStatusDetail,
+        ),
         timestamp: instance.instanceStatusTimestamp,
       };
     }
@@ -96,7 +97,7 @@ export const hostToStatuses = (
         indicator:
           instance.provisioningStatusIndicator ??
           "STATUS_INDICATION_UNSPECIFIED",
-        message: getMessageByGenericStatus(instance.provisioningStatus),
+        message: instance.provisioningStatus,
         timestamp: instance.provisioningStatusTimestamp,
       };
     }
@@ -104,7 +105,10 @@ export const hostToStatuses = (
       hgs.updateStatus = {
         indicator:
           instance.updateStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
-        message: getMessageByGenericStatus(instance.updateStatus),
+        message: statusWithDetails(
+          instance.updateStatus,
+          instance.updateStatusDetail,
+        ),
         timestamp: instance.updateStatusTimestamp,
       };
     }
@@ -118,7 +122,7 @@ export const hostToStatuses = (
         instance.trustedAttestationStatusIndicator ??
         "STATUS_INDICATION_UNSPECIFIED",
       message: instance.trustedAttestationStatus
-        ? getMessageByGenericStatus(instance.trustedAttestationStatus)
+        ? instance.trustedAttestationStatus
         : "Not Enabled",
       timestamp: instance.trustedAttestationStatusTimestamp,
     };

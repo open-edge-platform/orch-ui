@@ -45,7 +45,7 @@ export const HostStatusPopover = ({ data }: HostStatusPopoverProps) => {
       ([key, currentStatus]: [string, FieldLabel]) => {
         const typedKey = key as HostGenericStatusKeys;
         return (
-          <Flex cols={[4, 8]}>
+          <Flex cols={[4, 8]} key={typedKey}>
             <div data-cy={`label-${typedKey}`}>
               <Text>{currentStatus.label}</Text>
             </div>

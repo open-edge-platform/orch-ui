@@ -34,6 +34,7 @@ describe("<HostStatusPopover/>", () => {
             provisioningStatus: "Provisioning in Progress",
             provisioningStatusIndicator: "STATUS_INDICATION_IN_PROGRESS",
             updateStatus: "Update Failed",
+            updateStatusDetail: "",
             updateStatusIndicator: "STATUS_INDICATION_ERROR",
           },
         }}
@@ -43,15 +44,19 @@ describe("<HostStatusPopover/>", () => {
     cyGet("popover").click();
     popOverPom.el.popoverContent.should("be.visible");
     // Within Host
-    pom.getIconByStatus("hostStatus").contains("Running");
-    pom.getIconByStatus("onboardingStatus").contains("Onboarded");
+    pom.getIconByStatus("hostStatus").should("contain.text", "Running");
+    pom.getIconByStatus("onboardingStatus").should("contain.text", "Onboarded");
 
     // Within Host.Instance
-    pom.getIconByStatus("instanceStatus").contains("Running");
+    pom.getIconByStatus("instanceStatus").should("contain.text", "Running");
+    pom
+      .getIconByStatus("instanceStatus")
+      .should("contain.text", "(2 of 5 components Running)");
     pom
       .getIconByStatus("provisioningStatus")
-      .contains("Provisioning in Progress");
-    pom.getIconByStatus("updateStatus").contains("Update Failed");
+      .should("contain.text", "Provisioning in Progress");
+    pom.getIconByStatus("updateStatus").should("contain.text", "Update Failed");
+    pom.getIconByStatus("updateStatus").should("not.contain.text", "("); // the updateStatusDetail is an empty string, we want to make sure we don't render empty parentheses
   });
 
   it("should show unknown for statuses that are not available", () => {

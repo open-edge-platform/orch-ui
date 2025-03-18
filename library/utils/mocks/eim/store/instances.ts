@@ -52,6 +52,7 @@ export const instanceOne: enhancedEimSlice.InstanceReadModified = {
   name: "Instance One",
   instanceStatusIndicator: "STATUS_INDICATION_IDLE",
   instanceStatus: "Running",
+  instanceStatusDetail: "2 of 5 components Running",
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   currentState: "INSTANCE_STATE_RUNNING",
@@ -146,6 +147,7 @@ export const instanceFour: enhancedEimSlice.InstanceReadModified = {
   provisioningStatusTimestamp: +new Date(),
   updateStatusIndicator: "STATUS_INDICATION_ERROR",
   updateStatus: "Update Failed",
+  updateStatusDetail: "Detailed error message",
   updateStatusTimestamp: +new Date(),
 };
 

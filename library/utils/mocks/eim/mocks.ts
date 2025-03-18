@@ -75,13 +75,25 @@ const randomizeHostStatus = () => {
   return hostStatuses[Math.floor(Math.random() * hostStatuses.length)];
 };
 
-const randomizeHostList = (hosts: eim.HostRead[]) => {
+const randomizeHostList = (hosts: eim.HostRead[]): HostMock[] => {
   if (IS_MOCK_RANDOMIZE_ENABLED) {
-    return hosts.map((host, i) =>
-      i === 0 ? { ...host, hostStatus: randomizeHostStatus() } : host,
-    );
+    const mockHosts: eim.HostRead[] = hosts.map((host, i) => {
+      if (i === 0) {
+        return host;
+      }
+      const status = randomizeHostStatus();
+      return {
+        ...host,
+        ...{
+          hostStatus: status.message,
+          hostStatusIndication: status.indicator,
+          hostStatusTimestamp: status.timestamp,
+        },
+      };
+    });
+    return mockHosts as HostMock[];
   }
-  return hosts;
+  return hosts as HostMock[];
 };
 const randomizeInstanceHostList = (
   instanceList: enhancedEimSlice.InstanceReadModified[],
@@ -432,7 +444,7 @@ export const handlers = [
     }
 
     if (hosts.length > 0) {
-      hosts = randomizeHostList(hosts) as HostMock[];
+      hosts = randomizeHostList(hosts);
     }
     return await res(
       ctx.status(200),
