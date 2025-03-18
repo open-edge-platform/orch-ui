@@ -17,3 +17,6 @@ license: $(VENV_NAME) ## @HELP Check licensing with the reuse tool
 	. ./$</bin/activate ; set -u ;\
 	reuse --version ;\
 	reuse --root . lint
+
+forbidden-words:
+	@bash ./tools/forbidden-words.sh
