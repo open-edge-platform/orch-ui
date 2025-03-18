@@ -194,11 +194,17 @@ const ApplicationDetails = ({ app, clusterId }: ApplicationDetailsProps) => {
         {
           displayText: "Console",
           disable: !checkAuthAndRole([Role.AO_WRITE]),
-          onSelect: () =>
-            window.open(
-              `/applications/app/${app.id}/cluster/${clusterId}/vm/${appWorkload.id}/console`,
-              `vm_${appWorkload.id}`,
-            ),
+          onSelect: () => {
+            if (SharedStorage.project) {
+              window.open(
+                `${window.location.origin.replace(
+                  "web-ui",
+                  "vnc",
+                )}/?project=${SharedStorage.project.uID}&app=${app.id}&cluster=${clusterId}&vm=${appWorkload.id}`,
+                `vm_${appWorkload.id}`,
+              );
+            }
+          },
         },
       ];
     }

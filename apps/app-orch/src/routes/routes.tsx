@@ -22,7 +22,6 @@ import DeploymentPackages from "../components/pages/DeploymentPackages/Deploymen
 import Deployments from "../components/pages/Deployments/Deployments";
 import EditDeployment from "../components/pages/EditDeployment/EditDeployment";
 import SetupDeployment from "../components/pages/SetupDeployment/SetupDeployment";
-import VMRemoteWindow from "../components/pages/VMRemoteWindow/VMRemoteWindow";
 
 const Admin =
   RuntimeConfig.isEnabled("ADMIN") &&
@@ -98,10 +97,6 @@ export const childRoutes = [
   {
     path: "deployment/:deplId/cluster/:name",
     element: <DeploymentInstanceDetail />,
-  },
-  {
-    path: "app/:appId/cluster/:name/vm/:vmId/console",
-    element: <VMRemoteWindow />,
   },
   // DEBUG Route: This path is not on the UI but can be used to test out the
   // dashboard component in isolation.

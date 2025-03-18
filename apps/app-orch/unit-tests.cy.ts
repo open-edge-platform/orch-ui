@@ -12,13 +12,12 @@ import "./src/components/atoms/DeploymentUpgradeAvailabilityStatus/DeploymentUpg
 import "./src/components/atoms/ProfileName/ProfileName.cy.tsx";
 import "./src/components/organisms/applications/ApplicationAddRegistryDrawer/ApplicationAddRegistryDrawer.cy.tsx";
 import "./src/components/organisms/applications/ApplicationDetailsDrawerContent/ApplicationDetailsDrawerContent.cy.tsx";
+import "./src/components/organisms/applications/ApplicationDetailsMain/ApplicationDetailsMain.cy.tsx";
 import "./src/components/organisms/applications/ApplicationForm/ApplicationForm.cy.tsx";
 import "./src/components/organisms/applications/ApplicationReferenceTable/ApplicationReferenceTable.cy.tsx";
 import "./src/components/organisms/applications/ApplicationReview/ApplicationReview.cy.tsx";
 import "./src/components/organisms/applications/ApplicationSource/ApplicationSource.cy.tsx";
 import "./src/components/organisms/applications/ApplicationTable/ApplicationTable.cy.tsx";
-
-import "./src/components/organisms/applications/ApplicationDetailsMain/ApplicationDetailsMain.cy.tsx";
 import "./src/components/organisms/applications/ApplicationTabs/ApplicationTabs.cy.tsx";
 import "./src/components/organisms/applications/AvailableRegistriesTable/AvailableRegistriesTable.cy.tsx";
 import "./src/components/organisms/applications/DeploymentPackageImportResult/DeploymentPackageImportResult.cy.tsx";
@@ -77,7 +76,6 @@ import "./src/components/pages/DeploymentPackages/DeploymentPackages.cy.tsx";
 import "./src/components/pages/Deployments/Deployments.cy.tsx";
 import "./src/components/pages/EditDeployment/EditDeployment.cy.tsx";
 import "./src/components/pages/SetupDeployment/SetupDeployment.cy.tsx";
-import "./src/components/pages/VMRemoteWindow/VMRemoteWindow.cy.tsx";
 import "./src/components/templates/Layout.cy.tsx";
 import "./src/utils/app-catalog.cy.ts";
 import "./src/utils/global.cy.ts";
