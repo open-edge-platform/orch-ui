@@ -6,7 +6,6 @@
 import { omApi } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { alertDefinitionTemplateOne } from "@orch-ui/utils";
-import { dataCy } from "./AlertDefinitionDuration";
 
 const activeProject = structuredClone(defaultActiveProject);
 
@@ -30,7 +29,7 @@ const endpoints: CyApiDetails<
 };
 
 class AlertDefinitionDurationPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "alertDefinitionDuration") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

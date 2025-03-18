@@ -7,7 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { Icon } from "@spark-design/react";
 import { Link } from "react-router-dom";
 import "./Site.scss";
-export const dataCy = "site";
+const dataCy = "site";
 
 export interface SiteDynamicProps {
   viewHandler?: (site: eim.SiteRead) => void;

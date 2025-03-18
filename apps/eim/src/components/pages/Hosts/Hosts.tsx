@@ -21,7 +21,7 @@ import HostsTable from "../../organism/HostsTable/HostsTable";
 import { RegisterHostDrawer } from "../../organism/RegisterHostDrawer/RegisterHostDrawer";
 import "./Hosts.scss";
 
-export const dataCy = "hosts";
+const dataCy = "hosts";
 
 const Hosts = () => {
   const cy = { "data-cy": dataCy };

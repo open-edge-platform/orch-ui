@@ -12,7 +12,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import { showToast } from "../../../store/notifications";
 import "./SshKeyInUseByHostsCell.scss";
 
-export const dataCy = "sshKeyInUseByHostsCell";
+const dataCy = "sshKeyInUseByHostsCell";
 
 interface SshKeyInUseByHostsCellProps {
   localAccount: eim.LocalAccountRead;

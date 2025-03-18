@@ -8,7 +8,7 @@ import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Badge } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import "./ScheduleMaintenanceStatusTag.scss";
-export const dataCy = "ScheduleMaintenanceStatusTag";
+const dataCy = "ScheduleMaintenanceStatusTag";
 export interface ScheduleMaintenanceStatusTagProps {
   targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
   targetEntityType: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;

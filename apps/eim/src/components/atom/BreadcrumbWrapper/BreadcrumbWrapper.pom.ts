@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./BreadcrumbWrapper";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class BreadcrumbWrapperPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "breadcrumbWrapper") {
     super(rootCy, [...dataCySelectors]);
   }
 }

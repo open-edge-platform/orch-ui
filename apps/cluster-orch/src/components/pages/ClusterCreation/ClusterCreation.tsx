@@ -54,7 +54,7 @@ import Review from "../../organism/cluster/clusterCreation/Review/Review";
 import SelectSite from "../../organism/cluster/clusterCreation/SelectSite/SelectSite";
 import "./ClusterCreation.scss";
 
-export const dataCy = "clusterCreation";
+const dataCy = "clusterCreation";
 
 const ClusterCreation = () => {
   const cy = { "data-cy": dataCy };

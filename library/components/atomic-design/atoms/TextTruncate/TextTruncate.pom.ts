@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./TextTruncate";
 
 const dataCySelectors = ["checkbox", "content", "label"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class TextTruncatePom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "textTruncate") {
     super(rootCy, [...dataCySelectors]);
   }
 }

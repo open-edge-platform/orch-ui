@@ -9,7 +9,6 @@ import { instanceOne, workloadOne, workloadOneId } from "@orch-ui/utils";
 import OnboardedHostPopupPom from "../../../molecules/OnboardedHostPopup/OnboardedHostPopup.pom";
 import ProvisionedHostPopupPom from "../../../molecules/ProvisionedHostPopup/ProvisionedHostPopup.pom";
 import RegisteredHostPopupPom from "../../../molecules/RegisteredHostPopup/RegisteredHostPopup.pom";
-import { dataCy } from "./HostDetailsActions";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -69,7 +68,7 @@ class HostDetailsActionsPom extends CyPom<Selectors, ApiAliases> {
   public registeredHostPopupPom: RegisteredHostPopupPom;
   public provisionedHostPopupPom: ProvisionedHostPopupPom;
 
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "hostDetailsActions") {
     super(rootCy, [...dataCySelectors], {
       ...instanceEndpoints,
       ...deleteEndpoints,

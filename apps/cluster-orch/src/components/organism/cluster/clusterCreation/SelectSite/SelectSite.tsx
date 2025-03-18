@@ -18,7 +18,7 @@ import {
   updateSiteName,
 } from "../../../../../store/reducers/locations";
 
-export const dataCy = "selectSite";
+const dataCy = "selectSite";
 
 export const ORDER_BY = "name asc";
 

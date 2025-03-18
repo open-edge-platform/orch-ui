@@ -31,7 +31,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "./CreateEditProject.scss";
 
-export const dataCy = "createEditProject";
+const dataCy = "createEditProject";
 
 export interface CreateEditProjectProps {
   isOpen: boolean;

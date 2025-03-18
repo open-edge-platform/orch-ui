@@ -15,14 +15,13 @@ import {
 import { ClusterPerformanceCardPom } from "../../atom/ClusterPerformanceCard/ClusterPerformanceCard.pom";
 import { ClusterHostsBySitePom } from "../../organism/cluster/ClusterHostsBySite/ClusterHostsBySite.pom";
 import DeploymentInstancesTablePom from "../../organism/clusterDetail/DeploymentInstancesTable/DeploymentInstancesTable.pom";
-import { dataCy } from "./ClusterDetail";
 
 const dataCySelectors = [
-  `${dataCy}Heading`,
-  `${dataCy}Popup`,
-  `${dataCy}Status`,
-  `${dataCy}GeneralInfoTable`,
-  `${dataCy}Tabs`,
+  "clusterDetailHeading",
+  "clusterDetailPopup",
+  "clusterDetailStatus",
+  "clusterDetailGeneralInfoTable",
+  "clusterDetailTabs",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
@@ -137,7 +136,7 @@ export class ClusterDetailPom extends CyPom<Selectors, ApiAliases> {
   public confirmationDialogPom: ConfirmationDialogPom;
   public deploymentInstancesTablePom: DeploymentInstancesTablePom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterDetail") {
     super(rootCy, [...dataCySelectors], {
       ...successClusterEndpoints,
       ...successHostEndpointconst,

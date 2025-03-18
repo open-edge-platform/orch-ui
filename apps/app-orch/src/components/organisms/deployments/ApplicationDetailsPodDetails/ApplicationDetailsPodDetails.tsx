@@ -16,7 +16,7 @@ import {
   generateContainerStatusIcon,
 } from "../../../../utils/app-catalog"; // TODO: Check if this can be moved to @orch-utils/global/app-orch/global.ts
 
-export const dataCy = "applicationDetailsPodDetails";
+const dataCy = "applicationDetailsPodDetails";
 
 interface ApplicationDetailsPodDetailsProps {
   containers?: arm.ContainerRead[];

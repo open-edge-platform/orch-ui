@@ -6,7 +6,6 @@
 import { CyPom } from "@orch-ui/tests";
 import DeploymentPackageProfileAddEditDrawerPom from "../DeploymentPackageProfileAddEditDrawer/DeploymentPackageProfileAddEditDrawer.pom";
 import DeploymentPackageProfileListPom from "../DeploymentPackageProfileList/DeploymentPackageProfileList.pom";
-import { dataCy } from "./DeploymentPackageProfileForm";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -14,7 +13,7 @@ type Selectors = (typeof dataCySelectors)[number];
 class DeploymentPackageProfileFormPom extends CyPom<Selectors> {
   addEditProfileDrawer: DeploymentPackageProfileAddEditDrawerPom;
   profileList: DeploymentPackageProfileListPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageProfileForm") {
     super(rootCy, [...dataCySelectors]);
     this.addEditProfileDrawer = new DeploymentPackageProfileAddEditDrawerPom();
     this.profileList = new DeploymentPackageProfileListPom();

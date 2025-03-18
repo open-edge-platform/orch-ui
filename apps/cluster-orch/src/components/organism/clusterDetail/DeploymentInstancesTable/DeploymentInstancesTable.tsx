@@ -35,7 +35,7 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./DeploymentInstancesTable.scss";
 
-export const dataCy = "deploymentInstancesTable";
+const dataCy = "deploymentInstancesTable";
 
 interface DeploymentInstancesTableProps {
   clusterId?: string;

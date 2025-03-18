@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import "./TextTruncate.scss";
-export const dataCy = "textTruncate";
+const dataCy = "textTruncate";
 export interface TextTruncateProps {
   id: string;
   text: string;

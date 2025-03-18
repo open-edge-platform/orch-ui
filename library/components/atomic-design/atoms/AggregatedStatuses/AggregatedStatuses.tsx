@@ -5,7 +5,7 @@
 
 import { Status, StatusIcon } from "../StatusIcon/StatusIcon";
 
-export const dataCy = "aggregatedStatuses";
+const dataCy = "aggregatedStatuses";
 
 export type StatusIndicator =
   | "STATUS_INDICATION_UNSPECIFIED"

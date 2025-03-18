@@ -16,7 +16,7 @@ import { NodeTableColumns } from "../../../../../utils/NodeTableColumns";
 import NodeRoleDropdown from "../../../../atom/NodeRoleDropdown/NodeRoleDropdown";
 import ClusterNodesTable from "../../../ClusterNodesTable/ClusterNodesTable";
 
-export const dataCy = "AddRoles";
+const dataCy = "addRoles";
 
 const AddRoles = () => {
   const dispatch = useAppDispatch();

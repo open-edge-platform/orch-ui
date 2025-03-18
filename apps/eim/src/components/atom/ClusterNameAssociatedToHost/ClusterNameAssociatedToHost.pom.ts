@@ -5,7 +5,6 @@
 
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ClusterNameAssociatedToHost";
 
 const dataCySelectors = ["clusterLink", "notAssigned"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -38,7 +37,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 };
 
 class ClusterNameAssociatedToHostPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterNameAssociatedToHost") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

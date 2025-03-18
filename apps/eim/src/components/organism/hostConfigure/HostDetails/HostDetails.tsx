@@ -21,7 +21,7 @@ import OsProfileDropdown from "../../OsProfileDropdown/OsProfileDropdown";
 import { SecuritySwitch } from "../SecuritySwitch/SecuritySwitch";
 import "./HostDetails.scss";
 
-export const dataCy = "details";
+const dataCy = "details";
 
 /** Return true for valid and false for invalid host name */
 export const isValidHostName = (name?: string) =>

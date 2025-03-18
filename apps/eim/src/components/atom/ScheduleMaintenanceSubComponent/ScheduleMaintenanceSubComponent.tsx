@@ -17,7 +17,7 @@ import {
 import { abbreviations, MONTHS, WEEKDAYS } from "../../../utils/worldTimezones";
 import "./ScheduleMaintenanceSubComponent.scss";
 
-export const dataCy = "maintenanceTableDecription";
+const dataCy = "maintenanceTableDecription";
 
 export interface ScheduleMaintenanceSubComponentProps {
   maintenance: enhancedEimSlice.ScheduleMaintenance;

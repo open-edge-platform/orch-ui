@@ -11,7 +11,7 @@ import { TextSize } from "@spark-design/tokens";
 import { useState } from "react";
 import ProfilePackageDetails from "../ProfilePackageDetails/ProfilePackageDetails";
 
-export const dataCy = "selectProfileTable";
+const dataCy = "selectProfileTable";
 
 export type ProfileColumns = "Select" | "Profile Name" | "Description" | " ";
 

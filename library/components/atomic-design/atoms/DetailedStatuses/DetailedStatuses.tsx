@@ -13,7 +13,7 @@ import { Text } from "@spark-design/react";
 import moment from "moment";
 import "./DetailedStatuses.scss";
 
-export const dataCy = "clusterStatusDetails";
+const dataCy = "detailedStatuses";
 
 const genericStatusToIconStatus = (gs: GenericStatus): Status => {
   switch (gs.indicator) {

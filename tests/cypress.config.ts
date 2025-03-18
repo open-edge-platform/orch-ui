@@ -39,7 +39,9 @@ export default defineConfig({
         "file:preprocessor",
         webpackPreprocessor({
           webpackOptions: require("./webpack.config"),
-          watchOptions: {},
+          watchOptions: {
+            devtool: false,
+          },
         }),
       );
 

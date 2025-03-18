@@ -31,7 +31,7 @@ import ParameterOverridesForm, {
 } from "../ParameterOverridesForm/ParameterOverridesForm";
 import "./ApplicationProfileForm.scss";
 
-export const dataCy = "applicationProfileForm";
+const dataCy = "applicationProfileForm";
 
 const parseObject = (obj: object, currentPath = ""): ChartParameterData[] => {
   if (currentPath.length > 0) currentPath = `${currentPath}.`;

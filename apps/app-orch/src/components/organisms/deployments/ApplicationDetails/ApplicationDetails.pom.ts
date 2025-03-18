@@ -10,7 +10,6 @@ import { arm } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ApplicationDetails";
 
 const dataCySelectors = [
   "applicationDetailsTable",
@@ -71,7 +70,7 @@ class ApplicationDetailsPom extends CyPom<
 > {
   public workloadsTable: TablePom;
   public workloadsTableUtils: SiTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "applicationDetails") {
     super(rootCy, [...dataCySelectors], {
       ...endpointsQuery,
       ...endpointsMutation,

@@ -6,7 +6,6 @@
 import { adm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { deploymentMinimal } from "@orch-ui/utils";
-import { dataCy } from "./EditDeployment";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -30,7 +29,7 @@ const getDeploymentDetailsSuccessEndpoints: CyApiDetails<
 };
 
 class EditDeploymentPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "editDeployment") {
     super(rootCy, [...dataCySelectors], {
       ...getDeploymentDetailsSuccessEndpoints,
     });

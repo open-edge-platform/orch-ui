@@ -6,7 +6,6 @@
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { registeredHostOne } from "@orch-ui/utils";
-import { dataCy } from "./RegisteredHostDetails";
 
 const dataCySelectors = [
   "serialNumber",
@@ -30,7 +29,7 @@ const endpoints: CyApiDetails<
 };
 
 export class RegisteredHostDetailsPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "registeredHostDetails") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

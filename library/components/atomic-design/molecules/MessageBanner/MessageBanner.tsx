@@ -6,7 +6,7 @@
 import { Button, Heading, Icon, IconProps, Text } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import "./MessageBanner.scss";
-export const dataCy = "messageBanner";
+const dataCy = "messageBanner";
 export enum MessageBannerVariant {
   Info = "info",
   Warning = "warning",

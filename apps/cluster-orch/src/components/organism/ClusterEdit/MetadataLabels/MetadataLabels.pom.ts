@@ -6,7 +6,6 @@
 import { MetadataDisplayPom, MetadataFormPom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
 import ClusterEditPom from "../../../pages/ClusterEdit/ClusterEdit.pom";
-import { dataCy } from "./MetadataLabels";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -16,7 +15,7 @@ class MetadataLabelsPom extends CyPom<Selectors> {
   public metadataDisplay = new MetadataDisplayPom();
   public metadataForm = new MetadataFormPom();
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "metadataLabels") {
     super(rootCy, [...dataCySelectors]);
   }
 }

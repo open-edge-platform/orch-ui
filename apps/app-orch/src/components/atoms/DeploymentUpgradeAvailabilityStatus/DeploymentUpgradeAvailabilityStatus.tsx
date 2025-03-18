@@ -7,7 +7,7 @@ import { catalog } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import "./DeploymentUpgradeAvailabilityStatus.scss";
 
-export const dataCy = "deploymentUpgradeAvailabilityStatus";
+const dataCy = "deploymentUpgradeAvailabilityStatus";
 interface DeploymentUpgradeAvailabilityStatusProps {
   currentCompositeAppName: string;
   currentVersion: string;

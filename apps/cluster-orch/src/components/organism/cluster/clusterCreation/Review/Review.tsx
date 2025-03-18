@@ -18,7 +18,7 @@ import { NodeTableColumns } from "../../../../../utils/NodeTableColumns";
 import ClusterNodesTable from "../../../ClusterNodesTable/ClusterNodesTable";
 import "./Review.scss";
 
-export const dataCy = "review";
+const dataCy = "review";
 
 interface ReviewProps {
   accumulatedMeta: MetadataPair[];

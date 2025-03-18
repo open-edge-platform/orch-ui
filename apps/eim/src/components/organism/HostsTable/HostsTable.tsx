@@ -42,7 +42,7 @@ import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
 import HostDetailsActions from "../hosts/HostDetailsActions/HostDetailsActions";
 import "./HostsTable.scss";
-export const dataCy = "hostsTable";
+const dataCy = "hostsTable";
 export interface HostsTableProps {
   /** columns to show from Host object */
   columns?: TableColumn<eim.HostRead>[];

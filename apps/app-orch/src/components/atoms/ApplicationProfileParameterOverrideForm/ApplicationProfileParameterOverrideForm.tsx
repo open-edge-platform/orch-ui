@@ -15,7 +15,7 @@ import ApplicationProfileOverrideValueComboxCell, {
 } from "../ApplicationProfileOverrideValueComboBoxCell/ApplicationProfileOverrideValueComboBoxCell";
 import "./ApplicationProfileParameterOverrideForm.scss";
 
-export const dataCy = "parameterOverrideDeploymentForm";
+const dataCy = "applicationProfileParameterOverrideForm";
 
 export const removeEmptyValues = (values: ParameterOverrideValuePair) => {
   Object.keys(values).forEach((key) => {

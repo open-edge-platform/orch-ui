@@ -15,7 +15,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import { clearDeploymentPackage } from "../../../store/reducers/deploymentPackage";
 import DeploymentPackageCreateEdit from "../../organisms/deploymentPackages/DeploymentPackageCreateEdit/DeploymentPackageCreateEdit";
 
-export const dataCy = "deploymentPackageCreate";
+const dataCy = "deploymentPackageCreate";
 
 const DeploymentPackageCreate = () => {
   const cy = { "data-cy": dataCy };

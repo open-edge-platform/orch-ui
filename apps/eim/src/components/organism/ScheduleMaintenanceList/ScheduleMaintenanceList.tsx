@@ -35,7 +35,7 @@ import { isSingleMaintenance } from "../../../store/utils";
 import { ScheduleMaintenanceSubComponent } from "../../atom/ScheduleMaintenanceSubComponent/ScheduleMaintenanceSubComponent";
 import "./ScheduleMaintenanceList.scss";
 
-export const dataCy = "scheduleMaintenanceList";
+const dataCy = "scheduleMaintenanceList";
 
 interface ScheduleMaintenanceTargetIds {
   hostId?: string;

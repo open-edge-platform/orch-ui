@@ -19,7 +19,7 @@ import OSProfileDetailsDrawer from "./OSProfilesDrawer";
 
 import "./OSProfiles.scss";
 
-export const dataCy = "oSProfiles";
+const dataCy = "oSProfiles";
 
 const OSProfiles = () => {
   const cy = { "data-cy": dataCy };

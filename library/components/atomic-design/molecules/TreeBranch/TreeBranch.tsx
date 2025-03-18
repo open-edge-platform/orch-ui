@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { SquareSpinner } from "../../atoms/SquareSpinner/SquareSpinner";
 import { TreeExpander } from "../TreeExpander/TreeExpander";
 import "./TreeBranch.scss";
-export const dataCy = "treeBranch";
+const dataCy = "treeBranch";
 
 export interface TreeNode {
   id: string;

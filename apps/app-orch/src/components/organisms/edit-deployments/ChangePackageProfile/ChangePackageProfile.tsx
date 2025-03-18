@@ -13,7 +13,7 @@ import DeploymentPackage from "../../../atoms/DeploymentPackage/DeploymentPackag
 import SelectProfilesTable from "../../setup-deployments/SelectProfileTable/SelectProfileTable";
 import "./ChangePackageProfile.scss";
 
-export const dataCy = "changePackageProfile";
+const dataCy = "changePackageProfile";
 
 interface ChangePackageProfileProps {
   deployment: adm.DeploymentRead;

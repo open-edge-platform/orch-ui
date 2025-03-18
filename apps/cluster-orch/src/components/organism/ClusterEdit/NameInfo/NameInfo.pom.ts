@@ -8,7 +8,6 @@ import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterOne } from "@orch-ui/utils";
 import ClusterTemplatesDropdownPom from "../../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown.pom";
-import { dataCy } from "./NameInfo";
 
 const dataCySelectors = [
   "name",
@@ -40,7 +39,7 @@ class NameInfoPom extends CyPom<Selectors, ApiAliases> {
     "clusterTemplateVersionDropdown",
   );
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "nameInfo") {
     super(rootCy, [...dataCySelectors], {
       ...successClusterEndpoint,
     });

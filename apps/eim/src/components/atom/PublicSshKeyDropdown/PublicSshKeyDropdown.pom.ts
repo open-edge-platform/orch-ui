@@ -5,13 +5,12 @@
 
 import { SiDropdown } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./PublicSshKeyDropdown";
 const dataCySelectors = ["localAccountsDropdown"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class PublicSshKeyDropdownPom extends CyPom<Selectors> {
   public sshKeyDrpopdown = new SiDropdown("localAccountsDropdown");
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "publicSshKeyDropdown") {
     super(rootCy, [...dataCySelectors]);
   }
 }

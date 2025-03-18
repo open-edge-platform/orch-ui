@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../store/hooks";
 import { setErrorInfo } from "../../../store/notifications";
 
-export const dataCy = "hostLink";
+const dataCy = "hostLink";
 
 export interface HostLinkProps {
   id?: string;

@@ -7,7 +7,7 @@ import { RadioButton, RadioGroup } from "@spark-design/react";
 import { RadioButtonSize } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 
-export const dataCy = "advancedSettingsToggle";
+const dataCy = "advancedSettingsToggle";
 interface AdvancedSettingsToggleProps {
   message?: string;
   value?: boolean; // defaults to false

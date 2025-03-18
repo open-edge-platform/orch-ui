@@ -5,7 +5,10 @@
 	npm ci
 
 build: ../node_modules
-	npx webpack build --config webpack.config.js
+	@for file in $(shell find cypress -name '*.cy.ts'); do \
+		echo "Building $$file"; \
+		npx webpack build --config webpack.config.js --stats --progress --entry ./$$file; \
+	done
 
 lint:
 	npx prettier --check .

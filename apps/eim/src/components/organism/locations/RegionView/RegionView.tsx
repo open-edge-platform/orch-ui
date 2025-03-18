@@ -18,7 +18,7 @@ import {
   setRegionToDelete,
 } from "../../../../store/locations";
 import "./RegionView.scss";
-export const dataCy = "regionView";
+const dataCy = "regionView";
 
 export enum RegionViewActions {
   Edit = "Edit",

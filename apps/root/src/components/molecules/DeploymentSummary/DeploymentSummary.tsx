@@ -18,7 +18,7 @@ import HostStatusCounter from "../../atoms/HostStatusCounter/HostStatusCounter";
 import DeploymentSiteSummary from "../DeploymentSiteSummary/DeploymentSiteSummary";
 import "./DeploymentSummary.scss";
 
-export const dataCy = "deploymentSummary";
+const dataCy = "deploymentSummary";
 
 interface DeploymentSummaryProps {
   deployment: adm.Deployment;

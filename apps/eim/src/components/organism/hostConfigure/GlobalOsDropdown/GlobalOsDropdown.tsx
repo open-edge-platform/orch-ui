@@ -10,7 +10,7 @@ import { Dropdown, Item, MessageBanner } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
 import "./GlobalOsDropdown.scss";
 
-export const dataCy = "globalOsDropdown";
+const dataCy = "globalOsDropdown";
 
 export type OsOptions = [string, string][];
 export interface GlobalOsDropdownProps {

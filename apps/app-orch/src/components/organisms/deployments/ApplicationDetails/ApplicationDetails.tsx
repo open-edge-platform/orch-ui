@@ -47,7 +47,7 @@ const {
   useVirtualMachineServiceStopVirtualMachineMutation,
 } = arm;
 
-export const dataCy = "applicationDetails";
+const dataCy = "applicationDetails";
 
 interface ApplicationDetailsProps {
   app: adm.AppRead;

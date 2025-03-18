@@ -51,7 +51,7 @@ import SetupMetadata, {
 import { DeploymentType } from "../SetupDeployment/SetupDeployment";
 import "./EditDeployment.scss";
 
-export const dataCy = "editDeployment";
+const dataCy = "editDeployment";
 
 type params = {
   id: string;

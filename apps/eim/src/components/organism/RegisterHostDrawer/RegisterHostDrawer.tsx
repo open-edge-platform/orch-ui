@@ -24,7 +24,7 @@ import {
 } from "../../../store/utils";
 import "./RegisterHostDrawer.scss";
 
-export const dataCy = "registerHostDrawer";
+const dataCy = "registerHostDrawer";
 export interface RegisterHostDrawerProps {
   isOpen: boolean;
   onHide: (registerHost: eim.HostRegisterInfo) => void;

@@ -9,7 +9,6 @@ import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import HostSearchFiltersPom from "../../organism/HostSearchFilters/HostSearchFilters.pom";
 import HostsTablePom from "../../organism/HostsTable/HostsTable.pom";
-import { dataCy } from "./Hosts";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -46,7 +45,7 @@ class HostsPom extends CyPom<Selectors, ApiAliases> {
   hostContextSwitcherPom: ContextSwitcherPom;
   hostSearchFilterPom: HostSearchFiltersPom;
   hostTablePom: HostsTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hosts") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.hostContextSwitcherPom = new ContextSwitcherPom();
     this.hostSearchFilterPom = new HostSearchFiltersPom();

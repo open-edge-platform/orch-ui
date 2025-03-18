@@ -7,7 +7,7 @@ import { Button, Icon } from "@spark-design/react";
 import { FallbackProps } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 import "./ErrorBoundaryFallback.scss";
-export const dataCy = "errorBoundaryFallback";
+const dataCy = "errorBoundaryFallback";
 
 const ErrorBoundaryFallback = ({ error }: FallbackProps) => {
   const cy = { "data-cy": dataCy };

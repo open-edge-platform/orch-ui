@@ -30,7 +30,7 @@ import { useDispatch } from "react-redux";
 import { setProps } from "../../../../store/reducers/toast";
 import "./ApplicationAddRegistryDrawer.scss";
 
-export const dataCy = "applicationAddRegistryDrawer";
+const dataCy = "applicationAddRegistryDrawer";
 
 interface ApplicationAddRegistryDrawerProps {
   editRegistryData?: catalog.RegistryRead;

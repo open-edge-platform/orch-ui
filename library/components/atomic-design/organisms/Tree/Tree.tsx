@@ -11,7 +11,7 @@ import {
 } from "../../molecules/TreeBranch/TreeBranch";
 import "./Tree.scss";
 import { TreeUtils } from "./Tree.utils";
-export const dataCy = "tree";
+const dataCy = "tree";
 
 export interface TreeProps<NodeData extends TreeNode>
   extends Pick<TreeBranchProps<NodeData>, "onExpand" | "onCollapse"> {

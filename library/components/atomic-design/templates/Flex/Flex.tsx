@@ -6,7 +6,7 @@
 import React, { ReactNode } from "react";
 import { FlexItem } from "../FlexItem/FlexItem";
 import "./Flex.scss";
-export const dataCy = "flex";
+const dataCy = "flex";
 const colSize = ["cols", "colsSm", "colsMd", "colsLg"] as const;
 const colSizeCss = ["col", "col-sm", "col-md", "col-lg"] as const;
 export type FlexColSize = (typeof colSize)[number];

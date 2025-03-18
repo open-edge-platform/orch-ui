@@ -8,7 +8,7 @@ import { TableColumn } from "@orch-ui/components";
 import { Table } from "@spark-design/react";
 import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 
-export const dataCy = "gpu";
+const dataCy = "gpu";
 const Gpu = ({
   data,
 }: ResourceDetailsDisplayProps<eim.HostResourcesGpuRead[]>) => {

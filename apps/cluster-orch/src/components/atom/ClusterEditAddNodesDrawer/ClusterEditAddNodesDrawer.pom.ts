@@ -6,7 +6,6 @@
 import { SiTablePom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
 import ClusterNodesTableBySitePom from "../../organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite.pom";
-import { dataCy } from "./ClusterEditAddNodesDrawer";
 
 const dataCySelectors = ["okBtn", "cancelBtn"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -14,7 +13,7 @@ type Selectors = (typeof dataCySelectors)[number];
 class ClusterEditAddNodesDrawerPom extends CyPom<Selectors> {
   nodeTablePom: ClusterNodesTableBySitePom;
   nodeTableUtilsPom: SiTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterEditAddNodesDrawer") {
     super(rootCy, [...dataCySelectors]);
     this.nodeTablePom = new ClusterNodesTableBySitePom();
     this.nodeTableUtilsPom = new SiTablePom("table");

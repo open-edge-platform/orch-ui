@@ -22,8 +22,6 @@ import {
 import ClusterTemplatesDropdown from "../../../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown";
 import ClusterTemplateVersionsDropdown from "../../../../atom/ClusterTemplateVersionsDropdown/ClusterTemplateVersionsDropdown";
 
-export const dataCy = "NameAndTemplate";
-
 const NameAndTemplate = () => {
   const currentCluster = useAppSelector(getCluster);
 

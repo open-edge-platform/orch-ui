@@ -47,7 +47,7 @@ import DeploymentPackageCreateEditReview from "../DeploymentPackageCreateEditRev
 import DeploymentPackageCreateGeneral from "../DeploymentPackageGeneralInfoForm/DeploymentPackageGeneralInfoForm";
 import "./DeploymentPackageCreateEdit.scss";
 
-export const dataCy = "deploymentPackageCreateEdit";
+const dataCy = "deploymentPackageCreateEdit";
 
 export type PackageInputs = {
   name: string;

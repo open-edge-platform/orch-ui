@@ -5,7 +5,6 @@
 
 import { CatalogUploadDeploymentPackageResponse } from "@orch-ui/apis";
 import { Cy, CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentPackageImport";
 
 // FIXME remove me once @orch-ui/components@0.0.17 is published
 const ubDataCySelectors = ["uploadBtn", "uploadInput"] as const;
@@ -79,7 +78,7 @@ export const apApis: CyApiDetails<
 class DeploymentPackageImportPom extends CyPom<Selectors, ApiAliases> {
   public uploadButtonEmpty: UploadButtonPom;
   public uploadButtonList: UploadButtonPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageImport") {
     super(rootCy, [...dataCySelectors], apApis);
     this.uploadButtonEmpty = new UploadButtonPom("uploadButtonEmpty");
     this.uploadButtonList = new UploadButtonPom("uploadButtonList");

@@ -8,7 +8,7 @@
 import { MessageBanner, Table, Tooltip } from "@spark-design/react";
 import { Result } from "../../../pages/DeploymentPackageImport/DeploymentPackageImport";
 
-export const dataCy = "deploymentPackageImportResult";
+const dataCy = "deploymentPackageImportResult";
 
 interface DeploymentPackageImportResultProps {
   results: Result[];

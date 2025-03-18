@@ -8,7 +8,7 @@ import { SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 
-export const dataCy = "applicationName";
+const dataCy = "applicationName";
 
 interface ApplicationNameProps {
   applicationReference: catalog.ApplicationReference;

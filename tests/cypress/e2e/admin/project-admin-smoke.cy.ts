@@ -1,7 +1,7 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import { NetworkLog } from "../../support/network-logs";
 import { ADMIN_USER } from "../../support/utilities";
@@ -107,18 +107,18 @@ describe("Org Admin Smoke", () => {
   });
   after(() => {
     // Cleanup all the new entries created
-    // cy.authenticatedRequest({
-    //   method: "DELETE",
-    //   url: `/v1/projects/${name}`,
-    // }).then((response) => {
-    //   // we only care that the created region is  not there,
-    //   // if the test failed before creating it we're fine with a 400, 404
-    //   const success =
-    //     response.status === 200 ||
-    //     response.status === 204 ||
-    //     response.status === 400 ||
-    //     response.status === 404;
-    //   expect(success).to.be.true;
-    // });
+    cy.authenticatedRequest({
+      method: "DELETE",
+      url: `/v1/projects/${name}`,
+    }).then((response) => {
+      // we only care that the created project is not there,
+      // if the test failed before creating it we're fine with a 400, 404
+      const success =
+        response.status === 200 ||
+        response.status === 204 ||
+        response.status === 400 ||
+        response.status === 404;
+      expect(success).to.be.true;
+    });
   });
 });

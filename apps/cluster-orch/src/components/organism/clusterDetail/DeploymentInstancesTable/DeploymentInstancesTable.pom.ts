@@ -6,7 +6,6 @@
 import { adm } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentInstancesTable";
 
 const deploymentsPerCluster: adm.DeploymentServiceListDeploymentsPerClusterApiResponse =
   {
@@ -86,7 +85,7 @@ const endpoints: CyApiDetails<
 
 class DeploymentInstancesTablePom extends CyPom<Selectors, ApiAliases> {
   public table = new TablePom();
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentInstancesTable") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

@@ -5,7 +5,6 @@
 
 import { catalog } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentPackageDetailsHeader";
 
 const dataCySelectors = ["dpTitle"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -27,7 +26,7 @@ export class DeploymentPackageDetailsHeaderPom extends CyPom<
   Selectors,
   ApiAliases
 > {
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageDetailsHeader") {
     super(rootCy, [...dataCySelectors], deploymentPackageEndpoints);
   }
 

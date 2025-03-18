@@ -5,14 +5,13 @@
 
 import { SiTablePom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ClusterEditNodeReview";
 
 const dataCySelectors = ["addHostBtn"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class ClusterEditNodeReviewPom extends CyPom<Selectors> {
   table: SiTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterEditNodeReview") {
     super(rootCy, [...dataCySelectors]);
     this.table = new SiTablePom("reviewTable");
   }

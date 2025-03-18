@@ -7,10 +7,8 @@ import { adm } from "@orch-ui/apis";
 import { SiDrawerPom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { deploymentOne } from "@orch-ui/utils";
-import { dataCy as DeploymentDrawerContent } from "../DeploymentDrawerContent/DeploymentDrawerContent";
-import { dataCy } from "./DeploymentDrawer";
 
-const dataCySelectors = ["error", DeploymentDrawerContent] as const;
+const dataCySelectors = ["error", "deploymentDrawerContent"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "getDeployment" | "getDeployment404";
@@ -36,7 +34,7 @@ const endpoints: CyApiDetails<
 
 export class DeploymentDrawerPom extends CyPom<Selectors, ApiAliases> {
   public drawerPom: SiDrawerPom<Selectors, ApiAliases>;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentDrawer") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.drawerPom = new SiDrawerPom(
       this.rootCy,

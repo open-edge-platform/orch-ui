@@ -9,7 +9,7 @@ import { Badge, Heading } from "@spark-design/react";
 import DeploymentPackageDetailsAppProfileList from "../DeploymentPackageDetailsAppProfileList/DeploymentPackageDetailsAppProfileList";
 import "./DeploymentPackageDetailsProfileList.scss";
 
-export const dataCy = "dpDetailsProfileList";
+const dataCy = "deploymentPackageDetailsProfileList";
 
 interface DeploymentPackageDetailsProfileListProps {
   deploymentPackage: catalog.DeploymentPackage;

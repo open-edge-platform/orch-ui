@@ -25,7 +25,7 @@ import {
   setSearchType,
 } from "../../../../store/locations";
 import "./Search.scss";
-export const dataCy = "search";
+const dataCy = "search";
 export interface SearchTypeItem {
   id: string;
   name: string;

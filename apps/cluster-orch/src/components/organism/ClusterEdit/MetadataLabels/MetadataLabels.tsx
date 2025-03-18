@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../../store/hooks";
 import { updateClusterLabels } from "../../../../store/reducers/cluster";
 
-export const dataCy = "metadataLabels";
+const dataCy = "metadataLabels";
 
 interface MetadataLabelsProps {
   regionMeta: TypedMetadata[];

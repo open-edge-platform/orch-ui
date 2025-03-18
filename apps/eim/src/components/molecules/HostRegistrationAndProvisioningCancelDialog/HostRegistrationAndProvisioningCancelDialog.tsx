@@ -8,7 +8,7 @@ import { ButtonVariant } from "@spark-design/tokens";
 import { useNavigate } from "react-router-dom";
 import { reset } from "../../../store/configureHost";
 import { useAppDispatch } from "../../../store/hooks";
-export const dataCy = "hostRegistrationAndProvisioningCancelDialog";
+const dataCy = "hostRegistrationAndProvisioningCancelDialog";
 interface HostRegistrationAndProvisioningCancelDialogProps {
   isOpen: boolean;
   onClose: () => void;

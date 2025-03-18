@@ -7,7 +7,7 @@ import { ReactEChart } from "@orch-ui/components";
 import { Heading } from "@spark-design/react";
 import "./ClusterPerformanceCard.scss";
 
-export const dataCy = "performanceCard";
+const dataCy = "clusterPerformanceCard";
 
 interface ClusterPerformanceCardProps {
   /** heading title for the card */

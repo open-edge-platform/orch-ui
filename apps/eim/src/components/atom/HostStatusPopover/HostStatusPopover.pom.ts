@@ -5,7 +5,6 @@
 
 import { AggregatedStatusesPom, PopoverPom } from "@orch-ui/components";
 import { cyGet, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./HostStatusPopover";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -20,7 +19,7 @@ type GenericStatusType =
 class HostStatusPopoverPom extends CyPom<Selectors> {
   public aggregateStatusPom = new AggregatedStatusesPom();
   public popoverPom = new PopoverPom();
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostStatusPopover") {
     super(rootCy, [...dataCySelectors]);
     this.aggregateStatusPom = new AggregatedStatusesPom();
     this.popoverPom = new PopoverPom();

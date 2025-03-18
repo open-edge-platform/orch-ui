@@ -17,7 +17,7 @@ import { HostTableColumn } from "../../../../utils/HostTableColumns";
 import { PublicSshKeyDropdown } from "../../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
 import "./AddSshPublicKey.scss";
 
-export const dataCy = "addSshPublicKey";
+const dataCy = "addSshPublicKey";
 
 interface AddSshPublicKeyProps {
   localAccounts?: eim.LocalAccountRead[];

@@ -7,7 +7,6 @@ import { eim } from "@orch-ui/apis";
 import { CheckboxSelectionListPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { osRedHat } from "@orch-ui/utils";
-import { dataCy } from "./HostSearchFilters";
 
 const dataCySelectors = [
   "filterButton",
@@ -43,7 +42,7 @@ const endpoints: CyApiDetails<
 class HostSearchFiltersPom extends CyPom<Selectors, ApiAliases> {
   statusCheckboxListPom: CheckboxSelectionListPom;
   osProfileCheckboxListPom: CheckboxSelectionListPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostSearchFilters") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.statusCheckboxListPom = new CheckboxSelectionListPom(
       "statusCheckboxList",

@@ -42,7 +42,7 @@ import { setDeploymentPackage } from "../../../../store/reducers/deploymentPacka
 import { setProps } from "../../../../store/reducers/toast";
 import "./DeploymentPackageTable.scss";
 
-export const dataCy = "deploymentPackageTable";
+const dataCy = "deploymentPackageTable";
 
 export interface DeploymentPackageTableProps {
   hasPermission?: boolean;

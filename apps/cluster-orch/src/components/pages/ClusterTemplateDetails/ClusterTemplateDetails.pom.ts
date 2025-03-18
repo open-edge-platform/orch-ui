@@ -5,13 +5,12 @@
 
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterTemplateOneV1 } from "@orch-ui/utils";
-import { dataCy } from "./ClusterTemplateDetails";
 
 const dataCySelectors = [
   "templateVersion",
   "templateDescription",
   "templateName",
-  "clusterTemplateViewPopup",
+  "clusterTemplateDetailsPopup",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
@@ -32,7 +31,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 };
 
 class ClusterTemplateDetailsPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterTemplateDetails") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

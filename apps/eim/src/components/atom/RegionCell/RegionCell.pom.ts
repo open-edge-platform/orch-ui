@@ -11,7 +11,8 @@ import {
   defaultActiveProject,
 } from "@orch-ui/tests";
 import { RegionStore, regionUsWest } from "@orch-ui/utils";
-import { dataCy } from "./RegionCell";
+
+const dataCy = "regionCell";
 
 const dataCySelectors = [dataCy] as const;
 type Selectors = (typeof dataCySelectors)[number];

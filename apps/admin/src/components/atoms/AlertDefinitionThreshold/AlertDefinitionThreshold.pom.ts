@@ -6,7 +6,6 @@
 import { omApi } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { alertDefinitionTemplateOne } from "../../../../../../library/utils/mocks/tenancy/data/alertDefinitionTemplates";
-import { dataCy } from "./AlertDefinitionThreshold";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -28,7 +27,7 @@ const endpoints: CyApiDetails<
 };
 
 class AlertDefinitionThresholdPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "alertDefinitionThreshold") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

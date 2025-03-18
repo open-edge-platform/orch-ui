@@ -15,7 +15,7 @@ import AlertSource from "../../atoms/AlertSource/AlertSource";
 import AlertDrawer from "../AlertDrawer/AlertDrawer";
 import "./AlertsList.scss";
 
-export const dataCy = "alertsList";
+const dataCy = "alertsList";
 
 const AlertsList = () => {
   const cy = { "data-cy": dataCy };

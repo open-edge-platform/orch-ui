@@ -55,7 +55,7 @@ export default ${name}Pom;"
 
 TSX="
 import \"./${name}.scss\";
-export const dataCy = \"${lowerName}\";
+const dataCy = \"${lowerName}\";
 interface ${name}Props {}
 const ${name} = ({}: ${name}Props) => {
   const cy = { \"data-cy\": dataCy };

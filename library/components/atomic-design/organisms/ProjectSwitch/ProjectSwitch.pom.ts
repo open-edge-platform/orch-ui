@@ -6,7 +6,6 @@
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { EimUIMessageError } from "@orch-ui/utils";
 import { Project } from "../../organisms/ProjectSwitch/ProjectSwitch";
-import { dataCy } from "./ProjectSwitch";
 
 const dataCySelectors = [
   "seeAllProjects",
@@ -85,7 +84,7 @@ const errorEndpoints: CyApiDetails<
 };
 
 export class ProjectSwitchPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "projectSwitch") {
     super(rootCy, [...dataCySelectors], {
       ...successEndpoints,
       ...errorEndpoints,

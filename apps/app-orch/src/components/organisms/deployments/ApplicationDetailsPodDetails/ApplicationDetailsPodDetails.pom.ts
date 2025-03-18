@@ -5,14 +5,13 @@
 
 import { TablePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ApplicationDetailsPodDetails";
 
 const dataCySelectors = ["empty"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class ApplicationDetailsPodDetailsPom extends CyPom<Selectors> {
   public table: TablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "applicationDetailsPodDetails") {
     super(rootCy, [...dataCySelectors]);
     this.table = new TablePom("pods");
   }

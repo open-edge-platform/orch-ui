@@ -5,7 +5,6 @@
 
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./TelemetryProfileLogs";
 
 const dataCySelectors = [
   "log",
@@ -57,7 +56,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 };
 
 export class TelemetryProfileLogsPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "telemetryProfileLogs") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

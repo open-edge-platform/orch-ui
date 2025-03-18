@@ -21,7 +21,7 @@ import GenericHostPopup, {
 } from "../../atom/GenericHostPopup/GenericHostPopup";
 import "./ProvisionedHostPopup.scss";
 
-export const dataCy = "provisionedHostPopup";
+const dataCy = "provisionedHostPopup";
 export type ProvisionedHostPopupProps = Omit<
   GenericHostPopupProps,
   "additionalPopupOptions" | "onDeauthorize" | "showDeleteOption"

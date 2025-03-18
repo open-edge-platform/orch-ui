@@ -81,7 +81,7 @@ export interface ParameterOverrideValuePair {
   [key: string]: any;
 }
 
-export const dataCy = "applicationProfileOverrideValueComboBoxCell";
+const dataCy = "applicationProfileOverrideValueComboBoxCell";
 
 interface ApplicationProfileOverrideValueComboBoxCellProps {
   application: catalog.Application;

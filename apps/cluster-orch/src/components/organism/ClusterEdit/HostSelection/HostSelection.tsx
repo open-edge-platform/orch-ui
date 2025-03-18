@@ -13,7 +13,7 @@ import ClusterEditAddNodesDrawer from "../../../atom/ClusterEditAddNodesDrawer/C
 import ClusterEditNodeReview from "../../../atom/ClusterEditNodeReview/ClusterEditNodeReview";
 import "./HostSelection.scss";
 
-export const dataCy = "hostSelection";
+const dataCy = "hostSelection";
 
 interface HostSelectionProps {
   cluster: cm.ClusterDetailInfo & cm.ClusterInfo;

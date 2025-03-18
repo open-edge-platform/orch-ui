@@ -7,7 +7,6 @@ import { EmptyPom, TablePom } from "@orch-ui/components";
 import { SiComboboxPom, SiTablePom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
 import ApplicationProfileOverrideValueComboxCellPom from "../ApplicationProfileOverrideValueComboBoxCell/ApplicationProfileOverrideValueComboBoxCell.pom";
-import { dataCy } from "./ApplicationProfileParameterOverrideForm";
 
 const dataCySelectors = [
   "emptyList",
@@ -25,7 +24,9 @@ class ApplicationProfileParameterOverrideFormPom extends CyPom<Selectors> {
   public tableUtil: SiTablePom;
   public empty: EmptyPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(
+    public rootCy: string = "applicationProfileParameterOverrideForm",
+  ) {
     super(rootCy, [...dataCySelectors]);
 
     this.combobox = new SiComboboxPom("comboxParams");

@@ -24,7 +24,7 @@ if (RuntimeConfig.isEnabled("FM")) {
   );
 }
 
-export const dataCy = "alertSource";
+const dataCy = "alertSource";
 
 interface AlertSourceProps {
   alert: omApi.Alert;

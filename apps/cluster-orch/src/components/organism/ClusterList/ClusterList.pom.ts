@@ -7,7 +7,6 @@ import { cm } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterInfo1, clusterInfo2 } from "@orch-ui/utils";
-import { dataCy } from "./ClusterList";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -61,7 +60,7 @@ const endpoints: CyApiDetails<
 
 class ClusterListPom extends CyPom<Selectors, ApiAliases> {
   public table: TablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterList") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.table = new TablePom("table");
   }

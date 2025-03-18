@@ -13,7 +13,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import { showToast } from "../../../store/notifications";
 import "./ReceiversList.scss";
 
-export const dataCy = "receiversList";
+const dataCy = "receiversList";
 interface ReceiversListProps {
   isOpen?: boolean;
   setIsOpen?: (isOpen: boolean) => void;

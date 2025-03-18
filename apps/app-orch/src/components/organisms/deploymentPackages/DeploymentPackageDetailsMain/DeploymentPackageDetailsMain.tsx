@@ -8,7 +8,7 @@ import { rfc3339ToDate } from "@orch-ui/utils";
 import { Heading } from "@spark-design/react";
 import "./DeploymentPackageDetailsMain.scss";
 
-export const dataCy = "deploymentPackageDetailsMain";
+const dataCy = "deploymentPackageDetailsMain";
 
 interface DeploymentPackageDetailsMainProps {
   deploymentPackage: catalog.DeploymentPackageRead;

@@ -6,7 +6,6 @@
 import { catalog } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { ApplicationsStore } from "@orch-ui/utils";
-import { dataCy } from "./DeploymentPackageProfileAddEditDrawer";
 
 const dataCySelectors = ["drawerContent"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -30,7 +29,7 @@ class DeploymentPackageProfileAddEditDrawerPom extends CyPom<
   Selectors,
   ApiAliases
 > {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentPackageProfileAddEditDrawer") {
     super(rootCy, [...dataCySelectors], apis);
   }
 }

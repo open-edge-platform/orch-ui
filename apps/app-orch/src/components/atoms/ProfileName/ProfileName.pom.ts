@@ -6,7 +6,6 @@
 import { catalog } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { profileOne } from "@orch-ui/utils";
-import { dataCy } from "./ProfileName";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -38,7 +37,7 @@ const apis: CyApiDetails<ProfileApiAliases, ApplicationResponseForProfiles> = {
 };
 
 class ProfileNamePom extends CyPom<Selectors, ProfileApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "profileName") {
     super(rootCy, [...dataCySelectors], {
       ...apis,
     });

@@ -46,7 +46,7 @@ import SshKeysAddEditDrawer from "../SshKeysAddEditDrawer/SshKeysAddEditDrawer";
 import SshKeysViewDrawer from "../SshKeysViewDrawer/SshKeysViewDrawer";
 import "./SshKeysTable.scss";
 
-export const dataCy = "sshKeysTable";
+const dataCy = "sshKeysTable";
 
 interface SshDrawerControl {
   isOpen: boolean;

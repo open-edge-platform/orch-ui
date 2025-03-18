@@ -10,8 +10,6 @@ import { Drawer } from "@spark-design/react";
 import OSProfileDetails from "../../organism/OSProfileDetails/OSProfileDetails";
 import "./OSProfiles.scss";
 
-export const dataCy = "os-profile-drawer";
-
 interface OSProfileDrawerProps {
   showDrawer: boolean;
   selectedOsProfile: eim.OperatingSystemResourceRead;

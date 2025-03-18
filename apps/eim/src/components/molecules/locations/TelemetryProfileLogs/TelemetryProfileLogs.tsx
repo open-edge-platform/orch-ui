@@ -8,7 +8,7 @@ import { ApiError, Flex, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import "./TelemetryProfileLogs.scss";
-export const dataCy = "telemetryProfileLogs";
+const dataCy = "telemetryProfileLogs";
 export interface TelemetryProfileProps {
   region?: eim.RegionRead;
   site?: eim.SiteRead;

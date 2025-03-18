@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./AlertDrawer";
 
 const dataCySelectors = [
   "alertDrawerBody",
@@ -28,7 +27,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class AlertDrawerPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "alertDrawer") {
     super(rootCy, [...dataCySelectors]);
   }
 }

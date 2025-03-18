@@ -14,7 +14,7 @@ import { useAppSelector } from "../../../../store/hooks";
 import { selectSite } from "../../../../store/locations";
 import "./SiteView.scss";
 
-export const dataCy = "siteView";
+const dataCy = "siteView";
 interface SiteViewProps {
   basePath?: string;
   hideActions?: boolean;

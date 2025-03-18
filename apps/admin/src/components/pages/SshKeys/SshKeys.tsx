@@ -8,7 +8,7 @@ import { hasRole, Role } from "@orch-ui/utils";
 import { Heading, Text } from "@spark-design/react";
 import SshKeysTable from "../../organisms/SshKeysTable/SshKeysTable";
 
-export const dataCy = "sshKeys";
+const dataCy = "sshKeys";
 
 const SshKeys = () => {
   const cy = { "data-cy": dataCy };

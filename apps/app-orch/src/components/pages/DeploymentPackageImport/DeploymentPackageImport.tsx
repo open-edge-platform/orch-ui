@@ -34,7 +34,7 @@ import {
 import { useAppDispatch } from "../../../store/hooks";
 import "./DeploymentPackageImport.scss";
 
-export const dataCy = "dpImport";
+const dataCy = "deploymentPackageImport";
 
 export type Result = {
   filename: string;
@@ -167,7 +167,7 @@ const DeploymentPackageImport = () => {
                     ),
                   },
                 ]}
-                dataCy="dpImportEmpty"
+                dataCy="deploymentPackageImportEmpty"
                 icon="document-plus"
               />
               <Button

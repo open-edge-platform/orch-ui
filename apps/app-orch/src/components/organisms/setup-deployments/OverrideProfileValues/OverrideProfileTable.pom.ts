@@ -8,9 +8,8 @@ import { TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { appWithParameterTemplates } from "@orch-ui/utils";
 import ParameterOverrideDeploymentFormPom from "../../../atoms/ApplicationProfileParameterOverrideForm/ApplicationProfileParameterOverrideForm.pom";
-import { dataCy } from "./OverrideProfileTable";
 
-const dataCySelectors = ["parameterOverrideDeploymentForm"] as const;
+const dataCySelectors = ["applicationProfileParameterOverrideForm"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "appError500" | "appSingle" | "appSingleDelayed";
@@ -46,7 +45,7 @@ export class OverrideProfileTablePom extends CyPom<Selectors, ApiAliases> {
   /** Expand row component */
   public overrideForm: ParameterOverrideDeploymentFormPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "overrideProfileTable") {
     super(rootCy, [...dataCySelectors], apis);
 
     this.table = new TablePom("table");

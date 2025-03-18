@@ -22,7 +22,7 @@ import { RegisterHostDrawer } from "../../RegisterHostDrawer/RegisterHostDrawer"
 import { ScheduleMaintenanceDrawer } from "../../ScheduleMaintenanceDrawer/ScheduleMaintenanceDrawer";
 import DeauthorizeHostStandalone from "../DeauthorizeHostStandalone/DeauthorizeHostStandalone";
 
-export const dataCy = "hostDetailsActions";
+const dataCy = "hostDetailsActions";
 export type HostDetailsActionsProp = Omit<
   GenericHostPopupProps,
   // Below props are all ready applied within HostDetailsActions

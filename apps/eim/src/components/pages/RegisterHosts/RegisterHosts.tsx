@@ -29,7 +29,7 @@ import AutoPropertiesMessageBanner from "../../molecules/AutoPropertiesMessageBa
 import AddHostsForm from "../../organism/AddHostsForm/AddHostsForm";
 import "./RegisterHosts.scss";
 import { registerHostPost } from "./RegisterHosts.utils";
-export const dataCy = "registerHosts";
+const dataCy = "registerHosts";
 
 const RegisterHosts = () => {
   const cy = { "data-cy": dataCy };

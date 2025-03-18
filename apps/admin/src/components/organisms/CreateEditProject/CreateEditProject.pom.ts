@@ -6,7 +6,6 @@
 import { tm } from "@orch-ui/apis";
 import { ModalPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./CreateEditProject";
 
 const dataCySelectors = [
   "projectNameLabel",
@@ -57,7 +56,7 @@ const errorEndpoints: CyApiDetails<ErrorApiAliases> = {
 export class CreateEditProjectPom extends CyPom<Selectors, ApiAliases> {
   public modalPom: ModalPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "createEditProject") {
     super(rootCy, [...dataCySelectors], {
       ...successEndpoints,
       ...errorEndpoints,

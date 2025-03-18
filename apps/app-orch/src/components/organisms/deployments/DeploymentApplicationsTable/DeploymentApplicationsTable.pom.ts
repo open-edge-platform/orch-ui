@@ -7,7 +7,6 @@ import { catalog } from "@orch-ui/apis";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import ApplicationDetailsPom from "../../../pages/ApplicationDetails/ApplicationDetails.pom";
-import { dataCy } from "./DeploymentApplicationsTable";
 
 const dataCySelectors = ["paramName", "paramValue"] as const;
 
@@ -85,7 +84,7 @@ class DeploymentApplicationsTablePom extends CyPom<Selectors, ApiAliases> {
   public table: SiTablePom;
   public appDetailPom: ApplicationDetailsPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentApplicationsTable") {
     super(rootCy, [...dataCySelectors], apis);
     this.table = new SiTablePom(this.rootCy);
     this.appDetailPom = new ApplicationDetailsPom("appDetailsPage");

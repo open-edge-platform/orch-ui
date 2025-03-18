@@ -64,7 +64,7 @@ type urlParams = {
   clusterName: string;
 };
 
-export const dataCy = "clusterDetail";
+const dataCy = "clusterDetail";
 
 export interface ClusterDetailProps {
   hasHeader?: boolean;

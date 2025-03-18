@@ -12,7 +12,7 @@ import { useAppSelector } from "../../../store/hooks";
 
 import "./HostConfigReview.scss";
 
-export const dataCy = "hostConfigReview";
+const dataCy = "hostConfigReview";
 
 interface IosItem {
   count?: number;

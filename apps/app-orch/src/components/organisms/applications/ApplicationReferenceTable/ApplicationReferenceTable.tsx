@@ -8,7 +8,7 @@ import { Table, TableColumn } from "@orch-ui/components";
 import { useAppSelector } from "../../../../store/hooks";
 import ApplicationName from "../../../atoms/ApplicationName/ApplicationName";
 
-export const dataCy = "applicationReferencesTable";
+const dataCy = "applicationReferencesTable";
 
 const ApplicationReferencesTable = () => {
   const cy = { "data-cy": dataCy };

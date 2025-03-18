@@ -8,7 +8,6 @@ import { EmptyPom, TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { RegistryStore } from "@orch-ui/utils";
-import { dataCy } from "./AvailableRegistriesTable";
 
 const dataCySelectors = ["ribbonButton"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -99,7 +98,7 @@ class AvailableRegistriesTablePom extends CyPom<Selectors, ApiAliases> {
   public table: TablePom;
   public tableUtils: SiTablePom;
   public empty: EmptyPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "availableRegistriesTable") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.table = new TablePom("registryTable");
     this.tableUtils = new SiTablePom("registryTable");

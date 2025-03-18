@@ -5,7 +5,6 @@
 
 import { SiComboboxPom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ApplicationProfileOverrideValueComboBoxCell";
 
 const dataCySelectors = ["chartName", "chartValue", "overrideValue"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -13,7 +12,9 @@ type Selectors = (typeof dataCySelectors)[number];
 class ApplicationProfileOverrideValueComboBoxCellPom extends CyPom<Selectors> {
   public combobox = new SiComboboxPom("comboxParams");
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(
+    public rootCy: string = "applicationProfileOverrideValueComboBoxCell",
+  ) {
     super(rootCy, [...dataCySelectors]);
   }
 

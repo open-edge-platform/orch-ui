@@ -8,7 +8,7 @@ import { Button, MessageBanner } from "@spark-design/react";
 import { useAuth } from "react-oidc-context";
 import "./NoProjectsDialog.scss";
 
-export const dataCy = "NoProjects";
+const dataCy = "noProjectsDialog";
 
 export const NoProjectsDialog = () => {
   const cy = { "data-cy": dataCy };

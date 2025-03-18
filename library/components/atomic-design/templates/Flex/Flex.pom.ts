@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./Flex";
 
 const dataCySelectors = ["flexItem"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class FlexPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "flex") {
     super(rootCy, [...dataCySelectors]);
   }
 }

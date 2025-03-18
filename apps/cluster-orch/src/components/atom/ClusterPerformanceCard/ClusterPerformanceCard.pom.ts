@@ -4,8 +4,8 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ClusterPerformanceCard";
 
+const dataCy = "clusterPerformanceCard";
 const dataCySelectors = [
   `${dataCy}Title`,
   `${dataCy}Body`,

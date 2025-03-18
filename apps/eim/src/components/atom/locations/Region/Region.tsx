@@ -16,7 +16,7 @@ import {
 } from "../../../../store/locations";
 import "./Region.scss";
 
-export const dataCy = "region";
+const dataCy = "region";
 
 export interface RegionDynamicProps {
   showActionsMenu?: boolean;

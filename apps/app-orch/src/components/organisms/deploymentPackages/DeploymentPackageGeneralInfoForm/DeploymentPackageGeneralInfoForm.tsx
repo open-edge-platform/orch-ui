@@ -22,7 +22,7 @@ import {
 } from "../DeploymentPackageCreateEdit/DeploymentPackageCreateEdit";
 import "./DeploymentPackageGeneralInfoForm.scss";
 
-export const dataCy = "deploymentPackageGeneralInfoForm";
+const dataCy = "deploymentPackageGeneralInfoForm";
 
 interface DeploymentPackageGeneralInfoFormProps {
   control: Control<PackageInputs, string>;

@@ -5,7 +5,6 @@
 
 import { ModalPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeleteSSHDialog";
 
 const dataCySelectors = ["confirmationMessage"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -37,7 +36,7 @@ const errorEndpoints: CyApiDetails<ErrorApiAliases> = {
 
 class DeleteSSHDialogPom extends CyPom<Selectors, ApiAliases> {
   modalPom: ModalPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deleteSSHDialog") {
     super(rootCy, [...dataCySelectors], {
       ...successEndpoints,
       ...errorEndpoints,

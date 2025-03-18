@@ -16,7 +16,7 @@ import React, { Suspense } from "react";
 import { generateMetadataPair } from "../../../../utils/global";
 import "./ClusterDetails.scss";
 
-export const dataCy = "clusterDetails";
+const dataCy = "clusterDetails";
 
 interface ClusterDetailsProps {
   isOpen: boolean;

@@ -7,7 +7,7 @@ import { Checkbox, Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import "./CheckboxSelectionList.scss";
 
-export const dataCy = "checkboxSelectionList";
+const dataCy = "checkboxSelectionList";
 
 export interface CheckboxSelectionOption {
   id: string;

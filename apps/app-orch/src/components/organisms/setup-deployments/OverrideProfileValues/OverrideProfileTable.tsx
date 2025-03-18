@@ -16,7 +16,7 @@ import {
 import ApplicationProfileParameterOverrideForm from "../../../atoms/ApplicationProfileParameterOverrideForm/ApplicationProfileParameterOverrideForm";
 import "./OverrideProfileTable.scss";
 
-export const dataCy = "OverrideProfileTable";
+const dataCy = "overrideProfileTable";
 
 /** dictionary of `appName: OverrideValues` */
 export interface OverrideValuesList {

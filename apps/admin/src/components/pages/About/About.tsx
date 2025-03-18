@@ -7,7 +7,7 @@ import { Heading } from "@spark-design/react";
 import Version from "../../atoms/Version/Version";
 import "./About.scss";
 
-export const dataCy = "about";
+const dataCy = "about";
 const About = () => {
   const cy = { "data-cy": dataCy };
 

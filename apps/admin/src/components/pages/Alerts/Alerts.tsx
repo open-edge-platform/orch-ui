@@ -7,7 +7,7 @@ import { Heading } from "@spark-design/react";
 import AlertsList from "../../organisms/AlertsList/AlertsList";
 import "./Alerts.scss";
 
-export const dataCy = "alerts";
+const dataCy = "alerts";
 
 const Alerts = () => {
   const cy = { "data-cy": dataCy };

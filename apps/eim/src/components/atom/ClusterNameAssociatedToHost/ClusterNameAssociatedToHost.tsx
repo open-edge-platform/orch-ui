@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 interface ClusterNameAssociatedToHostProps {
   host: eim.HostRead;
 }
-export const dataCy = "clusterNameAssociatedToHost";
+const dataCy = "clusterNameAssociatedToHost";
 const ClusterNameAssociatedToHost = ({
   host,
 }: ClusterNameAssociatedToHostProps) => {

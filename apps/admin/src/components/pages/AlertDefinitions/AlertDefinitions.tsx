@@ -10,7 +10,7 @@ import AlertDefinitionsList from "../../organisms/AlertDefinitionsList/AlertDefi
 import ReceiversList from "../../organisms/ReceiversList/ReceiversList";
 import "./AlertDefinitions.scss";
 
-export const dataCy = "alertDefinitions";
+const dataCy = "alertDefinitions";
 
 const AlertDefinitions = () => {
   const cy = { "data-cy": dataCy };

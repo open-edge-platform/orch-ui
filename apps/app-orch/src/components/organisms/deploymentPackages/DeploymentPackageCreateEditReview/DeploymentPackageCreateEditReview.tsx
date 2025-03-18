@@ -10,7 +10,7 @@ import { selectDeploymentPackage } from "../../../../store/reducers/deploymentPa
 import ApplicationReferenceTable from "../../applications/ApplicationReferenceTable/ApplicationReferenceTable";
 import DeploymentPackageDetailsProfileList from "../DeploymentPackageDetailsProfileList/DeploymentPackageDetailsProfileList";
 
-export const dataCy = "dpCreateEditReview";
+const dataCy = "deploymentPackageCreateEditReview";
 
 const DeploymentPackageCreateEditReview = () => {
   const cy = { "data-cy": dataCy };

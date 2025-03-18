@@ -51,7 +51,7 @@ const basicOverrideProfileValuesTest = (testProfileIndex: number) => {
     pom.table.getCell(1, 5).contains("No");
   });
   pom.OverrideProfileValues.overrideTable.table.expandRow(0);
-  pom.OverrideProfileValues.overrideTable.el.parameterOverrideDeploymentForm.should(
+  pom.OverrideProfileValues.overrideTable.el.applicationProfileParameterOverrideForm.should(
     "be.visible",
   );
 };
@@ -157,7 +157,7 @@ describe("<SetupDeployment>", () => {
         });
 
         it("should see no parameter templates available", () => {
-          pom.OverrideProfileValues.overrideTable.el.parameterOverrideDeploymentForm
+          pom.OverrideProfileValues.overrideTable.el.applicationProfileParameterOverrideForm
             .children()
             .should("contain.text", "No parameter templates available");
         });

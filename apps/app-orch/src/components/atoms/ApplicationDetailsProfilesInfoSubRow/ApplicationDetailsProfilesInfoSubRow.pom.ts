@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ApplicationDetailsProfilesInfoSubRow";
 
 const dataCySelectors = [
   "createdOn",
@@ -15,7 +14,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class ApplicationDetailsProfilesInfoSubRowPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "applicationDetailsProfilesInfoSubRow") {
     super(rootCy, [...dataCySelectors]);
   }
   getAllParameters() {

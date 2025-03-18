@@ -5,7 +5,6 @@
 
 import { Cy, CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterA, clusterB, clusterC } from "@orch-ui/utils";
-import { dataCy } from "./HostStatusCounter";
 
 const dataCySelectors = ["statusText", "error", "chart"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -27,7 +26,7 @@ const apis: CyApiDetails<ApiAliases> = {
 };
 
 export class HostStatusCounterPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostStatusCounter") {
     super(rootCy, [...dataCySelectors], apis);
   }
 

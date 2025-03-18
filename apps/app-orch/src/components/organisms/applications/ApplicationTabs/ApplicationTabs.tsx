@@ -43,7 +43,7 @@ import AvailableRegistriesTable, {
 } from "../AvailableRegistriesTable/AvailableRegistriesTable";
 import "./ApplicationTabs.scss";
 
-export const dataCy = "applicationTabs";
+const dataCy = "applicationTabs";
 
 interface ApplicationTabsProps {
   hasPermission?: boolean;

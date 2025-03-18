@@ -7,7 +7,7 @@ import { Button, Icon, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import React, { useEffect, useRef, useState } from "react";
 import "./Popover.scss";
-export const dataCy = "popover";
+const dataCy = "popover";
 export interface PopoverProps {
   children: React.ReactNode;
   content: React.ReactNode;

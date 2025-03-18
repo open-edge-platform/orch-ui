@@ -11,7 +11,7 @@ import { MessageBannerAlertState } from "@spark-design/tokens";
 import { Link } from "react-router-dom";
 import "./ClusterSummary.scss";
 
-export const dataCy = "clusterSummary";
+const dataCy = "clusterSummary";
 export interface ClusterSummaryProps {
   nodeId: string;
   site?: string;

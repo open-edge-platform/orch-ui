@@ -8,7 +8,7 @@ import { Flex } from "@orch-ui/components";
 import { Text } from "@spark-design/react";
 import "./DeploymentMetadata.scss";
 
-export const dataCy = "deploymentMetadata";
+const dataCy = "deploymentMetadata";
 
 interface DeploymentMetadataProps {
   site?: eim.SiteRead;

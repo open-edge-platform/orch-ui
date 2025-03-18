@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@maestro-ui/tests";
-import { dataCy } from "./ChangeProfileValues";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class ChangeProfileValuesPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "changeProfileValues") {
     super(rootCy, [...dataCySelectors]);
   }
 }

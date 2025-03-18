@@ -33,7 +33,7 @@ interface HostDetailsTabProps {
   onShowCategoryDetails: (title: ResourceTypeTitle, data: ResourceType) => void;
 }
 
-export const dataCy = "iaasHostResources";
+const dataCy = "iaasHostResources";
 
 const ClusterSummaryRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
   ? React.lazy(async () => await import("ClusterOrchUI/ClusterSummary"))

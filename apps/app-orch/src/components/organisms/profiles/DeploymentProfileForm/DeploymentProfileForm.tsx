@@ -13,7 +13,7 @@ import OverrideProfileTable, {
 } from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import "./DeploymentProfileForm.scss";
 
-export const dataCy = "DeploymentProfileForm";
+const dataCy = "DeploymentProfileForm";
 
 export interface DeploymentProfileFormProps {
   selectedPackage?: catalog.DeploymentPackage;

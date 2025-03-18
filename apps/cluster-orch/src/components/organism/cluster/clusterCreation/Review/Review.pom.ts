@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./Review";
 
 const dataCySelectors = [
   "clusterName",
@@ -14,7 +13,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class ReviewPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "review") {
     super(rootCy, [...dataCySelectors]);
   }
 }

@@ -22,7 +22,7 @@ const ClusterListRemote = React.lazy(() => {
     : import("ClusterOrchUI/ClusterList");
 });
 
-export const dataCy = "selectCluster";
+const dataCy = "selectCluster";
 
 export enum SelectClusterMode {
   CREATE = "CREATE",

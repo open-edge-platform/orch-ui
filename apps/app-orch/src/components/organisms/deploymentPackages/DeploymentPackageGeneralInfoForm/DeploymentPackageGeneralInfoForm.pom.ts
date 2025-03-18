@@ -5,13 +5,12 @@
 
 import { catalog } from "@orch-ui/apis";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentPackageGeneralInfoForm";
 
 const dataCySelectors = ["name", "version", "desc"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageGeneralInfoFormPom extends CyPom<Selectors> {
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageGeneralInfoForm") {
     super(rootCy, [...dataCySelectors]);
   }
 

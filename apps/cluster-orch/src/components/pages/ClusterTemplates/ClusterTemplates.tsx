@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { store } from "../../../store";
 import ClusterTemplatesList from "../../organism/ClusterTemplatesList/ClusterTemplatesList";
 
-export const dataCy = "clusterTemplates";
+const dataCy = "clusterTemplates";
 
 export const ClusterTemplates = () => {
   const cy = { "data-cy": dataCy };

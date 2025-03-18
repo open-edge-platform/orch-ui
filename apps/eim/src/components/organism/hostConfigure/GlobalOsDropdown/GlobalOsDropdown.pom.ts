@@ -7,7 +7,6 @@ import { eim } from "@orch-ui/apis";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { OsResourceStore } from "@orch-ui/utils";
-import { dataCy } from "./GlobalOsDropdown";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -37,8 +36,8 @@ const endpoints: CyApiDetails<
 };
 
 export class GlobalOsDropdownPom extends CyPom<Selectors, ApiAliases> {
-  public dropdown = new SiDropdown(dataCy);
-  constructor(public rootCy: string = dataCy) {
+  public dropdown = new SiDropdown("globalOsDropdown");
+  constructor(public rootCy: string = "globalOsDropdown") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

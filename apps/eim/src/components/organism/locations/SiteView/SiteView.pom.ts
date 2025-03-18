@@ -7,7 +7,6 @@ import { CyPom } from "@orch-ui/tests";
 import { SiteActionsPopupPom } from "../../../../components/atom/locations/SiteActionsPopup/SiteActionsPopup.pom";
 import { TelemetryProfileLogsPom } from "../../../../components/molecules/locations/TelemetryProfileLogs/TelemetryProfileLogs.pom";
 import { TelemetryProfileMetricsPom } from "../../../../components/molecules/locations/TelemetryProfileMetrics/TelemetryProfileMetrics.pom";
-import { dataCy } from "./SiteView";
 
 const dataCySelectors = ["siteName", "siteRegion"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -17,7 +16,7 @@ export class SiteViewPom extends CyPom<Selectors> {
   public logs = new TelemetryProfileLogsPom();
   public siteActionsPopup = new SiteActionsPopupPom();
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "siteView") {
     super(rootCy, [...dataCySelectors]);
   }
 }

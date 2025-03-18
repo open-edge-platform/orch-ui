@@ -18,7 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import HostDetailsActions from "../../organism/hosts/HostDetailsActions/HostDetailsActions";
 import "./RegisteredHostDetails.scss";
 
-export const dataCy = "registeredHostDetails";
+const dataCy = "registeredHostDetails";
 export const RegisteredHostDetails = () => {
   const cy = { "data-cy": dataCy };
   const className = "registered-host-details";

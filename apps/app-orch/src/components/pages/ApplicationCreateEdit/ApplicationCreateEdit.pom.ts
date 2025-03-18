@@ -21,7 +21,6 @@ import ApplicationReviewPom from "../../organisms/applications/ApplicationReview
 import ApplicationSourcePom from "../../organisms/applications/ApplicationSource/ApplicationSource.pom";
 import ApplicationProfileFormPom from "../../organisms/profiles/ApplicationProfileForm/ApplicationProfileForm.pom";
 import ApplicationProfileTablePom from "../../organisms/profiles/ApplicationProfileTable/ApplicationProfileTable.pom";
-import { dataCy } from "./ApplicationCreateEdit";
 
 export const steps = [
   "Select Application Source",
@@ -148,7 +147,7 @@ class ApplicationCreateEditPom extends CyPom<Selectors, ApiAliases> {
   public profileTable: ApplicationProfileTablePom;
   public profileForm: ApplicationProfileFormPom;
   public appReview: ApplicationReviewPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "appActionPage") {
     super(rootCy, [...dataCySelectors], apis);
     this.sourceForm = new ApplicationSourcePom("appSourceForm");
     this.appForm = new ApplicationFormPom("appForm");

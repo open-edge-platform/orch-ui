@@ -16,7 +16,7 @@ interface DeploymentDrawerProps {
   deploymentId?: string;
 }
 
-export const dataCy = "deploymentDrawer";
+const dataCy = "deploymentDrawer";
 
 const DeploymentDrawer = ({ deploymentId }: DeploymentDrawerProps) => {
   const projectName = SharedStorage.project?.name ?? "";

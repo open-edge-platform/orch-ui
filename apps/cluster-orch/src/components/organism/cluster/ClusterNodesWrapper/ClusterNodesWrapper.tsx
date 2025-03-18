@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { NodeTableColumns } from "../../../../utils/NodeTableColumns";
 import ClusterNodesTable from "../../ClusterNodesTable/ClusterNodesTable";
 
-export const dataCy = "clusterNodesWrapper";
+const dataCy = "clusterNodesWrapper";
 interface ClusterNodesWrapperProps {
   name: string;
 }

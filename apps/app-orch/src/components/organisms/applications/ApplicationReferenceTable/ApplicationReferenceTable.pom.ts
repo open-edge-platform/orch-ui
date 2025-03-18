@@ -6,7 +6,6 @@
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ApplicationReferenceTable";
 
 export const applicationReferenceHeaders = ["Name", "Version"];
 
@@ -16,7 +15,7 @@ type Selectors = (typeof dataCySelectors)[number];
 class ApplicationReferenceTablePom extends CyPom<Selectors> {
   table: TablePom;
   tableUtils: SiTablePom;
-  constructor(rootCy = dataCy) {
+  constructor(public rootCy = "applicationReferenceTable") {
     super(rootCy, [...dataCySelectors]);
     this.table = new TablePom();
     this.tableUtils = new SiTablePom();

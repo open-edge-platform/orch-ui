@@ -26,7 +26,7 @@ import { Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import { useSearchParams } from "react-router-dom";
 
-export const dataCy = "clusterList";
+const dataCy = "clusterList";
 export interface ClusterListProps {
   selectedClusterIds?: string[];
   onSelect?: (selectedRowData: cm.ClusterInfoRead, isSelected: boolean) => void;

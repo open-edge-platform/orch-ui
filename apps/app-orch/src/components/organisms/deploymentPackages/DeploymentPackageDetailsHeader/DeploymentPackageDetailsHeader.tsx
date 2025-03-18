@@ -20,7 +20,7 @@ import { setDeploymentPackage } from "../../../../store/reducers/deploymentPacka
 import { setProps } from "../../../../store/reducers/toast";
 import "./DeploymentPackageDetailsHeader.scss";
 
-export const dataCy = "deploymentPackageDetailsHeader";
+const dataCy = "deploymentPackageDetailsHeader";
 
 interface DeploymentPackageDetailsHeaderProps {
   deploymentPackage: catalog.DeploymentPackage;

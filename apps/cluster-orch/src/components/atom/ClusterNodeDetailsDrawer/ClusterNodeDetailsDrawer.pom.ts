@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ClusterNodeDetailsDrawer";
 
 const dataCySelectors = [
   "serialNumber",
@@ -18,7 +17,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class ClusterNodeDetailsDrawerPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterNodeDetailsDrawer") {
     super(rootCy, [...dataCySelectors]);
   }
 

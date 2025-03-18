@@ -5,7 +5,6 @@
 
 import { CyPom } from "@orch-ui/tests";
 import DeploymentPackageDetailsProfileListPom from "../DeploymentPackageDetailsProfileList/DeploymentPackageDetailsProfileList.pom";
-import { dataCy } from "./DeploymentPackageCreateEditReview";
 
 const dataCySelectors = [
   "reviewSection",
@@ -19,7 +18,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageCreateEditReviewPom extends CyPom<Selectors> {
   profileListPom: DeploymentPackageDetailsProfileListPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentPackageCreateEditReview") {
     super(rootCy, [...dataCySelectors]);
     this.profileListPom = new DeploymentPackageDetailsProfileListPom();
   }

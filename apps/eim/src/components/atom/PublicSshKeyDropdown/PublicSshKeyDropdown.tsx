@@ -7,7 +7,7 @@ import { Dropdown, Item } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
 import { HostData } from "../../../store/configureHost";
 
-export const dataCy = "publicSshKeyDropdown";
+const dataCy = "publicSshKeyDropdown";
 interface PublicSshKeyDropdownProps {
   host: HostData;
   onPublicKeySelect?: (hostId: string, acount: eim.LocalAccount) => void;

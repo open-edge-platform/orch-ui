@@ -7,7 +7,6 @@ import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { OsResourceStore } from "@orch-ui/utils";
-import { dataCy } from "./OSProfiles";
 
 const dataCySelectors = ["osProfilesPopup", "osProfileDrawerContent"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -40,7 +39,7 @@ export class OSProfilesPom extends CyPom<Selectors, ApiAliases> {
   public osProfilesTablePom = new TablePom("oSProfiles");
   public apiErrorPom = new ApiErrorPom();
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "oSProfiles") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

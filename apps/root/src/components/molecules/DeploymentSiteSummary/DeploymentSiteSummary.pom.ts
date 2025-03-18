@@ -9,7 +9,6 @@ import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterA, clusterB } from "@orch-ui/utils";
 import SiteByClusterPom from "../../atoms/SiteByCluster/SiteByCluster.pom";
-import { dataCy } from "./DeploymentSiteSummary";
 
 const dataCySelectors = ["siteTable"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -88,7 +87,7 @@ class DeploymentSiteSummaryPom extends CyPom<Selectors, ApiAliases> {
   public table: TablePom;
   public tableUtils: SiTablePom;
   public siteByClusterPom: SiteByClusterPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentSiteSummary") {
     super(rootCy, [...dataCySelectors], apis);
     this.table = new TablePom("table");
     this.tableUtils = new SiTablePom("table");

@@ -5,7 +5,6 @@
 
 import { SiDropdown } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./NodeRoleDropdown";
 
 const dataCySelectors = ["roleDropdown"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -13,7 +12,7 @@ type Selectors = (typeof dataCySelectors)[number];
 class NodeRoleDropdownPom extends CyPom<Selectors> {
   public roleDropdownPom = new SiDropdown("roleDropdown");
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "nodeRoleDropdown") {
     super(rootCy, [...dataCySelectors]);
   }
 }

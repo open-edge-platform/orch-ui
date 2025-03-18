@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./Version";
 
 const dataCySelectors = ["orchVersion"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class VersionPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "version") {
     super(rootCy, [...dataCySelectors]);
   }
   get orchVersionError() {

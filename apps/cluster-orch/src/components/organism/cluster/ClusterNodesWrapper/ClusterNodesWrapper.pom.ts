@@ -6,7 +6,6 @@
 import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterOne } from "@orch-ui/utils";
-import { dataCy } from "./ClusterNodesWrapper";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -28,7 +27,7 @@ const successClusterEndpoint: CyApiDetails<
 };
 
 class ClusterNodesWrapperPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterNodesWrapper") {
     super(rootCy, [...dataCySelectors], {
       ...successClusterEndpoint,
     });

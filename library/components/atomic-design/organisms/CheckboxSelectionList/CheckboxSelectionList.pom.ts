@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./CheckboxSelectionList";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class CheckboxSelectionListPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "checkboxSelectionList") {
     super(rootCy, [...dataCySelectors]);
   }
   getLabel(id: string) {

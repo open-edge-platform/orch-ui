@@ -15,7 +15,7 @@ import React, {
 import { useParams } from "react-router-dom";
 import "./ExtensionHandler.scss";
 
-export const dataCy = "extensionHandler";
+const dataCy = "extensionHandler";
 
 const getExtensionBaseUrl = (serviceName: string): string => {
   let baseUrl: string;

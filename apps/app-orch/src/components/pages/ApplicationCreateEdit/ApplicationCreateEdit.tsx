@@ -61,7 +61,7 @@ import ApplicationProfileForm from "../../organisms/profiles/ApplicationProfileF
 import ApplicationProfileTable from "../../organisms/profiles/ApplicationProfileTable/ApplicationProfileTable";
 import "./ApplicationCreateEdit.scss";
 
-export const dataCy = "appActionPage"; // "applicationCreateEdit";
+const dataCy = "appActionPage"; // "applicationCreateEdit";
 
 export type ApplicationInputs = {
   displayName: string;

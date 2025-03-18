@@ -12,7 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { RegionSiteSelectTree } from "../RegionSiteSelectTree/RegionSiteSelectTree";
 
-export const dataCy = "hostSiteSelect";
+const dataCy = "hostSiteSelect";
 
 export const RegionSite = () => {
   const cy = { "data-cy": dataCy };

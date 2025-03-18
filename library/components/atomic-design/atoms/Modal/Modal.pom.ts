@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./Modal";
 
 const dataCySelectors = [
   "modalLabel",
@@ -17,7 +16,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 export class ModalPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "modal") {
     super(rootCy, [...dataCySelectors]);
   }
 }

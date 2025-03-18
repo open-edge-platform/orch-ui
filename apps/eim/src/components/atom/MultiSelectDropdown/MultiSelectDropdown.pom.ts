@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { defaultCy as dataCy } from "./MultiSelectDropdown";
 
 const dataCySelectors = ["dropdownList"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class MultiSelectDropdownPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "multiSelectDropdown") {
     super(rootCy, [...dataCySelectors]);
   }
 

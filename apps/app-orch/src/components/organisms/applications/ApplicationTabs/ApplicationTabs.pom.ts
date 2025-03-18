@@ -8,7 +8,6 @@ import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import ApplicationAddRegistryDrawerPom from "../ApplicationAddRegistryDrawer/ApplicationAddRegistryDrawer.pom";
 import ApplicationTablePom from "../ApplicationTable/ApplicationTable.pom";
 import AvailableRegistriesTablePom from "../AvailableRegistriesTable/AvailableRegistriesTable.pom";
-import { dataCy } from "./ApplicationTabs";
 
 const dataCySelectors = [
   "appTableContent",
@@ -38,7 +37,7 @@ class ApplicationTabsPom extends CyPom<
   appRegistryTablePom: AvailableRegistriesTablePom;
   registryDrawerPom: ApplicationAddRegistryDrawerPom;
   deleteConfirmationPom: ConfirmationDialogPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "applicationTabs") {
     super(rootCy, [...dataCySelectors], deleteApplicationEndpoint);
     this.appTablePom = new ApplicationTablePom();
     this.appRegistryTablePom = new AvailableRegistriesTablePom(

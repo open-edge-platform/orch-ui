@@ -10,7 +10,6 @@ import {
   clusterTemplateOneV2,
   clusterTemplateTwoV1,
 } from "@orch-ui/utils";
-import { dataCy } from "./ClusterTemplatesList";
 
 const dataCySelectors = ["empty", "uploadInput"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -76,7 +75,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 class ClusterTemplatesListPom extends CyPom<Selectors, ApiAliases> {
   public tablePom = new TablePom();
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterTemplatesList") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 

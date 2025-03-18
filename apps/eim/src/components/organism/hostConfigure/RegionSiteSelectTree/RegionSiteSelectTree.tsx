@@ -22,7 +22,7 @@ import { SiteView } from "../../locations/SiteView/SiteView";
 
 import "./RegionSiteSelectTree.scss";
 
-export const dataCy = "stepTwoRegionAndSite";
+const dataCy = "stepTwoRegionAndSite";
 
 interface SiteSelectProps {
   handleOnSiteSelected: (value: eim.SiteRead) => void;

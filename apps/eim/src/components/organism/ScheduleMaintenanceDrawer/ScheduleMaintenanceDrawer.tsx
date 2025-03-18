@@ -11,7 +11,7 @@ import { ScheduleMaintenanceForm } from "../ScheduleMaintenanceForm/ScheduleMain
 import { ScheduleMaintenanceList } from "../ScheduleMaintenanceList/ScheduleMaintenanceList";
 import "./ScheduleMaintenanceDrawer.scss";
 
-export const dataCy = "scheduleMaintenanceDrawer";
+const dataCy = "scheduleMaintenanceDrawer";
 
 interface TabItem {
   /** tab key */

@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./TreeExpander";
 
 const dataCySelectors = [
   "expander",
@@ -14,7 +13,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 export class TreeExpanderPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "treeExpander") {
     super(rootCy, [...dataCySelectors]);
   }
 }

@@ -8,7 +8,7 @@ import { Empty, Table, TableColumn } from "@orch-ui/components";
 import { Link } from "react-router-dom";
 import "./DeploymentPackageDetailsAppProfileList.scss";
 
-export const dataCy = "deploymentPackageDetailsAppProfileList";
+const dataCy = "deploymentPackageDetailsAppProfileList";
 
 interface DeploymentPackageDetailsAppProfileListProps {
   deploymentPackageProfile: catalog.DeploymentProfile;

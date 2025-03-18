@@ -79,10 +79,10 @@ describe("<OverrideProfileTable />", () => {
       pom.table.getRows().should("have.length", 1);
 
       pom.table.expandRow(0);
-      pom.el.parameterOverrideDeploymentForm.should("be.visible");
+      pom.el.applicationProfileParameterOverrideForm.should("be.visible");
 
       cyGet("rowCollapser").eq(0).click();
-      pom.el.parameterOverrideDeploymentForm.should("not.exist");
+      pom.el.applicationProfileParameterOverrideForm.should("not.exist");
     });
   });
 });

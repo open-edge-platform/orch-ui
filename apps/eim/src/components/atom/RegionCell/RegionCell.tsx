@@ -9,7 +9,7 @@ import { SharedStorage } from "@orch-ui/utils";
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const dataCy = "regionCell";
+const dataCy = "regionCell";
 
 interface RegionCellProps {
   regionId?: string;

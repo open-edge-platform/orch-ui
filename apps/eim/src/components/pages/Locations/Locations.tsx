@@ -47,7 +47,7 @@ import {
 } from "../../../store/locations";
 import { setMessageBanner } from "../../../store/notifications";
 import "./Locations.scss";
-export const dataCy = "locations";
+const dataCy = "locations";
 
 export const DELETE_SITE_DIALOG_TITLE = "Delete Site ?";
 

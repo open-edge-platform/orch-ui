@@ -8,7 +8,6 @@ import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { deploymentOne } from "@orch-ui/utils";
-import { dataCy } from "./DeploymentDetailsTable";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -33,7 +32,7 @@ const endpoints: CyApiDetails<
 class DeploymentDetailsTablePom extends CyPom<Selectors, ApiAliases> {
   public table: TablePom;
   public tableUtil: SiTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentDetailsTable") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.table = new TablePom("deployments-table");
     this.tableUtil = new SiTablePom("deployments-table");

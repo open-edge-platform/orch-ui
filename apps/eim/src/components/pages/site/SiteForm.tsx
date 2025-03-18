@@ -66,7 +66,7 @@ import { setErrorInfo, showToast } from "../../../store/notifications";
 import { handleSiteViewAction } from "../../organism/locations/RegionSiteTree/RegionSiteTree.handlers";
 import "./SiteForm.scss";
 
-export const dataCy = "siteForm";
+const dataCy = "siteForm";
 
 type urlParams = {
   regionId: string | undefined;

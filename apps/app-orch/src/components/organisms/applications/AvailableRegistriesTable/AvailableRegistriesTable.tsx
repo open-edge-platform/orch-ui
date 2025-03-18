@@ -32,7 +32,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./AvailableRegistriesTable.scss";
 
-export const dataCy = "availableRegistriesTable";
+const dataCy = "availableRegistriesTable";
 
 export interface DeleteRegistryState {
   registry: catalog.Registry;

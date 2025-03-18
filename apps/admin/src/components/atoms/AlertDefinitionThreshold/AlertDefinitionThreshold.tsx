@@ -8,7 +8,7 @@ import { Slider, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import "./AlertDefinitionThreshold.scss";
-export const dataCy = "alertDefinitionThreshold";
+const dataCy = "alertDefinitionThreshold";
 interface AlertDefinitionThresholdProps {
   alertDefinition: omApi.AlertDefinition;
   onChange: (value: number) => void;

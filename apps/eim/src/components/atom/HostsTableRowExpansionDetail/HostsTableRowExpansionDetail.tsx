@@ -13,7 +13,7 @@ import { Icon } from "@spark-design/react";
 import { ScheduleMaintenanceStatusTag } from "../../molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
 import { OsConfig } from "../OsConfig/OsConfig";
 import "./HostsTableRowExpansionDetail.scss";
-export const dataCy = "hostsTableRowExpansionDetail";
+const dataCy = "hostsTableRowExpansionDetail";
 interface HostsTableRowExpansionDetailProps {
   host: eim.HostRead;
 }

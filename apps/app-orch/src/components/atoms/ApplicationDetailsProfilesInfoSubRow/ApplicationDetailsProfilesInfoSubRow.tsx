@@ -8,7 +8,7 @@ import { CodeSnippet, Dropdown, TextField } from "@spark-design/react";
 import { getParameterOverrideType } from "../../organisms/profiles/ParameterOverridesForm/ParameterOverridesForm";
 import "./ApplicationDetailsProfilesInfoSubRow.scss";
 
-export const dataCy = "applicationDetailsProfilesInfoSubRow";
+const dataCy = "applicationDetailsProfilesInfoSubRow";
 
 interface ApplicationDetailsProfilesInfoSubRowProps {
   profile: catalog.ProfileRead;

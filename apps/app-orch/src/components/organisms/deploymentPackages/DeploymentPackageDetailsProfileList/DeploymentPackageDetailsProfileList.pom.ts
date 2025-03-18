@@ -7,7 +7,6 @@ import { EmptyPom, TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
 import DeploymentPackageDetailsAppProfileListPom from "../DeploymentPackageDetailsAppProfileList/DeploymentPackageDetailsAppProfileList.pom";
-import { dataCy } from "./DeploymentPackageDetailsProfileList";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -18,7 +17,7 @@ class DeploymentPackageDetailsProfileListPom extends CyPom<Selectors> {
   profileTableUtils: SiTablePom;
   appProfileList: DeploymentPackageDetailsAppProfileListPom;
 
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageDetailsProfileList") {
     super(rootCy, [...dataCySelectors]);
 
     this.emptyPom = new EmptyPom();

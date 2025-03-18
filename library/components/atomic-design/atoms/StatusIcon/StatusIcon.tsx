@@ -8,7 +8,7 @@ import { TextSize } from "@spark-design/tokens";
 import { HTMLProps } from "react";
 import "./StatusIcon.scss";
 
-export const dataCy = "statusIcon";
+const dataCy = "statusIcon";
 
 export enum Status {
   Ready = "ready",

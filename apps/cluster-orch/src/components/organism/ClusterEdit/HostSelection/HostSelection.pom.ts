@@ -6,7 +6,6 @@
 import { CyPom } from "@orch-ui/tests";
 import ClusterEditAddNodesDrawerPom from "../../../atom/ClusterEditAddNodesDrawer/ClusterEditAddNodesDrawer.pom";
 import ClusterEditNodeReviewPom from "../../../atom/ClusterEditNodeReview/ClusterEditNodeReview.pom";
-import { dataCy } from "./HostSelection";
 
 const dataCySelectors = ["site", "region", "confirmBtn"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -15,7 +14,7 @@ class HostSelectionPom extends CyPom<Selectors> {
   public clusterAddNodeDrawerPom: ClusterEditAddNodesDrawerPom;
   public clusterSelectedNodeReviewTablePom: ClusterEditNodeReviewPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostSelection") {
     super(rootCy, [...dataCySelectors]);
     this.clusterSelectedNodeReviewTablePom = new ClusterEditNodeReviewPom();
     this.clusterAddNodeDrawerPom = new ClusterEditAddNodesDrawerPom();

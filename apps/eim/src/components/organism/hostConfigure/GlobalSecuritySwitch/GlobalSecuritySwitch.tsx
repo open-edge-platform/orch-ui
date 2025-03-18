@@ -12,7 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import "./GlobalSecuritySwitch.scss";
 
-export const dataCy = "globalSecuritySwitch";
+const dataCy = "globalSecuritySwitch";
 export interface GlobalSecuritySwitchProps {
   value?: boolean;
   onChange?: (sbFdeEnabled: boolean) => void;

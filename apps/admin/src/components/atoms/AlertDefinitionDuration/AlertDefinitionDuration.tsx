@@ -16,7 +16,7 @@ import {
 import { useMemo } from "react";
 import { maxValue, minValue, updateValue } from "../../../utils/global";
 import "./AlertDefinitionDuration.scss";
-export const dataCy = "alertDefinitionDuration";
+const dataCy = "alertDefinitionDuration";
 
 const units = {
   s: "sec",

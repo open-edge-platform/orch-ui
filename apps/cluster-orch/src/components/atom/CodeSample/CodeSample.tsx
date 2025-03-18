@@ -10,7 +10,7 @@ import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import "prismjs/plugins/line-numbers/prism-line-numbers.js";
 import "prismjs/themes/prism.css";
 
-export const dataCy = "codeSample";
+const dataCy = "codeSample";
 interface CodeSampleProps {
   code: string;
   language: string;

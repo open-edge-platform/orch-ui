@@ -4,13 +4,12 @@
  */
 
 import { Cy, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentStatusCounter";
 
 const dataCySelectors = ["statusText", "chart"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class DeploymentStatusCounterPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentStatusCounter") {
     super(rootCy, [...dataCySelectors]);
   }
 

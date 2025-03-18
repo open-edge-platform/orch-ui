@@ -12,7 +12,6 @@ import {
   RepeatedScheduleStore,
   SingleSchedule2Store,
 } from "@orch-ui/utils";
-import { dataCy } from "./ScheduleMaintenanceList";
 
 const dataCySelectors = [
   "scheduleType",
@@ -156,7 +155,7 @@ const maintenanceIntercepts: CyApiDetails<
 export class ScheduleMaintenanceListPom extends CyPom<Selectors, ApiAliases> {
   tablePom: SiTablePom; // Todo: remove or replace after completing LPUUH-2101
   maintenanceTable: TablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "scheduleMaintenanceList") {
     super(rootCy, [...dataCySelectors], {
       ...maintenanceIntercepts,
       ...crudMaintenanceIntercepts,

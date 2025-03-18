@@ -35,7 +35,7 @@ interface DeploymentStatusCounterProps {
   ) => Promise<IHostStatusCounter>;
 }
 
-export const dataCy = "deploymentStatusCounter";
+const dataCy = "hostStatusCounter";
 
 /**
  * Renders a donut chart reporting the number of hsots

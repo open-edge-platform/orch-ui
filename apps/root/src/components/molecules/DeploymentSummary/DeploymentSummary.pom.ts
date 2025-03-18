@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentSummary";
 
 const dataCySelectors = [
   "compositePackageDetails",
@@ -17,7 +16,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentSummaryPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentSummary") {
     super(rootCy, [...dataCySelectors]);
   }
 }

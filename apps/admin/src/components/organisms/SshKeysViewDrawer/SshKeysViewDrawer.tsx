@@ -25,7 +25,7 @@ import { showToast } from "../../../store/notifications";
 import SshHostsTable from "../../atoms/SshHostsTable/SshHostsTable";
 import "./SshKeysViewDrawer.scss";
 
-export const dataCy = "sshKeysViewDrawer";
+const dataCy = "sshKeysViewDrawer";
 interface SshKeysViewDrawerProps {
   /** Local account value to view */
   localAccount: eim.LocalAccountRead;

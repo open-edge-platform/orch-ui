@@ -13,7 +13,7 @@ import { Control, Controller, FieldErrors } from "react-hook-form";
 import { hasFieldError } from "../../../store/utils";
 import { Timezone } from "../../../utils/worldTimezones";
 
-export const dataCy = "singleScheduleMaintenanceForm";
+const dataCy = "singleScheduleMaintenanceForm";
 export interface SingleScheduleMaintenanceFormProps {
   maintenance: enhancedEimSlice.ScheduleMaintenance;
   timezone: Timezone;

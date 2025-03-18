@@ -14,7 +14,7 @@ import {
 import DeploymentProfileForm from "../../profiles/DeploymentProfileForm/DeploymentProfileForm";
 import { OverrideValuesList } from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 
-export const dataCy = "changeProfileValues";
+const dataCy = "changeProfileValues";
 
 interface ChangeProfileValuesProps {
   deployment?: adm.DeploymentRead;

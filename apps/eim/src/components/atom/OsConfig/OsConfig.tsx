@@ -7,7 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { isOSUpdateAvailable } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import "./OsConfig.scss";
-export const dataCy = "osConfig";
+const dataCy = "osConfig";
 export interface OsConfigProps {
   instance?: eim.InstanceRead;
   iconOnly?: boolean;

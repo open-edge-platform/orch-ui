@@ -9,7 +9,7 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useEffect, useState } from "react";
 
-export const dataCy = "sshKeysPopup";
+const dataCy = "sshKeysPopup";
 interface SshKeysPopupProps {
   localAccount: eim.LocalAccountRead;
   onViewDetails?: () => void;

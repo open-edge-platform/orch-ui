@@ -9,8 +9,6 @@ import { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
 import { getLabels, updateLabels } from "../../../../../store/reducers/labels";
 
-export const dataCy = "addDeploymentMeta";
-
 interface AddDeploymentMetaProps {
   hasError?: (error: boolean) => void;
 }

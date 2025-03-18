@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { setErrorInfo } from "../../../../store/notifications";
 import "./DeauthorizeHostStandalone.scss";
 
-export const dataCy = "deauthorizeHostStandalone";
+const dataCy = "deauthorizeHostStandalone";
 
 interface DeauthInputs {
   reason: string;

@@ -6,7 +6,6 @@
 import { catalog } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { packageOne } from "@orch-ui/utils";
-import { dataCy } from "./DeploymentUpgradeAvailabilityStatus";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -46,7 +45,7 @@ class DeploymentUpgradeAvailabilityStatusPom extends CyPom<
   Selectors,
   ApiAliases
 > {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentUpgradeAvailabilityStatus") {
     super(rootCy, [...dataCySelectors], versionEndpoints);
   }
 }

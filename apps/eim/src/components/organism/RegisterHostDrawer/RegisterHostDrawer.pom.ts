@@ -5,7 +5,6 @@
 
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { registeredHostOne } from "@orch-ui/utils";
-import { dataCy } from "./RegisterHostDrawer";
 
 const dataCySelectors = [
   "hostName",
@@ -32,7 +31,7 @@ export const endpoints: CyApiDetails<ApiAliases> = {
 };
 
 export class RegisterHostDrawerPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "registerHostDrawer") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 

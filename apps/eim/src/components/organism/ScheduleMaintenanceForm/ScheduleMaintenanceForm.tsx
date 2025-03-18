@@ -47,7 +47,7 @@ import { SingleScheduleMaintenanceForm } from "../SingleScheduleMaintenanceForm/
 import "./ScheduleMaintenanceForm.scss";
 
 import { Flex } from "@orch-ui/components";
-export const dataCy = "newScheduleMaintenanceForm";
+const dataCy = "newScheduleMaintenanceForm";
 
 export interface ScheduleMaintenanceFormProps {
   maintenance: enhancedEimSlice.ScheduleMaintenanceRead;

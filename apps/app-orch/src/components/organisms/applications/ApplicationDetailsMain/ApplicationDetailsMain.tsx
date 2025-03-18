@@ -16,7 +16,7 @@ import { Heading, Tag } from "@spark-design/react";
 import ApplicationDetailsProfilesInfoSubRow from "../../../atoms/ApplicationDetailsProfilesInfoSubRow/ApplicationDetailsProfilesInfoSubRow";
 import "./ApplicationDetailsMain.scss";
 
-export const dataCy = "applicationDetailsMain";
+const dataCy = "applicationDetailsMain";
 
 interface ApplicatinDetailsMainProps {
   app: catalog.Application;

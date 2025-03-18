@@ -16,7 +16,7 @@ import "./Header.scss";
 import { Logo } from "./Logo";
 import { LogoSmall } from "./LogoSmall";
 
-export const dataCy = "header";
+const dataCy = "header";
 
 export enum HeaderSize {
   Large = "l",

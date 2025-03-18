@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { ApplicationTableColumns } from "../DeploymentDetailsDrawerContent/DeploymentDetailsDrawerContent";
 import "./DeploymentApplicationsTable.scss";
 
-export const dataCy = "deploymentApplicationsTable";
+const dataCy = "deploymentApplicationsTable";
 interface DeploymentApplicationsTableProps {
   deployment: adm.Deployment;
   deploymentPackage: catalog.DeploymentPackage;

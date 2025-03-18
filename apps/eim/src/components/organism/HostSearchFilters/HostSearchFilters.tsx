@@ -22,7 +22,7 @@ import {
 } from "../../../store/hostFilterBuilder";
 import "./HostSearchFilters.scss";
 
-export const dataCy = "hostSearchFilters";
+const dataCy = "hostSearchFilters";
 
 const HostSearchFilters = () => {
   const cy = { "data-cy": dataCy };

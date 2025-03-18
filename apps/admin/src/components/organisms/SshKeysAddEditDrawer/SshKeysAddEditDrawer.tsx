@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { Controller, FieldError, useForm } from "react-hook-form";
 import "./SshKeysAddEditDrawer.scss";
 
-export const dataCy = "sshKeysAddEditDrawer";
+const dataCy = "sshKeysAddEditDrawer";
 
 interface SshKeysAddEditDrawerProps {
   /** Is the drawer open in current state of UI. */

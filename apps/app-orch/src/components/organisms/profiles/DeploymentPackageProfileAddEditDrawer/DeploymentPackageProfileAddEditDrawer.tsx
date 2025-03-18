@@ -33,7 +33,7 @@ import { generateName } from "../../../../utils/global";
 import SelectApplicationProfile from "../SelectApplicationProfile/SelectApplicationProfile";
 import "./DeploymentPackageProfileAddEditDrawer.scss";
 
-export const dataCy = "deploymentPackageProfileAddEditDrawer";
+const dataCy = "deploymentPackageProfileAddEditDrawer";
 
 type ApplicationProfiles = catalog.DeploymentProfile["applicationProfiles"];
 export type ProfileInputs = {

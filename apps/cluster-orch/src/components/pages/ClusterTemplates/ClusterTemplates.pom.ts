@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ClusterTemplates";
 
 const dataCySelectors = ["uploadInput"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class ClusterTemplatesPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterTemplates") {
     super(rootCy, [...dataCySelectors]);
   }
 }

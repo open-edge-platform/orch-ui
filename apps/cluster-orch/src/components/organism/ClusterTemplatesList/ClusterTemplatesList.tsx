@@ -20,7 +20,7 @@ import { ChangeEvent } from "react";
 import TableLoader from "../../atom/TableLoader";
 import "./ClusterTemplatesList.scss";
 
-export const dataCy = "clusterTemplatesList";
+const dataCy = "clusterTemplatesList";
 
 interface ClusterTemplateListProps {
   getPopupOptions: (

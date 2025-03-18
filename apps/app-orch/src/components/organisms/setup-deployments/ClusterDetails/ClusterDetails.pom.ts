@@ -8,7 +8,6 @@ import { MetadataDisplayPom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne } from "@orch-ui/utils";
-import { dataCy } from "./ClusterDetails";
 
 const dataCySelectors = [
   "status",
@@ -38,7 +37,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 class ClusterDetailsPom extends CyPom<Selectors, ApiAliases> {
   public labelsDisplay: MetadataDisplayPom;
   public iaasHostsTable: SiTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterDetails") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.labelsDisplay = new MetadataDisplayPom("MetadataDisplay");
     this.iaasHostsTable = new SiTablePom("iaasHostsTable");

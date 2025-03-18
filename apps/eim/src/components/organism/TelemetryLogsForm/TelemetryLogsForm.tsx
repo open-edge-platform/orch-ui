@@ -16,7 +16,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 import { SharedStorage } from "@orch-ui/utils";
 import "./TelemetryLogsForm.scss";
-export const dataCy = "TelemetryLogsForm";
+const dataCy = "TelemetryLogsForm";
 
 export type TelemetryLogsProfile = {
   targetInstance?: string;

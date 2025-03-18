@@ -8,7 +8,7 @@ import { Card, MessageBanner, Text } from "@spark-design/react";
 import { MessageBannerAlertState, TextSize } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import "./Version.scss";
-export const dataCy = "version";
+const dataCy = "version";
 
 const Version = () => {
   const cy = { "data-cy": dataCy };

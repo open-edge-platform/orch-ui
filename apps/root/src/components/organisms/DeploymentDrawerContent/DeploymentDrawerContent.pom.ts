@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentDrawerContent";
 
 const dataCySelectors = [
   "compositePackageDetails",
@@ -15,7 +14,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentDrawerContentPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentDrawerContent") {
     super(rootCy, [...dataCySelectors]);
   }
 }

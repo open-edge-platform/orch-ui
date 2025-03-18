@@ -12,7 +12,7 @@ import ClusterNodesTableBySite, {
   NodeRoles,
 } from "../../organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite";
 
-export const dataCy = "clusterEditAddNodesDrawer";
+const dataCy = "clusterEditAddNodesDrawer";
 
 type ClusterCompleteInfo = cm.ClusterDetailInfo & cm.ClusterInfo;
 const convertEimHostToCmNode = (host: eim.HostRead, role?: NodeRoles) => ({

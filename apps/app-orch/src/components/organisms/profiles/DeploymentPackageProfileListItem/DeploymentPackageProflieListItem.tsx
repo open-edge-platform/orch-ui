@@ -19,7 +19,7 @@ import ProfileName from "../../../atoms/ProfileName/ProfileName";
 import AddEditProfileDrawer from "../DeploymentPackageProfileAddEditDrawer/DeploymentPackageProfileAddEditDrawer";
 import "./DeploymentPackageProfileListItem.scss";
 
-export const dataCy = "deploymentPackageProfileListItem";
+const dataCy = "deploymentPackageProfileListItem";
 
 type ApplicationProfiles = catalog.DeploymentProfile["applicationProfiles"];
 

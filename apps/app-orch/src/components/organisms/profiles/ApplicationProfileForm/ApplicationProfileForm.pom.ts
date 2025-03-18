@@ -5,7 +5,6 @@
 
 import { catalog } from "@orch-ui/apis";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ApplicationProfileForm";
 
 const dataCySelectors = [
   "nameInput",
@@ -15,7 +14,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class ProfilleFormPom extends CyPom<Selectors> {
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "applicationProfileForm") {
     super(rootCy, [...dataCySelectors]);
   }
 

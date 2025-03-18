@@ -8,7 +8,7 @@ import { SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text, ToggleSwitch } from "@spark-design/react";
 import "./AlertDefinitionEnable.scss";
-export const dataCy = "alertDefinitionEnable";
+const dataCy = "alertDefinitionEnable";
 interface AlertDefinitionEnableProps {
   alertDefinition: omApi.AlertDefinition;
   onChange: (value: string) => void;

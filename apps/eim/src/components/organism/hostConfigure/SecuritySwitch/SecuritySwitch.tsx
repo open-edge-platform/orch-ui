@@ -7,7 +7,7 @@ import { ToggleSwitch } from "@spark-design/react";
 import { ToggleSwitchSize } from "@spark-design/tokens";
 import "./SecuritySwitch.scss";
 
-export const dataCy = "securitySwitch";
+const dataCy = "securitySwitch";
 
 export interface SecuritySwitchProps {
   value?: boolean;

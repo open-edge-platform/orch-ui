@@ -9,7 +9,6 @@ import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { AdminProject as Project, projectStore } from "@orch-ui/utils";
 import { CreateEditProjectPom } from "../CreateEditProject/CreateEditProject.pom";
 import DeleteProjectDialogPom from "../DeleteProjectDialog/DeleteProjectDialog.pom";
-import { dataCy } from "./ProjectsTable";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -67,7 +66,7 @@ class ProjectsTablePom extends CyPom<Selectors, ApiAliases> {
   createRenameProjectPom: CreateEditProjectPom;
   deleteProjectPom: DeleteProjectDialogPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "projectsTable") {
     super(rootCy, [...dataCySelectors], {
       ...successEndpoints,
       ...errorEndpoints,

@@ -16,7 +16,7 @@ import { useAppSelector } from "../../../../store/hooks";
 import { selectProfile } from "../../../../store/reducers/profile";
 import "./ParameterOverridesForm.scss";
 
-export const dataCy = "parameterOverridesForm";
+const dataCy = "parameterOverridesForm";
 
 interface ChartParameterDataFormFields {
   parameterOverrides: ChartParameterData[];

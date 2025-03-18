@@ -12,7 +12,7 @@ import GenericHostPopup, {
 } from "../../atom/GenericHostPopup/GenericHostPopup";
 import "./RegisteredHostPopup.scss";
 
-export const dataCy = "registeredHostPopup";
+const dataCy = "registeredHostPopup";
 
 export type RegisteredHostPopupProps = Omit<
   GenericHostPopupProps,

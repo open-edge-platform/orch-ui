@@ -12,7 +12,6 @@ import {
   deploymentProfileTwo,
   packageWithParameterTemplates,
 } from "@orch-ui/utils";
-import { dataCy } from "./SelectProfileTable";
 
 const dataCySelectors = ["empty", "radioButtonCy", "errorMessage"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -64,7 +63,7 @@ export class SelectProfileTablePom extends CyPom<Selectors, ApiAliases> {
   public tablePom: TablePom;
   public tableUtils: SiTablePom;
   public emptyPom: EmptyPom;
-  constructor(rootCy = dataCy) {
+  constructor(rootCy: string = "selectProfileTable") {
     super(rootCy, [...dataCySelectors], { ...apis });
     this.tablePom = new TablePom();
     this.tableUtils = new SiTablePom();

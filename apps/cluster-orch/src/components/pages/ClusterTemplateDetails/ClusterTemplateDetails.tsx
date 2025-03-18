@@ -29,7 +29,7 @@ import CodeSample from "../../atom/CodeSample/CodeSample";
 import TableLoader from "../../atom/TableLoader";
 import "./ClusterTemplateDetails.scss";
 
-export const dataCy = "clusterTemplateView";
+const dataCy = "clusterTemplateDetails";
 
 type UrlParams = {
   templateName: string;

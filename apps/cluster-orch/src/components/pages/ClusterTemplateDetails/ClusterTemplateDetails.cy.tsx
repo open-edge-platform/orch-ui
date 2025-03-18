@@ -36,8 +36,8 @@ describe("<ClusterTemplateDetails/>", () => {
     pom.interceptApis([pom.api.getTemplate]);
     cy.mount(<ClusterTemplateDetails />);
     pom.waitForApis();
-    pom.el.clusterTemplateViewPopup.click();
-    pom.el.clusterTemplateViewPopup.within(() => {
+    pom.el.clusterTemplateDetailsPopup.click();
+    pom.el.clusterTemplateDetailsPopup.within(() => {
       cy.contains("Export Template").click();
     });
     cy.readFile("cypress/downloads/5G Template1-v1.0.1-template.json").then(

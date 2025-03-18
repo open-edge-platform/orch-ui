@@ -27,7 +27,7 @@ import HostStatusCounter from "../../atoms/HostStatusCounter/HostStatusCounter";
 
 const { useDeploymentServiceListDeploymentsQuery } = adm;
 
-export const dataCy = "deploymentDetailsTable";
+const dataCy = "deploymentDetailsTable";
 
 export interface DeploymentDetailsTableProps {
   labels?: string[];

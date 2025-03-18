@@ -6,7 +6,6 @@
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { mockHost } from "../../pages/HostDetails/HostDetails.pom";
-import { dataCy } from "./HostLink";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -31,7 +30,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 };
 
 export class HostLinkPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostLink") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

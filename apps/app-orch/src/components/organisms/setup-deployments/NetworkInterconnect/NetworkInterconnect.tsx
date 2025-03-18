@@ -10,7 +10,7 @@ import { ComboboxSize, ComboboxVariant } from "@spark-design/tokens";
 import React, { useState } from "react";
 import "./NetworkInterconnect.scss";
 
-export const dataCy = "networkInterconnect";
+const dataCy = "networkInterconnect";
 
 type NetworkInterconnectProps = {
   networks: string[];

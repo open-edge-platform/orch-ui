@@ -6,7 +6,6 @@
 import { catalog } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { CyHttpMessages } from "cypress/types/net-stubbing";
-import { dataCy } from "./ApplicationAddRegistryDrawer";
 
 const dataCySelectors = [
   "drawerContent",
@@ -57,7 +56,7 @@ const errorRegistryEndpoint: CyApiDetails<ErrorRegistryApiAliases> = {
 };
 
 class ApplicationAddRegistryDrawerPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "applicationAddRegistryDrawer") {
     super(rootCy, [...dataCySelectors], {
       ...successRegistryEndpoint,
       ...errorRegistryEndpoint,

@@ -13,7 +13,7 @@ interface DeploymentsContainerProps {
   filters: MetadataPair[];
 }
 
-export const dataCy = "deploymentsContainer";
+const dataCy = "deploymentsContainer";
 
 const DeploymentsContainer = ({ filters }: DeploymentsContainerProps) => {
   const cy = { "data-cy": dataCy };

@@ -9,7 +9,7 @@ import { Drawer, Text } from "@spark-design/react";
 import AlertSource from "../../atoms/AlertSource/AlertSource";
 import "./AlertDrawer.scss";
 
-export const dataCy = "alertDrawer";
+const dataCy = "alertDrawer";
 interface AlertDrawerProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;

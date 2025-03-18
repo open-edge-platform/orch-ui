@@ -10,7 +10,6 @@ import ApplicationTablePom from "../../applications/ApplicationTable/Application
 import DeploymentPackageProfileFormPom from "../../profiles/DeploymentPackageProfileForm/DeploymentPackageProfileForm.pom";
 import DeploymentPackageCreateEditReviewPom from "../DeploymentPackageCreateEditReview/DeploymentPackageCreateEditReview.pom";
 import DeploymentPackageGeneralInfoFormPom from "../DeploymentPackageGeneralInfoForm/DeploymentPackageGeneralInfoForm.pom";
-import { dataCy } from "./DeploymentPackageCreateEdit";
 
 const dataCySelectors = [
   "dpCreateEditStepper",
@@ -47,7 +46,7 @@ class DeploymentPackageCreateEditPom extends CyPom<Selectors, ApiAliases> {
   public deploymentPackageProfilePom: DeploymentPackageProfileFormPom; // Step 3 pom
   public deploymentPackageReviewPom: DeploymentPackageCreateEditReviewPom; // Step 4 pom
 
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageCreateEdit") {
     super(rootCy, [...dataCySelectors], deploymentPackageApis);
     this.deploymentPackageGeneralInfoFormPom =
       new DeploymentPackageGeneralInfoFormPom();

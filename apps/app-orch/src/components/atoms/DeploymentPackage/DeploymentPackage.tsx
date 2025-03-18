@@ -6,7 +6,7 @@
 import { Heading, Icon, Text } from "@spark-design/react";
 import "./DeploymentPackage.scss";
 
-export const dataCy = "deploymentPackage";
+const dataCy = "deploymentPackage";
 
 interface DeploymentPackageProps {
   name: string;

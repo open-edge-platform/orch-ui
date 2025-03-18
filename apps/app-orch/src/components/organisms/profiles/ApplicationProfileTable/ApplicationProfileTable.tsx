@@ -18,7 +18,7 @@ import {
   setDefaultProfileName,
 } from "../../../../store/reducers/application";
 
-export const dataCy = "applicationProfilesTable";
+const dataCy = "applicationProfilesTable";
 
 export interface ApplicationProfileTableAction {
   text: string;

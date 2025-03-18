@@ -7,7 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
-export const dataCy = "siteCell";
+const dataCy = "siteCell";
 
 export interface SiteCellProps {
   siteId?: string;

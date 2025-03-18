@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./MessageBanner";
 
 const dataCySelectors = [
   "close",
@@ -16,7 +15,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 export class MessageBannerPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "messageBanner") {
     super(rootCy, [...dataCySelectors]);
   }
 }

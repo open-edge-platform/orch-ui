@@ -8,7 +8,7 @@ import { ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import "./ContextSwitcher.scss";
 
-export const dataCy = "contextSwitcher";
+const dataCy = "contextSwitcher";
 
 interface ContextSwitcherProps {
   tabButtons: string[];

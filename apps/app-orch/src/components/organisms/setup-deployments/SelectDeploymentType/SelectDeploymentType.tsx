@@ -9,7 +9,7 @@ import { RadioButtonSize, RadioGroupOrientation } from "@spark-design/tokens";
 import { DeploymentType } from "../../../pages/SetupDeployment/SetupDeployment";
 import "./SelectDeploymentType.scss";
 
-export const dataCy = "selectDeploymentType";
+const dataCy = "selectDeploymentType";
 interface SelectDeploymentTypeProps {
   type: DeploymentType;
   setType: (type: DeploymentType) => void;

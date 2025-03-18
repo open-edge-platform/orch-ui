@@ -11,7 +11,7 @@ import { ButtonVariant, DrawerSize } from "@spark-design/tokens";
 import { useState } from "react";
 import "./AddToClusterDrawer.scss";
 
-export const dataCy = "addToClusterDrawer";
+const dataCy = "addToClusterDrawer";
 interface AddToClusterDrawerProps {
   host: eim.HostRead;
   isDrawerShown?: boolean;

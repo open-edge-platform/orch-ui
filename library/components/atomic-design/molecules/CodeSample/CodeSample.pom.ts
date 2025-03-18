@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./CodeSample";
 
 const dataCySelectors = ["code"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class CodeSamplePom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "codeSample") {
     super(rootCy, [...dataCySelectors]);
   }
 }

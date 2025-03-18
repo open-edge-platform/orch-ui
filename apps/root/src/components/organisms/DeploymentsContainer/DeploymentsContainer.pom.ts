@@ -8,7 +8,6 @@ import { EmptyPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { deployments } from "@orch-ui/utils";
 import DeploymentDetailsTablePom from "../../molecules/DeploymentDetailsTable/DeploymentDetailsTable.pom";
-import { dataCy } from "./DeploymentsContainer";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -48,7 +47,7 @@ export class DeploymentsContainerPom extends CyPom<Selectors, ApiAliases> {
   public empty = new EmptyPom();
   public deploymentDetailsTablePom: DeploymentDetailsTablePom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentsContainer") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.deploymentDetailsTablePom = new DeploymentDetailsTablePom();
   }

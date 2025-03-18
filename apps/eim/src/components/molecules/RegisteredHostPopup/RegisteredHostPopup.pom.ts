@@ -5,14 +5,13 @@
 
 import { CyPom } from "@orch-ui/tests";
 import GenericHostPopupPom from "../../atom/GenericHostPopup/GenericHostPopup.pom";
-import { dataCy } from "./RegisteredHostPopup";
 
 const dataCySelectors = ["hostRegisterErrorDrawer", "footerOkButton"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class RegisteredHostPopupPom extends CyPom<Selectors> {
   hostPopupPom: GenericHostPopupPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "registeredHostPopup") {
     super(rootCy, [...dataCySelectors]);
     this.hostPopupPom = new GenericHostPopupPom();
   }

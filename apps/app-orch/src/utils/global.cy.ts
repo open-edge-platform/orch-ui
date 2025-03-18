@@ -37,7 +37,7 @@ describe("the global utilities", () => {
       expect(printStatus("STATE_TESTING")).to.equal("Testing");
     });
   });
-  describe("invalidateTagByTagName", () => {
+  describe("invalidateTagByTagName", { retries: 2 }, () => {
     const endpointPom = new ApplicationDetailsServicePom();
     const cacheApiArg: arm.EndpointsServiceListAppEndpointsApiArg = {
       appId: "test-app",

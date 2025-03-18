@@ -40,7 +40,7 @@ import DeleteProjectDialog from "../DeleteProjectDialog/DeleteProjectDialog";
 import ProjectPopup from "../ProjectPopup/ProjectPopup";
 import "./ProjectsTable.scss";
 
-export const dataCy = "projectsTable";
+const dataCy = "projectsTable";
 
 export type ProjectModalType = "create" | "delete" | "rename";
 interface ProjectModalState {

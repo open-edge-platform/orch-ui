@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./StatusIcon";
 
 const dataCySelectors = ["sparkIcon"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class StatusIconPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "statusIcon") {
     super(rootCy, [...dataCySelectors]);
   }
 

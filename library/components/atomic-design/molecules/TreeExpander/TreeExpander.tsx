@@ -6,7 +6,7 @@
 import { Icon } from "@spark-design/react";
 import { useEffect } from "react";
 import "./TreeExpander.scss";
-export const dataCy = "treeExpander";
+const dataCy = "treeExpander";
 export const expandedLeafMessage =
   "Can't have an item that is both expandable and a leaf";
 

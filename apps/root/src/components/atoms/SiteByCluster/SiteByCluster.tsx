@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../store/hooks";
 import { getHosts, getHostsList, getSite } from "../../../utils/helpers";
 
-export const dataCy = "SiteByCluster";
+const dataCy = "SiteByCluster";
 interface SiteByClusterProps {
   clusterName: string;
 }

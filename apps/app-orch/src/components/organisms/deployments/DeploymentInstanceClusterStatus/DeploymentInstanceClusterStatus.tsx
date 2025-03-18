@@ -12,7 +12,7 @@ import {
 import { Text } from "@spark-design/react";
 import "./DeploymentInstanceClusterStatus.scss";
 
-export const dataCy = "deploymentInstanceClusterStatus";
+const dataCy = "deploymentInstanceClusterStatus";
 
 export interface DeploymentClusterStatus {
   status: JSX.Element;

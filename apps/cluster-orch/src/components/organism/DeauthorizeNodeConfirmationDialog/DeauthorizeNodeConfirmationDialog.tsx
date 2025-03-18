@@ -13,7 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import "./DeauthorizeNodeConfirmationDialog.scss";
 
-export const dataCy = "deauthorizeNodeConfirmationDialog";
+const dataCy = "deauthorizeNodeConfirmationDialog";
 
 interface DeauthorizeNodeConfirmationDialogProps {
   name: string;

@@ -6,7 +6,6 @@
 import { adm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { UiExtensionsStore } from "@orch-ui/utils";
-import { dataCy } from "./DashboardsHeaderBtn";
 
 const dataCySelectors = [
   "mainBtn",
@@ -35,7 +34,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 class DashboardsHeaderBtnPom extends CyPom<Selectors, ApiAliases> {
   public resources = uiExtnStore.list();
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "dashboardsHeaderBtn") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 

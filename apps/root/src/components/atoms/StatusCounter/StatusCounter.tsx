@@ -14,7 +14,7 @@ import { TextSize } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import "./StatusCounter.scss";
 
-export const dataCy = "statusCounter";
+const dataCy = "statusCounter";
 
 export interface StatusSummary {
   total: number;

@@ -27,7 +27,7 @@ import {
 } from "../../../utils/worldTimezones";
 import "./RepeatedScheduleMaintenance.scss";
 
-export const dataCy = "repeatedScheduleMaintenanceForm";
+const dataCy = "repeatedScheduleMaintenanceForm";
 
 export interface RepeatedScheduleMaintenanceFormProps {
   maintenance: enhancedEimSlice.ScheduleMaintenanceRead;

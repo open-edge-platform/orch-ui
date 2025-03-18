@@ -19,7 +19,7 @@ import ClusterNodeDetailsDrawer from "../../../../atom/ClusterNodeDetailsDrawer/
 import NodeRoleDropdown from "../../../../atom/NodeRoleDropdown/NodeRoleDropdown";
 import "./ClusterNodesTableBySite.scss";
 
-export const dataCy = "clusterNodeTableBySite";
+const dataCy = "clusterNodeTableBySite";
 
 export type NodeRoles = "all" | "worker" | "controlplane";
 interface SelectedRole {

@@ -7,7 +7,7 @@ import { Dropdown, Item } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import "./NodeRoleDropdown.scss";
 
-export const dataCy = "nodeRoleDropdown";
+const dataCy = "nodeRoleDropdown";
 
 interface NodeRoleDropdownProps {
   role: string;

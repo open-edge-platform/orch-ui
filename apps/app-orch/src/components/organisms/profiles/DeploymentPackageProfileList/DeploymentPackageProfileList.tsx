@@ -17,7 +17,7 @@ import {
 import { generateName } from "../../../../utils/global";
 import DeploymentPackageProfileListItem from "../DeploymentPackageProfileListItem/DeploymentPackageProflieListItem";
 
-export const dataCy = "deploymentPackageProfileList";
+const dataCy = "deploymentPackageProfileList";
 
 const DeploymentPackageProfileList = () => {
   const cy = { "data-cy": dataCy };

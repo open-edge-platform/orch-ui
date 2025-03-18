@@ -9,7 +9,7 @@ import { Button, Heading, Icon, IconVariant } from "@spark-design/react";
 import { ScheduleMaintenanceStatusTag } from "../../../components/molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
 import "./DrawerHeader.scss";
 
-export const dataCy = "drawerHeader";
+const dataCy = "drawerHeader";
 export interface DrawerHeaderProps {
   targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
   targetEntityType: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;

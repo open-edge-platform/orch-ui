@@ -5,7 +5,6 @@
 
 import { SiDropdown } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./NameAndTemplate";
 
 const dataCySelectors = ["clusterName"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -16,7 +15,7 @@ class NameAndTemplatePom extends CyPom<Selectors> {
     "clusterTemplateVersionDropdown",
   );
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "NameAndTemplate") {
     super(rootCy, [...dataCySelectors]);
   }
 }

@@ -6,7 +6,6 @@
 import { cm, eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne, ClusterStore, regionPortlandId } from "@orch-ui/utils";
-import { dataCy } from "./AddToClusterDrawer";
 
 const dataCySelectors = ["clusterDropdown"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -153,7 +152,7 @@ const siteSuccessEndpoint: CyApiDetails<
 };
 
 class AddToClusterDrawerPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "addToClusterDrawer") {
     super(rootCy, [...dataCySelectors], {
       ...clusterSuccessEndpoint,
       ...hostSuccessEndpoint,

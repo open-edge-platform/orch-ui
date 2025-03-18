@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./SingleScheduleMaintenanceForm";
 
 const dataCySelectors = [
   "startDate",
@@ -15,7 +14,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 export class SingleScheduleMaintenanceFormPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "singleScheduleMaintenanceForm") {
     super(rootCy, [...dataCySelectors]);
   }
 

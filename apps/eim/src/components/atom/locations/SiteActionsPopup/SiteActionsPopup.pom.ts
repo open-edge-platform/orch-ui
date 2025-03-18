@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./SiteActionsPopup";
 
 const dataCySelectors = ["siteActionsBtn", "Edit", "Delete"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class SiteActionsPopupPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "siteActionsPopup") {
     super(rootCy, [...dataCySelectors]);
   }
 }

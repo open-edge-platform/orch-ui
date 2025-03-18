@@ -10,7 +10,7 @@ import { ModalHeader } from "./ModalHeader";
 
 import "./Modal.scss";
 
-export const dataCy = "modal";
+const dataCy = "modal";
 const cssSelector = "content-modal-footer";
 
 export interface ModalProps {

@@ -19,7 +19,7 @@ import { AppDispatch } from "../../../store/store";
 import { getHosts as gH, getHostsList as gHL } from "../../../utils/helpers";
 import "./HostsStatusByCluster.scss";
 
-export const dataCy = "hostsStatusByCluster";
+const dataCy = "hostsStatusByCluster";
 
 interface HostsStatusByClusterProps {
   clusterName: string;

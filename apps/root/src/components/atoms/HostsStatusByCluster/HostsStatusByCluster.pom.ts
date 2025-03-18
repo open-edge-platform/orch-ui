@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./HostsStatusByCluster";
 
 const dataCySelectors = ["hostStatus"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class HostsStatusByClusterPom extends CyPom<Selectors> {
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "hostsStatusByCluster") {
     super(rootCy, [...dataCySelectors]);
   }
 }

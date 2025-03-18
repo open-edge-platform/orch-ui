@@ -10,7 +10,7 @@ import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { NodeTableColumns } from "../../../utils/NodeTableColumns";
 import NodeRoleDropdown from "../NodeRoleDropdown/NodeRoleDropdown";
 
-export const dataCy = "clusterEditNodeReview";
+const dataCy = "clusterEditNodeReview";
 export type NodeRoles = "all" | "controlplane" | "worker";
 
 interface ClusterEditNodeReviewProps {

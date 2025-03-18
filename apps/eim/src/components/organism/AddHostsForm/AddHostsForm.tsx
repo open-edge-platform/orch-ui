@@ -32,7 +32,7 @@ export enum ErrorMessages {
   SerialNumberFormat = "Serial Number format is invalid",
 }
 
-export const dataCy = "addHostsForm";
+const dataCy = "addHostsForm";
 
 const defaultHostFormItem: AddHostsFormItem = {
   name: "",

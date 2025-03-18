@@ -6,7 +6,7 @@
 import { cm } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 
-export const dataCy = "clusterNodesTable";
+const dataCy = "clusterNodesTable";
 interface ClusterNodesTableProps {
   nodes?: cm.NodeInfo[];
   columns: TableColumn<cm.NodeInfo>[];

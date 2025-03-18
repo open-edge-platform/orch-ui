@@ -5,7 +5,6 @@
 
 import { CyPom } from "@orch-ui/tests";
 import DeploymentPackageDetailsProfileListPom from "../DeploymentPackageDetailsProfileList/DeploymentPackageDetailsProfileList.pom";
-import { dataCy } from "./DeploymentPackageDetailsMain";
 
 const dataCySelectors = [
   "dpVersion",
@@ -19,7 +18,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 export class DeploymentPackageDetailsMainPom extends CyPom<Selectors> {
   profileListPom: DeploymentPackageDetailsProfileListPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageDetailsMain") {
     super(rootCy, [...dataCySelectors]);
     this.profileListPom = new DeploymentPackageDetailsProfileListPom();
   }

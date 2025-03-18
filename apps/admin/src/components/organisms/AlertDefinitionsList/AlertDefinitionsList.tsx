@@ -18,7 +18,7 @@ import AlertDefinitionEnable from "../../atoms/AlertDefinitionEnable/AlertDefini
 import AlertDefinitionThreshold from "../../atoms/AlertDefinitionThreshold/AlertDefinitionThreshold";
 import "./AlertDefinitionsList.scss";
 
-export const dataCy = "alertDefinitionsList";
+const dataCy = "alertDefinitionsList";
 
 const AlertDefinitionsList = () => {
   const cy = { "data-cy": dataCy };

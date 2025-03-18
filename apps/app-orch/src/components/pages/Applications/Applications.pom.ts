@@ -5,7 +5,6 @@
 
 import { CyPom } from "@orch-ui/tests";
 import ApplicationTabsPom from "../../organisms/applications/ApplicationTabs/ApplicationTabs.pom";
-import { dataCy } from "./Applications";
 
 const dataCySelectors = [
   "introTitle",
@@ -21,7 +20,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 class ApplicationsPom extends CyPom<Selectors> {
   public tabs: ApplicationTabsPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "appPage") {
     super(rootCy, [...dataCySelectors]);
     this.tabs = new ApplicationTabsPom();
   }

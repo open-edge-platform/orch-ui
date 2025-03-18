@@ -6,7 +6,6 @@
 import { MetadataDisplayPom, TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentInstanceClusterStatus";
 
 const dataCySelectors = [
   "clusterStatus",
@@ -21,7 +20,7 @@ class DeploymentInstanceClusterStatusPom extends CyPom<Selectors> {
   public statusTablePom: TablePom;
   public metadataPom: MetadataDisplayPom;
 
-  constructor(rootCy = dataCy) {
+  constructor(rootCy: string = "deploymentInstanceClusterStatus") {
     super(rootCy, [...dataCySelectors]);
     this.metadataPom = new MetadataDisplayPom();
     this.statusTablePom = new TablePom("clusterStatusTable");

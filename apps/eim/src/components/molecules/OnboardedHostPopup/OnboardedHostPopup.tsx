@@ -12,7 +12,7 @@ import GenericHostPopup, {
   GenericHostPopupProps,
 } from "../../atom/GenericHostPopup/GenericHostPopup";
 
-export const dataCy = "onboardedHostPopup";
+const dataCy = "onboardedHostPopup";
 export type OnboardedHostPopupProps = Omit<
   GenericHostPopupProps,
   "additionalPopupOptions"

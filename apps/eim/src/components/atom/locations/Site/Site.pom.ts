@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./Site";
 
 const dataCySelectors = [
   "sitePageLink",
@@ -14,7 +13,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 export class SitePom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "site") {
     super(rootCy, [...dataCySelectors]);
   }
 }

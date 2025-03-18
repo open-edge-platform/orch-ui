@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./_HostsTable.scss";
 
-export const dataCy = "hostsTable";
+const dataCy = "hostsTable";
 
 export enum HostCategory {
   Active,

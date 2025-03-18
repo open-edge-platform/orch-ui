@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./SecuritySwitch";
 
 const dataCySelectors = ["security", "securitySwitchToggle"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class SecuritySwitchPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "securitySwitch") {
     super(rootCy, [...dataCySelectors]);
   }
 }

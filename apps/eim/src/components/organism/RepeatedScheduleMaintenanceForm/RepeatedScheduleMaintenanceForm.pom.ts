@@ -5,7 +5,6 @@
 
 import { CyPom } from "@orch-ui/tests";
 import { MultiSelectDropdownPom } from "../../../components/atom/MultiSelectDropdown/MultiSelectDropdown.pom";
-import { dataCy } from "./RepeatedScheduleMaintenanceForm";
 
 const dataCySelectors = [
   "startTime",
@@ -21,7 +20,7 @@ export class RepeatedScheduleMaintenanceFormPom extends CyPom<Selectors> {
   monthsMultiDropdown: MultiSelectDropdownPom;
   dayNumbersMultiDropdown: MultiSelectDropdownPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "repeatedScheduleMaintenanceForm") {
     super(rootCy, [...dataCySelectors]);
     this.weekdaysMultiDropdown = new MultiSelectDropdownPom("weekday");
     this.monthsMultiDropdown = new MultiSelectDropdownPom("month");

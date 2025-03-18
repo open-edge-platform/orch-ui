@@ -5,7 +5,7 @@
 
 import { NumberField, Text } from "@spark-design/react";
 import "./Slider.scss";
-export const dataCy = "slider";
+const dataCy = "slider";
 export interface SliderProps {
   defaultValue?: number;
   value?: number;

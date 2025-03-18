@@ -5,7 +5,6 @@
 
 import { TablePom } from "@orch-ui/components";
 import { Cy, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./HostConfigReview";
 
 const dataCySelectors = [
   "totalHosts",
@@ -19,7 +18,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 export class HostConfigReviewPom extends CyPom<Selectors> {
   public table: TablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostConfigReview") {
     super(rootCy, [...dataCySelectors]);
     this.table = new TablePom(rootCy);
   }

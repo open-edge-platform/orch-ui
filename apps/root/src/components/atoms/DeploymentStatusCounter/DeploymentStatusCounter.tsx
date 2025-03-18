@@ -12,7 +12,7 @@ interface DeploymentStatusCounterProps {
   showAllStates?: boolean;
 }
 
-export const dataCy = "deploymentStatusCounter";
+const dataCy = "deploymentStatusCounter";
 
 /**
  * Renders a donut chart reporting the number of deployment instances

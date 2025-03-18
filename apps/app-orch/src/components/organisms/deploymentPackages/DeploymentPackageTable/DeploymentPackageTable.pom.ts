@@ -12,7 +12,6 @@ import {
   packageOneExtension,
   packageTwoExtension,
 } from "@orch-ui/utils";
-import { dataCy } from "./DeploymentPackageTable";
 
 const dataCySelectors = ["actions-button", "appDeleteModal"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -106,7 +105,7 @@ class DeploymentPackageTablePom extends CyPom<Selectors, CompositeApiAliases> {
   apiErrorPom: ApiErrorPom;
   table: TablePom;
   tableUtils: SiTablePom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageTable") {
     super(rootCy, [...dataCySelectors], compositeApis);
     this.emptyPom = new EmptyPom();
     this.apiErrorPom = new ApiErrorPom();

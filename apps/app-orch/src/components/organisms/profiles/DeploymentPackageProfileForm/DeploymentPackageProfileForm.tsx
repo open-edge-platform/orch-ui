@@ -15,7 +15,7 @@ import DeploymentPackageProfileAddEditDrawer from "../DeploymentPackageProfileAd
 import DeploymentPackageProfilesList from "../DeploymentPackageProfileList/DeploymentPackageProfileList";
 import "./DeploymentPackageProfileForm.scss";
 
-export const dataCy = "deploymentPackageProfileForm";
+const dataCy = "deploymentPackageProfileForm";
 
 const DeploymentPackageProfileForm = () => {
   const cy = { "data-cy": dataCy };

@@ -9,7 +9,7 @@ import { Drawer, Text, TextField } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
 import "./ProfilePackageDetails.scss";
 
-export const dataCy = "profilePackageDetails";
+const dataCy = "profilePackageDetails";
 
 interface ProfilePackageDetailsProps {
   isOpen: boolean;

@@ -13,7 +13,7 @@ import {
 } from "../../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
-export const dataCy = "addHostLabels";
+const dataCy = "addHostLabels";
 
 export const AddHostLabels = () => {
   const cy = { "data-cy": dataCy };

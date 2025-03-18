@@ -9,7 +9,7 @@ import { updateClusterTemplate } from "../../../../store/reducers/cluster";
 import ClusterTemplatesDropdown from "../../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown";
 import ClusterTemplateVersionsDropdown from "../../../atom/ClusterTemplateVersionsDropdown/ClusterTemplateVersionsDropdown";
 
-export const dataCy = "nameInfo";
+const dataCy = "nameInfo";
 
 interface NameInfoProps {
   clusterName: string;

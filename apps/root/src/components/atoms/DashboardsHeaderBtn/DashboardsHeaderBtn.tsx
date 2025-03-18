@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./DashboardsHeaderBtn.scss";
 
-export const dataCy = "dashboardsHeaderBtn";
+const dataCy = "dashboardsHeaderBtn";
 interface DashboardsHeaderBtnProps {
   active: boolean;
   setActive: () => void;

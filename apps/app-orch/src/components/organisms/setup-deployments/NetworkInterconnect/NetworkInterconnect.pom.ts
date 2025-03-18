@@ -5,7 +5,6 @@
 
 import { TablePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./NetworkInterconnect";
 
 const dataCySelectors = [
   "networkInterconnectCombobox",
@@ -16,7 +15,7 @@ type Selectors = (typeof dataCySelectors)[number];
 class NetworkInterconnectPom extends CyPom<Selectors> {
   public table: TablePom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "networkInterconnect") {
     super(rootCy, [...dataCySelectors]);
     this.table = new TablePom("table");
   }

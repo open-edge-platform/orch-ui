@@ -9,7 +9,7 @@ import { parseError, SharedStorage } from "@orch-ui/utils";
 import { ButtonVariant, ModalSize } from "@spark-design/tokens";
 import "./DeleteSSHDialog.scss";
 
-export const dataCy = "deleteSSHDialog";
+const dataCy = "deleteSSHDialog";
 
 interface DeleteSSHDialogProps {
   ssh: eim.LocalAccountRead;

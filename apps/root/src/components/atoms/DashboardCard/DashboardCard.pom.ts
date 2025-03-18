@@ -4,13 +4,12 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DashboardCard";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DashboardCardPom extends CyPom<Selectors> {
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "dashboardCard") {
     super(rootCy, [...dataCySelectors]);
   }
 }

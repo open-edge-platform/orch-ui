@@ -18,7 +18,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import { setDeploymentPackage } from "../../../store/reducers/deploymentPackage";
 import DeploymentPackageCreateEdit from "../../organisms/deploymentPackages/DeploymentPackageCreateEdit/DeploymentPackageCreateEdit";
 
-export const dataCy = "deploymentPackageEdit";
+const dataCy = "deploymentPackageEdit";
 
 type urlParams = {
   appName: string;

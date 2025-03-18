@@ -9,7 +9,7 @@ import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useNavigate } from "react-router-dom";
 
-export const dataCy = "genericHostPopup";
+const dataCy = "genericHostPopup";
 
 export interface GenericHostPopupProps {
   /** host for which this popup affects upon. */

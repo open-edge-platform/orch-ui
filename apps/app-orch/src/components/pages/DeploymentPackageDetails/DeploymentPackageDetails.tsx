@@ -28,7 +28,7 @@ import DeploymentPackageDetailsMain from "../../organisms/deploymentPackages/Dep
 import DeploymentPackageDetailsProfileList from "../../organisms/deploymentPackages/DeploymentPackageDetailsProfileList/DeploymentPackageDetailsProfileList";
 import "./DeploymentPackageDetails.scss";
 
-export const dataCy = "deploymentPackageDetails";
+const dataCy = "deploymentPackageDetails";
 
 type params = {
   appName: string;

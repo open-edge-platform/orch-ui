@@ -8,16 +8,9 @@ import * as _ from "lodash";
 import { LocationsPom } from "../../../../apps/eim/src/components/pages/Locations/Locations.pom";
 import RegionFormPom from "../../../../apps/eim/src/components/pages/region/RegionForm.pom";
 import SiteFormPom from "../../../../apps/eim/src/components/pages/site/SiteForm.pom";
-import UnconfiguredHostsPom from "../../../../apps/eim/src/components/pages/UnconfiguredHosts/UnconfiguredHosts.pom";
 import { NetworkLog } from "../../support/network-logs";
 import { EIM_USER } from "../../support/utilities";
-import {
-  createRegionViaAPi,
-  createSiteViaApi,
-  deleteRegionViaApi,
-  deleteSiteViaApi,
-  unconfigureHostViaApi,
-} from "../helpers";
+import { deleteRegionViaApi, deleteSiteViaApi } from "../helpers";
 
 interface TestData {
   regions: {
@@ -64,7 +57,6 @@ describe("EIM Smoke test:", () => {
   const regionFormPom = new RegionFormPom();
   const siteFormPom = new SiteFormPom();
   const tablePom = new TablePom();
-  const unconfigureHostsPom = new UnconfiguredHostsPom();
 
   let testData: TestData;
 
@@ -197,58 +189,6 @@ describe("EIM Smoke test:", () => {
         cy.contains(uuid).should("be.visible");
 
         tablePom.getCell(1, 3).should("contain.text", "Provisioned");
-      });
-
-      it.skip("should configure a host", () => {
-        createRegionViaAPi(activeProject, data.region).then((rid) => {
-          regionId = rid;
-          cy.log(`Created region ${data.region} with id ${regionId}`);
-          createSiteViaApi(activeProject, regionId, data.site).then((sid) => {
-            siteId = sid;
-            cy.log(`Created site ${data.site} with id ${siteId}`);
-          });
-        });
-
-        // navigate to the onboarded hosts page
-        cy.dataCy("header").contains("Infrastructure").click();
-        cy.dataCy("aside", { timeout: 10 * 1000 })
-          .contains("button", "Onboarded")
-          .click();
-
-        tablePom.search(uuid);
-
-        unconfigureHostsPom.tablePom.getHostCheckboxByName(uuid).click();
-        unconfigureHostsPom.el.ribbonButtonconfigure.click();
-        cy.contains("Configure Host").should("be.visible");
-
-        cy.intercept({
-          method: "PATCH",
-          url: `/v1/projects/${activeProject}/compute/hosts/*`,
-          times: 1,
-        }).as("patchHost");
-        unconfigureHostsPom.hostConfigPom.configureHost(
-          data.site,
-          data.hostName,
-          [],
-        );
-        cy.wait("@patchHost").then((interception) => {
-          expect(interception.response?.statusCode).to.equal(200);
-          hostId = interception.response?.body.resourceId;
-        });
-
-        cy.url().should("contain", "infrastructure/unassigned-hosts");
-      });
-
-      after(() => {
-        if (hostId) {
-          unconfigureHostViaApi(activeProject, hostId);
-        }
-        if (siteId) {
-          deleteSiteViaApi(activeProject, regionId, siteId);
-        }
-        if (regionId) {
-          deleteRegionViaApi(activeProject, regionId);
-        }
       });
     });
   });

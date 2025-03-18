@@ -5,7 +5,6 @@
 
 import { adm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ExtensionHandler";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -33,7 +32,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 
 class ExtensionHandlerPom extends CyPom<Selectors, ApiAliases> {
   public extensions = extensions;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "extensionHandler") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

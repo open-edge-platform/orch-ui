@@ -20,7 +20,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "./DeleteProjectDialog.scss";
 
-export const dataCy = "deleteProjectDialog";
+const dataCy = "deleteProjectDialog";
 
 interface DeleteProjectDialogProps {
   project: AdminProject;

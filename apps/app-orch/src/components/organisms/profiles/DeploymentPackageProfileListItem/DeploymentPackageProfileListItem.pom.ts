@@ -13,7 +13,6 @@ import {
   defaultActiveProject,
 } from "@orch-ui/tests";
 import ProfileNamePom from "../../../atoms/ProfileName/ProfileName.pom";
-import { dataCy } from "./DeploymentPackageProflieListItem";
 
 const dataCySelectors = ["rowExpander", "rowCollapser"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -52,7 +51,7 @@ class DeploymentPackageProfileListItemPom extends CyPom<Selectors, ApiAliases> {
   public applicationTablePom: TablePom;
   public applicationTableUtils: SiTablePom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentPackageProfileListItem") {
     super(rootCy, [...dataCySelectors], apis);
     this.profileName = new ProfileNamePom();
     this.deploymentPackageTablePom = new TablePom("packageProfileList");

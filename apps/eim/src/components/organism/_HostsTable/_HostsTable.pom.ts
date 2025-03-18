@@ -15,7 +15,6 @@ import {
 } from "@orch-ui/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostPopupPom from "../../molecules/ProvisionedHostPopup/ProvisionedHostPopup.pom";
-import { dataCy } from "./_HostsTable";
 
 export const unconfiguredColumn: TableColumn<eim.HostRead>[] = [
   HostTableColumn.name("../"),
@@ -195,7 +194,7 @@ class _HostsTablePom extends CyPom<Selectors, ApiAliases> {
   public table: TablePom;
   public hostPopup: HostPopupPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "_HostsTable") {
     super(rootCy, [...dataCySelectors], {
       ...genericHostSuccessEndpoints,
       ...specificHostSuccessApiEndpoints,

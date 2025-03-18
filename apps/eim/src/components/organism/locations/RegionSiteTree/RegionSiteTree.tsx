@@ -39,7 +39,7 @@ import {
 } from "./RegionSiteTree.handlers";
 import { generateTreeJsx } from "./RegionSiteTree.helpers";
 import "./RegionSiteTree.scss";
-export const dataCy = "regionSiteTree";
+const dataCy = "regionSiteTree";
 export const ORDER_BY: string = "name asc";
 const clearTree: string = "clearTree";
 

@@ -17,7 +17,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import ApplicationTabs from "../../organisms/applications/ApplicationTabs/ApplicationTabs";
 import "./Applications.scss";
 
-export const dataCy = "appPage";
+const dataCy = "appPage";
 
 const Applications = () => {
   const cy = { "data-cy": dataCy };

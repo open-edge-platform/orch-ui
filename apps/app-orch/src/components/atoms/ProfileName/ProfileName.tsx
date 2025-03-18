@@ -9,7 +9,7 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import { useEffect, useState } from "react";
 
-export const dataCy = "profileName";
+const dataCy = "profileName";
 interface ProfileNameProps {
   applicationReference: catalog.ApplicationReference;
   profileName: string;

@@ -18,7 +18,7 @@ import { GlobalSecuritySwitch } from "../GlobalSecuritySwitch/GlobalSecuritySwit
 import { HostDetails } from "../HostDetails/HostDetails";
 import "./HostsDetails.scss";
 
-export const dataCy = "hostsDetails";
+const dataCy = "hostsDetails";
 export const HostsDetails = () => {
   const cy = { "data-cy": dataCy };
 

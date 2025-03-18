@@ -13,7 +13,7 @@ import {
   setSiteToDelete,
 } from "../../../../store/locations";
 
-export const dataCy = "siteActionsPopup";
+const dataCy = "siteActionsPopup";
 export interface SiteActionsPopupProps {
   site: eim.SiteRead;
 }

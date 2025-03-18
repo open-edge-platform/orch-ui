@@ -8,7 +8,7 @@ import OsProfileDetailField from "./OsProfileDetailField";
 
 import "./OSProfileDetails.scss";
 
-export const dataCy = "osProfileDetails";
+const dataCy = "osProfileDetails";
 
 export const OSProfileSecurityFeatures: {
   [key in eim.SecurityFeature]: string;

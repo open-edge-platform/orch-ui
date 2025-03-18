@@ -46,7 +46,7 @@ interface DeploymentSite {
   createdAt?: string;
 }
 
-export const dataCy = "deploymentSiteSummary";
+const dataCy = "deploymentSiteSummary";
 interface DeploymentSiteSummaryProps {
   deployment: adm.DeploymentRead;
 }

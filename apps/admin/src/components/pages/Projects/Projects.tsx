@@ -13,7 +13,7 @@ import { Heading, Text } from "@spark-design/react";
 import { NoProjectsDialog } from "../../organisms/NoProjectsDialog/NoProjectsDialog";
 import ProjectsTable from "../../organisms/ProjectsTable/ProjectsTable";
 
-export const dataCy = "projects";
+const dataCy = "projects";
 
 interface ProjectsProps {
   // these props are used for testing purposes

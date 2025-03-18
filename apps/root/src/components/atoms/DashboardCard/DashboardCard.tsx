@@ -7,7 +7,7 @@ import { Shadow } from "@spark-design/react";
 import React, { CSSProperties } from "react";
 import "./DashboardCard.scss";
 
-export const dataCy = "dashboardCard";
+const dataCy = "dashboardCard";
 
 const DashboardCard = ({
   children,

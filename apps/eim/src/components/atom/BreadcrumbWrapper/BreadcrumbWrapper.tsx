@@ -7,7 +7,7 @@ import { BreadcrumbPiece, setBreadcrumb } from "@orch-ui/components";
 import { ComponentType, LazyExoticComponent } from "react";
 import { infrastructureBreadcrumb } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
-export const dataCy = "breadcrumbWrapper";
+const dataCy = "breadcrumbWrapper";
 
 type RemoteComponent = LazyExoticComponent<ComponentType> | null;
 export interface BreadcrumbWrapperProps {

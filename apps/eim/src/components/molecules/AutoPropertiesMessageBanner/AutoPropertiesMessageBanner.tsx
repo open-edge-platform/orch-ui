@@ -6,7 +6,7 @@
 import { MessageBanner } from "@spark-design/react";
 import { useAppSelector } from "../../../store/hooks";
 import { AutoPropertiesMessages } from "./AutoPropertiesMessages";
-export const dataCy = "autoPropertiesMessageBanner";
+const dataCy = "autoPropertiesMessageBanner";
 
 const AutoPropertiesMessageBanner = () => {
   const cy = { "data-cy": dataCy };

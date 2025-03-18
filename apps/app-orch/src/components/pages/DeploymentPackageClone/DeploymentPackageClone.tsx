@@ -22,7 +22,7 @@ import {
 } from "../../../store/reducers/deploymentPackage";
 import DeploymentPackageCreateEdit from "../../organisms/deploymentPackages/DeploymentPackageCreateEdit/DeploymentPackageCreateEdit";
 
-export const dataCy = "deploymentPackageClone";
+const dataCy = "deploymentPackageClone";
 
 type urlParams = {
   appName: string;

@@ -15,7 +15,7 @@ import { API_INTERVAL, RuntimeConfig, SharedStorage } from "@orch-ui/utils";
 import { Heading } from "@spark-design/react";
 import React, { Suspense } from "react";
 
-export const dataCy = "sshHostsTable";
+const dataCy = "sshHostsTable";
 
 interface SshHostsTableProps {
   /** Local account having ssh which is getting used by the host that are displayed. */

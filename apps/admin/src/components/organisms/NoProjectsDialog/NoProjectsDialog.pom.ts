@@ -5,7 +5,6 @@
 
 import { ModalPom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./NoProjectsDialog";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -13,7 +12,7 @@ type Selectors = (typeof dataCySelectors)[number];
 export class NoProjectsDialogPom extends CyPom<Selectors> {
   public modalPom: ModalPom;
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "noProjectsDialog") {
     super(rootCy, [...dataCySelectors], {});
     this.modalPom = new ModalPom();
   }

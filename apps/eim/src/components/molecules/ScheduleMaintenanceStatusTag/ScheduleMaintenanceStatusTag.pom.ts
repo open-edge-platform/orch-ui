@@ -6,7 +6,6 @@
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
-import { dataCy } from "./ScheduleMaintenanceStatusTag";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -95,7 +94,7 @@ export class ScheduleMaintenanceStatusTagPom extends CyPom<
   Selectors,
   ApiAliases
 > {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "scheduleMaintenanceStatusTag") {
     super(rootCy, [...dataCySelectors], {
       ...successScheduleEndpoints,
       ...errorScheduleEndpoints,

@@ -6,7 +6,6 @@
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { sitePortland } from "@orch-ui/utils";
-import { dataCy } from "./SiteCell";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -30,7 +29,7 @@ const endpoints: CyApiDetails<
 };
 
 class SiteCellPom extends CyPom<Selectors, ApiAliases> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "siteCell") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

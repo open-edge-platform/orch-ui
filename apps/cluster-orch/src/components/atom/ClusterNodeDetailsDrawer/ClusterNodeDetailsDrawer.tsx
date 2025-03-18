@@ -8,7 +8,7 @@ import { Flex, MetadataDisplay, TypedMetadata } from "@orch-ui/components";
 import { Button, Drawer } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 
-export const dataCy = "clusterNodeDetailsDrawer";
+const dataCy = "clusterNodeDetailsDrawer";
 
 interface ClusterNodeDetailsDrawerProps {
   isOpen: boolean;

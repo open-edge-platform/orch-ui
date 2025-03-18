@@ -7,7 +7,7 @@ import { adm } from "@orch-ui/apis";
 import { useState } from "react";
 import DeploymentSummary from "../../molecules/DeploymentSummary/DeploymentSummary";
 
-export const dataCy = "deploymentDrawerContent";
+const dataCy = "deploymentDrawerContent";
 
 interface DeploymentDrawerContentProps {
   deployment: adm.Deployment;

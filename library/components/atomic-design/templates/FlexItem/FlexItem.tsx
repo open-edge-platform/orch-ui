@@ -6,7 +6,7 @@
 import { ReactNode } from "react";
 import { FlexColConfigCss, FlexColSizeCss } from "../Flex/Flex";
 import "./FlexItem.scss";
-export const dataCy = "flexItem";
+const dataCy = "flexItem";
 export interface FlexItemProps {
   config: FlexColConfigCss;
   children: ReactNode;

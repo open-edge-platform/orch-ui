@@ -5,7 +5,6 @@
 import { RbacRibbonButtonPom, RibbonPom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
 import DeploymentPackageTablePom from "../../organisms/deploymentPackages/DeploymentPackageTable/DeploymentPackageTable.pom";
-import { dataCy } from "./DeploymentPackages";
 
 const dataCySelectors = [
   "title",
@@ -20,7 +19,7 @@ class DeploymentPackagesPom extends CyPom<Selectors> {
   public importButtonPom: RbacRibbonButtonPom;
   public createButtonPom: RbacRibbonButtonPom;
   public ribbonPom: RibbonPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackages") {
     super(rootCy, [...dataCySelectors]);
     this.deploymentPackageTable = new DeploymentPackageTablePom();
     this.importButtonPom = new RbacRibbonButtonPom("ribbonButtonimport");

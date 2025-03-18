@@ -26,7 +26,7 @@ import { DeploymentType } from "../../../pages/SetupDeployment/SetupDeployment";
 import { OverrideValuesList } from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import "./Review.scss";
 
-export const dataCy = "review";
+const dataCy = "review";
 
 type Diff = {
   parameterName: string;

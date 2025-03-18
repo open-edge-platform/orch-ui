@@ -14,7 +14,6 @@ import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne, clusterOneName, sitePortland } from "@orch-ui/utils";
 import ClusterEditAddNodesDrawerPom from "../../atom/ClusterEditAddNodesDrawer/ClusterEditAddNodesDrawer.pom";
 import ClusterTemplatesDropdownPom from "../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown.pom";
-import { dataCy } from "./ClusterEdit";
 
 const dataCySelectors = [
   "name",
@@ -202,7 +201,7 @@ class ClusterEditPom extends CyPom<Selectors, ApiAliases> {
   //public modal = new SiModalPom("profileDeleteModal");
   public confirmationDialog = new ConfirmationDialogPom();
 
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "clusterEdit") {
     super(rootCy, [...dataCySelectors], {
       ...successClusterEndpoint,
       ...errorClusterEndpoint,

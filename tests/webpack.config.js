@@ -3,20 +3,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const path = require("path");
 const DefinePlugin = require("webpack/lib/DefinePlugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
-  entry: "./index.ts",
   mode: "production",
+  entry: "./index.ts",
   devtool: false,
+  ignoreWarnings: [
+    {
+      message: /export .* was not found in .*/,
+    },
+  ],
+  optimization: {
+    minimize: false,
+  },
   module: {
     rules: [
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        use: "ts-loader",
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
       },
       {
         test: /\.(s[ac]ss|css)$/i,
@@ -35,12 +49,5 @@ module.exports = {
     fallback: {
       path: require.resolve("path-browserify"),
     },
-  },
-  devServer: {
-    historyApiFallback: true,
-    static: {
-      directory: path.join(__dirname, "build"),
-    },
-    port: 8000,
   },
 };

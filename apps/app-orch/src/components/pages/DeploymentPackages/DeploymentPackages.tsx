@@ -23,7 +23,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import DeploymentPackagesTable from "../../organisms/deploymentPackages/DeploymentPackageTable/DeploymentPackageTable";
 import "./DeploymentPackages.scss";
 
-export const dataCy = "deploymentPackages";
+const dataCy = "deploymentPackages";
 
 const DeploymentPackages = () => {
   const cy = { "data-cy": dataCy };

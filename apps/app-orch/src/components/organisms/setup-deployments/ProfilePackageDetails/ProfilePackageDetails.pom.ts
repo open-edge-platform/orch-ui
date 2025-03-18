@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ProfilePackageDetails";
 
 const dataCySelectors = [
   "nameValue",
@@ -14,7 +13,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class ProfilePackageDetailsPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "profilePackageDetails") {
     super(rootCy, [...dataCySelectors]);
   }
 }

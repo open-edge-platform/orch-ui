@@ -11,7 +11,7 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const webpackUtils = require("../../../library/utils/webpack.util");
 const { dependencies, version } = require("../../../package.json");
-const path = require('path');
+const path = require("path");
 
 const fs = require("fs");
 fs.copyFileSync(
@@ -24,7 +24,7 @@ module.exports = {
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        exclude:  [/node_modules/, /\.cy\.tsx$/, /\.pom\.ts/],
+        exclude: [/node_modules/, /\.cy\.tsx$/, /\.pom\.ts/],
         use: ["@jsdevtools/coverage-istanbul-loader", "ts-loader"],
       },
       {
@@ -63,27 +63,27 @@ module.exports = {
       name: "container",
       shared: {
         "@spark-design/css": dependencies["@spark-design/css"],
-        "@spark-design/react": {singleton:true},
-        "@spark-design/tokens": {singleton: true},
+        "@spark-design/react": { singleton: true },
+        "@spark-design/tokens": { singleton: true },
         react: {
           singleton: true,
-          requiredVersion: dependencies['react']
+          requiredVersion: dependencies["react"],
         },
         "react-dom": {
-          singleton:true,
-          requiredVersion: dependencies["react-dom"]
+          singleton: true,
+          requiredVersion: dependencies["react-dom"],
         },
         "react-redux": {
           singleton: true,
-          requiredVersion: dependencies["react-redux"]
+          requiredVersion: dependencies["react-redux"],
         },
         "react-transition-group": {
           singleton: true,
-          requiredVersion: dependencies["react-transition-group"]
+          requiredVersion: dependencies["react-transition-group"],
         },
         redux: {
           singleton: true,
-          requiredVersion: dependencies["redux"]
+          requiredVersion: dependencies["redux"],
         },
         "react-router-dom": {
           singleton: true,

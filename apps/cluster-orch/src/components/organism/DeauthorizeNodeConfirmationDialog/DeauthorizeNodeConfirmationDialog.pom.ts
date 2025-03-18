@@ -5,7 +5,6 @@
 
 import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeauthorizeNodeConfirmationDialog";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -28,7 +27,7 @@ class DeauthorizeNodeConfirmationDialogPom extends CyPom<
   Selectors,
   ApiAliases
 > {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deauthorizeNodeConfirmationDialog") {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 }

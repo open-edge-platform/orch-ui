@@ -4,7 +4,6 @@
  */
 
 import { CyPom } from "@orch-ui/tests";
-import { dataCy } from "./HostsTableRowExpansionDetail";
 
 const dataCySelectors = [
   "hostName",
@@ -15,7 +14,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class HostsTableRowExpansionDetailPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "hostsTableRowExpansionDetail") {
     super(rootCy, [...dataCySelectors]);
   }
 }

@@ -4,7 +4,6 @@
  */
 
 import { Cy, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./ParameterOverridesForm";
 
 const dataCySelectors = [
   "add",
@@ -18,7 +17,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 class ParameterOverridesFormPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "parameterOverridesForm") {
     super(rootCy, [...dataCySelectors]);
   }
 

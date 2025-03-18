@@ -11,7 +11,6 @@ import {
   defaultActiveProject,
 } from "@orch-ui/tests";
 import DeploymentPackageProfileListItemPom from "../DeploymentPackageProfileListItem/DeploymentPackageProfileListItem.pom";
-import { dataCy } from "./DeploymentPackageProfileList";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -63,7 +62,7 @@ const apis: CyApiDetails<ApiAliases, catalog.GetApplicationResponse> = {
 
 class DeploymentPackageProfileListPom extends CyPom<Selectors, ApiAliases> {
   public listItem: DeploymentPackageProfileListItemPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentPackageProfileList") {
     super(rootCy, [...dataCySelectors], apis);
     this.listItem = new DeploymentPackageProfileListItemPom();
   }

@@ -56,7 +56,7 @@ import {
   updateHostDetails,
 } from "./HotConfig.utils";
 
-export const dataCy = "hostConfig";
+const dataCy = "hostConfig";
 
 interface HostConfigProps {
   // these props are used for testing purposes

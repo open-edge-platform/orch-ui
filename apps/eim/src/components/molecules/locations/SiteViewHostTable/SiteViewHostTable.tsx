@@ -10,7 +10,7 @@ import { HostTableColumn } from "../../../../utils/HostTableColumns";
 import HostPopup from "../../ProvisionedHostPopup/ProvisionedHostPopup";
 import "./SiteViewHostTable.scss";
 
-export const dataCy = "siteViewHostTable";
+const dataCy = "siteViewHostTable";
 export interface SiteViewHostTableProps {
   site?: eim.SiteRead;
   basePath?: string;

@@ -15,7 +15,6 @@ import { packageOne } from "@orch-ui/utils";
 import { DeploymentPackageDetailsHeaderPom } from "../../organisms/deploymentPackages/DeploymentPackageDetailsHeader/DeploymentPackageDetailsHeader.pom";
 import { DeploymentPackageDetailsMainPom } from "../../organisms/deploymentPackages/DeploymentPackageDetailsMain/DeploymentPackageDetailsMain.pom";
 import DeploymentPackageDetailsProfileListPom from "../../organisms/deploymentPackages/DeploymentPackageDetailsProfileList/DeploymentPackageDetailsProfileList.pom";
-import { dataCy } from "./DeploymentPackageDetails";
 
 const dataCySelectors = ["loading", "backButton"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -53,7 +52,7 @@ class DeploymentPackageDetailsPom extends CyPom<Selectors, ApiAliases> {
   public dpDetailsHeaderPom: DeploymentPackageDetailsHeaderPom;
   public dpDetailsMainPom: DeploymentPackageDetailsMainPom;
   public dpDetailsProfileListPom: DeploymentPackageDetailsProfileListPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageDetails") {
     super(rootCy, [...dataCySelectors], apis);
 
     this.empty = new EmptyPom();

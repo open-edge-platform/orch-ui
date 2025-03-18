@@ -34,7 +34,7 @@ import MetadataLabels from "../../organism/ClusterEdit/MetadataLabels/MetadataLa
 import NameInfo from "../../organism/ClusterEdit/NameInfo/NameInfo";
 import "./ClusterEdit.scss";
 
-export const dataCy = "clusterEdit";
+const dataCy = "clusterEdit";
 type urlParams = {
   clusterName: string;
 };

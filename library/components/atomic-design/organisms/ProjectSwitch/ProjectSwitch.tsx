@@ -23,7 +23,7 @@ import "./ProjectSwitch.scss";
 
 export type Project = tm.ProjectProjectGet & { name?: string };
 
-export const dataCy = "projectSwitch";
+const dataCy = "projectSwitch";
 export interface ProjectSwitchProps {
   isTokenAvailable?: boolean;
   padding: string;

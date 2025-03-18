@@ -8,7 +8,6 @@ import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { multipleAlertDefinitions, multipleAlerts } from "@orch-ui/utils";
 import AlertDrawerPom from "../AlertDrawer/AlertDrawer.pom";
-import { dataCy } from "./AlertsList";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -35,7 +34,7 @@ const endpoints: CyApiDetails<
 class AlertsListPom extends CyPom<Selectors, ApiAliases> {
   table: SiTablePom;
   drawer: AlertDrawerPom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "alertsList") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.table = new SiTablePom();
     this.drawer = new AlertDrawerPom();

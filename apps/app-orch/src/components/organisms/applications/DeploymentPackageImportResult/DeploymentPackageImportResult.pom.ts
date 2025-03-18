@@ -5,14 +5,13 @@
 
 import { SiTablePom } from "@orch-ui/poms";
 import { Cy, CyPom } from "@orch-ui/tests";
-import { dataCy } from "./DeploymentPackageImportResult";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageImportResultPom extends CyPom<Selectors> {
   public resultTable: SiTablePom;
-  constructor(public rootCy: string = dataCy) {
+  constructor(public rootCy: string = "deploymentPackageImportResult") {
     super(rootCy, [...dataCySelectors]);
     this.resultTable = new SiTablePom("result");
   }

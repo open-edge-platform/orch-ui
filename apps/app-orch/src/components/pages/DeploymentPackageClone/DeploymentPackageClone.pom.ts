@@ -5,14 +5,13 @@
 
 import { CyPom } from "@orch-ui/tests";
 import DeploymentPackageCreateEditPom from "../../organisms/deploymentPackages/DeploymentPackageCreateEdit/DeploymentPackageCreateEdit.pom";
-import { dataCy } from "./DeploymentPackageClone";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageClonePom extends CyPom<Selectors> {
   dpEditPom: DeploymentPackageCreateEditPom;
-  constructor(public rootCy = dataCy) {
+  constructor(public rootCy = "deploymentPackageClone") {
     super(rootCy, [...dataCySelectors]);
     this.dpEditPom = new DeploymentPackageCreateEditPom();
   }
