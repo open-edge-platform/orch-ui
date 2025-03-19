@@ -383,6 +383,7 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <HostDetailsActions
+          basePath="../"
           host={{
             ...host,
             instance:

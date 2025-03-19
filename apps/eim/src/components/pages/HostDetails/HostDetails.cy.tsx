@@ -76,6 +76,19 @@ describe("HostDetails", () => {
         pom.medataBadge.root.should("contain.text", "Metadata are not defined");
       }
     });
+
+    it("should render HostDetailsActions component", () => {
+      cy.get(".spark-button").should("exist");
+      cy.get(".spark-button").should("contain.text", "Host Actions");
+    });
+
+    it("should able to Edit a host from host details screen", () => {
+      pom.hostAction.onboardedHostPopupPom.hostPopupPom.root.click();
+      pom.hostAction.onboardedHostPopupPom.hostPopupPom
+        .getActionPopupBySearchText("Edit")
+        .click();
+      cy.get("#pathname").contains(`host/${mockHost.resourceId}/edit`);
+    });
   });
 
   describe("when the Host is correctly loaded with no host name", () => {
