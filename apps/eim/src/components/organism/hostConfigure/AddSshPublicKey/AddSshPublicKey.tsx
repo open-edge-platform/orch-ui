@@ -32,11 +32,26 @@ export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {
     dispatch(setPublicSshKey({ hostId: hostId, value: localAccount }));
   };
 
+  // returns a identifier corresponding to the host
+  const getHostId = (host: HostData): string => {
+    for (const key of Object.keys(hosts)) {
+      const selectedHost = hosts[key];
+      if (
+        selectedHost.resourceId === host.resourceId ||
+        selectedHost.name === host.name
+      ) {
+        return key;
+      }
+    }
+    return host.resourceId || host.name;
+  };
+
   const columns: TableColumn<HostData>[] = [
     HostTableColumn.hostConfigName,
     HostTableColumn.serialNumberUuid,
     HostTableColumn.publicSshKey((host: HostData) => (
       <PublicSshKeyDropdown
+        hostId={getHostId(host)}
         localAccounts={localAccounts}
         host={host}
         onPublicKeySelect={onPublicKeySelect}
@@ -56,11 +71,7 @@ export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {
           outlined
         />
       </div>
-      <Table
-        columns={columns}
-        data={Object.values(hosts)}
-        getRowId={(row) => row.resourceId!}
-      />
+      <Table columns={columns} data={Object.values(hosts)} />
     </div>
   );
 };

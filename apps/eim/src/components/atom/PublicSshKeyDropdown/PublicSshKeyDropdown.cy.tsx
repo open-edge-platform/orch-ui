@@ -17,6 +17,7 @@ describe("<PublicSshKeyDropdown/>", () => {
   it("should render component", () => {
     cy.mount(
       <PublicSshKeyDropdown
+        hostId={onboardedHostOne.resourceId!}
         host={{ ...onboardedHostOne, instance: instanceOne }}
         onPublicKeySelect={cy.stub().as("onPublicKeySelect")}
         localAccounts={sampleLocalAccount}

@@ -21,6 +21,7 @@ describe("<AddSshPublicKey/>", () => {
   const localAccounts = generateSshMocks(2);
   const store = setupStore({
     configureHost: {
+      ...initialState,
       formStatus: initialState.formStatus,
       hosts: {
         [hostOneId]: {
@@ -36,8 +37,6 @@ describe("<AddSshPublicKey/>", () => {
           },
         },
       },
-      autoOnboard: false,
-      autoProvision: false,
     },
   });
 

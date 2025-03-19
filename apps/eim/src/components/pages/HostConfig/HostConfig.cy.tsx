@@ -276,14 +276,13 @@ describe("<HostConfig/>", () => {
     });
   });
 
-  describe("when SSH key is selected", () => {
+  describe("when SSH key is selected with auto provisioning disabled", () => {
     beforeEach(() => {
       const formStatus: HostConfigFormStatus = {
+        ...initialState.formStatus,
         currentStep: HostConfigSteps["Add SSH public key to hosts"],
         enablePrevBtn: false,
         enableNextBtn: true,
-        globalOsValue: "",
-        globalSecurityValue: "",
         hasValidationError: false,
       };
       // convert to a WriteHost and set the values that the form would set
@@ -294,6 +293,7 @@ describe("<HostConfig/>", () => {
       mockHost.site = sitePortland;
       const store = setupStore({
         configureHost: {
+          ...initialState,
           formStatus,
           hosts: {
             [onboardedHostOne.resourceId!]: {
@@ -307,8 +307,90 @@ describe("<HostConfig/>", () => {
               },
             },
           },
-          autoOnboard: false,
-          autoProvision: false,
+        },
+      });
+      // @ts-ignore
+      window.store = store;
+      addSshPublicKeyPom.interceptApis([
+        addSshPublicKeyPom.api.getLocalAccounts,
+      ]);
+
+      cy.mount(<HostConfig />, {
+        reduxStore: store,
+      });
+    });
+
+    it("should save the instance with ssh key", () => {
+      pom.interceptApis([
+        pom.api.patchComputeHostsAndHostId,
+        pom.api.postInstances,
+      ]);
+
+      cy.wait("@getLocalAccounts").then((interception) => {
+        const responseData = interception.response?.body;
+
+        // ssh key details
+        const selectedAccount: eim.LocalAccountRead =
+          responseData.localAccounts[0];
+
+        addSshPublicKeyPom.sshKeyDropdownPom.sshKeyDrpopdown.openDropdown(
+          addSshPublicKeyPom.tablePom.getCell(1, 3),
+        );
+        // selecting item from 0th index
+        addSshPublicKeyPom.sshKeyDropdownPom.sshKeyDrpopdown.selectDropdownValue(
+          addSshPublicKeyPom.tablePom.getCell(1, 3),
+          "sshKey",
+          "ssh-mock-0",
+          "ssh-mock-0",
+        );
+
+        pom.el.next.click(); // click to move to review step
+        pom.el.next.click(); // click to "submit" in review step
+        pom.waitForApis();
+
+        cy.get(`@${pom.api.postInstances}`)
+          .its("request.body")
+          .should((body) => {
+            expect(body.localAccountID).to.equal(selectedAccount.resourceId);
+          });
+      });
+    });
+  });
+
+  describe("when SSH key is selected with auto provisioning enabled", () => {
+    beforeEach(() => {
+      const formStatus: HostConfigFormStatus = {
+        ...initialState.formStatus,
+        currentStep: HostConfigSteps["Add SSH public key to hosts"],
+        enablePrevBtn: false,
+        enableNextBtn: true,
+        hasValidationError: false,
+      };
+      // convert to a WriteHost and set the values that the form would set
+      const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
+        structuredClone(onboardedHostOne),
+      );
+      mockHost.siteId = sitePortland.resourceId;
+      mockHost.site = sitePortland;
+      const store = setupStore({
+        configureHost: {
+          ...initialState,
+          formStatus,
+          hosts: {
+            // using host name as key to mimic register host with autoProvision: true, where resourceId is not available yet
+            [onboardedHostOne.name!]: {
+              ...onboardedHostOne,
+              region: regionUsWest,
+              instance: {
+                securityFeature:
+                  "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+                os: osUbuntu,
+                osID: osUbuntu.resourceId,
+              },
+            },
+          },
+          autoOnboard: true,
+          autoProvision: true, // auto provision enabled
         },
       });
       // @ts-ignore
@@ -401,7 +483,7 @@ describe("<HostConfig/>", () => {
       });
 
       it("set correct text in Next button", () => {
-        pom.el.next.should("have.text", "Configure");
+        pom.el.next.should("have.text", "Provision");
       });
     });
     describe("and Host already has OS Installed", () => {
@@ -737,7 +819,7 @@ describe("<HostConfig/>", () => {
       pom.el.next.click();
       pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
       cyGet("dialog").should("not.exist");
-      pom.getPath().should("contain", "/unassigned-hosts");
+      pom.getPath().should("contain", "/hosts");
     });
   });
 

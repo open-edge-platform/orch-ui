@@ -9,11 +9,13 @@ import { HostData } from "../../../store/configureHost";
 
 const dataCy = "publicSshKeyDropdown";
 interface PublicSshKeyDropdownProps {
+  hostId: string;
   host: HostData;
   onPublicKeySelect?: (hostId: string, acount: eim.LocalAccount) => void;
   localAccounts: eim.LocalAccountRead[] | undefined;
 }
 export const PublicSshKeyDropdown = ({
+  hostId,
   host,
   onPublicKeySelect,
   localAccounts,
@@ -34,7 +36,7 @@ export const PublicSshKeyDropdown = ({
               (account) => account.resourceId === key.toString(),
             );
             if (!selectedAccount) return;
-            onPublicKeySelect(host.resourceId!, selectedAccount);
+            onPublicKeySelect(hostId, selectedAccount);
           }
         }}
       >

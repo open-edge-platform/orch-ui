@@ -81,6 +81,7 @@ export const createHostInstance = async (
       kind: "INSTANCE_KIND_METAL",
       hostID: host.resourceId,
       name: `${host.name}-instance`,
+      localAccountID: host.instance?.localAccountID,
     },
   })
     .unwrap()
