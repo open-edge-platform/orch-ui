@@ -45,6 +45,14 @@ describe("<HostsDetails/>", () => {
     pom.getHostDetailsRow(0).should("contain.text", "SN1234AB");
   });
 
+  it("should render MessageBanner with correct message", () => {
+    cy.get(".spark-message-banner").should("exist");
+    cy.get(".spark-message-banner").should(
+      "contain.text",
+      "Secure Boot and Full Disk Encryption must be enabled in the BIOS of selected hosts. Trusted Compute compatibility requires Secure Boot.",
+    );
+  });
+
   describe("Preselect global values", () => {
     beforeEach(() => {
       pom.root.first().within(() => {

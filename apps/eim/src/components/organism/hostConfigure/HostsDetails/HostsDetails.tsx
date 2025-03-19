@@ -5,6 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
+import { MessageBanner } from "@spark-design/react";
 import { useEffect } from "react";
 import {
   selectHostConfigForm,
@@ -64,6 +65,17 @@ export const HostsDetails = () => {
 
   return (
     <div {...cy} className="hosts-details">
+      <MessageBanner
+        messageTitle=""
+        variant="info"
+        size="m"
+        messageBody={
+          "Secure Boot and Full Disk Encryption must be enabled in the BIOS of selected hosts. Trusted Compute compatibility requires Secure Boot."
+        }
+        showIcon
+        outlined
+      />
+      <br />
       <Flex
         cols={[3]}
         className={`top-row labels ${singleHostConfig ? "single" : ""}`}
