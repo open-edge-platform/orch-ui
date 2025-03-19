@@ -9,7 +9,7 @@ const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class OSProfileDetailsPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = "oSProfileDetails") {
+  constructor(public rootCy: string = "osProfileDetails") {
     super(rootCy, [...dataCySelectors]);
   }
 }

@@ -20,7 +20,7 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 export class ScheduleMaintenanceSubComponentPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = "scheduleMaintenanceSubComponent") {
+  constructor(public rootCy: string = "maintenanceTableDecription") {
     super(rootCy, [...dataCySelectors]);
   }
 }

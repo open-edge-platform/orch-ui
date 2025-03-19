@@ -44,7 +44,7 @@ describe("<OnboardedHostPopup />", () => {
 
   it("should call `onProvision` to provision host", () => {
     pom.hostPopupPom.getActionPopupBySearchText("Provision").click();
-    pom.getPath().should("eq", "/host/provision");
+    pom.getPath().should("eq", "/hosts/set-up-provisioning");
     cy.window()
       .its("store")
       .invoke("getState")

@@ -78,7 +78,7 @@ describe("<Hosts/>", () => {
         .then((url: string) => {
           const match = url.match(
             encodeURLQuery(
-              "(currentState=HOST_STATE_UNSPECIFIED OR currentState=HOST_STATE_REGISTERED)",
+              "(currentState=HOST_STATE_REGISTERED OR currentState=HOST_STATE_UNSPECIFIED)",
             ),
           );
           return expect(match && match.length > 0).to.be.eq(true);

@@ -55,7 +55,7 @@ const getProvidersWithNoDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNamePro
 export class HostDetailsPom extends CyPom<Selectors, ApiAliases> {
   public osDropdown = new OsProfileDropdownPom();
 
-  constructor(public rootCy: string = "hostDetails") {
+  constructor(public rootCy: string = "details") {
     super(rootCy, [...dataCySelectors], {
       getProvidersWithDefaultOs,
       getProvidersWithNoDefaultOs,

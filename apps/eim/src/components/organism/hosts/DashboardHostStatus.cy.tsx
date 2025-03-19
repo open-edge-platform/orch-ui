@@ -14,7 +14,7 @@ describe("<DashboardHostStatus>", () => {
     cy.mount(<DashboardHostStatus />);
     pom.waitForApis();
 
-    pom.hostStat.el.dashboardStatusTotal.should("contain.text", "15");
+    pom.hostStat.el.dashboardStatusTotal.should("contain.text", "16");
     pom.hostStat.el.dashboardStatusRunning.should("contain.text", "6");
     pom.hostStat.el.dashboardStatusError.should("contain.text", "1");
   });

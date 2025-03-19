@@ -24,7 +24,7 @@ import {
   ScheduleMaintenanceFormPom,
 } from "./ScheduleMaintenanceForm.pom";
 
-const isOnMarchDaylightSaving = false;
+const isOnMarchDaylightSaving = true;
 
 const TestingComponent = ({
   mockEntity = hostOne,
