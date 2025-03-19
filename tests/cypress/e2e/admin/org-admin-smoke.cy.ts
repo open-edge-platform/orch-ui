@@ -109,7 +109,7 @@ describe("Org Admin Smoke", () => {
     // Cleanup all the new entries created
     cy.authenticatedRequest({
       method: "DELETE",
-      url: `/v1/projects/${name}`,
+      url: `/v1/projects/${testData.description}`,
     }).then((response) => {
       // we only care that the created project is not there,
       // if the test failed before creating it we're fine with a 400, 404
@@ -118,7 +118,12 @@ describe("Org Admin Smoke", () => {
         response.status === 204 ||
         response.status === 400 ||
         response.status === 404;
-      expect(success).to.be.true;
+      expect(
+        success,
+        `Unecpected HTTP status: ${response.status}. Valid values are (200, 204, 400, 404)`,
+      ).to.be.true;
     });
+    netLog.save("org_admin_smoke_after");
+    netLog.clear();
   });
 });
