@@ -167,7 +167,7 @@ export type PodServiceDeletePodApiArg = {
   /** unique projectName for the resource */
   projectName: string;
 };
-export type ListAppEndpointsResponse = { appEndpoints: AppEndpoint[] }; //TODO - need fix that is not manual
+export type ListAppEndpointsResponse = {};
 export type EndpointStatus = {};
 export type EndpointStatusRead = {
   /** Endpoint state, either Ready or NotReady. */
@@ -175,9 +175,6 @@ export type EndpointStatusRead = {
 };
 export type AppEndpoint = {
   endpointStatus?: EndpointStatus;
-  name?: any;
-  fqdns?: any;
-  ports?: any;
 };
 export type Fqdn = {
   fqdn?: string;

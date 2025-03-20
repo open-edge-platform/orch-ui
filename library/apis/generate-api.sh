@@ -36,20 +36,20 @@ npx @rtk-query/codegen-openapi ${prefix}eim/eimApis.config.json
 echo -e "${CYAN}Generate CLUSTER_MANAGER RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}cluster-manager/clusterManagerApis.config.json
 
-# echo -e "${CYAN}Generate APP_CATALOG RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-catalog/appCatalogApis.config.json
+echo -e "${CYAN}Generate APP_CATALOG RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-catalog/appCatalogApis.config.json
 
-# echo -e "${CYAN}Generate APP_CATALOG_UTILITIES RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-utilities/appUtilitiesApis.config.json
+echo -e "${CYAN}Generate APP_CATALOG_UTILITIES RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-utilities/appUtilitiesApis.config.json
 
-# echo -e "${CYAN}Generate APP_DEPLOYMENT_MGR RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-deploy-mgr/appDeployMgr.config.json
+echo -e "${CYAN}Generate APP_DEPLOYMENT_MGR RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-deploy-mgr/appDeployMgr.config.json
 
-# echo -e "${CYAN}Generate APP_RESOURCE_MGR RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-resource-mgr/appResourceMgr.config.json
+echo -e "${CYAN}Generate APP_RESOURCE_MGR RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-resource-mgr/appResourceMgr.config.json
 
-# echo -e "${CYAN}Generate METADATA_BROKER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
+echo -e "${CYAN}Generate METADATA_BROKER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
 
 echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json

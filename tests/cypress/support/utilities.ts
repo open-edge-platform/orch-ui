@@ -31,7 +31,7 @@ export const APP_ORCH_READ_USER: IUser = {
   password,
 };
 
-export const KUBECTL_POD = `kubectl get pods -A`;
+export const KUBECTL_POD = "kubectl get pods -A";
 
 export const defaultActiveProject: ProjectItem = {
   name: "itep-ui",

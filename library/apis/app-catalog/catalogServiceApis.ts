@@ -796,7 +796,7 @@ export type Namespace = {
   labels?: {
     [key: string]: string;
   };
-  /** namespace names must be valid RFC 1123 DNS labels. Avoid creating namespaces with the prefix `kube-`, since it is reserved for Kubernetes system namespaces. Avoid `default` - will already exist */
+  /** namespace names must be valid RFC 1123 DNS labels. Avoid creating namespaces with the prefix `kube-`, since it is reserved for Kubernetes\* system namespaces. Avoid `default` - will already exist */
   name: string;
 };
 export type DeploymentProfile = {
@@ -832,7 +832,7 @@ export type DeploymentPackage = {
   applicationDependencies?: ApplicationDependency[];
   /** List of applications comprising this deployment package. Expressed as (name, version) pairs. */
   applicationReferences: ApplicationReference[];
-  /** Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail artifacts can be used by the UI; Grafana dashboard definitions can be used by the deployment manager. */
+  /** Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail artifacts can be used by the UI; Grafana\* dashboard definitions can be used by the deployment manager. */
   artifacts: ArtifactReference[];
   /** Optional map of application-to-namespace bindings to be used as a default when deploying the applications that comprise the package. If a namespace is not defined in the set of "namespaces" in this Deployment Package, it will be inferred that it is a simple namespace with no predefined labels or annotations. */
   defaultNamespaces?: {
@@ -868,7 +868,7 @@ export type DeploymentPackageRead = {
   applicationDependencies?: ApplicationDependency[];
   /** List of applications comprising this deployment package. Expressed as (name, version) pairs. */
   applicationReferences: ApplicationReference[];
-  /** Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail artifacts can be used by the UI; Grafana dashboard definitions can be used by the deployment manager. */
+  /** Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail artifacts can be used by the UI; Grafana\* dashboard definitions can be used by the deployment manager. */
   artifacts: ArtifactReference[];
   /** The creation time of the deployment package. */
   createTime?: string;
@@ -952,7 +952,7 @@ export type Registry = {
   name: string;
   /** Root URL for retrieving artifacts, e.g. Docker images and Helm charts, from the registry. */
   rootUrl: string;
-  /** Type indicates whether the registry holds Docker images or Helm charts; defaults to Helm. */
+  /** Type indicates whether the registry holds Docker images or Helm charts; defaults to Helm charts. */
   type: string;
   /** Optional username for accessing the registry. */
   username?: string;
@@ -976,7 +976,7 @@ export type RegistryRead = {
   name: string;
   /** Root URL for retrieving artifacts, e.g. Docker images and Helm charts, from the registry. */
   rootUrl: string;
-  /** Type indicates whether the registry holds Docker images or Helm charts; defaults to Helm. */
+  /** Type indicates whether the registry holds Docker images or Helm charts; defaults to Helm charts. */
   type: string;
   /** The last update time of the registry. */
   updateTime?: string;
