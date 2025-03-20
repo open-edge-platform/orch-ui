@@ -32,6 +32,7 @@ import { reset, setHosts } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   LifeCycleState,
+  setLifeCycleState,
   setSearchTerm,
 } from "../../../store/hostFilterBuilder";
 import {
@@ -42,10 +43,12 @@ import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
 import HostDetailsActions from "../hosts/HostDetailsActions/HostDetailsActions";
 import "./HostsTable.scss";
-const dataCy = "hostsTable";
+export const dataCy = "hostsTable";
 export interface HostsTableProps {
   /** columns to show from Host object */
   columns?: TableColumn<eim.HostRead>[];
+  /** Lifecycle category */
+  category?: LifeCycleState;
   /** API filters */
   filters?: eim.GetV1ProjectsByProjectNameComputeHostsApiArg & {
     workloadMemberId?: string | undefined;
@@ -76,6 +79,8 @@ export interface HostsTableProps {
   onDataLoad?: (data: eim.HostRead[]) => void;
   unsetSelectedHosts?: () => void;
   provisionHosts?: () => void;
+  /** This will decide on what HostRead info basis is host is selected  */
+  getSelectionId?: (row: eim.HostRead) => string;
 }
 
 const hostColumns: TableColumn<eim.HostRead>[] = [
@@ -91,15 +96,17 @@ const hostColumns: TableColumn<eim.HostRead>[] = [
 ];
 const HostsTable = ({
   columns = hostColumns,
+  category,
   poll,
-  onDataLoad,
   selectable,
   selectedHosts,
   expandable,
   actionsJsx,
   emptyActionProps,
+  onDataLoad,
   onHostSelect,
   unsetSelectedHosts,
+  getSelectionId = (row) => row.resourceId!,
 }: HostsTableProps) => {
   const cy = { "data-cy": dataCy };
   const defaultPageSize = {
@@ -124,6 +131,12 @@ const HostsTable = ({
   const { filter, lifeCycleState } = useAppSelector(
     (state) => state.hostFilterBuilder,
   );
+
+  useEffect(() => {
+    if (category) {
+      dispatch(setLifeCycleState(category));
+    }
+  }, [category]);
 
   const { data, isSuccess, isError, isLoading, error } =
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
@@ -337,12 +350,12 @@ const HostsTable = ({
         }}
         // Searching
         canSearch={!selectedIds?.length} // If selctedItems banner is shown, hiding the search
-        getRowId={(row) => row.resourceId!}
         searchTerm={searchTerm}
         onSearch={onSearchChange}
         // Checkbox Selection
         canSelectRows={selectable}
         onSelect={onHostSelect}
+        getRowId={getSelectionId}
         selectedIds={selectedIds}
         canExpandRows={expandable}
         subRow={(row: { original: eim.HostRead }) => {

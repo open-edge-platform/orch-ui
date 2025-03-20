@@ -9,4 +9,3 @@ export { RegionSiteTreePom } from "./src/components/organism/locations/RegionSit
 export { LocationsPom } from "./src/components/pages/Locations/Locations.pom";
 export { default as RegionFormPom } from "./src/components/pages/region/RegionForm.pom";
 export { default as SiteFormPom } from "./src/components/pages/site/SiteForm.pom";
-export { default as UnconfiguredHostsPom } from "./src/components/pages/UnconfiguredHosts/UnconfiguredHosts.pom";

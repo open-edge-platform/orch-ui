@@ -5,12 +5,12 @@
 
 import { ApiErrorPom, EmptyPom } from "@orch-ui/components";
 import { siteBoston } from "@orch-ui/utils";
-import _HostsTablePom from "../../../../components/organism/HostsTable/HostsTable.pom";
+import HostsTablePom from "../../../../components/organism/HostsTable/HostsTable.pom";
 import { SiteViewHostTable } from "./SiteViewHostTable";
 import { SiteViewHostTablePom } from "./SiteViewHostTable.pom";
 
 const pom = new SiteViewHostTablePom();
-const hostsTablePom = new _HostsTablePom();
+const hostsTablePom = new HostsTablePom();
 const apiErrorPom = new ApiErrorPom();
 const emptyPom = new EmptyPom();
 

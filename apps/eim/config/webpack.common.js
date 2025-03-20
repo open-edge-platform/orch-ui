@@ -55,8 +55,7 @@ module.exports = {
         "./UnallocatedHostsWheel":
           "./src/components/organism/hosts/DashboardUnallocatedHostsWheel",
         "./HostsTableRemote":
-          "./src/components/organism/_HostsTable/_HostsTableRemote",
-        "./HostsTable": "./src/components/organism/HostsTable/HostsTableRemote",
+          "./src/components/organism/HostsTable/HostsTableRemote",
         "./SiteCellRemote": "./src/components/atom/SiteCell/SiteCellRemote",
         "./HostLink": "./src/components/atom/HostLink/HostLinkRemote",
         "./OSProfiles": "./src/components/pages/OSProfiles/OSProfilesRemote",

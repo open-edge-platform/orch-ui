@@ -24,7 +24,6 @@ const dataCy = "clusterNodeTableBySite";
 export type NodeRoles = "all" | "worker" | "controlplane";
 interface SelectedRole {
   hostId: string;
-  uuid: string;
   selectedRole: NodeRoles;
 }
 
@@ -71,7 +70,7 @@ const ClusterNodesTableBySite = ({
   const currentNodesSpec = useAppSelector(getNodesSpec);
 
   // Hosts/Nodes Table selection and dropdown states
-  const [selectedHostIds, setSelectedHostIds] = useState<string[]>([]);
+  const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
   const [selectedRoles, setSelectedRole] = useState<SelectedRole[]>([]); // List of role in dropdown selection for each host/uuid row.
 
   // Drawer related states
@@ -83,40 +82,42 @@ const ClusterNodesTableBySite = ({
     // To make local step state persist after stepper change unmounting current component.
     // The data for selectedHosts and selectedRoles is constructed and states are updated.
 
-    const prevSelectedHostIds = selectedHostIds; // By default take in current selection
+    const prevSelectedHostIds = selectedHosts; // By default take in current selection
 
-    if (currentNodes.length) {
+    if (currentNodes.length > 0) {
       // In case we come back to this step from next step,
       // we need to re-build the component internal state from Redux
       const prevSelectedRoles: SelectedRole[] = [];
       currentNodes.forEach((node) => {
         // This needs to be independent of row selection toggle until this step is completed.
-        if (node.id && node.role && node.id) {
-          prevSelectedHostIds.push(node.id);
+        if (node.id && node.role) {
+          prevSelectedHostIds.push({
+            resourceId: node.id,
+            name: node.name ?? node.id,
+          });
           prevSelectedRoles.push({
             hostId: node.id,
             selectedRole: node.role as NodeRoles,
-            uuid: node.id,
           });
         }
       });
       // Render hosts roles
       setSelectedRole(prevSelectedRoles);
       // Render host row pre-selections
-      setSelectedHostIds(prevSelectedHostIds);
+      setSelectedHosts(prevSelectedHostIds);
     }
-  }, []);
+  }, [currentNodes]);
 
   const handleRoleSelectInRow = (host: eim.HostRead) => {
     const currentNode = currentNodes.find(
       (node) => node.id === host.resourceId,
     );
-    const currentHost = selectedRoles.find(
+    const currentRole = selectedRoles.find(
       (node) => node.hostId === host.resourceId,
     );
     // If previously present in global or local or default: "all"
     const currentNodeRole =
-      currentNode?.role ?? currentHost?.selectedRole ?? "all";
+      currentNode?.role ?? currentRole?.selectedRole ?? "all";
     return (
       <NodeRoleDropdown
         role={currentNodeRole}
@@ -170,18 +171,16 @@ const ClusterNodesTableBySite = ({
 
   const eimNodeToCMNode = (host: eim.HostRead): cm.NodeInfo => {
     return {
-      id: host.uuid, //TODO: is this resourceId or uuid?
-      os: host.instance?.os?.name,
-      name: host.name,
+      id: host.resourceId,
       role: "all",
     };
   };
 
   const handleNodeSelection = (host: eim.HostRead, isSelected: boolean) => {
     // Make Cluster-Orch Node from the updated host row
-    const selectedNode: cm.NodeInfo = eimNodeToCMNode(host);
+    const selectedNode = eimNodeToCMNode(host);
     const selectedNodeSpec: cm.NodeSpec = {
-      id: host.uuid ?? "",
+      id: host.resourceId ?? "",
       role: "all",
     };
 
@@ -202,6 +201,12 @@ const ClusterNodesTableBySite = ({
           ),
         ),
       );
+      setSelectedHosts(
+        selectedHosts.filter((h) => h.resourceId !== host.resourceId),
+      );
+      setSelectedRole(
+        selectedRoles.filter((role) => role.hostId !== host.resourceId),
+      );
     }
 
     // FIXME we are using redux, why do we need a callback?
@@ -212,7 +217,7 @@ const ClusterNodesTableBySite = ({
   // this method is called when the list of Host is loaded
   // in the Host table. We use this to populate data in the Redux store
   const onHostLoad = (hosts: eim.HostRead[]) => {
-    if (hostIdUrlParam && selectedHostIds.length === 0) {
+    if (hostIdUrlParam && selectedHosts.length === 0) {
       // we only execute this code if the url param contains a hostId
       // and the user have not selected any host yet
       const host = hosts.find((h) => h.resourceId === hostIdUrlParam);
@@ -221,13 +226,18 @@ const ClusterNodesTableBySite = ({
         dispatch(
           setNodesSpec([
             {
-              id: host.uuid!,
+              id: host.resourceId!,
               role: "all",
             },
           ]),
         );
         // Render host row pre-selections
-        setSelectedHostIds([hostIdUrlParam]);
+        setSelectedHosts([
+          {
+            resourceId: hostIdUrlParam,
+            name: hostIdUrlParam,
+          },
+        ]);
         // Propagate the status to the parent component
         // FIXME this should not be necessary as we're using redux
         onNodeSelection(host, true);
@@ -297,10 +307,9 @@ const ClusterNodesTableBySite = ({
           <HostsTableRemote
             columns={columns}
             siteId={siteId}
-            category={1} /* 1: HostCategory.Configured in FM */
+            category="provisioned"
             selectable
-            selectedHostIds={selectedHostIds}
-            getSelectionId={(row: eim.HostRead) => row.uuid}
+            selectedHosts={selectedHosts}
             poll={poll}
             onHostSelect={handleNodeSelection}
             onDataLoad={onHostLoad}

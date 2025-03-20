@@ -13,8 +13,8 @@ import {
   regionPortlandId,
 } from "@orch-ui/utils";
 import { ClusterPerformanceCardPom } from "../../atom/ClusterPerformanceCard/ClusterPerformanceCard.pom";
-import { ClusterHostsBySitePom } from "../../organism/cluster/ClusterHostsBySite/ClusterHostsBySite.pom";
 import DeploymentInstancesTablePom from "../../organism/clusterDetail/DeploymentInstancesTable/DeploymentInstancesTable.pom";
+import ClusterNodesTablePom from "../../organism/ClusterNodesTable/ClusterNodesTable.pom";
 
 const dataCySelectors = [
   "clusterDetailHeading",
@@ -132,7 +132,7 @@ export class ClusterDetailPom extends CyPom<Selectors, ApiAliases> {
     memory: ClusterPerformanceCardPom;
     storage: ClusterPerformanceCardPom;
   };
-  public clusterHostTablePom: ClusterHostsBySitePom;
+  public clusterHostTablePom: ClusterNodesTablePom;
   public confirmationDialogPom: ConfirmationDialogPom;
   public deploymentInstancesTablePom: DeploymentInstancesTablePom;
 
@@ -150,7 +150,7 @@ export class ClusterDetailPom extends CyPom<Selectors, ApiAliases> {
       memory: new ClusterPerformanceCardPom("memoryChart"),
       storage: new ClusterPerformanceCardPom("storageChart"),
     };
-    this.clusterHostTablePom = new ClusterHostsBySitePom();
+    this.clusterHostTablePom = new ClusterNodesTablePom();
     this.confirmationDialogPom = new ConfirmationDialogPom();
     this.deploymentInstancesTablePom = new DeploymentInstancesTablePom();
   }

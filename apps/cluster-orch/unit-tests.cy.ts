@@ -19,7 +19,6 @@ import "./src/components/organism/cluster/clusterCreation/ClusterNodesTableBySit
 import "./src/components/organism/cluster/clusterCreation/NameAndTemplate/NameAndTemplate.cy.tsx";
 import "./src/components/organism/cluster/clusterCreation/Review/Review.cy.tsx";
 import "./src/components/organism/cluster/clusterCreation/SelectSite/SelectSite.cy.tsx";
-import "./src/components/organism/cluster/ClusterHostsBySite/ClusterHostsBySite.cy.tsx";
 import "./src/components/organism/cluster/ClusterList.cy.tsx";
 import "./src/components/organism/cluster/ClusterNodesWrapper/ClusterNodesWrapper.cy.tsx";
 import "./src/components/organism/clusterDetail/DeploymentInstancesTable/DeploymentInstancesTable.cy.tsx";

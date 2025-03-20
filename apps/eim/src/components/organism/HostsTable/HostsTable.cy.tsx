@@ -297,5 +297,14 @@ describe("<HostsTable/>", () => {
     it("should not allow selection", () => {
       pom.table.el.rowSelectCheckbox.should("not.exist");
     });
+
+    it("should not allow selection when category is provided", () => {
+      pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+      cy.mount(<HostsTable category={LifeCycleState.Provisioned} />, {
+        reduxStore: setupStore(),
+      });
+      pom.waitForApis();
+      pom.table.el.rowSelectCheckbox.should("not.exist");
+    });
   });
 });

@@ -4,7 +4,6 @@
  */
 
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import _HostsTablePom from "../../HostsTable/HostsTable.pom";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -21,11 +20,8 @@ const deauthorizedEndpoints: CyApiDetails<ApiAliases> = {
 };
 
 class DeauthorizeHostStandalonePom extends CyPom<Selectors, ApiAliases> {
-  public hostsTablePom: _HostsTablePom;
-
   constructor(public rootCy: string = "deauthorizeHostStandalone") {
     super(rootCy, [...dataCySelectors], deauthorizedEndpoints);
-    this.hostsTablePom = new _HostsTablePom();
   }
 }
 export default DeauthorizeHostStandalonePom;

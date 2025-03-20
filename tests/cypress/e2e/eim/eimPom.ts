@@ -10,7 +10,6 @@ import {
   RegionSiteTreePom,
   SearchPom,
   SiteFormPom,
-  UnconfiguredHostsPom,
 } from "@orch-ui/eim-poms";
 import { CyPom } from "@orch-ui/tests";
 
@@ -21,7 +20,6 @@ class EimPom extends CyPom<Selectors> {
   public locationPom: LocationsPom;
   public regionFormPom: RegionFormPom;
   public siteFormPom: SiteFormPom;
-  public unconfigureHostsPom: UnconfiguredHostsPom;
   public regionSiteTreePom: RegionSiteTreePom;
   public regionAndSitePom: RegionAndSitePom;
   public searchPom: SearchPom;
@@ -30,7 +28,6 @@ class EimPom extends CyPom<Selectors> {
     this.locationPom = new LocationsPom();
     this.regionFormPom = new RegionFormPom();
     this.siteFormPom = new SiteFormPom();
-    this.unconfigureHostsPom = new UnconfiguredHostsPom();
     this.regionSiteTreePom = new RegionSiteTreePom();
     this.regionAndSitePom = new RegionAndSitePom();
     this.searchPom = new SearchPom();
