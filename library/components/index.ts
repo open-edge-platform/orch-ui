@@ -186,7 +186,10 @@ export {
   CheckboxSelectionList, 
   CheckboxSelectionOption,
 } from "./atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList";
-
+export {
+  TrustedCompute,
+  TrustedComputeProps,
+} from "./atomic-design/organisms/TrustedCompute/TrustedCompute";
 /***************************** Pages *****************************************/
 export { PageNotFound } from "./atomic-design/pages/PageNotFound/PageNotFound";
 

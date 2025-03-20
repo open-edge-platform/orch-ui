@@ -11,6 +11,7 @@ import {
   Status as IconStatus,
 } from "@orch-ui/components";
 import { capitalize } from "lodash";
+import { TrustedComputeCompatibility } from "../../../components/atomic-design/organisms/TrustedCompute/TrustedCompute";
 
 export type HostGenericStatuses = {
   /** indicator: host.hostStatusIndicator, message: host.hostStatus, timestamp: host.hostStatusTimestamp */
@@ -451,8 +452,6 @@ export const getCustomStatusOnIdleAggregation = (
   return hostStateMapping[hostCurrentState];
 };
 
-export type TrustedComputeCompatible = { text: string; tooltip: string };
-
 /**
  * Determines the trusted compute compatibility of a given host.
  *
@@ -466,7 +465,7 @@ export type TrustedComputeCompatible = { text: string; tooltip: string };
  */
 export const getTrustedComputeCompatibility = (
   host: eim.HostRead,
-): TrustedComputeCompatible => {
+): TrustedComputeCompatibility => {
   if (
     host?.instance?.securityFeature ===
       "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION" &&

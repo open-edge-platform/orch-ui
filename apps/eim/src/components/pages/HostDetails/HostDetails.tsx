@@ -12,6 +12,7 @@ import {
   MetadataDisplay,
   setActiveNavItem,
   setBreadcrumb,
+  TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
 import {
@@ -26,7 +27,6 @@ import {
   parseError,
   Role,
   SharedStorage,
-  TrustedComputeCompatible,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -371,10 +371,6 @@ const HostDetails: React.FC = () => {
     }) ?? []),
   ];
 
-  /** Trusted compute mapping as per security */
-  const trustedComputeCompatible: TrustedComputeCompatible =
-    getTrustedComputeCompatibility(host);
-
   return (
     <div className={cssSelectorIhd} data-cy={dataCyIhd}>
       {/* HostDetails Heading */}
@@ -507,13 +503,11 @@ const HostDetails: React.FC = () => {
               <tr>
                 <td>Trusted Compute</td>
                 <td data-cy="trustedCompute">
-                  {trustedComputeCompatible.text}
-                  <Icon
-                    className="tc-info-icon"
-                    data-cy="tc-info-icon"
-                    icon="information-circle"
-                    title={trustedComputeCompatible.tooltip}
-                  />
+                  <TrustedCompute
+                    trustedComputeCompatible={getTrustedComputeCompatibility(
+                      host,
+                    )}
+                  ></TrustedCompute>
                 </td>
               </tr>
             )}

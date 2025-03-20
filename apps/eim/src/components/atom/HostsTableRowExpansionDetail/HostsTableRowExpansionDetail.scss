@@ -14,9 +14,7 @@
   &__content span {
     margin-right: 1rem;
   }
-  .tc-info-icon {
-    left: 5px;
-    top: 2px;
-    position: relative;
+  &__content .spark-tooltip-tip {
+    margin-right: 0rem;
   }
 }
