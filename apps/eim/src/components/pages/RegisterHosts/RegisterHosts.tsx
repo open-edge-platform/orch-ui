@@ -100,6 +100,7 @@ const RegisterHosts = () => {
         </Button>
 
         <Button
+          data-cy="nextButton"
           size={ButtonSize.Large}
           variant={ButtonVariant.Action}
           onPress={async () => {

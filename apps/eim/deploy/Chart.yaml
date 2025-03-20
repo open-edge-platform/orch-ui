@@ -4,9 +4,9 @@ apiVersion: v2
 name: orch-ui-eim
 description: Deploy the Edge-Native Software Platform iaas pod
 type: application
-version: 2.0.5-dev
+version: 2.0.5
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
-appVersion: "2.0.5-dev"
+appVersion: "2.0.5"
 dependencies: []
 annotations: {}
