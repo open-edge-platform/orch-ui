@@ -120,7 +120,7 @@ describe("Org Admin Smoke", () => {
         response.status === 404;
       expect(
         success,
-        `Unecpected HTTP status: ${response.status}. Valid values are (200, 204, 400, 404)`,
+        `Unexpected HTTP status: ${response.status}. Valid values are (200, 204, 400, 404)`,
       ).to.be.true;
     });
     netLog.save("org_admin_smoke_after");

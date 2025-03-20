@@ -1,7 +1,7 @@
 /*
-* SPDX-FileCopyrightText: (C) 2023 Intel Corporation
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 import * as _ from "lodash";
 import { eim } from "../../../../library/apis";
@@ -30,8 +30,7 @@ export const createRegionViaAPi = (
       },
     })
     .then((response) => {
-      const success = response.status === 201;
-      expect(success).to.be.true;
+      expect(response.status).to.equal(201);
       return cy.wrap(response.body.resourceId!);
     });
 };
@@ -126,10 +125,13 @@ export const unconfigureHostViaApi = (project: string, hostId: string) => {
       "onboardingStatus",
       "registrationStatus",
       "uuid",
-      "licenseExpirationTimestamp",
-      "licenseStatus",
-      "licenseStatusIndicator",
-      "licenseStatusTimestamp",
+      "timestamps",
+      "hostStatusIndicator",
+      "hostStatusTimestamp",
+      "onboardingStatusIndicator",
+      "onboardingStatusTimestamp",
+      "registrationStatusIndicator",
+      "registrationStatusTimestamp",
     ];
 
     _.forEach(readOnlyProps, (prop) => {
@@ -168,7 +170,7 @@ export const configureHostViaAPI = (
 
 export const getHostsViaApi = (project): Chainable => {
   const onBoardedHostsFilter =
-    "((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR (currentState=HOST_STATE_ERROR AND NOT desiredState=HOST_STATE_REGISTERED)) AND (NOT has(site) OR NOT has(instance) OR NOT instance.desiredState=INSTANCE_STATE_RUNNING)&offset=0&orderBy=name asc&pageSize=10";
+    "%28currentState%3DHOST_STATE_ONBOARDED%20AND%20has%28instance%29%29";
 
   return cy
     .authenticatedRequest({

@@ -22,4 +22,11 @@ export class RibbonPom extends CyPom<Selectors> {
   constructor(public rootCy: string = "ribbon") {
     super(rootCy, [...dataCySelectors]);
   }
+
+  public search(searchText: string) {
+    // we might be re-rendering the search input,
+    // for now let's try the workaround in this issue
+    // https://github.com/cypress-io/cypress/issues/5830
+    this.el.search.type(searchText, { force: true });
+  }
 }

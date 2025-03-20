@@ -7,11 +7,14 @@ export const deleteClusterViaApi = (project: string, clusterName: string) => {
   return cy
     .authenticatedRequest({
       method: "DELETE",
-      url: `/v1/projects/${project}/clusters/${clusterName}`,
+      url: `/v2/projects/${project}/clusters/${clusterName}`,
     })
     .then((response) => {
-      const success = response.status === 200 || response.status === 404;
-      expect(success).to.be.true;
+      const success = response.status === 204 || response.status === 404;
+      expect(
+        success,
+        `Unexpected HTTP status: ${response.status}. Valid values are (204, 404)`,
+      ).to.be.true;
     });
 };
 
