@@ -111,7 +111,7 @@ header:
       dest: /content/dev_guide/additional_howtos/gs_os_profile_aws.html
 
 # List of versions used to populate the "About" page
-# they are all set to `unknown` as it's `orch-deploy` responsibility
+# they are all set to `unknown` as it's `edge-manageability-framework` responsibility
 # to set the correct value
 versions:
   orchestrator: unknown

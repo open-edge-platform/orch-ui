@@ -28,7 +28,7 @@ DOCKER_REGISTRY=<registry> DOCKER_REPOSITORY=edge-orch/orch-ui  VERSION=dev make
 
 ## Update an existing deployment with custom images
 
-Custom built images can easily be used in ArgoCD to test development code. In order to do that locate the cluster-configuration you are using to deploy (these configurations are defined in the `orch-deploy` repository, for example: `dev-coder-minimal`) and modify it as in the following example:
+Custom built images can easily be used in ArgoCD to test development code. In order to do that locate the cluster-configuration you are using to deploy (these configurations are defined in the `edge-manageability-framework` repository, for example: `dev-coder-minimal`) and modify it as in the following example:
 
 ```yaml
 postCustomTemplateOverwrite:
@@ -85,7 +85,7 @@ Github repository as source for the UI helm chart(s).
 ```go
 var privateRepos = []string{
 	"https://github.com/open-edge-platform/orch-utils",
-	"https://github.com/open-edge-platform/orch-deploy",
+	"https://github.com/open-edge-platform/edge-manageability-framework",
 	"https://github.com/open-edge-platform/orch-ui",
 }
 ```
@@ -94,7 +94,7 @@ then run `mage argo:login argo:repoAdd`
 > NOTE: when the repository will be moved to open-source, this won't be needed anymore
  -->
 
-Update the application template file in the `orch-deploy` repo.
+Update the application template file in the `edge-manageability-framework` repo.
 These templates are located in the ``argocd/applications/templates/` folder
 
 **web-ui-root.yaml**
