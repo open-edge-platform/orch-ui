@@ -47,6 +47,7 @@ const Hosts = () => {
     <>
       <HostSearchFilters />
       <Button
+        data-cy="registerHosts"
         variant={ButtonVariant.Action}
         onPress={() => {
           navigate("../register-hosts");

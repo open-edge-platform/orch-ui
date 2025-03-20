@@ -55,7 +55,7 @@ export const initialState: HostConfigForm = {
   },
   hasMultiHostValidationError: false,
   hosts: {},
-  autoOnboard: false,
+  autoOnboard: true,
   autoProvision: false,
 };
 
