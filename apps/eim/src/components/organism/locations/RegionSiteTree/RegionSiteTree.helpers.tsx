@@ -22,7 +22,7 @@ export interface RegionSiteTreeCallbacks {
 
 interface ComponentsProps {
   regionProps: RegionDynamicProps;
-  siteProps: SiteDynamicProps;
+  siteDynamicProps: SiteDynamicProps;
 }
 
 export const createRegion = (
@@ -65,9 +65,9 @@ export const createSite = (
     throw new Error(
       "Site id (resourceId) is missing from retrieved sites result",
     );
-  const siteProps = componentProps.siteProps ?? {};
+  const siteDynamicProps = componentProps.siteDynamicProps ?? {};
   return {
-    content: <Site {...siteProps} site={site} />,
+    content: <Site {...siteDynamicProps} site={site} />,
     data: { id: site.resourceId },
     isLeaf: true,
   };

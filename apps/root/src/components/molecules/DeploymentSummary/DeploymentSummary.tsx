@@ -47,7 +47,7 @@ const DeploymentSummary = ({ deployment }: DeploymentSummaryProps) => {
           cardTitle="Deployment Package"
           titleSemanticLevel={6}
         >
-          <CardBox dataCy="compositePackageDetails">
+          <CardBox dataCy="applicationPackageDetails">
             <Flex cols={[3, 9]}>
               {/* TODO replace with the correct icon */}
               <Icon icon="cube" className="icon" />

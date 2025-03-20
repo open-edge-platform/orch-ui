@@ -10,7 +10,7 @@ import {
   onboardedHostOne,
   osUbuntu,
   regionUsWest,
-  sitePortland,
+  siteOregonPortland,
   StoreUtils,
 } from "@orch-ui/utils";
 
@@ -29,7 +29,7 @@ import { HostConfigPom } from "./HostConfig.pom";
 
 const pom = new HostConfigPom();
 const osProfileDropdownPom = new OsProfileDropdownPom();
-const selectSitePom = new RegionSiteTreePom();
+const selectSiteTreePom = new RegionSiteTreePom();
 const searchPom = new SearchPom();
 const addSshPublicKeyPom = new AddSshPublicKeyPom();
 
@@ -236,17 +236,19 @@ describe("<HostConfig/>", () => {
       });
       // @ts-ignore
       window.store = store;
-      selectSitePom.interceptApis([selectSitePom.api.getRootRegionsMocked]);
+      selectSiteTreePom.interceptApis([
+        selectSiteTreePom.api.getRootRegionsMocked,
+      ]);
 
       cy.mount(<HostConfig />, {
         reduxStore: store,
       });
-      selectSitePom.waitForApis();
+      selectSiteTreePom.waitForApis();
     });
 
     it("host must be updated with selected site details", () => {
-      selectSitePom.expandFirstRootMocked();
-      selectSitePom.site.el.selectSiteRadio.click();
+      selectSiteTreePom.expandFirstRootMocked();
+      selectSiteTreePom.site.el.selectSiteRadio.click();
       cy.window()
         .its("store")
         .invoke("getState")
@@ -270,8 +272,8 @@ describe("<HostConfig/>", () => {
 
     it("form buttons should validate selections", () => {
       pom.el.next.should("have.attr", "aria-disabled", "true");
-      selectSitePom.expandFirstRootMocked();
-      selectSitePom.site.el.selectSiteRadio.click();
+      selectSiteTreePom.expandFirstRootMocked();
+      selectSiteTreePom.site.el.selectSiteRadio.click();
       pom.el.next.should("have.attr", "aria-disabled", "false");
     });
   });
@@ -289,8 +291,8 @@ describe("<HostConfig/>", () => {
       const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
         structuredClone(onboardedHostOne),
       );
-      mockHost.siteId = sitePortland.resourceId;
-      mockHost.site = sitePortland;
+      mockHost.siteId = siteOregonPortland.resourceId;
+      mockHost.site = siteOregonPortland;
       const store = setupStore({
         configureHost: {
           ...initialState,
@@ -370,8 +372,8 @@ describe("<HostConfig/>", () => {
       const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
         structuredClone(onboardedHostOne),
       );
-      mockHost.siteId = sitePortland.resourceId;
-      mockHost.site = sitePortland;
+      mockHost.siteId = siteOregonPortland.resourceId;
+      mockHost.site = siteOregonPortland;
       const store = setupStore({
         configureHost: {
           ...initialState,
@@ -454,8 +456,8 @@ describe("<HostConfig/>", () => {
     const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
       structuredClone(onboardedHostOne),
     );
-    mockHost.siteId = sitePortland.resourceId;
-    mockHost.site = sitePortland;
+    mockHost.siteId = siteOregonPortland.resourceId;
+    mockHost.site = siteOregonPortland;
     const testMetadata = [{ key: "color", value: "red" }];
     mockHost.metadata = testMetadata;
 
@@ -521,7 +523,7 @@ describe("<HostConfig/>", () => {
 
         const expectedResult: eim.HostWrite = {
           name: onboardedHostOne.name,
-          siteId: sitePortland.resourceId,
+          siteId: siteOregonPortland.resourceId,
           metadata: testMetadata,
         };
 
@@ -678,7 +680,9 @@ describe("<HostConfig/>", () => {
         pom.api.patchComputeHostsAndHostId,
         pom.api.postInstances,
       ]);
-      selectSitePom.interceptApis([selectSitePom.api.getRootRegionsMocked]);
+      selectSiteTreePom.interceptApis([
+        selectSiteTreePom.api.getRootRegionsMocked,
+      ]);
       searchPom.interceptApis([searchPom.api.getLocationsOnSearch200]);
       osProfileDropdownPom.interceptApis([
         osProfileDropdownPom.api.getOSResources,
@@ -698,9 +702,9 @@ describe("<HostConfig/>", () => {
     });
 
     it("when the site is selected by expanding the tree manually", () => {
-      selectSitePom.waitForApis();
-      selectSitePom.expandFirstRootMocked();
-      selectSitePom.site.el.selectSiteRadio.click();
+      selectSiteTreePom.waitForApis();
+      selectSiteTreePom.expandFirstRootMocked();
+      selectSiteTreePom.site.el.selectSiteRadio.click();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
@@ -715,15 +719,15 @@ describe("<HostConfig/>", () => {
     });
 
     it("when the site is selected in tree by searching", () => {
-      selectSitePom.waitForApis();
-      selectSitePom.expandFirstRootMocked();
+      selectSiteTreePom.waitForApis();
+      selectSiteTreePom.expandFirstRootMocked();
 
       searchPom.root.should("exist");
       searchPom.el.textField.type("Site 1");
       searchPom.el.button.click();
       searchPom.waitForApi([searchPom.api.getLocationsOnSearch200]);
 
-      selectSitePom.site.el.selectSiteRadio.click();
+      selectSiteTreePom.site.el.selectSiteRadio.click();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
@@ -783,7 +787,9 @@ describe("<HostConfig/>", () => {
         pom.api.patchComputeHostsAndHostId,
         pom.api.postInstances,
       ]);
-      selectSitePom.interceptApis([selectSitePom.api.getRootRegionsMocked]);
+      selectSiteTreePom.interceptApis([
+        selectSiteTreePom.api.getRootRegionsMocked,
+      ]);
       searchPom.interceptApis([searchPom.api.getLocationsOnSearch200]);
       osProfileDropdownPom.interceptApis([
         osProfileDropdownPom.api.getOSResources,
@@ -803,15 +809,15 @@ describe("<HostConfig/>", () => {
     });
 
     it("should not show the create cluster modal", () => {
-      selectSitePom.waitForApis();
-      selectSitePom.expandFirstRootMocked();
+      selectSiteTreePom.waitForApis();
+      selectSiteTreePom.expandFirstRootMocked();
 
       searchPom.root.should("exist");
       searchPom.el.textField.type("Site 1");
       searchPom.el.button.click();
       searchPom.waitForApi([searchPom.api.getLocationsOnSearch200]);
 
-      selectSitePom.site.el.selectSiteRadio.click();
+      selectSiteTreePom.site.el.selectSiteRadio.click();
       pom.el.next.click();
       pom.el.next.click();
       pom.el.next.click();
@@ -835,7 +841,7 @@ describe("<HostConfig/>", () => {
         hosts: {
           [onboardedHostOne.resourceId!]: {
             ...onboardedHostOne,
-            site: sitePortland,
+            site: siteOregonPortland,
           },
         },
         autoOnboard: false,
@@ -844,12 +850,14 @@ describe("<HostConfig/>", () => {
     });
     // @ts-ignore
     window.store = store;
-    selectSitePom.interceptApis([selectSitePom.api.getRootRegionsMocked]);
+    selectSiteTreePom.interceptApis([
+      selectSiteTreePom.api.getRootRegionsMocked,
+    ]);
 
     cy.mount(<HostConfig />, {
       reduxStore: store,
     });
-    selectSitePom.waitForApis();
+    selectSiteTreePom.waitForApis();
 
     pom.el.next.should("not.have.class", "spark-button-disabled");
   });

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getUserToken, RuntimeConfig } from "@orch-ui/utils";
+import { getUserToken } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { CSSProperties, ReactElement } from "react";
 import { useAuth } from "react-oidc-context";
@@ -36,14 +36,12 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
   const { isAuthenticated, signoutRedirect, user, error } = useAuth();
   const location = useLocation();
 
-  const projectName = RuntimeConfig.title;
-
   const calculateStyles = () => {
     switch (size) {
       case HeaderSize.Large:
         return {
           bannerHeight: 80,
-          logoMargins: "1.25rem 1rem",
+          logoMargins: "1rem",
           dividerMargin: "1.875rem",
           projectNameMargins: "1.875rem 1rem",
           profileBtnMargins: "1.85rem 0",
@@ -63,7 +61,7 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
       case HeaderSize.Small:
         return {
           bannerHeight: 48,
-          logoMargins: "0.5rem 1rem",
+          logoMargins: "0.5rem",
           dividerMargin: "0.875rem",
           projectNameMargins: "0.875rem 1rem",
           profileBtnMargins: "0.9rem 0",
@@ -123,26 +121,19 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
       {...rest}
     >
       <div className="ribbon"></div>
-      {size === HeaderSize.Small ? (
-        <LogoSmall margin={sizeStyles.logoMargins} />
-      ) : (
-        <Logo margin={sizeStyles.logoMargins} />
-      )}
+      <Link to="/">
+        {size === HeaderSize.Small ? (
+          <LogoSmall margin={sizeStyles.logoMargins} />
+        ) : (
+          <Logo margin={sizeStyles.logoMargins} />
+        )}
+      </Link>
       <div
         className="divider"
         style={{
           margin: `${sizeStyles.dividerMargin} 0`,
         }}
       ></div>
-      <div
-        className="project-name"
-        data-cy="projectName"
-        style={{
-          margin: sizeStyles.projectNameMargins,
-        }}
-      >
-        <Link to="/">{projectName}</Link>
-      </div>
       {children}
       <div style={{ flexGrow: 1 }}></div>
       <ProjectSwitch

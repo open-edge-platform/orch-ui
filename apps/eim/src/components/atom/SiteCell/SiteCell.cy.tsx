@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { sitePortland } from "@orch-ui/utils";
+import { siteOregonPortland } from "@orch-ui/utils";
 import SiteCell from "./SiteCell";
 import SiteCellPom from "./SiteCell.pom";
 const pom = new SiteCellPom();
@@ -13,12 +13,12 @@ describe("<SiteCell/>", () => {
       pom.interceptApis([pom.api.getSiteSuccess]);
       cy.mount(
         <SiteCell
-          siteId={sitePortland.resourceId}
-          regionId={sitePortland.region?.resourceId}
+          siteId={siteOregonPortland.resourceId}
+          regionId={siteOregonPortland.region?.resourceId}
         />,
       );
       pom.waitForApis();
-      pom.root.contains(sitePortland.name!);
+      pom.root.contains(siteOregonPortland.name!);
     });
   });
 
@@ -27,12 +27,12 @@ describe("<SiteCell/>", () => {
       pom.interceptApis([pom.api.getSiteNotFound]);
       cy.mount(
         <SiteCell
-          siteId={sitePortland.resourceId}
-          regionId={sitePortland.region?.resourceId}
+          siteId={siteOregonPortland.resourceId}
+          regionId={siteOregonPortland.region?.resourceId}
         />,
       );
       pom.waitForApis();
-      pom.root.contains(sitePortland.resourceId!);
+      pom.root.contains(siteOregonPortland.resourceId!);
     });
   });
 

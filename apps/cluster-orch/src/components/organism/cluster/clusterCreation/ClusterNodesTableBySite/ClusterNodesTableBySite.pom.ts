@@ -11,7 +11,7 @@ import NodeRoleDropdownPom from "../../../../atom/NodeRoleDropdown/NodeRoleDropd
 const dataCySelectors = ["hostTableContainer", "rowSelectCheckbox"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-class ClusterNodesTableBySitePom extends CyPom<Selectors> {
+class ClusterNodesSiteTablePom extends CyPom<Selectors> {
   public nodeRoleDropdown: NodeRoleDropdownPom;
   public nodeDetailsDrawer: ClusterNodeDetailsDrawerPom;
   public hostTable: TablePom;
@@ -24,4 +24,4 @@ class ClusterNodesTableBySitePom extends CyPom<Selectors> {
     this.hostTable = new TablePom("hostTableContainer");
   }
 }
-export default ClusterNodesTableBySitePom;
+export default ClusterNodesSiteTablePom;

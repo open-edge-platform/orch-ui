@@ -18,7 +18,6 @@ export { config as header, HeaderSize, HeaderVariant } from './header';
 export { config as heading } from './heading';
 export { config as hyperlink, HyperlinkType, HyperlinkVariant } from './hyperlink';
 export { config as input, InputSize, InputVariant } from './input';
-export { config as ledgeFlex, LedgeFlexAlignment, LedgeFlexColumnSize, LedgeFlexDirection, LedgeFlexItemSize } from './ledge-flex';
 export { config as list, ListSize } from './list';
 export { config as logo, properties as logoProperties } from './logo';
 export { config as messageBanner, MessageBannerAlertState, MessageBannerButtonPosition, MessageBannerDialogState } from './message-banner';
@@ -30,6 +29,7 @@ export { config as progressIndicator, ProgressIndicatorVariant, ProgressIndicato
 export { config as progressLoader, ProgressLoaderVariant, ProgressLoaderWeight } from './progress-loader';
 export { config as radioButton, RadioButtonSize } from './radio-button';
 export { config as radioGroup, RadioGroupOrientation } from './radio-group';
+export { config as rosinFlex, RosinFlexAlignment, RosinFlexColumnSize, RosinFlexDirection, RosinFlexItemSize } from './rosin-flex';
 export { config as scrollbar } from './scrollbar';
 export { config as search } from './search';
 export { config as shadow } from './shadow';

@@ -23,7 +23,7 @@
     right: 0;
     z-index: 1;
 
-    background-color: var(--spark-color-tiber-theme-light-gray100);
+    background-color: var(--spark-color-tb-theme-light-gray100);
     box-shadow: 0px 2px 4px rgba(4, 4, 4, 0.12);
 
     & > .flex {
@@ -35,7 +35,7 @@
 
     /* This is color is specific to the background color of the ribbon search-filter component */
     .checkbox-selection-list__title {
-      background-color: var(--spark-color-tiber-theme-light-gray100, 1);
+      background-color: var(--spark-color-tb-theme-light-gray100, 1);
       min-width: 11rem;
     }
   }

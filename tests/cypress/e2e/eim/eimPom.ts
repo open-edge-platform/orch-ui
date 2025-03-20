@@ -5,7 +5,7 @@
 
 import {
   LocationsPom,
-  RegionAndSitePom,
+  RegionAndSiteConfigurePom,
   RegionFormPom,
   RegionSiteTreePom,
   SearchPom,
@@ -21,7 +21,7 @@ class EimPom extends CyPom<Selectors> {
   public regionFormPom: RegionFormPom;
   public siteFormPom: SiteFormPom;
   public regionSiteTreePom: RegionSiteTreePom;
-  public regionAndSitePom: RegionAndSitePom;
+  public regionAndSiteConfigurePom: RegionAndSiteConfigurePom;
   public searchPom: SearchPom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
@@ -29,7 +29,7 @@ class EimPom extends CyPom<Selectors> {
     this.regionFormPom = new RegionFormPom();
     this.siteFormPom = new SiteFormPom();
     this.regionSiteTreePom = new RegionSiteTreePom();
-    this.regionAndSitePom = new RegionAndSitePom();
+    this.regionAndSiteConfigurePom = new RegionAndSiteConfigurePom();
     this.searchPom = new SearchPom();
   }
 }

@@ -19,7 +19,7 @@ export const regionDaytonId = "region-dayton";
 export const regionChicagoId = "region-chicago";
 
 // Sites
-export const sitePortlandId = "site-portland";
+export const siteOregonPortlandId = "site-portland";
 export const siteSantaClaraId = "site-santa-clara";
 export const siteBostonId = "site-boston";
 

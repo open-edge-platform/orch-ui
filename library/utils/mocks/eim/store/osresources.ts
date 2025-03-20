@@ -4,7 +4,7 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { osRedHatId, osTiberId, osTiberUpdateId, osUbuntuId } from "../data";
+import { osRedHatId, osTbId, osTbUpdateId, osUbuntuId } from "../data";
 import { BaseStore } from "./baseStore";
 
 export const createOsResource = (
@@ -34,26 +34,26 @@ export const createOsResource = (
   };
 };
 
-export const osTiber = createOsResource(
-  osTiberId,
-  "Tiber Os",
+export const osTb = createOsResource(
+  osTbId,
+  "Tb Os",
   "x86_64",
-  "http://one-intel-edge/tiberos",
+  "http://one-intel-edge/tbos",
   "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
   ["deb https://files.edgeorch.net orchui release"],
-  "TiberOS",
+  "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OPERATING_SYSTEM_TYPE_IMMUTABLE",
 );
 
-export const osTiberUpdate = createOsResource(
-  osTiberUpdateId,
-  "Tiber new Os",
+export const osTbUpdate = createOsResource(
+  osTbUpdateId,
+  "Tb new Os",
   "x86_64",
-  "http://one-intel-edge/tiberos",
+  "http://one-intel-edge/tbos",
   "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
   ["deb https://files.edgeorch.net orchui release"],
-  "TiberOS",
+  "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OPERATING_SYSTEM_TYPE_IMMUTABLE",
 );

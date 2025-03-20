@@ -19,7 +19,7 @@ import {
   siteMinimartThreeId,
   siteMinimartTwoId,
   siteMinimartTwoName,
-  sitePortlandId,
+  siteOregonPortlandId,
   siteRestaurantOneId,
   siteRestaurantOneName,
   siteRestaurantThreeId,
@@ -43,9 +43,9 @@ import {
 } from "./regions";
 import { StoreUtils } from "./utils";
 
-export const sitePortland: eim.SiteRead = {
-  siteID: sitePortlandId,
-  resourceId: sitePortlandId,
+export const siteOregonPortland: eim.SiteRead = {
+  siteID: siteOregonPortlandId,
+  resourceId: siteOregonPortlandId,
   inheritedMetadata: {
     ou: [
       {
@@ -164,11 +164,11 @@ export const siteRestaurantTwo: eim.SiteRead = {
   metadata: [
     {
       key: "site",
-      value: sitePortlandId,
+      value: siteOregonPortlandId,
     },
     {
       key: "site",
-      value: sitePortlandId,
+      value: siteOregonPortlandId,
     },
   ],
   siteLat: 0,
@@ -306,7 +306,7 @@ export const updateSite = {
 export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
   constructor() {
     super("resourceId", [
-      sitePortland,
+      siteOregonPortland,
       siteSantaClara,
       siteBoston,
       siteRestaurantOne,

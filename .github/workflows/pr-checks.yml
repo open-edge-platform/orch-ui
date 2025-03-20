@@ -37,6 +37,17 @@ jobs:
       - name: License check
         run: make license
 
+ 
+  forbidden-words-check:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Forbidden words check
+        run: make forbidden-words  
+        continue-on-error: true   # TODO: re-enforce when all forbidden words are cleaned up  
+
   setup-conditions:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'

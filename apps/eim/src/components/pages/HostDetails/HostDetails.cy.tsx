@@ -5,7 +5,7 @@
 
 import { getActiveNavItem } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
-import { IRuntimeConfig, osTiber, siteRestaurantTwo } from "@orch-ui/utils";
+import { IRuntimeConfig, osTb, siteRestaurantTwo } from "@orch-ui/utils";
 import { useAppSelector } from "../../../store/hooks";
 import HostDetails from "./HostDetails";
 import { HostDetailsPom, hostNoName, mockHost } from "./HostDetails.pom";
@@ -59,7 +59,7 @@ describe("HostDetails", () => {
       pom.el.iaasHostDetailsHeader.contains(mockHost.name);
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
-      pom.el.osProfiles.should("have.text", osTiber.name);
+      pom.el.osProfiles.should("have.text", osTb.name);
       pom.el.site.should("have.text", "Restaurant 02");
       pom.el.trustedCompute.should("contain.text", "Not compatible");
       pom.el.provider.should("have.text", mockHost.provider?.name);

@@ -8,7 +8,7 @@ import { CyPom } from "@orch-ui/tests";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export class SelectSitePom extends CyPom<Selectors> {
+export class SelectSiteForClusterPom extends CyPom<Selectors> {
   constructor(public rootCy: string = "selectSite") {
     super(rootCy, [...dataCySelectors]);
   }

@@ -107,9 +107,9 @@
             "import": "./lib/esm/components/flex/index.js",
             "require": "./lib/cjs/components/flex/index.js"
         },
-        "./components/ledge-flex": {
-            "import": "./lib/esm/components/ledge-flex/index.js",
-            "require": "./lib/cjs/components/ledge-flex/index.js"
+        "./components/rosin-flex": {
+            "import": "./lib/esm/components/rosin-flex/index.js",
+            "require": "./lib/cjs/components/rosin-flex/index.js"
         },
         "./components/toast": {
             "import": "./lib/esm/components/toast/index.js",

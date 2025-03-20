@@ -9,9 +9,9 @@ import { assignedHosts } from "@orch-ui/utils";
 import React from "react";
 import { setupStore } from "../../../../../store";
 import ClusterNodesTableBySite from "./ClusterNodesTableBySite";
-import ClusterNodesTableBySitePom from "./ClusterNodesTableBySite.pom";
+import ClusterNodesSiteTablePom from "./ClusterNodesTableBySite.pom";
 
-const pom = new ClusterNodesTableBySitePom();
+const pom = new ClusterNodesSiteTablePom();
 
 /** Remote component mock for Host table.
  * This can be used to test custom columns sent from Clusters to FM

@@ -69,43 +69,6 @@ describe("<Header/>", () => {
     pom.root.should("have.css", "height", "48px");
   });
 
-  it("when interacting with the project name", () => {
-    cy.mount(
-      <Header size={HeaderSize.Small}>
-        <HeaderItem to="/to" size={HeaderSize.Small}>
-          One
-        </HeaderItem>
-      </Header>,
-      {
-        routerProps: { initialEntries: ["/some-url"] },
-        routerRule: [
-          {
-            path: "/some-url",
-            element: (
-              <Header size={HeaderSize.Small}>
-                <HeaderItem to="/to" size={HeaderSize.Small}>
-                  One
-                </HeaderItem>
-              </Header>
-            ),
-          },
-          {
-            path: "/",
-            element: (
-              <Header size={HeaderSize.Small}>
-                <HeaderItem to="/to" size={HeaderSize.Small}>
-                  One
-                </HeaderItem>
-              </Header>
-            ),
-          },
-        ],
-      },
-    );
-    pom.getProjectName().click({ force: true });
-    cy.get("#pathname").contains("/");
-  });
-
   it("correctly displays the documentation link", () => {
     const cfg: IRuntimeConfig = {
       DOCUMENTATION_URL: "https://test.com/",

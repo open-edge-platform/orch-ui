@@ -5,7 +5,7 @@
 
 import { SiDropdown, SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { regions, sitePortland, updateSite } from "@orch-ui/utils";
+import { regions, siteOregonPortland, updateSite } from "@orch-ui/utils";
 
 import { eim, mbApi } from "@orch-ui/apis";
 import { MetadataFormPom } from "@orch-ui/components";
@@ -35,8 +35,8 @@ const dataCySelectors = [
 type Selectors = (typeof dataCySelectors)[number];
 
 const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites`;
-const sitePortlandNoMetadata = structuredClone(sitePortland);
-sitePortlandNoMetadata.inheritedMetadata = { location: [] };
+const siteOregonPortlandNoMetadata = structuredClone(siteOregonPortland);
+siteOregonPortlandNoMetadata.inheritedMetadata = { location: [] };
 
 type HostsApi = "getHosts";
 const hostsEndpoints: CyApiDetails<HostsApi> = {
@@ -76,7 +76,7 @@ const singleSiteEndpoints: CyApiDetails<
     route: route,
     method: "POST",
     statusCode: 200,
-    body: sitePortland,
+    body: siteOregonPortland,
   },
   getSite: {
     route: `${route}/site-**`,
@@ -84,7 +84,7 @@ const singleSiteEndpoints: CyApiDetails<
   getSiteMocked: {
     route: `${route}/site-**`,
     statusCode: 200,
-    response: sitePortland,
+    response: siteOregonPortland,
   },
   updateSite: {
     route: `${route}/site-**`,
@@ -94,17 +94,17 @@ const singleSiteEndpoints: CyApiDetails<
     route: `${route}/site-**`,
     method: "PUT",
     statusCode: 200,
-    body: sitePortland,
+    body: siteOregonPortland,
   },
   getSiteSuccess: {
     route: `${route}/*`,
     statusCode: 200,
-    response: sitePortland,
+    response: siteOregonPortland,
   },
   getSiteSuccessNoMetadata: {
     route: `${route}/*`,
     statusCode: 200,
-    response: sitePortlandNoMetadata,
+    response: siteOregonPortlandNoMetadata,
   },
   getSiteError: {
     route: `${route}/*`,
@@ -118,7 +118,7 @@ const singleSiteEndpoints: CyApiDetails<
     route,
     method: "POST",
     statusCode: 200,
-    response: sitePortland,
+    response: siteOregonPortland,
   },
   putSiteSuccess: {
     route: `${route}/*`,

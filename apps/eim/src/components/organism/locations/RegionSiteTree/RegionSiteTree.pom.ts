@@ -7,7 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { TreePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import { RegionPom } from "../../../../components/atom/locations/Region/Region.pom";
-import { SitePom } from "../../../../components/atom/locations/Site/Site.pom";
+import { SiteAtomPom } from "../../../../components/atom/locations/Site/Site.pom";
 
 const dataCySelectors = ["apiError", "region"] as const;
 type Selectors = (typeof dataCySelectors)[number];
@@ -94,7 +94,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
 export class RegionSiteTreePom extends CyPom<Selectors, ApiAliases> {
   public tree = new TreePom();
   public region = new RegionPom();
-  public site = new SitePom();
+  public site = new SiteAtomPom();
 
   constructor(public rootCy: string = "regionSiteTree") {
     super(rootCy, [...dataCySelectors], endpoints);

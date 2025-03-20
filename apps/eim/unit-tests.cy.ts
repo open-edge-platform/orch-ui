@@ -80,7 +80,6 @@ import "./src/components/pages/region/Region.cy.tsx";
 import "./src/components/pages/region/RegionForm.cy.tsx";
 import "./src/components/pages/RegisteredHostDetails/RegisteredHostDetails.cy.tsx";
 import "./src/components/pages/RegisterHosts/RegisterHosts.cy.tsx";
-import "./src/components/pages/site/Site.cy.tsx";
 import "./src/components/pages/site/SiteForm.cy.tsx";
 import "./src/components/templates/Layout.cy.tsx";
 import "./src/store/configureHost.cy.ts";

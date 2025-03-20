@@ -11,7 +11,7 @@ import {
 } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { clusterOne, clusterOneName, sitePortland } from "@orch-ui/utils";
+import { clusterOne, clusterOneName, siteOregonPortland } from "@orch-ui/utils";
 import ClusterEditAddNodesDrawerPom from "../../atom/ClusterEditAddNodesDrawer/ClusterEditAddNodesDrawer.pom";
 import ClusterTemplatesDropdownPom from "../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown.pom";
 
@@ -164,7 +164,7 @@ const successSitesEndpoint: CyApiDetails<
     route: siteByIdRoute,
     statusCode: 200,
     // @ts-ignore
-    response: sitePortland,
+    response: siteOregonPortland,
   },
 };
 const errorSitesEndpoint: CyApiDetails<
@@ -184,7 +184,7 @@ const successFirstHostEndpoint: CyApiDetails<SuccessFirstHost, eim.HostRead> = {
     response: {
       resourceId: "test-host",
       name: "Host One",
-      site: sitePortland,
+      site: siteOregonPortland,
     },
   },
 };

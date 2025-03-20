@@ -37,3 +37,5 @@ artifacts
 **/cypress/pacts/*
 **/cypress/videos/*
 **/cypress/screenshots/*
+
+iconfont.bak

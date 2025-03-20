@@ -200,7 +200,7 @@ export const Locations = () => {
         </Flex>
         <RegionSiteTree
           regionProps={{ showActionsMenu: true }}
-          siteProps={{ isSelectable: false }}
+          siteDynamicProps={{ isSelectable: false }}
         />
         <Drawer
           show={region !== undefined}

@@ -4,9 +4,9 @@
  */
 import { siteRestaurantOne } from "@orch-ui/utils";
 import SelectSite from "./SelectSite";
-import { SelectSitePom } from "./SelectSite.pom";
+import { SelectSiteForClusterPom } from "./SelectSite.pom";
 
-const pom = new SelectSitePom();
+const pom = new SelectSiteForClusterPom();
 describe("<RegionSiteTree/>", () => {
   it("should render component", () => {
     cy.mount(

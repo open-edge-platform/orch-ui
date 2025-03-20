@@ -53,7 +53,7 @@ export const RegionSiteSelectTree = ({
       </Flex>
       <RegionSiteTree
         regionProps={{ showActionsMenu: false }}
-        siteProps={{
+        siteDynamicProps={{
           selectedSite: selectedSite,
           isSelectable: true,
           handleOnSiteSelected: handleOnSiteSelected,

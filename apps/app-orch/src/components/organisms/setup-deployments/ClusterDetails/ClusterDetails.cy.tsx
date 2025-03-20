@@ -8,7 +8,7 @@ import ClusterDetails from "./ClusterDetails";
 import ClusterDetailsPom from "./ClusterDetails.pom";
 
 const pom = new ClusterDetailsPom();
-// TODO: skipped due to ITEP-22694, ITEP-22695
+// TODO: skipped due to 22694, 22695
 xdescribe("<ClusterDetails/>", () => {
   it("should render component", () => {
     const runtimeConfig: IRuntimeConfig = {

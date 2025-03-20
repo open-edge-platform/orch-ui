@@ -112,7 +112,7 @@ describe("<ClusterEdit/>", () => {
         "v1.0.1",
       );
 
-      // TODO: check additional metadata flow ITEP-22694
+      // TODO: check additional metadata flow
       // pom.metadataForm.el.pair
       //   .eq(0)
       //   .children()
@@ -129,7 +129,7 @@ describe("<ClusterEdit/>", () => {
       //   .should("equal", "value-two");
       // pom.metadataForm.el.pair.should("have.length", 2);
     });
-    // TODO : ITEP-22694 Site information to be updated from labels
+    // TODO : 22694 Site information to be updated from labels
     it.skip("update cluster host after adding host", () => {
       // add new host
       pom.el.addHostBtn.click();

@@ -25,7 +25,7 @@ export * from "./number-field";
 export * from "./modal";
 export * from "./message-banner";
 export * from "./list";
-export * from "./ledge-flex";
+export * from "./rosin-flex";
 export * from "./input";
 export * from "./hyperlink";
 export * from "./heading";

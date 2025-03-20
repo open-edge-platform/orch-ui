@@ -5,13 +5,13 @@
 
 import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
-import { sitePortland } from "@orch-ui/utils";
+import { siteOregonPortland } from "@orch-ui/utils";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 type ApiAliases = "getSiteSuccess" | "getSiteNotFound";
 
-const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites/${sitePortland.resourceId}`;
+const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites/${siteOregonPortland.resourceId}`;
 
 const endpoints: CyApiDetails<
   ApiAliases,
@@ -20,7 +20,7 @@ const endpoints: CyApiDetails<
   getSiteSuccess: {
     route: route,
     statusCode: 200,
-    response: sitePortland,
+    response: siteOregonPortland,
   },
   getSiteNotFound: {
     route: route,

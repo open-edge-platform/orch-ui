@@ -8,7 +8,7 @@ import { ApiErrorPom, MetadataFormPom } from "@orch-ui/components";
 import { CyApiDetail, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { provisionedHostOne, provisionedInstanceOne } from "@orch-ui/utils";
 import { HostsDetailsPom } from "../../organism/hostConfigure/HostsDetails/HostsDetails.pom";
-import { RegionAndSitePom } from "../../organism/hostConfigure/RegionSite/RegionSite.pom";
+import { RegionAndSiteConfigurePom } from "../../organism/hostConfigure/RegionSite/RegionSite.pom";
 import { RegionSiteTreePom } from "../../organism/locations/RegionSiteTree/RegionSiteTree.pom";
 
 const dataCySelectors = ["next", "prev", "serialNumber"] as const;
@@ -61,7 +61,7 @@ const postInstances400: CyApiDetail<eim.ProblemDetailsRead> = {
 export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   public apiError = new ApiErrorPom();
   public metadataPom = new MetadataFormPom();
-  public regionAndSitePom = new RegionAndSitePom();
+  public regionAndSiteConfigurePom = new RegionAndSiteConfigurePom();
   public regionSiteTreePom = new RegionSiteTreePom();
   public hostsDetailsPom = new HostsDetailsPom();
 
@@ -86,7 +86,7 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   public configureHost(site: string, name: string, metadata: eim.Metadata) {
     // search for site
-    this.regionAndSitePom.search(site);
+    this.regionAndSiteConfigurePom.search(site);
     // select site
     this.regionSiteTreePom.selectSite(site);
     // click next

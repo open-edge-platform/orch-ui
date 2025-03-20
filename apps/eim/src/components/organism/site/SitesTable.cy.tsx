@@ -9,7 +9,7 @@ import SitesTablePom from "./SitesTable.pom";
 import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TableColumn } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
-import { regionUsWest, sitePortland } from "@orch-ui/utils";
+import { regionUsWest, siteOregonPortland } from "@orch-ui/utils";
 
 const pom = new SitesTablePom("sitesTable");
 const apiErrorPom = new ApiErrorPom();
@@ -32,7 +32,7 @@ describe("<SitesTable />", () => {
           regionId={"testRegion"}
         />,
       );
-      pom._table.getCell(1, 1).contains(sitePortland.name!);
+      pom._table.getCell(1, 1).contains(siteOregonPortland.name!);
       pom._table.getCell(1, 2).contains("customer: Culvers");
       pom._table.getCell(1, 3).contains(regionUsWest.name!);
     });

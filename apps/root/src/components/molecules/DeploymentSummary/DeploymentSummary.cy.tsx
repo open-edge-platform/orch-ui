@@ -18,12 +18,12 @@ describe("<DeploymentSummary/>", () => {
   });
 
   it("should render the application package details", () => {
-    pom.el.compositePackageDetails.should("be.visible");
-    pom.el.compositePackageDetails.should(
+    pom.el.applicationPackageDetails.should("be.visible");
+    pom.el.applicationPackageDetails.should(
       "contain.text",
       deploymentOne.appName,
     );
-    pom.el.compositePackageDetails.should(
+    pom.el.applicationPackageDetails.should(
       "contain.text",
       deploymentOne.appVersion,
     );

@@ -9,7 +9,7 @@ import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
   regionUsWest,
-  sitePortland,
+  siteOregonPortland,
   siteSantaClara,
   SiteStore,
 } from "@orch-ui/utils";
@@ -87,7 +87,7 @@ const sitesEndpoints: CyApiDetails<
     route: routeAll,
     statusCode: 200,
     response: {
-      sites: [sitePortland],
+      sites: [siteOregonPortland],
       hasNext: false,
       totalElements: 1,
     },
@@ -122,7 +122,7 @@ const singleSiteEndpoints: CyApiDetails<
   getSingleSiteMocked: {
     route: routeSingle,
     statusCode: 200,
-    response: sitePortland,
+    response: siteOregonPortland,
   },
   getSitesByRegion: {
     route: routeByRegion,

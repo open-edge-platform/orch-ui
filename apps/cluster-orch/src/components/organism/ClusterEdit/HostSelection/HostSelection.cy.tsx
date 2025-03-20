@@ -138,7 +138,7 @@ describe("<HostSelection/>", () => {
         pom.clusterSelectedNodeReviewTablePom.el.addHostBtn.click();
         pom.clusterAddNodeDrawerPom.nodeTablePom.el.rowSelectCheckbox.click();
       });
-      // TODO : ITEP-22694 Site information to be updated from labels
+      // TODO : 22694 Site information to be updated from labels
       it.skip("should get the host from the drawer", () => {
         pom.clusterAddNodeDrawerPom.el.okBtn.click();
         cy.get("@saveSelectedNodes").should("be.calledWith", [

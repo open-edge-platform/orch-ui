@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { osTiber, osUbuntu } from "@orch-ui/utils";
+import { osTb, osUbuntu } from "@orch-ui/utils";
 import OSProfileDetails from "./OSProfileDetails";
 import { OSProfileDetailsPom } from "./OSProfileDetails.pom";
 
@@ -70,7 +70,7 @@ describe("<OSProfileDetails/>", () => {
       );
     });
     it("should render installed packages list", () => {
-      cy.mount(<OSProfileDetails os={osTiber} />);
+      cy.mount(<OSProfileDetails os={osTb} />);
 
       pom.root.should("contain.text", "Installed Packages");
       pom.root.should("contain.text", "Name");

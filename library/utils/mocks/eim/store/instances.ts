@@ -34,7 +34,7 @@ import {
   provisionedHostTwo,
   registeredHostOne,
 } from "./hosts";
-import { osRedHat, osTiber, osTiberUpdate, osUbuntu } from "./osresources";
+import { osRedHat, osTb, osTbUpdate, osUbuntu } from "./osresources";
 import {
   workloadFive,
   workloadFour,
@@ -78,9 +78,9 @@ export const instanceTwo: enhancedEimSlice.InstanceReadModified = {
   instanceStatus: "Running",
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
-  os: osTiber,
-  currentOs: osTiber,
-  desiredOs: osTiberUpdate,
+  os: osTb,
+  currentOs: osTb,
+  desiredOs: osTbUpdate,
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",

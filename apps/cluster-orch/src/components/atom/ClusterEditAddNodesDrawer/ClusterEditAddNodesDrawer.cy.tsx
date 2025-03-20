@@ -70,7 +70,7 @@ describe("<ClusterEditAddNodeDetailsDrawer/>", () => {
     it("should see ok button disable when no hosts are selected", () => {
       pom.el.okBtn.should("have.class", "spark-button-disabled");
     });
-    // TODO : ITEP-22694 Site information to be updated from labels
+    // TODO : 22694 Site information to be updated from labels
     it.skip("should click ok button when hosts are selected", () => {
       pom.nodeTablePom.el.rowSelectCheckbox.click();
       pom.el.okBtn.should("not.have.class", "spark-button-disabled");

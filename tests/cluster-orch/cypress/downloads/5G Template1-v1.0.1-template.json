@@ -1,0 +1,153 @@
+{
+  "name": "5G Template1",
+  "version": "v1.0.1",
+  "description": "example description 1",
+  "controlplaneprovidertype": "rke2",
+  "infraprovidertype": "docker",
+  "kubernetesVersion": "v1.35.36",
+  "clusterconfiguration": {
+    "rke2": {
+      "apiVersion": "provisioning.cattle.io/v1",
+      "kind": "Cluster",
+      "metadata": {
+        "finalizers": [
+          "wrangler.cattle.io/cloud-config-secret-remover",
+          "wrangler.cattle.io/provisioning-cluster-remove",
+          "wrangler.cattle.io/rke-cluster-remove"
+        ],
+        "labels": {
+          "cpumanager": "true"
+        },
+        "generation": 1,
+        "managedFields": null,
+        "name": "lp-app-cluster",
+        "namespace": "fleet-default"
+      },
+      "spec": {
+        "kubernetesVersion": "v1.26.8+rke2r1",
+        "localClusterAuthEndpoint": {},
+        "rkeConfig": {
+          "chartValues": {
+            "rke2-calico": {
+              "installation": {
+                "calicoNetwork": {
+                  "nodeAddressAutodetectionV4": {
+                    "kubernetes": "NodeInternalIP"
+                  }
+                }
+              }
+            },
+            "rke2-coredns": {
+              "resources": {
+                "limits": {
+                  "cpu": "250m"
+                },
+                "requests": {
+                  "cpu": "250m"
+                }
+              }
+            }
+          },
+          "etcd": {
+            "snapshotRetention": 5,
+            "snapshotScheduleCron": "0 */5 * * *"
+          },
+          "machineGlobalConfig": {
+            "cni": "multus,calico",
+            "disable-kube-proxy": false,
+            "etcd-expose-metrics": false,
+            "kube-apiserver-arg": [
+              "feature-gates=DownwardAPIHugePages=true"
+            ],
+            "etcd-arg": [
+              "cipher-suites=[TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256]"
+            ],
+            "profile": null
+          },
+          "machineSelectorConfig": [
+            {
+              "config": {
+                "kubelet-arg": [
+                  "feature-gates=TopologyManager=true",
+                  "topology-manager-policy=best-effort",
+                  "cpu-manager-policy=static",
+                  "reserved-cpus=1",
+                  "max-pods=250",
+                  "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256"
+                ],
+                "protect-kernel-defaults": true
+              }
+            }
+          ],
+          "registries": {
+            "mirrors": {
+              "cr.fluentbit.io": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              },
+              "docker.elastic.co": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              },
+              "docker.io": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              },
+              "ghcr.io": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              },
+              "k8s.gcr.io": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              },
+              "quay.io": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              },
+              "registry.k8s.io": {
+                "endpoint": [
+                  "amr-registry.caas.intel.com"
+                ]
+              }
+            }
+          },
+          "upgradeStrategy": {
+            "controlPlaneConcurrency": "1",
+            "controlPlaneDrainOptions": {
+              "deleteEmptyDirData": true,
+              "disableEviction": false,
+              "enabled": false,
+              "force": false,
+              "gracePeriod": -1,
+              "ignoreDaemonSets": true,
+              "postDrainHooks": null,
+              "preDrainHooks": null,
+              "skipWaitForDeleteTimeoutSeconds": 0,
+              "timeout": 120
+            },
+            "workerConcurrency": "1",
+            "workerDrainOptions": {
+              "deleteEmptyDirData": true,
+              "disableEviction": false,
+              "enabled": false,
+              "force": false,
+              "gracePeriod": -1,
+              "ignoreDaemonSets": true,
+              "postDrainHooks": null,
+              "preDrainHooks": null,
+              "skipWaitForDeleteTimeoutSeconds": 0,
+              "timeout": 120
+            }
+          }
+        }
+      }
+    }
+  }
+}

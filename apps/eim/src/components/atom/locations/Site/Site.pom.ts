@@ -5,14 +5,10 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = [
-  "sitePageLink",
-  "siteName",
-  "selectSiteRadio",
-] as const;
+const dataCySelectors = ["siteName", "selectSiteRadio"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export class SitePom extends CyPom<Selectors> {
+export class SiteAtomPom extends CyPom<Selectors> {
   constructor(public rootCy: string = "site") {
     super(rootCy, [...dataCySelectors]);
   }

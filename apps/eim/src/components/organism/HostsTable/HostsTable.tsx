@@ -235,7 +235,7 @@ const HostsTable = ({
   };
 
   const renderSelectedItemsBanner = () => {
-    const hasWritePermission = checkAuthAndRole([Role.INFRA_MANAGER_WRITE]);
+    const hasWriteAccess = checkAuthAndRole([Role.INFRA_MANAGER_WRITE]);
     return selectedHosts?.length ? (
       <Flex
         dataCy="selectedHostsBanner"
@@ -247,7 +247,7 @@ const HostsTable = ({
         <div className="action-btns-container">
           <Button
             isDisabled={
-              !hasWritePermission || lifeCycleState === LifeCycleState.Onboarded
+              !hasWriteAccess || lifeCycleState === LifeCycleState.Onboarded
             }
             className="hosts-action-btn"
             data-cy="onboardBtn"
@@ -259,8 +259,7 @@ const HostsTable = ({
           </Button>
           <Button
             isDisabled={
-              !hasWritePermission ||
-              lifeCycleState === LifeCycleState.Registered
+              !hasWriteAccess || lifeCycleState === LifeCycleState.Registered
             }
             className="hosts-action-btn"
             data-cy="provisionBtn"

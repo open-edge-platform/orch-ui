@@ -1,7 +1,7 @@
 {
-  "name": "itep-ui",
+  "name": "edge-orchestrator-ui",
   "version": "3.0.0-dev",
-  "description": "Intel Tiber Edge Platform User Interface",
+  "description": "Edge Orchestrator User Interface",
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run app:admin\" \"npm run app:eim\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
@@ -40,7 +40,7 @@
     "api:generate": "bash ./library/apis/generate-api.sh --prefix library/apis/",
     "prettify": "npm run app:admin:fix & npm run app:eim:fix & npm run app:cluster-orch:fix & npm run app:app-orch:fix & npm run app:root:fix"
   },
-  "author": "ITEP UI Team",
+  "author": "Edge Orchestrator UI Team",
   "license": "Intel",
   "devDependencies": {
     "@cypress/code-coverage": "^3.13.10",

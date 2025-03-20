@@ -15,7 +15,7 @@ export interface SiteDynamicProps {
   selectedSite?: eim.SiteRead;
   isSelectable?: boolean;
 }
-export interface SiteProps extends SiteDynamicProps {
+export interface SiteExtendedProps extends SiteDynamicProps {
   site: eim.SiteRead;
 }
 
@@ -25,7 +25,7 @@ export const Site = ({
   handleOnSiteSelected,
   selectedSite,
   isSelectable = false,
-}: SiteProps) => {
+}: SiteExtendedProps) => {
   const cy = { "data-cy": dataCy };
   const className = "site";
 

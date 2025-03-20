@@ -150,7 +150,7 @@ describe("Cluster orch Smoke test:", () => {
         eimPom.searchPom.el.textField.type(data.site);
         eimPom.regionSiteTreePom.selectSite(data.site);
         clusterOrchPom.clusterCreationPom.el.nextBtn.click();
-        clusterOrchPom.clusterNodesTableBySitePom.el.rowSelectCheckbox.click();
+        clusterOrchPom.clusterNodesSiteTablePom.el.rowSelectCheckbox.click();
         clusterOrchPom.clusterCreationPom.el.nextBtn.click();
         clusterOrchPom.clusterCreationPom.fillMetadata("key", "test-value");
         clusterOrchPom.clusterCreationPom.el.nextBtn.click();

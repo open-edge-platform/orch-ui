@@ -16,35 +16,37 @@ fail_on_match="${1:-true}"
 
 # Keep list sorted in ascending order 🙏. Will search case insensitive so no need to add upper/lower case variants.
 forbidden_words=(
-    "amr-registry.caas.intel.com"
+    "amr-registry"
     "devtoolbox"
-    "edge I"
-    "Edge iaas"
-    "Edge-I"
-    "Edge-infra"
+    "edge i"
+    "edge iaas"
+    "edge-i"
     "edgei"
-    "Eim"
+    "eim"
     "ensp"
     "Fleet management"
     "fleetmanagement"
     "fmaas"
     "Iaas"
     "Ifm"
-    "intel-innersource"
+    "innersource"
     "itep"
-    "ledge park i"
-    "Ledge park-I"
     "Ledge park"
     "ledgepark"
-    "ledgeparki"
     "lp-I"
     "Lpi"
-    "maestro I"
-    "Maestro-I"
-    "Maestro"
+    "maestro"
+    "maestro-a"
+    "maestroa"
+    "maestro-c"
+    "maestroc"
+    "maestro-i"
     "maestroi"
     "one-intel-edge"
     "One Intel Edge"
+    "open-registry"
+    "proxy-dmz.intel.com"
+    "proxy.intel.com"
     "springboard"
     "strata"
     "tiber"
@@ -63,14 +65,14 @@ ignore_globs=(
 
 ignore_dirs=(
     ".git"
+    "lint-forbidden-words"
     "node_modules"
     "lib"
     "dist"
     "./library/@orch-utils"
     "./tools/forbidden-words.sh"
     "coverage"
-    ".nyc_output"
-)
+    ".nyc_output")
 
 found=0
 total_matches=0
@@ -85,7 +87,7 @@ for dir in "${ignore_dirs[@]}"; do
 done
 
 for word in "${forbidden_words[@]}"; do
-    matches=$(grep -r -i -n "${exclude_opts[@]}" "$word" . || true)
+    matches=$(grep -r -w -i -n "${exclude_opts[@]}" "$word" . || true)
     match_count=$(echo "$matches" | wc -l)
     echo "---"
     if [ "$match_count" -gt 1 ]; then

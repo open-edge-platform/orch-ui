@@ -31,7 +31,7 @@ export interface SearchTypeItem {
   id: string;
   name: string;
 }
-interface SelectSiteProps {
+interface SelectSiteForClusterProps {
   selectedSite?: eim.SiteRead;
   selectedRegion?: eim.Region;
   onSelectedInheritedMeta: (value: TypedMetadata[]) => void;
@@ -40,7 +40,7 @@ interface SelectSiteProps {
 const SelectSite = ({
   selectedSite,
   onSelectedInheritedMeta,
-}: SelectSiteProps) => {
+}: SelectSiteForClusterProps) => {
   const currentLocations = useAppSelector(getLocations);
 
   const dispatch = useAppDispatch();

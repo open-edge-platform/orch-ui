@@ -5,7 +5,7 @@
 
 import {
   ClusterCreationPom,
-  ClusterNodesTableBySitePom,
+  ClusterNodesSiteTablePom,
 } from "@orch-ui/cluster-orch-poms";
 import { CyPom } from "@orch-ui/tests";
 
@@ -14,11 +14,11 @@ type Selectors = (typeof dataCySelectors)[number];
 
 class ClusterOrchPom extends CyPom<Selectors> {
   public clusterCreationPom: ClusterCreationPom;
-  public clusterNodesTableBySitePom: ClusterNodesTableBySitePom;
+  public clusterNodesSiteTablePom: ClusterNodesSiteTablePom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
     this.clusterCreationPom = new ClusterCreationPom();
-    this.clusterNodesTableBySitePom = new ClusterNodesTableBySitePom();
+    this.clusterNodesSiteTablePom = new ClusterNodesSiteTablePom();
   }
 }
 

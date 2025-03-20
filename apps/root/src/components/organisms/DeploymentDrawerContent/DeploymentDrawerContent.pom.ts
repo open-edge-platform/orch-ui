@@ -5,7 +5,7 @@
 import { CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [
-  "compositePackageDetails",
+  "applicationPackageDetails",
   "deploymentMetadata",
   "deploymentCounter",
   "hostCounter",

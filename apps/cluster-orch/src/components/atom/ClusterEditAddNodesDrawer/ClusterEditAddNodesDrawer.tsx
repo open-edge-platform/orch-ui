@@ -52,7 +52,7 @@ const ClusterEditAddNodesDrawer = ({
     [cluster.nodes],
   );
 
-  //TODO : ITEP-22694 Site information to be updated from labels
+  //TODO : 22694 Site information to be updated from labels
   const [site] = useState<eim.SiteRead>();
 
   return (

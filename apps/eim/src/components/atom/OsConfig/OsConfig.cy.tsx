@@ -4,7 +4,7 @@
  */
 
 import { cyGet } from "@orch-ui/tests";
-import { instanceOne, instanceTwo, osTiber } from "@orch-ui/utils";
+import { instanceOne, instanceTwo, osTb } from "@orch-ui/utils";
 import { OsConfig } from "./OsConfig";
 import { OsConfigPom } from "./OsConfig.pom";
 
@@ -13,7 +13,7 @@ describe("<OsConfig/>", () => {
   it("should render component", () => {
     cy.mount(<OsConfig />);
     pom.root.should("exist");
-    pom.root.should("not.contain.text", osTiber.name);
+    pom.root.should("not.contain.text", osTb.name);
   });
   it("should render component", () => {
     cy.mount(<OsConfig instance={instanceOne} />);
@@ -22,7 +22,7 @@ describe("<OsConfig/>", () => {
   it("should render component", () => {
     cy.mount(<OsConfig instance={instanceTwo} />);
     cyGet("osUpdate").should("exist");
-    pom.root.should("contain.text", osTiber.name);
+    pom.root.should("contain.text", osTb.name);
   });
   it("should render icon when added", () => {
     cy.mount(<OsConfig instance={instanceTwo} iconOnly />);

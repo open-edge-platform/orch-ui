@@ -6,7 +6,7 @@
 import { ApiErrorPom } from "@orch-ui/components";
 import {
   regionUsWestId,
-  sitePortlandId,
+  siteOregonPortlandId,
   siteRestaurantOneId,
 } from "@orch-ui/utils";
 import SitesDropdown from "./SitesDropdown";
@@ -35,8 +35,8 @@ describe("<SitesDropdown />", () => {
     pom.dropdown.selectDropdownValue(
       pom.root,
       "site",
-      sitePortlandId,
-      sitePortlandId,
+      siteOregonPortlandId,
+      siteOregonPortlandId,
     );
   });
   it("should handle 500 error", () => {

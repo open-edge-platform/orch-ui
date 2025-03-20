@@ -41,7 +41,7 @@ describe("<MetadataLabels/> should", () => {
 
     pom.metadataDisplay.getByIndex(1).should("contain", "site = site1");
     pom.metadataDisplay.getTagByIndex(1).should("have.text", "S");
-    // TODO: ITEP-22694 labels design to be updated
+    // TODO: 22694 labels design to be updated
     // pom.metadataForm.el.pair
     //   .eq(0)
     //   .children()

@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { sitePortland } from "@orch-ui/utils";
+import { siteOregonPortland } from "@orch-ui/utils";
 import { Site } from "./Site";
-import { SitePom } from "./Site.pom";
+import { SiteAtomPom } from "./Site.pom";
 
-const pom = new SitePom();
+const pom = new SiteAtomPom();
 
 describe("<Site/>", () => {
   beforeEach(() => {
     const viewHandler = cy.stub().as("viewHandler");
-    cy.mount(<Site site={sitePortland} viewHandler={viewHandler} />);
+    cy.mount(<Site site={siteOregonPortland} viewHandler={viewHandler} />);
   });
 
   it("should render component", () => {
@@ -31,7 +31,7 @@ describe("<Site/>", () => {
       const handleOnSiteSelected = cy.stub().as("handleOnSiteSelected");
       cy.mount(
         <Site
-          site={sitePortland}
+          site={siteOregonPortland}
           viewHandler={viewHandler}
           handleOnSiteSelected={handleOnSiteSelected}
           isSelectable
@@ -47,7 +47,7 @@ describe("<Site/>", () => {
       const handleOnSiteSelected = cy.stub().as("handleOnSiteSelected");
       cy.mount(
         <Site
-          site={sitePortland}
+          site={siteOregonPortland}
           viewHandler={viewHandler}
           handleOnSiteSelected={handleOnSiteSelected}
           isSelectable={false}

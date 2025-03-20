@@ -45,13 +45,13 @@ const clearTree: string = "clearTree";
 
 export interface RegionSiteTreeProps {
   regionProps?: RegionDynamicProps;
-  siteProps?: SiteDynamicProps;
+  siteDynamicProps?: SiteDynamicProps;
   showSingleSelection?: boolean;
 }
 
 export const RegionSiteTree = ({
   regionProps = {},
-  siteProps = {},
+  siteDynamicProps = {},
   showSingleSelection,
 }: RegionSiteTreeProps) => {
   const cy = { "data-cy": dataCy };
@@ -60,7 +60,7 @@ export const RegionSiteTree = ({
   const location = useLocation();
 
   const searchTerm = useAppSelector(selectSearchTerm);
-  const selectedSite = siteProps.selectedSite;
+  const selectedSite = siteDynamicProps.selectedSite;
   const dispatch = useAppDispatch();
 
   const {
@@ -266,8 +266,8 @@ export const RegionSiteTree = ({
           deleteHandler: () => {},
           ...regionProps,
         },
-        siteProps: {
-          ...siteProps,
+        siteDynamicProps: {
+          ...siteDynamicProps,
           viewHandler: viewSiteAction,
         },
       },
@@ -279,7 +279,7 @@ export const RegionSiteTree = ({
         onCollapse={onCollapse}
       />
     );
-  }, [branches, siteProps.selectedSite]);
+  }, [branches, siteDynamicProps.selectedSite]);
 
   return (
     <div {...cy} className={className}>

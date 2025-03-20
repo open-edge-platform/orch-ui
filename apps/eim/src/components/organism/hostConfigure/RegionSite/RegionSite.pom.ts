@@ -8,7 +8,7 @@ import { CyPom } from "@orch-ui/tests";
 const dataCySelectors = ["search"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export class RegionAndSitePom extends CyPom<Selectors> {
+export class RegionAndSiteConfigurePom extends CyPom<Selectors> {
   constructor(public rootCy: string = "hostSiteSelect") {
     super(rootCy, [...dataCySelectors]);
   }

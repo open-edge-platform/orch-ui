@@ -6,5 +6,5 @@
 // Os resources
 export const osUbuntuId = "os-ubuntu";
 export const osRedHatId = "os-redhat";
-export const osTiberId = "os-tiber";
-export const osTiberUpdateId = "os-tiber-update";
+export const osTbId = "os-tb";
+export const osTbUpdateId = "os-tb-update";

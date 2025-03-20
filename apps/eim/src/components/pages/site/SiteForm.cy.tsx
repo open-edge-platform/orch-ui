@@ -6,7 +6,7 @@ import {
   regionUsWest,
   regionUsWestId,
   simpleTree,
-  sitePortland,
+  siteOregonPortland,
   updateSite,
 } from "@orch-ui/utils";
 import { setupStore } from "../../../store/store";
@@ -64,11 +64,17 @@ describe("<SiteForm />", () => {
 
     it("should render inherited metadata", () => {
       pom.table.root.should("exist");
-      if (!sitePortland.metadata || !sitePortland.inheritedMetadata?.location)
+      if (
+        !siteOregonPortland.metadata ||
+        !siteOregonPortland.inheritedMetadata?.location
+      )
         throw new Error("Test data missing required metadata information");
       pom.table
         .getRows()
-        .should("have.length", sitePortland.inheritedMetadata?.location.length);
+        .should(
+          "have.length",
+          siteOregonPortland.inheritedMetadata?.location.length,
+        );
     });
 
     it("should successfully modify site name", () => {
