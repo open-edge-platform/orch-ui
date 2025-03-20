@@ -13,7 +13,8 @@
     padding: 1rem 0 !important; //need to override inline the SI value
   }
 
-  .host-label {
+  .host-label,
+  .host-specs {
     width: 100%;
   }
 }

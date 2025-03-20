@@ -53,7 +53,7 @@ const statusWithDetails = (status: string, details?: string) => {
 
 export const hostToStatuses = (
   host: eim.HostRead,
-  instance?: eim.InstanceRead,
+  instance?: eim.InstanceRead, // TODO we should be able to use host.instance
 ): HostGenericStatuses => {
   const hgs: HostGenericStatuses = {};
   if (host.hostStatus) {

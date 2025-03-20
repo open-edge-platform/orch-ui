@@ -12,13 +12,11 @@ import {
   SquareSpinner,
 } from "@orch-ui/components";
 import {
-  API_INTERVAL,
   HostGenericStatuses,
   hostStatusFields,
   hostToStatuses,
   humanFileSize,
   RuntimeConfig,
-  SharedStorage,
 } from "@orch-ui/utils";
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
@@ -42,22 +40,6 @@ const ClusterSummaryRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
 const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   const { host, onShowCategoryDetails } = props;
   const currentOs = host.instance?.currentOs;
-  // NOTE we can't use Host.instance as it's not always available (the list API does not return it)
-  const { data: instanceList, isSuccess: isInstanceSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeInstancesQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        hostId: host.resourceId,
-      },
-      {
-        skip: !host.resourceId || !SharedStorage.project,
-        pollingInterval: API_INTERVAL,
-      },
-    );
-  const instance =
-    isInstanceSuccess && instanceList.instances.length > 0
-      ? instanceList.instances[0]
-      : undefined;
 
   const storageDisplayValue = humanFileSize(
     host.hostStorages?.reduce((total: number, s) => {
@@ -103,7 +85,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   const itemList = [
     <Item title={tabItems[0].title}>
       <DetailedStatuses<HostGenericStatuses>
-        data={hostToStatuses(host, instance)}
+        data={hostToStatuses(host, host.instance)}
         statusFields={hostStatusFields}
         showTimestamp
       />
@@ -184,18 +166,20 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     </Item>,
 
     <Item title={tabItems[2].title}>
-      <Flex cols={[4, 8]}>
-        <b>Serial</b>
-        <div>{host.serialNumber ?? "N/A"}</div>
-        <b>UUID</b>
-        <div>{host.uuid ?? "N/A"}</div>
-        <b>OS</b>
-        <div>{instance?.os?.name ?? "N/A"}</div>
-        <b>Bios Vendor</b>
-        <div>{host.biosVendor ?? "N/A"}</div>
-        <b>Product Name</b>
-        <div>{host.productName ?? "N/A"}</div>
-      </Flex>
+      <div className="host-specs">
+        <Flex cols={[4, 8]}>
+          <b>Serial</b>
+          <div>{host.serialNumber ?? "N/A"}</div>
+          <b>UUID</b>
+          <div>{host.uuid ?? "N/A"}</div>
+          <b>OS</b>
+          <div>{host.instance?.os?.name ?? "N/A"}</div>
+          <b>Bios Vendor</b>
+          <div>{host.biosVendor ?? "N/A"}</div>
+          <b>Product Name</b>
+          <div>{host.productName ?? "N/A"}</div>
+        </Flex>
+      </div>
     </Item>,
 
     <Item title={tabItems[3].title}>
@@ -246,7 +230,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
 
   if (
     host.site &&
-    instance?.workloadMembers?.find(
+    host.instance?.workloadMembers?.find(
       (workloadRef) => workloadRef.kind === "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
     ) &&
     ClusterSummaryRemote !== null
