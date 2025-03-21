@@ -16,6 +16,7 @@ import {
   TableColumn,
 } from "@orch-ui/components";
 import {
+  API_INTERVAL,
   checkAuthAndRole,
   Direction,
   getFilter,
@@ -64,6 +65,7 @@ const AvailableRegistriesTable = ({
   const orderBy =
     getOrder(searchParams.get("column"), sortDirection) ?? "name asc";
   const projectName = SharedStorage.project?.name ?? "";
+  const [pollingInterval, setPollingInterval] = useState<number>(API_INTERVAL);
   const { data, error, isError, isLoading, isSuccess } =
     catalog.useCatalogServiceListRegistriesQuery(
       {
@@ -76,13 +78,11 @@ const AvailableRegistriesTable = ({
         orderBy,
         pageSize,
         offset,
-        showSensitiveInfo: checkAuthAndRole([
-          // TODO: Might need CATALOG_RESTRICTED_* roles to protect username/password
-          Role.CATALOG_WRITE,
-        ]),
+        showSensitiveInfo: checkAuthAndRole([Role.CATALOG_WRITE]),
       },
       {
         skip: !projectName,
+        pollingInterval,
       },
     );
 
@@ -130,28 +130,28 @@ const AvailableRegistriesTable = ({
       Header: "Actions",
       textAlign: "center",
       padding: "0",
-      Cell: (table: { row: { original: catalog.RegistryRead } }) => {
-        const registry = table.row.original;
-        return (
-          <Popup
-            dataCy="appRegistryPopup"
-            jsx={<Icon icon="ellipsis-v" />}
-            options={[
-              {
-                disable: !hasPermission,
-                onSelect: () => onEdit && onEdit(registry),
-                displayText: "Edit",
-              },
-              {
-                disable: !hasPermission,
-                onSelect: () =>
-                  onDelete && onDelete({ registry, onDeleteSuccess }),
-                displayText: "Delete",
-              },
-            ]}
-          />
-        );
-      },
+      accessor: (registry) => (
+        <Popup
+          onToggle={(isToggled: boolean) => {
+            setPollingInterval(isToggled ? 0 : API_INTERVAL);
+          }}
+          dataCy="appRegistryPopup"
+          jsx={<Icon icon="ellipsis-v" />}
+          options={[
+            {
+              disable: !hasPermission,
+              onSelect: () => onEdit && onEdit(registry),
+              displayText: "Edit",
+            },
+            {
+              disable: !hasPermission,
+              onSelect: () =>
+                onDelete && onDelete({ registry, onDeleteSuccess }),
+              displayText: "Delete",
+            },
+          ]}
+        />
+      ),
     },
   ];
   const sortColumn =
