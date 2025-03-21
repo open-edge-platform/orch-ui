@@ -5,6 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, MetadataFormPom } from "@orch-ui/components";
+import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetail, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { provisionedHostOne, provisionedInstanceOne } from "@orch-ui/utils";
 import { HostsDetailsPom } from "../../organism/hostConfigure/HostsDetails/HostsDetails.pom";
@@ -64,6 +65,7 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   public regionAndSiteConfigurePom = new RegionAndSiteConfigurePom();
   public regionSiteTreePom = new RegionSiteTreePom();
   public hostsDetailsPom = new HostsDetailsPom();
+  public globalOsDropdownPom = new SiDropdown("globalOsDropdown");
 
   constructor(public rootCy: string = "hostConfig") {
     super(rootCy, [...dataCySelectors], {
@@ -84,21 +86,24 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  public configureHost(site: string, name: string, metadata: eim.Metadata) {
+  public provisionHost(site: string, metadata: eim.Metadata) {
     // search for site
     this.regionAndSiteConfigurePom.search(site);
     // select site
     this.regionSiteTreePom.selectSite(site);
     // click next
     this.el.next.click();
-    // set name (note we're assuming there's only one host)
-    this.hostsDetailsPom.setHostName(0, name);
+    // select an os
+    this.globalOsDropdownPom.openDropdown(this.globalOsDropdownPom.root);
+    this.globalOsDropdownPom.selectFirstListItemValue();
     // click next
     this.el.next.click();
     // TODO add host label
     // click next
     this.el.next.click();
+    // selecting ssh keys
+    this.el.next.click();
     // click configure
-    this.el.next.contains("Configure").click();
+    this.el.next.contains("Provision").click();
   }
 }

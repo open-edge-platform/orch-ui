@@ -1,0 +1,14 @@
+{
+  "hosts": [
+    {
+      "name": "provisioned-host-1",
+      "serialNumber": 12345
+    },
+    {
+      "name": "provisioned-host-2",
+      "serialNumber": 123456
+    }
+  ],
+  "region": "french-polynesia",
+  "site": "rangiroa"
+}

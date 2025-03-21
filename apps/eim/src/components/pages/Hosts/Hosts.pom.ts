@@ -10,7 +10,7 @@ import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import HostSearchFiltersPom from "../../organism/HostSearchFilters/HostSearchFilters.pom";
 import HostsTablePom from "../../organism/HostsTable/HostsTable.pom";
 
-const dataCySelectors = [] as const;
+const dataCySelectors = ["registerHosts"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export const encodeURLQuery = (str: string) =>
