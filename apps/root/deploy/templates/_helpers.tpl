@@ -70,6 +70,12 @@ server {
     root   /usr/share/nginx/html;
   }
 
+  error_page   400 402 403 404  /40x.html;
+
+  location = /40x.html {
+    root   /usr/share/nginx/html;
+  }
+
 }
 {{- end -}}
 

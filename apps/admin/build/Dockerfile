@@ -3,6 +3,7 @@
 
 FROM nginxinc/nginx-unprivileged:stable-alpine
 USER nobody
+COPY --chown=nobody:nobody --chmod=444 ./nginxCommon /usr/share/nginx/html
 COPY --chown=nobody:nobody --chmod=444 ./dist /usr/share/nginx/html
 
 # Running a server

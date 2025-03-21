@@ -64,6 +64,8 @@ build: ../../node_modules ## @HELP Builds the react application using webpack
 	NODE_ENV=production npm run app:$(PROJECT_NAME):build
 
 docker-build: build ## @HELP Build the docker image
+	cp -r ../../library/nginxCommon .
+
 	docker build $(DOCKER_BUILD_ARGS) --platform=linux/x86_64 ${DOCKER_EXTRA_ARGS} \
 		-t $(DOCKER_TAG) \
 		-f ${DOCKER_FILE} ${DOCKER_CONTEXT}

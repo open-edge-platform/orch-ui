@@ -80,6 +80,7 @@ server {
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
   add_header X-XSS-Protection "1; mode=block";
   add_header X-Content-Type-Options nosniff;
+  server_tokens off;
   proxy_http_version 1.1;
   keepalive_timeout 60s;
   charset utf-8;
@@ -104,6 +105,12 @@ server {
   error_page   500 502 503 504  /50x.html;
 
   location = /50x.html {
+    root   /usr/share/nginx/html;
+  }
+
+  error_page   400 402 403 404  /40x.html;
+
+  location = /40x.html {
     root   /usr/share/nginx/html;
   }
 

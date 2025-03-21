@@ -39,3 +39,11 @@ artifacts
 **/cypress/screenshots/*
 
 iconfont.bak
+
+#nginx error pages copy
+apps/admin/nginxCommon
+apps/eim/nginxCommon
+apps/root/nginxCommon
+apps/cluster-orch/nginxCommon
+apps/app-orch/nginxCommon
+
