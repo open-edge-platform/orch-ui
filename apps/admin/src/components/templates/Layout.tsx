@@ -119,7 +119,7 @@ const Layout = () => {
       items.push(clusterTemplatesNavItem);
     }
     if (
-      RuntimeConfig.isEnabled("FM") &&
+      RuntimeConfig.isEnabled("INFRA") &&
       checkAuthAndRole([Role.INFRA_MANAGER_READ, Role.INFRA_MANAGER_WRITE])
     ) {
       items.push(osProfilesNavItem);

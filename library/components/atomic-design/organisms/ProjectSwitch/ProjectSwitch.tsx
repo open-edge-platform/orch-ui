@@ -43,7 +43,7 @@ export const ProjectSwitch = ({
     // If other mfes are disabled other than ADMIN, this is a standalone ADMIN
     !RuntimeConfig.isEnabled("APP_ORCH") &&
     !RuntimeConfig.isEnabled("CLUSTER_ORCH") &&
-    !RuntimeConfig.isEnabled("FM")
+    !RuntimeConfig.isEnabled("INFRA")
   ) {
     projectHomeLink = "/projects";
   }

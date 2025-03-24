@@ -37,7 +37,7 @@ const devConfig = {
   },
   devServer: {
     open: false,
-    ...(process.env.REACT_FM_HMR !== "true" && {
+    ...(process.env.REACT_INFRA_HMR !== "true" && {
       watchFiles: ["src/**/*.tsx", "src/**/*.ts", "public/**/*"],
     }),
     port: 8082,
@@ -55,12 +55,12 @@ const devConfig = {
       const port = devServer.server.address().port;
       openBrowser(`http://localhost:${port}`);
     },
-    hot: process.env.REACT_FM_HMR === "true" ? true : false,
+    hot: process.env.REACT_INFRA_HMR === "true" ? true : false,
   },
   optimization: {
     nodeEnv: mode,
     // Imported modules are initialized for each runtime chunk separately. For HMR to work, there should be only one instance. Setting runtimeChunk to 'single' ensures this behavior.
-    ...(process.env.REACT_FM_HMR === "true" && { runtimeChunk: "single" }),
+    ...(process.env.REACT_INFRA_HMR === "true" && { runtimeChunk: "single" }),
   },
   plugins: [
     new ModuleFederationPlugin({
@@ -69,7 +69,7 @@ const devConfig = {
         Admin: `Admin@http://localhost:8084/remoteEntry.js`,
       },
     }),
-    ...(process.env.REACT_FM_HMR === "true"
+    ...(process.env.REACT_INFRA_HMR === "true"
       ? [new webpack.HotModuleReplacementPlugin()]
       : []),
   ],

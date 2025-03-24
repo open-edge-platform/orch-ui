@@ -39,7 +39,7 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
   );
 }
 
-if (RuntimeConfig.isEnabled("FM")) {
+if (RuntimeConfig.isEnabled("INFRA")) {
   OSProfiles = React.lazy(async () => await import("EimUI/OSProfiles"));
 }
 
@@ -162,7 +162,7 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
   );
 }
 
-if (RuntimeConfig.isEnabled("FM")) {
+if (RuntimeConfig.isEnabled("INFRA")) {
   if (OSProfiles) {
     childRoutes.push({
       path: "os-profiles",

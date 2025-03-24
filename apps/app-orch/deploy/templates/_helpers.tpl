@@ -83,7 +83,7 @@ window.__RUNTIME_CONFIG__ = {
   OBSERVABILITY_URL: {{ .Values.global.observability.url |  quote }},
   MFE:{
     APP_ORCH: {{ .Values.mfe.app_orch | quote }},
-    FM: {{ .Values.mfe.fm | quote }},
+    INFRA: {{ .Values.mfe.infra | quote }},
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }}
   },
   TITLE: {{ .Values.header.title }},

@@ -17,7 +17,7 @@ describe("SessionTimeout component", () => {
         AUTH: "true",
         SESSION_TIMEOUT: 0.1,
         OBSERVABILITY_URL: "",
-        MFE: { APP_ORCH: "false", CLUSTER_ORCH: "false", FM: "false" },
+        MFE: { APP_ORCH: "false", CLUSTER_ORCH: "false", INFRA: "false" },
         TITLE: "",
         API: {},
       };
@@ -41,7 +41,7 @@ describe("SessionTimeout component", () => {
         AUTH: "true",
         SESSION_TIMEOUT: 0,
         OBSERVABILITY_URL: "",
-        MFE: { APP_ORCH: "false", CLUSTER_ORCH: "false", FM: "false" },
+        MFE: { APP_ORCH: "false", CLUSTER_ORCH: "false", INFRA: "false" },
         TITLE: "",
         API: {},
       };

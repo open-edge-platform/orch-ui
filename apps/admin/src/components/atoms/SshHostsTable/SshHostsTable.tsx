@@ -25,7 +25,7 @@ interface SshHostsTableProps {
     React.ComponentType<any>
   > | null;
 }
-const AggregateHostStatus = RuntimeConfig.isEnabled("FM")
+const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 

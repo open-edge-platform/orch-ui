@@ -18,7 +18,7 @@ describe("<Layout/>", () => {
     KC_URL: "",
     MFE: {
       ADMIN: "false",
-      FM: "false",
+      INFRA: "false",
     },
     OBSERVABILITY_URL: "",
     SESSION_TIMEOUT: 0,
@@ -35,7 +35,7 @@ describe("<Layout/>", () => {
   beforeEach(() => {
     cy.mount(<Layout />, {
       runtimeConfig: cfg,
-      // NOTE that clusterOrch real components depend on FM components,
+      // NOTE that clusterOrch real components depend on INFRA components,
       // to avoid those imports make up fake routers (we're only testing the transitions)
       routerRule: [
         {

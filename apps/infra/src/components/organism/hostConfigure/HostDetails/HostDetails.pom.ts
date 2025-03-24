@@ -20,14 +20,14 @@ type ApiAliases =
 
 const getProvidersWithDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNameProvidersApiResponse> =
   {
-    route: `**/v1/projects/${defaultActiveProject.name}/providers?filter=name%3D%22fm_onboarding%22`,
+    route: `**/v1/projects/${defaultActiveProject.name}/providers?filter=name%3D%22infra_onboarding%22`,
     response: {
       hasNext: false,
       totalElements: 1,
       providers: [
         {
           apiEndpoint: "",
-          name: "fm_onboarding",
+          name: "infra_onboarding",
           providerKind: "PROVIDER_KIND_BAREMETAL",
           config: `{"defaultOs":"${osUbuntu.resourceId}"}`,
         },
@@ -37,14 +37,14 @@ const getProvidersWithDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNameProvi
 
 const getProvidersWithNoDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNameProvidersApiResponse> =
   {
-    route: `**/v1/projects/${defaultActiveProject.name}/providers?filter=name%3D%22fm_onboarding%22`,
+    route: `**/v1/projects/${defaultActiveProject.name}/providers?filter=name%3D%22infra_onboarding%22`,
     response: {
       hasNext: false,
       totalElements: 1,
       providers: [
         {
           apiEndpoint: "",
-          name: "fm_onboarding",
+          name: "infra_onboarding",
           providerKind: "PROVIDER_KIND_BAREMETAL",
           config: "",
         },

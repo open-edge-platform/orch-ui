@@ -394,7 +394,7 @@ export const hostStatusToString = (status?: eim.StatusIndicatorRead) => {
   return capitalize(status.replace("STATUS_INDICATION_", "").toLowerCase());
 };
 
-/** Decide the text to display for aggregated host status (actual host status, host in maintenance and host licensing) */
+/** Decide the text to display for aggregated host status (actual host status, host in maintenance) */
 /** @deprecated  */
 export const hostProviderStatusToString = (host?: eim.HostRead): string => {
   if (!host) {

@@ -25,7 +25,7 @@ describe("The HostDetailsTab component", () => {
         OBSERVABILITY_URL: "",
         DOCUMENTATION: [],
         MFE: {
-          FM: "false",
+          INFRA: "false",
         },
         TITLE: "",
         API: {},

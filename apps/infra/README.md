@@ -13,7 +13,7 @@ REACT_LP_MOCK_API=true npm start
 If you are running Infrastructure standalone and want to enable HMR, you can run this command before starting the server:
 
 ```shell
-REACT_FM_HMR=true
+REACT_INFRA_HMR=true
 ```
 
 ## Running against a real API server
@@ -42,7 +42,7 @@ When running the UI itself, we can then configure the appropriate API server in 
 ```js
 ...
   API: {
-    FM: "https://infra.kind.internal",
+    INFRA: "https://infra.kind.internal",
     CO: "https://cluster-orch.kind.internal",
     MB: "https://metadata.kind.internal",
   },
@@ -51,7 +51,7 @@ When running the UI itself, we can then configure the appropriate API server in 
 
 ## Running Standalone Infrastructure
 
-With a coder environment that has the Orch UI's deployed at <https://web-ui.kind.internal>, the followng can be done to run FM (infrastructure) as a standalone application.
+With a coder environment that has the Orch UI's deployed at <https://web-ui.kind.internal>, the followng can be done to run INFRA (infrastructure) as a standalone application.
 
 1. Delete the web-ui pods
 

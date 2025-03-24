@@ -28,8 +28,6 @@ const dataCySelectors = [
   "site",
   "trustedCompute",
   "provider",
-  "licenseExpireDateString",
-  "licenseNearExpiryNotice",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 

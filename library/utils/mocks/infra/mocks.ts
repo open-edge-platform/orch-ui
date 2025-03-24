@@ -1137,7 +1137,7 @@ export const handlers = [
   rest.get(`${baseURL}/providers`, async (req, res, ctx) => {
     const filter = req.url.searchParams.get("filter");
 
-    if (filter?.match(/name="fm_onboarding"/)) {
+    if (filter?.match(/name="infra_onboarding"/)) {
       return await res(
         ctx.status(200),
         ctx.json<eim.GetV1ProjectsByProjectNameProvidersApiResponse>({
@@ -1148,7 +1148,7 @@ export const handlers = [
                 ".qtBRC2kpHr?(BYYah -uw/B)eKc<8**os1*b8h@/MeO00EY.*",
               ],
               apiEndpoint: "H?xXQ.adSCiF@b:sdJ*<ZABsWOUhOSKwOf;)HAFEbL)GrtVnO#",
-              name: "fm_onboarding",
+              name: "infra_onboarding",
               providerID: "provider-3148c6c1",
               providerKind: "PROVIDER_KIND_BAREMETAL",
               providerVendor: "PROVIDER_VENDOR_UNSPECIFIED",

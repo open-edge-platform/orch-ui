@@ -103,7 +103,7 @@ describe("<ProjectSwitch />", () => {
             ...runtimeConfig,
             MFE: {
               APP_ORCH: "false",
-              FM: "false",
+              INFRA: "false",
               CLUSTER_ORCH: "false",
               ADMIN: "true",
             },
@@ -133,7 +133,7 @@ describe("<ProjectSwitch />", () => {
             ...runtimeConfig,
             MFE: {
               APP_ORCH: "true",
-              FM: "true",
+              INFRA: "true",
               CLUSTER_ORCH: "true",
               ADMIN: "true",
             },

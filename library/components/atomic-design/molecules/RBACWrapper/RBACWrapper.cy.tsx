@@ -22,7 +22,7 @@ describe("RBAC Wrapper component", () => {
       OBSERVABILITY_URL: "",
       MFE: {
         APP_ORCH: "true",
-        FM: "true",
+        INFRA: "true",
         CLUSTER_ORCH: "true",
       },
       TITLE: "",
@@ -150,7 +150,7 @@ describe("RBAC Wrapper component", () => {
       OBSERVABILITY_URL: "",
       MFE: {
         APP_ORCH: "true",
-        FM: "true",
+        INFRA: "true",
         CLUSTER_ORCH: "true",
       },
       TITLE: "",

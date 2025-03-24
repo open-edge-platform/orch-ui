@@ -75,7 +75,7 @@ describe("<SiteActionsPopup/>", () => {
       cy.get("#pathname").contains("/infrastructure");
     });
 
-    it("from FM only context", () => {
+    it("from INFRA only context", () => {
       cy.mount(<SiteActionsPopup site={siteRestaurantTwo} />, {
         routerProps: { initialEntries: ["/"] },
         routerRule: [

@@ -167,7 +167,7 @@ window.__RUNTIME_CONFIG__ = {
   ],
   MFE: {
     APP_ORCH: "true",
-    FM: "true",
+    INFRA: "true",
     CLUSTER_ORCH: "true",
     ADMIN: "true",
   },
@@ -177,10 +177,9 @@ window.__RUNTIME_CONFIG__ = {
     ADM: "https://api.kind.internal",
     ARM: "https://api.kind.internal",
     CO: "https://api.kind.internal",
-    FM: "https://api.kind.internal",
+    INFRA: "https://api.kind.internal",
     MB: "https://api.kind.internal",
     ALERT: "https://web-ui.kind.internal/api",
-    LICENSE: "https://license.kind.internal",
     TM: "https://api.kind.internal/",
   },
   VERSIONS: {

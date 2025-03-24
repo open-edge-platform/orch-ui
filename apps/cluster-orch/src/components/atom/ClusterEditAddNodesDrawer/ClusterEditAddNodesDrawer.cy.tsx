@@ -12,7 +12,7 @@ import ClusterEditAddNodesDrawer from "./ClusterEditAddNodesDrawer";
 import ClusterEditAddNodesDrawerPom from "./ClusterEditAddNodesDrawer.pom";
 
 /** Remote component mock for Host table.
- * This can be used to test custom columns sent from Clusters to FM
+ * This can be used to test custom columns sent from Clusters to INFRA
  **/
 const HostTableRemoteMock = ({
   columns,

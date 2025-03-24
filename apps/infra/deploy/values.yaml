@@ -118,7 +118,7 @@ versions:
 
 mfe:
   app_orch: false
-  fm: true
+  infra: true
   cluster_orch: false
   admin: true
 
@@ -126,7 +126,6 @@ api:
   infraManager: "https://api.kind.internal"
   clusterOrch: "https://api.kind.internal"
   metadataBroker: "https://api.kind.internal"
-  licensing: "https://license.kind.internal"
   alertManager: "https://api.kind.internal"
 
 image:

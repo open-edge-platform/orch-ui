@@ -139,7 +139,7 @@ export const ScheduleMaintenanceForm = ({
   const [editRepeatedMaintenance] =
     eim.usePutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
 
-  /** Add new maintenance via FM-API */
+  /** Add new maintenance via INFRA-API */
   const submitMaintenance = () => {
     const submitSingleMaintenance = isMaintenanceEdit
       ? editSingleMaintenance

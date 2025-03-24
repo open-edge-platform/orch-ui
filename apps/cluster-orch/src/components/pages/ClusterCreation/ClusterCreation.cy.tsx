@@ -58,7 +58,7 @@ describe("<ClusterCreation/>", () => {
         SESSION_TIMEOUT: 0,
         OBSERVABILITY_URL: "",
         TITLE: "",
-        MFE: { CLUSTER_ORCH: "false", APP_ORCH: "false", FM: "false" },
+        MFE: { CLUSTER_ORCH: "false", APP_ORCH: "false", INFRA: "false" },
         API: {},
         DOCUMENTATION: [],
       };

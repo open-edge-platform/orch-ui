@@ -27,11 +27,11 @@ interface SelectedRole {
   selectedRole: NodeRoles;
 }
 
-const HostsTableFMRemote = RuntimeConfig.isEnabled("FM")
+const HostsTableInfraRemote = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/HostsTableRemote"))
   : null;
 
-const AggregateHostStatusFMRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
+const AggregateHostStatusInfraRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 
@@ -55,8 +55,8 @@ const ClusterNodesTableBySite = ({
   onNodeSelection,
   onNodeUpdate,
   poll,
-  HostsTableRemote = HostsTableFMRemote, // By default use Remote component
-  AggregateHostStatus = AggregateHostStatusFMRemote, // By default use Remote component
+  HostsTableRemote = HostsTableInfraRemote, // By default use Remote component
+  AggregateHostStatus = AggregateHostStatusInfraRemote, // By default use Remote component
 }: ClusterNodesTableBySitesProps) => {
   const cy = { "data-cy": dataCy };
   const siteId = site.resourceId;

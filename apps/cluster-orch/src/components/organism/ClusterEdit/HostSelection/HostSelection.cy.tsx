@@ -11,7 +11,7 @@ import HostSelection from "./HostSelection";
 import HostSelectionPom from "./HostSelection.pom";
 
 /** Remote component mock for Host table.
- * This can be used to test custom columns sent from Clusters to FM
+ * This can be used to test custom columns sent from Clusters to Infra
  **/
 const HostTableRemoteMock = ({
   columns,

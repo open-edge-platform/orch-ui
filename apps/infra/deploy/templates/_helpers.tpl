@@ -134,16 +134,15 @@ AUTH: {{ .Values.global.auth.enabled | quote }},
     ],
   MFE:{
     APP_ORCH: {{ .Values.mfe.app_orch | quote }},
-    FM: {{ .Values.mfe.fm | quote }},
+    INFRA: {{ .Values.mfe.infra | quote }},
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }},
     ADMIN: {{ .Values.mfe.admin | quote }}
   },
   API: {
-    FM: {{ .Values.api.infraManager | quote }},
+    INFRA: {{ .Values.api.infraManager | quote }},
     CO: {{ .Values.api.clusterOrch | quote }},
     MB: {{ .Values.api.metadataBroker | quote }},
     ALERT: {{ .Values.api.alertManager | quote }},
-    LICENSE: {{ .Values.api.licensing | quote }},
   },
   VERSIONS: {
     orchestrator: {{ .Values.versions.orchestrator | quote }},

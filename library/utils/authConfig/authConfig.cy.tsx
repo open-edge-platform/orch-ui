@@ -22,7 +22,7 @@ describe("The authConfig file", () => {
       OBSERVABILITY_URL: "",
       MFE: {
         APP_ORCH: "true",
-        FM: "true",
+        INFRA: "true",
         CLUSTER_ORCH: "true",
         ADMIN: "false",
       },

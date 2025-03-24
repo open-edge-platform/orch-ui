@@ -25,7 +25,7 @@ describe("Host Details Action component testing", () => {
     OBSERVABILITY_URL: "testUrl",
     DOCUMENTATION: [],
     TITLE: "",
-    MFE: { FM: "false" },
+    MFE: { INFRA: "false" },
     API: {},
     VERSIONS: {},
   };

@@ -15,7 +15,7 @@ window.__RUNTIME_CONFIG__ = {
   OBSERVABILITY_URL: "https://observability-ui.kind.internal",
   MFE: {
     APP_ORCH: "false",
-    FM: "false",
+    INFRA: "false",
     CLUSTER_ORCH: "false",
     ADMIN: "true",
   },
@@ -24,11 +24,10 @@ window.__RUNTIME_CONFIG__ = {
     CATALOG: "https://app-orch.kind.internal",
     ADM: "https://app-orch.kind.internal",
     ARM: "https://app-orch.kind.internal",
-    FM: "https://api.kind.internal",
+    INFRA: "https://api.kind.internal",
     CO: "https://cluster-orch.kind.internal",
     MB: "https://metadata.kind.internal",
     ALERT: "https://alerting-monitor.kind.internal",
-    LICENSE: "https://orchestrator-license.kind.internal",
     TM: "https://api.kind.internal",
   },
   VERSIONS: {

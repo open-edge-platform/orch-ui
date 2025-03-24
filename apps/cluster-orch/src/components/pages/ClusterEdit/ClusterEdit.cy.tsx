@@ -16,7 +16,7 @@ import ClusterEdit from "./ClusterEdit";
 import ClusterEditPom from "./ClusterEdit.pom";
 
 /** Remote component mock for Host table.
- * This can be used to test custom columns sent from Clusters to FM
+ * This can be used to test custom columns sent from Clusters to INFRA
  **/
 const HostTableRemoteMock = ({
   columns,
@@ -59,7 +59,7 @@ describe("<ClusterEdit/>", () => {
         KC_URL: "",
         SESSION_TIMEOUT: 0,
         OBSERVABILITY_URL: "",
-        MFE: { CLUSTER_ORCH: "false", APP_ORCH: "false", FM: "false" },
+        MFE: { CLUSTER_ORCH: "false", APP_ORCH: "false", INFRA: "false" },
         TITLE: "",
         API: {},
         DOCUMENTATION: [],

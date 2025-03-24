@@ -21,7 +21,7 @@ describe("HostDetails", () => {
     OBSERVABILITY_URL: "testUrl",
     DOCUMENTATION: [],
     TITLE: "",
-    MFE: { FM: "false" },
+    MFE: { INFRA: "false" },
     API: {},
     VERSIONS: {},
   };

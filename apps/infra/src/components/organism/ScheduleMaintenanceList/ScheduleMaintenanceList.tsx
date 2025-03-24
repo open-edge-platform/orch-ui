@@ -149,7 +149,7 @@ export const ScheduleMaintenanceList = ({
     eim.useDeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
 
   // TODO#2: move this to new maintenance list
-  /** Delete a maintenance via FM-API */
+  /** Delete a maintenance via INFRA-API */
   const deleteMaintenance = (
     maintenance: enhancedEimSlice.ScheduleMaintenanceRead,
   ) => {

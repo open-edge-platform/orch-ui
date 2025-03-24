@@ -20,11 +20,10 @@ const runtimeConfig: IRuntimeConfig = {
     CATALOG: "CATALOG",
     ADM: "ADM",
     ARM: "ARM",
-    FM: "FM",
+    INFRA: "INFRA",
     CO: "CO",
     MB: "MB",
     ALERT: "ALERT",
-    LICENSE: "LICENSE",
     TM: "TM",
   },
   VERSIONS: {
@@ -32,19 +31,34 @@ const runtimeConfig: IRuntimeConfig = {
   },
 };
 
-const fmStandalone: IRuntimeConfig = {
+const infraStandalone: IRuntimeConfig = {
   ...runtimeConfig,
-  MFE: { APP_ORCH: "false", CLUSTER_ORCH: "false", FM: "true", ADMIN: "false" },
+  MFE: {
+    APP_ORCH: "false",
+    CLUSTER_ORCH: "false",
+    INFRA: "true",
+    ADMIN: "false",
+  },
 };
 
 const allMFEs: IRuntimeConfig = {
   ...runtimeConfig,
-  MFE: { APP_ORCH: "true", CLUSTER_ORCH: "true", FM: "true", ADMIN: "false" },
+  MFE: {
+    APP_ORCH: "true",
+    CLUSTER_ORCH: "true",
+    INFRA: "true",
+    ADMIN: "false",
+  },
 };
 
 const comboConfig: IRuntimeConfig = {
   ...runtimeConfig,
-  MFE: { APP_ORCH: "true", CLUSTER_ORCH: "true", FM: "false", ADMIN: "false" },
+  MFE: {
+    APP_ORCH: "true",
+    CLUSTER_ORCH: "true",
+    INFRA: "false",
+    ADMIN: "false",
+  },
 };
 
 describe("RuntimeConfig", () => {
@@ -66,9 +80,9 @@ describe("RuntimeConfig", () => {
     ]);
   });
 
-  describe("with FM standalone configuration", () => {
+  describe("with INFRA standalone configuration", () => {
     beforeEach(() => {
-      window.__RUNTIME_CONFIG__ = fmStandalone;
+      window.__RUNTIME_CONFIG__ = infraStandalone;
     });
 
     it("reports false for CLUSTER_ORCH enablement", () => {
@@ -83,11 +97,11 @@ describe("RuntimeConfig", () => {
     });
     it("reports true for all  checks", () => {
       const appOrch = RuntimeConfig.isEnabled("APP_ORCH");
-      const fm = RuntimeConfig.isEnabled("FM");
+      const infra = RuntimeConfig.isEnabled("INFRA");
       const clusterOrch = RuntimeConfig.isEnabled("CLUSTER_ORCH");
 
       expect(appOrch).to.equal(true);
-      expect(fm).to.equal(true);
+      expect(infra).to.equal(true);
       expect(clusterOrch).to.equal(true);
     });
   });
@@ -96,13 +110,13 @@ describe("RuntimeConfig", () => {
     beforeEach(() => {
       window.__RUNTIME_CONFIG__ = comboConfig;
     });
-    it("reports false on FM check", () => {
+    it("reports false on INFRA check", () => {
       const appOrch = RuntimeConfig.isEnabled("APP_ORCH");
-      const fm = RuntimeConfig.isEnabled("FM");
+      const infra = RuntimeConfig.isEnabled("INFRA");
       const clusterOrch = RuntimeConfig.isEnabled("CLUSTER_ORCH");
 
       expect(appOrch).to.equal(true);
-      expect(fm).to.equal(false);
+      expect(infra).to.equal(false);
       expect(clusterOrch).to.equal(true);
     });
   });
@@ -115,11 +129,11 @@ describe("RuntimeConfig", () => {
     it("reports false for RuntimeConfig.isEnabled check", () => {
       const appOrch = RuntimeConfig.isEnabled("APP_ORCH");
       const clusterOrch = RuntimeConfig.isEnabled("CLUSTER_ORCH");
-      const fm = RuntimeConfig.isEnabled("FM");
+      const infra = RuntimeConfig.isEnabled("INFRA");
 
       expect(appOrch).to.equal(false);
       expect(clusterOrch).to.equal(false);
-      expect(fm).to.equal(false);
+      expect(infra).to.equal(false);
     });
 
     it("should return an empty title", () => {
@@ -166,14 +180,14 @@ describe("RuntimeConfig", () => {
     describe("when the REACT_LP_MOCK_API is true", () => {
       it("should return the current origin", () => {
         window.process = { env: { REACT_LP_MOCK_API: "true" } };
-        expect(RuntimeConfig.fmApiUrl).to.eq(window.location.origin);
+        expect(RuntimeConfig.infraApiUrl).to.eq(window.location.origin);
       });
     });
     describe("when the configuration is missing", () => {
       it("should throw an error", () => {
         // @ts-ignore
         delete window.__RUNTIME_CONFIG__.API;
-        expect(() => RuntimeConfig.fmApiUrl).to.throw();
+        expect(() => RuntimeConfig.infraApiUrl).to.throw();
       });
     });
     describe("when the configuration is present", () => {

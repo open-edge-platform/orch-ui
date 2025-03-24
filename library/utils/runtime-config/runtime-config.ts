@@ -17,7 +17,7 @@ export interface IRuntimeConfig {
   OBSERVABILITY_URL: string;
   MFE: {
     APP_ORCH?: string;
-    FM?: string;
+    INFRA?: string;
     CLUSTER_ORCH?: string;
     ADMIN?: string;
   };
@@ -33,11 +33,10 @@ export const apiServers = [
   "CATALOG",
   "ADM",
   "ARM",
-  "FM",
+  "INFRA",
   "CO",
   "MB",
   "ALERT",
-  "LICENSE",
   "TM",
 ] as const;
 export type ApiServer = (typeof apiServers)[number];
@@ -85,8 +84,8 @@ export class RuntimeConfig {
   /**
    * Returns the API URL for infra
    */
-  public static get fmApiUrl(): string {
-    return this.getApiUrl("FM");
+  public static get infraApiUrl(): string {
+    return this.getApiUrl("INFRA");
   }
 
   /**
@@ -108,13 +107,6 @@ export class RuntimeConfig {
    */
   public static get alertApiUrl(): string {
     return this.getApiUrl("ALERT");
-  }
-
-  /**
-   * Returns the API URL for Licensing
-   */
-  public static get licenseApiUrl(): string {
-    return this.getApiUrl("LICENSE");
   }
 
   /**

@@ -24,11 +24,11 @@ interface ClusterDetailsProps {
   cluster: cm.ClusterInfo;
 }
 
-const HostsTableRemote = RuntimeConfig.isEnabled("FM")
+const HostsTableRemote = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/HostsTableRemote"))
   : null;
 
-const AggregateHostStatus = RuntimeConfig.isEnabled("FM")
+const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 

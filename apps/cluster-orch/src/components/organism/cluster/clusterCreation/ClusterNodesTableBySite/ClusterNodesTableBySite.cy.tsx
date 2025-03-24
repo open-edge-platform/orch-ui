@@ -14,7 +14,7 @@ import ClusterNodesSiteTablePom from "./ClusterNodesTableBySite.pom";
 const pom = new ClusterNodesSiteTablePom();
 
 /** Remote component mock for Host table.
- * This can be used to test custom columns sent from Clusters to FM
+ * This can be used to test custom columns sent from Clusters to INFRA
  **/
 const HostTableRemoteMock = ({
   columns,

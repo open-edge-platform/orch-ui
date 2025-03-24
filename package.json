@@ -41,7 +41,7 @@
     "prettify": "npm run app:admin:fix & npm run app:infra:fix & npm run app:cluster-orch:fix & npm run app:app-orch:fix & npm run app:root:fix"
   },
   "author": "Edge Orchestrator UI Team",
-  "license": "Intel",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@cypress/code-coverage": "^3.13.10",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",

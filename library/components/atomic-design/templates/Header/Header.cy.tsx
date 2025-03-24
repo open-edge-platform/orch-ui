@@ -21,7 +21,7 @@ const runtimeConfig: IRuntimeConfig = {
   DOCUMENTATION_URL: "https://test.com/",
   MFE: {
     APP_ORCH: undefined,
-    FM: undefined,
+    INFRA: undefined,
     CLUSTER_ORCH: undefined,
     ADMIN: undefined,
   },

@@ -96,7 +96,7 @@ window.__RUNTIME_CONFIG__ = {
   ],
   MFE: {
     APP_ORCH: {{ .Values.mfe.app_orch | quote }},
-    FM: {{ .Values.mfe.fm | quote }},
+    INFRA: {{ .Values.mfe.infra | quote }},
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }},
     ADMIN: {{ .Values.mfe.admin | quote }}
   },
@@ -104,11 +104,10 @@ window.__RUNTIME_CONFIG__ = {
     CATALOG: {{ .Values.api.catalog | quote }},
     ADM: {{ .Values.api.appDeploymentManger | quote }},
     ARM: {{ .Values.api.appResourceManger | quote }},
-    FM: {{ .Values.api.infraManager | quote }},
+    INFRA: {{ .Values.api.infraManager | quote }},
     CO: {{ .Values.api.clusterOrch | quote }},
     MB: {{ .Values.api.metadataBroker | quote }},
     ALERT: {{ .Values.api.alertManager | quote }},
-    LICENSE: {{ .Values.api.licensing | quote }},
     TM: {{ .Values.api.tenantManager | quote }},
   },
   VERSIONS: {

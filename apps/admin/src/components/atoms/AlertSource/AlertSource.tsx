@@ -14,7 +14,7 @@ type RemoteComponent = LazyExoticComponent<ComponentType<any>> | null;
 
 let HostLink: RemoteComponent = null;
 
-if (RuntimeConfig.isEnabled("FM")) {
+if (RuntimeConfig.isEnabled("INFRA")) {
   //Updated path for test to run
   HostLink = React.lazy(
     async () =>

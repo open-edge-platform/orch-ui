@@ -12,7 +12,7 @@ import queryString from "query-string";
 const baseUrl: string =
   window.Cypress?.testingType === "component"
     ? window.location.origin
-    : RuntimeConfig.fmApiUrl;
+    : RuntimeConfig.infraApiUrl;
 
 const staggeredBaseQueryWith404NoRetry = retry(
   async (args: string | FetchArgs, api, extraOptions) => {
