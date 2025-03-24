@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const { merge } = require("webpack-merge");
 const commonConfig = require("./webpack.common");
 const openBrowser = require("react-dev-utils/openBrowser");
@@ -11,6 +11,7 @@ const openBrowser = require("react-dev-utils/openBrowser");
 const mode = "development";
 const devConfig = {
   mode: mode,
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -22,6 +23,9 @@ const devConfig = {
         use: [{ loader: "ignore-loader" }],
       },
     ],
+  },
+  resolve: {
+    plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
     publicPath: process.env.REACT_LP_REMOTE_EP

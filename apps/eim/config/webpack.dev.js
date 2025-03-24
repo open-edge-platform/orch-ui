@@ -27,6 +27,9 @@ const devConfig = {
       },
     ],
   },
+  resolve: {
+    plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
+  },
   output: {
     publicPath: process.env.REACT_LP_REMOTE_EP
       ? `http://${process.env.REACT_LP_REMOTE_EP}:8082/`

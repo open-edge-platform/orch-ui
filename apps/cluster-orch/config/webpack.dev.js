@@ -7,11 +7,16 @@ const { merge } = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const commonConfig = require("./webpack.common");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const openBrowser = require("react-dev-utils/openBrowser");
 
 const mode = "development";
 const devConfig = {
   mode: mode,
+  devtool: "source-map",
+  resolve: {
+    plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
+  },
   output: {
     publicPath: process.env.REACT_LP_REMOTE_EP
       ? `http://${process.env.REACT_LP_REMOTE_EP}:8083/`

@@ -10,6 +10,7 @@ const commonConfig = require("./webpack.common");
 const mode = "production";
 const prodConfig = {
   mode: mode,
+  devtool: false,
   module: {
     rules: [
       {

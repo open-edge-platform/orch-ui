@@ -8,6 +8,7 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const mode = "production";
 const prodConfig = {
   mode: mode,
+  devtool: false,
   module: {
     rules: [
       {
