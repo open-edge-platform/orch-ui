@@ -128,7 +128,7 @@ describe("<ClusterList />", () => {
   });
   describe("ClusterList exapandable list should", () => {
     beforeEach(() => {
-      pom.interceptApis([pom.api.clusterListSuccess]);
+      pom.interceptApis([pom.api.clusterListSuccess, pom.api.getHosts]);
       clusterDetailPom.interceptApis([clusterDetailPom.api.getClusterSuccess]);
     });
     it("should open and close row", () => {
@@ -137,10 +137,11 @@ describe("<ClusterList />", () => {
       pom.table.getRows().should("have.length", 2);
       pom.table.expandRow(0);
       clusterDetailPom.waitForApi([clusterDetailPom.api.getClusterSuccess]);
+      pom.waitForApi([pom.api.getHosts]);
       pom.root.should("contain", "Operating System");
       pom.root.should("contain", "Readiness");
       pom.table.expandRow(0);
-      cy.get(".cluster-nodes-table .table-row").should("have.length", 2);
+      cy.get(".cluster-nodes-table .table-row").should("have.length", 1);
     });
   });
 

@@ -3,19 +3,51 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { eim } from "@orch-ui/apis";
 import { SiTablePom } from "@orch-ui/poms";
-import { CyPom } from "@orch-ui/tests";
+import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import NodeRoleDropdownPom from "../../atom/NodeRoleDropdown/NodeRoleDropdown.pom";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-class ClusterNodesTablePom extends CyPom<Selectors> {
+type ApiAliases = "getHosts";
+
+const route = "**/v1/**/compute/hosts?filter=hostId**";
+
+const endpoints: CyApiDetails<
+  ApiAliases,
+  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+> = {
+  getHosts: {
+    route,
+    statusCode: 200,
+    response: {
+      hasNext: false,
+      hosts: [
+        {
+          resourceId: "hostId",
+          name: "Node 1",
+          instance: {
+            os: {
+              name: "linux",
+              sha256: "sha",
+              updateSources: [],
+            },
+          },
+        },
+      ],
+      totalElements: 1,
+    },
+  },
+};
+
+class ClusterNodesTablePom extends CyPom<Selectors, ApiAliases> {
   public table = new SiTablePom();
   public nodeRoleDropdown = new NodeRoleDropdownPom();
 
   constructor(public rootCy: string = "clusterNodesTable") {
-    super(rootCy, [...dataCySelectors]);
+    super(rootCy, [...dataCySelectors], endpoints);
   }
 }
 export default ClusterNodesTablePom;

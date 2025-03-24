@@ -3,18 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
-import {
-  Flex,
-  MetadataDisplay,
-  MetadataPair,
-  TableColumn,
-} from "@orch-ui/components";
+import { Flex, MetadataDisplay, MetadataPair } from "@orch-ui/components";
 import { Heading } from "@spark-design/react";
 import { useAppSelector } from "../../../../../store/hooks";
 import { getCluster } from "../../../../../store/reducers/cluster";
 import { getNodes } from "../../../../../store/reducers/nodes";
-import { NodeTableColumns } from "../../../../../utils/NodeTableColumns";
 import ClusterNodesTable from "../../../ClusterNodesTable/ClusterNodesTable";
 import "./Review.scss";
 
@@ -28,11 +21,6 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
   const currentNodes = useAppSelector(getNodes);
 
   const cy = { "data-cy": dataCy };
-  const columns: TableColumn<cm.NodeInfo>[] = [
-    NodeTableColumns.nameWithoutLink,
-    NodeTableColumns.role,
-    NodeTableColumns.os,
-  ];
 
   return (
     <div {...cy} className="review">
@@ -75,7 +63,7 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
         Host Status
       </Heading>
 
-      <ClusterNodesTable nodes={currentNodes} columns={columns} />
+      <ClusterNodesTable nodes={currentNodes} readinessType="host" />
     </div>
   );
 };

@@ -4,63 +4,59 @@
  */
 
 import { cm } from "@orch-ui/apis";
+import {
+  assignedWorkloadHostFourId,
+  assignedWorkloadHostOneId,
+  assignedWorkloadHostThreeId,
+  assignedWorkloadHostTwoId,
+  provisionedHostOneId,
+  provisionedHostTwoId,
+} from "../../infra/data/hostIds";
 
 export const nodeOne: cm.NodeInfo = {
-  id: "host-dh38bjw9",
-  name: "Room Edge Node",
+  id: assignedWorkloadHostOneId,
   status: {
     condition: "STATUS_CONDITION_READY",
   },
-  os: "ubuntu",
   role: "worker",
 };
 
 export const nodeTwo: cm.NodeInfo = {
-  id: "host-k72ywhgd",
-  name: "Kitchen Edge Node",
+  id: assignedWorkloadHostTwoId,
   status: {
     condition: "STATUS_CONDITION_READY",
   },
-  os: "ubuntu",
   role: "worker",
 };
 
 export const nodeThree: cm.NodeInfo = {
-  id: "host-3uc8eh0w",
-  name: "Cashier Node",
+  id: assignedWorkloadHostThreeId,
   status: {
     condition: "STATUS_CONDITION_READY",
   },
-  os: "ubuntu",
   role: "controlplane",
 };
 
 export const nodeFour: cm.NodeInfo = {
-  id: "host-5i68cbq7",
-  name: "Minimart Node",
+  id: assignedWorkloadHostFourId,
   status: {
     condition: "STATUS_CONDITION_READY",
   },
-  os: "ubuntu",
   role: "all",
 };
 
 export const nodeFive: cm.NodeInfo = {
-  id: "host-bdj38fj0",
-  name: "Drive Node",
+  id: provisionedHostOneId,
   status: {
     condition: "STATUS_CONDITION_READY",
   },
-  os: "ubuntu",
   role: "all",
 };
 
 export const nodeSix: cm.NodeInfo = {
-  id: "host-v9eyx73m",
-  name: "Information Edge Node",
+  id: provisionedHostTwoId,
   status: {
     condition: "STATUS_CONDITION_READY",
   },
-  os: "ubuntu",
   role: "worker",
 };

@@ -43,7 +43,7 @@ iconfont.bak
 
 #nginx error pages copy
 apps/admin/nginxCommon
-apps/eim/nginxCommon
+apps/infra/nginxCommon
 apps/root/nginxCommon
 apps/cluster-orch/nginxCommon
 apps/app-orch/nginxCommon

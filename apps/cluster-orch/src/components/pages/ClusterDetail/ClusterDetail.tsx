@@ -21,7 +21,6 @@ import {
   PopupOption,
   setActiveNavItem,
   setBreadcrumb as setClusterBreadcrumb,
-  TableColumn,
   TypedMetadata,
 } from "@orch-ui/components";
 import {
@@ -44,7 +43,7 @@ import {
   ToastProps,
 } from "@spark-design/react";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { clustersMenuItem, homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import TableLoader from "../../atom/TableLoader";
@@ -55,7 +54,6 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { NodeTableColumns } from "../../../utils/NodeTableColumns";
 import DeploymentInstancesTable from "../../organism/clusterDetail/DeploymentInstancesTable/DeploymentInstancesTable";
 import ClusterNodesTable from "../../organism/ClusterNodesTable/ClusterNodesTable";
 import "./ClusterDetail.scss";
@@ -72,19 +70,6 @@ export interface ClusterDetailProps {
   /** This is required for cluster plugin to to set breadcrumb from fleet-management UI */
   setBreadcrumb?: (breadcrumbs: BreadcrumbPiece[]) => void;
 }
-
-// these columns define the nodes in the cluster.
-// They are used to render information about the node
-const nodesTableColumns: TableColumn<cm.NodeInfo>[] = [
-  NodeTableColumns.name,
-  NodeTableColumns.status,
-  NodeTableColumns.role,
-  NodeTableColumns.actions((node) => (
-    <Link to={`/infrastructure/host/${node.id}`}>
-      <Icon icon="clipboard-forward" /> View Host Details
-    </Link>
-  )),
-];
 
 function ClusterDetail({
   hasHeader = true,
@@ -489,7 +474,7 @@ function ClusterDetail({
           <Item title={<Text>Hosts</Text>}>
             <ClusterNodesTable
               nodes={clusterDetail.nodes ?? []}
-              columns={nodesTableColumns}
+              readinessType="cluster"
             />
           </Item>
           <Item title={<Text>Deployment Instances</Text>}>

@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, eim } from "@orch-ui/apis";
 import { ConfirmationDialogPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import {
+  assignedWorkloadHostTwoId,
   clusterEmptyLocationInfo,
   clusterFive,
   clusterFour,
@@ -30,12 +31,18 @@ type ClusterSuccessApiAliases =
   | "deleteCluster"
   | "creatingHostCluster";
 
+type HostSuccessApiAliases = "getHosts";
+
 type ClusterErrorApiAliases = "clusterListError500";
 
-type ApiAliases = ClusterSuccessApiAliases | ClusterErrorApiAliases;
+type ApiAliases =
+  | ClusterSuccessApiAliases
+  | ClusterErrorApiAliases
+  | HostSuccessApiAliases;
 
 const route = "**/v2/**/clusters**";
 const routeDelete = "**/v2/**/clusters/**";
+const hostRoute = "**/v1/**/compute/hosts?filter=hostId**";
 const successEndpoints: CyApiDetails<
   ClusterSuccessApiAliases,
   cm.GetV2ProjectsByProjectNameClustersApiResponse
@@ -111,6 +118,33 @@ const successEndpoints: CyApiDetails<
   },
 };
 
+const hostEndpoints: CyApiDetails<
+  HostSuccessApiAliases,
+  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+> = {
+  getHosts: {
+    route: hostRoute,
+    statusCode: 200,
+    response: {
+      hasNext: false,
+      hosts: [
+        {
+          resourceId: assignedWorkloadHostTwoId,
+          name: "Node 1",
+          instance: {
+            os: {
+              name: "linux",
+              sha256: "sha",
+              updateSources: [],
+            },
+          },
+        },
+      ],
+      totalElements: 1,
+    },
+  },
+};
+
 const errorEndpoints: CyApiDetails<
   ClusterErrorApiAliases,
   cm.GetV2ProjectsByProjectNameClustersApiResponse
@@ -125,6 +159,7 @@ export class ClusterListPom extends CyPom<Selectors, ApiAliases> {
   constructor(public rootCy: string = "clusterList") {
     super(rootCy, [...dataCySelectors], {
       ...successEndpoints,
+      ...hostEndpoints,
       ...errorEndpoints,
     });
     this.table = new TablePom("clusterList");

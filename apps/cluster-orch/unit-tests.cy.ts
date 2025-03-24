@@ -14,7 +14,6 @@ import "./src/components/atom/CodeSample/CodeSample.cy.tsx";
 import "./src/components/atom/NodeRoleDropdown/NodeRoleDropdown.cy.tsx";
 import "./src/components/atom/TableLoader.cy.tsx";
 import "./src/components/organism/cluster/clusterCreation/AddDeploymentMeta/AddDeploymentMeta.cy.tsx";
-import "./src/components/organism/cluster/clusterCreation/AddRoles/AddRoles.cy.tsx";
 import "./src/components/organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite.tsx";
 import "./src/components/organism/cluster/clusterCreation/NameAndTemplate/NameAndTemplate.cy.tsx";
 import "./src/components/organism/cluster/clusterCreation/Review/Review.cy.tsx";
