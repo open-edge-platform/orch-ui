@@ -71,7 +71,7 @@ docker-build: build ## @HELP Build the docker image
 		-f ${DOCKER_FILE} ${DOCKER_CONTEXT}
 
 docker-push: ## @HELP Push the docker image to a registry
-	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(DOCKER_SUB_REPOSITORY)/$(DOCKER_IMG_NAME) || true
+	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME)/$(DOCKER_IMG_NAME) || true
 	docker push $(DOCKER_TAG)
 	# NOTE do we need to push with the branch name?
 	# If we need we should modify CI so that we can run the docker push twice with different env vars
