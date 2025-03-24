@@ -21,7 +21,7 @@ global:
   observability:
     url: ""
 
-# false= run as standalone application, true = run as a part of ENSP
+# false= run as standalone application, true = run as a part of OEP
 mfe:
   app_orch: false
   fm: false

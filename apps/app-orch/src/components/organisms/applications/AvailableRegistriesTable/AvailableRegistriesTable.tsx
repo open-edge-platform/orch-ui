@@ -21,7 +21,7 @@ import {
   Direction,
   getFilter,
   getOrder,
-  LpInternalError,
+  InternalError,
   Operator,
   parseError,
   rfc3339ToDate,
@@ -57,7 +57,7 @@ const AvailableRegistriesTable = ({
 }: AvailableRegistriesTableProps) => {
   const cy = { "data-cy": dataCy };
   const [searchParams, setSearchParams] = useSearchParams();
-  const [parsedError, setParsedError] = useState<LpInternalError>();
+  const [parsedError, setParsedError] = useState<InternalError>();
 
   const sortDirection = (searchParams.get("direction") as Direction) || "asc";
   const pageSize = parseInt(searchParams.get("pageSize") || "10");

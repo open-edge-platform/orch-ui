@@ -16,7 +16,7 @@ export const hostDetailsGuidRoute = "host/uuid/:uuid";
 export const unconfiguredDetailsGuidRoute = "unconfigured-host/uuid/:uuid";
 export const hostConfigureRoute = "unconfigured-host/configure";
 
-export type IaaSRoute =
+export type InfraRoute =
   | typeof regionsRoute
   | typeof sitesRoute
   | typeof hostsRoute
@@ -85,19 +85,19 @@ export const unconfiguredBreadcrumb = {
 };
 
 // only used in Development
-export const summaryMenuItem: CollapsableListItem<IaaSRoute> = {
+export const summaryMenuItem: CollapsableListItem<InfraRoute> = {
   route: summary,
   icon: "graph-chart",
   value: "Summary",
 };
 
-export const regionsMenuItem: CollapsableListItem<IaaSRoute> = {
+export const regionsMenuItem: CollapsableListItem<InfraRoute> = {
   route: regionsRoute,
   icon: "globe-pointer",
   value: "Regions",
 };
 
-export const sitesMenuItem: CollapsableListItem<IaaSRoute> = {
+export const sitesMenuItem: CollapsableListItem<InfraRoute> = {
   route: sitesRoute,
   icon: "pin",
   value: "Sites",

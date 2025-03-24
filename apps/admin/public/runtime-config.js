@@ -24,7 +24,7 @@ window.__RUNTIME_CONFIG__ = {
     CATALOG: "https://app-orch.kind.internal",
     ADM: "https://app-orch.kind.internal",
     ARM: "https://app-orch.kind.internal",
-    FM: "https://iaas.kind.internal",
+    FM: "https://api.kind.internal",
     CO: "https://cluster-orch.kind.internal",
     MB: "https://metadata.kind.internal",
     ALERT: "https://alerting-monitor.kind.internal",

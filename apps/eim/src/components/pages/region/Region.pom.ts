@@ -16,7 +16,7 @@ import { RegionStore } from "@orch-ui/utils";
 import RegionsDropdownPom from "../../organism/region/RegionsDropdown/RegionsDropdown.pom";
 
 const dataCySelectors = [
-  "iaasHostDetailsHeader",
+  "infraHostDetailsHeader",
   "add",
   "regionFormName",
   "create",
@@ -119,7 +119,7 @@ class RegionPom extends CyPom<Selectors, ApiAliases> {
   regionsDropdown: RegionsDropdownPom;
   confirmationDialogPom: ConfirmationDialogPom;
 
-  constructor(public rootCy: string = "iaaSRegions") {
+  constructor(public rootCy: string = "infraRegions") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.table = new SiTablePom();
     this.regionsTable = new TablePom("regionsTable");

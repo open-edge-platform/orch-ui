@@ -41,11 +41,10 @@ import "../../library/components/atomic-design/molecules/TreeBranch/TreeBranch.c
 import "../../library/components/atomic-design/molecules/TreeExpander/TreeExpander.cy.tsx";
 
 //organisms
+import "../../library/components/atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList.cy.tsx";
 import "../../library/components/atomic-design/organisms/CounterWheel/CounterWheel.cy.tsx";
 import "../../library/components/atomic-design/organisms/DashboardStatus/DashboardStatus.cy.tsx";
 import "../../library/components/atomic-design/organisms/LPBreadcrumb/LPBreadcrumb.cy.tsx";
-// import "../../library/components/atomic-design/organisms/MaestroTable/MaestroTable.cy.tsx";
-import "../../library/components/atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList.cy.tsx";
 import "../../library/components/atomic-design/organisms/MetadataBadge/MetadataBadge.cy.tsx";
 import "../../library/components/atomic-design/organisms/MetadataDisplay/MetadataDisplay.cy.tsx";
 import "../../library/components/atomic-design/organisms/MetadataForm/MetadataForm.cy.tsx";

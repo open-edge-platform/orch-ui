@@ -59,6 +59,6 @@ export const appExtensionTwoDescription =
 export const packageOneDescription =
   "Application package for identifying and real-time monitoring of shelf inventory, using pre-trained computer vision models.";
 export const packageTwoDescription =
-  "Application package using video analytics and edge inferencing; interfaces with the smart stock app to track shoppers' purchases.";
+  "Application package using video analytics; interfaces with the smart stock app to track shoppers' purchases.";
 export const packageThreeDescription =
   "Application package the serves advertising content based on person tracking, facial recognition, and contextual awareness.";

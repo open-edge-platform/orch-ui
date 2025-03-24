@@ -19,7 +19,7 @@ global:
       realm: "master"
   session_timeout: 3600
   # NOTE this is not set in the same runtime-config.js that is used in all MFE
-  # if this configuration grows too much consider moving it in a MFE specific confing, eg: iaas-runtime-config
+  # if this configuration grows too much consider moving it in a MFE specific config,
   # NOTE if empty, Hosts are not linked to the corresponding observability page
   observability:
     #    url: "https://observability-ui.kind.internal"
@@ -37,12 +37,12 @@ api:
   catalog: "https://api.kind.internal"
   appDeploymentManger: "https://api.kind.internal"
   appResourceManger: "https://api.kind.internal"
-  fleetManagement: "https://iaas.kind.internal"
+  infraManager: "https://api.kind.internal"
   clusterOrch: "https://api.kind.internal"
-  metadataBroker: "https://metadata.kind.internal"
-  alertManager: "https://web-ui.kind.internal/api"
+  metadataBroker: "https://api.kind.internal"
+  alertManager: "https://api.kind.internal"
   licensing: "https://license.kind.internal"
-  tenantManager: "https://api.kind.internal/"
+  tenantManager: "https://api.kind.internal"
 
 # Used to configure the Header title
 header:
@@ -147,7 +147,7 @@ service:
     enabled: false
     baseHostname: "Host(`kind.internal`)"
     hostname: "Host(`web-ui.kind.internal`)"
-    secretName: tls-maestro
+    secretName: tls-orch
     # if the secret is in the same namespace as the chart, use "{{ .Release.Namespace }}"
     # namespace: "{{ .Release.Namespace }}"
     namespace: "gateway-system"

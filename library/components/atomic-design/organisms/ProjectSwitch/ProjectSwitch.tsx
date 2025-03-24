@@ -6,7 +6,7 @@ import { tm } from "@orch-ui/apis";
 import {
   API_INTERVAL,
   hasRole,
-  LpInternalError,
+  InternalError,
   Role,
   RuntimeConfig,
   SharedStorage,
@@ -118,7 +118,7 @@ export const ProjectSwitch = ({
     }
 
     if (isError) {
-      const err = error as LpInternalError;
+      const err = error as InternalError;
       // NOTE the /v1/projects?member-role=true returns 401 if the user is not associated with any project
       if (err?.status === 401) {
         SharedStorage.removeStorageItem(StorageItems.PROJECT);

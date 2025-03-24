@@ -5,7 +5,7 @@
 
 import { cm } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { LpInternalError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { TextField } from "@spark-design/react";
 import { ButtonVariant, InputSize, ModalSize } from "@spark-design/tokens";
 import { useState } from "react";
@@ -27,7 +27,7 @@ interface DeauthorizeNodeConfirmationDialogProps {
   /** The Deauthorise process function after node is removed */
   deauthorizeHostFn?: (reason: string) => Promise<any>;
   /** Inform EIM UI of error from ClusterOrch */
-  setErrorInfo: (e?: LpInternalError) => void; // TODO: this will be removed as part of LPUUH-951
+  setErrorInfo: (e?: InternalError) => void; // TODO: this will be removed as part of LPUUH-951
 }
 
 interface DeauthInputs {

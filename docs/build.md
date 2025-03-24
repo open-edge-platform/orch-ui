@@ -16,16 +16,6 @@ To build an image with a different registry, tag or version the following comman
 DOCKER_REGISTRY=<registry> DOCKER_REPOSITORY=edge-orch/orch-ui  VERSION=dev make docker-build -C apps/<name>
 ```
 
-> **Note for Intel employes**
-> If you are trying to push to Intel's sandbox registry, you can use the following command
->
-> ```bash
-> DOCKER_REGISTRY="amr-registry-pre.caas.intel.com/one-intel-edge-sandbox" \
-> DOCKER_REPOSITORY=maestro \
-> VERSION=dev \
-> make docker-build docker-push -C apps/app-orch
-> ```
-
 ## Update an existing deployment with custom images
 
 Custom built images can easily be used in ArgoCD to test development code. In order to do that locate the cluster-configuration you are using to deploy (these configurations are defined in the `edge-manageability-framework` repository, for example: `dev-coder-minimal`) and modify it as in the following example:
@@ -37,27 +27,27 @@ postCustomTemplateOverwrite:
       registry:
         name: amr-registry-pre.caas.intel.com
       pullPolicy: Always
-      repository: one-intel-edge-sandbox/maestro/root
+      repository: edge-orch/orch-ui
       tag: "dev"
   web-ui-app-orch:
     image:
       registry:
         name: amr-registry-pre.caas.intel.com
       pullPolicy: Always
-      repository: one-intel-edge-sandbox/maestro/app-orch
+      repository: edge-orch/orch-ui
       tag: "dev"
   web-ui-cluster-orch:
     image:
       registry:
         name: amr-registry-pre.caas.intel.com
       pullPolicy: Always
-      repository: one-intel-edge-sandbox/maestro/cluster-orch
+      repository: edge-orch/orch-ui
       tag: "dev"
   web-ui-fm:
     image:
       registry:
         name: amr-registry-pre.caas.intel.com
-      repository: one-intel-edge-sandbox/maestro/iaas
+      repository: edge-orch/orch-ui
       pullPolicy: Always
       tag: "dev"
   web-ui-admin:
@@ -65,7 +55,7 @@ postCustomTemplateOverwrite:
       registry:
         name: amr-registry-pre.caas.intel.com
       pullPolicy: Always
-      repository: one-intel-edge-sandbox/maestro/admin
+      repository: edge-orch/orch-ui
       tag: "dev"
 ```
 

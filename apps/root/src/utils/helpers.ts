@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// import { miEnhancedApi as miApi } from "@orch-api/iaas/enhancedApiSlice";
 import { cm, eim } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";

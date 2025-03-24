@@ -5,7 +5,7 @@
 
 import { adm, catalog } from "@orch-ui/apis";
 import { ApiError, Table, TableColumn, TableLoader } from "@orch-ui/components";
-import { LpInternalError, parseError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, parseError, SharedStorage } from "@orch-ui/utils";
 import { MessageBanner } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -39,7 +39,7 @@ const OverrideProfileTable = ({
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
-  const [parsedErr, setParsedErr] = useState<LpInternalError>();
+  const [parsedErr, setParsedErr] = useState<InternalError>();
   const [isLoading, setIsloading] = useState(false);
   const [applications, setApplications] = useState<catalog.Application[]>([]);
   const projectName = SharedStorage.project?.name ?? "";

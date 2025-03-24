@@ -17,11 +17,11 @@ import HostDetailsTabPom from "../../organism/hosts/HostDetailsTab/HostDetailsTa
 
 const metadataRoute = "**/v1/projects/**/metadata";
 const dataCySelectors = [
-  "iaasHostDetailsHeader",
-  "iaasHostDetailsSite",
-  "iaasHostDetailsMaintenanceBanner",
-  "iaasHostDetailsHostDescriptionTable",
-  "iaasHostDetailsDeploymentMetadata",
+  "infraHostDetailsHeader",
+  "infraHostDetailsSite",
+  "infraHostDetailsMaintenanceBanner",
+  "infraHostDetailsHostDescriptionTable",
+  "infraHostDetailsDeploymentMetadata",
   "guid",
   "serial",
   "osProfiles",
@@ -202,13 +202,13 @@ export class HostDetailsPom extends CyPom<
 
   constructor(
     public hostId: string = "*",
-    public rootCy: string = "iaasHostDetails",
+    public rootCy: string = "infraHostDetails",
   ) {
     const endpoints = getApiEndpoints(hostId);
     super(rootCy, [...dataCySelectors], { ...endpoints });
     this.hostAction = new HostDetailsActionsPom();
     this.medataBadge = new MetadataDisplayPom(
-      "iaasHostDetailsDeploymentMetadata",
+      "infraHostDetailsDeploymentMetadata",
     );
     this.hostDetailsTab = new HostDetailsTabPom();
     // this.addToClusterPom = new AddToClusterDrawerPom();

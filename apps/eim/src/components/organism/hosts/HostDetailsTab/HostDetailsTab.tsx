@@ -31,7 +31,7 @@ interface HostDetailsTabProps {
   onShowCategoryDetails: (title: ResourceTypeTitle, data: ResourceType) => void;
 }
 
-const dataCy = "iaasHostResources";
+const dataCy = "infraHostResources";
 
 const ClusterSummaryRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
   ? React.lazy(async () => await import("ClusterOrchUI/ClusterSummary"))
@@ -258,7 +258,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   );
 
   return (
-    <div className="iaas-host-resources" data-cy={dataCy}>
+    <div className="infra-host-resources" data-cy={dataCy}>
       <Tabs items={tabItems} isCloseable={false}>
         {itemList}
       </Tabs>

@@ -79,8 +79,8 @@ type urlParams = {
 
 /** This will render a host's details */
 const HostDetails: React.FC = () => {
-  const cssSelectorIhd = "iaas-host-details";
-  const dataCyIhd = "iaasHostDetails";
+  const cssSelectorIhd = "infra-host-details";
+  const dataCyIhd = "infraHostDetails";
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

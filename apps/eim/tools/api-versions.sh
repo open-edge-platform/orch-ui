@@ -100,7 +100,7 @@ annotate() {
 
   for (( i=0; i<${#apis[@]}; i++ ))
   do
-    api="${apis[$i]}" # eg: | api/iaas/orch-infra.api | 0.7.1 | 576ed6a20358233c7370fe3e9201610acef25650 |
+    api="${apis[$i]}" # eg: | api/orch-infra.api | 0.7.1 | 576ed6a20358233c7370fe3e9201610acef25650 |
     # split the line at |
     _IFS=$IFS   # Save current IFS (Internal Field Separator)
     IFS='|'      # Change IFS to newline char

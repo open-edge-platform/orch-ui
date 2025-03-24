@@ -19,7 +19,7 @@ import { pod1_id, vm1_id, vm2_id, vm4_id, vm5_id } from "./ids";
  */
 
 export const container1: arm.ContainerRead = {
-  name: "Container-WG-1",
+  name: "Container-1",
   imageName: "nginx",
   restartCount: 2,
   status: {

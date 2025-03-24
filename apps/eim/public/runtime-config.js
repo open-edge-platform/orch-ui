@@ -171,7 +171,7 @@ window.__RUNTIME_CONFIG__ = {
     CLUSTER_ORCH: "false",
     ADMIN: "true",
   },
-  TITLE: "Fleet Management",
+  TITLE: "Infra Manager",
   API: {
     CATALOG: "https://app-orch.kind.internal",
     ADM: "https://app-orch.kind.internal",

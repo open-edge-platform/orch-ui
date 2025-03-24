@@ -83,7 +83,7 @@ export class RuntimeConfig {
   }
 
   /**
-   * Returns the API URL for Fleet Management
+   * Returns the API URL for infra
    */
   public static get fmApiUrl(): string {
     return this.getApiUrl("FM");

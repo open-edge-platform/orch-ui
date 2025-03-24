@@ -139,7 +139,7 @@ AUTH: {{ .Values.global.auth.enabled | quote }},
     ADMIN: {{ .Values.mfe.admin | quote }}
   },
   API: {
-    FM: {{ .Values.api.fleetManagement | quote }},
+    FM: {{ .Values.api.infraManager | quote }},
     CO: {{ .Values.api.clusterOrch | quote }},
     MB: {{ .Values.api.metadataBroker | quote }},
     ALERT: {{ .Values.api.alertManager | quote }},

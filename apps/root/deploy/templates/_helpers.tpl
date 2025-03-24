@@ -104,7 +104,7 @@ window.__RUNTIME_CONFIG__ = {
     CATALOG: {{ .Values.api.catalog | quote }},
     ADM: {{ .Values.api.appDeploymentManger | quote }},
     ARM: {{ .Values.api.appResourceManger | quote }},
-    FM: {{ .Values.api.fleetManagement | quote }},
+    FM: {{ .Values.api.infraManager | quote }},
     CO: {{ .Values.api.clusterOrch | quote }},
     MB: {{ .Values.api.metadataBroker | quote }},
     ALERT: {{ .Values.api.alertManager | quote }},

@@ -30,7 +30,7 @@ admin:
 
 # Used to configure the Header title
 header:
-  title: "Fleet Management"
+  title: "Infra Manager"
   documentationUrl: "https://web-ui.kind.internal/docs"
   documentation:
     - src: /dashboard
@@ -123,11 +123,11 @@ mfe:
   admin: true
 
 api:
-  fleetManagement: "https://iaas.kind.internal"
-  clusterOrch: "https://cluster-orch.kind.internal"
-  metadataBroker: "https://metadata.kind.internal"
+  infraManager: "https://api.kind.internal"
+  clusterOrch: "https://api.kind.internal"
+  metadataBroker: "https://api.kind.internal"
   licensing: "https://license.kind.internal"
-  alertManager: "https://alerting-monitor.kind.internal"
+  alertManager: "https://api.kind.internal"
 
 image:
   repository: orch-ui/eim
@@ -142,7 +142,7 @@ service:
     namespace: gateway-system
     baseHostname: "Host(`kind.internal`)"
     hostname: "Host(`web-ui.kind.internal`)"
-    secretName: tls-maestro
+    secretName: tls-orch
     options:
       name: gateway-tls
 

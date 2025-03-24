@@ -5,7 +5,7 @@
 
 import { cm, eim } from "@orch-ui/apis";
 import { ApiError } from "@orch-ui/components";
-import { LpInternalError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { Button, ButtonGroup, Drawer } from "@spark-design/react";
 import { ButtonVariant, DrawerSize } from "@spark-design/tokens";
 import { useState } from "react";
@@ -24,7 +24,7 @@ const AddToClusterDrawer = ({
   setHideDrawer,
 }: AddToClusterDrawerProps) => {
   // TODO: Replace with a global error notification LPUUH-951
-  const [error, setError] = useState<LpInternalError | undefined>();
+  const [error, setError] = useState<InternalError | undefined>();
 
   const cy = { "data-cy": dataCy };
   const [selectedClusterName] = useState<string>();

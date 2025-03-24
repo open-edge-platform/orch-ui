@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LpInternalError, parseError } from "@orch-ui/utils";
+import { InternalError, parseError } from "@orch-ui/utils";
 import { MessageBanner } from "@spark-design/react";
 import { AlertVariant } from "@spark-design/tokens";
 import "./ApiError.scss";
@@ -18,7 +18,7 @@ import "./ApiError.scss";
 interface ApiErrorProps {
   error: unknown;
 }
-const errorMapping = (lpError: LpInternalError) => {
+const errorMapping = (lpError: InternalError) => {
   switch (lpError?.status) {
     case 7:
     case 403:
@@ -57,7 +57,7 @@ const errorMapping = (lpError: LpInternalError) => {
   }
 };
 /**
- * Handles ApiErrors for IaaS
+ * Handles ApiErrors
  */
 export const ApiError = ({ error }: ApiErrorProps) => {
   const apiError = errorMapping(parseError(error));

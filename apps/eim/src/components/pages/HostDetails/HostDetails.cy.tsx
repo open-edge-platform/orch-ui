@@ -56,7 +56,7 @@ describe("HostDetails", () => {
     });
 
     it("should display the Host information", () => {
-      pom.el.iaasHostDetailsHeader.contains(mockHost.name);
+      pom.el.infraHostDetailsHeader.contains(mockHost.name);
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
       pom.el.osProfiles.should("have.text", osTb.name);
@@ -102,7 +102,7 @@ describe("HostDetails", () => {
     });
 
     it("should display the Host ID as header", () => {
-      pom.el.iaasHostDetailsHeader.contains(hostNoName.resourceId!);
+      pom.el.infraHostDetailsHeader.contains(hostNoName.resourceId!);
     });
   });
 
@@ -118,7 +118,7 @@ describe("HostDetails", () => {
       });
     });
     it("should display the Host information", () => {
-      pom.el.iaasHostDetailsHeader.contains(mockHost.name);
+      pom.el.infraHostDetailsHeader.contains(mockHost.name);
       cy.wait(`@${pom.api.hostUuidSuccess}`).then(({ request }) => {
         expect(request.query.detail).eq("true");
         expect(request.query.uuid).eq(mockHost.uuid);
@@ -175,7 +175,7 @@ describe("HostDetails", () => {
         routerRule: [{ path: "/host/:id", element: <HostDetails /> }],
       });
       pom.waitForApis();
-      cyGet("iaasHostDetails").should("contain.text", "OS update available");
+      cyGet("infraHostDetails").should("contain.text", "OS update available");
     });
   });
 
@@ -192,7 +192,7 @@ describe("HostDetails", () => {
         routerRule: [{ path: "/host/:id", element: <HostDetails /> }],
       });
       pom.waitForApis();
-      cyGet("iaasHostDetails").should(
+      cyGet("infraHostDetails").should(
         "contain.text",
         "Deactivate Maintenance Mode",
       );
@@ -210,7 +210,7 @@ describe("HostDetails", () => {
         routerRule: [{ path: "/host/:id", element: <HostDetails /> }],
       });
       pom.waitForApis();
-      cyGet("iaasHostDetails").should(
+      cyGet("infraHostDetails").should(
         "not.contain.text",
         "Deactivate Maintenance Mode",
       );

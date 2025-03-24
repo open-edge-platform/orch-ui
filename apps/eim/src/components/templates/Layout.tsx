@@ -26,7 +26,7 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {
   clusterNavItem,
   hostsNavItem,
-  IaaSRoute,
+  InfraRoute,
   locationsNavItem,
 } from "../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -69,7 +69,7 @@ const Layout = () => {
     errorInfo,
   } = useAppSelector((state) => state.notificationStatusList);
 
-  const onSelectMenuItem = (item: CollapsableListItem<IaaSRoute>) => {
+  const onSelectMenuItem = (item: CollapsableListItem<InfraRoute>) => {
     if (item.route) {
       navigate(item.route);
     }

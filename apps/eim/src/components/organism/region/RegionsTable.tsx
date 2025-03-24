@@ -142,7 +142,7 @@ const RegionsTable = ({
                 <Tag
                   data-cy="metaValue"
                   key={index}
-                  className="iaas-regions-table__tag"
+                  className="infra-regions-table__tag"
                   label={`${metadataPairs[index].key}: ${metadataPairs[index].value}`}
                   rounding="semi-round"
                   size="small"
@@ -154,7 +154,7 @@ const RegionsTable = ({
             metadataPairs.map((metadata) => (
               <Tag
                 data-cy="metaValue"
-                className="iaas-regions-table__tag"
+                className="infra-regions-table__tag"
                 label={`${metadata.key}: ${metadata.value}`}
                 rounding="semi-round"
                 size="small"

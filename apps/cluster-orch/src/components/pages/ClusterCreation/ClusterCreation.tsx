@@ -10,7 +10,7 @@ import {
   setActiveNavItem,
   setBreadcrumb,
 } from "@orch-ui/components";
-import { LpInternalError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, SharedStorage } from "@orch-ui/utils";
 import {
   Button,
   ButtonGroup,
@@ -308,7 +308,7 @@ const ClusterCreation = () => {
     })
       .unwrap()
       .then(() => {
-        const onMetadataFailure = (err: LpInternalError) => {
+        const onMetadataFailure = (err: InternalError) => {
           if (err.data) {
             onFailure("metadata of the cluster", err.data);
           } else {

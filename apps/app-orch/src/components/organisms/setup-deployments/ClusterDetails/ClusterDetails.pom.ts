@@ -25,8 +25,7 @@ type ApiAliases = "getClusterDetailSuccess" | "getHostsSuccess";
 const endpoints: CyApiDetails<ApiAliases> = {
   getClusterDetailSuccess: {
     route: "**v1/**/clusters/*",
-    response:
-      clusterOne as cm.GetV1ProjectsByProjectNameClustersAndClusterNameApiResponse,
+    response: clusterOne as cm.ClusterInfo,
   },
   getHostsSuccess: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`,
@@ -36,11 +35,11 @@ const endpoints: CyApiDetails<ApiAliases> = {
 
 class ClusterDetailsPom extends CyPom<Selectors, ApiAliases> {
   public labelsDisplay: MetadataDisplayPom;
-  public iaasHostsTable: SiTablePom;
+  public infraHostsTable: SiTablePom;
   constructor(public rootCy: string = "clusterDetails") {
     super(rootCy, [...dataCySelectors], endpoints);
     this.labelsDisplay = new MetadataDisplayPom("MetadataDisplay");
-    this.iaasHostsTable = new SiTablePom("iaasHostsTable");
+    this.infraHostsTable = new SiTablePom("infraHostsTable");
   }
 }
 export default ClusterDetailsPom;

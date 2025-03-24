@@ -4,7 +4,7 @@
  */
 
 import { MessageBannerProps } from "@orch-ui/components";
-import { LpInternalError } from "@orch-ui/utils";
+import { InternalError } from "@orch-ui/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ToastProps } from "@spark-design/react";
 import {
@@ -29,7 +29,7 @@ interface NotificationsState {
   messageBannerDuration?: number;
   messageState: MessageBannerState;
   toastState: ToastProps;
-  errorInfo?: LpInternalError;
+  errorInfo?: InternalError;
 }
 
 const messageBannerDuration: number = 10000;
@@ -97,7 +97,7 @@ export const notificationStatusList = createSlice({
     },
     setErrorInfo(
       state: NotificationsState,
-      action: PayloadAction<LpInternalError | undefined>,
+      action: PayloadAction<InternalError | undefined>,
     ) {
       state.errorInfo = action.payload;
     },

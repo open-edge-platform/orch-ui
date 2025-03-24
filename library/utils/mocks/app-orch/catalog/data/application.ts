@@ -12,9 +12,9 @@ import { profileFormValues } from "./profile";
 export const singleApplication: catalog.ApplicationRead = {
   name: "engage",
   displayName: "engage display name",
-  description: "This application is the wireless guardian VM-based engage app",
+  description: "This application is VM-based engage app",
   version: "0.0.1",
-  chartName: "wg-engage-vm",
+  chartName: "engage-vm",
   chartVersion: "0.0.1",
   helmRegistryName: "orch-harbor",
   imageRegistryName: "orch-image",
@@ -47,7 +47,7 @@ export const singleApplicationWithShortDescription: catalog.ApplicationRead = {
   displayName: "engage display name",
   description: "description",
   version: "0.0.1",
-  chartName: "wg-engage-vm",
+  chartName: "engage-vm",
   chartVersion: "0.0.1",
   helmRegistryName: "orch-harbor",
   imageRegistryName: "orch-image",
@@ -78,10 +78,9 @@ export const multipleApplication: catalog.ApplicationRead[] = [
   {
     name: "engage",
     displayName: "engage app",
-    description:
-      "This application is the wireless guardian VM-based engage app",
+    description: "This application is VM-based engage app",
     version: "0.0.1",
-    chartName: "wg-engage-vm",
+    chartName: "engage-vm",
     chartVersion: "0.0.1",
     helmRegistryName: "culvers-harbor",
     imageRegistryName: "culvers-image",
@@ -102,10 +101,9 @@ export const multipleApplication: catalog.ApplicationRead[] = [
   {
     name: "gsm-sigint",
     displayName: "gsm sigint app",
-    description:
-      "This application is the wireless guardian VM-based GSM Sigint app",
+    description: "This application is VM-based GSM Sigint app",
     version: "0.0.1",
-    chartName: "wg-gsm-sigint-vm",
+    chartName: "gsm-sigint-vm",
     chartVersion: "0.0.1",
     helmRegistryName: "culvers-harbor",
     imageRegistryName: "culvers-image",
@@ -159,10 +157,9 @@ export const multipleApplication: catalog.ApplicationRead[] = [
   {
     name: "win19-server",
     displayName: "win19 server",
-    description:
-      "This application is the wireless guardian VM-based Windows 19 Server app",
+    description: "This application is VM-based Windows 19 Server app",
     version: "0.0.1",
-    chartName: "wg-windows19-vm",
+    chartName: "windows19-vm",
     chartVersion: "0.0.1",
     helmRegistryName: "culvers-harbor",
     imageRegistryName: "culvers-image",
@@ -183,10 +180,9 @@ export const multipleApplication: catalog.ApplicationRead[] = [
   {
     name: "wifi-sigint",
     displayName: "wifi",
-    description:
-      "This application is the wireless guardian VM-based Wifi Sigint app",
+    description: "This application is VM-based Wifi Sigint app",
     version: "0.0.1",
-    chartName: "wg-wifi-sigint-vm",
+    chartName: "wifi-sigint-vm",
     chartVersion: "0.0.1",
     helmRegistryName: "culvers-harbor",
     imageRegistryName: "culvers-image",
@@ -207,10 +203,9 @@ export const multipleApplication: catalog.ApplicationRead[] = [
   {
     name: "engage",
     displayName: "engage app",
-    description:
-      "This application is the wireless guardian VM-based engage app",
+    description: "This application is VM-based engage app",
     version: "0.0.2",
-    chartName: "wg-engage-vm",
+    chartName: "engage-vm",
     chartVersion: "0.0.2",
     helmRegistryName: "culvers-harbor",
     profiles: [
@@ -264,9 +259,9 @@ export const applicationReviewInfomation = (
 export const applicationDetails: catalog.ApplicationRead = {
   name: "wordpress",
   displayName: "engage display name",
-  description: "This application is the wireless guardian VM-based engage app",
+  description: "This application is VM-based engage app",
   version: "0.0.1",
-  chartName: "wg-engage-vm",
+  chartName: "engage-vm",
   chartVersion: "0.0.1",
   helmRegistryName: "orch-harbor",
   imageRegistryName: "orch-image",

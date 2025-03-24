@@ -114,7 +114,7 @@ export default function Region() {
   };
 
   return (
-    <div data-cy="iaaSRegions">
+    <div data-cy="infraRegions">
       <Heading semanticLevel={1} size="l">
         Regions
       </Heading>

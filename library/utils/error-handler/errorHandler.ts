@@ -26,7 +26,7 @@ type ClusterOrchError = {
 };
 /*******************************/
 
-export interface LpInternalError {
+export interface InternalError {
   status:
     | number
     | "FETCH_ERROR"
@@ -47,7 +47,7 @@ const UNKNOWN_ERROR_MSG = "Unknown error. Please contact the administrator.";
  * Given and error we make our best guesses to format it in a readable way
  * @param error
  */
-export function parseError(error: unknown): LpInternalError {
+export function parseError(error: unknown): InternalError {
   if (isFetchBaseQueryError(error)) {
     if (!isNaN(<number>error.status)) {
       if (isErrorWithDetail(error.data)) {
@@ -175,7 +175,7 @@ function isErrorWithDetail(
  * Utility to log errors that don't need to be bubbled up to the user but we want to report
  * It is defined as a centralized utility as we might want to start collecting them sometime in the future
  */
-export function logError(error: LpInternalError | unknown, message?: string) {
+export function logError(error: InternalError | unknown, message?: string) {
   // eslint-disable-next-line no-console
   return message ? console.error(message, error) : console.error(error);
 }

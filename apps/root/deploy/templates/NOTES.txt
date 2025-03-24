@@ -23,12 +23,3 @@ revision: {{ .Chart.Annotations.revision }}
 created: {{ .Chart.Annotations.created }}
 
 ---
-Api Compatibility:
-
-ADM: {{ .Chart.Annotations.api_app_orch_orch_app_app_deployment_manager }}
-ARM: {{ .Chart.Annotations.api_app_orch_orch_app_app_resource_manager }}
-Application Catalog: {{ .Chart.Annotations.api_app_orch_orch_app_application_catalog }}
-ECM: {{ .Chart.Annotations.api_cluster_orch_cluster_ecm }}
-Cluster Template Manager: {{ .Chart.Annotations.api_cluster_orch_cluster_template_manager }}
-IaaS: {{ .Chart.Annotations.api_iaas_orch_infra_api }}
-Metadata Broker: {{ .Chart.Annotations.api_metadata_broker_metadata_service }}

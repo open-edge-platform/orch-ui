@@ -18,7 +18,7 @@ import ErrorBoundaryFallback from "./components/molecules/ErrorBoundaryFallback/
 import "./index.css";
 import Routes from "./routes";
 import { store } from "./store/store";
-// FIXME this is a temporary solution until https://github.com/intel-innersource/libraries.ui.intel-design-system.spark-design/pull/1844 is merged and released
+
 import "@spark-design/css/components/ledge-flex/index.css";
 
 /* devblock:start */

@@ -67,7 +67,7 @@ const DashboardUnallocatedHostsWheel = ({
   );
 
   // If data is countable
-  // i.e., If API data is loaded on isSuccess when data is not fetching (in RTK) and errorStatus is not 404 (empty list: Edge-IaaS)
+  // i.e., If API data is loaded on isSuccess when data is not fetching (in RTK) and errorStatus is not 404 (empty list)
   // calculate new count
   if (
     data?.hosts &&

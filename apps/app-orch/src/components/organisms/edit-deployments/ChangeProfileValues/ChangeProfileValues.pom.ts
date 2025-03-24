@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CyPom } from "@maestro-ui/tests";
+import { CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];

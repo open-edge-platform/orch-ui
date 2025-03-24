@@ -8,7 +8,7 @@ import { StatusIcon } from "@orch-ui/components";
 import {
   hostProviderStatusToString,
   hostStatusIndicatorToIconStatus,
-  LpInternalError,
+  InternalError,
   parseError,
 } from "@orch-ui/utils";
 import { MessageBanner } from "@spark-design/react";
@@ -49,7 +49,7 @@ const HostsStatusByCluster = ({
 }: HostsStatusByClusterProps) => {
   const cy = { "data-cy": dataCy };
 
-  const [error, setError] = useState<LpInternalError | undefined>();
+  const [error, setError] = useState<InternalError | undefined>();
   const [hosts, setHosts] = useState<eim.HostRead[]>([]);
   const dispatch = useAppDispatch();
 

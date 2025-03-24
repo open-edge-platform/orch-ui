@@ -5,7 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { LpInternalError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { TextField } from "@spark-design/react";
 import { ButtonVariant, InputSize, ModalSize } from "@spark-design/tokens";
 import { useState } from "react";
@@ -94,7 +94,7 @@ const DeauthorizeHostStandalone = ({
           navigate(`${basePath}../hosts`, { relative: "path" });
         });
     } catch (e) {
-      setErrorInfo(e as LpInternalError);
+      setErrorInfo(e as InternalError);
     }
     setDeauthorizeConfirmationOpen(false);
   };

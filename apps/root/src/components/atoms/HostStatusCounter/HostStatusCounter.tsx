@@ -5,7 +5,7 @@
 
 import { adm } from "@orch-ui/apis";
 import { MessageBannerAlertState } from "@orch-ui/components";
-import { LpInternalError, parseError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, parseError, SharedStorage } from "@orch-ui/utils";
 import { MessageBanner } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
@@ -59,7 +59,7 @@ const HostStatusCounter = ({
     total: 0,
     running: 0,
   });
-  const [error, setError] = useState<LpInternalError | undefined>();
+  const [error, setError] = useState<InternalError | undefined>();
 
   const { data: deploymentClusters, isSuccess } =
     useDeploymentServiceListDeploymentClustersQuery(

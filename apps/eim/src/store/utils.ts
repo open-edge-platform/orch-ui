@@ -5,7 +5,7 @@
 
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { MessageBannerAlertState } from "@orch-ui/components";
-import { LpInternalError, SharedStorage } from "@orch-ui/utils";
+import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import moment from "moment-timezone";
@@ -167,7 +167,7 @@ export const deleteHostInstanceFn = (
     }
     setErrorInfo();
   } catch (e) {
-    setErrorInfo(e as LpInternalError);
+    setErrorInfo(e as InternalError);
   }
 
   return promise;

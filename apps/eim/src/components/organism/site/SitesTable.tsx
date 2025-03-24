@@ -163,7 +163,7 @@ const SiteTable = ({
               {new Array(2).fill(undefined).map((_, index) => (
                 <Tag
                   key={index}
-                  className="iaas-regions-table__tag"
+                  className="infra-regions-table__tag"
                   label={`${metadataPairs[index].key}: ${metadataPairs[index].value}`}
                   rounding="semi-round"
                   size="small"
@@ -174,7 +174,7 @@ const SiteTable = ({
           ) : (
             metadataPairs.map((metadata) => (
               <Tag
-                className="iaas-regions-table__tag"
+                className="infra-regions-table__tag"
                 label={`${metadata.key}: ${metadata.value}`}
                 rounding="semi-round"
                 size="small"

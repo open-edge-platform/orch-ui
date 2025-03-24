@@ -9,7 +9,7 @@ const dataCySelectors = ["hostLabelMetadata"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class HostDetailsTabPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = "iaasHostResources") {
+  constructor(public rootCy: string = "infraHostResources") {
     super(rootCy, [...dataCySelectors]);
   }
 

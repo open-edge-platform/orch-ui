@@ -65,7 +65,7 @@ type urlParams = {
 };
 
 const HostEdit = () => {
-  const cssComponentSelector = "iaas-host-edit";
+  const cssComponentSelector = "infra-host-edit";
   const datacyComponentSelector = "hostEdit";
 
   const { id } = useParams<urlParams>() as urlParams;

@@ -113,25 +113,25 @@ export const clusterTemplateOneV1: cm.TemplateInfo = {
           registries: {
             mirrors: {
               "cr.fluentbit.io": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
               "docker.elastic.co": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
               "docker.io": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
               "ghcr.io": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
               "k8s.gcr.io": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
               "quay.io": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
               "registry.k8s.io": {
-                endpoint: ["amr-registry.caas.intel.com"],
+                endpoint: ["open-registry.com"],
               },
             },
           },

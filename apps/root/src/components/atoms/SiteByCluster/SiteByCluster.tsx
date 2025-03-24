@@ -4,7 +4,7 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { LpInternalError, parseError } from "@orch-ui/utils";
+import { InternalError, parseError } from "@orch-ui/utils";
 import { MessageBanner, ProgressLoader } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ const SiteByCluster = ({ clusterName }: SiteByClusterProps) => {
   const [siteId, setSiteId] = useState<string>();
   const [siteName, setSiteName] = useState<string>();
   const [siteRegionId, setRegionId] = useState<string>();
-  const [error, setError] = useState<LpInternalError | undefined>();
+  const [error, setError] = useState<InternalError | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
