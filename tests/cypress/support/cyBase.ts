@@ -28,6 +28,13 @@ export const cyGetChild = (parent: string, child: string): Cy => {
 };
 // FIXME end
 
+/*
+ * encodeURLQuery encodes a string to be used in a URL query, including parentheses
+ * @param str the string to encode
+ */
+export const encodeURLQuery = (str: string) =>
+  encodeURIComponent(str).replace(/\(/g, "%28").replace(/\)/g, "%29");
+
 export const cyApiIntercept = (
   selected: string[],
   apis: Record<string, CyApiDetail>,

@@ -6,6 +6,10 @@
 import { eim } from "@orch-ui/apis";
 import { DashboardStatus, MetadataPairs } from "@orch-ui/components";
 import { API_INTERVAL, Operator, SharedStorage } from "@orch-ui/utils";
+import {
+  LifeCycleState,
+  lifeCycleStateQuery,
+} from "../../../store/hostFilterBuilder";
 //import "./Dashboard.scss";
 
 const DashboardHostsStatus = ({
@@ -15,10 +19,7 @@ const DashboardHostsStatus = ({
 }: {
   metadata?: MetadataPairs;
 }) => {
-  const filterQueries = [
-    "has(instance.workloadMembers)",
-    "(NOT desiredState=HOST_STATE_UNTRUSTED)",
-  ];
+  const filterQueries = [lifeCycleStateQuery.get(LifeCycleState.Provisioned)];
 
   if (metadata && metadata.pairs && metadata.pairs.length !== 0) {
     filterQueries.push(
@@ -68,7 +69,7 @@ const DashboardHostsStatus = ({
         apiError={error}
         empty={{
           icon: "desktop",
-          text: "There are no hosts",
+          text: "There are no provisioned hosts",
         }}
       />
     </div>

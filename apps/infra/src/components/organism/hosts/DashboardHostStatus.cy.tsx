@@ -31,7 +31,7 @@ describe("<DashboardHostStatus>", () => {
     cy.mount(<DashboardHostStatus />);
     pom.waitForApis();
 
-    pom.root.should("contain.text", "There are no hosts");
+    pom.root.should("contain.text", "There are no provisioned hosts");
   });
 
   it("shows component on single metadata label filter", () => {

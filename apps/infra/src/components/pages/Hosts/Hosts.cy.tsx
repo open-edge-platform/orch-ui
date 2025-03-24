@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { encodeURLQuery } from "@orch-ui/tests";
 import { LifeCycleState } from "../../../store/hostFilterBuilder";
 import { setupStore } from "../../../store/store";
 import Hosts from "./Hosts";
-import HostsPom, { encodeURLQuery } from "./Hosts.pom";
+import HostsPom from "./Hosts.pom";
 
 const pom = new HostsPom();
 describe("<Hosts/>", () => {

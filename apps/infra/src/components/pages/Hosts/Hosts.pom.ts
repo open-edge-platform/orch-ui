@@ -13,9 +13,6 @@ import HostsTablePom from "../../organism/HostsTable/HostsTable.pom";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export const encodeURLQuery = (str: string) =>
-  encodeURIComponent(str).replace(/\(/g, "%28").replace(/\)/g, "%29");
-
 type ApiAliases = "getHost";
 
 const generateHosts = (size = 10, hostMock: eim.HostRead = hostOne) =>

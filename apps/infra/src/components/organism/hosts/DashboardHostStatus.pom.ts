@@ -5,7 +5,12 @@
 
 import { eim } from "@orch-ui/apis";
 import { DashboardStatusPom } from "@orch-ui/components";
-import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
+import {
+  CyApiDetails,
+  CyPom,
+  defaultActiveProject,
+  encodeURLQuery,
+} from "@orch-ui/tests";
 import {
   customersKey,
   customersOne,
@@ -13,6 +18,10 @@ import {
   HostStore,
   Operator,
 } from "@orch-ui/utils";
+import {
+  LifeCycleState,
+  lifeCycleStateQuery,
+} from "../../../store/hostFilterBuilder";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
@@ -23,7 +32,7 @@ type ApiAliases =
   | "getHostSummaryError"
   | "getHostSummaryEmpty";
 
-const route = `**/v1/projects/${defaultActiveProject.name}/compute/hosts/summary*`;
+const route = `**/v1/projects/${defaultActiveProject.name}/compute/hosts/summary?filter=${encodeURLQuery(lifeCycleStateQuery.get(LifeCycleState.Provisioned)!)}*`;
 
 const hostStore = new HostStore();
 

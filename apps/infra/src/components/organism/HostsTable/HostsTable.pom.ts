@@ -5,7 +5,13 @@
 
 import { eim } from "@orch-ui/apis";
 import { TableColumn, TablePom } from "@orch-ui/components";
-import { Cy, CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
+import {
+  Cy,
+  CyApiDetails,
+  CyPom,
+  defaultActiveProject,
+  encodeURLQuery,
+} from "@orch-ui/tests";
 import {
   assignedHosts,
   assignedWorkloadHostOne as hostOne,
@@ -86,9 +92,6 @@ const hostResponseOfSize10Total18 = {
   hasNext: true,
   totalElements: 18,
 };
-
-const encodeURLQuery = (str: string) =>
-  encodeURIComponent(str).replace(/\(/g, "%28").replace(/\)/g, "%29");
 
 const genericHostSuccessEndpoints: CyApiDetails<
   GenericHostSuccessApiAliases,
