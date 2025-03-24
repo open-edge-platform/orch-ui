@@ -101,8 +101,9 @@ describe("<HostConfigReview/>", () => {
       pom.getColumnHeader(0).contains("Name");
       pom.getColumnHeader(1).contains("Serial Number and UUID");
       pom.getColumnHeader(2).contains("OS Profile");
-      pom.getColumnHeader(3).contains("Security Configuration");
-      pom.getColumnHeader(4).contains("Public SSH Key");
+      pom.getColumnHeader(3).contains("Secure Boot and Full Disk Encryption");
+      pom.getColumnHeader(4).contains("Trusted Compute");
+      pom.getColumnHeader(5).contains("Public SSH Key");
     });
     it("should render appropriate values in columns", () => {
       cy.window()
@@ -114,8 +115,9 @@ describe("<HostConfigReview/>", () => {
           pom.getCell(1, 1).should("contain", host.name);
           pom.getCell(1, 2).should("contain", host.serialNumber);
           pom.getCell(1, 2).should("contain", host.uuid);
-          pom.getCell(1, 4).should("contain", host.instance.securityFeature);
-          pom.getCell(1, 5).should("contain", "all-groups-example-user");
+          pom.getCell(1, 4).should("contain", "Enabled");
+          pom.getCell(1, 5).should("contain", "Compatible");
+          pom.getCell(1, 6).should("contain", "all-groups-example-user");
         });
     });
   });

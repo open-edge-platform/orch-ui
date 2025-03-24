@@ -75,7 +75,10 @@ export const HostConfigReview = ({
                   <th data-cy="tableHeaderCell">Name</th>
                   <th data-cy="tableHeaderCell">Serial Number and UUID</th>
                   <th data-cy="tableHeaderCell">OS Profile</th>
-                  <th data-cy="tableHeaderCell">Security Configuration</th>
+                  <th data-cy="tableHeaderCell">
+                    Secure Boot and Full Disk Encryption
+                  </th>
+                  <th data-cy="tableHeaderCell">Trusted Compute</th>
                   <th data-cy="tableHeaderCell">Public SSH Key</th>
                 </tr>
               </thead>
@@ -84,6 +87,9 @@ export const HostConfigReview = ({
                   const selectedAccount = localAccounts?.find(
                     (acc) => acc.resourceId === host.instance?.localAccountID,
                   );
+                  const sbFdeEnabled =
+                    host.instance?.securityFeature ===
+                    "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
                   const rowContent = (
                     <tr data-cy="tableRow">
                       <td data-cy="tableRowCell">{host.name}</td>
@@ -95,9 +101,10 @@ export const HostConfigReview = ({
                         {host.instance?.os ? host.instance.os.name : "-"}
                       </td>
                       <td data-cy="tableRowCell">
-                        {host.instance?.os
-                          ? host.instance.os.securityFeature
-                          : "-"}
+                        {sbFdeEnabled ? "Enabled" : "Disabled"}
+                      </td>
+                      <td data-cy="tableRowCell">
+                        {sbFdeEnabled ? "Compatible" : "Not compatible"}
                       </td>
                       <td data-cy="tableRowCell">
                         {selectedAccount ? selectedAccount.username : "-"}
