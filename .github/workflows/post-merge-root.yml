@@ -17,10 +17,11 @@ jobs:
   post-merge-pipeline:
     uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@main
     with:
+      bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
-      run_build: true
+      run_build: false
       run_docker_build: true
       run_docker_push: true
       run_helm_build: true

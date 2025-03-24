@@ -71,7 +71,7 @@ docker-build: build ## @HELP Build the docker image
 		-f ${DOCKER_FILE} ${DOCKER_CONTEXT}
 
 docker-push: ## @HELP Push the docker image to a registry
-	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME)/$(DOCKER_IMG_NAME) || true
+	aws ecr create-repository --region us-west-2 --repository-name edge-orch/$(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME) || true
 	docker push $(DOCKER_TAG)
 	# NOTE do we need to push with the branch name?
 	# If we need we should modify CI so that we can run the docker push twice with different env vars
@@ -116,7 +116,7 @@ apply-version: helm-clean ## @HELP apply version from the top level package.json
 	yq eval -i '.appVersion = "${VERSION}"' ./deploy/Chart.yaml ;
 
 helm-push: ## @HELP Push helm charts.
-	aws ecr create-repository --region us-west-2 --repository-name $(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)/$(HELM_CHART_NAME) || true
+	aws ecr create-repository --region us-west-2 --repository-name edge-orch/$(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)/$(HELM_CHART_NAME) || true
 	helm push ${HELM_CHART_NAME}-${VERSION}.tgz oci://$(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)
 
 lint: ## @HELP Lint the code
