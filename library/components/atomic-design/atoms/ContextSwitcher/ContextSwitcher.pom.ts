@@ -5,7 +5,7 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = ["all"] as const;
+const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class ContextSwitcherPom extends CyPom<Selectors> {

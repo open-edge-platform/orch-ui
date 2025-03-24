@@ -46,8 +46,4 @@ export class SiDropdown<T extends string, U extends string = ""> extends CyPom<
   public getDropdown(name: string) {
     return cy.get(`[data-cy="${name}"] > .spark-button-content`);
   }
-
-  public selectFirstListItemValue(): void {
-    cy.get(".spark-popover .spark-list-item:first-child").click();
-  }
 }

@@ -18,17 +18,5 @@
     "region": "french-polynesia",
     "site": "rangiroa",
     "hostName": "six-passengers"
-  },
-  "provisionedHosts": [
-    {
-      "name": "provisioned-host-1",
-      "site": "rangiroa",
-      "serialNumber": 12345
-    },
-    {
-      "name": "provisioned-host-2",
-      "site": "rangiroa",
-      "serialNumber": 123456
-    }
-  ]
+  }
 }

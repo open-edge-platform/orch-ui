@@ -5,11 +5,7 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = [
-  "nextButton",
-  "isAutoOnboarded",
-  "isAutoProvisioned",
-] as const;
+const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class RegisterHostsPom extends CyPom<Selectors> {
