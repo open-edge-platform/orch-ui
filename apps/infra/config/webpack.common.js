@@ -36,7 +36,7 @@ module.exports = {
     ],
   },
   output: {
-    uniqueName: "eim",
+    uniqueName: "infra",
   },
   resolve: {
     //https://webpack.js.org/configuration/resolve/#resolveextensions

@@ -61,6 +61,7 @@ ignore_globs=(
     "*.o"
     "*.so"
     "*.log"
+    "*forbidden-words.sh"
 )
 
 ignore_dirs=(
@@ -70,9 +71,11 @@ ignore_dirs=(
     "lib"
     "dist"
     "./library/@orch-utils"
-    "./tools/forbidden-words.sh"
     "coverage"
-    ".nyc_output")
+    ".nyc_output"
+    "./tests/cypress/logs"
+    "./tests/cypress/reports"
+)
 
 found=0
 total_matches=0

@@ -20,7 +20,7 @@
 
 // Import commands.js using ES2015 syntax:
 import "cypress-mochawesome-reporter/register";
-import "../../../apps/eim/src/remotes.ts";
+import "../../../apps/infra/src/remotes.ts";
 import "./commands";
 import "./network-logs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires

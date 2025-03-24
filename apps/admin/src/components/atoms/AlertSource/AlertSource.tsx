@@ -19,7 +19,7 @@ if (RuntimeConfig.isEnabled("FM")) {
   HostLink = React.lazy(
     async () =>
       await import(
-        "../../../../../eim/src/components/atom/HostLink/HostLinkRemote"
+        "../../../../../infra/src/components/atom/HostLink/HostLinkRemote"
       ),
   );
 }

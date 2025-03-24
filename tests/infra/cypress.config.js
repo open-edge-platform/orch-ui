@@ -27,9 +27,9 @@ const config = {
       return config;
     },
     specPattern: [
-      "../../apps/eim/src/**/*cy.tsx",
-      "../../apps/eim/src/**/*cy.ts",
-      "../../apps/eim/unit-tests.cy.ts",
+      "../../apps/infra/src/**/*cy.tsx",
+      "../../apps/infra/src/**/*cy.ts",
+      "../../apps/infra/unit-tests.cy.ts",
     ],
   },
 };

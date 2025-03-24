@@ -13,7 +13,7 @@ if [ -n "$1" ]
 then
   app="$1"
 else
-  echo "ERROR: missing required app parameter  admin|eim|app-orch|cluster-orch"
+  echo "ERROR: missing required app parameter  admin|infra|app-orch|cluster-orch"
   exit 1
 fi
 

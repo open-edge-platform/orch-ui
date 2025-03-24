@@ -1,4 +1,4 @@
-------- EIM (Infra Manager) ---------
+------- Infrastructure Manager ---------
 
 kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "mfe.mi.fullname" . }} 3002:{{ .Values.service.port }}
 

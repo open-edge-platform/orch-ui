@@ -24,11 +24,11 @@ This project is a "mono-repo" example of micro front ends (MFEs), with minimal a
 
 There are 5 apps in this repository:
 
-- Root - glues everything together, displays the other apps
+- root - glues everything together, displays the other apps
 - app-orch - Manages Application Catalog and Deployments
 - cluster-orch - Manages the Clusters
-- EIM - Manages the Hosts (Edge Infratructure)
-- Admin - The administrator features (settings and alerts)
+- infra - Manages the Hosts (Edge Infratructure)
+- admin - The administrator features (settings and alerts)
 
 In addition, there is a common library that is shared across all apps.
 
@@ -54,7 +54,7 @@ You can build the images individually with:
 
 ```shell
 DOCKER_TAG=dev make -C apps/root docker-build
-DOCKER_TAG=dev make -C apps/eim docker-build
+DOCKER_TAG=dev make -C apps/infra docker-build
 DOCKER_TAG=dev make -C apps/cluster-orch docker-build
 DOCKER_TAG=dev make -C apps/app-orch docker-build
 ```

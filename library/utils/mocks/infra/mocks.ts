@@ -6,8 +6,8 @@
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { GenericStatus } from "@orch-ui/components";
 import { rest } from "msw";
-import { SearchResult } from "../../../../apps/eim/src/store/locations";
-import { SharedStorage } from "../../../utils";
+import { SharedStorage } from "../..";
+import { SearchResult } from "../../../../apps/infra/src/store/locations";
 import { osUbuntuId } from "./data";
 import {
   HostMock,

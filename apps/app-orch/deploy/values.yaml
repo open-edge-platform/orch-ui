@@ -9,7 +9,7 @@ replicaCount: 1
 
 global:
   registry:
-    name: open-registry.espdprod.infra-host.com/edge-orch
+    name: registry-rs.edgeorchestration.intel.com/edge-orch
     imagePullSecrets: []
   auth:
     enabled: false

@@ -32,7 +32,7 @@ async function prepare() {
   /* devblock:start */
   if (process.env.REACT_LP_MOCK_API === "true") {
     const { handlers: eim_handlers } = await import(
-      "../../../library/utils/mocks/eim/mocks"
+      "../../../library/utils/mocks/infra/mocks"
     );
     const { handlers: applicationCatalogHandlers } = await import(
       "../../../library/utils/mocks/app-orch/catalog/applicationCatalog"

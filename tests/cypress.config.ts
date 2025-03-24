@@ -84,7 +84,7 @@ export default defineConfig({
       "test.cy.ts",
       "../apps/admin/src/components/**/*.cy.tsx",
       "../apps/admin/unit-tests-sample.cy.ts",
-      "../apps/eim/src/components/**/*.cy.tsx",
+      "../apps/infra/src/components/**/*.cy.tsx",
       "../library/components/**/*.cy.tsx",
       "../library/utils/**/*.cy.ts*",
       "unit-tests.cy.ts",

@@ -26,7 +26,7 @@ import React from "react";
 import { AuthProvider } from "react-oidc-context";
 import { Provider } from "react-redux";
 import { MemoryRouter, useLocation, useRoutes } from "react-router-dom";
-import { setupStore } from "../../apps/eim/src/store/store";
+import { setupStore } from "../../apps/infra/src/store/store";
 // import "./commands";
 
 export function RenderLocation() {

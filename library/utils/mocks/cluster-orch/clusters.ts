@@ -5,7 +5,7 @@
 
 import { cm } from "@orch-ui/apis";
 import { BaseStore } from "../baseStore";
-import { HostStore } from "../eim/store";
+import { HostStore } from "../infra/store";
 import {
   customersKey,
   customersOne,

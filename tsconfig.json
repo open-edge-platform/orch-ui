@@ -121,7 +121,7 @@
       "@orch-ui/app-orch-poms": ["apps/app-orch/poms.ts"],
       "@orch-ui/admin-poms": ["apps/admin/pom.ts"],
       "@orch-ui/cluster-orch-poms": ["apps/cluster-orch/pom.ts"],
-      "@orch-ui/eim-poms": ["apps/eim/pom.ts"],
+      "@orch-ui/infra-poms": ["apps/infra/pom.ts"],
     }
   },
   "exclude": ["node_modules"]

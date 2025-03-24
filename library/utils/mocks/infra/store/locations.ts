@@ -4,7 +4,7 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { TreeBranchState } from "../../../../../apps/eim/src/store/locations.treeBranch"; // TODO: check how the mock can use common eim store files
+import { TreeBranchState } from "../../../../../apps/infra/src/store/locations.treeBranch"; // TODO: check how the mock can use common eim store files
 
 export const simpleTree: TreeBranchState<eim.RegionRead | eim.SiteRead>[] = [
   {

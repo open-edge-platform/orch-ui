@@ -27,6 +27,7 @@ lib
 !library/@spark-design/tokens/lib
 !library/@spark-design/utils/lib
 tests/cypress-mochawesome-reporter.log
+apps/**/*.tgz
 
 #python
 __pycache__

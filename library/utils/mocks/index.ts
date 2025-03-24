@@ -5,6 +5,6 @@
 
 export * from "./app-orch";
 export * from "./cluster-orch";
-export * from "./eim";
+export * from "./infra";
 export * from "./metadata-broker";
 export * from "./tenancy";

@@ -115,7 +115,7 @@ These templates are located in the ``argocd/applications/templates/` folder
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui
-  path: apps/eim/deploy/
+  path: apps/infra/deploy/
   targetRevision: <your-dev-branch>
 ```
 

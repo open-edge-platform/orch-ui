@@ -33,7 +33,9 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: "../../apps/eim/public/runtime-config.js", to: "." }],
+      patterns: [
+        { from: "../../apps/infra/public/runtime-config.js", to: "." },
+      ],
     }),
     new DefinePlugin({ process: {}, "process.env": {} }),
   ],

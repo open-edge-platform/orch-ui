@@ -10,7 +10,7 @@ import {
   RegionSiteTreePom,
   SearchPom,
   SiteFormPom,
-} from "@orch-ui/eim-poms";
+} from "@orch-ui/infra-poms";
 import { CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [] as const;
