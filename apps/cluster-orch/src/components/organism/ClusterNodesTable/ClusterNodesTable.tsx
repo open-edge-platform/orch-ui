@@ -108,6 +108,14 @@ const ClusterNodesTable = ({
       accessor: (node) => node.instance?.os?.name ?? "-",
     },
     {
+      Header: "Trusted Compute",
+      accessor: (node) =>
+        node.instance?.os?.securityFeature ===
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+          ? "Compatible"
+          : "Not compatible",
+    },
+    {
       Header: "Actions",
       textAlign: "center",
       padding: "0",
@@ -140,7 +148,7 @@ const ClusterNodesTable = ({
       <Table
         columns={columns}
         data={data}
-        sortColumns={[0, 1, 2, 3]}
+        sortColumns={[0, 1, 2]}
         initialSort={{
           column: "Host Name",
           direction: "asc",

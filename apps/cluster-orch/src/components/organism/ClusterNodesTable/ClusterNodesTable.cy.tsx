@@ -32,6 +32,28 @@ describe("<ClusterNodesTable/> should", () => {
     pom.root.should("contain", "CONDITION READY");
   });
 
+  it("display 'Not compatible' when trusted compute is not enabled", () => {
+    pom.root.should("contain", "Not compatible");
+  });
+
+  it("display 'Compatible' when trusted compute is enabled", () => {
+    pom.interceptApis([pom.api.getHostsWithTCEnabled]);
+    const nodesWithSecurityFeature: cm.NodeInfo[] = [
+      {
+        id: "hostId",
+        status: { condition: "STATUS_CONDITION_READY" },
+      },
+    ];
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodesWithSecurityFeature}
+        readinessType="cluster"
+      />,
+    );
+    pom.waitForApis();
+    pom.root.should("contain", "Compatible");
+  });
+
   it("check default sorting as Host name", () => {
     cy.get(".caret-up-select")
       .parents(".table-header-cell")
