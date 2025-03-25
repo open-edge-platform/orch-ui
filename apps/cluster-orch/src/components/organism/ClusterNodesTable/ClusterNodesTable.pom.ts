@@ -13,7 +13,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "getHosts";
 
-const route = "**/v1/**/compute/hosts?filter=hostId**";
+const route = "**/v1/**/compute/hosts?filter=resourceId**";
 
 const endpoints: CyApiDetails<
   ApiAliases,

@@ -373,6 +373,7 @@ const ClusterCreation = () => {
                   );
                 });
               }}
+              poll
             />
           ) : (
             <Empty

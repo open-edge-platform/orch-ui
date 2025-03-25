@@ -11,6 +11,7 @@ import { LifeCycleState } from "../../../store/hostFilterBuilder";
 import { setupStore } from "../../../store/store";
 import { HostConfigPom } from "../../pages/HostConfig/HostConfig.pom";
 
+import { siteBostonId } from "@orch-ui/utils";
 import HostsTable from "./HostsTable";
 import HostsTablePom from "./HostsTable.pom";
 
@@ -306,5 +307,25 @@ describe("<HostsTable/>", () => {
       pom.waitForApis();
       pom.table.el.rowSelectCheckbox.should("not.exist");
     });
+  });
+
+  it("should filter provisioned hosts by provided siteId", () => {
+    pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+    cy.mount(
+      <HostsTable
+        category={LifeCycleState.Provisioned}
+        siteId={siteBostonId}
+      />,
+      {
+        reduxStore: setupStore(),
+      },
+    );
+    pom.waitForApis();
+    cy.get(`@${pom.api.getHostsListSuccessPage1Total10}`)
+      .its("request.url")
+      .then((url: string) => {
+        const match = url.match(/siteID=site-boston/);
+        expect(match && match.length > 0).to.eq(true);
+      });
   });
 });

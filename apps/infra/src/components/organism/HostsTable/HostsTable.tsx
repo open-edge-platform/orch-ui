@@ -28,12 +28,13 @@ import {
 import { Button } from "@spark-design/react";
 import { useEffect } from "react";
 import { reset, setHosts } from "../../../store/configureHost";
-
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   LifeCycleState,
+  setHasWorkload,
   setLifeCycleState,
   setSearchTerm,
+  setWorkloadMemberId,
 } from "../../../store/hostFilterBuilder";
 import {
   showErrorMessageBanner,
@@ -53,6 +54,7 @@ export interface HostsTableProps {
   filters?: eim.GetV1ProjectsByProjectNameComputeHostsApiArg & {
     workloadMemberId?: string | undefined;
   };
+  hasWorkload?: boolean;
   /** hide only Deauthorized Hosts (default: false) */
   hideDeauthorized?: boolean;
   /** hide only Authorized Hosts (default: false) */
@@ -73,6 +75,7 @@ export interface HostsTableProps {
   /** manually skip polling */
   poll?: boolean;
   emptyActionProps?: EmptyActionProps[];
+  hideSelectedItemBanner?: boolean;
   /** Invoked when a Host is selected */
   onHostSelect?: (selectedHost: eim.HostRead, isSelected: boolean) => void;
   /** Invoked when data is loaded */
@@ -97,12 +100,16 @@ const hostColumns: TableColumn<eim.HostRead>[] = [
 const HostsTable = ({
   columns = hostColumns,
   category,
+  filters,
+  hasWorkload,
   poll,
+  siteId,
   selectable,
   selectedHosts,
   expandable,
   actionsJsx,
   emptyActionProps,
+  hideSelectedItemBanner,
   onDataLoad,
   onHostSelect,
   unsetSelectedHosts,
@@ -138,6 +145,15 @@ const HostsTable = ({
     }
   }, [category]);
 
+  useEffect(() => {
+    dispatch(setHasWorkload(hasWorkload));
+  }, [hasWorkload]);
+
+  useEffect(() => {
+    dispatch(setWorkloadMemberId(filters?.workloadMemberId));
+    /* Add more dispatch if you have more filters here ... */
+  }, [filter]);
+
   const { data, isSuccess, isError, isLoading, error } =
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
@@ -147,6 +163,7 @@ const HostsTable = ({
         pageSize,
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         filter,
+        ...(!searchTerm ? { siteId } : {}),
       },
       {
         // Skip polling
@@ -304,7 +321,7 @@ const HostsTable = ({
   const selectedIds = selectedHosts?.map((host) => host.resourceId!);
   return (
     <div {...cy} className="hosts-table">
-      {renderSelectedItemsBanner()}
+      {!hideSelectedItemBanner && renderSelectedItemsBanner()}
       <Table
         // Basic Table data
         key={selectable ? "selectable" : "non-selectable"}
@@ -348,7 +365,7 @@ const HostsTable = ({
           });
         }}
         // Searching
-        canSearch={!selectedIds?.length} // If selctedItems banner is shown, hiding the search
+        canSearch={hideSelectedItemBanner || !selectedIds?.length} // If selctedItems banner is shown, hiding the search
         searchTerm={searchTerm}
         onSearch={onSearchChange}
         // Checkbox Selection

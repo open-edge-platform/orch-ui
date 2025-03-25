@@ -41,7 +41,7 @@ const ClusterNodesTable = ({
   const cy = { "data-cy": dataCy };
 
   const nodesCount = nodes?.length ?? 0;
-  const hostsFilter = nodes?.map(({ id }) => `hostId=${id}`).join(" OR ");
+  const hostsFilter = nodes?.map(({ id }) => `resourceId="${id}"`).join(" OR ");
 
   const {
     data: hostsResponse,
@@ -100,7 +100,7 @@ const ClusterNodesTable = ({
   const columns: TableColumn<ClusterNode>[] = [
     {
       Header: "Host Name",
-      accessor: (node) => node.name ?? node.resourceId,
+      accessor: (node) => node.name || node.resourceId,
     },
     readinessType === "cluster" ? statusCluster : statusHost,
     {

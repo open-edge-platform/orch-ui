@@ -82,7 +82,7 @@ const ClusterNodesTableBySite = ({
     // To make local step state persist after stepper change unmounting current component.
     // The data for selectedHosts and selectedRoles is constructed and states are updated.
 
-    const prevSelectedHostIds = selectedHosts; // By default take in current selection
+    const prevSelectedHosts = selectedHosts; // By default take in current selection
 
     if (currentNodes.length > 0) {
       // In case we come back to this step from next step,
@@ -91,7 +91,7 @@ const ClusterNodesTableBySite = ({
       currentNodes.forEach((node) => {
         // This needs to be independent of row selection toggle until this step is completed.
         if (node.id && node.role) {
-          prevSelectedHostIds.push({
+          prevSelectedHosts.push({
             resourceId: node.id,
             name: node.name ?? node.id,
           });
@@ -104,7 +104,7 @@ const ClusterNodesTableBySite = ({
       // Render hosts roles
       setSelectedRole(prevSelectedRoles);
       // Render host row pre-selections
-      setSelectedHosts(prevSelectedHostIds);
+      setSelectedHosts(prevSelectedHosts);
     }
   }, [currentNodes]);
 
@@ -307,12 +307,14 @@ const ClusterNodesTableBySite = ({
           <HostsTableRemote
             columns={columns}
             siteId={siteId}
+            hasWorkload={false}
             category="provisioned"
             selectable
             selectedHosts={selectedHosts}
             poll={poll}
             onHostSelect={handleNodeSelection}
             onDataLoad={onHostLoad}
+            hideSelectedItemBanner
           />
         </div>
       )}

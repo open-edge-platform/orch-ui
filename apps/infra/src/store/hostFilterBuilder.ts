@@ -84,6 +84,10 @@ aggregatedStatusQuery.set(
 export interface HostFilterBuilderState {
   lifeCycleState: LifeCycleState;
   lifeCycleStateQuery?: string;
+  hasWorkload?: boolean;
+  hasWorkloadQuery?: string;
+  workloadMemberId?: string;
+  workloadMemberIdQuery?: string;
   searchTerm?: string;
   searchTermQuery?: string;
   statuses?: AggregatedStatus[];
@@ -119,6 +123,28 @@ export const _setLifeCycleState = (
   return state;
 };
 
+export const _setHasWorkload = (
+  state: HostFilterBuilderState,
+  action: PayloadAction<boolean | undefined>,
+) => {
+  state.hasWorkload = action.payload;
+  state.hasWorkloadQuery = action.payload
+    ? "has(instance.workloadMembers)"
+    : "NOT has(instance.workloadMembers)";
+  hostFilterBuilder.caseReducers.buildFilter(state);
+  return state;
+};
+
+export const _setWorkloadMemberId = (
+  state: HostFilterBuilderState,
+  action: PayloadAction<string | undefined>,
+) => {
+  state.workloadMemberId = action.payload;
+  state.workloadMemberIdQuery = `workloadMembers="${action.payload}"`;
+  hostFilterBuilder.caseReducers.buildFilter(state);
+  return state;
+};
+
 export const _setSearchTerm = (
   state: HostFilterBuilderState,
   action: PayloadAction<string>,
@@ -144,7 +170,6 @@ export const _setStatuses = (
   }
   hostFilterBuilder.caseReducers.buildFilter(state);
 };
-
 export const _setOsProfiles = (
   state: HostFilterBuilderState,
   action: PayloadAction<string[] | undefined>,
@@ -171,6 +196,10 @@ export const _buildFilter = (state: HostFilterBuilderState) => {
   filter.push(state.searchTerm ? state.searchTermQuery : undefined);
   filter.push(state.statuses ? state.statusesQuery : undefined);
   filter.push(state.osProfiles ? state.osProfilesQuery : undefined);
+  filter.push(
+    state.hasWorkload !== undefined ? state.hasWorkloadQuery : undefined,
+  );
+  filter.push(state.workloadMemberId ? state.workloadMemberIdQuery : undefined);
   const result = filter.filter((value) => value !== undefined).join(" AND ");
   state.filter = result.length === 0 ? undefined : result;
 };
@@ -180,6 +209,8 @@ export const hostFilterBuilder = createSlice({
   initialState,
   reducers: {
     setLifeCycleState: _setLifeCycleState,
+    setHasWorkload: _setHasWorkload,
+    setWorkloadMemberId: _setWorkloadMemberId,
     setSearchTerm: _setSearchTerm,
     setStatuses: _setStatuses,
     setOsProfiles: _setOsProfiles,
@@ -189,6 +220,8 @@ export const hostFilterBuilder = createSlice({
 
 export const {
   setLifeCycleState,
+  setHasWorkload,
+  setWorkloadMemberId,
   setSearchTerm,
   setStatuses,
   setOsProfiles,

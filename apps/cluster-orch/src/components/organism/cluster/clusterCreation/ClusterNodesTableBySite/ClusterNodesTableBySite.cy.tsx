@@ -6,7 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { assignedHosts } from "@orch-ui/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { setupStore } from "../../../../../store";
 import ClusterNodesTableBySite from "./ClusterNodesTableBySite";
 import ClusterNodesSiteTablePom from "./ClusterNodesTableBySite.pom";
@@ -18,19 +18,29 @@ const pom = new ClusterNodesSiteTablePom();
  **/
 const HostTableRemoteMock = ({
   columns,
-  selectedHostIds = [],
+  selectedHosts = [],
   onHostSelect,
+  onDataLoad,
+  mockHosts = [assignedHosts.hosts[0]],
 }: {
   columns: TableColumn<eim.HostRead>[];
-  selectedHostIds?: string[];
+  selectedHosts?: eim.HostRead[];
   onHostSelect: (host: eim.Host, isSelected: boolean) => void;
+  onDataLoad?: (hosts: eim.HostRead[]) => void;
+  mockHosts?: eim.HostRead[];
 }) => {
+  useEffect(() => {
+    if (onDataLoad) {
+      onDataLoad([assignedHosts.hosts[0]]);
+    }
+  }, [onDataLoad]);
   return (
     <Table
       columns={columns}
-      data={[assignedHosts]}
+      data={mockHosts}
       canSelectRows
-      selectedIds={selectedHostIds}
+      getRowId={(row) => row.resourceId!}
+      selectedIds={selectedHosts.map((host) => host.resourceId!)}
       onSelect={(host, isSelected) => {
         onHostSelect(host, isSelected);
       }}
@@ -87,7 +97,7 @@ describe("<ClusterNodesTableBySite />", () => {
         HostsTableRemote={LazyHostTableMockRemote}
       />,
       {
-        reduxStore: store,
+        reduxStore: setupStore({}),
       },
     );
   });
@@ -127,7 +137,7 @@ describe("<ClusterNodesTableBySite />", () => {
       );
     });
     it("should render options in roles dropdown", () => {
-      pom.el.rowSelectCheckbox.click();
+      pom.getRowCheckboxByHostName("Assigned Host 1").click();
       pom.nodeRoleDropdown.roleDropdownPom.openDropdown(
         pom.nodeRoleDropdown.root,
       );
@@ -160,6 +170,46 @@ describe("<ClusterNodesTableBySite />", () => {
 
       pom.nodeRoleDropdown.root.should("exist");
     });
+
+    it("should select multiple hosts", () => {
+      cy.mount(
+        <ClusterNodesTableBySite
+          site={mockSite}
+          onNodeSelection={cy.stub().as("storeSelectedHost")}
+          HostsTableRemote={React.lazy(() =>
+            Promise.resolve({
+              default: (props: any) => (
+                <HostTableRemoteMock
+                  {...props}
+                  mockHosts={assignedHosts.hosts}
+                />
+              ),
+            }),
+          )}
+        />,
+        {
+          reduxStore: store,
+        },
+      );
+
+      pom.hostTableUtils
+        .getRowBySearchText("Assigned Host 1")
+        .find("[data-cy='rowSelectCheckbox']")
+        .click();
+      pom.hostTableUtils
+        .getRowBySearchText("Assigned Host 2")
+        .find("[data-cy='rowSelectCheckbox']")
+        .click();
+
+      pom.hostTableUtils
+        .getRowBySearchText("Assigned Host 1")
+        .find("[data-cy='rowSelectCheckbox']")
+        .should("be.checked");
+      pom.hostTableUtils
+        .getRowBySearchText("Assigned Host 2")
+        .find("[data-cy='rowSelectCheckbox']")
+        .should("be.checked");
+    });
   });
 
   describe("when a host is preselected", () => {
@@ -167,12 +217,12 @@ describe("<ClusterNodesTableBySite />", () => {
       const mountConfig = {
         reduxStore: setupStore(),
         routerProps: {
-          initialEntries: ["/component?hostId=host-dh38bjw9"],
+          initialEntries: [`/?hostId=${assignedHosts.hosts[0].resourceId}`],
         },
         routerRule: [
           {
-            path: "/component",
-            search: "?hostId=host-dh38bjw9",
+            path: "/",
+            search: `?hostId=${assignedHosts.hosts[0].resourceId}`,
             element: (
               <ClusterNodesTableBySite
                 site={mockSite}
