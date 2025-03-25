@@ -42,7 +42,7 @@ type ApiAliases =
 
 const route = "**/v2/**/clusters**";
 const routeDelete = "**/v2/**/clusters/**";
-const hostRoute = "**/v1/**/compute/hosts?filter=hostId**";
+const hostRoute = "**/v1/**/compute/hosts?filter=resourceId**";
 const successEndpoints: CyApiDetails<
   ClusterSuccessApiAliases,
   cm.GetV2ProjectsByProjectNameClustersApiResponse
