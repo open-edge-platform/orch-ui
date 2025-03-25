@@ -2,61 +2,9 @@
 # SPDX-FileCopyrightText: (C) 2023 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 */}}
-{{/*
-Expand the name of the chart.
-*/}}
 
-{{- define "mfe.container.name" -}}
-{{- default "orch-ui-container" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{- define "mfe.ma.name" -}}
-{{- default "orch-ui-ma" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{- define "mfe.mi.name" -}}
-{{- default "orch-ui-mi" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{- define "mfe.mc.name" -}}
-{{- default "orch-ui-mc" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-
-{{- define "mfe.container.fullname" -}}
-{{- $name := "orch-ui-container" }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-
-{{- define "mfe.ma.fullname" -}}
-{{- $name := "orch-ui-ma" }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-
-{{- define "mfe.mi.fullname" -}}
-{{- $name := "orch-ui-mi" }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-
-{{- define "mfe.mc.fullname" -}}
-{{- $name := "orch-ui-mc" }}
+{{- define "infra.fullname" -}}
+{{- $name := "infra" }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}

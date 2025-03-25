@@ -5,7 +5,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "mfe.container.fullname" . }}
+  name: {{ include "root.fullname" . }}
   # NOTE in order to access the middlewares, the IngressRoute must be in the same namespace as the gateway
   namespace: {{ tpl .Values.service.traefik.namespace . }}
 spec:
@@ -16,10 +16,10 @@ spec:
       kind: Rule
       middlewares:
         - name: secure-headers
-        - name: {{ include "mfe.container.fullname" . }}
+        - name: {{ include "root.fullname" . }}
       priority: 10
       services:
-        - name: {{ include "mfe.container.fullname" . }}
+        - name: {{ include "root.fullname" . }}
           port: {{ .Values.service.port }}
           scheme: http
           namespace: {{ .Release.Namespace }}
@@ -34,10 +34,10 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "mfe.container.fullname" . }}
+  name: {{ include "root.fullname" . }}
   namespace: {{ tpl .Values.service.traefik.namespace . }}
 spec:
   headers:
     customRequestHeaders:
-      Host: {{ include "mfe.container.fullname" . }}.{{ .Release.Namespace }}.svc
+      Host: {{ include "root.fullname" . }}.{{ .Release.Namespace }}.svc
 {{- end }}

@@ -10,7 +10,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mfe.admin.fullname" . }}
+  name: {{ include "admin.fullname" . }}
   labels:
     app.kubernetes.io/part-of: orch-ui
     app: admin
@@ -62,13 +62,13 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "mfe.admin.fullname" . }}-nginx-config
+            name: {{ include "admin.fullname" . }}-nginx-config
             items:
               - key: config
                 path: default.conf
         - name: runtime-config
           configMap:
-            name: {{ include "mfe.admin.fullname" . }}-runtime-config
+            name: {{ include "admin.fullname" . }}-runtime-config
             items:
               - key: config
                 path: runtime-config.js

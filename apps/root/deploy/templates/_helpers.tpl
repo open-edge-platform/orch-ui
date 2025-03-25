@@ -4,21 +4,13 @@
 */}}
 
 {{/*
-Expand the name of the chart.
-*/}}
-
-{{- define "mfe.container.name" -}}
-{{- default "orch-ui-container" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
 
-{{- define "mfe.container.fullname" -}}
-{{- $name := "orch-ui-container" }}
+{{- define "root.fullname" -}}
+{{- $name := "root" }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -79,7 +71,7 @@ server {
 }
 {{- end -}}
 
-{{- define "mfe.container.runtime-config" -}}
+{{- define "root.runtime-config" -}}
 window.__RUNTIME_CONFIG__ = {
   AUTH: {{ .Values.global.auth.enabled | quote }},
   KC_URL: {{ .Values.global.auth.keycloak.url |  quote }},

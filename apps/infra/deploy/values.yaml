@@ -161,9 +161,9 @@ nginx:
       rewrite:
         source: "/mfe/infrastructure/(.*)"
         dest: "/$1"
-      proxy_pass: "http://{{ .Release.Name }}-orch-ui-mi.{{ .Release.Namespace }}.svc:80"
+      proxy_pass: "http://{{ .Release.Name }}-infra.{{ .Release.Namespace }}.svc:80"
     - location: "/mfe/admin"
       rewrite:
         source: "/mfe/admin/(.*)"
         dest: "/$1"
-      proxy_pass: "http://{{ .Release.Name }}-orch-ui-admin.{{ .Release.Namespace }}.svc:80"
+      proxy_pass: "http://{{ .Release.Name }}-admin.{{ .Release.Namespace }}.svc:80"

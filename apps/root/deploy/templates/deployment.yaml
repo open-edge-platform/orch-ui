@@ -10,23 +10,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mfe.container.fullname" . }}
+  name: {{ include "root.fullname" . }}
   labels:
     app.kubernetes.io/part-of: orch-ui
-    app: mfe-container
+    app: root
     release: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/part-of: orch-ui
-      app: mfe-container
+      app: root
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app.kubernetes.io/part-of: orch-ui
-        app: mfe-container
+        app: root
         release: {{ .Release.Name }}
       annotations:
         checksum/nginx-config: {{ include (print $.Template.BasePath "/nginx_configmap.yaml") . | sha256sum }}
@@ -37,7 +37,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: container
+        - name: root
           image: "{{- if hasKey $registry "name" }}{{ $registry.name }}/{{- end -}}{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -62,13 +62,13 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "mfe.container.fullname" . }}-nginx-config
+            name: {{ include "root.fullname" . }}-nginx-config
             items:
               - key: config
                 path: default.conf
         - name: runtime-config
           configMap:
-            name: {{ include "mfe.container.fullname" . }}-runtime-config
+            name: {{ include "root.fullname" . }}-runtime-config
             items:
               - key: config
                 path: runtime-config.js

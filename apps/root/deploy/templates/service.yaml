@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "mfe.container.fullname" . }}
+  name: {{ include "root.fullname" . }}
   labels:
     app.kubernetes.io/part-of: orch-ui
     container: app-orch
@@ -22,5 +22,5 @@ spec:
       name: http
   selector:
     app.kubernetes.io/part-of: orch-ui
-    app: mfe-container
+    app: root
     release: {{ .Release.Name }}

@@ -1,6 +1,6 @@
 ------- App Orch ---------
 
-kubectl port-forward -n {{ .Release.Name }} svc/{{ include "mfe.ma.fullname" . }} 3001:{{ .Values.service.port }}
+kubectl port-forward -n {{ .Release.Name }} svc/{{ include "appOrch.fullname" . }} 3001:{{ .Values.service.port }}
 
 ---
 revision: {{ .Chart.Annotations.revision }}

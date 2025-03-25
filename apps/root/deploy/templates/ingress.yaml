@@ -6,7 +6,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "mfe.container.fullname" . }}
+  name: {{ include "root.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/part-of: orch-ui
@@ -40,7 +40,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "mfe.container.fullname" . }}
+                name: {{ include "root.fullname" . }}
                 port:
                   number: 80
 {{- end }}

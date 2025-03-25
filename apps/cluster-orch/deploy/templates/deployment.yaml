@@ -10,7 +10,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mfe.mc.fullname" . }}
+  name: {{ include "clusterOrch.fullname" . }}
   labels:
     app.kubernetes.io/part-of: orch-ui
     app: cluster-orch
@@ -37,7 +37,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: mc
+        - name: cluster-orch
           image: "{{- if hasKey $registry "name" }}{{ $registry.name }}/{{- end -}}{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -62,13 +62,13 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "mfe.mc.fullname" . }}-nginx-config
+            name: {{ include "clusterOrch.fullname" . }}-nginx-config
             items:
               - key: config
                 path: default.conf
         - name: runtime-config
           configMap:
-            name: {{ include "mfe.mc.fullname" . }}-runtime-config
+            name: {{ include "clusterOrch.fullname" . }}-runtime-config
             items:
               - key: config
                 path: runtime-config.js

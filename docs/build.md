@@ -43,7 +43,7 @@ postCustomTemplateOverwrite:
       pullPolicy: Always
       repository: edge-orch/orch-ui
       tag: "dev"
-  web-ui-fm:
+  web-ui-infra:
     image:
       registry:
         name: amr-registry-pre.caas.intel.com
@@ -111,7 +111,7 @@ These templates are located in the ``argocd/applications/templates/` folder
   targetRevision: <your-dev-branch>
 ```
 
-**web-ui-fm.yaml**
+**web-ui-infra.yaml**
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui

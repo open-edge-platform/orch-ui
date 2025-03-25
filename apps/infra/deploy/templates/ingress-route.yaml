@@ -5,7 +5,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "mfe.mi.fullname" . }}
+  name: {{ include "infra.fullname" . }}
   # NOTE in order to access the middlewares, the IngressRoute must be in the same namespace as the gateway
   namespace: {{ tpl .Values.service.traefik.namespace . }}
 spec:
@@ -16,10 +16,10 @@ spec:
       kind: Rule
       middlewares:
         - name: secure-headers
-        - name: {{ include "mfe.mi.fullname" . }}
+        - name: {{ include "infra.fullname" . }}
       priority: 10
       services:
-        - name: {{ include "mfe.mi.fullname" . }}
+        - name: {{ include "infra.fullname" . }}
           port: {{ .Values.service.port }}
           scheme: http
           namespace: {{ .Release.Namespace }}
@@ -28,10 +28,10 @@ spec:
       middlewares:
         - name: licensing
         - name: validate-jwt
-        - name: {{ include "mfe.mi.fullname" . }}
+        - name: {{ include "infra.fullname" . }}
       priority: 20
       services:
-        - name: {{ include "mfe.mi.fullname" . }}
+        - name: {{ include "infra.fullname" . }}
           port: {{ .Values.service.port }}
           scheme: http
           namespace: {{ .Release.Namespace }}
@@ -46,10 +46,10 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "mfe.mi.fullname" . }}
+  name: {{ include "infra.fullname" . }}
   namespace: {{ tpl .Values.service.traefik.namespace . }}
 spec:
   headers:
     customRequestHeaders:
-      Host: {{ include "mfe.mi.fullname" . }}.{{ .Release.Namespace }}.svc
+      Host: {{ include "infra.fullname" . }}.{{ .Release.Namespace }}.svc
 {{- end }}

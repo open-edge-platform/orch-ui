@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "mfe.mi.fullname" . }}
+  name: {{ include "infra.fullname" . }}
   labels:
     app.kubernetes.io/part-of: orch-ui
     app: infra

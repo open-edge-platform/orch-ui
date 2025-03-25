@@ -1,6 +1,6 @@
 ------- Infrastructure Manager ---------
 
-kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "mfe.mi.fullname" . }} 3002:{{ .Values.service.port }}
+kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "infra.fullname" . }} 3002:{{ .Values.service.port }}
 
 ---
 revision: {{ .Chart.Annotations.revision }}
