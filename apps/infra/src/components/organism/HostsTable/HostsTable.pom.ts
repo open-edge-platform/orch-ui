@@ -39,6 +39,7 @@ const dataCySelectors = [
   "provisionBtn",
   "onboardBtn",
   "cancelBtn",
+  "search",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 

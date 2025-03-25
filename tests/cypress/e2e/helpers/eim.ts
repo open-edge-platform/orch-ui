@@ -84,6 +84,29 @@ export const deleteSiteViaApi = (
   });
 };
 
+export const deleteHostInstanceViaApi = (
+  project: string,
+  instanceId: string,
+) => {
+  cy.authenticatedRequest({
+    method: "DELETE",
+    url: `/v1/projects/${project}/compute/instances/${instanceId}`,
+  }).then((response) => {
+    const success = response.status === 204 || response.status === 404;
+    expect(success).to.be.true;
+  });
+};
+
+export const deleteHostViaApi = (project: string, hostId: string) => {
+  cy.authenticatedRequest({
+    method: "DELETE",
+    url: `/v1/projects/${project}/compute/hosts/${hostId}`,
+  }).then((response) => {
+    const success = response.status === 204 || response.status === 404;
+    expect(success).to.be.true;
+  });
+};
+
 export const unconfigureHostViaApi = (project: string, hostId: string) => {
   cy.authenticatedRequest({
     method: "GET",
