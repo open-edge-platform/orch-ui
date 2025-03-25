@@ -47,26 +47,6 @@ graph TD
 
     style G fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
 ```
-## Build the docker images
-
-A `Makefile` is provided to build the docker images.
-You can build the images individually with:
-
-```shell
-DOCKER_TAG=dev make -C apps/root docker-build
-DOCKER_TAG=dev make -C apps/infra docker-build
-DOCKER_TAG=dev make -C apps/cluster-orch docker-build
-DOCKER_TAG=dev make -C apps/app-orch docker-build
-```
-
-or alternatively you can build all of them with:
-
-```shell
-DOCKER_TAG=dev make docker-build-all
-```
-
-> NOTE that this requires that your development environment is correctly setup with all the required dependencies in place
-
 
 Read more about {Name} in the \[User
 Guide\](<https://website-name.com>).
@@ -74,13 +54,6 @@ Guide\](<https://website-name.com>).
 
 See the \[Documentation\](<https://website-name.com>) to get started
 using {Name}.
-
-## The TLDR on deploying Edge Orchestrator UI in kubernetes
-
-```shell
-helm repo add lp https://amr-registry.caas.intel.com/chartrepo/one-intel-edge/ --username "**"  --password "**"
-helm upgrade --install --create-namespace -n orch-ui orch-ui apps/root/deploy
-```
 
 ## License
 

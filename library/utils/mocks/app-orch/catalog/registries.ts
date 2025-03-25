@@ -16,7 +16,7 @@ import {
 export const registryOne: catalog.RegistryRead = {
   name: registryOneName,
   displayName: registryOneName,
-  rootUrl: "https://open-registry.com/chartrepo/open-edge-platform/",
+  rootUrl: "https://sample-registry.com/chartrepo/open-edge-platform/",
   type: "HELM",
   createTime: "2017-07-21T17:32:28Z",
   username: "intel-user1",

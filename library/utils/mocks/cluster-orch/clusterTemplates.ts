@@ -113,25 +113,25 @@ export const clusterTemplateOneV1: cm.TemplateInfo = {
           registries: {
             mirrors: {
               "cr.fluentbit.io": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
               "docker.elastic.co": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
               "docker.io": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
               "ghcr.io": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
               "k8s.gcr.io": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
               "quay.io": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
               "registry.k8s.io": {
-                endpoint: ["open-registry.com"],
+                endpoint: ["sample-registry.com"],
               },
             },
           },

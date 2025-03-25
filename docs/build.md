@@ -25,35 +25,35 @@ postCustomTemplateOverwrite:
   web-ui-root:
     image:
       registry:
-        name: amr-registry-pre.caas.intel.com
+        name: <registry>
       pullPolicy: Always
       repository: edge-orch/orch-ui
       tag: "dev"
   web-ui-app-orch:
     image:
       registry:
-        name: amr-registry-pre.caas.intel.com
+        name: <registry>
       pullPolicy: Always
       repository: edge-orch/orch-ui
       tag: "dev"
   web-ui-cluster-orch:
     image:
       registry:
-        name: amr-registry-pre.caas.intel.com
+        name: <registry>
       pullPolicy: Always
       repository: edge-orch/orch-ui
       tag: "dev"
   web-ui-infra:
     image:
       registry:
-        name: amr-registry-pre.caas.intel.com
+        name: <registry>
       repository: edge-orch/orch-ui
       pullPolicy: Always
       tag: "dev"
   web-ui-admin:
     image:
       registry:
-        name: amr-registry-pre.caas.intel.com
+        name: <registry>
       pullPolicy: Always
       repository: edge-orch/orch-ui
       tag: "dev"
