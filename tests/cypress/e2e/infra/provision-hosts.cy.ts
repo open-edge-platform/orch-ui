@@ -40,7 +40,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     instanceHosts: string[] = [];
 
   before(() => {
-    const provisionHostDataFile = "./cypress/e2e/eim/data/provision-host.json";
+    const provisionHostDataFile = "./cypress/e2e/infra/data/provision-host.json";
     cy.readFile(provisionHostDataFile, "utf-8").then((data) => {
       if (!isTestProvisionHostData(data)) {
         throw new Error(

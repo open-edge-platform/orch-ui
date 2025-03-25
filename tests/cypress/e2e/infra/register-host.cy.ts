@@ -30,7 +30,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     registeredHostId: string;
 
   before(() => {
-    const registerHostDataFile = "./cypress/e2e/eim/data/register-host.json";
+    const registerHostDataFile = "./cypress/e2e/infra/data/register-host.json";
     cy.readFile(registerHostDataFile, "utf-8").then((data) => {
       if (!isTestRegisterHostData(data)) {
         throw new Error(

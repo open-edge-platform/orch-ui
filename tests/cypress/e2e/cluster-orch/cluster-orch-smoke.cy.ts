@@ -5,7 +5,7 @@
 
 import { RibbonPom, TablePom } from "@orch-ui/components";
 import { NetworkLog } from "../../support/network-logs";
-import EimPom from "../eim/eimPom";
+import InfraPom from "../infra/infraPom";
 import ClusterOrchPom from "./cluster-orch.pom";
 
 import { eim } from "@orch-ui/apis";
@@ -30,7 +30,7 @@ interface TestData {
 
 describe("Cluster orch Smoke test:", () => {
   const netLog = new NetworkLog();
-  const eimPom = new EimPom("eim");
+  const infraPom = new InfraPom("eim");
   const tablePom = new TablePom();
   const ribbonPom = new RibbonPom("table");
   const clusterOrchPom = new ClusterOrchPom("cluster-orch");
@@ -141,8 +141,8 @@ describe("Cluster orch Smoke test:", () => {
         );
 
         clusterOrchPom.clusterCreationPom.el.nextBtn.click();
-        eimPom.searchPom.el.textField.type(data.site);
-        eimPom.regionSiteTreePom.selectSite(data.site);
+        infraPom.searchPom.el.textField.type(data.site);
+        infraPom.regionSiteTreePom.selectSite(data.site);
         clusterOrchPom.clusterCreationPom.el.nextBtn.click();
         clusterOrchPom.clusterNodesSiteTablePom.el.rowSelectCheckbox.click();
         clusterOrchPom.clusterCreationPom.el.nextBtn.click();

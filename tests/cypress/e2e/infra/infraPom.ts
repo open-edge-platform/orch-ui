@@ -16,7 +16,7 @@ import { CyPom } from "@orch-ui/tests";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-class EimPom extends CyPom<Selectors> {
+class InfraPom extends CyPom<Selectors> {
   public locationPom: LocationsPom;
   public regionFormPom: RegionFormPom;
   public siteFormPom: SiteFormPom;
@@ -34,4 +34,4 @@ class EimPom extends CyPom<Selectors> {
   }
 }
 
-export default EimPom;
+export default InfraPom;

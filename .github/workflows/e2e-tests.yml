@@ -50,4 +50,4 @@ jobs:
       #   run: npx serve dist -s --no-request-logging -p 8080 &
 
       # - name: Run EIM tests
-      #   run: cd tests; npx cypress run --e2e -s cypress/e2e/infra/eim-smoke.cy.ts --env EN_UUID=398395da-c10e-7c47-9b4f-efb34c0b261e
+      #   run: cd tests; npx cypress run --e2e -s cypress/e2e/infra/infra-smoke.cy.ts --env EN_UUID=398395da-c10e-7c47-9b4f-efb34c0b261e

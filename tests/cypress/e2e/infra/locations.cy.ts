@@ -55,7 +55,7 @@ let testData: TestData;
 
 before(() => {
   const dataFile =
-    Cypress.env("DATA_FILE") || "./cypress/e2e/eim/data/locations.json";
+    Cypress.env("DATA_FILE") || "./cypress/e2e/infra/data/locations.json";
   cy.readFile(dataFile, "utf-8").then((data) => {
     if (!isTestData(data)) {
       throw new Error(
