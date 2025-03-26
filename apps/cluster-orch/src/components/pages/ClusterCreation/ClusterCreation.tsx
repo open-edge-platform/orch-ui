@@ -98,6 +98,12 @@ const ClusterCreation = () => {
     { text: "Review" },
   ]);
   const [step, setStep] = useState<number>(0);
+  useEffect(() => {
+    if (step === 0 && !window.location.search) {
+      navigate("?offset=0");
+    }
+  }, [step]);
+
   const [isNextDisabled, setIsNextDisabled] = useState(true);
   const [isCreateBtnDisabled, setIsCreateBtnDisabled] =
     useState<boolean>(false);
