@@ -122,10 +122,21 @@ jobs:
       orch_ci_repo_ref: main
     secrets: inherit
   final-check:
-    needs: 
-      - pre-merge-pipeline
-      - pre-merge-pipeline-all
     runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [pre-merge-pipeline, pre-merge-pipeline-all]
     steps:
       - name: Final Status Check
-        run: echo "All pre-merge checks passed successfully."
+        run: |
+          pre_merge_pipeline_result="${{ needs.pre-merge-pipeline.result }}"
+          pre_merge_pipeline_result_all="${{ needs.pre-merge-pipeline-all.result }}"
+          
+          echo "Pre-merge pipeline result: $pre_merge_pipeline_result"
+          echo "Pre-merge pipeline all result: $pre_merge_pipeline_result_all"
+
+          if [ "$pre_merge_pipeline_result" == "success" ] || [ "$pre_merge_pipeline_result_all" == "success" ]; then
+            echo "At least one pre-merge check passed successfully."
+          else
+            echo "Both pre-merge checks failed or were skipped. PR can't get merged"
+            exit 1
+          fi
