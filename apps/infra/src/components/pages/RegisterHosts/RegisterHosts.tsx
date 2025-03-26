@@ -53,7 +53,7 @@ const RegisterHosts = () => {
       <AddHostsForm />
       <Flex cols={[6]}>
         <div className={`${className}__auto-onboard`}>
-          <Heading semanticLevel={6}>Auto Onboard</Heading>
+          <Heading semanticLevel={6}>Onboard Automatically</Heading>
           <p>Hosts will be onboarded once they connect</p>
           <ToggleSwitch
             data-cy="isAutoOnboarded"
@@ -63,11 +63,11 @@ const RegisterHosts = () => {
             }}
             className={`${className}__auto-onboard-switch`}
           >
-            <label>Auto Onboard</label>
+            <label>Onboard Automatically</label>
           </ToggleSwitch>
         </div>
         <div className={`${className}__auto-provision`}>
-          <Heading semanticLevel={6}>Auto Provision</Heading>
+          <Heading semanticLevel={6}>Provision Automatically</Heading>
           <p>
             Hosts will be provisioned automatically once they are onboarded.
           </p>
@@ -79,7 +79,7 @@ const RegisterHosts = () => {
             }}
             className={`${className}__auto-provision-switch`}
           >
-            <label>Auto Provision</label>
+            <label>Provision Automatically</label>
           </ToggleSwitch>
         </div>
       </Flex>
