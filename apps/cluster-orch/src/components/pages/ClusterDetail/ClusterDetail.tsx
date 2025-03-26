@@ -21,6 +21,7 @@ import {
   PopupOption,
   setActiveNavItem,
   setBreadcrumb as setClusterBreadcrumb,
+  TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
 import {
@@ -29,6 +30,7 @@ import {
   clusterToStatuses,
   copyToClipboard,
   downloadFile,
+  getTrustedComputeCluster,
   parseError,
   Role,
   SharedStorage,
@@ -438,6 +440,16 @@ function ClusterDetail({
             <tr>
               <td>Site</td>
               <td>{siteData?.name || siteData?.siteID || "-"}</td>
+            </tr>
+            <tr>
+              <td>Trusted Compute</td>
+              <td data-cy="trustedCompute">
+                <TrustedCompute
+                  trustedComputeCompatible={getTrustedComputeCluster(
+                    clusterDetail,
+                  )}
+                ></TrustedCompute>
+              </td>
             </tr>
           </table>
         </div>

@@ -5,7 +5,11 @@
 
 import { cm } from "@orch-ui/apis";
 import { Status } from "@orch-ui/components";
-import { clusterStatusToIconStatus, clusterStatusToText } from "./global";
+import {
+  clusterStatusToIconStatus,
+  clusterStatusToText,
+  getTrustedComputeCluster,
+} from "./global";
 
 describe("The Utils", () => {
   describe("clusterStatusToText", () => {
@@ -55,6 +59,48 @@ describe("The Utils", () => {
         ).eq(assertions[key as Exclude<cm.ClusterInfo["status"], undefined>]);
       }
       expect(clusterStatusToIconStatus()).eq(Status.Unknown);
+    });
+  });
+
+  describe("getTrustedComputeCluster", () => {
+    it("should return compatible when trusted-compute-compatible label is true", () => {
+      const cluster = {
+        labels: {
+          "trusted-compute-compatible": "true",
+        },
+      } as cm.ClusterInfoRead;
+      const result = getTrustedComputeCluster(cluster);
+      expect(result).to.deep.equal({
+        text: "Compatible",
+        tooltip:
+          "This cluster contain at least one host that has Secure Boot and Full Disk Encryption enabled.",
+      });
+    });
+
+    it("should return not compatible when trusted-compute-compatible label is false", () => {
+      const cluster = {
+        labels: {
+          "trusted-compute-compatible": "false",
+        },
+      } as cm.ClusterInfoRead;
+      const result = getTrustedComputeCluster(cluster);
+      expect(result).to.deep.equal({
+        text: "Not compatible",
+        tooltip:
+          "This cluster does not contain any host that has Secure Boot and Full Disk Encryption enabled.",
+      });
+    });
+
+    it("should return not compatible when trusted-compute-compatible label is missing", () => {
+      const cluster = {
+        labels: {},
+      } as cm.ClusterInfoRead;
+      const result = getTrustedComputeCluster(cluster);
+      expect(result).to.deep.equal({
+        text: "Not compatible",
+        tooltip:
+          "This cluster does not contain any host that has Secure Boot and Full Disk Encryption enabled.",
+      });
     });
   });
 });

@@ -19,6 +19,7 @@ import {
   Direction,
   getFilter,
   getOrder,
+  getTrustedComputeCluster,
   Operator,
   SharedStorage,
 } from "@orch-ui/utils";
@@ -73,6 +74,10 @@ const ClusterList = ({
     {
       Header: "Host Count",
       accessor: "nodeQuantity",
+    },
+    {
+      Header: "Trusted Compute",
+      accessor: (item) => getTrustedComputeCluster(item).text,
     },
   ];
 

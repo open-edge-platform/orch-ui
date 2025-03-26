@@ -29,6 +29,7 @@ import {
   downloadFile,
   getFilter,
   getOrder,
+  getTrustedComputeCluster,
   Operator,
   parseError,
   SharedStorage,
@@ -241,6 +242,10 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
           return `${item.nodeQuantity} Hosts`;
         }
       },
+    },
+    {
+      Header: "Trusted Compute",
+      accessor: (item) => getTrustedComputeCluster(item).text,
     },
     {
       Header: "Actions",

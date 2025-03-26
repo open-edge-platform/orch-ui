@@ -43,6 +43,6 @@ xdescribe("<ClusterDetails/>", () => {
     //pom.el.siteValue.contains(`${clusterOne.locationList![0].locationInfo};`);
     pom.el.labels.contains("Cluster Labels");
     pom.labelsDisplay.root.should("be.exist");
-    pom.el.hosts.contains("Hosts");
+    //TODO: pom.el.hosts.contains("Hosts");
   });
 });

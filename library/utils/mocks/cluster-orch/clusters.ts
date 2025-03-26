@@ -153,6 +153,7 @@ export const clusterFour: ClusterComplete = {
     [customersKey]: customersTwo,
     "objectset.rio.cattle.io/hash": "d61199e1ee0274dd74871b839f440c8ba2980efe",
     "provider.cattle.io": "rke2",
+    "trusted-compute-compatible": "true",
     [userDefinedKeyOne]: userDefinedValueOne,
     [userDefinedKeyTwo]: userDefinedValueTwo,
   },

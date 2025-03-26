@@ -3,16 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
-import { Flex, MetadataDisplay, SquareSpinner } from "@orch-ui/components";
-import {
-  hostProviderStatusToString,
-  RuntimeConfig,
-  SharedStorage,
-  SparkTableColumn,
-} from "@orch-ui/utils";
+import { cm } from "@orch-ui/apis";
+import { Flex, MetadataDisplay } from "@orch-ui/components";
+import { SharedStorage } from "@orch-ui/utils";
 import { Drawer, Text } from "@spark-design/react";
-import React, { Suspense } from "react";
 import { generateMetadataPair } from "../../../../utils/global";
 import "./ClusterDetails.scss";
 
@@ -24,13 +18,13 @@ interface ClusterDetailsProps {
   cluster: cm.ClusterInfo;
 }
 
-const HostsTableRemote = RuntimeConfig.isEnabled("INFRA")
-  ? React.lazy(async () => await import("EimUI/HostsTableRemote"))
-  : null;
+// const HostsTableRemote = RuntimeConfig.isEnabled("INFRA")
+//   ? React.lazy(async () => await import("EimUI/HostsTableRemote"))
+//   : null;
 
-const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
-  ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
-  : null;
+// const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
+//   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
+//   : null;
 
 /* TODO: this component may need to be moved to ClusterOrch and imported via remote mfe component
    OR preffered: better to reuse ClusterDetails page component as drawer for SelectHost table
@@ -51,38 +45,38 @@ const ClusterDetails = ({
       { skip: !cluster.name || !projectName },
     );
 
-  const guids = (): string[] =>
-    clusterDetail?.nodes?.reduce(
-      (l, n) => (n.id ? [n.id, ...l] : l),
-      [] as string[],
-    ) ?? [];
+  // const guids = (): string[] =>
+  //   clusterDetail?.nodes?.reduce(
+  //     (l, n) => (n.id ? [n.id, ...l] : l),
+  //     [] as string[],
+  //   ) ?? [];
 
-  const columns: SparkTableColumn<eim.HostRead>[] = [
-    {
-      Header: "Host Name",
-      accessor: "name",
-    },
-    {
-      Header: "Status",
-      accessor: (item: eim.HostRead) => hostProviderStatusToString(item),
-      Cell: (table: { row: { original: eim.HostRead } }) => (
-        <Suspense fallback={<SquareSpinner />}>
-          {AggregateHostStatus !== null ? (
-            <AggregateHostStatus
-              host={table.row.original}
-              instance={table.row.original.instance}
-            />
-          ) : (
-            "Remote Error"
-          )}
-        </Suspense>
-      ),
-    },
-    {
-      Header: "Serial Number",
-      accessor: "serialNumber",
-    },
-  ];
+  // const columns: SparkTableColumn<eim.HostRead>[] = [
+  //   {
+  //     Header: "Host Name",
+  //     accessor: "name",
+  //   },
+  //   {
+  //     Header: "Status",
+  //     accessor: (item: eim.HostRead) => hostProviderStatusToString(item),
+  //     Cell: (table: { row: { original: eim.HostRead } }) => (
+  //       <Suspense fallback={<SquareSpinner />}>
+  //         {AggregateHostStatus !== null ? (
+  //           <AggregateHostStatus
+  //             host={table.row.original}
+  //             instance={table.row.original.instance}
+  //           />
+  //         ) : (
+  //           "Remote Error"
+  //         )}
+  //       </Suspense>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Serial Number",
+  //     accessor: "serialNumber",
+  //   },
+  // ];
 
   return (
     <Drawer
@@ -115,12 +109,12 @@ const ClusterDetails = ({
             />
           </div>
           <div className="cluster-details-host" data-cy="hosts">
-            <Text size="l">Hosts</Text>
+            {/*TODO: Host Table need to be added with fix 
             {HostsTableRemote && (
               <Suspense fallback={<SquareSpinner />}>
                 <HostsTableRemote columns={columns} filterByUuids={guids()} />
               </Suspense>
-            )}
+            )}*/}
           </div>
         </div>
       }

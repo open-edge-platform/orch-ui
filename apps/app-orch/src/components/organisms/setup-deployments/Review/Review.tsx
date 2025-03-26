@@ -13,7 +13,7 @@ import {
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { clusterToStatuses } from "@orch-ui/utils";
+import { clusterToStatuses, getTrustedComputeCluster } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import MetadataMessage from "../../../atoms/MetadataMessage/MetadataMessage";
@@ -47,10 +47,7 @@ const Review = ({
       Header: "Cluster Name",
       accessor: (item) => item.name,
     },
-    {
-      Header: "Host Count",
-      accessor: "nodeQuantity",
-    },
+
     {
       Header: "Status",
       accessor: (item) =>
@@ -61,6 +58,14 @@ const Review = ({
           defaultStatusName="lifecyclePhase"
         />
       ),
+    },
+    {
+      Header: "Host Count",
+      accessor: "nodeQuantity",
+    },
+    {
+      Header: "Trusted Compute",
+      accessor: (item) => getTrustedComputeCluster(item).text,
     },
   ];
 

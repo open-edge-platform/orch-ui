@@ -94,6 +94,9 @@ describe("<ClusterDetail />", () => {
       pom
         .getGeneralInfoValueByKey("Region")
         .should("have.text", "region-portland");
+      pom
+        .getGeneralInfoValueByKey("Trusted Compute")
+        .should("contain.text", "Not compatible");
       pom.getGeneralInfoValueByKey("Site").should("have.text", "Restaurant 01");
     });
 

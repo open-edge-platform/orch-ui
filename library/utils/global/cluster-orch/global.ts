@@ -9,6 +9,7 @@ import {
   Status as IconStatus,
   Status,
 } from "@orch-ui/components";
+import { TrustedComputeCompatibility } from "../../../components/atomic-design/organisms/TrustedCompute/TrustedCompute";
 
 /**
  * @deprecated remove before 25.03
@@ -152,4 +153,33 @@ export const convertDataUnitsToBytes = (value = "0") => {
   }
 
   return numberVal;
+};
+
+/**
+ * Determines if a given cluster is trusted compute compatible.
+ *
+ * @param cluster - The cluster information object.
+ * @returns An object indicating whether the cluster is trusted compute compatible,
+ *          along with a tooltip providing additional information.
+ */
+export const getTrustedComputeCluster = (
+  cluster: cm.ClusterInfoRead,
+): TrustedComputeCompatibility => {
+  if (
+    cluster.labels &&
+    "trusted-compute-compatible" in cluster.labels &&
+    cluster.labels["trusted-compute-compatible"] === "true"
+  ) {
+    return {
+      text: "Compatible",
+      tooltip:
+        "This cluster contains at least one host that has Secure Boot and Full Disk Encryption enabled.",
+    };
+  } else {
+    return {
+      text: "Not compatible",
+      tooltip:
+        "This cluster does not contain any host that has Secure Boot and Full Disk Encryption enabled.",
+    };
+  }
 };

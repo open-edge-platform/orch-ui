@@ -140,6 +140,7 @@ describe("<ClusterList />", () => {
       pom.waitForApi([pom.api.getHosts]);
       pom.root.should("contain", "Operating System");
       pom.root.should("contain", "Readiness");
+      pom.root.should("contain", "Trusted Compute");
       pom.table.expandRow(0);
       cy.get(".cluster-nodes-table .table-row").should("have.length", 1);
     });
