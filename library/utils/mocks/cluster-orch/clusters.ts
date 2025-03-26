@@ -450,10 +450,14 @@ export class ClusterStore extends BaseStore<
     cs: ClusterComplete[],
   ): ClusterComplete[] {
     if (!searchTerm || searchTerm.trim().length === 0) return cs;
+    const names = searchTerm
+      .split(" OR ")
+      .filter((search) => search.split("=")[0] === "name")
+      .map((search) => search.split("=")[1]);
     const searchTermValue = searchTerm.split("OR")[0].split("=")[1];
     return cs.filter(
       (c: ClusterComplete) =>
-        c.name?.includes(searchTermValue) ||
+        names.includes(c.name!) ||
         c.providerStatus?.indicator.includes(searchTermValue),
     );
   }

@@ -5,16 +5,12 @@
 
 import { adm, catalog, cm } from "@orch-ui/apis";
 import {
-  AggregatedStatuses,
-  AggregatedStatusesMap,
-  aggregateStatuses,
   Flex,
   MetadataPair,
   SquareSpinner,
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { clusterToStatuses } from "@orch-ui/utils";
 import { Heading, Text, ToggleSwitch } from "@spark-design/react";
 import { TextSize, ToggleSwitchSize } from "@spark-design/tokens";
 import { useCallback, useState } from "react";
@@ -25,6 +21,7 @@ import DeploymentPackage from "../../../atoms/DeploymentPackage/DeploymentPackag
 import { DeploymentType } from "../../../pages/SetupDeployment/SetupDeployment";
 import { OverrideValuesList } from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import "./Review.scss";
+import ReviewClusters from "./ReviewClusters";
 
 const dataCy = "review";
 
@@ -61,7 +58,6 @@ const Review = ({
   selectedClusters,
 }: ReviewProps) => {
   const cy = { "data-cy": dataCy };
-  console.log(deploymentType);
   const [changedOnly, setChangedOnly] = useState<boolean>(false);
 
   if (
@@ -184,28 +180,6 @@ const Review = ({
     ({ oldPair, newPair }) => oldPair !== newPair,
   );
 
-  const clusterColumns: TableColumn<cm.ClusterInfoRead>[] = [
-    {
-      Header: "Cluster Name",
-      accessor: (item) => item.name + " *",
-    },
-    {
-      Header: "Host Count",
-      accessor: "nodeQuantity",
-    },
-    {
-      Header: "Status",
-      accessor: (item) =>
-        aggregateStatuses(clusterToStatuses(item), "lifecyclePhase").message,
-      Cell: (table) => (
-        <AggregatedStatuses<AggregatedStatusesMap>
-          statuses={clusterToStatuses(table.row.original)}
-          defaultStatusName="lifecyclePhase"
-        />
-      ),
-    },
-  ];
-
   return (
     <div {...cy} className="review">
       <Text size={TextSize.Large} data-cy="title">
@@ -284,15 +258,11 @@ const Review = ({
         </>
       )}
       {deploymentType === DeploymentType.MANUAL && (
-        <>
-          <Heading semanticLevel={6}>Clusters</Heading>
-          <Table
-            dataCy="clusterReviewList"
-            columns={clusterColumns}
-            data={selectedClusters}
-            sortColumns={[0, 1]}
-          />
-        </>
+        <ReviewClusters
+          changedOnly={changedOnly}
+          selectedClusters={selectedClusters}
+          deployment={deployment}
+        />
       )}
     </div>
   );
