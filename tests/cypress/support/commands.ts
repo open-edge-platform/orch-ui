@@ -117,7 +117,7 @@ Cypress.Commands.add("currentProject", () => {
   cy.visit("/");
   cy.intercept("/v1/projects?member-role=true").as("getProjects");
   cy.url().should("contain", Cypress.config().baseUrl!);
-  cy.contains("Edge Orchestrator").should("be.visible");
+  cy.contains("Dashboard").should("be.visible");
   cy.dataCy("projectSwitchText").should("not.have.text", "Select Projects");
   cy.wait("@getProjects");
   cy.wait(1000);
