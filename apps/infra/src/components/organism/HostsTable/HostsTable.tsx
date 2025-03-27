@@ -34,6 +34,7 @@ import {
   setHasWorkload,
   setLifeCycleState,
   setSearchTerm,
+  setSiteId,
   setWorkloadMemberId,
 } from "../../../store/hostFilterBuilder";
 import {
@@ -140,6 +141,10 @@ const HostsTable = ({
   );
 
   useEffect(() => {
+    dispatch(setSiteId(siteId));
+  }, [siteId]);
+
+  useEffect(() => {
     if (category) {
       dispatch(setLifeCycleState(category));
     }
@@ -163,7 +168,6 @@ const HostsTable = ({
         pageSize,
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         filter,
-        ...(!searchTerm ? { siteId } : {}),
       },
       {
         // Skip polling

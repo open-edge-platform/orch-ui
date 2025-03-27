@@ -4,7 +4,7 @@
  */
 import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, RibbonPom } from "@orch-ui/components";
-import { cyGet } from "@orch-ui/tests";
+import { cyGet, encodeURLQuery } from "@orch-ui/tests";
 import { useState } from "react";
 import { useAppSelector } from "../../../store/hooks";
 import { LifeCycleState } from "../../../store/hostFilterBuilder";
@@ -324,7 +324,9 @@ describe("<HostsTable/>", () => {
     cy.get(`@${pom.api.getHostsListSuccessPage1Total10}`)
       .its("request.url")
       .then((url: string) => {
-        const match = url.match(/siteID=site-boston/);
+        const match = url.match(
+          encodeURLQuery(`site.resourceId="${siteBostonId}"`),
+        );
         expect(match && match.length > 0).to.eq(true);
       });
   });

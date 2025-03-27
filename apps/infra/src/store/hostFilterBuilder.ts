@@ -84,6 +84,9 @@ aggregatedStatusQuery.set(
 export interface HostFilterBuilderState {
   lifeCycleState: LifeCycleState;
   lifeCycleStateQuery?: string;
+  hasSiteIdQuery?: string;
+  siteId?: string;
+  siteIdQuery?: string;
   hasWorkload?: boolean;
   hasWorkloadQuery?: string;
   workloadMemberId?: string;
@@ -113,6 +116,16 @@ export const searchableColumns = [
 
 export const buildColumnOrs = (column: string, values: string[]): string =>
   `(${values.map((value) => `${column}="${value}"`).join(" OR ")})`;
+
+export const _setSiteId = (
+  state: HostFilterBuilderState,
+  action: PayloadAction<string | undefined>,
+) => {
+  state.siteId = action.payload;
+  state.siteIdQuery = `site.resourceId="${action.payload}"`;
+  hostFilterBuilder.caseReducers.buildFilter(state);
+  return state;
+};
 
 export const _setLifeCycleState = (
   state: HostFilterBuilderState,
@@ -200,6 +213,7 @@ export const _buildFilter = (state: HostFilterBuilderState) => {
     state.hasWorkload !== undefined ? state.hasWorkloadQuery : undefined,
   );
   filter.push(state.workloadMemberId ? state.workloadMemberIdQuery : undefined);
+  filter.push(state.siteId ? state.siteIdQuery : undefined);
   const result = filter.filter((value) => value !== undefined).join(" AND ");
   state.filter = result.length === 0 ? undefined : result;
 };
@@ -215,6 +229,7 @@ export const hostFilterBuilder = createSlice({
     setStatuses: _setStatuses,
     setOsProfiles: _setOsProfiles,
     buildFilter: _buildFilter,
+    setSiteId: _setSiteId,
   },
 });
 
@@ -226,6 +241,7 @@ export const {
   setStatuses,
   setOsProfiles,
   buildFilter,
+  setSiteId,
 } = hostFilterBuilder.actions;
 
 export const selectFilter = (state: _FilterBuilderRootState) =>
