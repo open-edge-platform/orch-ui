@@ -100,14 +100,15 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     },
   ];
 
-  // Graphana: add Dashboard access link
-  if (getObservabilityUrl()) {
+  // Graphana: add Dashboard access
+  const project = SharedStorage.project;
+  if (getObservabilityUrl() && project) {
     provisionedHostPopup.push({
       displayText: "View Metrics",
       onSelect() {
         const url = `${getObservabilityUrl()}/d/edgenode_host/edge-node?orgId=1&refresh=30s&var-guid=${
           host.uuid
-        }`;
+        }&var-projectId=${project.uID}&var-projectName=${project.name}`;
         window.open(url, "_newtab");
       },
       disable: false,
