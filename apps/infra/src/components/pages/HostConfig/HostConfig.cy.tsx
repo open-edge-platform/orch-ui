@@ -4,6 +4,7 @@
  */
 
 import { eim } from "@orch-ui/apis";
+import { cyGet } from "@orch-ui/tests";
 import {
   IRuntimeConfig,
   onboardedHostOne,
@@ -710,7 +711,7 @@ describe("<HostConfig/>", () => {
       pom.el.next.click();
       pom.el.next.click();
       pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
-      cy.dataCy("confirmBtn").click();
+      cyGet("confirmBtn").click();
       cy.get("#pathname").contains("/infrastructure/clusters/create");
       cy.get("#search").contains(
         `?regionId=1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=${onboardedHostOne.resourceId}`,
@@ -733,7 +734,7 @@ describe("<HostConfig/>", () => {
       pom.el.next.click();
       pom.el.next.click();
       pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
-      cy.dataCy("confirmBtn").click();
+      cyGet("confirmBtn").click();
       pom.getPath().should("equal", "/infrastructure/clusters/create");
       cy.get("#search").contains(
         `?regionId=region-1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=${onboardedHostOne.resourceId}`,
@@ -823,7 +824,7 @@ describe("<HostConfig/>", () => {
       pom.el.next.click();
       pom.el.next.click();
       pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
-      cy.dataCy("dialog").should("not.exist");
+      cyGet("dialog").should("not.exist");
       pom.getPath().should("contain", "/hosts");
     });
   });

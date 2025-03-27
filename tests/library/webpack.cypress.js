@@ -45,9 +45,6 @@ module.exports = {
         configFile: "../../tsconfig.json",
       }),
     ],
-    fallback: {
-      path: require.resolve("path-browserify"),
-    },
   },
   devServer: {
     historyApiFallback: true,

@@ -46,9 +46,6 @@ module.exports = {
       react: path.resolve(__dirname, "../../node_modules/react"),
     },
     plugins: [new TsconfigPathsPlugin({ configFile: "../tsconfig.json" })],
-    fallback: {
-      path: require.resolve("path-browserify"),
-    },
   },
   devServer: {
     historyApiFallback: true,
