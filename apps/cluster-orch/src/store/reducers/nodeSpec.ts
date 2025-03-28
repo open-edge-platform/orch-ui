@@ -17,14 +17,6 @@ export const nodesSpec = createSlice({
       return state;
     },
 
-    setInitialNodesSpec(
-      state: cm.NodeSpec[],
-      action: PayloadAction<cm.NodeSpec[]>,
-    ) {
-      state = action.payload;
-      return state;
-    },
-
     clearNodesSpec(state: cm.NodeSpec[]) {
       state = initialState;
       return state;
@@ -35,7 +27,6 @@ export const nodesSpec = createSlice({
 export const getNodesSpec = (state: RootState) => state.nodesSpec;
 export const getInitialNodes = () => initialState;
 
-export const { clearNodesSpec, setNodesSpec, setInitialNodesSpec } =
-  nodesSpec.actions;
+export const { clearNodesSpec, setNodesSpec } = nodesSpec.actions;
 
 export default nodesSpec.reducer;

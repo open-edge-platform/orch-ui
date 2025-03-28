@@ -171,7 +171,7 @@ const ClusterNodesTableBySite = ({
 
   const eimNodeToCMNode = (host: eim.HostRead): cm.NodeInfo => {
     return {
-      id: host.resourceId,
+      id: host.uuid,
       role: "all",
     };
   };
@@ -180,7 +180,7 @@ const ClusterNodesTableBySite = ({
     // Make Cluster-Orch Node from the updated host row
     const selectedNode = eimNodeToCMNode(host);
     const selectedNodeSpec: cm.NodeSpec = {
-      id: host.resourceId ?? "",
+      id: host.uuid!,
       role: "all",
     };
 
@@ -226,7 +226,7 @@ const ClusterNodesTableBySite = ({
         dispatch(
           setNodesSpec([
             {
-              id: host.resourceId!,
+              id: host.uuid!,
               role: "all",
             },
           ]),
