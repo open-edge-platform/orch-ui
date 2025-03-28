@@ -6,7 +6,6 @@
 import { cm, eim } from "@orch-ui/apis";
 import { SquareSpinner, TableColumn, TypedMetadata } from "@orch-ui/components";
 import { hostProviderStatusToString, RuntimeConfig } from "@orch-ui/utils";
-import { Tooltip } from "@spark-design/react";
 import React, { Suspense, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../../store/hooks";
@@ -82,8 +81,6 @@ const ClusterNodesTableBySite = ({
     // To make local step state persist after stepper change unmounting current component.
     // The data for selectedHosts and selectedRoles is constructed and states are updated.
 
-    const prevSelectedHosts = selectedHosts; // By default take in current selection
-
     if (currentNodes.length > 0) {
       // In case we come back to this step from next step,
       // we need to re-build the component internal state from Redux
@@ -91,10 +88,6 @@ const ClusterNodesTableBySite = ({
       currentNodes.forEach((node) => {
         // This needs to be independent of row selection toggle until this step is completed.
         if (node.id && node.role) {
-          prevSelectedHosts.push({
-            resourceId: node.id,
-            name: node.name ?? node.id,
-          });
           prevSelectedRoles.push({
             hostId: node.id,
             selectedRole: node.role as NodeRoles,
@@ -103,8 +96,6 @@ const ClusterNodesTableBySite = ({
       });
       // Render hosts roles
       setSelectedRole(prevSelectedRoles);
-      // Render host row pre-selections
-      setSelectedHosts(prevSelectedHosts);
     }
   }, [currentNodes]);
 
@@ -189,6 +180,7 @@ const ClusterNodesTableBySite = ({
       // This will store for next step
       dispatch(setNodes(currentNodes.concat(selectedNode)));
       dispatch(setNodesSpec(currentNodesSpec.concat(selectedNodeSpec)));
+      setSelectedHosts([...selectedHosts, host]);
     } else {
       // remove node if deselected
       dispatch(
@@ -242,6 +234,17 @@ const ClusterNodesTableBySite = ({
         // FIXME this should not be necessary as we're using redux
         onNodeSelection(host, true);
       }
+    } else {
+      // if we get back to this component when moving in the stepper,
+      // check the selected nodes in the redux store and update the selectedHosts list
+      const _hosts: eim.HostRead[] = [];
+      currentNodes.forEach((node) => {
+        const host = hosts.find((h) => h.uuid === node.id);
+        if (host) {
+          _hosts.push(host);
+        }
+      });
+      setSelectedHosts(_hosts);
     }
   };
 
@@ -253,17 +256,15 @@ const ClusterNodesTableBySite = ({
       Cell: (table: { row: { original: eim.HostRead } }) => {
         const host = table.row.original;
         return (
-          <Tooltip placement="bottom" content="View the Host Details">
-            <Link
-              to="#"
-              onClick={() => {
-                setHostDetail(host);
-                setShowDrawer(true);
-              }}
-            >
-              {host.name || host.resourceId}
-            </Link>
-          </Tooltip>
+          <Link
+            to="#"
+            onClick={() => {
+              setHostDetail(host);
+              setShowDrawer(true);
+            }}
+          >
+            {host.name || host.resourceId}
+          </Link>
         );
       },
     },

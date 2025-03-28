@@ -38,6 +38,7 @@ const ClusterNodesWrapper = ({ name }: ClusterNodesWrapperProps) => {
         <ClusterNodesTable
           nodes={clusterDetail.nodes}
           readinessType="cluster"
+          filterOn="resourceId"
         />
       )}
       {isLoading && <SquareSpinner />}

@@ -487,6 +487,7 @@ function ClusterDetail({
             <ClusterNodesTable
               nodes={clusterDetail.nodes ?? []}
               readinessType="cluster"
+              filterOn="resourceId"
             />
           </Item>
           <Item title={<Text>Deployment Instances</Text>}>

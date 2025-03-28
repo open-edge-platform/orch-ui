@@ -63,7 +63,11 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
         Host Status
       </Heading>
 
-      <ClusterNodesTable nodes={currentNodes} readinessType="host" />
+      <ClusterNodesTable
+        nodes={currentNodes}
+        readinessType="host"
+        filterOn="uuid"
+      />
     </div>
   );
 };

@@ -18,7 +18,13 @@ const pom = new ClusterNodesTablePom();
 describe("<ClusterNodesTable/> should", () => {
   beforeEach(() => {
     pom.interceptApis([pom.api.getHosts]);
-    cy.mount(<ClusterNodesTable nodes={nodes} readinessType="cluster" />);
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodes}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
     pom.waitForApis();
   });
 
@@ -48,6 +54,7 @@ describe("<ClusterNodesTable/> should", () => {
       <ClusterNodesTable
         nodes={nodesWithSecurityFeature}
         readinessType="cluster"
+        filterOn={"resourceId"}
       />,
     );
     pom.waitForApis();
@@ -63,7 +70,13 @@ describe("<ClusterNodesTable/> should", () => {
 
 describe("<ClusterNodesTable/> status should", () => {
   it("render empty", () => {
-    cy.mount(<ClusterNodesTable nodes={[]} readinessType="cluster" />);
+    cy.mount(
+      <ClusterNodesTable
+        nodes={[]}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
     pom.root.should("contain", "No information to display");
   });
 });

@@ -33,15 +33,21 @@ type ClusterNode = eim.HostRead & cm.NodeInfo;
 interface ClusterNodesTableProps {
   nodes?: cm.NodeInfo[];
   readinessType: "cluster" | "host";
+  // NOTE the CO API takes UUID when creating the cluster and returns resourceId when reading it
+  // as a result we need to filter on the former in the review page or the latter in the cluster list expansion
+  filterOn: "resourceId" | "uuid";
 }
 const ClusterNodesTable = ({
   nodes,
   readinessType,
+  filterOn,
 }: ClusterNodesTableProps) => {
   const cy = { "data-cy": dataCy };
 
   const nodesCount = nodes?.length ?? 0;
-  const hostsFilter = nodes?.map(({ id }) => `resourceId="${id}"`).join(" OR ");
+  const hostsFilter = nodes
+    ?.map(({ id }) => `${filterOn}="${id}"`)
+    .join(" OR ");
 
   const {
     data: hostsResponse,
@@ -132,7 +138,7 @@ const ClusterNodesTable = ({
   if (nodesCount > 0) {
     nodes?.forEach((node) => {
       const host = hostsResponse?.hosts?.find(
-        (host) => host.resourceId === node.id,
+        (host) => host[filterOn] === node.id,
       );
       if (host) {
         data.push({
