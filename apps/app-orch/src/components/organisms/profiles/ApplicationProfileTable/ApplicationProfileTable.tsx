@@ -38,7 +38,7 @@ const ApplicationProfileTable = ({ actions }: ApplicationProfileTableProps) => {
   const columns: TableColumn<catalog.Profile>[] = [
     {
       Header: "Name",
-      accessor: (row) => <span>{row.displayName}</span>,
+      accessor: (row) => row.displayName ?? row.name,
     },
     {
       Header: "Description",
@@ -99,7 +99,9 @@ const ApplicationProfileTable = ({ actions }: ApplicationProfileTableProps) => {
         key="application-profiles-table"
         columns={columns}
         data={profiles}
-        sortColumns={[0, 1, 2]}
+        isServerSidePaginated={false}
+        canPaginate
+        sortColumns={[0]}
       />
     </div>
   );
