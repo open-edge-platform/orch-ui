@@ -528,7 +528,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           cancelBtnText="Create Later"
           cancelCb={() => {
             setClusterConfirmationOpen(false);
-            navigate("../../unassigned-hosts", { relative: "path" });
+            navigate("../../hosts", { relative: "path" });
           }}
         />
       )}

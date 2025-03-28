@@ -287,12 +287,7 @@ const HostEdit = () => {
           );
           setTimeout(() => {
             dispatch(disableMessageBanner());
-            const redirectPath = location.pathname.includes("unconfigured-host")
-              ? "unconfigured-hosts"
-              : location.pathname.includes("unassigned-host")
-                ? "unassigned-hosts"
-                : "hosts";
-            navigate(`../../${redirectPath}`);
+            navigate("../../hosts");
           }, 3000);
         })
         .catch((e) => {
