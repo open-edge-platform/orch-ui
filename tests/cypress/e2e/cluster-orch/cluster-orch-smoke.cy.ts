@@ -117,6 +117,8 @@ describe("Cluster orch Smoke test:", () => {
         .should("be.visible")
         .click();
 
+      cy.waitForPageTransition();
+
       cy.intercept({
         method: "GET",
         url: "**/v2/**/templates?*",

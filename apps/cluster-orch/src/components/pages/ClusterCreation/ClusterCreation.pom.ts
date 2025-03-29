@@ -269,6 +269,7 @@ class ClusterCreationPom extends CyPom<Selectors, ApiAliases> {
     templateVal?: string,
     versionVal?: string,
   ) {
+    this.el.clusterName.should("be.visible");
     this.el.clusterName.type(clusterName);
     this.clusterTemplateDropdown.selectDropdownValue(
       this.clusterTemplateDropdown.root,
