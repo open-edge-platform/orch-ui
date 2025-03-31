@@ -181,7 +181,7 @@ describe("Cluster orch Smoke test:", () => {
       cy.dataCy("icon-providerStatus").should("contain.text", "ready");
       cy.dataCy("icon-controlPlaneReady").should(
         "contain.text",
-        "control plane is ready",
+        "ready",
       );
       cy.dataCy("icon-nodeHealth").should("contain.text", "nodes are healthy");
     });
