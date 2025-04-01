@@ -161,15 +161,12 @@ export const miEnhancedApi = eimSlice.enhanceEndpoints({
     postV1ProjectsByProjectNameComputeHosts: {
       invalidatesTags: [HostListTag],
     },
-<<<<<<< HEAD
-=======
     postV1ProjectsByProjectNameComputeHostsRegister: {
       invalidatesTags: [HostTag, HostListTag, InstanceListTag],
     },
     patchV1ProjectsByProjectNameComputeHostsAndHostIdOnboard: {
       invalidatesTags: [HostTag, HostListTag, InstanceListTag],
     },
->>>>>>> 1a6e6aa5 (Host statuses alignment)
     deleteV1ProjectsByProjectNameComputeHostsAndHostId: {
       invalidatesTags: [HostListTag],
     },
