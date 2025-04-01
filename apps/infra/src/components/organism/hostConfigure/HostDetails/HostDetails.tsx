@@ -25,9 +25,10 @@ const dataCy = "details";
 const validNameRegex = /^[a-zA-Z-_0-9./: ]{1,20}$/;
 
 export const isValidHostName = (name?: string) => {
-  return name && name.trim().length > 0 && validNameRegex.test(name);
+  return (
+    name != undefined && name.trim().length > 0 && validNameRegex.test(name)
+  );
 };
-
 
 const containsDuplicatedName = (duplicates: string[], name?: string) => {
   if (!name) return false;
