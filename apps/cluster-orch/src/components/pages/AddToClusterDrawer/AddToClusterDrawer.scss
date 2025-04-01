@@ -1,0 +1,19 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.add-to-cluster-drawer {
+  .cluster-details-content {
+    padding: 1rem;
+  }
+  .footer-btn-group {
+    margin-left: auto;
+  }
+  .selected-cluster-info {
+    padding: 1rem;
+    .selected-cluster {
+      margin: 1rem 0;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.header-item {
+  padding: 0 0.75rem;
+
+  &:hover {
+    background-color: var(--spark-color-cobalt-shade2);
+  }
+
+  &:active {
+    background-color: var(--spark-color-cobalt-shade1);
+  }
+
+  &:focus {
+    border: 0.125rem solid var(--spark-color-white);
+  }
+
+  a {
+    display: inline-block;
+    font-family: "IntelOne Text";
+    font-size: 14px;
+    color: var(--spark-color-white);
+    text-decoration: none;
+
+    span {
+      padding: 0 0.5rem;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-upgrade-availability-status {
+  &.not-fetched {
+    color: var(--spark-color-coral-shade1, #c81326);
+  }
+  &.loading {
+    color: var(--spark-color-classic-blue, #0054ae);
+  }
+  &.available {
+    color: var(--spark-color-moss, #b1d272);
+  }
+}

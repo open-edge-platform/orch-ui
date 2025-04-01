@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+{{- if .Values.service.ingress.enabled -}}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "root.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/part-of: orch-ui
+    container: app-orch
+    release: {{ .Release.Name }}
+  {{- with .Values.service.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.service.ingress.className }}
+  {{- if .Values.service.ingress.tls }}
+  tls:
+    {{- range .Values.service.ingress.tls }}
+    - hosts:
+        {{- if $.Values.service.ingress.virtualHostName }}
+        - {{ $.Values.service.ingress.virtualHostName }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- if $.Values.service.ingress.virtualHostName }}
+    - host: {{ $.Values.service.ingress.virtualHostName }}
+      http:
+    {{- else }}
+    - http:
+    {{- end }}
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "root.fullname" . }}
+                port:
+                  number: 80
+{{- end }}

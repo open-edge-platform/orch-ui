@@ -1,0 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.radio-card {
+  background-color: var(--spark-color-theme-light-gray100);
+  padding: 1rem;
+  .description {
+    margin-left: 1rem;
+  }
+}

@@ -1,0 +1,46 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+html {
+  /* 
+    This is added to fix the bug seen in drawer overflow.
+    Seen for all drawer pages.
+  */
+  overflow-x: hidden;
+}
+
+.pa-0 {
+  padding: 0;
+}
+
+.pa-1 {
+  padding: 0.25rem;
+}
+
+.pa-2 {
+  padding: 0.5rem;
+}
+
+.pa-3 {
+  padding: 0.75rem;
+}
+
+.pa-4 {
+  padding: 1rem;
+}
+
+.pa-5 {
+  padding: 1.25rem;
+}
+
+.wheel-tooltip-width {
+  width: 9rem;
+}
+
+/* TODO: workaround on react-echart. tooltip bug */
+.donut-tooltip {
+  position: absolute !important;
+  display: block !important;
+}

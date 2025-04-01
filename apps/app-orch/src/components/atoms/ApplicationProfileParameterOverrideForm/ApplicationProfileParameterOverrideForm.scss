@@ -1,0 +1,37 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.parameter-override-form {
+  .spark-text-field-container {
+    height: auto !important;
+  }
+
+  &__table {
+    width: 90%;
+    .table {
+      border: none;
+      tbody tr td,
+      thead tr th {
+        border: none;
+        background-color: unset;
+      }
+
+      thead tr th {
+        .table-header-cell {
+          padding-left: 0.5rem;
+        }
+
+        &:first-child {
+          max-width: 30%;
+          width: auto;
+        }
+      }
+    }
+
+    .chart-value-type {
+      width: 10.2rem;
+    }
+  }
+}

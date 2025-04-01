@@ -1,0 +1,103 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-packages {
+  &__intro {
+    margin-bottom: 1.5rem;
+
+    .spark-heading {
+      margin-bottom: 0;
+    }
+
+    &__subHeader {
+      color: var(--spark-color-theme-light-gray700);
+    }
+  }
+
+  &__search {
+    width: 100%;
+  }
+
+  .action-button {
+    margin: auto;
+    margin-right: 0px;
+  }
+
+  .table {
+    &__row td {
+      min-width: 7.5rem;
+    }
+
+    &__row td:nth-child(5) {
+      max-width: 35rem;
+      word-break: break-word;
+      text-align: justify;
+    }
+
+    &__row td:nth-child(6) {
+      width: 5rem;
+    }
+  }
+
+  .spark-text-field {
+    padding-left: 0;
+  }
+
+  .description-read-btn {
+    text-decoration: underline;
+    color: var(--spark-color-classic-blue);
+    border: none;
+    outline: none;
+    background: none;
+  }
+
+  .packages-table-content,
+  .extensions-table-content {
+    min-height: 30rem;
+    padding: 2rem 0;
+    width: 100%;
+
+    & > div {
+      padding: 0.5rem;
+    }
+  }
+
+  .spark-tabs {
+    /* This is required for disabling the line under tabs covering whole window */
+    box-shadow: none !important;
+  }
+  .spark-tabs-scrollbar {
+    overflow-x: hidden !important;
+    &::-webkit-scrollbar {
+      width: 0.625rem;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--spark-color-white);
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--spark-color-theme-light-gray600);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--spark-color-theme-dark-gray400);
+    }
+    width: 100%;
+  }
+  .spark-tabs::after {
+    $line-width: 12.25rem;
+    position: relative;
+    margin-left: $line-width * -1;
+    display: block;
+    content: "";
+    margin-top: 2rem;
+    height: var(--spark-tabs-box-shadow-y);
+    width: $line-width;
+    background-color: var(--spark-tabs-color-ghost-border);
+  }
+
+  .spark-tabs.spark-tabs-ghost .spark-tabs-active:after {
+    margin-bottom: 0.165rem;
+    outline: none;
+  }
+}

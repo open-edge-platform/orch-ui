@@ -1,0 +1,44 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.checkbox-selection-list {
+  overflow: auto;
+  max-height: 14rem;
+  padding: 0 0.25rem;
+
+  &__title {
+    display: block;
+    position: absolute;
+    padding-right: 1rem;
+    color: var(--spark-color-tb-theme-light-gray700);
+    z-index: 1;
+  }
+
+  &__selection-list {
+    position: relative;
+    list-style: none;
+    text-align: left;
+    vertical-align: middle;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    &__option {
+      &:first-of-type {
+        padding-top: 2rem;
+      }
+      // Spark's check box seems to do an !important on display: block;
+      .spark-checkbox {
+        display: inline-block !important;
+      }
+      &-text {
+        display: inline;
+        padding-left: 0.4rem;
+        /* this make the spark text style align with checkbox */
+        vertical-align: super;
+      }
+    }
+  }
+}

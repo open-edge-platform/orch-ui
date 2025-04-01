@@ -1,0 +1,106 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-package-create-edit {
+  .spark-message-banner.spark-message-banner-state-error {
+    color: var(--spark-color-theme-dark-gray75);
+    border: 0.01rem solid var(--spark-color-coral-tint2);
+    background-color: #ffb6b9b7;
+    padding: 0;
+
+    .spark-icon.icon.alert-circle {
+      color: var(--spark-color-coral-shade1);
+    }
+  }
+  &__general {
+    .spark-flex {
+      row-gap: 1rem;
+
+      .spark-text-field-container {
+        height: 5rem;
+        padding-right: 1rem;
+      }
+
+      .spark-combobox {
+        width: 100%;
+        height: 6rem;
+        .spark-combobox-text-field {
+          display: block !important;
+          padding-right: 1rem;
+        }
+        .spark-combobox-button {
+          width: 100%;
+        }
+        .spark-combobox .spark-combobox-text-field {
+          width: 100% !important;
+        }
+        .spark-combobox-button-label {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+
+  &__application {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &__buttons {
+        gap: 1rem;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+      }
+    }
+
+    &__action {
+      display: flex;
+      gap: 0.5rem;
+
+      .vertical-line {
+        border-left: 1px solid black;
+      }
+    }
+
+    .spark-table {
+      max-width: 100%;
+      overflow: auto;
+    }
+
+    &__footer {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: right;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+
+  &__profile {
+    background-color: var(--spark-color-carbon-tint2);
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    .spark-text-field-container {
+      width: 100%;
+    }
+
+    .spark-button {
+      margin-top: 2rem;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    margin: 5rem 0;
+    padding: 1rem 0;
+    justify-content: right;
+    gap: 1rem;
+    border-color: var(--spark-drawer-border-color);
+    border-top-style: var(--spark-drawer-footer-border-top-style);
+  }
+}

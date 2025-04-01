@@ -1,0 +1,19 @@
+/*!
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.spark-table.spark-table-minimal a,
+.spark-table.spark-table-minimal a:visited {
+  color: var(--spark-table-minimal-link-color);
+  text-decoration: none;
+}
+
+.spark-table.spark-table-minimal a:hover:active {
+  color: var(--spark-table-min-link-active);
+  text-decoration: underline;
+}
+
+.spark-table.spark-table-minimal a:hover {
+  text-decoration: underline;
+}

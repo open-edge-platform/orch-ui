@@ -1,0 +1,109 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.setup-metadata {
+  margin-bottom: 1rem;
+  &__package {
+    margin: 0;
+  }
+  &__application-package {
+    display: flex;
+    border: 0.1rem solid var(--spark-color-carbon-tint2);
+    align-items: center;
+    padding: 1rem;
+    margin: 0 0 2rem 0;
+
+    .spark-icon {
+      font-size: 2rem;
+      padding: 1rem;
+      width: 2rem;
+      height: 2rem;
+      background-color: var(--spark-color-carbon-tint2);
+      border-radius: 50%;
+      margin-right: 1rem;
+    }
+  }
+
+  &__advanced_settings {
+    margin-top: 1rem;
+  }
+
+  &__metadata {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem auto;
+
+    .spark-fieldlabel {
+      line-height: 2 !important;
+    }
+    .spark-text-field-container,
+    .spark-dropdown {
+      flex: 1;
+    }
+
+    .spark-dropdown-text-field {
+      display: block !important; //Note: Asked SI team about this being table on their end
+    }
+
+    .spark-dropdown :is(.spark-dropdown-text-field, .spark-button) {
+      width: 100%;
+    }
+    .spark-dropdown .spark-button {
+      margin: 0 !important;
+    }
+  }
+
+  &__metadata-docs {
+    margin-bottom: 2rem;
+  }
+
+  .spark-popover {
+    background-color: orange;
+  }
+  &__metadata-profile {
+    .spark-popover {
+      background-color: red;
+    }
+  }
+  &__metadata-spacer {
+    width: 2rem;
+  }
+
+  .application-package {
+    &__name,
+    &__version,
+    &__description {
+      margin: 0;
+      display: block;
+    }
+
+    &__version {
+      color: var(--spark-color-carbon);
+    }
+  }
+
+  &__tooltip {
+    position: relative;
+    margin-left: 0.4rem;
+
+    .spark-icon {
+      transition: all 0.2s ease-in-out;
+    }
+    .spark-icon:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+      color: var(--spark-color-classic-blue);
+    }
+  }
+
+  &__tooltip-position {
+    transform: translateX(-4.85rem);
+  }
+
+  span + p {
+    margin: 0.5rem auto 1.5rem;
+  }
+}

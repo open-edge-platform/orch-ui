@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# IDEs
+*.sublime-project
+*.sublime-workspace
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+
+# Deps
+node_modules
+venv
+
+# Auto generated
+dist
+node_modules
+cobertura-coverage.xml
+coverage
+orch-ui-admin-*.tgz
+lib
+!library/@spark-design/core/lib
+!library/@spark-design/react/lib
+!library/@spark-design/react-icons/lib
+!library/@spark-design/tokens/lib
+!library/@spark-design/utils/lib
+tests/cypress-mochawesome-reporter.log
+apps/**/*.tgz
+
+#python
+__pycache__
+
+#jenkins
+artifacts
+.nyc_output
+**/cypress/pacts/*
+**/cypress/videos/*
+**/cypress/screenshots/*
+
+iconfont.bak
+
+#nginx error pages copy
+apps/admin/nginxCommon
+apps/infra/nginxCommon
+apps/root/nginxCommon
+apps/cluster-orch/nginxCommon
+apps/app-orch/nginxCommon
+

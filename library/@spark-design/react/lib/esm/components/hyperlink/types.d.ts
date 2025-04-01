@@ -1,0 +1,3 @@
+export type HyperlinkRefererPolicy = 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url';
+export type HyperlinkTarget = '_blank' | '_self' | '_parent' | '_top' | string;
+export type HyperlinkRelAttribute = 'noopener' | 'noreferrer' | 'nofollow' | 'external' | 'noopener noreferrer' | 'nofollow noopener noreferrer' | 'prefetch' | 'preload' | 'alternate' | 'author' | 'help' | 'license' | 'next' | 'prev' | 'search' | 'tag' | 'index' | 'dns-prefetch' | 'preconnect' | 'pingback' | 'pre-render' | 'manifest' | 'external nofollow';

@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# Default values for orch-ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+global:
+  registry:
+    name: registry-rs.edgeorchestration.intel.com/edge-orch
+    imagePullSecrets: []
+  auth:
+    enabled: true
+    keycloak:
+      url: "https://keycloak.kind.internal"
+      client_id: "orch-ui"
+      realm: "master"
+  session_timeout: 3600
+
+# all MFE's need to be on (true) at this level and not run as standalone applications
+# if an MFE is set to true it means that is available, and other MFE will use this flag to know that they can import remote components from it
+mfe:
+  app_orch: true
+  infra: true
+  cluster_orch: true
+  admin: true
+
+api:
+  clusterOrch: "https://cluster-orch.kind.internal"
+  metadataBroker: "https://metadata.kind.internal"
+  alertManager: "https://alerting-monitor.kind.internal"
+  tenantManager: "https://api.kind.internal"
+
+image:
+  repository: orch-ui/admin
+  pullPolicy: IfNotPresent
+  tag: "{{ .Chart.AppVersion }}"
+
+service:
+  type: ClusterIP
+  port: 80
+
+# set resource limits of the container or set resources to {} to remove limits
+#resources: {}
+resources:
+  limits:
+    memory: "500M"
+    cpu: "1"
+  requests:
+    memory: "10M"
+    cpu: "50m"
+
+nginx:
+  rewrites:
+    - location: "/mfe/admin"
+      rewrite:
+        source: "/mfe/admin/(.*)"
+        dest: "/$1"
+      proxy_pass: "http://localhost:80"

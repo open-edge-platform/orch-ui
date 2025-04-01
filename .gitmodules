@@ -1,0 +1,3 @@
+[submodule "library/@orch-utils"]
+	path = library/@orch-utils
+	url = https://github.com/open-edge-platform/orch-utils.git

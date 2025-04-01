@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-o11y-alerting-monitor-openapi.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "observabilityMonitorApi",
+  "outputFile": "./observabilityMonitorApi.ts",
+  "exportName": "observabilityMonitor",
+  "hooks": true,
+  "tag": true
+}

@@ -1,0 +1,31 @@
+{
+  "registry": {
+    "displayName": "Test Registry",
+    "rootUrl": "http://www.test-registry.com",
+    "inventoryUrl": "http://www.test-registry.com/inventory",
+    "type": "HELM",
+    "username": "John Doe",
+    "authToken": "PassWord"
+  },
+  "registryChart": {
+    "chartName": "chart-1",
+    "chartVersion": "1.0.1"
+  },
+  "application": {
+    "name": "custom-application-1",
+    "version": "1.0.1"
+  },
+  "applicationProfile": {
+    "name": "profile-1",
+    "chartValues": "apiVersion: v2\nname: mock-chart\ndescription: A Helm chart for Kubernetes\nversion: 0.1.0\nappVersion: \"1.0\"\n",
+    "description": "Sample profile. this only used for testing purpose"
+  },
+  "deploymentPackage": {
+    "displayName": "Deployment-Package Test 1",
+    "version": "1.0.1",
+    "description": "This deployment package is for testing purpose only..."
+  },
+  "deployments": {
+    "displayName": "Deployment Test 1"
+  }
+}

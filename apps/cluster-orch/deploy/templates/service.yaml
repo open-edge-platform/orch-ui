@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "clusterOrch.fullname" . }}
+  labels:
+    app.kubernetes.io/part-of: orch-ui
+    app: cluster-orch
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/part-of: orch-ui
+    app: cluster-orch
+    release: {{ .Release.Name }}

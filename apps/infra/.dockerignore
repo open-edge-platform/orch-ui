@@ -1,0 +1,16 @@
+node_modules
+venv-lp
+deployment
+docs
+requirements.txt
+*.license
+*.md
+Makefile
+**/**/Makefile
+.git
+.github
+.idea
+.reuse
+.gitignore
+Jenkinsfile
+LICENSES

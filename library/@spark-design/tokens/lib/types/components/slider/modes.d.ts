@@ -1,0 +1,82 @@
+export declare const mode: import("@spark-design/core").TokenData<{
+    trackBackgroundColor: string;
+    trackColor: string;
+    iconColor: string;
+    valueTextColor: string;
+    thumbColor: string;
+    shadowColor: string;
+    thumbColorHover: string;
+    thumbColorActive: string;
+    doubleValueTextColor: string;
+    disabledColor: string;
+    labelColor: string;
+    transparentColor: string;
+}>;
+export declare const darkMode: import("@spark-design/core").TokenData<{
+    trackBackgroundColor: string;
+    trackColor: string;
+    iconColor: string;
+    valueTextColor: string;
+    thumbColor: string;
+    shadowColor: string;
+    thumbColorHover: string;
+    thumbColorActive: string;
+    doubleValueTextColor: string;
+    disabledColor: string;
+    labelColor: string;
+    transparentColor: string;
+} & {
+    trackBackgroundColor: string;
+    trackColor: string;
+    iconColor: string;
+    valueTextColor: string;
+    thumbColor: string;
+    shadowColor: string;
+    thumbColorHover: string;
+    thumbColorActive: string;
+    disabledColor: string;
+    labelColor: string;
+    transparentColor: string;
+}>;
+export declare const modes: {
+    light: import("@spark-design/core").TokenData<{
+        trackBackgroundColor: string;
+        trackColor: string;
+        iconColor: string;
+        valueTextColor: string;
+        thumbColor: string;
+        shadowColor: string;
+        thumbColorHover: string;
+        thumbColorActive: string;
+        doubleValueTextColor: string;
+        disabledColor: string;
+        labelColor: string;
+        transparentColor: string;
+    }>;
+    dark: import("@spark-design/core").TokenData<{
+        trackBackgroundColor: string;
+        trackColor: string;
+        iconColor: string;
+        valueTextColor: string;
+        thumbColor: string;
+        shadowColor: string;
+        thumbColorHover: string;
+        thumbColorActive: string;
+        doubleValueTextColor: string;
+        disabledColor: string;
+        labelColor: string;
+        transparentColor: string;
+    } & {
+        trackBackgroundColor: string;
+        trackColor: string;
+        iconColor: string;
+        valueTextColor: string;
+        thumbColor: string;
+        shadowColor: string;
+        thumbColorHover: string;
+        thumbColorActive: string;
+        disabledColor: string;
+        labelColor: string;
+        transparentColor: string;
+    }>;
+};

@@ -1,0 +1,24 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-package-profile-form {
+  &__body {
+    .spark-message-banner {
+      margin-block: 1rem;
+    }
+
+    .spark-message-banner.spark-message-banner-outlined {
+      color: var(--spark-color-theme-dark-gray50);
+      background-color: var(--spark-color-blue-steel-tint2);
+      border: 1px solid var(--spark-color-blue-steel-tint2);
+      padding: 0.2rem;
+    }
+
+    .add-profile-btn {
+      display: flex;
+      justify-content: right;
+    }
+  }
+}

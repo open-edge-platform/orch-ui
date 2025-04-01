@@ -1,0 +1,5 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: *.md **/*.md *.ico *.json *.svg *.png *.PNG *.jpg *.jpeg **/.dockerignore .trivyignore **/VERSION **/Chart.lock CONTRIBUTING.md LICENSE .gitmodules **/.gitignore library/@spark-design/*
+Copyright: (C) 2025 Intel Corporation
+License: Apache-2.0

@@ -1,0 +1,19 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.adv-settings-app-name .spark-combobox-button-disabled {
+  background-color: transparent !important;
+  border-color: var(--spark-combobox-border-color) !important;
+}
+
+.adv-settings-app-name .spark-combobox-text-field,
+.adv-settings-app-profile .spark-combobox-text-field {
+  padding-right: 1rem;
+}
+
+.profile-err-msg {
+  text-align: center;
+  color: var(--spark-color-coral-shade1);
+}

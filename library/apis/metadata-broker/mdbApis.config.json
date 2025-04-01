@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-orch-metadata-broker-openapi.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "metadataBrokerApi",
+  "outputFile": "./generated.ts",
+  "exportName": "metadataBroker",
+  "hooks": true,
+  "tag": true
+}

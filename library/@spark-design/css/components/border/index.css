@@ -1,0 +1,97 @@
+@import './spark-border.css';
+@import 'skin.css';
+@import 'dark-mode.css';
+
+/* horizontal */
+.spark-border.spark-border-horizontal {
+    display: inline-flex;
+}
+
+.spark-border-split-horizontal {
+    cursor: col-resize;
+}
+
+.spark-border-split-horizontal.spark-border-split-doubleline {
+    inline-size: 1px;
+    margin-inline-end: 1px;
+}
+
+.spark-border-split-horizontal.spark-border-split-hairline {
+    inline-size: 1px;
+    margin-inline-end: 3px;
+}
+
+.spark-border-split-horizontal.spark-border-split-ghost {
+    inline-size: 1px;
+    margin-inline-end: 3px;
+}
+
+.spark-border-split-horizontal.spark-border-split-doubleline:active,
+.spark-border-split-horizontal.spark-border-split-hairline:active,
+.spark-border-split-horizontal.spark-border-split-ghost:active {
+    inline-size: 4px;
+    border: none;
+    margin-inline-end: 0px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.spark-border-split-horizontal.spark-border-split-doubleline:active::before,
+.spark-border-split-horizontal.spark-border-split-hairline:active::before,
+.spark-border-split-horizontal.spark-border-split-ghost:active::before {
+    position: relative;
+    font-size: 10px;
+    inset-block-start: calc(50% - 10px);
+    inset-inline-start: -0.5px;
+    content: '\2807';
+    color: #ffffff;
+    text-align: center;
+    display: block;
+}
+
+/* vertical */
+.spark-border.spark-border-vertical {
+    display: block;
+}
+
+.spark-border-split-vertical {
+    cursor: row-resize;
+}
+
+.spark-border-split-vertical.spark-border-split-doubleline {
+    block-size: 1px;
+    margin-block-end: 1px;
+}
+
+.spark-border-split-vertical.spark-border-split-hairline {
+    block-size: 1px;
+    margin-block-end: 3px;
+}
+
+.spark-border-split-vertical.spark-border-split-ghost {
+    block-size: 1px;
+    margin-block-end: 3px;
+}
+
+.spark-border-split-vertical.spark-border-split-doubleline:active,
+.spark-border-split-vertical.spark-border-split-hairline:active,
+.spark-border-split-vertical.spark-border-split-ghost:active {
+    block-size: 4px;
+    border: none;
+    margin-inline-end: 0px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.spark-border-split-vertical.spark-border-split-doubleline:active::before,
+.spark-border-split-vertical.spark-border-split-hairline:active::before,
+.spark-border-split-vertical.spark-border-split-ghost:active::before {
+    position: relative;
+    font-size: 8px;
+    inset-block-start: -4px;
+    content: '•••';
+    block-size: 10px;
+    color: #ffffff;
+    text-align: center;
+    display: block;
+}

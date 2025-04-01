@@ -1,0 +1,79 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+.site-form {
+  .spark-flex {
+    margin-bottom: 1rem;
+  }
+
+  // Additional space for error message
+  .spark-text-field-container {
+    height: 3rem;
+  }
+
+  // Spark design dropdown size L and input size m font size and label gap are different.
+  .spark-fieldlabel-size-l {
+    font-size: 0.75rem;
+  }
+
+  .spark-fieldtext-wrapper {
+    gap: 0;
+  }
+
+  .spark-dropdown-text-field {
+    width: 100%;
+    display: block !important;
+
+    .spark-button {
+      inline-size: 100%;
+      max-inline-size: 100%;
+    }
+  }
+
+  .spark-dropdown {
+    box-sizing: border-box;
+    width: 100%;
+    height: 4rem;
+  }
+
+  .spark-flex-item:not(:last-child) &-item {
+    padding-right: 1rem;
+  }
+
+  .spark-flex-item:not(:first-child) &-item {
+    padding-left: 1rem;
+  }
+
+  &-item {
+    padding: 0.5rem;
+  }
+
+  &-btn-container {
+    display: flex;
+    justify-content: end;
+
+    button {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .site-metadata {
+    .spark-fieldlabel.spark-fieldlabel-size-l {
+      font-size: 1rem;
+    }
+
+    .spark-message-banner {
+      margin-block: 1rem;
+    }
+  }
+
+  .metadata-form {
+    & > .spark-button {
+      font-size: 1.75rem;
+      font-weight: 100;
+      margin-top: -0.563rem;
+    }
+  }
+}

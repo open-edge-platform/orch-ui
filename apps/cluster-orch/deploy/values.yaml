@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# Default values for orch-ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+global:
+  registry:
+    name: registry-rs.edgeorchestration.intel.com/edge-orch
+    imagePullSecrets: []
+  auth:
+    enabled: false
+    keycloak:
+      url: "http://keycloak.kind.internal"
+      client_id: "web-ui"
+      realm: "master"
+  session_timeout: 3600
+  observability:
+    url: ""
+
+# false= run as standalone application, true = run as a part of OEP
+mfe:
+  app_orch: false
+  infra: false
+  cluster_orch: false
+
+# Used to configure the Header title
+header:
+  title: "ESPD Cluster Orch"
+
+image:
+  repository: orch-ui/cluster-orch
+  pullPolicy: IfNotPresent
+  tag: "{{ .Chart.AppVersion }}"
+
+service:
+  type: ClusterIP
+  port: 80
+
+# set resource limits of the container or set resources to {} to remove limits
+#resources: {}
+resources:
+  limits:
+    memory: "500M"
+    cpu: "1"
+  requests:
+    memory: "10M"
+    cpu: "50m"
+
+nginx:
+  rewrites:
+    - location: "/mfe/cluster-orch"
+      rewrite:
+        source: "/mfe/cluster-orch/(.*)"
+        dest: "/$1"
+      proxy_pass: "http://localhost:80"

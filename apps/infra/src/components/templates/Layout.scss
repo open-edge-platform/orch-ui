@@ -1,0 +1,65 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.spark-breadcrumb {
+  margin-bottom: 1.5rem;
+  .spark-focus-visible.spark-focus-visible-self {
+    &:focus {
+      outline: none;
+    }
+    &.spark-focus-visible-background:focus {
+      &:not(:focus-visible) {
+        color: var(--spark-color-classic-blue);
+      }
+      &-visible {
+        color: var(--spark-color-classic-blue);
+        box-shadow: none;
+      }
+    }
+  }
+  .spark-hyperlink:visited {
+    color: var(--spark-color-classic-blue);
+  }
+}
+
+.collapsable-list .spark-button span {
+  font-weight: normal;
+}
+.infrastructure-layout {
+  position: relative;
+  &__mb-container {
+    position: fixed;
+    top: 7rem;
+    right: 1rem;
+    z-index: 99;
+    width: 100%;
+    margin: 2rem;
+
+    // Toast must be seen over the Drawer (not-hidden by)
+    z-index: 1000;
+    pointer-events: none;
+  }
+  &__message-banner {
+    width: 100%;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    min-height: 8rem;
+    pointer-events: none;
+    z-index: 99;
+    &-box {
+      pointer-events: visible;
+      background-color: var(--spark-color-white);
+    }
+  }
+  .orch-message-banner {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: white;
+    z-index: 101;
+    min-width: 20rem;
+  }
+}

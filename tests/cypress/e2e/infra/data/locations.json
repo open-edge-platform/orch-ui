@@ -1,0 +1,22 @@
+{
+  "regions": [
+    {
+      "name": "test-region"
+    },
+    {
+      "name": "test-region-2",
+      "parentName": "test-region"
+    }
+  ],
+  "sites": [
+    {
+      "name": "test-site-1",
+      "parentRegions": ["test-region", "test-region-2"]
+    }
+  ],
+  "hostConfig": {
+    "region": "french-polynesia",
+    "site": "rangiroa",
+    "hostName": "six-passengers"
+  }
+}

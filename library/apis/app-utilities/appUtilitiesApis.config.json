@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-app-orch-catalog-utilities-openapi.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "appUtilitiesApis",
+  "outputFile": "./appUtilitiesServiceApis.ts",
+  "exportName": "appUtilitiesServiceApis",
+  "hooks": { "queries": true, "lazyQueries": true, "mutations": true },
+  "tag": true
+}

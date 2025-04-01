@@ -1,0 +1,43 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+$sizes: (
+  1: 8.3%,
+  2: 16.6%,
+  3: 25%,
+  4: 33.3%,
+  5: 41.6%,
+  6: 50%,
+  7: 58.3%,
+  8: 66.6%,
+  9: 75%,
+  10: 83.3%,
+  11: 91.6%,
+  12: 100%,
+);
+
+@mixin medias($map, $size: "") {
+  @each $key, $value in $map {
+    &--col#{$size}-#{$key} {
+      width: $value;
+    }
+  }
+}
+
+.flex-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @include medias($sizes);
+
+  @container flex (width < 690px) {
+    @include medias($sizes, -sm);
+  }
+  @container flex (width  >= 690px) and (width <= 1264px) {
+    @include medias($sizes, -md);
+  }
+  @container flex (width  > 1264px) {
+    @include medias($sizes, -lg);
+  }
+}

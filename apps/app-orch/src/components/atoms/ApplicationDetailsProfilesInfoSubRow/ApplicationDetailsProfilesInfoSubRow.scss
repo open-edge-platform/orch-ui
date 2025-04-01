@@ -1,0 +1,33 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.application-details-profiles-info-sub-row {
+  td {
+    /* This is required to override subrow td border with any outer table border effect */
+    border: none !important;
+  }
+
+  .chart-values {
+    width: 100%;
+  }
+
+  .label {
+    font-weight: 500;
+    min-width: 10rem;
+    font-weight: 500;
+  }
+  .value-title {
+    padding-bottom: 0.5rem;
+  }
+
+  .spark-dropdown.spark-dropdown-is-disabled {
+    pointer-events: none;
+    width: 20rem;
+    margin: 0 1rem 0.25rem 0;
+  }
+  .chart-suggest-values .spark-fieldtext-wrapper {
+    height: 1.975rem;
+  }
+}

@@ -1,0 +1,42 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.page {
+  padding: 1rem 0.5rem;
+}
+
+.spark-breadcrumb {
+  margin-bottom: 1.5rem;
+
+  .spark-focus-visible.spark-focus-visible-self {
+    &:focus {
+      outline: none;
+    }
+
+    &.spark-focus-visible-background:focus {
+      &:not(:focus-visible) {
+        color: var(--spark-color-classic-blue);
+      }
+
+      &-visible {
+        color: var(--spark-color-classic-blue);
+        box-shadow: none;
+      }
+    }
+  }
+
+  .spark-hyperlink:visited {
+    color: var(--spark-color-classic-blue);
+  }
+}
+
+.spark-toast {
+  position: absolute;
+  z-index: 1000;
+}
+
+.d-none {
+  display: none;
+}

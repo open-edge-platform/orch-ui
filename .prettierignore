@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+.github
+node_modules
+build
+public
+deploy
+venv
+coverage
+dist
+.nyc_output
+.nyc_output/out.json
+cypress/pacts
+logs.json
+api_versions.md
+artifacts
+src/api/observability.monitor
+trivy.yaml
+
+# App-orch test to execute in order
+tests/cypress/e2e/app-orch/app-orch-smoke.cy.ts
+
+# NOTE there are dependency import order in these files,
+# we can't automatically sort the imports with prettier until those are resolved
+library/utils/index.ts
+library/components/index.ts
+library/utils/mocks/app-orch/index.ts
+library/utils/mocks/app-orch/adm/index.ts
+library/@spark-design
+library/@orch-utils

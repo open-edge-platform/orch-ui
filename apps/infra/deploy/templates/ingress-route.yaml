@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+{{- if .Values.service.traefik.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "infra.fullname" . }}
+  # NOTE in order to access the middlewares, the IngressRoute must be in the same namespace as the gateway
+  namespace: {{ tpl .Values.service.traefik.namespace . }}
+spec:
+  entryPoints: # We listen to requests coming from ports 443
+    - websecure
+  routes:
+    - match: ({{ required "A valid hostname entry required!" .Values.service.traefik.hostname }} || {{ required "A valid baseHostname entry required!" .Values.service.traefik.baseHostname }}) && PathPrefix(`/`)
+      kind: Rule
+      middlewares:
+        - name: secure-headers
+        - name: {{ include "infra.fullname" . }}
+      priority: 10
+      services:
+        - name: {{ include "infra.fullname" . }}
+          port: {{ .Values.service.port }}
+          scheme: http
+          namespace: {{ .Release.Namespace }}
+    - match: ({{ required "A valid hostname entry required!" .Values.service.traefik.hostname }} || {{ required "A valid baseHostname entry required!" .Values.service.traefik.baseHostname }}) && PathPrefix(`/api`)
+      kind: Rule
+      middlewares:
+        - name: licensing
+        - name: validate-jwt
+        - name: {{ include "infra.fullname" . }}
+      priority: 20
+      services:
+        - name: {{ include "infra.fullname" . }}
+          port: {{ .Values.service.port }}
+          scheme: http
+          namespace: {{ .Release.Namespace }}
+  tls:
+    secretName: {{ required "A valid secretName entry required in Traefik values!" .Values.service.traefik.secretName }}
+{{- if .Values.service.traefik.options.name }}
+    options:
+      name: {{ required "A valid TLS name entry required in Traefik values!" .Values.service.traefik.options.name }}
+      namespace: {{ tpl .Values.service.traefik.namespace . }}
+{{- end }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "infra.fullname" . }}
+  namespace: {{ tpl .Values.service.traefik.namespace . }}
+spec:
+  headers:
+    customRequestHeaders:
+      Host: {{ include "infra.fullname" . }}.{{ .Release.Namespace }}.svc
+{{- end }}

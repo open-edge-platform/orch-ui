@@ -1,0 +1,14 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.cluster-nodes-table-by-site {
+  .host-table-container {
+    .table {
+      th:nth-child(6) {
+        width: 11rem;
+      }
+    }
+  }
+}

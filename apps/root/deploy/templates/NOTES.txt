@@ -1,0 +1,25 @@
+
+{{ if .Values.service.ingress.enabled }}
+
+{{ if ne (len .Values.service.ingress.tls) 0 }}
+The UI is accessible at https://{{ .Values.service.ingress.virtualHostName }}
+{{ else }}
+The UI is accessible at http://{{ .Values.service.ingress.virtualHostName }}
+{{ end }}
+
+{{ else if eq .Values.service.type "NodePort"}}
+
+The UI is now accessible at <cluster-ip>:{{ .Values.service.nodePort }}
+
+{{ else if eq .Values.service.type "ClusterIp"}}
+
+To expose the UI locally you can run:
+
+kubectl port-forward -n {{ .Release.Name }} svc/{{ include "root.fullname" . }} 3000:{{ .Values.service.port }}
+{{end}}
+
+---
+revision: {{ .Chart.Annotations.revision }}
+created: {{ .Chart.Annotations.created }}
+
+---

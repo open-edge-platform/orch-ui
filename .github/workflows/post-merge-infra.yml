@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+---
+name: Post-Merge Infra
+
+on:
+  push:
+    branches:
+      - main
+      - release-*
+    paths:
+      - 'apps/infra/**'
+  workflow_dispatch:
+
+jobs:
+  post-merge-pipeline:
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@main
+    with:
+      bootstrap_tools: "base,helm,yq,jq"
+      run_security_scans: true
+      run_version_check: true
+      run_dep_version_check: false
+      run_build: false
+      run_docker_build: true
+      run_docker_push: true
+      run_helm_build: true
+      run_helm_push: true
+      run_version_tag: true
+      run_artifact: false
+      prefix_tag_separator: "/"
+      project_folder: apps/infra
+      orch_ci_repo_ref: main
+      persist_creds: true
+    secrets: inherit

@@ -1,0 +1,117 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+:root {
+  --table-border-color: hsla(240, 4%, 89%, 1);
+  --table-sort-arrow-color: hsla(228, 5%, 80%, 1);
+  --table-hover-color: hsla(210, 5%, 92%, 1);
+  --table-row-hover-color: hsla(180, 5%, 96%, 1);
+  --table-sort-arrow-select-color: hsla(211, 100%, 34%, 1);
+  --table-cell-font-size: 0.875rem;
+  --table-margin-bottom: 0.625rem;
+  --table-link-color: hsla(211, 100%, 34%, 1);
+}
+
+.table {
+  width: 100%;
+
+  border-collapse: collapse;
+  border: 0.1rem solid var(--table-border-color);
+  margin-bottom: var(--table-margin-bottom);
+
+  a {
+    color: var(--spark-color-classic-blue);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .table-header-cell {
+    display: flex;
+    align-items: center;
+    .toggle-expand-all-rows {
+      display: none;
+    }
+  }
+  .table-header-cell.left {
+    justify-content: flex-start;
+  }
+  .table-header-cell.right {
+    justify-content: flex-end;
+  }
+  .table-header-cell.center {
+    justify-content: center;
+  }
+  .table-header-cell,
+  .table-row-cell {
+    font-size: var(--table-cell-font-size);
+  }
+
+  .table-header-sort-arrows {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.4rem;
+
+    .caret {
+      width: 0.5rem;
+      height: 0.5rem;
+      position: relative;
+      background: linear-gradient(
+        45deg,
+        transparent 0%,
+        transparent 50%,
+        var(--table-sort-arrow-color) 50%
+      );
+
+      &.caret-up,
+      &.caret-up-select {
+        transform: rotate(-45deg);
+        top: 0.1rem;
+      }
+      &.caret-down,
+      &.caret-down-select {
+        top: -0.1rem;
+        transform: rotate(135deg);
+      }
+
+      &.caret-up-select,
+      &.caret-down-select {
+        background: linear-gradient(
+          45deg,
+          transparent 0%,
+          transparent 50%,
+          var(--spark-color-classic-blue) 50%
+        );
+      }
+    }
+  }
+
+  td,
+  th {
+    padding: 0.4rem 0.8rem;
+    border-top: 0.1rem solid var(--table-border-color);
+    background-color: white;
+  }
+  tbody tr:last-child td {
+    border-bottom: 0.1rem solid var(--table-border-color);
+  }
+
+  th {
+    font-weight: 500;
+  }
+  th:hover {
+    background-color: var(--table-hover-color);
+  }
+  tbody tr:hover td {
+    background-color: var(--table-row-hover-color);
+  }
+}
+
+.table + .spark-pagination {
+  margin-bottom: var(--table-margin-bottom);
+}

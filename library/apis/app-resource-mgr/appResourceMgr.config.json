@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-app-orch-deployment-app-resource-manager-openapi.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "appResourceManagerApi",
+  "outputFile": "./resourceManagerApis.ts",
+  "exportName": "resourceManager",
+  "hooks": true,
+  "tag": true
+}

@@ -1,0 +1,101 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.spark-header-region-start {
+  width: 100% !important;
+}
+
+.applications__actions-ribbon,
+.deployments__actions-ribbon,
+.composite-applications__actions-ribbon {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  width: 100%;
+  $transition: 0.125s;
+  $input-width: 31rem;
+  $full-width: 100%;
+
+  .ribbon-item-left input,
+  .spark-text-field-container,
+  .spark-text-field-container {
+    width: $full-width;
+  }
+
+  .ribbon-item-right .spark-tooltip-toggle {
+    float: right;
+  }
+
+  .ribbon-item-left {
+    width: $input-width;
+    transition: width $transition ease-in-out;
+
+    .spark-tooltip-toggle {
+      width: $full-width;
+    }
+
+    &:focus-within {
+      width: $full-width;
+      transition: width $transition ease-in-out;
+
+      + .ribbon-item-right {
+        width: 0;
+        transition: width $transition ease-in-out;
+
+        button {
+          width: $full-width;
+          max-width: 0;
+          min-inline-size: 0;
+          padding: 0;
+          transition:
+            max-width $transition ease-in-out,
+            padding $transition ease-in-out;
+        }
+      }
+    }
+
+    &:not(:focus-within) {
+      .ribbon-item-right {
+        width: calc($full-width - $input-width);
+      }
+
+      + .ribbon-item-right {
+        width: calc($full-width - $input-width);
+
+        button {
+          min-inline-size: 0;
+          width: $full-width;
+          max-width: 25rem;
+          transition: max-width $transition ease-in-out;
+        }
+
+        .spark-tooltip-toggle {
+          float: right;
+        }
+      }
+    }
+  }
+}
+
+.spark-stepper
+  .spark-stepper-step.spark-stepper-step-active:not(.spark-stepper-step-invalid)
+  .spark-stepper-step-button.spark-button {
+  color: white;
+}
+
+.text-field-align {
+  margin-right: -1rem;
+}
+
+.spark-modal-backdrop,
+.spark-modal-wrapper,
+.confirmation-dialog {
+  z-index: 100;
+}

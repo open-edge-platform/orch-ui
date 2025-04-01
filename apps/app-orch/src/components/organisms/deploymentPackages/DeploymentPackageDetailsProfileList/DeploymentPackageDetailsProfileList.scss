@@ -1,0 +1,18 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-package-details-profile-list {
+  &__table {
+    div > .table {
+      /* Description column will be the longest column by default */
+      td:nth-child(3) {
+        width: 60%;
+      }
+    }
+  }
+  &__app-profile-list-wrapper {
+    padding-left: 3rem;
+  }
+}

@@ -1,0 +1,69 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.application-tabs {
+  .application-table-content,
+  .application-registry-table-content {
+    min-height: 30rem;
+    padding: 2rem 0;
+    width: 100%;
+
+    & > div {
+      padding: 0.5rem;
+    }
+  }
+
+  .add-button-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    &__button {
+      position: absolute;
+      right: 0;
+      z-index: 1;
+      &:focus {
+        /* for tab misalignment upon button click */
+        position: absolute !important;
+      }
+    }
+  }
+
+  .spark-tabs {
+    /* This is required for disabling the line under tabs covering whole window */
+    box-shadow: none !important;
+  }
+  .spark-tabs-scrollbar {
+    overflow-x: hidden !important;
+    &::-webkit-scrollbar {
+      width: 0.625rem;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--spark-color-white);
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--spark-color-theme-light-gray600);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--spark-color-theme-dark-gray400);
+    }
+    width: 100%;
+  }
+  .spark-tabs::after {
+    $line-width: 17.25rem;
+    position: relative;
+    margin-left: $line-width * -1;
+    display: block;
+    content: "";
+    margin-top: 2rem;
+    height: var(--spark-tabs-box-shadow-y);
+    width: $line-width;
+    background-color: var(--spark-tabs-color-ghost-border);
+  }
+
+  .spark-tabs.spark-tabs-ghost .spark-tabs-active:after {
+    margin-bottom: 0.165rem;
+  }
+}

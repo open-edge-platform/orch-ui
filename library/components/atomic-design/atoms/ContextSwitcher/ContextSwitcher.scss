@@ -1,0 +1,58 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.context-switcher {
+  border: 0.1rem solid var(--spark-color-theme-light-gray500);
+  width: fit-content;
+
+  .spark-button-group {
+    gap: 0;
+  }
+
+  button {
+    outline: none;
+  }
+
+  &__button-container {
+    position: relative;
+    width: 7rem;
+
+    /* when button is not active show gray text for deselection */
+    .spark-button-content {
+      color: var(--spark-color-tb-theme-light-gray700);
+      margin: 0;
+      text-transform: capitalize;
+    }
+
+    /* show divider line */
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0.5rem;
+      left: -0.1rem;
+      height: 1rem;
+      width: 0.1rem;
+      background-color: var(--spark-color-theme-light-gray200);
+    }
+
+    /* when button is active show white text */
+    &.active {
+      .spark-button-content {
+        color: var(--spark-color-white);
+      }
+
+      /* donot show divider line before and after selected button element*/
+      &::after,
+      & + ::after {
+        background-color: transparent;
+      }
+    }
+
+    /* donot show line in front of first elementt of the list buttton */
+    &:first-child::after {
+      background-color: transparent;
+    }
+  }
+}

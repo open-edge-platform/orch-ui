@@ -1,0 +1,9 @@
+{
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-app-orch-deployment-app-deployment-manager-openapi.yaml",
+  "apiFile": "./apiSlice.ts",
+  "apiImport": "appDeploymentManagerApi",
+  "outputFile": "./deploymentManagerApis.ts",
+  "exportName": "deploymentManager",
+  "hooks": true,
+  "tag": true
+}

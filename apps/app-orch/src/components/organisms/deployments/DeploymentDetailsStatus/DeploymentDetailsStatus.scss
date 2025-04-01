@@ -1,0 +1,102 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-details__status {
+  .spark-icon {
+    padding: 1rem;
+    background: #f4f5f5;
+    border-radius: 5rem;
+  }
+
+  .deploymentType {
+    vertical-align: top;
+    padding-left: 2rem;
+  }
+
+  .spark-message-banner {
+    margin-top: 1rem;
+
+    .spark-icon {
+      padding: 0;
+      background: none;
+      border-radius: 0;
+    }
+  }
+
+  .package-icon {
+    width: 4rem;
+  }
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .deployment-package-table {
+    .package-icon {
+      width: 3rem;
+    }
+
+    .spark-button-content:hover,
+    button:hover {
+      background-color: #fff;
+    }
+  }
+
+  &__pkg-details {
+    button {
+      /* View Details modal button: According to wireframe */
+      padding: 0 !important;
+    }
+  }
+
+  &__metadata-tags {
+    &__scrollbox {
+      overflow-y: scroll;
+      border: 0.1rem solid var(--spark-color-theme-light-gray300);
+      height: 8rem;
+
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #888;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+      .metadata {
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        background-color: var(--spark-color-theme-light-gray300);
+        color: var(--spark-color-theme-light-gray900);
+      }
+
+      .spark-badge {
+        margin: 0.5rem;
+      }
+    }
+  }
+
+  &__deployment-time,
+  &__deployment-stat {
+    margin: 1rem;
+  }
+
+  .card-container {
+    margin: 1rem 1rem 0 0;
+  }
+
+  .subtitle {
+    font-weight: 500;
+  }
+}

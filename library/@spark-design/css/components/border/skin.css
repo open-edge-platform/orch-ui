@@ -1,0 +1,37 @@
+.spark-border-split-horizontal.spark-border-split-doubleline {
+    border-inline: 1px solid var(--spark-border-split-doubleline-border-color);
+    background-color: var(--spark-border-split-doubleline-background-color);
+}
+
+.spark-border-split-horizontal.spark-border-split-hairline,
+.spark-border-split-vertical.spark-border-split-hairline {
+    background-color: var(--spark-border-split-hairline-background-color);
+}
+
+.spark-border-split-horizontal.spark-border-split-ghost,
+.spark-border-split-vertical.spark-border-split-ghost {
+    background-color: var(--spark-border-split-ghost-background-color);
+}
+
+.spark-border-split-vertical.spark-border-split-doubleline {
+    border-block: 1px solid var(--spark-border-split-doubleline-border-color);
+    background-color: var(--spark-border-split-doubleline-background-color);
+}
+
+.spark-border-split-horizontal.spark-border-split-doubleline:active,
+.spark-border-split-horizontal.spark-border-split-hairline:active,
+.spark-border-split-horizontal.spark-border-split-ghost:active,
+.spark-border-split-vertical.spark-border-split-doubleline:active,
+.spark-border-split-vertical.spark-border-split-hairline:active,
+.spark-border-split-vertical.spark-border-split-ghost:active {
+    background-color: var(--spark-border-split-active-background-color);
+}
+
+.spark-border-split-horizontal.spark-border-split-doubleline:active::before,
+.spark-border-split-horizontal.spark-border-split-hairline:active::before,
+.spark-border-split-horizontal.spark-border-split-ghost:active::before,
+.spark-border-split-vertical.spark-border-split-doubleline:active::before,
+.spark-border-split-vertical.spark-border-split-hairline:active::before,
+.spark-border-split-vertical.spark-border-split-ghost:active::before {
+    color: var(--spark-border-split-active-icon-color);
+}

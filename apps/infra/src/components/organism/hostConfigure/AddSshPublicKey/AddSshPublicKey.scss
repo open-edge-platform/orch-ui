@@ -1,0 +1,24 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.add-ssh-public-key {
+  th {
+    background-color: var(--spark-color-tb-theme-light-gray100);
+  }
+
+  .serial-number {
+    color: var(--spark-color-theme-light-gray900);
+    font-size: 0.875rem;
+  }
+
+  .uuid {
+    color: var(--spark-color-theme-light-gray700);
+    font-size: 0.75rem;
+  }
+
+  .ssh-key-message-banner {
+    margin-bottom: 2rem;
+  }
+}

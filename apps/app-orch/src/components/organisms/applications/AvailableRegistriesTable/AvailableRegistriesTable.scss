@@ -1,0 +1,13 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.available-registries-table {
+  .ribbon-button {
+    pointer-events: visible;
+    .action-tooltip {
+      text-wrap: pretty;
+    }
+  }
+}

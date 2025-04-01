@@ -1,0 +1,7 @@
+------- Cluster Orch ---------
+
+kubectl port-forward -n {{ .Release.Name }} svc/{{ include "clusterOrch.fullname" . }} 3003:{{ .Values.service.port }}
+
+---
+revision: {{ .Chart.Annotations.revision }}
+created: {{ .Chart.Annotations.created }}

@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# IDEs
+*.sublime-project
+*.sublime-workspace
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+
+# Deps
+node_modules
+venv-lp
+
+# Auto generated
+dist
+node_modules
+cobertura-coverage.xml
+coverage
+#python
+__pycache__
+
+#jenkins
+artifacts
+.nyc_output
+cypress/pacts/*
+cypress/videos/*
+cypress/screenshots/
+cypress/logs/
+cypress/reports/

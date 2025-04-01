@@ -1,0 +1,96 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-package-profile-list-item {
+  margin: 1rem 0;
+  background-color: var(--themeLightGray75, #f9f9f9);
+  border: 0.1rem solid var(--themeLightGray300, #e2e2e4);
+
+  // This style is for table that show only single profile at a time
+  &__table {
+    // wrapper around original table
+    & > div > table,
+    & > div > table td {
+      background-color: unset;
+      border: none;
+    }
+
+    & > div > table {
+      // original table
+      height: 5rem;
+      margin: 0;
+
+      & > thead > tr > th {
+        position: relative;
+        top: 1rem;
+      }
+
+      th {
+        color: var(--spark-color-theme-light-gray600);
+        font-weight: 400;
+        /* TODO: remove this after css of .header of navigation bar is encapsulated within navigation bar. */
+        background-color: unset;
+
+        &:nth-child(2) {
+          width: 20%;
+        }
+        &:nth-child(3) {
+          width: 60%;
+        }
+        &:nth-child(4) {
+          width: 10%;
+        }
+        &:hover {
+          background-color: unset;
+        }
+      }
+
+      // This will make the icons center between header and single data row
+      .spark-icon {
+        font-size: 1.25rem;
+        position: relative;
+        top: -1rem;
+      }
+
+      .popup-icon {
+        padding: 0.25rem 1rem;
+      }
+
+      .spark-badge {
+        margin: 0.5rem 1rem;
+        padding: 0 1rem;
+        color: black;
+        background-color: var(--energyBlueTint2, #a0ebff);
+      }
+    }
+
+    &__app-profile-list {
+      & > div {
+        width: 100%;
+        padding-left: 3rem;
+        & > table {
+          width: 60%;
+          background-color: white;
+          tr {
+            border: 0.1rem solid var(--themeLightGray300, #e2e2e4);
+            tr:hover {
+              background-color: white;
+            }
+          }
+          th {
+            font-weight: 500;
+            color: var(--spark-color-theme-dark-gray50);
+          }
+          td:nth-child(1) {
+            width: 30%;
+          }
+          td:nth-child(2) {
+            width: 70%;
+          }
+        }
+      }
+    }
+  }
+}

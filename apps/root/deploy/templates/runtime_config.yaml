@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "root.fullname" . }}-runtime-config
+  labels:
+    app.kubernetes.io/part-of: orch-ui
+    release: {{ .Release.Name }}
+data:
+  config: |
+{{ include "root.runtime-config" . | indent 4 }}

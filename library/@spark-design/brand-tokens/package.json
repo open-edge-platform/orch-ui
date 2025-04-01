@@ -1,0 +1,6 @@
+{
+    "name": "@spark-design/brand-tokens",
+    "version": "1.1.7-alpha.0",
+    "main": "index.js",
+    "files": ["style", "assets"]
+}

@@ -1,0 +1,31 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.perf-charts-container {
+  display: flex;
+  justify-content: space-evenly;
+  .performance-card {
+    /* chart box setting */
+    &-box {
+      position: relative;
+      border: 0.1rem solid var(--spark-color-theme-light-gray300);
+      margin: 1rem;
+      height: 28rem;
+    }
+    &-head {
+      padding-left: 1rem;
+      padding-top: 2rem;
+    }
+
+    /* Echart adjustments upon resize */
+    .performanceCardChart > div {
+      margin: auto;
+      padding: 0.5rem;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

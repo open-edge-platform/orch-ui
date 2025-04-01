@@ -1,0 +1,19 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.os-config {
+  /*Add styles*/
+  .os-update {
+    background-color: var(--spark-color-daisy-shade1);
+    border-radius: 5px;
+    padding: 3px;
+    margin-left: 0.5rem;
+    font-size: 0.7rem;
+  }
+  .os-update-icon {
+    color: var(--spark-color-classic-blue);
+    margin-right: 0.4rem;
+  }
+}

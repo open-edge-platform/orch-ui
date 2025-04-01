@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+---
+name: Post-Merge Tests
+
+on:
+  push:
+    branches:
+      - main
+      - release-*
+    paths:
+      - 'tests/**'
+  workflow_dispatch:
+
+jobs:
+  post-merge-pipeline:
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@main
+    with:
+      bootstrap_tools: "base,helm,yq,jq"
+      run_security_scans: true
+      run_version_check: true
+      run_dep_version_check: false
+      run_build: false
+      run_docker_build: false
+      run_docker_push: false
+      run_helm_build: false
+      run_helm_push: false
+      run_version_tag: true
+      run_artifact: false
+      run_version_dev: true
+      prefix_tag_separator: "/"
+      project_folder: tests
+      orch_ci_repo_ref: main
+      persist_creds: true
+    secrets: inherit

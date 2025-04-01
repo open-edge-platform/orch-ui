@@ -1,0 +1,43 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.region {
+  display: flex;
+  height: 2rem;
+  .name {
+    margin-right: auto;
+  }
+  align-items: center;
+  padding: 0;
+  p {
+    margin: 0;
+  }
+  .price,
+  &__icon {
+    max-width: 10rem;
+    width: 100%;
+  }
+  &__icon.spark-icon.spark-icon-light {
+    font-weight: 800;
+  }
+}
+
+.site {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 2rem;
+  padding: 0;
+  //border: 1px solid purple;
+
+  &__link {
+    text-decoration: none;
+  }
+
+  &.last {
+    //padding-bottom: 1rem;
+    border-bottom: 0.01rem solid lightgray;
+  }
+}

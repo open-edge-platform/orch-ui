@@ -1,0 +1,144 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.collapsable-list {
+  transition: width 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-right: 1px solid var(--spark-color-theme-light-gray300);
+
+  .list-value {
+    transition: opacity 0.5s ease;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    opacity: 1;
+  }
+
+  .list-value.hide {
+    opacity: 1;
+  }
+
+  h2 {
+    display: flex;
+  }
+
+  .hide-title {
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s opacity;
+    transition-delay: 0.5s;
+  }
+
+  .show-title {
+    visibility: initial;
+    opacity: 1;
+    transition: 1.5s opacity;
+    transition-delay: 0.5s;
+  }
+
+  .spark-button {
+    width: calc(100% - 2rem);
+    justify-content: flex-start;
+    background-color: transparent;
+    margin: 1rem 1rem 0 1rem;
+    outline: none !important;
+    justify-content: space-between;
+
+    span {
+      font-weight: 400;
+    }
+    &.indented {
+      padding-left: 3rem;
+    }
+    &.bold .list-value {
+      font-weight: 500;
+    }
+  }
+
+  .spark-button:hover {
+    background-color: var(--spark-color-theme-light-gray300);
+  }
+
+  .spark-button-selected {
+    background-color: var(--spark-color-theme-light-gray300);
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  & > .spark-button {
+    margin-top: 1rem;
+  }
+
+  .collapsible {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      width: inherit;
+    }
+  }
+
+  &__toggle {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--spark-color-theme-light-gray300);
+
+    .spark-button {
+      width: inherit;
+    }
+  }
+
+  &__children {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    transition-property: max-height, opacity;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+    opacity: 1;
+    visibility: visible;
+    max-height: 100vh; //
+
+    &-hide {
+      opacity: 0;
+      visibility: hidden;
+      max-height: 0;
+    }
+
+    .spark-button {
+      margin-top: 0.5rem;
+    }
+
+    .spark-button-selected {
+      background-color: var(--spark-color-transparent);
+
+      span {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__divider {
+    margin-top: 0.875rem;
+    border-top: 1px solid var(--spark-color-theme-light-gray300);
+  }
+
+  .spark-focus-visible.spark-focus-visible-self:focus-visible {
+    box-shadow: none !important;
+  }
+}
+
+.dark-mode .collapsable-list {
+  background-color: #323538;
+
+  i[class~="bi"] {
+    color: var(--bs-white);
+  }
+}

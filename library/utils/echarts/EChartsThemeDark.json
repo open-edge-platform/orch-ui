@@ -1,0 +1,35 @@
+{
+  "color": [
+    "#0068b5",
+    "#8bae46",
+    "#edb200",
+    "#8f5da2",
+    "#e96115",
+    "#00c7fd",
+    "#548fad",
+    "#1e2eb8",
+    "#808080",
+    "#fec91b",
+    "#004a86",
+    "#ff5662",
+    "#c81326"
+  ],
+  "backgroundColor": "#262626",
+  "title": {
+    "textStyle": {
+      "color": "#ffffff"
+    },
+    "subtextStyle": {
+      "color": "#dddddd"
+    }
+  },
+  "legend": {
+    "textStyle": {
+      "color": "#ffffff"
+    },
+    "pageIconColor": "#ffffff",
+    "pageTextStyle": {
+      "color": "#ffffff"
+    }
+  }
+}
