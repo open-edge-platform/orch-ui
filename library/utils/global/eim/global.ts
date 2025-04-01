@@ -187,7 +187,7 @@ export const hostStatusFields: FieldLabels<HostGenericStatuses> = {
     label: "Host",
   },
   trustedAttestationStatus: {
-    label: "Trusted Compute",
+    label: "Attestation",
   },
   instanceStatus: {
     label: "Software(OS/Agents)",
