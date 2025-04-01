@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { HostData, selectHosts } from "../../../store/configureHost";
 import { useAppSelector } from "../../../store/hooks";
-
+import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import "./HostConfigReview.scss";
 
 const dataCy = "hostConfigReview";
@@ -104,7 +104,7 @@ export const HostConfigReview = ({
                         {sbFdeEnabled ? "Enabled" : "Disabled"}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Compatible" : "Not compatible"}
+                        {getTrustedComputeCompatibility(host).text}
                       </td>
                       <td data-cy="tableRowCell">
                         {selectedAccount ? selectedAccount.username : "-"}

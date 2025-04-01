@@ -58,6 +58,7 @@ export const DetailedStatuses = <T extends AggregatedStatusesMap>({
     const humanReadableTimestamp = timestamp
       ? moment(new Date(timestamp * 1000)).format("MMM DD, YYYY hh:mm:ss A")
       : "Unavailable";
+    const message = data[key].message ?? "-";
     return (
       <>
         <span className="line"></span>
@@ -67,9 +68,7 @@ export const DetailedStatuses = <T extends AggregatedStatusesMap>({
         <div data-cy={`icon-${key}`}>
           <StatusIcon
             status={genericStatusToIconStatus(data[key])}
-            text={
-              field.formatter ? field.formatter(data[key]) : data[key].message
-            }
+            text={field.formatter ? field.formatter(data[key]) : message}
           />
         </div>
         {showTimestamp && (
