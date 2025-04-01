@@ -4,7 +4,7 @@
  */
 
 import { adm } from "@orch-ui/apis";
-import { Status } from "@orch-ui/components";
+import { MetadataPair, Status } from "@orch-ui/components";
 
 export const admStatusToUIStatus = (s?: adm.DeploymentStatusRead): Status => {
   let status: Status;
@@ -68,4 +68,16 @@ export const admStatusToText = (s?: adm.DeploymentStatusRead): string => {
   } else {
     return parseState(s?.state);
   }
+};
+
+export const generateMetadataPair = (labels?: any): MetadataPair[] => {
+  const result: MetadataPair[] = [];
+  if (labels) {
+    Object.keys(labels).map((key) => {
+      if (typeof key === "string" && typeof labels[key] === "string") {
+        result.push({ key: key, value: labels[key] });
+      }
+    });
+  }
+  return result;
 };
