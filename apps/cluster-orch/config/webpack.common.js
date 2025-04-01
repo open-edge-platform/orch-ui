@@ -10,7 +10,7 @@ const webpackCommon = require("../../../library/utils/webpack.util");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const fs = require("fs");
-const { dependencies, version } = require("../../../package.json");
+const { dependencies } = require("../../../package.json");
 
 fs.copyFileSync(
   "../root/public/runtime-config.js",
@@ -61,13 +61,16 @@ module.exports = {
         "./App": "./src/App",
         "./Dashboard": "./src/components/pages/Dashboard",
         "./ClusterDetail": "./src/components/pages/ClusterDetailExternal",
+        "./ClusterDetailsDrawer":
+          "./src/components/organism/ClusterDetailsDrawer/ClusterDetailsDrawer",
         "./ClusterManagement":
           "./src/components/pages/ClusterManagementExternal",
         "./ClusterEdit":
           "./src/components/pages/ClusterEdit/ClusterEditExternal",
         "./ClusterCreation":
           "./src/components/pages/ClusterCreation/ClusterCreationExternal",
-        "./ClusterList": "./src/components/organism/ClusterListRemote",
+        "./ClusterList":
+          "./src/components/organism/ClusterList/ClusterListRemote",
         "./ClusterSummary":
           "./src/components/organism/ClusterSummary/ClusterSummaryExternal",
         "./DeauthorizeNodeConfirmationDialog":

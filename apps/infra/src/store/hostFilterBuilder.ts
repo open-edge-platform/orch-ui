@@ -84,6 +84,10 @@ aggregatedStatusQuery.set(
 export interface HostFilterBuilderState {
   lifeCycleState: LifeCycleState;
   lifeCycleStateQuery?: string;
+  uuids?: string[];
+  uuidsQuery?: string;
+  hostIds?: string[];
+  hostIdsQuery?: string;
   hasSiteIdQuery?: string;
   siteId?: string;
   siteIdQuery?: string;
@@ -164,7 +168,18 @@ export const _setSearchTerm = (
 ) => {
   state.searchTerm = action.payload;
   state.searchTermQuery = `(${searchableColumns
-    .map((value) => `${value}="${action.payload}"`)
+    .map((value) => {
+      // Ignore search filter on `uuid` column if filters.uuids are set
+      if (value === "uuid" && state.uuidsQuery !== undefined) {
+        return;
+      }
+      // Ignore search filter on `resourceId` column if filters.hostIds are set
+      if (value === "resourceId" && state.hostIdsQuery !== undefined) {
+        return;
+      }
+      return `${value}="${action.payload}"`;
+    })
+    .filter((value) => value !== undefined)
     .join(" OR ")})`;
   hostFilterBuilder.caseReducers.buildFilter(state);
 };
@@ -183,6 +198,35 @@ export const _setStatuses = (
   }
   hostFilterBuilder.caseReducers.buildFilter(state);
 };
+
+export const _setFiltersByUuids = (
+  state: HostFilterBuilderState,
+  action: PayloadAction<string[] | undefined>,
+) => {
+  state.uuids = action.payload;
+  if (action.payload && action.payload.length > 0) {
+    state.uuidsQuery = buildColumnOrs("uuid", action.payload);
+  } else {
+    state.uuidsQuery = undefined;
+  }
+  hostFilterBuilder.caseReducers.buildFilter(state);
+  return state;
+};
+
+export const _setFiltersByHostIds = (
+  state: HostFilterBuilderState,
+  action: PayloadAction<string[] | undefined>,
+) => {
+  state.hostIds = action.payload;
+  if (action.payload && action.payload.length > 0) {
+    state.hostIdsQuery = buildColumnOrs("resourceId", action.payload);
+  } else {
+    state.hostIdsQuery = undefined;
+  }
+  hostFilterBuilder.caseReducers.buildFilter(state);
+  return state;
+};
+
 export const _setOsProfiles = (
   state: HostFilterBuilderState,
   action: PayloadAction<string[] | undefined>,
@@ -214,6 +258,12 @@ export const _buildFilter = (state: HostFilterBuilderState) => {
   );
   filter.push(state.workloadMemberId ? state.workloadMemberIdQuery : undefined);
   filter.push(state.siteId ? state.siteIdQuery : undefined);
+  filter.push(
+    state.uuids && state.uuids.length > 0 ? state.uuidsQuery : undefined,
+  );
+  filter.push(
+    state.hostIds && state.hostIds.length > 0 ? state.hostIdsQuery : undefined,
+  );
   const result = filter.filter((value) => value !== undefined).join(" AND ");
   state.filter = result.length === 0 ? undefined : result;
 };
@@ -230,6 +280,8 @@ export const hostFilterBuilder = createSlice({
     setOsProfiles: _setOsProfiles,
     buildFilter: _buildFilter,
     setSiteId: _setSiteId,
+    setFiltersByUuids: _setFiltersByUuids,
+    setFiltersByHostIds: _setFiltersByHostIds,
   },
 });
 
@@ -242,6 +294,8 @@ export const {
   setOsProfiles,
   buildFilter,
   setSiteId,
+  setFiltersByUuids,
+  setFiltersByHostIds,
 } = hostFilterBuilder.actions;
 
 export const selectFilter = (state: _FilterBuilderRootState) =>

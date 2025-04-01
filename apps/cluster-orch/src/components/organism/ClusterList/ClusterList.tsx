@@ -29,16 +29,16 @@ import { useSearchParams } from "react-router-dom";
 
 const dataCy = "clusterList";
 export interface ClusterListProps {
+  canSelectRows?: boolean;
   selectedClusterIds?: string[];
   onSelect?: (selectedRowData: cm.ClusterInfoRead, isSelected: boolean) => void;
   onShowDetails?: (cluster: cm.ClusterInfoRead) => void;
-  isForm?: boolean;
 }
 const ClusterList = ({
+  canSelectRows,
   selectedClusterIds,
   onSelect,
   onShowDetails,
-  isForm,
 }: ClusterListProps) => {
   const cy = { "data-cy": dataCy };
   const projectName = SharedStorage.project?.name ?? "";
@@ -154,7 +154,7 @@ const ClusterList = ({
           });
         }}
         // Selection feature
-        canSelectRows={isForm}
+        canSelectRows={canSelectRows}
         getRowId={(cluster) => cluster.name!}
         selectedIds={selectedClusterIds}
         onSelect={onSelect}

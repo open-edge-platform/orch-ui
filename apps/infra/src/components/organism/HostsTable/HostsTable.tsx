@@ -31,6 +31,8 @@ import { reset, setHosts } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   LifeCycleState,
+  setFiltersByHostIds,
+  setFiltersByUuids,
   setHasWorkload,
   setLifeCycleState,
   setSearchTerm,
@@ -52,8 +54,10 @@ export interface HostsTableProps {
   /** Lifecycle category */
   category?: LifeCycleState;
   /** API filters */
-  filters?: eim.GetV1ProjectsByProjectNameComputeHostsApiArg & {
-    workloadMemberId?: string | undefined;
+  filters?: Partial<eim.GetV1ProjectsByProjectNameComputeHostsApiArg> & {
+    workloadMemberId?: string;
+    byUuids?: string[];
+    byHostIds?: string[];
   };
   hasWorkload?: boolean;
   /** hide only Deauthorized Hosts (default: false) */
@@ -155,9 +159,16 @@ const HostsTable = ({
   }, [hasWorkload]);
 
   useEffect(() => {
-    dispatch(setWorkloadMemberId(filters?.workloadMemberId));
-    /* Add more dispatch if you have more filters here ... */
-  }, [filter]);
+    if (filters) {
+      dispatch(setWorkloadMemberId(filters.workloadMemberId));
+      if (filters.byUuids) {
+        dispatch(setFiltersByUuids(filters.byUuids));
+      } else if (filters.byHostIds) {
+        dispatch(setFiltersByHostIds(filters.byHostIds));
+      }
+      /* Add more dispatch if you have more filters here ... */
+    }
+  }, [filters]);
 
   const { data, isSuccess, isError, isLoading, error } =
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
@@ -215,7 +226,10 @@ const HostsTable = ({
       dispatch(reset());
       // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
+
+      // TODO: change this to `../onboarded-host/configure`
       const path = "../unconfigured-host/configure";
+
       navigate(path, {
         relative: "path",
       });

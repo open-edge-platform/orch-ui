@@ -51,7 +51,6 @@ import "./src/components/organisms/profiles/DeploymentPackageProfileListItem/Dep
 import "./src/components/organisms/profiles/DeploymentProfileForm/DeploymentProfileForm.cy.tsx";
 import "./src/components/organisms/profiles/ParameterOverridesForm/ParameterOverridesForm.cy.tsx";
 import "./src/components/organisms/profiles/SelectApplicationProfile/SelectApplicationProfile.cy.tsx";
-import "./src/components/organisms/setup-deployments/ClusterDetails/ClusterDetails.cy.tsx";
 import "./src/components/organisms/setup-deployments/NetworkInterconnect/NetworkInterconnect.cy.tsx";
 import "./src/components/organisms/setup-deployments/OverrideProfileValues/OverrideProfileTable.cy.tsx";
 import "./src/components/organisms/setup-deployments/ProfilePackageDetails/ProfilePackageDetails.cy.tsx";
