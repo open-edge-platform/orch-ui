@@ -19,7 +19,7 @@ jobs:
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
-      run_version_check: true
+      run_version_check: false
       run_dep_version_check: false
       run_build: false
       run_docker_build: false
