@@ -19,7 +19,8 @@ describe("DeploymentsContainer helpers functions", () => {
         },
         {
           name: "cluster-2",
-          nodes: [{ id: "node2-guid" }, { id: "node3-guid" }],
+          nodes: [{ id: "host-1" }, { id: "host-3" }],
+          // TODO: nodes: [{ id: "node2-guid" }, { id: "node3-guid" }],
         },
       ];
 
@@ -111,7 +112,7 @@ describe("DeploymentsContainer helpers functions", () => {
           "GET",
           `**/v1/projects/${
             SharedStorage.project?.name
-          }/compute/hosts?uuid=${n.uuid!}`,
+          }/compute/hosts?resourceId=${n.resourceId}`,
           {
             ...mockRes,
             hosts: [n],
@@ -125,7 +126,7 @@ describe("DeploymentsContainer helpers functions", () => {
       const dispatch = setupStore().dispatch;
       const res = await getHostStatus(
         dispatch,
-        nodes.map((n) => n.uuid!),
+        nodes.map((n) => n.resourceId!),
       );
 
       cy.get("@getNodes.all").should("have.length", nodes.length);
