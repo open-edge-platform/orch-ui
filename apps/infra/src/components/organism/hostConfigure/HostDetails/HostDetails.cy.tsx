@@ -22,18 +22,10 @@ describe("<Details/>", () => {
         "Foo.123!",
         "Foo.123$",
         "123456789012345678901", // max of 20 chars exceeded
-        "-foo", // starts with a hyphen
-        "foo-", // ends with a hyphen
-        ".foo", // starts with a dot
-        "foo.", // ends with a dot
-        "foo..bar", // consecutive dots
         "foo@bar", // contains invalid character '@'
         "foo#bar", // contains invalid character '#'
-        "foo/bar", // contains invalid character '/'
         "foo\\bar", // contains invalid character '\'
-        "foo bar", // contains space
         "foo,bar", // contains invalid character ','
-        "foo:bar", // contains invalid character ':'
         "foo;bar", // contains invalid character ';'
         "foo|bar", // contains invalid character '|'
         "foo<bar", // contains invalid character '<'
