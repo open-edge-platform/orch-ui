@@ -34,7 +34,7 @@ const NameAndTemplate = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleNameChange = (name: string) => {
-    const regex = "^$|^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$";
+    const regex = "^$|^[a-z0-9][a-z0-9.-]*[a-z0-9]$";
     const regexHandle = new RegExp(regex);
     if (regexHandle.test(name)) {
       dispatch(updateClusterName(name));
