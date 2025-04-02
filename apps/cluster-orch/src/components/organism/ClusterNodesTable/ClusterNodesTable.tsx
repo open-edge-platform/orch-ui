@@ -19,7 +19,7 @@ import {
   SharedStorage,
 } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const dataCy = "clusterNodesTable";
@@ -36,11 +36,14 @@ interface ClusterNodesTableProps {
   // NOTE the CO API takes UUID when creating the cluster and returns resourceId when reading it
   // as a result we need to filter on the former in the review page or the latter in the cluster list expansion
   filterOn: "resourceId" | "uuid";
+  /** Invoked when data is loaded */
+  onDataLoad?: (data: eim.HostRead[]) => void;
 }
 const ClusterNodesTable = ({
   nodes,
   readinessType,
   filterOn,
+  onDataLoad,
 }: ClusterNodesTableProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -63,6 +66,12 @@ const ClusterNodesTable = ({
       skip: nodesCount === 0,
     },
   );
+
+  useEffect(() => {
+    if (onDataLoad && isSuccess && hostsResponse) {
+      onDataLoad(hostsResponse.hosts);
+    }
+  }, [hostsResponse, isSuccess]);
 
   if (nodesCount > 0 && isError) {
     return <ApiError error={error} />;
