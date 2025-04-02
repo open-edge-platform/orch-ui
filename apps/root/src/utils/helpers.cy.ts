@@ -15,16 +15,18 @@ describe("DeploymentsContainer helpers functions", () => {
       const clusters: cm.ClusterDetailInfo[] = [
         {
           name: "cluster-1",
-          nodes: [{ id: "node1-guid" }],
+          // TODO: nodes: [{ id: "node1-guid" }],
+          nodes: [{ id: "host-2" }],
         },
         {
           name: "cluster-2",
           nodes: [{ id: "host-1" }, { id: "host-3" }],
-          // TODO: nodes: [{ id: "node2-guid" }, { id: "node3-guid" }],
+          // nodes: [{ id: "node2-guid" }, { id: "node3-guid" }],
         },
       ];
 
-      const nodeGuids = ["node1-guid", "node2-guid", "node3-guid"];
+      const nodeIds = ["host-1", "host-3", "host-2"];
+      //const nodeGuids = ["node1-guid", "node2-guid", "node3-guid"];
 
       beforeEach(() => {
         SharedStorage.project = defaultActiveProject;
@@ -45,9 +47,9 @@ describe("DeploymentsContainer helpers functions", () => {
         cy.get("@getCluster.all").should("have.length", clusters.length);
 
         // check to see that all nodes are reported
-        expect(res.length).to.equal(nodeGuids.length);
+        expect(res.length).to.equal(nodeIds.length);
         res.forEach((n) => {
-          expect(nodeGuids).to.contain(n);
+          expect(nodeIds).to.contain(n);
         });
       });
     });
@@ -112,7 +114,8 @@ describe("DeploymentsContainer helpers functions", () => {
           "GET",
           `**/v1/projects/${
             SharedStorage.project?.name
-          }/compute/hosts?resourceId=${n.resourceId}`,
+            // TODO: uuid instead of resourceId
+          }/compute/hosts?filter=resourceId%3D%27${n.resourceId}%27`,
           {
             ...mockRes,
             hosts: [n],
