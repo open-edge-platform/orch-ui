@@ -21,22 +21,16 @@ describe("<Details/>", () => {
         null,
         "Foo.123!",
         "Foo.123$",
-        "123456789012345678901" //max of 20 chars exceeded
-      ].forEach((name)=>{
+        "123456789012345678901", //max of 20 chars exceeded
+      ].forEach((name) => {
         expect(isValidHostName(name)).to.be.false;
       });
     });
 
     it("should pass on valid names", () => {
-      [
-        "foo-bar",
-        "Foo-Bar",
-        "Foo-123",
-        "Foo.123",
-      ].forEach((name)=>{
-        expect(isValidHostName(name)).to.be.true
-      })
-
+      ["foo-bar", "Foo-Bar", "Foo-123", "Foo.123"].forEach((name) => {
+        expect(isValidHostName(name)).to.be.true;
+      });
     });
   });
 
