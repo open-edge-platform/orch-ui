@@ -58,7 +58,7 @@ describe("<NameAndTemplate/>", () => {
     pom.el.clusterName.should("have.attr", "aria-invalid", "true");
 
     pom.el.clusterName.clear().type("test-hello.cluster");
-    pom.el.clusterName.should("have.attr", "aria-invalid", "true");
+    pom.el.clusterName.should("not.have.attr", "aria-invalid");
   });
 
   it("should not allow any capital case", () => {
