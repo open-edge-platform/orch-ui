@@ -6,6 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwo as hostTwo,
+  regionSalemId,
   siteMinimartTwo,
   siteMinimartTwoName,
 } from "@orch-ui/utils";
@@ -167,6 +168,19 @@ describe("<HostEdit />", () => {
     it("should enable dropdowns when API responds with instances/workloads", () => {
       pom.el.regionCombobox.should("not.be.disabled");
       pom.el.siteCombobox.should("not.be.disabled");
+    });
+
+    it("should have the correct region ID in the sitesSuccess request URL", () => {
+      const expectedRegionId = regionSalemId;
+
+      cy.get(`@${pom.api.sitesSuccess}`)
+        .its("request.url")
+        .then((url: string) => {
+          const match = url.match(
+            `region.resourceId%3D%27${expectedRegionId}%27`,
+          );
+          expect(match && match.length > 0).to.be.eq(true);
+        });
     });
 
     it("should not contain 'None' in the Site dropdown", () => {
