@@ -6,8 +6,6 @@ The following are guidelines for contributing to the {Name} project, including t
 
 - [Code of Conduct](#code-of-conduct)
 
-- [Security](#security)
-
 - [Get Started](#get-started)
 
 - [How to Contribute](#how-to-contribute)
@@ -21,8 +19,6 @@ The following are guidelines for contributing to the {Name} project, including t
 ## Code of Conduct
 
 This project and everyone participating in it are governed by the [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to adhere to this code. Please report unacceptable behavior to <email@example.com>.
-
-## Security
 
 ## Get Started
 
