@@ -54,9 +54,9 @@ const endpoints: CyApiDetails<
               name: "linux",
               sha256: "sha",
               updateSources: [],
-              securityFeature:
-                "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
             },
+            securityFeature:
+              "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
           },
         },
       ],

@@ -12,6 +12,7 @@ import {
   TableColumn,
 } from "@orch-ui/components";
 import {
+  getTrustedComputeCompatibility,
   hostProviderStatusToString,
   nodeStatusToIconStatus,
   nodeStatusToText,
@@ -124,11 +125,7 @@ const ClusterNodesTable = ({
     },
     {
       Header: "Trusted Compute",
-      accessor: (node) =>
-        node.instance?.os?.securityFeature ===
-        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
-          ? "Compatible"
-          : "Not compatible",
+      accessor: (node) => getTrustedComputeCompatibility(node).text,
     },
     {
       Header: "Actions",
