@@ -80,6 +80,8 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
           searchParams.get("searchTerm") ?? "",
           ["name", "providerStatus.indicator", "kubernetesVersion"],
           Operator.OR,
+          false,
+          { "providerStatus.indicator": "providerStatus" },
         ),
         orderBy: getOrder(
           searchParams.get("column"),

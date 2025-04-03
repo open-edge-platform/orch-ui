@@ -97,6 +97,8 @@ const ClusterList = ({
           searchParams.get("searchTerm") ?? "",
           ["name", "providerStatus.indicator"],
           Operator.OR,
+          false,
+          { "providerStatus.indicator": "providerStatus" },
         ),
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         pageSize: searchParams.get("pageSize")
