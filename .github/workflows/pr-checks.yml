@@ -100,9 +100,9 @@ jobs:
           echo "Library pipeline result: $library_pipeline_result"
           echo "Detect-changed-folders: $detect_changed_folders"
 
-          # E2E tests should always succeed regardless of other changes
+          # E2E tests pipeline should always succeed regardless of other changes
           if [ "$e2e_tests_pipeline_result" != "success" ]; then
-            echo "E2E tests failed. PR can't be merged."
+            echo "E2E tests pipeline failed. PR can't be merged."
             exit 1
           fi
 
