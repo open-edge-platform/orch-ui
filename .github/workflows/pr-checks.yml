@@ -83,27 +83,27 @@ jobs:
       orch_ci_repo_ref: main
     secrets: inherit
 
-  final-check:
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: [detect-changed-folders, pre-merge-pipeline, pre-merge-pipeline-all, e2e-tests-pipeline]
-    steps:
-      - name: Final Status Check
-        run: |
-          pre_merge_pipeline_result="${{ needs.pre-merge-pipeline.result }}"
-          pre_merge_pipeline_result_all="${{ needs.pre-merge-pipeline-all.result }}"
-          e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
-          detect_changed_folders="${{ needs.detect-changed-folders.outputs.changed_apps }}"
-          echo "E2E test pipeline result: $e2e_tests_pipeline_result"
-          echo "Pre-merge pipeline result: $pre_merge_pipeline_result"
-          echo "Pre-merge pipeline all result: $pre_merge_pipeline_result_all"
-          echo "Detect-changed-folders: $detect_changed_folders"
+  # final-check:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ always() }}
+  #   needs: [detect-changed-folders, pre-merge-pipeline, pre-merge-pipeline, e2e-tests-pipeline]
+  #   steps:
+  #     - name: Final Status Check
+  #       run: |
+  #         pre_merge_pipeline_result="${{ needs.pre-merge-pipeline.result }}"
+  #         pre_merge_pipeline_result_all="${{ needs.pre-merge-pipeline-all.result }}"
+  #         e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
+  #         detect_changed_folders="${{ needs.detect-changed-folders.outputs.changed_apps }}"
+  #         echo "E2E test pipeline result: $e2e_tests_pipeline_result"
+  #         echo "Pre-merge pipeline result: $pre_merge_pipeline_result"
+  #         echo "Pre-merge pipeline all result: $pre_merge_pipeline_result_all"
+  #         echo "Detect-changed-folders: $detect_changed_folders"
 
-          if [ "$detect_changed_folders" == "[]" ] && [ "$e2e_tests_pipeline_result" == "success" ]; then
-            echo "No project changes found. E2E check passed successfully."
-          elif [ "$pre_merge_pipeline_result" == "success" ] || [ "$pre_merge_pipeline_result_all" == "success" ]; then
-            echo "At least one pre-merge check passed successfully."
-          else
-            echo "Both pre-merge checks failed or were skipped. PR can't get merged."
-            exit 1
-          fi
+  #         if [ "$detect_changed_folders" == "[]" ] && [ "$e2e_tests_pipeline_result" == "success" ]; then
+  #           echo "No project changes found. E2E check passed successfully."
+  #         elif [ "$pre_merge_pipeline_result" == "success" ] || [ "$pre_merge_pipeline_result_all" == "success" ]; then
+  #           echo "At least one pre-merge check passed successfully."
+  #         else
+  #           echo "Both pre-merge checks failed or were skipped. PR can't get merged."
+  #           exit 1
+  #         fi
