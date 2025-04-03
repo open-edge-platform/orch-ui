@@ -58,11 +58,11 @@ jobs:
 
   pre-merge-pipeline:
     needs: [detect-changed-folders, setup-conditions]
-    if: needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null
+    if: ${{ needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null) }}
     strategy:
       fail-fast: false
       matrix:
-        project_folder: ${{ fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
+        project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
     with:
       bootstrap_tools: "base,helm,yq,jq"
@@ -83,36 +83,10 @@ jobs:
       orch_ci_repo_ref: main
     secrets: inherit
 
-  pre-merge-pipeline-all:
-    needs: setup-conditions
-    if: needs.setup-conditions.outputs.common_condition == 'true'
-    strategy:
-      fail-fast: false
-      matrix:
-        project_folder: ["admin", "app-orch", "cluster-orch", "infra", "root"]
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
-    with:
-      bootstrap_tools: "base,helm,yq,jq"
-      run_security_scans: true
-      run_version_check: true
-      run_dep_version_check: false
-      run_build: true
-      run_lint: true
-      run_test: true
-      run_validate_clean_folder: true
-      run_docker_build: true
-      run_scan_containers: true
-      run_artifact: false
-      run_helm_build: true
-      run_reuse_check: true
-      prefix_tag_separator: "/"
-      project_folder: apps/${{ matrix.project_folder }}
-      orch_ci_repo_ref: main
-    secrets: inherit
   final-check:
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [Detect-changed-folders, pre-merge-pipeline, pre-merge-pipeline-all, e2e-tests-pipeline]
+    needs: [detect-changed-folders, pre-merge-pipeline, pre-merge-pipeline-all, e2e-tests-pipeline]
     steps:
       - name: Final Status Check
         run: |
