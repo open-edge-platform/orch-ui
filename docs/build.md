@@ -2,13 +2,20 @@
 
 This guide provides steps to update an existing KinD cluster with custom UI changes.
 
+The UI consists of five different micro front-ends (MFEs), each deployed via a separate Docker container and Helm chart.
+
+The MFEs include:
+
+- admin
+- infra
+- cluster-orch
+- app-orch
+
 ---
 
 ## Build Docker Image
 
-The UI consists of five different micro front-ends (MFEs), each deployed via a separate Docker container and Helm chart.
-
-To build all MFEs from the root of the repository, use the following command:
+In general to build an MFEs `apps/<name>` from the root of the repository, use the following command:
 
 ```bash
 make docker-build -C apps/<name>
@@ -86,8 +93,8 @@ postCustomTemplateOverwrite:
 To build and publish images to an online registry (e.g., DockerHub), use the following commands
 
 ```shell
-DOCKER_TAG=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-build
-DOCKER_TAG=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
+VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-build
+VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
 ```
 
 ## Apply the Docker Image Change for a UI App
