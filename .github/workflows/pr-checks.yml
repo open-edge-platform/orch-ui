@@ -86,7 +86,7 @@ jobs:
   final-check:
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [detect-changed-folders, pre-merge-pipeline, e2e-tests-pipeline]
+    needs: [detect-changed-folders, setup-conditions, library-pipeline, e2e-tests-pipeline, pre-merge-pipeline]
     steps:
       - name: Final Status Check
         run: |
