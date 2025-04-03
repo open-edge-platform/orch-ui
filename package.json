@@ -106,7 +106,7 @@
     "@spark-design/react": "file:library/@spark-design/react",
     "@spark-design/tokens": "file:library/@spark-design/tokens",
     "@spark-design/utils": "file:library/@spark-design/utils",
-    "axios": "^1.6.0",
+    "axios": "^1.8.2",
     "echarts": "^5.4.3",
     "jss": "^10.9.2",
     "jss-preset-default": "^10.9.2",
