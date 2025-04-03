@@ -66,7 +66,7 @@ export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {
           messageTitle=""
           variant={MessageBannerAlertState.Info}
           size="m"
-          messageBody="This is an optional step, you can also proceed without adding SSH public keys."
+          messageBody="This step is optional. Select an SSH key name to enable local user access to hosts."
           showIcon
           outlined
         />

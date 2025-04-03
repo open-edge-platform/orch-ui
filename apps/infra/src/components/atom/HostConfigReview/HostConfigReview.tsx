@@ -79,7 +79,7 @@ export const HostConfigReview = ({
                     Secure Boot and Full Disk Encryption
                   </th>
                   <th data-cy="tableHeaderCell">Trusted Compute</th>
-                  <th data-cy="tableHeaderCell">Public SSH Key</th>
+                  <th data-cy="tableHeaderCell">SSH Key Name</th>
                 </tr>
               </thead>
               <tbody>
