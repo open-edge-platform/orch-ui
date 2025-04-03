@@ -37,6 +37,7 @@ jobs:
           CHANGED_FILES=$(git diff --name-only HEAD library/apis/)
           if [[ -n "$CHANGED_FILES" ]]; then
             echo "::error::API file changes detected in library/apis: $CHANGED_FILES"
+            exit 1  # Fail the step
           else
             echo "No changes detected in the library/apis folder."
           fi
