@@ -49,6 +49,7 @@ const endpoints: CyApiDetails<
         {
           resourceId: "hostId",
           name: "Node 1",
+          currentState: "HOST_STATE_ONBOARDED",
           instance: {
             os: {
               name: "linux",
@@ -57,6 +58,7 @@ const endpoints: CyApiDetails<
             },
             securityFeature:
               "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+            currentState: "INSTANCE_STATE_RUNNING",
           },
         },
       ],
