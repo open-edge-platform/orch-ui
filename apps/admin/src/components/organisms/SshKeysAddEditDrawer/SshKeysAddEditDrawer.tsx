@@ -90,7 +90,9 @@ const SshKeysAddEditDrawer = ({
   const sshAddEditFormBody = (
     <form data-cy="drawerFormBody" onSubmit={handleSubmit(handleSshSubmit)}>
       <div className="ssh-field-container">
-        <FieldLabel size={FieldLabelSize.Large}>Key Name *</FieldLabel>
+        <FieldLabel size={FieldLabelSize.Large}>
+          Key Name(will be used as host's account username) *
+        </FieldLabel>
         <Controller
           name="username"
           control={control}
@@ -195,10 +197,11 @@ const SshKeysAddEditDrawer = ({
         show={isOpen}
         backdropClosable={true}
         onHide={onHide}
+        className="ssh-keys-add-edit-drawer-root"
         headerProps={{
           title: `${
             defaultLocalAccount ? "Edit" : "Enter"
-          } SSH Public Key Information`,
+          } SSH Key information to enable local host access`,
           onHide,
           closable: true,
         }}

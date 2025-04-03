@@ -4,11 +4,20 @@
  */
 
 .ssh-keys-add-edit-drawer {
+  .ssh-keys-add-edit-drawer-root {
+    .spark-drawer-header {
+      padding-bottom: 0;
+      align-items: baseline;
+    }
+  }
+
   .ssh-field-container {
     padding: 1rem;
+
     .textarea-error-message {
       color: var(--spark-color-coral-shade1);
     }
+
     .ssh-public-key {
       display: block;
       width: 100%;
