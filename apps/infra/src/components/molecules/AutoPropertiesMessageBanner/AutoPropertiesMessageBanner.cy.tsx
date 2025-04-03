@@ -9,8 +9,6 @@ import AutoPropertiesMessageBanner from "./AutoPropertiesMessageBanner";
 import AutoPropertiesMessageBannerPom from "./AutoPropertiesMessageBanner.pom";
 import { AutoPropertiesMessages } from "./AutoPropertiesMessages";
 
-//test comment
-
 const pom = new AutoPropertiesMessageBannerPom();
 describe("<AutoPropertiesMessageBanner/>", () => {
   it("should render component", () => {
