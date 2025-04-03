@@ -11,6 +11,7 @@ import {
   DeploymentPackagesPom,
   DeploymentsPom,
 } from "@orch-ui/app-orch-poms";
+import { MetadataFormPom } from "@orch-ui/components";
 import { cyGet, CyPom } from "@orch-ui/tests";
 import { RegistryChart } from "../helpers/app-orch";
 
@@ -23,6 +24,7 @@ class AppOrchPom extends CyPom<Selectors> {
   public deploymentPackagesPom: DeploymentPackagesPom;
   public deploymentPackageCreatePom: DeploymentPackageCreatePom;
   public deploymentsPom: DeploymentsPom;
+  public metadataPom: MetadataFormPom;
   // public setupDeploymentPom: SetupDeploymentPom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
@@ -33,6 +35,7 @@ class AppOrchPom extends CyPom<Selectors> {
     this.deploymentPackagesPom = new DeploymentPackagesPom();
     this.deploymentPackageCreatePom = new DeploymentPackageCreatePom();
     this.deploymentsPom = new DeploymentsPom();
+    this.metadataPom = new MetadataFormPom();
     // this.setupDeploymentPom = new SetupDeploymentPom();
   }
 
@@ -202,7 +205,7 @@ class AppOrchPom extends CyPom<Selectors> {
     // Select Profiles
     cyGet("selectProfileTable")
       // this was system-generated in add deployment package
-      .contains("deployment-profile-1")
+      .contains("Deployment Profile 1")
       .closest("tr")
       .find("[data-cy='radioButtonCy']")
       .click();
@@ -243,6 +246,15 @@ class AppOrchPom extends CyPom<Selectors> {
     cy.get("@popup").contains("Delete").as("deleteBtn");
     cy.get("@deleteBtn").click();
     cyGet("confirmBtn").click(); // click confirm button (Delete) in spark-modal (ConfirmationDialog)
+  }
+
+  navigateToAddDeployment() {
+    const element = document.querySelector('[data-cy="emptyActionBtn"]');
+    if (element) {
+      this.deploymentsPom.deploymentTablePom.emptyPom.el.emptyActionBtn.click();
+    } else {
+      this.deploymentsPom.deploymentTablePom.el.addDeploymentButton.click();
+    }
   }
 }
 

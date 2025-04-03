@@ -3,82 +3,64 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { catalog, eim } from "@orch-ui/apis";
+import { DeploymentDetailsPom } from "@orch-ui/app-orch-poms";
 import {
   APP_ORCH_READWRITE_USER,
-  APP_ORCH_READ_USER,
+  EIM_USER,
 } from "tests/cypress/support/utilities";
 import { NetworkLog } from "../../support/network-logs";
 import {
-  getDeploymentsMFETab,
+  createApplicationViaApi,
+  createDeploymentPackageViaApi,
+  deleteApplicationViaApi,
+  deleteDeploymentPackageViaApi,
   getSidebarTabByName,
   isApplicationProfileTestDataPresent,
   isApplicationTestDataPresent,
+  isClusterCreateTestDataPresent,
   isDeploymentPackageTestDataPresent,
   isDeploymentTestDataPresent,
   isRegistryChartTestDataPresent,
   isRegistryTestDataPresent,
+  navigateToDeploymentTab,
   TestData,
 } from "../helpers/app-orch";
+import {
+  createClusterViaApi,
+  deleteClusterViaApi,
+  getClusterTemplatesViaApi,
+} from "../helpers/cluster-orch";
+import {
+  configureHostViaAPI,
+  createRegionViaAPi,
+  createSiteViaApi,
+  deleteRegionViaApi,
+  deleteSiteViaApi,
+  getHostsViaApi,
+  unconfigureHostViaApi,
+} from "../helpers/eim";
 import AppOrchPom from "./app-orch-smoke.pom";
 
 const pom = new AppOrchPom("appOrchLayout");
+const deploymentDetailsPom = new DeploymentDetailsPom();
 describe("APP_ORCH E2E: Deployments Smoke tests", () => {
   const netLog = new NetworkLog();
   let testData: TestData;
-  let registryNameId: string;
+  let activeProject: string;
+  let application: catalog.Application;
+  let deploymentPackage: catalog.DeploymentPackage;
   let deploymentPackageDisplayName: string;
+  let deploymentDisplayName: string;
+  let regionId: string, siteId: string, hostId: string;
+  let currentHost: eim.HostRead;
+  const uuid = Cypress.env("EN_UUID");
 
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
     netLog.interceptAll(["**/v1/**", "**/v3/**"]);
     cy.login(user);
-    cy.visit("/");
-    getDeploymentsMFETab().click();
-  };
-
-  /** Prereq: Add Application Registry, Application */
-  const initPrequisite = () => {
-    initPageByUser(); // Get to Applications Tab
-    getSidebarTabByName("Applications").click();
-    // Add registry
-    pom.applicationsPom.tabs.getTab("Registries").click();
-    pom.addRegistry(testData.registry!);
-
-    // Add application
-    pom.applicationsPom.tabs.getTab("Applications").click();
-    pom.applicationsPom.el.addApplicationButton.click();
-    pom.addApplication(
-      { ...testData.registry!, name: registryNameId },
-      testData.registryChart!,
-      testData.application!,
-      testData.applicationProfile!,
-    );
-    // Add Deployment Package
-    getSidebarTabByName("Deployment Packages").click();
-    pom.deploymentPackagesPom.createButtonPom.el.button.click();
-    pom.addDeploymentPackage(testData.deploymentPackage!, [
-      testData.application!.name,
-    ]);
-  };
-
-  /** Prereq: Remove Application Registry, Application (that was added in initPrequisite) */
-  const deinitPrequisite = () => {
-    initPageByUser(); // Get to Applications Tab
-    getSidebarTabByName("Deployment Packages").click();
-    pom.removeDeploymentPackage(deploymentPackageDisplayName);
-
-    // Remove Application
-    cy.visit("/");
-    getDeploymentsMFETab().click();
-    getSidebarTabByName("Applications").click();
-    pom.removeApplication(testData.application!.name);
-
-    // Remove Registry
-    cy.visit("/");
-    getDeploymentsMFETab().click();
-    getSidebarTabByName("Applications").click();
-    pom.applicationsPom.tabs.getTab("Registries").click();
-    pom.removeRegistry(registryNameId); // Delete the added registry by name (id)
+    navigateToDeploymentTab();
   };
 
   before(() => {
@@ -96,7 +78,8 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
         // Deployment Package related test-data
         !isDeploymentPackageTestDataPresent(data) ||
         // Deployment related test-data
-        !isDeploymentTestDataPresent(data)
+        !isDeploymentTestDataPresent(data) ||
+        !isClusterCreateTestDataPresent(data)
       ) {
         throw new Error(
           "Require valid: registry, registryChart, application, deploymentPackage & deployments\n" +
@@ -104,26 +87,50 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
         );
       }
       testData = data;
-      registryNameId = testData
-        .registry!.displayName!.toLowerCase()
-        .split(" ")
-        .join("-");
-      // TODO: change this to displayName when opensource ready to be deployed in coder
-      deploymentPackageDisplayName = testData
-        .deploymentPackage!.displayName!.toLowerCase()
-        .split(" ")
-        .join("-");
-
-      initPrequisite(); // Initialize things needed for test before it runs
+      deploymentPackageDisplayName = testData.deploymentPackage.displayName!;
+      deploymentDisplayName = testData.deployments.displayName!;
     });
   });
 
-  after(() => {
-    deinitPrequisite(); // Deinitialize everything for any future E2E test.
-  });
   afterEach(() => {
     netLog.save();
     netLog.clear();
+  });
+
+  describe(`the ${EIM_USER.username}`, () => {
+    it("should setup the Infra pre-requisites", () => {
+      // pre-requisites to create cluster
+      cy.login(EIM_USER);
+      cy.visit("/");
+      cy.currentProject().then((p) => {
+        activeProject = p;
+
+        // creating region
+        createRegionViaAPi(activeProject, testData.region).then(
+          (regionResourceId) => {
+            regionId = regionResourceId;
+            cy.log(`ResourceId of the region created ${regionId}`);
+          },
+        );
+
+        // Creating site
+        createSiteViaApi(activeProject, regionId, testData.site).then(
+          (siteResourceId) => {
+            siteId = siteResourceId;
+            cy.log(`ResourceId of the region created ${siteId}`);
+          },
+        );
+
+        // configuring the host with previosly created region and site
+        getHostsViaApi(activeProject).then((hostList) => {
+          expect(hostList.length).to.be.greaterThan(0);
+          currentHost = hostList.find((host) => host.uuid === uuid);
+          hostId = currentHost.resourceId!;
+          configureHostViaAPI(activeProject, testData.hostName, hostId, siteId);
+          cy.log(`Configured host with hostId ${hostId}`);
+        });
+      });
+    });
   });
 
   describe(`the ${APP_ORCH_READWRITE_USER.username}`, () => {
@@ -131,54 +138,176 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
       initPageByUser();
       getSidebarTabByName("Deployments").click();
     });
-    describe("on create deployment", () => {
-      it("should see empty table", () => {
-        // Note: this test requires the table to be empty
-        pom.deploymentsPom.deploymentTablePom.emptyPom.root.should("exist");
-      });
-      it("should create new entry", () => {
-        // If Empty
-        pom.deploymentsPom.deploymentTablePom.emptyPom.el.emptyActionBtn.click();
-        // else execute below
-        // pom.deploymentsPom.deploymentTablePom.el.addDeploymentButton.click();
 
-        // TODO: Fix below step need to be coming from SetupDeployment.pom (which show error for MFE remote not found in cypress webpack upon import!!)
-        // Fill Setup Deployment Flow
-        pom.addDeployment(testData.deployments!, deploymentPackageDisplayName);
+    describe("on create deployment", () => {
+      it("should setup edge manager pre-requisites", () => {
+        cy.currentProject().then((p) => {
+          activeProject = p;
+
+          const testApp = testData.application;
+          // Creating application
+          createApplicationViaApi(activeProject, testApp).then((app) => {
+            application = app;
+            cy.log(
+              `Application created with application name ${application.name}`,
+            );
+          });
+
+          // Creating deployment package
+          createDeploymentPackageViaApi(
+            activeProject,
+            testData.deploymentPackage,
+          ).then((app) => {
+            deploymentPackage = app;
+            cy.log(
+              `Deployment package created with  name ${deploymentPackage.name}`,
+            );
+          });
+
+          getClusterTemplatesViaApi(activeProject).then((templates) => {
+            let defaultTemplateInfo = {
+              name: "",
+              version: "",
+            };
+            expect(templates).to.have.property("defaultTemplateInfo");
+            defaultTemplateInfo = templates.defaultTemplateInfo;
+            // creating cluster
+            const cluster = testData.cluster;
+            cluster.template = `${defaultTemplateInfo.name}-${defaultTemplateInfo.version}`;
+            cluster.nodes.push({
+              id: uuid,
+              role: "all",
+            });
+            createClusterViaApi(activeProject, cluster).then(() => {
+              cy.log(`Cluster is created with cluster name ${cluster.name}`);
+            });
+          });
+        });
       });
-      it("should see created entry", () => {
-        pom.deploymentsPom.deploymentTablePom.tableUtils.getRowBySearchText(
-          deploymentPackageDisplayName,
+
+      it("should create new entry", () => {
+        pom.navigateToAddDeployment();
+
+        // Fill Setup Deployment Flow
+        pom.addDeployment(testData.deployments, deploymentPackageDisplayName);
+      });
+
+      it("should validate the deployment is created", () => {
+        pom.deploymentsPom.deploymentTablePom.tablePom
+          .getRows()
+          .contains(deploymentPackageDisplayName);
+
+        // should display status `Deploying` initially
+        pom.deploymentsPom.deploymentTablePom.tableUtils
+          .getRowBySearchText(deploymentDisplayName)
+          .find(".table-row-cell")
+          .eq(1)
+          .contains("Deploying", { timeout: 2 * 60 * 1000 })
+          .should("contain.text", "Deploying");
+
+        // should display status `Running` once the deployment is successully running
+        pom.deploymentsPom.deploymentTablePom.tableUtils
+          .getRowBySearchText(deploymentDisplayName)
+          .find(".table-row-cell")
+          .eq(1)
+          .contains("Running", { timeout: 10 * 60 * 1000 }) // waiting for status change to Running
+          .should("contain.text", "Running");
+
+        // As 1 host is part of the cluster its expected to be 1/1 when deployment is running
+        pom.deploymentsPom.deploymentTablePom.tableUtils
+          .getRowBySearchText(deploymentDisplayName)
+          .find(".table-row-cell")
+          .eq(2)
+          .should("contain.text", "1/1");
+
+        pom.deploymentsPom.deploymentTablePom.tableUtils
+          .getRowBySearchText(deploymentDisplayName)
+          .find(".table-row-cell")
+          .eq(3)
+          .should("contain.text", deploymentPackageDisplayName);
+
+        pom.deploymentsPom.deploymentTablePom.tableUtils
+          .getRowBySearchText(deploymentDisplayName)
+          .find(".table-row-cell")
+          .eq(4)
+          .should("contain.text", testData.deploymentPackage.version);
+
+        pom.deploymentsPom.deploymentTablePom.tableUtils
+          .getRowBySearchText(deploymentDisplayName)
+          .find("a")
+          .click();
+
+        cy.url({ timeout: 5000 }).should("contain", "applications/deployment/");
+        deploymentDetailsPom.el.deploymentDetailsHeader.should("exist", {
+          timeout: 2 * 60 * 1000,
+        });
+        deploymentDetailsPom.el.deploymentDetailsHeader.should(
+          "contain.text",
+          deploymentDisplayName,
+        );
+
+        deploymentDetailsPom.el.deploymentDetailsHeader.should(
+          "contain.text",
+          deploymentDisplayName,
         );
       });
+
       it("should see delete entry", () => {
-        pom.removeDeployment(testData.deployments!.displayName!);
+        pom.removeDeployment(deploymentDisplayName);
         pom.deploymentsPom.root.should(
           "not.contain.text",
-          testData.deployments!.displayName!,
+          deploymentDisplayName,
         );
+      });
+
+      // cleanup
+      it("should delete edge manager pre-requisites", () => {
+        cy.currentProject().then((project) => {
+          if (testData.cluster.name) {
+            deleteClusterViaApi(project, testData.cluster.name);
+          }
+          if (
+            deploymentPackageDisplayName &&
+            testData.deploymentPackage.version
+          ) {
+            deleteDeploymentPackageViaApi(
+              project,
+              deploymentPackageDisplayName,
+              testData.deploymentPackage.version,
+            );
+          }
+          if (
+            testData.application.displayName &&
+            testData.application.version
+          ) {
+            deleteApplicationViaApi(
+              project,
+              testData.application.displayName!,
+              testData.application.version!,
+            );
+          }
+        });
       });
     });
   });
 
-  xdescribe(`the ${APP_ORCH_READ_USER.username}`, () => {
-    beforeEach(() => {
-      initPageByUser(APP_ORCH_READ_USER);
-      getSidebarTabByName("Deployments").click();
-    });
-    describe("on create deployment", () => {
-      // TODO: See if edge operator can create  deployments
-      it("should not be able to create", () => {
-        // if Empty
-        pom.deploymentsPom.deploymentTablePom.emptyPom.el.emptyActionBtn.should(
-          "have.class",
-          "spark-button-disabled",
-        );
-        // Else
-        // pom.deploymentsPom.deploymentTablePom.el.addDeploymentButton.should(
-        //   "have.class",
-        //   "spark-button-disabled",
-        // );
+  // cleanup
+  describe(`the ${EIM_USER.username}`, () => {
+    it("should delete infra pre-requisites", () => {
+      cy.login(EIM_USER);
+      cy.visit("/");
+      cy.currentProject().then((project) => {
+        if (hostId) {
+          unconfigureHostViaApi(project, hostId);
+        }
+
+        if (regionId && siteId) {
+          deleteSiteViaApi(project, regionId, siteId);
+        }
+
+        if (regionId) {
+          deleteRegionViaApi(project, regionId);
+        }
       });
     });
   });

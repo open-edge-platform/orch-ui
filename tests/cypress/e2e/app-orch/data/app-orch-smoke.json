@@ -12,8 +12,23 @@
     "chartVersion": "1.0.1"
   },
   "application": {
-    "name": "custom-application-1",
-    "version": "1.0.1"
+    "name": "wordpress1",
+    "displayName": "wordpress1",
+    "description": "Wordpress App created via cypress",
+    "version": "0.1.0",
+    "chartName": "wordpress1",
+    "chartVersion": "0.1.0",
+    "helmRegistryName": "bitnami-helm",
+    "profiles": [
+      {
+        "name": "default",
+        "displayName": "default",
+        "description": "Test profile with chart values",
+        "chartValues": "test: 10",
+        "parameterTemplates": []
+      }
+    ],
+    "defaultProfileName": "default"
   },
   "applicationProfile": {
     "name": "profile-1",
@@ -21,11 +36,66 @@
     "description": "Sample profile. this only used for testing purpose"
   },
   "deploymentPackage": {
-    "displayName": "Deployment-Package Test 1",
-    "version": "1.0.1",
-    "description": "This deployment package is for testing purpose only..."
+    "name": "wordpress-package",
+    "displayName": "wordpress-package",
+    "description": "Wordpress Deployment Package created via cypress",
+    "version": "0.1.0",
+    "applicationReferences": [
+      {
+        "name": "wordpress1",
+        "displayName": "wordpress1",
+        "description": "Wordpress App created via cypress",
+        "version": "0.1.0",
+        "kind": "KIND_NORMAL",
+        "chartName": "wordpress1",
+        "chartVersion": "0.1.0",
+        "helmRegistryName": "bitnami-helm",
+        "profiles": [
+          {
+            "name": "default",
+            "displayName": "default",
+            "description": "Test profile with chart values",
+            "chartValues": "test: 10",
+            "parameterTemplates": [],
+            "deploymentRequirement": [],
+            "createTime": "2025-03-25T16:11:21.337472Z",
+            "updateTime": "2025-03-25T16:11:21.337473Z"
+          }
+        ],
+        "defaultProfileName": "default",
+        "imageRegistryName": "",
+        "ignoredResources": [],
+        "createTime": "2025-03-25T16:11:21.336174Z",
+        "updateTime": "2025-03-25T16:11:21.339088Z"
+      }
+    ],
+    "isDeployed": false,
+    "isVisible": false,
+    "profiles": [
+      {
+        "name": "deployment-profile-1",
+        "displayName": "Deployment Profile 1",
+        "description": "System generated profile",
+        "applicationProfiles": {
+          "wordpress1": "default"
+        }
+      }
+    ],
+    "defaultProfileName": "deployment-profile-1",
+    "extensions": [],
+    "artifacts": []
   },
   "deployments": {
     "displayName": "Deployment Test 1"
+  },
+  "region": "french-polynesia",
+  "site": "rangiroa",
+  "hostName": "cluster-host",
+  "cluster": {
+    "name": "test-cluster",
+    "labels": {
+      "color": "blue"
+    },
+    "nodes": []
   }
 }
