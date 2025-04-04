@@ -91,7 +91,7 @@ const SshKeysAddEditDrawer = ({
     <form data-cy="drawerFormBody" onSubmit={handleSubmit(handleSshSubmit)}>
       <div className="ssh-field-container">
         <FieldLabel size={FieldLabelSize.Large}>
-          Key Name(will be used as host's account username) *
+          Key Name (will be used as host's account username) *
         </FieldLabel>
         <Controller
           name="username"
