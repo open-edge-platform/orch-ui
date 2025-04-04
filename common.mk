@@ -124,7 +124,7 @@ helm-push: ## @HELP Push helm charts.
 	aws ecr create-repository --region us-west-2 --repository-name edge-orch/$(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)/$(HELM_CHART_NAME) || true
 	helm push ${HELM_CHART_NAME}-${VERSION}.tgz oci://$(DOCKER_REGISTRY)/$(DOCKER_REPOSITORY)/$(HELM_CHART_PREFIX)
 
-lint: ## @HELP Lint the code
+lint: ../../node_modules ## @HELP Lint the code
 	npm run app:$(PROJECT_NAME):lint
 
 test: ## @HELP Run the tests
