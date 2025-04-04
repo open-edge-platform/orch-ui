@@ -64,8 +64,6 @@ jobs:
       matrix:
         project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@feature/push-dev-images
-    env:
-      VERSION_SUFFIX: ${{ github.event_name }}-${{ github.event.number }}
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
@@ -84,6 +82,7 @@ jobs:
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
       orch_ci_repo_ref: main
+      version_suffix: ${{ github.event_name }}-${{ github.event.number }}
     secrets: inherit
 
   final-check:
