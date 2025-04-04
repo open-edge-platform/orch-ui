@@ -83,7 +83,7 @@ jobs:
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
       orch_ci_repo_ref: main
-      version_suffix: ${{ github.event_name }}-${{ github.event.number }}
+      version_suffix: "-pr-${{ github.event.number }}"
     secrets: inherit
 
   final-check:
