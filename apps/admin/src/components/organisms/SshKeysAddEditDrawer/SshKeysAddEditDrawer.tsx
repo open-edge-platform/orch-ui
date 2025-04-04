@@ -197,7 +197,7 @@ const SshKeysAddEditDrawer = ({
         show={isOpen}
         backdropClosable={true}
         onHide={onHide}
-        className="ssh-keys-add-edit-drawer"
+        className="ssh-keys-add-edit-drawer-root"
         headerProps={{
           title: `${
             defaultLocalAccount ? "Edit" : "Enter"
