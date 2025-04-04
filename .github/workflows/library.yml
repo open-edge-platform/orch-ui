@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.SYS_ORCH_GITHUB }}
 
       - name: Cache npm dependencies
         uses: actions/setup-node@v4
