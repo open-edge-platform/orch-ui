@@ -6,8 +6,13 @@ SHELL = bash -e -o pipefail
 
 .PHONY: help build
 
-VERSION                     ?= $(shell cat ./VERSION)
-GIT_BRANCH                  ?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')
+# Add a a suffix to the version if needed
+# This is used in CI to add a suffix to the version when/if publishing images in the pre-merge job
+VERSION_SUFFIX              ?= ""
+
+VERSION                     ?= $(shell cat ./VERSION)$(VERSION_SUFFIX)
+GIT_BRANCH                  ?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')$(VERSION_SUFFIX)
+
 
 DOCKER_REGISTRY             ?= 080137407410.dkr.ecr.us-west-2.amazonaws.com/edge-orch
 DOCKER_REPOSITORY           ?= orch-ui
