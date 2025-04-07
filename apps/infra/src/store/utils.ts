@@ -198,35 +198,31 @@ export const convertTimeInLocalTimezone = (
   mm: string,
   date?: string,
 ) => {
-  const adjustedDate = date ? new Date(date) : new Date();
-  const formattedDate = moment(adjustedDate).format("YYYY-MM-DD");
-  const isoDateString = `${formattedDate}T${hh.padStart(2, "0")}:${mm.padStart(2, "0")}:00Z`;
-  const localDateTime = moment(isoDateString);
+  const adjustedDate = date ? new Date(date) : new Date().toDateString();
+  const localDateTime = new Date(`${adjustedDate} ${hh}:${mm}:00 GMT`);
+  const computedOffset = localDateTime.toString().match(/GMT(-|\+)([0-9]+)/);
+  const localeDateTimeString = localDateTime.toString();
+  const timezoneMatch = localeDateTimeString.match(/\((.*)\)/);
+  const timezoneName = (timezoneMatch ?? [])[1];
+  const { abbreviation: timezoneAbbreviation, offset: timezoneOffset } =
+    timezoneName in abbreviations
+      ? abbreviations[timezoneName]
+      : {
+          offset: computedOffset
+            ? `${computedOffset[1]}${computedOffset[2].slice(0, 2)}:${computedOffset[2].slice(2)}`
+            : undefined,
+          abbreviation: undefined,
+        };
 
-  const timezoneName = moment.tz.guess();
-
-  const timezoneAbbreviation = timezoneName
-    ? abbreviations[timezoneName]?.abbreviation
-    : undefined;
-
-  const timezoneOffset = -localDateTime.toDate().getTimezoneOffset();
-  const formattedOffset = `${timezoneOffset >= 0 ? "+" : "-"}${String(
-    Math.abs(timezoneOffset / 60),
-  ).padStart(
-    2,
-    "0",
-  )}:${String(Math.abs(timezoneOffset % 60)).padStart(2, "0")}`;
-
-  const localDate = localDateTime.toDate().toLocaleDateString();
-  const localTime = localDateTime.toDate().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
+  const localDate = localDateTime.toLocaleDateString();
+  const localTimeMatch = localeDateTimeString.match(
+    /([0-9]{2}:[0-9]{2}):[0-9]{2}/,
+  );
+  const localTime = (localTimeMatch ?? [])[1];
   return {
     timezoneName,
     timezoneAbbreviation,
-    timezoneOffset: formattedOffset,
+    timezoneOffset,
     localDate,
     localTime,
   };
