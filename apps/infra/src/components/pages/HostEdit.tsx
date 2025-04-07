@@ -177,7 +177,6 @@ const HostEdit = () => {
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `region.resourceId='${selectedRegion?.resourceId ?? ""}'`,
-        regionId: selectedRegion?.resourceId ?? "", // TODO: this a requires param in MT, but removed in `infra api`
       },
       { skip: !host || !selectedRegion?.resourceId },
     );
