@@ -4,9 +4,15 @@
 ---
 name: PR Checks
 
+# on:
+#   pull_request:
+#     types: [opened, reopened, synchronize]
+
+# temp to avoid unnecessary premerge jobs
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - main
 
 jobs:
   detect-changed-folders:

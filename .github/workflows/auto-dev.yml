@@ -19,7 +19,7 @@ jobs:
       - name: Find and update VERSION files
         id: update_versions
         run: |
-          source ./tagging-lib.sh
+          source ./.github/workflows/tagging-lib.sh
 
           # BRANCH_NAME="update-versions-$(date +%Y%m%d%H%M%S)"
           # git checkout -b $BRANCH_NAME
