@@ -33,6 +33,8 @@ jobs:
             echo "Processing $VERSION_PATH"
             export VERSIONFILE="$VERSION_PATH"
 
+            RELEASE_VERSION=0
+
             read_version
             check_if_releaseversion
 
@@ -43,7 +45,6 @@ jobs:
               echo "$NEXT_VERSION" > "$VERSION_PATH"
               # git add "$VERSION_PATH"
               # CHANGES_MADE=1
-              RELEASE_VERSION=1
             fi
           done
 
