@@ -38,6 +38,7 @@ jobs:
 
             if [ $FAIL_VALIDATION -ne 0 ]; then
               echo "WARNING: Current version $NEW_VERSION in $VERSION_PATH is not valid, skipping update"
+              FAIL_VALIDATION=1
               continue
             fi
 
