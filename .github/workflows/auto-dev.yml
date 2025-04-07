@@ -18,8 +18,6 @@ jobs:
 
       - name: Find and update VERSION files
         id: update_versions
-        env:
-          SEMVER_STRICT: 1
         run: |
           source ./.github/workflows/tagging-lib.sh
 
