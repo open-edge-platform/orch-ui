@@ -16,6 +16,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Git identity
+        run: |
+          git config --global user.name "Version Update Bot"
+          git config --global user.email "version-bot@something.com"
+
       - name: Find and update VERSION files
         id: update_versions
         run: |
