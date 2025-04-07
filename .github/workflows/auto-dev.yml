@@ -21,10 +21,10 @@ jobs:
         run: |
           source ./.github/workflows/tagging-lib.sh
 
-          # BRANCH_NAME="update-versions-$(date +%Y%m%d%H%M%S)"
-          # git checkout -b $BRANCH_NAME
+          BRANCH_NAME="update-versions-$(date +%Y%m%d%H%M%S)"
+          git checkout -b $BRANCH_NAME
 
-          # CHANGES_MADE=0
+          CHANGES_MADE=0
 
           # Find all VERSION files in the apps directory
           for VERSION_PATH in $(find apps -name VERSION -type f); do
@@ -41,18 +41,18 @@ jobs:
               echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
 
               echo "$NEXT_VERSION" > "$VERSION_PATH"
-              # git add "$VERSION_PATH"
-              # CHANGES_MADE=1
+              git add "$VERSION_PATH"
+              CHANGES_MADE=1
             fi
           done
 
-          # if [ $CHANGES_MADE -eq 1 ]; then
-          #   git commit -m "Update version files to next dev version"
-          #   git push origin $BRANCH_NAME
+          if [ $CHANGES_MADE -eq 1 ]; then
+            git commit -m "Update version files to next dev version"
+            git push origin $BRANCH_NAME
 
-          #   echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          #   echo "changes_made=true" >> $GITHUB_OUTPUT
-          # else
-          #   echo "No VERSION files found to update"
-          #   echo "changes_made=false" >> $GITHUB_OUTPUT
-          # fi
+            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+          else
+            echo "No VERSION files found to update"
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+          fi
