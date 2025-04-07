@@ -43,6 +43,7 @@ jobs:
               echo "$NEXT_VERSION" > "$VERSION_PATH"
               # git add "$VERSION_PATH"
               # CHANGES_MADE=1
+              RELEASE_VERSION=1
             fi
           done
 
