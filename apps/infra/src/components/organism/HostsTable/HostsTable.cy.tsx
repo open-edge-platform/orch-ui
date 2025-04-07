@@ -220,7 +220,7 @@ describe("<HostsTable/>", () => {
       pom.getHostCheckboxByName("Host 0").should("be.checked");
 
       pom.el.provisionBtn.click();
-      cy.get("#pathname").contains("/unconfigured-host/configure");
+      cy.get("#pathname").contains("/hosts/set-up-provisioning");
     });
   });
 
