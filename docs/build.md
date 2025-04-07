@@ -86,8 +86,8 @@ postCustomTemplateOverwrite:
 To build and publish images to an online registry (e.g., DockerHub), use the following commands
 
 ```shell
-DOCKER_TAG=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-build
-DOCKER_TAG=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
+VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-build
+VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
 ```
 
 ## Apply the Docker Image Change for a UI App
