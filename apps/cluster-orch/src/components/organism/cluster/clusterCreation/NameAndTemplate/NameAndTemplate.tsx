@@ -36,8 +36,8 @@ const NameAndTemplate = () => {
   const handleNameChange = (name: string) => {
     const regex = "^$|^[a-z0-9][a-z0-9.-]*[a-z0-9]$";
     const regexHandle = new RegExp(regex);
+    dispatch(updateClusterName(name));
     if (regexHandle.test(name)) {
-      dispatch(updateClusterName(name));
       setValid(true);
       setErrorMessage("");
     } else {
@@ -57,7 +57,7 @@ const NameAndTemplate = () => {
         size="l"
         label="Cluster Name"
         isRequired
-        placeholder={currentCluster.name}
+        value={currentCluster.name}
         onChange={(name: string) => {
           handleNameChange(name);
         }}

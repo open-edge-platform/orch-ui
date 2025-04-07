@@ -1,15 +1,15 @@
-# E2E tests
+# E2E Tests
 
 ## Setup
 
-After deploying the orchestrator on coder, and setting up all required
+After deploying the orchestrator on Coder and setting up all required
 certificates and routers, create the default MT setup with:
 
 ```shell
 mage tenantUtils:createDefaultMtSetup
 ```
 
-## Test execution
+## Test Execution
 
 To run all E2E tests:
 
@@ -29,12 +29,14 @@ To customize the `logs` folder location, use:
 CYPRESS_LOG_FOLDER=logs npx cypress run --e2e
 ```
 
-To customize the orchestrator password
+To customize the orchestrator password:
+
 ```shell
 CYPRESS_ORCH_DEFAULT_PASSWORD="Pleaseletme1n\!" npx cypress run --e2e
 ```
 
-## Best practices
+## Best Practices
 
-Add reusable testcases in cypress/e2e/pages folder
-Ensure to clean up the records created during testing inside after block of each smoke test
+- Add reusable test cases in the `cypress/e2e/pages` folder.
+- Ensure to clean up the records created during testing
+  inside the `after` block of each smoke test.
