@@ -58,7 +58,7 @@ export const DetailedStatuses = <T extends AggregatedStatusesMap>({
     const humanReadableTimestamp = timestamp
       ? moment(new Date(timestamp * 1000)).format("MMM DD, YYYY hh:mm:ss A")
       : "Unavailable";
-    const message = data[key].message ?? "-";
+    const message = data[key].message || "-";
     return (
       <>
         <span className="line"></span>
