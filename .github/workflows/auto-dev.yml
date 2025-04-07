@@ -36,18 +36,14 @@ jobs:
             read_version
             check_if_releaseversion
 
-            if [ $FAIL_VALIDATION -ne 0 ]; then
-              echo "WARNING: Current version $NEW_VERSION in $VERSION_PATH is not valid, skipping update"
-              FAIL_VALIDATION=1
-              continue
+            if [ $RELEASE_VERSION -eq 1 ]; then
+              NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
+              echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
+
+              echo "$NEXT_VERSION" > "$VERSION_PATH"
+              # git add "$VERSION_PATH"
+              # CHANGES_MADE=1
             fi
-
-            NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
-            echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
-
-            echo "$NEXT_VERSION" > "$VERSION_PATH"
-            # git add "$VERSION_PATH"
-            # CHANGES_MADE=1
           done
 
           # if [ $CHANGES_MADE -eq 1 ]; then
