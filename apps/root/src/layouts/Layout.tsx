@@ -55,6 +55,8 @@ const Layout = () => {
 
   const dashboardRoles = [...deploymentsRoles, ...infraRoles];
 
+  const alertRoles = [Role.ALERTS_READ, Role.ALERTS_WRITE];
+
   return (
     <>
       <Header size={headerSize}>
@@ -89,7 +91,7 @@ const Layout = () => {
             Infrastructure
           </HeaderItem>
         </RBACWrapper>
-        <RBACWrapper showTo={[Role.ALERTS_READ]}>
+        <RBACWrapper showTo={alertRoles}>
           <HeaderItem
             name="menuAlerts"
             to="/admin/alerts"

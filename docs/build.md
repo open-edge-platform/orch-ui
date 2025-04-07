@@ -105,7 +105,8 @@ mage deploy:orchLocal dev-coder-minimal
 If you are making changes to the Helm charts, configure ArgoCD to use a GitHub repository as the source for the UI Helm charts. For example, update the application template files in the edge-manageability-framework repository. These templates are located in the argocd/applications/templates/ folder.
 
 > [!NOTE]
-> You need to replace the YAML block in `edge-manageability-framework` with the lines below,
+> You need to replace the YAML block in `edge-manageability-framework` repo, 
+> within an application template file located at `argocd/applications/templates/` with the lines below,
 > not merge them.
 >
 > ```diff
@@ -121,7 +122,7 @@ The following example contains the ClusterOrch, AppOrch, Root, Infra, Admin, and
 
 > Note: replace `<your-dev-branch>` with the UI branch within `orch-ui` repo.
 
-**web-ui-root.yaml**
+### web-ui-root.yaml
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui
@@ -129,7 +130,7 @@ The following example contains the ClusterOrch, AppOrch, Root, Infra, Admin, and
   targetRevision: <your-dev-branch>
 ```
 
-**web-ui-app-orch.yaml**
+### web-ui-app-orch.yaml
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui
@@ -137,7 +138,7 @@ The following example contains the ClusterOrch, AppOrch, Root, Infra, Admin, and
   targetRevision: <your-dev-branch>
 ```
 
-**web-ui-cluster-orch.yaml**
+### web-ui-cluster-orch.yaml
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui
@@ -145,7 +146,7 @@ The following example contains the ClusterOrch, AppOrch, Root, Infra, Admin, and
   targetRevision: <your-dev-branch>
 ```
 
-**web-ui-infra.yaml**
+### web-ui-infra.yaml
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui
@@ -153,7 +154,7 @@ The following example contains the ClusterOrch, AppOrch, Root, Infra, Admin, and
   targetRevision: <your-dev-branch>
 ```
 
-**web-ui-admin.yaml**
+### web-ui-admin.yaml
 
 ```yaml
 - repoURL: https://github.com/open-edge-platform/orch-ui
