@@ -93,12 +93,25 @@ const ClusterList = ({
     cm.useGetV2ProjectsByProjectNameClustersQuery(
       {
         projectName,
-        filter: getFilter<cm.ClusterInfo>(
+        filter: getFilter<cm.ClusterInfoRead>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "providerStatus.indicator"],
+          [
+            "name",
+            "providerStatus.message",
+            "lifecyclePhase.message",
+            "nodeHealth.message",
+            "infrastructureReady.message",
+            "controlPlaneReady.message",
+          ],
           Operator.OR,
           false,
-          { "providerStatus.indicator": "providerStatus" },
+          {
+            "providerStatus.message": "providerStatus",
+            "lifecyclePhase.message": "lifecyclePhase",
+            "nodeHealth.message": "nodeHealth",
+            "infrastructureReady.message": "infrastructureReady",
+            "controlPlaneReady.message": "controlPlaneReady",
+          },
         ),
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         pageSize: searchParams.get("pageSize")
