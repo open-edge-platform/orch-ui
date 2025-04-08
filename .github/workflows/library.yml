@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.SYS_ORCH_GITHUB }}
 
       - name: Cache npm dependencies
         uses: actions/setup-node@v4
@@ -27,6 +30,21 @@ jobs:
 
       - name: Code style check
         run: npm run library:lint
+      
+      - name: Run api:generate script
+        run: npm run api:generate
+
+      - name: Check for Changes in library/apis
+        shell: bash
+        run: |
+          CHANGED_FILES=$(git diff --name-only HEAD library/apis/)
+          if [[ -n "$CHANGED_FILES" ]]; then
+            echo "::error::API file changes detected in library/apis: $CHANGED_FILES"
+            exit 1  # Fail the step
+          else
+            echo "No changes detected in the library/apis folder."
+          fi
+        continue-on-error: true
 
       - name: Cypress Component Tests
         run: npm run library:cy:component
