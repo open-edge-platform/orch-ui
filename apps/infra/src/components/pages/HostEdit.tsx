@@ -204,10 +204,7 @@ const HostEdit = () => {
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 
-  const isAssigned =
-    instanceList &&
-    instanceList.instances &&
-    isHostAssigned(instanceList.instances);
+  const isAssigned = isHostAssigned(host?.instance);
 
   // These steps will set's the breadcrumb in Host Details page
   const breadcrumb = useMemo(() => {
