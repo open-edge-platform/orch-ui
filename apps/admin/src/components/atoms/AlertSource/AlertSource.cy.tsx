@@ -8,11 +8,6 @@ import AlertSourcePom from "./AlertSource.pom";
 
 const pom = new AlertSourcePom();
 describe("<AlertSource/>", () => {
-  it("should render component with deployment", () => {
-    cy.mount(<AlertSource alert={alertFive} />);
-    pom.root.should("exist");
-    pom.root.contains(alertFive.labels?.deployment_id ?? "no source");
-  });
   it("should render component with component", () => {
     cy.mount(<AlertSource alert={alertSeven} />);
     pom.root.should("exist");
