@@ -67,7 +67,7 @@ const ClusterList = ({
       Cell: (table) => (
         <AggregatedStatuses<AggregatedStatusesMap>
           statuses={clusterToStatuses(table.row.original)}
-          defaultStatusName="lifecyclePhase"
+          defaultStatusName="providerStatus"
         />
       ),
     },
