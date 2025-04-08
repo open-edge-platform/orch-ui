@@ -96,7 +96,14 @@ export const createChildRoutes = () => {
     },
     {
       path: "register-hosts",
-      element: <RegisterHosts />,
+      element: (
+        <RBACWrapper
+          showTo={[Role.INFRA_MANAGER_WRITE]}
+          missingRoleContent={<PermissionDenied />}
+        >
+          <RegisterHosts />
+        </RBACWrapper>
+      ),
     },
     {
       path: `${hostDetailsRoute}/edit`,
