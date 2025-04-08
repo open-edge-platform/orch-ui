@@ -26,7 +26,8 @@ jobs:
         run: |
           source ./.github/workflows/tagging-lib.sh
 
-          BRANCH_NAME="update-versions-$(date +%Y%m%d%H%M%S)"
+          CURRENT_DATE=$(date +%d-%m-%Y)
+          BRANCH_NAME="update-versions-${CURRENT_DATE}"
           git checkout -b $BRANCH_NAME
 
           CHANGES_MADE=0
@@ -61,3 +62,14 @@ jobs:
             echo "No VERSION files found to update"
             echo "changes_made=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Create Pull Request
+        if: steps.update_versions.outputs.changes_made == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "Update version files to next dev version" \
+            --body "Automatically bumping versions after merge to main branch." \
+            --base main \
+            --head ${{ steps.update_versions.outputs.branch_name }}
