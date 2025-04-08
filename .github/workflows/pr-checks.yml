@@ -51,6 +51,7 @@ jobs:
     needs: setup-conditions
     if: needs.setup-conditions.outputs.common_condition == 'true'
     uses: ./.github/workflows/library.yml
+    secrets: inherit
 
   e2e-tests-pipeline:
     uses: ./.github/workflows/e2e-tests.yml
