@@ -73,7 +73,7 @@ describe("The Utils", () => {
       expect(result).to.deep.equal({
         text: "Compatible",
         tooltip:
-          "This cluster contain at least one host that has Secure Boot and Full Disk Encryption enabled.",
+          "This cluster contains at least one host that has Secure Boot and Full Disk Encryption enabled.",
       });
     });
 
@@ -96,6 +96,24 @@ describe("The Utils", () => {
         labels: {},
       } as cm.ClusterInfoRead;
       const result = getTrustedComputeCluster(cluster);
+      expect(result).to.deep.equal({
+        text: "Not compatible",
+        tooltip:
+          "This cluster does not contain any host that has Secure Boot and Full Disk Encryption enabled.",
+      });
+    });
+
+    it("should return compatible when tcEnabled is true", () => {
+      const result = getTrustedComputeCluster(undefined, true);
+      expect(result).to.deep.equal({
+        text: "Compatible",
+        tooltip:
+          "This cluster contains at least one host that has Secure Boot and Full Disk Encryption enabled.",
+      });
+    });
+
+    it("should return not compatible when tcEnabled is false", () => {
+      const result = getTrustedComputeCluster(undefined, false);
       expect(result).to.deep.equal({
         text: "Not compatible",
         tooltip:

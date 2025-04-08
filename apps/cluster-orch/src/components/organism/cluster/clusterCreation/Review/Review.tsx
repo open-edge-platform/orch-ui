@@ -3,8 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Flex, MetadataDisplay, MetadataPair } from "@orch-ui/components";
+import { eim } from "@orch-ui/apis";
+import {
+  Flex,
+  MetadataDisplay,
+  MetadataPair,
+  TrustedCompute,
+} from "@orch-ui/components";
+import { getTrustedComputeCluster } from "@orch-ui/utils";
 import { Heading } from "@spark-design/react";
+import { useState } from "react";
 import { useAppSelector } from "../../../../../store/hooks";
 import { getCluster } from "../../../../../store/reducers/cluster";
 import { getNodes } from "../../../../../store/reducers/nodes";
@@ -19,9 +27,20 @@ interface ReviewProps {
 const Review = ({ accumulatedMeta }: ReviewProps) => {
   const currentCluster = useAppSelector(getCluster);
   const currentNodes = useAppSelector(getNodes);
-
+  const [isTrustedComputeCompatible, setIsTrustedComputeCompatible] =
+    useState<boolean>(false);
   const cy = { "data-cy": dataCy };
-
+  // this method is called when the list of Host is loaded
+  // in the Host table. We use this to populate data in the Redux store
+  const onHostLoad = (hosts: eim.HostRead[]) => {
+    setIsTrustedComputeCompatible(
+      hosts.some(
+        (host) =>
+          host.instance?.securityFeature ===
+          "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+      ),
+    );
+  };
   return (
     <div {...cy} className="review">
       <Heading semanticLevel={6} className="review-category">
@@ -49,6 +68,19 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
             <span data-cy="clusterTemplateName">{currentCluster.template}</span>
           </td>
         </tr>
+        <tr>
+          <td className="labelName">
+            <p className="labelName">Trusted Compute</p>
+          </td>
+          <td data-cy="trustedCompute">
+            <TrustedCompute
+              trustedComputeCompatible={getTrustedComputeCluster(
+                undefined,
+                isTrustedComputeCompatible,
+              )}
+            ></TrustedCompute>
+          </td>
+        </tr>
       </table>
 
       <Heading semanticLevel={6} className="metadata-category  labelName">
@@ -67,6 +99,7 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
         nodes={currentNodes}
         readinessType="host"
         filterOn="uuid"
+        onDataLoad={onHostLoad}
       />
     </div>
   );

@@ -56,14 +56,14 @@ export const hostToStatuses = (
   instance?: eim.InstanceRead, // TODO we should be able to use host.instance
 ): HostGenericStatuses => {
   const hgs: HostGenericStatuses = {};
-  if (host.hostStatus) {
+  if (host.hostStatusIndicator) {
     hgs.hostStatus = {
       indicator: host.hostStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
       message: host.hostStatus,
       timestamp: host.hostStatusTimestamp,
     };
   }
-  if (host.onboardingStatus) {
+  if (host.onboardingStatusIndicator) {
     hgs.onboardingStatus = {
       indicator:
         host.onboardingStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
@@ -72,7 +72,7 @@ export const hostToStatuses = (
     };
   }
 
-  if (host.registrationStatus) {
+  if (host.registrationStatusIndicator) {
     hgs.registrationStatus = {
       indicator:
         host.registrationStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
@@ -82,18 +82,18 @@ export const hostToStatuses = (
   }
 
   if (instance) {
-    if (instance.instanceStatus) {
+    if (instance.instanceStatusIndicator) {
       hgs.instanceStatus = {
         indicator:
           instance.instanceStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
         message: statusWithDetails(
-          instance.instanceStatus,
+          instance.instanceStatus ?? "",
           instance.instanceStatusDetail,
         ),
         timestamp: instance.instanceStatusTimestamp,
       };
     }
-    if (instance.provisioningStatus) {
+    if (instance.provisioningStatusIndicator) {
       hgs.provisioningStatus = {
         indicator:
           instance.provisioningStatusIndicator ??
@@ -102,12 +102,12 @@ export const hostToStatuses = (
         timestamp: instance.provisioningStatusTimestamp,
       };
     }
-    if (instance.updateStatus) {
+    if (instance.updateStatusIndicator) {
       hgs.updateStatus = {
         indicator:
           instance.updateStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
         message: statusWithDetails(
-          instance.updateStatus,
+          instance.updateStatus ?? "",
           instance.updateStatusDetail,
         ),
         timestamp: instance.updateStatusTimestamp,
@@ -116,15 +116,13 @@ export const hostToStatuses = (
 
     /*
     by default trustedAttestationStatus is empty in which case
-    "Not Enabled" has to be shown
+    "Unknown" has to be shown
     */
     hgs.trustedAttestationStatus = {
       indicator:
         instance.trustedAttestationStatusIndicator ??
         "STATUS_INDICATION_UNSPECIFIED",
-      message: instance.trustedAttestationStatus
-        ? instance.trustedAttestationStatus
-        : "Not Enabled",
+      message: instance.trustedAttestationStatus ?? "Unknown",
       timestamp: instance.trustedAttestationStatusTimestamp,
     };
   }
@@ -137,15 +135,13 @@ export const generateClusterName = (siteName: string, hostName: string) =>
   `${siteName}-${hostName}`.replaceAll(" ", "-");
 
 /** Returns `true` if Host is assigned to a cluster. Else returns `false`. */
-export const isHostAssigned = (instances: eim.InstanceRead[]): boolean => {
-  if (instances.length === 0) return false;
-  const result = instances.some((instance: eim.InstanceRead) =>
-    instance.workloadMembers?.some(
-      (workloadMember: eim.WorkloadMemberRead) =>
-        workloadMember.kind === "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
-    ),
-  );
-  return result;
+export const isHostAssigned = (instance?: eim.InstanceRead): boolean => {
+  return instance && instance.workloadMembers
+    ? instance.workloadMembers.some(
+        (workloadMember: eim.WorkloadMemberRead) =>
+          workloadMember.kind === "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
+      )
+    : false;
 };
 
 export const inheritedScheduleToString = (
@@ -181,12 +177,6 @@ export const scheduleStatusToString = (status?: eim.ScheduleStatus) => {
     .join(" ");
 };
 
-export const CONSTANTS = {
-  HOST_STATUS: {
-    NOT_CONNECTED: "Not Connected",
-  },
-};
-
 export enum WorkloadMemberKind {
   Cluster = "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
   Unspecified = "WORKLOAD_MEMBER_KIND_UNSPECIFIED",
@@ -197,7 +187,7 @@ export const hostStatusFields: FieldLabels<HostGenericStatuses> = {
     label: "Host",
   },
   trustedAttestationStatus: {
-    label: "Trusted Compute",
+    label: "Attestation",
   },
   instanceStatus: {
     label: "Software(OS/Agents)",
@@ -416,9 +406,12 @@ export const hostProviderStatusToString = (host?: eim.HostRead): string => {
 };
 
 // currentState mapping for host to messages
-export const hostStateMapping: Record<eim.HostState, any> = {
+export const hostStateMapping: Record<
+  eim.HostState,
+  { status: IconStatus; message: string }
+> = {
   HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
-  HOST_STATE_DELETING: { status: IconStatus.Error, message: "Deleting" },
+  HOST_STATE_DELETING: { status: IconStatus.NotReady, message: "Deleting" },
   HOST_STATE_DELETED: { status: IconStatus.Error, message: "Deleted" },
   HOST_STATE_ONBOARDED: { status: IconStatus.Ready, message: "Onboarded" },
   HOST_STATE_REGISTERED: { status: IconStatus.Ready, message: "Registered" },
@@ -430,12 +423,11 @@ export const hostStateMapping: Record<eim.HostState, any> = {
 export const getCustomStatusOnIdleAggregation = (
   host: eim.HostRead,
 ): AggregatedStatus => {
-  const hostCurrentState = host.currentState;
-  if (!hostCurrentState)
+  if (!host.currentState || host.currentState === "HOST_STATE_UNSPECIFIED")
     return { status: IconStatus.Unknown, message: "Unknown" };
 
   const isInstanceRunning =
-    hostCurrentState === "HOST_STATE_ONBOARDED" &&
+    host.currentState === "HOST_STATE_ONBOARDED" &&
     host.instance?.currentState == "INSTANCE_STATE_RUNNING";
 
   // if workload members are assigned in Instance
@@ -449,7 +441,7 @@ export const getCustomStatusOnIdleAggregation = (
   }
 
   // other current statuses
-  return hostStateMapping[hostCurrentState];
+  return hostStateMapping[host.currentState];
 };
 
 /**
@@ -464,13 +456,11 @@ export const getCustomStatusOnIdleAggregation = (
  * Otherwise, it returns an object with text "Not compatible" and a corresponding tooltip.
  */
 export const getTrustedComputeCompatibility = (
-  host: eim.HostRead,
+  host: eim.HostWrite,
 ): TrustedComputeCompatibility => {
   if (
     host?.instance?.securityFeature ===
-      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION" &&
-    host.currentState === "HOST_STATE_ONBOARDED" &&
-    host.instance?.currentState == "INSTANCE_STATE_RUNNING"
+    "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
   )
     return {
       text: "Compatible",

@@ -215,7 +215,7 @@ const HostsTable = ({
       dispatch(reset());
       // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
-      const path = "../unconfigured-host/configure";
+      const path = "../hosts/set-up-provisioning";
       navigate(path, {
         relative: "path",
       });
