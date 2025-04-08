@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { alertFive, alertNoSource, alertSeven } from "@orch-ui/utils";
+import { alertNoSource, alertSeven } from "@orch-ui/utils";
 import AlertSource from "./AlertSource";
 import AlertSourcePom from "./AlertSource.pom";
 
