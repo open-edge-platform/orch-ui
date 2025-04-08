@@ -1,0 +1,75 @@
+name: Automatically update version to -dev
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+on: pull_request
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git identity
+        run: |
+          git config --global user.name "Version Update Bot"
+          git config --global user.email "version-bot@something.com"
+
+      - name: Find and update VERSION files
+        id: update_versions
+        run: |
+          source ./.github/workflows/tagging-lib.sh
+
+          CURRENT_DATE=$(date +%d-%m-%Y)
+          BRANCH_NAME="update-versions-${CURRENT_DATE}"
+          git checkout -b $BRANCH_NAME
+
+          CHANGES_MADE=0
+
+          # Find all VERSION files in the apps directory
+          for VERSION_PATH in $(find apps -name VERSION -type f); do
+            echo "Processing $VERSION_PATH"
+            export VERSIONFILE="$VERSION_PATH"
+
+            RELEASE_VERSION=0
+
+            read_version
+            check_if_releaseversion
+
+            if [ $RELEASE_VERSION -eq 1 ]; then
+              NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
+              echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
+
+              echo "$NEXT_VERSION" > "$VERSION_PATH"
+              git add "$VERSION_PATH"
+              CHANGES_MADE=1
+            fi
+          done
+
+          if [ $CHANGES_MADE -eq 1 ]; then
+            git commit -m "Update version files to next dev version"
+            git push origin $BRANCH_NAME
+
+            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+          else
+            echo "No VERSION files found to update"
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.update_versions.outputs.changes_made == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "Update version files to next dev version" \
+            --body "Automatically bumping versions after merge to main branch." \
+            --base main \
+            --head ${{ steps.update_versions.outputs.branch_name }}
