@@ -38,11 +38,7 @@ describe("HostDetails", () => {
     };
 
     beforeEach(() => {
-      pom.interceptApis([
-        pom.api.hostSuccess,
-        pom.api.siteSuccess,
-        pom.api.instanceSuccess,
-      ]);
+      pom.interceptApis([pom.api.hostSuccess, pom.api.siteSuccess]);
       cy.mount(<JSX />, {
         runtimeConfig,
         routerProps: { initialEntries: [`/host/${mockHost.resourceId}`] },
