@@ -6,6 +6,7 @@
 import { Direction, Operator } from "../interfaces/Pagination";
 import { IRuntimeConfig } from "../runtime-config/runtime-config";
 import {
+  clearAllStorage,
   convertUTCtoOrchUIDate,
   convertUTCtoOrchUIDateTime,
   copyToClipboard,
@@ -221,6 +222,34 @@ describe("the global utilities", () => {
       expect(stripTrailingSlash("https://with-trailing-slash.com")).to.equal(
         "https://with-trailing-slash.com",
       );
+    });
+  });
+
+  describe("clearAllStorage", () => {
+    beforeEach(() => {
+      // Set up localStorage, sessionStorage, and cookies
+      localStorage.setItem("testLocalStorageKey", "testLocalStorageValue");
+      sessionStorage.setItem(
+        "testSessionStorageKey",
+        "testSessionStorageValue",
+      );
+    });
+
+    it("should clear localStorage, sessionStorage, and cookies", () => {
+      // Verify initial values
+      expect(localStorage.getItem("testLocalStorageKey")).to.equal(
+        "testLocalStorageValue",
+      );
+      expect(sessionStorage.getItem("testSessionStorageKey")).to.equal(
+        "testSessionStorageValue",
+      );
+
+      // Call the function
+      clearAllStorage();
+
+      // Verify that localStorage and sessionStorage are cleared
+      expect(localStorage.getItem("testLocalStorageKey")).to.be.null;
+      expect(sessionStorage.getItem("testSessionStorageKey")).to.be.null;
     });
   });
 });
