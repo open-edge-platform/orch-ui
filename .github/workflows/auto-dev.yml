@@ -1,12 +1,9 @@
 name: Automatically update version to -dev
-# test
 
-# on:
-#   push:
-#     branches:
-#       - main
-
-on: pull_request
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   update-version:
