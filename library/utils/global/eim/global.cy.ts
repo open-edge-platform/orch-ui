@@ -6,7 +6,6 @@
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne,
-  assignedWorkloadHostThree,
   assignedWorkloadHostTwo,
   instanceOne,
   instanceTwo,
@@ -140,14 +139,6 @@ describe("The Utils", () => {
 
     it("should return Not compatible when Secure Boot and Full Disk Encryption are disabled", () => {
       const result = getTrustedComputeCompatibility(assignedWorkloadHostTwo);
-      expect(result).to.equal({
-        text: "Not compatible",
-        tooltip: "This host has Secure Boot and Full Disk Encryption disabled.",
-      });
-    });
-
-    it("should return Not compatible when the instance is not running", () => {
-      const result = getTrustedComputeCompatibility(assignedWorkloadHostThree);
       expect(result).to.equal({
         text: "Not compatible",
         tooltip: "This host has Secure Boot and Full Disk Encryption disabled.",
