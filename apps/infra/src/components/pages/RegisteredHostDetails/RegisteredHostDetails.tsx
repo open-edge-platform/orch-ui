@@ -6,7 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import { AggregatedStatuses, Flex, SquareSpinner } from "@orch-ui/components";
 import {
-  CONSTANTS,
+  getCustomStatusOnIdleAggregation,
   HostGenericStatuses,
   hostToStatuses,
   SharedStorage,
@@ -61,7 +61,9 @@ export const RegisteredHostDetails = () => {
             <AggregatedStatuses<HostGenericStatuses>
               defaultStatusName="hostStatus"
               statuses={hostToStatuses(host)}
-              defaultMessages={{ idle: CONSTANTS.HOST_STATUS.NOT_CONNECTED }}
+              customAggregationStatus={{
+                idle: () => getCustomStatusOnIdleAggregation(host),
+              }}
             />
           </div>
           <div className={`${className}__header-content-right`}>

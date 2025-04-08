@@ -4,12 +4,12 @@
  */
 import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
+import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { HostData, selectHosts } from "../../../store/configureHost";
 import { useAppSelector } from "../../../store/hooks";
-
 import "./HostConfigReview.scss";
 
 const dataCy = "hostConfigReview";
@@ -120,7 +120,7 @@ export const HostConfigReview = ({
                         {sbFdeValue(host, sbFdeEnabled)}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Compatible" : "Not compatible"}
+                        {getTrustedComputeCompatibility(host).text}
                       </td>
                       <td data-cy="tableRowCell">
                         {selectedAccount ? selectedAccount.username : "-"}
