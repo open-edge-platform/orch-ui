@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { appDeploymentManagerApi as api } from "./apiSlice";
 export const addTagTypes = ["ClusterService", "DeploymentService"] as const;
 const injectedRtkApi = api
