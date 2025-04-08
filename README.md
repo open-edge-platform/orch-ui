@@ -2,7 +2,12 @@
 
 ## Overview
 
-This implements the web user interface for the Orchestrator, allowing the user to do most of the features of the product in an intuitive, visual, manor without having learn all the complexities of the APIs.  That being said, everything the Web UI does and shows comes from the APIs.  This UI is intended for the day to day edge operators, who want to be able to:
+This implements the web user interface for the Orchestrator,
+allowing the user to perform most of the product's features in an intuitive,
+visual manner without having to learn all the complexities of the APIs.
+That being said, everything the Web UI does and shows comes from the APIs.
+This UI is intended for day-to-day edge operators, who want to be able to:
+
 - Register, Onboard and Provision hosts
 - Create and manage Clusters
 - Create and manage Projects
@@ -16,23 +21,24 @@ This implements the web user interface for the Orchestrator, allowing the user t
 
 ## Get Started
 
-## Edge Orchestrator Mirco Front Ends
+## Edge Orchestrator Micro Front Ends
 
-This project is a "mono-repo" example of micro front ends (MFEs), with minimal amount of configuration per project.
+This project is a "mono-repo" example of micro front ends (MFEs),
+with a minimal amount of configuration per project.
 
-> Note that MFEs and libraries are being moved to independent repost
+> Note that MFEs and libraries are being moved to independent repositories.
 
 There are 5 apps in this repository:
 
-- root - glues everything together, displays the other apps
-- app-orch - Manages Application Catalog and Deployments
+- root - Glues everything together, displays the other apps
+- app-orch - Manages the Application Catalog and Deployments
 - cluster-orch - Manages the Clusters
-- infra - Manages the Hosts (Edge Infratructure)
+- infra - Manages the Hosts (Edge Infrastructure)
 - admin - The administrator features (settings and alerts)
 
 In addition, there is a common library that is shared across all apps.
 
-(Note: All sub-projects are React based)
+(Note: All sub-projects are React-based)
 
 ```mermaid
 graph TD
@@ -48,16 +54,13 @@ graph TD
     style G fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
 ```
 
-Read more about {Name} in the \[User
-Guide\](<https://website-name.com>).
+Read more about Orchestrator GUI Web User Interface in the [User Guide](https://website-name.com).
 
-
-See the \[Documentation\](<https://website-name.com>) to get started
-using {Name}.
+See the [Documentation](https://website-name.com) to get started using
+Orchestrator GUI Web User Interface.
 
 ## License
 
-{Project Name} is licensed under \[license
-name\](https://website-name.com).
+Orchestrator GUI Web User Interface is licensed under [Apache 2.0 License](LICENSES/Apache-2.0.txt).
 
-Last Updated Date: {January 17, 2025}
+Last Updated Date: {April 03, 2025}

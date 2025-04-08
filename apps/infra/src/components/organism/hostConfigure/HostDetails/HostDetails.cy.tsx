@@ -13,16 +13,34 @@ const pom = new HostDetailsPom();
 
 describe("<Details/>", () => {
   describe("the isValidHostName function", () => {
-    it("should validate the host name", () => {
-      /* eslint-disable no-unused-expressions */
-      expect(isValidHostName()).to.be.true;
-      expect(isValidHostName("foo-bar")).to.be.true;
-      expect(isValidHostName("Foo-Bar")).to.be.true;
-      expect(isValidHostName("Foo-123")).to.be.true;
-      expect(isValidHostName("Foo.123")).to.be.true;
-      expect(isValidHostName("Foo.123!")).to.be.false;
-      expect(isValidHostName("Foo.123$")).to.be.false;
-      /* eslint-enable no-unused-expressions */
+    it("should fail on invalid names", () => {
+      [
+        "!!",
+        " ",
+        undefined,
+        null,
+        "Foo.123!",
+        "Foo.123$",
+        "123456789012345678901", // max of 20 chars exceeded
+        "foo@bar", // contains invalid character '@'
+        "foo#bar", // contains invalid character '#'
+        "foo\\bar", // contains invalid character '\'
+        "foo,bar", // contains invalid character ','
+        "foo;bar", // contains invalid character ';'
+        "foo|bar", // contains invalid character '|'
+        "foo<bar", // contains invalid character '<'
+        "foo>bar", // contains invalid character '>'
+        "foo?bar", // contains invalid character '?'
+        "foo*bar", // contains invalid character '*'
+      ].forEach((name) => {
+        expect(isValidHostName(name)).to.be.false;
+      });
+    });
+
+    it("should pass on valid names", () => {
+      ["foo-bar", "Foo-Bar", "Foo-123", "Foo.123"].forEach((name) => {
+        expect(isValidHostName(name)).to.be.true;
+      });
     });
   });
 
