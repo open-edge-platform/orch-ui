@@ -27,7 +27,7 @@ describe("<GlobalSecuritySwitch/>", () => {
             },
           },
         },
-        autoOnboard: false,
+        autoOnboard: true,
         autoProvision: false,
       },
     });
