@@ -17,20 +17,12 @@ let DeploymentLink: RemoteComponent = null;
 
 if (RuntimeConfig.isEnabled("INFRA")) {
   //Updated path for test to run
-  HostLink = React.lazy(
-    async () =>
-      await import(
-        "../../../../../infra/src/components/atom/HostLink/HostLinkRemote"
-      ),
-  );
+  HostLink = React.lazy(async () => await import("EimUI/HostLink"));
 }
 
 if (RuntimeConfig.isEnabled("APP_ORCH")) {
   DeploymentLink = React.lazy(
-    async () =>
-      await import(
-        "../../../../../app-orch/src/components/atoms/DeploymentLink/DeploymentLinkRemote"
-      ),
+    async () => await import("AppOrchUI/DeploymentLink"),
   );
 }
 
