@@ -77,7 +77,6 @@ export const getHostStatus = async (
   };
 
   // fetch details from all hosts at the same time
-  // TODO: use uuid instead of hostId
   const hosts = uniqueHosts.map((hostId: string) => {
     return dispatch(
       eim.eim.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({

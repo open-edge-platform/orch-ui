@@ -27,7 +27,6 @@ const config = {
       return config;
     },
     specPattern: [
-      "../../apps/root/src/**/*cy.tsx",
       "../../apps/root/src/**/*cy.{ts,tsx}",
       "../../apps/root/unit-tests.cy.ts",
     ],

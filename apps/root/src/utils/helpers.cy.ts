@@ -15,18 +15,15 @@ describe("DeploymentsContainer helpers functions", () => {
       const clusters: cm.ClusterDetailInfo[] = [
         {
           name: "cluster-1",
-          // TODO: nodes: [{ id: "node1-guid" }],
           nodes: [{ id: "host-2" }],
         },
         {
           name: "cluster-2",
           nodes: [{ id: "host-1" }, { id: "host-3" }],
-          // nodes: [{ id: "node2-guid" }, { id: "node3-guid" }],
         },
       ];
 
       const nodeIds = ["host-1", "host-3", "host-2"];
-      //const nodeGuids = ["node1-guid", "node2-guid", "node3-guid"];
 
       beforeEach(() => {
         SharedStorage.project = defaultActiveProject;
@@ -114,7 +111,6 @@ describe("DeploymentsContainer helpers functions", () => {
           "GET",
           `**/v1/projects/${
             SharedStorage.project?.name
-            // TODO: uuid instead of resourceId
           }/compute/hosts?filter=resourceId%3D%27${n.resourceId}%27`,
           {
             ...mockRes,
