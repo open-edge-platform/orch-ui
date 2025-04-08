@@ -1629,7 +1629,7 @@ export type GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg = {
   /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** The region ID that the sites belong to. If not specified, returns all sites (given the other query params). If specified, returns the sites that have the specified region ID applied to them. If null, returns all sites without a region ID. */
-  regionId?: string;
+  regionId: string;
   /** The OUID that the sites belong to. If not specified, returns all sites (given the other query parameters). If specified, returns the sites that have the specified OUID applied to them. If null, returns all sites without an OUID. */
   ouId?: string;
   /** unique projectName for the resource */
