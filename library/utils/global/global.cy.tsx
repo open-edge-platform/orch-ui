@@ -6,7 +6,7 @@
 import { Direction, Operator } from "../interfaces/Pagination";
 import { IRuntimeConfig } from "../runtime-config/runtime-config";
 import {
-  clearAllStorageAndCookies,
+  clearAllStorage,
   convertUTCtoOrchUIDate,
   convertUTCtoOrchUIDateTime,
   copyToClipboard,
@@ -225,7 +225,7 @@ describe("the global utilities", () => {
     });
   });
 
-  describe("clearAllStorageAndCookies", () => {
+  describe("clearAllStorage", () => {
     beforeEach(() => {
       // Set up localStorage, sessionStorage, and cookies
       localStorage.setItem("testLocalStorageKey", "testLocalStorageValue");
@@ -233,8 +233,6 @@ describe("the global utilities", () => {
         "testSessionStorageKey",
         "testSessionStorageValue",
       );
-      document.cookie = "testCookie1=testValue1";
-      document.cookie = "testCookie2=testValue2";
     });
 
     it("should clear localStorage, sessionStorage, and cookies", () => {
@@ -245,19 +243,13 @@ describe("the global utilities", () => {
       expect(sessionStorage.getItem("testSessionStorageKey")).to.equal(
         "testSessionStorageValue",
       );
-      expect(document.cookie).to.include("testCookie1=testValue1");
-      expect(document.cookie).to.include("testCookie2=testValue2");
 
       // Call the function
-      clearAllStorageAndCookies();
+      clearAllStorage();
 
       // Verify that localStorage and sessionStorage are cleared
       expect(localStorage.getItem("testLocalStorageKey")).to.be.null;
       expect(sessionStorage.getItem("testSessionStorageKey")).to.be.null;
-
-      // Verify that cookies are cleared
-      expect(document.cookie).to.not.include("testCookie1=testValue1");
-      expect(document.cookie).to.not.include("testCookie2=testValue2");
     });
   });
 });

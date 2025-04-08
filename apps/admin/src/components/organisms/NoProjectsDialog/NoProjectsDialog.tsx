@@ -4,7 +4,7 @@
  */
 
 import { MessageBannerAlertState, Modal } from "@orch-ui/components";
-import { clearAllStorageAndCookies } from "@orch-ui/utils";
+import { clearAllStorage } from "@orch-ui/utils";
 import { Button, MessageBanner } from "@spark-design/react";
 import { useAuth } from "react-oidc-context";
 import "./NoProjectsDialog.scss";
@@ -29,7 +29,7 @@ export const NoProjectsDialog = () => {
           <br />
           <Button
             onPress={() => {
-              clearAllStorageAndCookies();
+              clearAllStorage();
               signoutRedirect({
                 post_logout_redirect_uri: window.location.origin,
               });
