@@ -228,7 +228,7 @@ export class HostDetailsPom extends CyPom<
     this.hostDetailsTab = new HostDetailsTabPom();
   }
 
-  getHostDecriptionValueByKey(key: string) {
+  getHostDescriptionValueByKey(key: string) {
     return this.el.infraHostDetailsHostDescriptionTable
       .contains(key)
       .closest("td")
