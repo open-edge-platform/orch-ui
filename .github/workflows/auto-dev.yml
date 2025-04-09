@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - release-*
+      - feature/auto-dev-version
 
 jobs:
   update-version:
