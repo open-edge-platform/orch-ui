@@ -17,5 +17,7 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Run Version Update Action
         uses: ./.github/workflows/dev-version-update
