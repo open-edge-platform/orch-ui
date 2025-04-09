@@ -74,7 +74,7 @@ runs:
         # - name: Create Pull Request
         #   if: steps.update_versions.outputs.changes_made == 'true'
         #   env:
-        #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #     GH_TOKEN: ${{ github.token }}
         #   run: |
         #     gh pr create \
         #       --title "Update version files to next dev version" \
