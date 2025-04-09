@@ -102,9 +102,7 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
     // Host mock
     hostSuccess: {
       route: route,
-      response: {
-        mockHost,
-      },
+      response: mockHost,
     },
     hostSuccessWithOsData: {
       route: route,
