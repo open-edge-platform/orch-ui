@@ -88,14 +88,70 @@ postCustomTemplateOverwrite:
 
 > Note: If you only build one app you will only provide an image override for that app under the `postCustomTemplateOverwrite:`.
 
+Lastly, [Apply the Docker Image for a UI app](#apply-the-docker-image-change-for-a-ui-app)
+
 ## Method 2: Publish Images to a Hosted/Cloud-Based Registry
 
-To build and publish images to an online registry (e.g., DockerHub), use the following commands
+- Build images to an online registry (e.g., DockerHub), use the following commands:
 
 ```shell
-VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-build
-VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
+
+VERSION=`<my-tag>` DOCKER_REGISTRY=`<registry-name>` make docker-build
+
 ```
+
+- Push the image to the online registry using below command:
+
+```shell
+
+VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
+
+```
+
+- Make update to the cluster configuration for deployment, locate the configuration in the `edge-manageability-framework` repository (e.g., `dev-coder-minimal`) and modify it as shown below:
+
+```yaml
+
+postCustomTemplateOverwrite:
+  web-ui-root:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: Always
+      repository: edge-orch/orch-ui/root
+      tag: <my-tag>
+  web-ui-app-orch:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: Always
+      repository: edge-orch/orch-ui/app-orch
+      tag: <my-tag>
+  web-ui-cluster-orch:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: Always
+      repository: edge-orch/orch-ui/cluster-orch
+      tag: <my-tag>
+  web-ui-infra:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: Always
+      repository: edge-orch/orch-ui/cluster-orch
+      tag: <my-tag>
+  web-ui-admin:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: Always
+      repository: edge-orch/orch-ui/admin
+      tag: <my-tag>
+
+```
+
+Lastly, [Apply the Docker Image for a UI app](#apply-the-docker-image-change-for-a-ui-app)
 
 ## Apply the Docker Image Change for a UI App
 
