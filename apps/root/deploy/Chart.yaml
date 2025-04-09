@@ -9,5 +9,7 @@ version: 2.0.7
 
 # This value is supplied only to enable local unbuilt deployment of released content.
 appVersion: "2.0.7"
-annotations: {}
+annotations:
+  revision: a19b4129595953f77935f27abe20d58350a77e49
+  created: "2025-04-09T21:45:24Z"
 dependencies: []

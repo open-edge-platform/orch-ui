@@ -75,6 +75,9 @@ docker-build: build ## @HELP Build the docker image
 		-t $(DOCKER_TAG) \
 		-f ${DOCKER_FILE} ${DOCKER_CONTEXT}
 
+docker-list: ## Print name of docker container image
+	@echo $(DOCKER_TAG)
+
 docker-push: ## @HELP Push the docker image to a registry
 	aws ecr create-repository --region us-west-2 --repository-name edge-orch/$(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME) || true
 	docker push $(DOCKER_TAG)
