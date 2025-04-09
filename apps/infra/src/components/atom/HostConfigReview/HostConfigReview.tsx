@@ -196,8 +196,8 @@ export const HostConfigReview = ({
             <div className="icon-container">
               <Icon
                 className="hosts-overview-icon"
-                artworkStyle="regular"
-                icon="rack-mount"
+                artworkStyle="light"
+                icon="host"
                 onClick={() => setExpanded((e) => !e)}
               />
             </div>

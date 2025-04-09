@@ -336,7 +336,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const handlePrev = () => dispatch(goToPrevStep());
   const handleNext = async () => {
     switch (currentStep) {
-      case HostConfigSteps["Complete Configuration"]:
+      case HostConfigSteps["Complete Setup"]:
         // TODO save Host metadata
         if (autoProvision) {
           //Check if anything is already registered, if so remove it from list
@@ -453,7 +453,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         {currentStep === HostConfigSteps["Add SSH public key to hosts"] && (
           <AddSshPublicKey localAccounts={localAccountsList?.localAccounts} />
         )}
-        {currentStep === HostConfigSteps["Complete Configuration"] && (
+        {currentStep === HostConfigSteps["Complete Setup"] && (
           <HostConfigReview
             hostResults={hostResults}
             localAccounts={localAccountsList?.localAccounts}

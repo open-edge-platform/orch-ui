@@ -15,7 +15,7 @@ export enum HostConfigSteps {
   "Enter Host Details",
   "Add Host Labels",
   "Add SSH public key to hosts",
-  "Complete Configuration",
+  "Complete Setup",
 }
 const totalSteps = Object.keys(HostConfigSteps).length / 2;
 
