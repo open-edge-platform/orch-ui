@@ -96,12 +96,13 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       hostsTablePom.table.root.should("be.visible");
 
-      hostsTablePom.el.search.as("search").should("be.visible");
-      cy.get("@search").type(testRegisterHostData!.serialNumber, {
-        force: true,
-      });
+      hostsTablePom.el.search
+        .should("be.visible")
+        .type(testRegisterHostData!.serialNumber, {
+          force: true,
+        });
       // allow the search to complete before we count the number of rows
-      cy.get("@search").should(
+      hostsTablePom.el.search.should(
         "have.value",
         testRegisterHostData!.serialNumber,
       );
@@ -109,6 +110,9 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         "contain",
         `searchTerm=${testRegisterHostData!.serialNumber}`,
       );
+
+      // NOTE that there is still room for this test to fail, if we have two hosts with SN SN1234AB and SN1234ABC
+      // searching for SN1234AB will return both hosts
       hostsTablePom.getTableRows().should("have.length", 1);
     });
 
