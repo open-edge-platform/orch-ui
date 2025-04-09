@@ -5,13 +5,6 @@ name: Automatically update version to -dev
 #     branches:
 #       - main
 #       - release-*
-#   workflow_call:
-#     inputs:
-#       exclude_paths:
-#         description: "Comma-separated list of path patterns to exclude from search"
-#         required: false
-#         default: "*/node_modules/*,*/dist/*,*/build/*,*/vendor/*,*/bin/*,*/pkg/*,*/.git/*"
-#         type: string
 
 on:
   pull_request:
@@ -19,89 +12,10 @@ on:
   push:
     branches:
       - feature/auto-dev-version
-  workflow_call:
-    inputs:
-      exclude_paths:
-        description: "Comma-separated list of path patterns to exclude from search"
-        required: false
-        default: "*/node_modules/*,*/dist/*,*/build/*,*/vendor/*,*/bin/*,*/pkg/*,*/.git/*"
-        type: string
 
 jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Git identity
-        run: |
-          git config --global user.name "Version Update Bot"
-          git config --global user.email "version-bot@something.com"
-
-      - name: Find and update VERSION files
-        id: update_versions
-        run: |
-          source ./.github/workflows/tagging-lib.sh
-
-          CURRENT_DATE=$(date +%d-%m-%Y)
-          BRANCH_NAME="update-versions-${CURRENT_DATE}"
-          git checkout -b $BRANCH_NAME
-
-          CHANGES_MADE=0
-
-          # Split the exclude paths parameter
-          IFS=',' read -ra EXCLUDE_PATHS <<< "${{ inputs.exclude_paths }}"
-
-          # Build the find command starting from root
-          FIND_CMD="find . -name VERSION -type f"
-
-          # Add all exclusion patterns
-          for EXCLUDE in "${EXCLUDE_PATHS[@]}"; do
-            FIND_CMD="$FIND_CMD -not -path \"$EXCLUDE\""
-          done
-
-          echo "Executing: $FIND_CMD"
-
-          # Execute the find command and process results
-          for VERSION_PATH in $(eval $FIND_CMD 2>/dev/null || echo ""); do
-            echo "Processing $VERSION_PATH"
-            export VERSIONFILE="$VERSION_PATH"
-
-            RELEASE_VERSION=0
-            read_version
-            check_if_releaseversion
-
-            if [ $RELEASE_VERSION -eq 1 ]; then
-              NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
-              echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
-
-              echo "$NEXT_VERSION" > "$VERSION_PATH"
-              git add "$VERSION_PATH"
-              CHANGES_MADE=1
-            fi
-          done
-
-          if [ $CHANGES_MADE -eq 1 ]; then
-            git commit -m "Update version files to next dev version"
-            git push origin $BRANCH_NAME
-
-            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-            echo "changes_made=true" >> $GITHUB_OUTPUT
-          else
-            echo "No VERSION files found to update"
-            echo "changes_made=false" >> $GITHUB_OUTPUT
-          fi
-
-      # - name: Create Pull Request
-      #   if: steps.update_versions.outputs.changes_made == 'true'
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     gh pr create \
-      #       --title "Update version files to next dev version" \
-      #       --body "Automatically bumping versions after merge to main branch." \
-      #       --base main \
-      #       --head ${{ steps.update_versions.outputs.branch_name }}
+      - name: Run Version Update Action
+        uses: ./.github/workflows/dev-version-update
