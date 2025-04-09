@@ -34,7 +34,7 @@ const NameAndTemplate = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleNameChange = (name: string) => {
-    const regex = "^$|^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$";
+    const regex = "^$|^[a-z0-9][a-z0-9.-]*[a-z0-9]$";
     const regexHandle = new RegExp(regex);
     dispatch(updateClusterName(name));
     if (regexHandle.test(name)) {
@@ -42,7 +42,9 @@ const NameAndTemplate = () => {
       setErrorMessage("");
     } else {
       setValid(false);
-      setErrorMessage("Invalid Character");
+      setErrorMessage(
+        "A valid DNS name is required. can contain only lowercase letters (a-z), numbers (0-9), and hyphens (-), and must start and end with a letter or number, not a hyphen",
+      );
     }
   };
 

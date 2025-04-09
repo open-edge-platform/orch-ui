@@ -20,10 +20,12 @@ describe("<Review/>", () => {
       reduxStore: store,
     });
   });
+
   it("should render component", () => {
     pom.root.should("exist");
     pom.el.clusterName.should("have.text", "name");
     pom.el.clusterTemplateName.should("have.text", "template-v1.3.4");
+    pom.el.trustedCompute.should("contain.text", "Not compatible");
     pom.el.metadataBadge.should("have.text", "key = value");
   });
 });
