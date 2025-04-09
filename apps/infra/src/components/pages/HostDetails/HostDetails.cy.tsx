@@ -174,7 +174,7 @@ describe("HostDetails", () => {
     });
 
     it("show OS field", () => {
-      pom.getHostDecriptionValueByKey("OS").should("contain.text", "CurrentOS");
+      pom.getHostDescriptionValueByKey("OS").should("contain.text", "CurrentOS");
     });
     it("show Updates field", () => {
       pom
