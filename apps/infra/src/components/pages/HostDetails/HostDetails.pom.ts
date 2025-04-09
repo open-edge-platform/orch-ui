@@ -94,7 +94,7 @@ const repeatedScheduleMock = {
   RepeatedSchedules: [repeatedScheduleOne],
 };
 
-/* TODO: split below mock in separate endpoint groups by response type */
+const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
   const route = hostDetailRoute(hostId);
 
   return {
