@@ -116,6 +116,7 @@ describe("<HostConfigReview/>", () => {
           pom.getCell(1, 2).should("contain", host.serialNumber);
           pom.getCell(1, 2).should("contain", host.uuid);
           pom.getCell(1, 4).should("contain", "Enabled");
+          pom.getCell(2, 4).should("contain", "Not supported by OS");
           pom.getCell(1, 5).should("contain", "Compatible");
           pom.getCell(1, 6).should("contain", "all-groups-example-user");
         });

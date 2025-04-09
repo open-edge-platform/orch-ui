@@ -176,9 +176,10 @@ const HostEdit = () => {
     eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
+        filter: `region.resourceId='${selectedRegion?.resourceId ?? ""}'`,
         regionId: selectedRegion?.resourceId ?? "",
       },
-      { skip: !host || !selectedRegion },
+      { skip: !host || !selectedRegion?.resourceId },
     );
   useEffect(() => {
     if (!selectedSite && hostData && siteData && siteData.sites) {
