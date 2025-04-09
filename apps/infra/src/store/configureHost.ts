@@ -427,6 +427,22 @@ export const selectAreHostsSetSecureEnabled = (state: RootState) =>
       "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   );
 
+export const selectAreHostsOsSetSecureEnabled = (state: RootState) =>
+  Object.values(state.configureHost.hosts).every(
+    (hd) =>
+      hd.instance?.os?.securityFeature ===
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+  );
+
+export const selectAreHostsOsSetSecureDisabled = (state: RootState) =>
+  Object.values(state.configureHost.hosts).every(
+    (hd) =>
+      !hd.instance ||
+      !hd.instance.os ||
+      hd.instance?.os?.securityFeature !==
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+  );
+
 export const selectAreHostsSetSecureDisabled = (state: RootState) =>
   Object.values(state.configureHost.hosts).every(
     (hd) => hd.instance?.securityFeature === "SECURITY_FEATURE_NONE",
