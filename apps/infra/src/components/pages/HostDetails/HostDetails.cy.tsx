@@ -178,7 +178,7 @@ describe("HostDetails", () => {
     });
     it("show Updates field", () => {
       pom
-        .getHostDecriptionValueByKey("Updates")
+        .getHostDescriptionValueByKey("Updates")
         .should("contain.text", "DesiredOS");
     });
 
