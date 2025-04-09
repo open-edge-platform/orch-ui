@@ -42,6 +42,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       }
       testVerifyHostData = data;
 
+      // If we have a Serial Number passed in we are testing with VEN in CI/CD, should only be one host
       serialNumber = Cypress.env("EN_SERIAL_NUMBER");
       if (serialNumber) {
         testVerifyHostData.hosts = [testVerifyHostData.hosts[0]];
