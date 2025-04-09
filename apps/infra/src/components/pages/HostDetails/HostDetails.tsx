@@ -393,7 +393,7 @@ const HostDetails: React.FC = () => {
             }}
           />
           {isOSUpdateAvailable(host?.instance) && (
-            <label className={"update-available"}>
+            <label className={"update-available"} data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
             </label>
@@ -448,22 +448,18 @@ const HostDetails: React.FC = () => {
               <td>UUID</td>
               <td data-cy="guid">{host.uuid || "-"}</td>
             </tr>
-            {host.site && (
-              <>
-                <tr>
-                  <td>OS</td>
-                  <td data-cy="osProfiles">
-                    {host?.instance?.os?.name ?? "-"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Updates</td>
-                  <td data-cy="desiredOsProfiles">
-                    {host?.instance?.desiredOs?.name ?? "-"}
-                  </td>
-                </tr>
-              </>
-            )}
+            <tr>
+              <td>OS</td>
+              <td data-cy="osProfiles">
+                {host?.instance?.currentOs?.name ?? "-"}
+              </td>
+            </tr>
+            <tr>
+              <td>Updates</td>
+              <td data-cy="desiredOsProfiles">
+                {host?.instance?.desiredOs?.name ?? "-"}
+              </td>
+            </tr>
             {host.site && (
               <tr>
                 <td>Site</td>

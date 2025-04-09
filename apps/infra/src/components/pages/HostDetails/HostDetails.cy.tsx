@@ -5,7 +5,7 @@
 
 import { getActiveNavItem } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
-import { IRuntimeConfig, osTb, siteRestaurantTwo } from "@orch-ui/utils";
+import { IRuntimeConfig, siteRestaurantTwo } from "@orch-ui/utils";
 import { useAppSelector } from "../../../store/hooks";
 import HostDetails from "./HostDetails";
 import { HostDetailsPom, hostNoName, mockHost } from "./HostDetails.pom";
@@ -55,7 +55,7 @@ describe("HostDetails", () => {
       pom.el.infraHostDetailsHeader.contains(mockHost.name);
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
-      pom.el.osProfiles.should("have.text", osTb.name);
+      pom.el.osProfiles.should("have.text", "CurrentOS");
       pom.el.site.should("have.text", "Restaurant 02");
       pom.el.trustedCompute.should("contain.text", "Not compatible");
       pom.el.provider.should("have.text", mockHost.provider?.name);
@@ -158,10 +158,10 @@ describe("HostDetails", () => {
     });
   });
 
-  describe("OS Update", () => {
-    it("show OS update available", () => {
+  describe("Os field and OS Update field", () => {
+    beforeEach(() => {
       pom.interceptApis([
-        pom.api.hostSuccessNoHostLabels,
+        pom.api.hostSuccessWithOsData,
         pom.api.siteSuccess,
         pom.api.getHostSchedules,
       ]);
@@ -171,7 +171,19 @@ describe("HostDetails", () => {
         routerRule: [{ path: "/host/:id", element: <HostDetails /> }],
       });
       pom.waitForApis();
-      cyGet("infraHostDetails").should("contain.text", "OS update available");
+    });
+
+    it("show OS field", () => {
+      pom.getHostDecriptionValueByKey("OS").should("contain.text", "CurrentOS");
+    });
+    it("show Updates field", () => {
+      pom
+        .getHostDecriptionValueByKey("Updates")
+        .should("contain.text", "DesiredOS");
+    });
+
+    it("show `OS update available` under the Hostname", () => {
+      pom.el.osUpdateAvailable.should("exist");
     });
   });
 
