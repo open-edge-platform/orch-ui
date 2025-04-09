@@ -191,8 +191,10 @@ const serialNumberUuid: TableColumn<HostData> = {
     const uuid = table.row.original.uuid;
     return (
       <>
-        <div className="serial-number">{serialNumber}</div>
-        <div className="uuid">{uuid}</div>
+        <div className="serial-number">
+          {serialNumber || "No serial number present"}
+        </div>
+        <div className="uuid">{uuid || "No UUID value present"}</div>
       </>
     );
   },

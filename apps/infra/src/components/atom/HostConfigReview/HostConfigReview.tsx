@@ -94,8 +94,12 @@ export const HostConfigReview = ({
                     <tr data-cy="tableRow">
                       <td data-cy="tableRowCell">{host.name}</td>
                       <td data-cy="tableRowCell">
-                        <div className="serial-number">{host.serialNumber}</div>
-                        <div className="uuid">{host.uuid}</div>
+                        <div className="serial-number">
+                          {host.serialNumber || "No serial number present"}
+                        </div>
+                        <div className="uuid">
+                          {host.uuid || "No UUID value present"}
+                        </div>
                       </td>
                       <td data-cy="tableRowCell">
                         {host.instance?.os ? host.instance.os.name : "-"}
