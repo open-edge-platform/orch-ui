@@ -15,7 +15,7 @@ export type StatusIndicator =
 export type GenericStatus = {
   indicator: StatusIndicator;
   /** A textual message describing carrying a status message. */
-  message: string;
+  message?: string;
   /** A Unix, UTC timestamp when the status was last updated. */
   timestamp?: number;
 };
@@ -82,7 +82,7 @@ export const aggregateStatuses = <T extends AggregatedStatusesMap>(
     if (errors.length === 1) {
       return {
         status: Status.Error,
-        message: errors[0].message,
+        message: errors[0].message ?? "-",
       };
     }
     return {
@@ -95,7 +95,7 @@ export const aggregateStatuses = <T extends AggregatedStatusesMap>(
     if (inProgress.length === 1) {
       return {
         status: Status.NotReady,
-        message: inProgress[0].message,
+        message: inProgress[0].message ?? "-",
       };
     }
     return {

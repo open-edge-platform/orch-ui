@@ -4,11 +4,9 @@ apiVersion: v2
 name: orch-ui-infra
 description: Deploy the Edge-Native Software Platform Infrastructure pod
 type: application
-version: 1.0.6-dev
+version: 1.0.7
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
-appVersion: "1.0.6-dev-pull-request-27"
+appVersion: "1.0.7"
 dependencies: []
-annotations:
-  revision: 48c4b40fa7fb2f35b731dba129845438c1ca4ec6
-  created: "2025-04-04T17:48:42Z"
+annotations: {}

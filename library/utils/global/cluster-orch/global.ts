@@ -163,12 +163,15 @@ export const convertDataUnitsToBytes = (value = "0") => {
  *          along with a tooltip providing additional information.
  */
 export const getTrustedComputeCluster = (
-  cluster: cm.ClusterInfoRead,
+  cluster?: cm.ClusterInfoRead,
+  tcEnabled?: boolean,
 ): TrustedComputeCompatibility => {
   if (
-    cluster.labels &&
-    "trusted-compute-compatible" in cluster.labels &&
-    cluster.labels["trusted-compute-compatible"] === "true"
+    tcEnabled ||
+    (cluster &&
+      cluster.labels &&
+      "trusted-compute-compatible" in cluster.labels &&
+      cluster.labels["trusted-compute-compatible"] === "true")
   ) {
     return {
       text: "Compatible",

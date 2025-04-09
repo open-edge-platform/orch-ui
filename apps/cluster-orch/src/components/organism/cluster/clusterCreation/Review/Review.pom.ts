@@ -9,6 +9,7 @@ const dataCySelectors = [
   "clusterName",
   "clusterTemplateName",
   "metadataBadge",
+  "trustedCompute",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 

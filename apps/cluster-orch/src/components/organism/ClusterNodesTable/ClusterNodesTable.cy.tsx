@@ -44,15 +44,9 @@ describe("<ClusterNodesTable/> should", () => {
 
   it("display 'Compatible' when trusted compute is enabled", () => {
     pom.interceptApis([pom.api.getHostsWithTCEnabled]);
-    const nodesWithSecurityFeature: cm.NodeInfo[] = [
-      {
-        id: "hostId",
-        status: { condition: "STATUS_CONDITION_READY" },
-      },
-    ];
     cy.mount(
       <ClusterNodesTable
-        nodes={nodesWithSecurityFeature}
+        nodes={nodes}
         readinessType="cluster"
         filterOn={"resourceId"}
       />,
@@ -65,6 +59,20 @@ describe("<ClusterNodesTable/> should", () => {
     cy.get(".caret-up-select")
       .parents(".table-header-cell")
       .should("contain.text", "Host Name");
+  });
+
+  it("call onDataLoad prop when data is loaded", () => {
+    const onDataLoadSpy = cy.spy().as("onDataLoadSpy");
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodes}
+        readinessType="cluster"
+        filterOn="resourceId"
+        onDataLoad={onDataLoadSpy}
+      />,
+    );
+    pom.waitForApis();
+    cy.get("@onDataLoadSpy").should("have.been.calledOnce");
   });
 });
 

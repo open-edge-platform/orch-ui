@@ -5,6 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { ContextSwitcher } from "@orch-ui/components";
+import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
@@ -52,6 +53,7 @@ const Hosts = () => {
         onPress={() => {
           navigate("../register-hosts");
         }}
+        isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
       >
         Register Hosts
       </Button>
