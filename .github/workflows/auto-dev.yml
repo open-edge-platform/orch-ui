@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+      - release-*
+  workflow_call:
+    inputs:
+      exclude_paths:
+        description: "Comma-separated list of path patterns to exclude from search"
+        required: false
+        default: "*/node_modules/*,*/dist/*,*/build/*,*/vendor/*,*/bin/*,*/pkg/*,*/.git/*"
+        type: string
 
 jobs:
   update-version:
@@ -30,13 +38,25 @@ jobs:
 
           CHANGES_MADE=0
 
-          # Find all VERSION files in the apps directory
-          for VERSION_PATH in $(find apps -name VERSION -type f); do
+          # Split the exclude paths parameter
+          IFS=',' read -ra EXCLUDE_PATHS <<< "${{ inputs.exclude_paths }}"
+
+          # Build the find command starting from root
+          FIND_CMD="find . -name VERSION -type f"
+
+          # Add all exclusion patterns
+          for EXCLUDE in "${EXCLUDE_PATHS[@]}"; do
+            FIND_CMD="$FIND_CMD -not -path \"$EXCLUDE\""
+          done
+
+          echo "Executing: $FIND_CMD"
+
+          # Execute the find command and process results
+          for VERSION_PATH in $(eval $FIND_CMD 2>/dev/null || echo ""); do
             echo "Processing $VERSION_PATH"
             export VERSIONFILE="$VERSION_PATH"
 
             RELEASE_VERSION=0
-
             read_version
             check_if_releaseversion
 
@@ -61,13 +81,13 @@ jobs:
             echo "changes_made=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create Pull Request
-        if: steps.update_versions.outputs.changes_made == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr create \
-            --title "Update version files to next dev version" \
-            --body "Automatically bumping versions after merge to main branch." \
-            --base main \
-            --head ${{ steps.update_versions.outputs.branch_name }}
+      # - name: Create Pull Request
+      #   if: steps.update_versions.outputs.changes_made == 'true'
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh pr create \
+      #       --title "Update version files to next dev version" \
+      #       --body "Automatically bumping versions after merge to main branch." \
+      #       --base main \
+      #       --head ${{ steps.update_versions.outputs.branch_name }}
