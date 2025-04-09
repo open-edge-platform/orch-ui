@@ -110,6 +110,8 @@ VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
 
 - Make update to the cluster configuration for deployment, locate the configuration in the `edge-manageability-framework` repository (e.g., `dev-coder-minimal`) and modify it as shown below:
 
+> Note: in below `<registry-name>` is the location of the online-registry and `<my-tag>` the image tag you want to use in UI from the online registry.
+
 ```yaml
 
 postCustomTemplateOverwrite:
