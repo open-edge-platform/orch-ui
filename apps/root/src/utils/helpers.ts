@@ -77,10 +77,10 @@ export const getHostStatus = async (
   };
 
   // fetch details from all hosts at the same time
-  const hosts = uniqueHosts.map((uuid) => {
+  const hosts = uniqueHosts.map((hostId: string) => {
     return dispatch(
       eim.eim.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
-        uuid,
+        filter: `resourceId='${hostId}'`,
         projectName: SharedStorage.project?.name ?? "",
       }),
     );
