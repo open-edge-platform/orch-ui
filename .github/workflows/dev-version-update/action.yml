@@ -22,7 +22,7 @@ runs:
       run: |
         source ./.github/workflows/tagging-lib.sh
 
-        CURRENT_DATE=$(date +%d-%m-%Y)
+        CURRENT_DATE=$(date +%d-%m-%Y-%H%M%S)
         BRANCH_NAME="update-versions-${CURRENT_DATE}"
         git checkout -b $BRANCH_NAME
 
