@@ -96,6 +96,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.dataCy("aside", { timeout: 10 * 1000 })
         .contains("button", "Hosts")
         .click();
+
+      if (serialNumber) {
+        cy.wait(1000 * 60 * 5); // wait for the host to be provisioned ~5min
+      }
+
       testVerifyHostData.hosts.forEach((host) => {
         tablePom.search(host.serialNumber);
         tablePom.getRows().should("have.length", 1);

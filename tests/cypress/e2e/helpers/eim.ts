@@ -35,7 +35,6 @@ export const createRegionViaAPi = (
     });
 };
 
-
 export const getRegionViaAPi = (
   project: string,
   regionName: string,
@@ -50,8 +49,7 @@ export const getRegionViaAPi = (
     })
     .then((response) => {
       expect(response.status).to.equal(200);
-      console.log("Response", response.body);
-      
+
       return cy.wrap(response.body.regions);
     });
 };
