@@ -112,7 +112,7 @@ mage deploy:orchLocal dev-coder-minimal
 If you are making changes to the Helm charts, configure ArgoCD to use a GitHub repository as the source for the UI Helm charts. For example, update the application template files in the edge-manageability-framework repository. These templates are located in the argocd/applications/templates/ folder.
 
 > [!NOTE]
-> You need to replace the YAML block in `edge-manageability-framework` repo, 
+> You need to replace the YAML block in `edge-manageability-framework` repo,
 > within an application template file located at `argocd/applications/templates/` with the lines below,
 > not merge them.
 >
