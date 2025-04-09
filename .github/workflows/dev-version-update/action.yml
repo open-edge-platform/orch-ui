@@ -73,6 +73,7 @@ runs:
 
     - name: Create Pull Request
       if: steps.update_versions.outputs.changes_made == 'true'
+      shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
