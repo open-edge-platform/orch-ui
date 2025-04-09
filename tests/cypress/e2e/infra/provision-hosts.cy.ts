@@ -31,7 +31,6 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
   let testProvisionHostData: TestProvisionHostData,
     serialNumber: string,
-    uuid: string,
     activeProject: string,
     regionId: string,
     siteId: string,
@@ -50,24 +49,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       testProvisionHostData = data;
 
       serialNumber = Cypress.env("EN_SERIAL_NUMBER");
-      if (!Cypress.env("EN_SERIAL_NUMBER")) {
-        throw new Error(
-          "Please set the EN SERIAL NUMBER via CYPRESS_EN_SERIAL_NUMBER environment variable",
-        );
-      }
-      else{
-        testProvisionHostData.hosts = [testProvisionHostData.hosts[0]]; 
+      if (serialNumber) {
+        testProvisionHostData.hosts = [testProvisionHostData.hosts[0]];
         testProvisionHostData.hosts[0].serialNumber = serialNumber;
       }
-
     });
-
-    uuid = Cypress.env("EN_UUID");
-    if (!Cypress.env("EN_UUID")) {
-      throw new Error(
-        "Please set the EN UUID via CYPRESS_EN_UUID environment variable",
-      );
-    }
   });
 
   describe("when provisioning hosts", () => {
@@ -109,7 +95,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
           createSiteViaApi(
             activeProject,
             regionId,
-            testProvisionHostData.site,       
+            testProvisionHostData.site,
           ).then((sid) => {
             siteId = sid;
             cy.log(
@@ -141,7 +127,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       //Does all the work of going through the stepper
       cy.dataCy("textField").should("be.visible");
-      hostConfigPom.provisionHost(testProvisionHostData.site, [], serialNumber !== undefined);
+      hostConfigPom.provisionHost(
+        testProvisionHostData.site,
+        [],
+        serialNumber !== undefined,
+      );
 
       for (let i = 0; i < testProvisionHostData.hosts.length; i++) {
         cy.wait("@registerHost").then((interception) => {
@@ -161,7 +151,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
     afterEach(() => {
       // If we are using a serial number skip deletion until after the `verify-host` test
-      if(serialNumber) return;
+      if (serialNumber) return;
 
       instanceHosts.forEach((resourceId) => {
         deleteHostInstanceViaApi(activeProject, resourceId);
