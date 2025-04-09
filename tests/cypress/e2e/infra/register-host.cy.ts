@@ -9,7 +9,6 @@ import {
   HostsTablePom,
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
-import { cyGet } from "@orch-ui/tests";
 import { NetworkLog } from "../../support/network-logs";
 import { EIM_USER } from "../../support/utilities";
 import { deleteHostViaApi } from "../helpers";
@@ -50,59 +49,69 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.currentProject().then((p) => (activeProject = p));
     });
 
-    it("should sucessfully fill out form details and create a registered host", () => {
-      cy.viewport(1920, 1080);
+    Cypress._.times(1, (k) => {
+      it("should sucessfully fill out form details and create a registered host", () => {
+        cy.viewport(1920, 1080);
 
-      cy.intercept({
-        url: `/v1/projects/${activeProject}/compute/hosts?filter=*`,
-      }).as("getHosts");
+        cy.intercept({
+          url: `/v1/projects/${activeProject}/compute/hosts?filter=*`,
+        }).as("getHosts");
 
-      cy.intercept({
-        method: "POST",
-        url: `/v1/projects/${activeProject}/compute/hosts/register`,
-        times: 1,
-      }).as("registerHost");
+        cy.intercept({
+          method: "POST",
+          url: `/v1/projects/${activeProject}/compute/hosts/register`,
+          times: 1,
+        }).as("registerHost");
 
-      // navigate to the register hosts page
-      cy.dataCy("header").contains("Infrastructure").click();
-      cy.dataCy("aside", { timeout: 10 * 1000 })
-        .contains("button", "Hosts")
-        .click();
-      cyGet("registerHosts").click();
-      cy.url().should("contain", "register-hosts");
-      cy.wait("@getHosts");
+        // navigate to the register hosts page
+        cy.dataCy("header").contains("Infrastructure").click();
+        cy.dataCy("aside", { timeout: 10 * 1000 })
+          .contains("button", "Hosts")
+          .click();
+        cy.dataCy("registerHosts").click();
+        cy.url().should("contain", "register-hosts");
+        cy.wait("@getHosts");
 
-      // fill in the form to register a new host
-      addHostsFormPom.newHostNamePom.root
-        .should("be.visible")
-        .type(testRegisterHostData!.name);
-      addHostsFormPom.newSerialNumberPom.root.type(
-        testRegisterHostData!.serialNumber,
-      );
+        // fill in the form to register a new host
+        addHostsFormPom.newHostNamePom.root
+          .should("be.visible")
+          .type(`${testRegisterHostData!.name}-${k}`);
+        addHostsFormPom.newSerialNumberPom.root.type(
+          `${testRegisterHostData!.serialNumber}${k}`,
+        );
 
-      //isAutoOnboarded/isAutoProvisioned points to actual <input/> which is not visible,
-      //need the next element which is the clickable <span/> to set them to false
-      registerHostsPom.el.isAutoOnboarded.next().click();
-      registerHostsPom.el.nextButton.click();
+        //isAutoOnboarded/isAutoProvisioned points to actual <input/> which is not visible,
+        //need the next element which is the clickable <span/> to set them to false
+        registerHostsPom.el.isAutoOnboarded.next().click();
+        registerHostsPom.el.nextButton.click();
 
-      // wait for the registered host id for deletion afterwards
-      cy.wait("@registerHost").then((interception) => {
-        expect(interception.response?.statusCode).to.equal(201);
-        registeredHostId = interception.response?.body.resourceId;
+        // wait for the registered host id for deletion afterwards
+        cy.wait("@registerHost").then((interception) => {
+          expect(interception.response?.statusCode).to.equal(201);
+          registeredHostId = interception.response?.body.resourceId;
+        });
+
+        // verify that the host is registered
+        hostsPom.hostContextSwitcherPom.el.all.click();
+        cy.wait("@getHosts");
+
+        hostsTablePom.table.root.should("be.visible");
+
+        hostsTablePom.el.search.as("search").should("be.visible");
+        cy.get("@search").type(`${testRegisterHostData!.serialNumber}${k}`, {
+          force: true,
+        });
+        // allow the search to complete before we count the number of rows
+        cy.get("@search").should(
+          "have.value",
+          `${testRegisterHostData!.serialNumber}${k}`,
+        );
+        cy.url().should(
+          "contain",
+          `searchTerm=${testRegisterHostData!.serialNumber}${k}`,
+        );
+        hostsTablePom.getTableRows().should("have.length", 1);
       });
-
-      // verify that the host is registered
-      hostsPom.hostContextSwitcherPom.el.all.click();
-      cy.wait("@getHosts");
-      hostsTablePom.el.search
-        .should("be.visible")
-        .type(testRegisterHostData.serialNumber, { force: true });
-      // allow the search to complete before we count the number of rows
-      hostsTablePom.el.search.should(
-        "have.value",
-        testRegisterHostData.serialNumber,
-      );
-      hostsTablePom.getTableRows().should("have.length", 1);
     });
 
     afterEach(() => {
