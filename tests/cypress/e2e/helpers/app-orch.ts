@@ -4,7 +4,6 @@
  */
 
 import { adm, catalog, cm } from "@orch-ui/apis";
-import { cyGet } from "../../support/cyBase";
 import Chainable = Cypress.Chainable;
 
 // --- Interfaces ---
@@ -19,11 +18,8 @@ export interface TestData {
   applicationProfile?: catalog.Profile;
   deploymentPackage: catalog.DeploymentPackage;
   deployments: adm.Deployment;
-  applications: catalog.Application[];
-  deployment_package: catalog.DeploymentPackage;
   region: string;
   site: string;
-  // clusterName: string;
   hostName: string;
   cluster: cm.ClusterSpec;
 }
@@ -84,23 +80,19 @@ export function isClusterCreateTestDataPresent(testData) {
 }
 
 // --- Helper Functions ---
-export function navigateToDeploymentTab() {
-  cy.visit("/");
-  getDeploymentsMFETab().click();
-}
-
 /** get Deployments navigation button */
 export function getDeploymentsMFETab() {
   return cy
     .dataCy("headerItemLink")
-    .contains("Deployments", { timeout: 2 * 60 * 1000 })
+    .contains("Deployments")
     .should("be.visible");
 }
 
 /** get sidebar option by name */
 export function getSidebarTabByName(tabName: string) {
-  return cyGet("sidebar")
-    .contains(tabName, { timeout: 2 * 60 * 1000 })
+  return cy
+    .dataCy("sidebar", { timeout: 10 * 1000 })
+    .contains(tabName)
     .should("be.visible");
 }
 

@@ -191,14 +191,11 @@ export const configureHostViaAPI = (
   });
 };
 
-export const getHostsViaApi = (project): Chainable => {
-  const onBoardedHostsFilter =
-    "%28currentState%3DHOST_STATE_ONBOARDED%20AND%20has%28instance%29%29";
-
+export const getHostsViaApi = (project, uuid): Chainable => {
   return cy
     .authenticatedRequest({
       method: "GET",
-      url: `/v1/projects/${project}/compute/hosts?filter=${onBoardedHostsFilter}`,
+      url: `/v1/projects/${project}/compute/hosts?uuid=${uuid}`,
     })
     .then((response) => {
       expect(response.status).to.equal(200);

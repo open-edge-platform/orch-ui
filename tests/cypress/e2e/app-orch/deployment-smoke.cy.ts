@@ -15,6 +15,7 @@ import {
   createDeploymentPackageViaApi,
   deleteApplicationViaApi,
   deleteDeploymentPackageViaApi,
+  getDeploymentsMFETab,
   getSidebarTabByName,
   isApplicationProfileTestDataPresent,
   isApplicationTestDataPresent,
@@ -23,7 +24,6 @@ import {
   isDeploymentTestDataPresent,
   isRegistryChartTestDataPresent,
   isRegistryTestDataPresent,
-  navigateToDeploymentTab,
   TestData,
 } from "../helpers/app-orch";
 import {
@@ -47,7 +47,6 @@ const deploymentDetailsPom = new DeploymentDetailsPom();
 describe("APP_ORCH E2E: Deployments Smoke tests", () => {
   const netLog = new NetworkLog();
   let testData: TestData;
-  let activeProject: string;
   let application: catalog.Application;
   let deploymentPackage: catalog.DeploymentPackage;
   let deploymentPackageDisplayName: string;
@@ -60,7 +59,8 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
     netLog.interceptAll(["**/v1/**", "**/v3/**"]);
     cy.login(user);
-    navigateToDeploymentTab();
+    cy.visit("/");
+    getDeploymentsMFETab().click();
   };
 
   before(() => {
@@ -102,9 +102,7 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
       // pre-requisites to create cluster
       cy.login(EIM_USER);
       cy.visit("/");
-      cy.currentProject().then((p) => {
-        activeProject = p;
-
+      cy.currentProject().then((activeProject) => {
         // creating region
         createRegionViaAPi(activeProject, testData.region).then(
           (regionResourceId) => {
@@ -122,9 +120,9 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
         );
 
         // configuring the host with previosly created region and site
-        getHostsViaApi(activeProject).then((hostList) => {
+        getHostsViaApi(activeProject, uuid).then((hostList) => {
           expect(hostList.length).to.be.greaterThan(0);
-          currentHost = hostList.find((host) => host.uuid === uuid);
+          currentHost = hostList[0]; // as the host is fetched by uuid, there can be only 1 host
           hostId = currentHost.resourceId!;
           configureHostViaAPI(activeProject, testData.hostName, hostId, siteId);
           cy.log(`Configured host with hostId ${hostId}`);
@@ -139,154 +137,144 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
       getSidebarTabByName("Deployments").click();
     });
 
-    describe("on create deployment", () => {
-      it("should setup edge manager pre-requisites", () => {
-        cy.currentProject().then((p) => {
-          activeProject = p;
+    it("should setup edge manager pre-requisites", () => {
+      cy.currentProject().then((activeProject) => {
+        const testApp = testData.application;
+        // Creating application
+        createApplicationViaApi(activeProject, testApp).then((app) => {
+          application = app;
+          cy.log(
+            `Application created with application name ${application.name}`,
+          );
+        });
 
-          const testApp = testData.application;
-          // Creating application
-          createApplicationViaApi(activeProject, testApp).then((app) => {
-            application = app;
-            cy.log(
-              `Application created with application name ${application.name}`,
-            );
+        // Creating deployment package
+        createDeploymentPackageViaApi(
+          activeProject,
+          testData.deploymentPackage,
+        ).then((app) => {
+          deploymentPackage = app;
+          cy.log(
+            `Deployment package created with  name ${deploymentPackage.name}`,
+          );
+        });
+
+        getClusterTemplatesViaApi(activeProject).then((templates) => {
+          let defaultTemplateInfo = {
+            name: "",
+            version: "",
+          };
+          expect(templates).to.have.property("defaultTemplateInfo");
+          defaultTemplateInfo = templates.defaultTemplateInfo;
+          // creating cluster
+          const cluster = testData.cluster;
+          cluster.template = `${defaultTemplateInfo.name}-${defaultTemplateInfo.version}`;
+          cluster.nodes.push({
+            id: uuid,
+            role: "all",
           });
-
-          // Creating deployment package
-          createDeploymentPackageViaApi(
-            activeProject,
-            testData.deploymentPackage,
-          ).then((app) => {
-            deploymentPackage = app;
-            cy.log(
-              `Deployment package created with  name ${deploymentPackage.name}`,
-            );
-          });
-
-          getClusterTemplatesViaApi(activeProject).then((templates) => {
-            let defaultTemplateInfo = {
-              name: "",
-              version: "",
-            };
-            expect(templates).to.have.property("defaultTemplateInfo");
-            defaultTemplateInfo = templates.defaultTemplateInfo;
-            // creating cluster
-            const cluster = testData.cluster;
-            cluster.template = `${defaultTemplateInfo.name}-${defaultTemplateInfo.version}`;
-            cluster.nodes.push({
-              id: uuid,
-              role: "all",
-            });
-            createClusterViaApi(activeProject, cluster).then(() => {
-              cy.log(`Cluster is created with cluster name ${cluster.name}`);
-            });
+          createClusterViaApi(activeProject, cluster).then(() => {
+            cy.log(`Cluster is created with cluster name ${cluster.name}`);
           });
         });
       });
+    });
 
-      it("should create new entry", () => {
-        pom.navigateToAddDeployment();
+    it("should create a deployment", () => {
+      pom.navigateToAddDeployment();
 
-        // Fill Setup Deployment Flow
-        pom.addDeployment(testData.deployments, deploymentPackageDisplayName);
+      // Fill Setup Deployment Flow
+      pom.addDeployment(testData.deployments, deploymentPackageDisplayName);
+    });
+
+    it("should validate the deployment is created", () => {
+      pom.deploymentsPom.deploymentTablePom.tablePom
+        .getRows()
+        .contains(deploymentPackageDisplayName);
+
+      // should display status `Deploying` initially
+      pom.deploymentsPom.deploymentTablePom.tableUtils
+        .getRowBySearchText(deploymentDisplayName)
+        .find(".table-row-cell")
+        .eq(1)
+        .contains("Deploying", { timeout: 2 * 60 * 1000 })
+        .should("contain.text", "Deploying");
+
+      // should display status `Running` once the deployment is successully running
+      pom.deploymentsPom.deploymentTablePom.tableUtils
+        .getRowBySearchText(deploymentDisplayName)
+        .find(".table-row-cell")
+        .eq(1)
+        .contains("Running", { timeout: 10 * 60 * 1000 }) // waiting for status change to Running
+        .should("contain.text", "Running");
+
+      // As 1 host is part of the cluster its expected to be 1/1 when deployment is running
+      pom.deploymentsPom.deploymentTablePom.tableUtils
+        .getRowBySearchText(deploymentDisplayName)
+        .find(".table-row-cell")
+        .eq(2)
+        .should("contain.text", "1/1");
+
+      pom.deploymentsPom.deploymentTablePom.tableUtils
+        .getRowBySearchText(deploymentDisplayName)
+        .find(".table-row-cell")
+        .eq(3)
+        .should("contain.text", deploymentPackageDisplayName);
+
+      pom.deploymentsPom.deploymentTablePom.tableUtils
+        .getRowBySearchText(deploymentDisplayName)
+        .find(".table-row-cell")
+        .eq(4)
+        .should("contain.text", testData.deploymentPackage.version);
+
+      pom.deploymentsPom.deploymentTablePom.tableUtils
+        .getRowBySearchText(deploymentDisplayName)
+        .find("a")
+        .click();
+
+      cy.url({ timeout: 5000 }).should("contain", "applications/deployment/");
+      deploymentDetailsPom.el.deploymentDetailsHeader.should("exist", {
+        timeout: 2 * 60 * 1000,
       });
+      deploymentDetailsPom.el.deploymentDetailsHeader.should(
+        "contain.text",
+        deploymentDisplayName,
+      );
 
-      it("should validate the deployment is created", () => {
-        pom.deploymentsPom.deploymentTablePom.tablePom
-          .getRows()
-          .contains(deploymentPackageDisplayName);
+      deploymentDetailsPom.el.deploymentDetailsHeader.should(
+        "contain.text",
+        deploymentDisplayName,
+      );
+    });
 
-        // should display status `Deploying` initially
-        pom.deploymentsPom.deploymentTablePom.tableUtils
-          .getRowBySearchText(deploymentDisplayName)
-          .find(".table-row-cell")
-          .eq(1)
-          .contains("Deploying", { timeout: 2 * 60 * 1000 })
-          .should("contain.text", "Deploying");
+    it("should see delete entry", () => {
+      pom.removeDeployment(deploymentDisplayName);
+      pom.deploymentsPom.root.should("not.contain.text", deploymentDisplayName);
+    });
 
-        // should display status `Running` once the deployment is successully running
-        pom.deploymentsPom.deploymentTablePom.tableUtils
-          .getRowBySearchText(deploymentDisplayName)
-          .find(".table-row-cell")
-          .eq(1)
-          .contains("Running", { timeout: 10 * 60 * 1000 }) // waiting for status change to Running
-          .should("contain.text", "Running");
-
-        // As 1 host is part of the cluster its expected to be 1/1 when deployment is running
-        pom.deploymentsPom.deploymentTablePom.tableUtils
-          .getRowBySearchText(deploymentDisplayName)
-          .find(".table-row-cell")
-          .eq(2)
-          .should("contain.text", "1/1");
-
-        pom.deploymentsPom.deploymentTablePom.tableUtils
-          .getRowBySearchText(deploymentDisplayName)
-          .find(".table-row-cell")
-          .eq(3)
-          .should("contain.text", deploymentPackageDisplayName);
-
-        pom.deploymentsPom.deploymentTablePom.tableUtils
-          .getRowBySearchText(deploymentDisplayName)
-          .find(".table-row-cell")
-          .eq(4)
-          .should("contain.text", testData.deploymentPackage.version);
-
-        pom.deploymentsPom.deploymentTablePom.tableUtils
-          .getRowBySearchText(deploymentDisplayName)
-          .find("a")
-          .click();
-
-        cy.url({ timeout: 5000 }).should("contain", "applications/deployment/");
-        deploymentDetailsPom.el.deploymentDetailsHeader.should("exist", {
-          timeout: 2 * 60 * 1000,
-        });
-        deploymentDetailsPom.el.deploymentDetailsHeader.should(
-          "contain.text",
-          deploymentDisplayName,
-        );
-
-        deploymentDetailsPom.el.deploymentDetailsHeader.should(
-          "contain.text",
-          deploymentDisplayName,
-        );
-      });
-
-      it("should see delete entry", () => {
-        pom.removeDeployment(deploymentDisplayName);
-        pom.deploymentsPom.root.should(
-          "not.contain.text",
-          deploymentDisplayName,
-        );
-      });
-
-      // cleanup
-      it("should delete edge manager pre-requisites", () => {
-        cy.currentProject().then((project) => {
-          if (testData.cluster.name) {
-            deleteClusterViaApi(project, testData.cluster.name);
-          }
-          if (
-            deploymentPackageDisplayName &&
-            testData.deploymentPackage.version
-          ) {
-            deleteDeploymentPackageViaApi(
-              project,
-              deploymentPackageDisplayName,
-              testData.deploymentPackage.version,
-            );
-          }
-          if (
-            testData.application.displayName &&
-            testData.application.version
-          ) {
-            deleteApplicationViaApi(
-              project,
-              testData.application.displayName!,
-              testData.application.version!,
-            );
-          }
-        });
+    // cleanup
+    it("should delete edge manager pre-requisites", () => {
+      cy.currentProject().then((project) => {
+        if (testData.cluster.name) {
+          deleteClusterViaApi(project, testData.cluster.name);
+        }
+        if (
+          deploymentPackageDisplayName &&
+          testData.deploymentPackage.version
+        ) {
+          deleteDeploymentPackageViaApi(
+            project,
+            deploymentPackageDisplayName,
+            testData.deploymentPackage.version,
+          );
+        }
+        if (testData.application.displayName && testData.application.version) {
+          deleteApplicationViaApi(
+            project,
+            testData.application.displayName!,
+            testData.application.version!,
+          );
+        }
       });
     });
   });
