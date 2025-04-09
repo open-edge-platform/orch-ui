@@ -4,12 +4,12 @@
  */
 import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
+import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { HostData, selectHosts } from "../../../store/configureHost";
 import { useAppSelector } from "../../../store/hooks";
-
 import "./HostConfigReview.scss";
 
 const dataCy = "hostConfigReview";
@@ -49,6 +49,22 @@ export const HostConfigReview = ({
   const hasFailedToProvision = (host: HostData) => {
     return typeof hostResults.get(host.name) === "string" ? 1 : 0;
   };
+
+  const sbFdeValue = (host: HostData, sbFdeEnabled: boolean) => {
+    const notSupported: eim.SecurityFeature[] = [
+      "SECURITY_FEATURE_UNSPECIFIED",
+      "SECURITY_FEATURE_NONE",
+    ];
+    if (
+      !host.instance?.os?.securityFeature ||
+      notSupported.includes(host.instance.os.securityFeature)
+    ) {
+      return "Not supported by OS";
+    } else {
+      return sbFdeEnabled ? "Enabled" : "Disabled";
+    }
+  };
+
   const details = () => {
     const sortedHostResults = hostsValues.sort((a, b) => {
       const aHasFailed: number = hasFailedToProvision(a);
@@ -101,10 +117,10 @@ export const HostConfigReview = ({
                         {host.instance?.os ? host.instance.os.name : "-"}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Enabled" : "Disabled"}
+                        {sbFdeValue(host, sbFdeEnabled)}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Compatible" : "Not compatible"}
+                        {getTrustedComputeCompatibility(host).text}
                       </td>
                       <td data-cy="tableRowCell">
                         {selectedAccount ? selectedAccount.username : "-"}
