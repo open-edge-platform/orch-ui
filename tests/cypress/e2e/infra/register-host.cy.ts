@@ -74,9 +74,9 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // fill in the form to register a new host
       addHostsFormPom.newHostNamePom.root
         .should("be.visible")
-        .type(testRegisterHostData!.name);
+        .type(testRegisterHostData.name);
       addHostsFormPom.newSerialNumberPom.root.type(
-        testRegisterHostData!.serialNumber,
+        testRegisterHostData.serialNumber,
       );
 
       //isAutoOnboarded/isAutoProvisioned points to actual <input/> which is not visible,
@@ -98,17 +98,17 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       hostsTablePom.el.search
         .should("be.visible")
-        .type(testRegisterHostData!.serialNumber, {
+        .type(testRegisterHostData.serialNumber, {
           force: true,
         });
       // allow the search to complete before we count the number of rows
       hostsTablePom.el.search.should(
         "have.value",
-        testRegisterHostData!.serialNumber,
+        testRegisterHostData.serialNumber,
       );
       cy.url().should(
         "contain",
-        `searchTerm=${testRegisterHostData!.serialNumber}`,
+        `searchTerm=${testRegisterHostData.serialNumber}`,
       );
 
       // NOTE that there is still room for this test to fail, if we have two hosts with SN SN1234AB and SN1234ABC
