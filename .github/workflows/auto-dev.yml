@@ -14,4 +14,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run Version Update Action
-        uses: ./.github/workflows/dev-version-update
+        uses: open-edge-platform/orch-ci/dev-version-update@action-dev-version-update
