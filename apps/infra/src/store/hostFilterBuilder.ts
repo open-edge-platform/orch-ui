@@ -22,6 +22,7 @@ export enum LifeCycleState {
   Onboarded = "onboarded",
   Registered = "registered",
   All = "all",
+  Active = "active",
 }
 
 export enum AggregatedStatus {
@@ -43,6 +44,10 @@ const getIndicator = (
 ) => `STATUS_INDICATION_${value}` as eim.StatusIndicator;
 
 export const lifeCycleStateQuery = new Map<LifeCycleState, string | undefined>([
+  [
+    LifeCycleState.Active,
+    "(currentState=HOST_STATE_ONBOARDED AND has(instance) AND instance.currentState=INSTANCE_STATE_RUNNING )",
+  ],
   [
     LifeCycleState.Provisioned,
     "(currentState=HOST_STATE_ONBOARDED AND has(instance))",
