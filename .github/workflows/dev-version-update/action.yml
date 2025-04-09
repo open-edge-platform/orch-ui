@@ -79,5 +79,6 @@ runs:
       run: |
         gh pr create \
           --title "Update version files to next dev version" \
+          --body "Automatically bumping version files to next development iteration (-dev suffix)." \
           --base main \
           --head ${{ steps.update_versions.outputs.branch_name }}
