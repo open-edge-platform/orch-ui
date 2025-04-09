@@ -33,7 +33,7 @@ export default defineConfig({
   },
   e2e: {
     // to target a different environment use: CYPRESS_BASE_URL=http://localhost:8080 cypress run
-    baseUrl: "https://web-ui.kind.internal",
+    baseUrl: "https://web-ui.orch-10-114-181-106.espdqa.infra-host.com",
     setupNodeEvents(on, config) {
       on(
         "file:preprocessor",

@@ -11,20 +11,21 @@ import {
   deleteHostViaApi,
   deleteRegionViaApi,
   deleteSiteViaApi,
+  getHostsViaApi,
   getRegionViaAPi,
   getSiteViaApi,
 } from "../helpers";
 import {
-  isTestVerifyHostData,
-  TestVerifyHostData,
-} from "../helpers/eimTestVerifyHostData";
+  isTestProvisionHostData,
+  TestProvisionHostData,
+} from "../helpers/eimTestProvisionHostData";
 
 describe(`Infra smoke: the ${EIM_USER.username}`, () => {
   const netLog = new NetworkLog();
   const tablePom = new TablePom();
 
-  let testVerifyHostData: TestVerifyHostData, 
-  serialNumber: string,
+  let testVerifyHostData: TestProvisionHostData,
+    serialNumber: string,
     activeProject: string,
     regionId: string,
     siteId: string,
@@ -32,26 +33,24 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     instanceHosts: string[] = [];
 
   before(() => {
-    const verifyHostDataFile = "./cypress/e2e/infra/data/verify-host.json";
+    const verifyHostDataFile = "./cypress/e2e/infra/data/provision-host.json";
     cy.readFile(verifyHostDataFile, "utf-8").then((data) => {
-      if (!isTestVerifyHostData(data)) {
+      if (!isTestProvisionHostData(data)) {
         throw new Error(
           `Invalid test data in ${verifyHostDataFile}: ${JSON.stringify(data)}`,
         );
       }
       testVerifyHostData = data;
+
+      serialNumber = Cypress.env("EN_SERIAL_NUMBER");
+      if (serialNumber) {
+        testVerifyHostData.hosts = [testVerifyHostData.hosts[0]];
+        testVerifyHostData.hosts[0].serialNumber = serialNumber;
+      }
     });
-
-
-    serialNumber = Cypress.env("EN_SERIAL_NUMBER");
-    if (!serialNumber) {
-      throw new Error(
-        "Please set the serial number via CYPRESS_EN_SERIAL_NUMBER environment variable",
-      );
-    }
   });
 
-  describe("when provisioning hosts", () => {
+  describe("when verifying provisioned hosts", () => {
     beforeEach(() => {
       netLog.intercept();
 
@@ -60,38 +59,60 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.currentProject().then((p) => (activeProject = p));
     });
 
-    //TODO: Ensure it works with VEN once it is available
     it("should see a host in provisioned state", () => {
-      getRegionViaAPi(activeProject, testVerifyHostData.region).then((response) => {
-        console.log("Regions result", response);
-        regionId = response.find(
-          (region) => region.name === testVerifyHostData.region,
-        )?.resourceId!;
-
-        getSiteViaApi(activeProject, regionId, testVerifyHostData.site).then((response) => {
-          console.log("Sites result", response);
-          siteId = response.find(
-            (site) => site.name === testVerifyHostData.site,
-          )?.resourceId!;
-        });
-     
+      getHostsViaApi(activeProject).then((response) => {
+        if (serialNumber) {
+          const host = response.find(
+            (host) => host.name === testVerifyHostData.hosts[0].name,
+          );
+          provisionedHosts.push(host?.resourceId!);
+          instanceHosts.push(host?.instance?.resourceId!);
+        } else {
+          provisionedHosts.push(...response.map((host) => host.resourceId!));
+          instanceHosts.push(
+            ...response.map((host) => host.instance?.resourceId!),
+          );
+        }
       });
+
+      getRegionViaAPi(activeProject, testVerifyHostData.region).then(
+        (response) => {
+          regionId = response.find(
+            (region) => region.name === testVerifyHostData.region,
+          )?.resourceId!;
+
+          getSiteViaApi(activeProject, regionId, testVerifyHostData.site).then(
+            (response) => {
+              siteId = response.find(
+                (site) => site.name === testVerifyHostData.site,
+              )?.resourceId!;
+            },
+          );
+        },
+      );
 
       cy.dataCy("header").contains("Infrastructure").click();
       cy.dataCy("aside", { timeout: 10 * 1000 })
         .contains("button", "Hosts")
         .click();
-      tablePom.search(serialNumber);
-
-      tablePom.getRows().should("have.length", 1);
-      cy.contains(serialNumber).should("be.visible");
-      tablePom.getCell(1, 3).should("contain.text", "Provisioned");
+      testVerifyHostData.hosts.forEach((host) => {
+        tablePom.search(host.serialNumber);
+        tablePom.getRows().should("have.length", 1);
+        cy.contains(host.serialNumber).should("be.visible");
+        tablePom.getCell(1, 3).should("contain.text", "Provisioned");
+      });
     });
 
     afterEach(() => {
-      cy.log("regionId & siteId to be deleted", regionId, siteId);
+      instanceHosts.forEach((resourceId) => {
+        deleteHostInstanceViaApi(activeProject, resourceId);
+      });
+      provisionedHosts.forEach((resourceId) => {
+        deleteHostViaApi(activeProject, resourceId);
+      });
       deleteSiteViaApi(activeProject, regionId, siteId);
       deleteRegionViaApi(activeProject, regionId);
+
       netLog.save();
       netLog.clear();
     });
