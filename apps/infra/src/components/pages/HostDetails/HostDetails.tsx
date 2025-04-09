@@ -393,7 +393,7 @@ const HostDetails: React.FC = () => {
             }}
           />
           {isOSUpdateAvailable(host?.instance) && (
-            <label className={"update-available"} data-cy="osUpdateAvailable">
+            <label className="update-available" data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
             </label>
