@@ -1,11 +1,21 @@
 name: Automatically update version to -dev
 
+# on:
+#   push:
+#     branches:
+#       - main
+#       - release-*
+#   workflow_call:
+#     inputs:
+#       exclude_paths:
+#         description: "Comma-separated list of path patterns to exclude from search"
+#         required: false
+#         default: "*/node_modules/*,*/dist/*,*/build/*,*/vendor/*,*/bin/*,*/pkg/*,*/.git/*"
+#         type: string
+
 on:
   pull_request:
-  # push:
-  #   branches:
-  #     - main
-  #     - release-*
+    types: [opened, reopened, synchronize]
   workflow_call:
     inputs:
       exclude_paths:
