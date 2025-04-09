@@ -97,6 +97,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       hostsTablePom.el.search
         .should("be.visible")
         .type(testRegisterHostData.serialNumber, { force: true });
+      // allow the search to complete before we count the number of rows
+      hostsTablePom.el.search.should(
+        "have.value",
+        testRegisterHostData.serialNumber,
+      );
       hostsTablePom.getTableRows().should("have.length", 1);
     });
 
