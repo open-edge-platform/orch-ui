@@ -73,7 +73,7 @@ describe("<ClusterCreation/>", () => {
     describe("on metadata form validation", () => {
       beforeEach(() => {
         pom.fillSpecifyNameAndTemplates(
-          "Cluster1",
+          "cluster-1",
           clusterTemplateOneName,
           clusterTemplateOneV1Info.version,
         );
@@ -112,7 +112,7 @@ describe("<ClusterCreation/>", () => {
     describe("execute `Specify Name and Template` to `Review` steps", () => {
       beforeEach(() => {
         pom.fillSpecifyNameAndTemplates(
-          "Cluster1",
+          "cluster-1",
           clusterTemplateOneName,
           clusterTemplateOneV1Info.version,
         );
@@ -133,7 +133,7 @@ describe("<ClusterCreation/>", () => {
       });
 
       it("should verify cluster details in review", () => {
-        pom.el.clusterName.should("have.text", "Cluster1");
+        pom.el.clusterName.should("have.text", "cluster-1");
         metaDataPom
           .getByIndex(0)
           .should("contain.text", "region = region-uswest");
@@ -146,7 +146,7 @@ describe("<ClusterCreation/>", () => {
       // Upon clicking `Create` button test various with api response
       describe("when cluster create is clicked in review", () => {
         const expectedClusterReq: cm.ClusterSpec = {
-          name: "Cluster1",
+          name: "cluster-1",
           labels: {
             customer: "culvers",
             region: "region-uswest",
@@ -228,7 +228,7 @@ describe("<ClusterCreation/>", () => {
     });
 
     it("clear cluster data on cancel", () => {
-      pom.el.clusterName.type("Cluster1");
+      pom.el.clusterName.type("cluster-1");
       pom.clusterTemplateDropdown.selectDropdownValue(
         pom.clusterTemplateDropdown.root,
         "clusterTemplateDropdown",

@@ -15,7 +15,7 @@ const initialState: ModifiedClusterDetailInfo = {
   labels: {},
   template: "",
   kubernetesVersion: "",
-  name: "Add Name",
+  name: "",
   nodes: [],
   providerStatus: undefined,
   selectedSite: {},
