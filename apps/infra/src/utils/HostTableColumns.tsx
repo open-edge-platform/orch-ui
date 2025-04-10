@@ -194,7 +194,7 @@ const serialNumberUuid: TableColumn<HostData> = {
         <div className="serial-number">
           {serialNumber || "No serial number present"}
         </div>
-        <div className="uuid">{uuid || "No UUID value present"}</div>
+        <div className="uuid">{uuid || "No UUID present"}</div>
       </>
     );
   },

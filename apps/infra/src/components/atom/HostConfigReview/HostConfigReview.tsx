@@ -114,7 +114,7 @@ export const HostConfigReview = ({
                           {host.serialNumber || "No serial number present"}
                         </div>
                         <div className="uuid">
-                          {host.uuid || "No UUID value present"}
+                          {host.uuid || "No UUID present"}
                         </div>
                       </td>
                       <td data-cy="tableRowCell">
