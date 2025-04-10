@@ -230,7 +230,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
         return (
           <AggregatedStatuses<AggregatedStatusesMap>
             statuses={clusterToStatuses(table.row.original)}
-            defaultStatusName="lifecyclePhase"
+            defaultStatusName="providerStatus"
           />
         );
       },

@@ -56,7 +56,7 @@ describe("<ClusterList />", () => {
         // Check Status
         const statusMessage = aggregateStatuses<ClusterGenericStatuses>(
           clusterToStatuses(c),
-          "lifecyclePhase",
+          "providerStatus",
         ).message;
         pom.root.contains(statusMessage);
       });
