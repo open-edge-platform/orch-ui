@@ -8,9 +8,9 @@ SHELL = bash -e -o pipefail
 
 # Add a a suffix to the version if needed
 # This is used in CI to add a suffix to the version when/if publishing images in the pre-merge job
-VERSION_SUFFIX              ?= ""
+VERSION_SUFFIX              ?=
 
-VERSION                     ?= $(shell cat ./VERSION)$(VERSION_SUFFIX | xargs)
+VERSION                     ?= $(shell cat ./VERSION)$(VERSION_SUFFIX)
 GIT_BRANCH                  ?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')$(VERSION_SUFFIX)
 
 
@@ -68,12 +68,20 @@ all: help
 build: ../../node_modules ## @HELP Builds the react application using webpack
 	NODE_ENV=production npm run app:$(PROJECT_NAME):build
 
-docker-build: build ## @HELP Build the docker image
+docker-build:  ## @HELP Build the docker image
 	cp -r ../../library/nginxCommon .
+	echo "$(VERSION)"
 
 	docker build $(DOCKER_BUILD_ARGS) --platform=linux/x86_64 ${DOCKER_EXTRA_ARGS} \
 		-t $(DOCKER_TAG) \
 		-f ${DOCKER_FILE} ${DOCKER_CONTEXT}
+
+docker-list: ## Print name of docker container image
+	@echo "  $(DOCKER_IMG_NAME):"
+	@echo "    name: '$(DOCKER_TAG)'"
+	@echo "    version: '$(VERSION)'"
+	@echo "    gitTagPrefix: 'apps/$(PROJECT_NAME)/'"
+	@echo "    buildTarget: '$(PROJECT_NAME)-docker-build'"
 
 docker-push: ## @HELP Push the docker image to a registry
 	aws ecr create-repository --region us-west-2 --repository-name edge-orch/$(DOCKER_REPOSITORY)/$(DOCKER_IMG_NAME) || true
