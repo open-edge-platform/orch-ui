@@ -103,7 +103,7 @@ describe("<HostConfigReview/>", () => {
       pom.getColumnHeader(2).contains("OS Profile");
       pom.getColumnHeader(3).contains("Secure Boot and Full Disk Encryption");
       pom.getColumnHeader(4).contains("Trusted Compute");
-      pom.getColumnHeader(5).contains("Public SSH Key");
+      pom.getColumnHeader(5).contains("SSH Key Name");
     });
     it("should render appropriate values in columns", () => {
       cy.window()
