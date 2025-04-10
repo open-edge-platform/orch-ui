@@ -6,6 +6,7 @@
 import { eim } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwo as hostTwo,
+  regionSalemId,
   siteMinimartTwo,
   siteMinimartTwoName,
 } from "@orch-ui/utils";
@@ -18,9 +19,10 @@ const mockHost = HostEditPom.testHost;
 const pom = new HostEditPom();
 const newHostName = "Host name updated";
 
-describe("HostEdit", () => {
+describe("<HostEdit />", () => {
   beforeEach(() => {
     pom.interceptApis([
+      pom.api.getInstances,
       pom.api.hostSuccess,
       pom.api.siteByIdSuccess,
       pom.api.regionsSuccess,
@@ -37,40 +39,38 @@ describe("HostEdit", () => {
     pom.waitForApis();
   });
 
-  describe("should view host details", () => {
-    it("should render with Host name", () => {
+  describe("View Host Details", () => {
+    it("should render with the correct Host name", () => {
       pom.el.nameInput.should("contain.value", mockHost.name);
     });
 
-    describe("host metadata", () => {
-      it("should render metadata", () => {
-        if (!mockHost.metadata)
-          throw new Error("Test data missing required metadata information");
-        pom.hostMetadata.el.pair.should(
-          "have.length",
-          mockHost.metadata.length,
-        );
-      });
+    it("should display metadata when available", () => {
+      if (!mockHost.metadata)
+        throw new Error("Test data missing required metadata information");
+      pom.hostMetadata.el.pair.should("have.length", mockHost.metadata.length);
+    });
 
-      it("should disable Save button when there is metadata error", () => {
-        pom.hostMetadata.rhfComboboxKeyPom.getInput().type("fake-Value");
-        pom.el.updateHostButton.should("have.attr", "aria-disabled", "true");
-      });
+    it("should disable Save button when there is metadata error with capital case", () => {
+      // Enter a capital-case invalid metadata key
+      pom.hostMetadata.rhfComboboxKeyPom.getInput().type("fake-Value");
 
-      it("should render with empty when metadata is not available", () => {
-        pom.interceptApis([pom.api.hostWithoutMetadata]);
-        cy.mount(<HostEdit />, {
-          routerProps: { initialEntries: [`/host/${hostTwo.resourceId}/edit`] },
-          routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
-        });
-        pom.waitForApis();
-        pom.hostMetadata.root.should("exist");
+      // Assert that the Save button is disabled
+      pom.el.updateHostButton.should("have.attr", "aria-disabled", "true");
+    });
+
+    it("should render with empty when metadata is not available", () => {
+      pom.interceptApis([pom.api.hostWithoutMetadata]);
+      cy.mount(<HostEdit />, {
+        routerProps: { initialEntries: [`/host/${hostTwo.resourceId}/edit`] },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
       });
+      pom.waitForApis();
+      pom.hostMetadata.root.should("exist");
     });
   });
 
-  describe("update host details", () => {
-    it("should validate on invalid name with special symbol", () => {
+  describe("Update host details", () => {
+    it("should validate empty Host name", () => {
       pom.el.nameInput.clear();
       pom.el.nameInput
         .parentsUntil(".spark-text-field-container")
@@ -86,12 +86,12 @@ describe("HostEdit", () => {
         );
     });
 
-    it("take name only upto 20 characters", () => {
+    it("should limit Host name to 20 characters", () => {
       pom.el.nameInput.clear().type("host-0123456789123456789");
       pom.el.nameInput.should("have.value", "host-012345678912345");
     });
 
-    it("should rewrite name", () => {
+    it("should update Host name", () => {
       // we're making sure all the existing properties are sent
       const expectedReq: eim.HostWrite = {
         name: newHostName,
@@ -101,8 +101,8 @@ describe("HostEdit", () => {
       };
       if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)
         delete expectedReq.site?.region?.parentRegion?.parentRegion;
-      pom.el.nameInput.clear().type(newHostName);
 
+      pom.el.nameInput.clear().type(newHostName);
       pom.interceptApis([
         pom.api.updateHostSuccess,
         pom.api.hostUpdatedSuccess,
@@ -112,7 +112,6 @@ describe("HostEdit", () => {
         .its("request.body")
         .should("deep.equal", expectedReq);
       pom.waitForApis();
-
       pom.el.nameInput.should("contain.value", newHostName);
     });
 
@@ -153,7 +152,7 @@ describe("HostEdit", () => {
       pom.el.nameInput.should("contain.value", newHostName);
     });
 
-    it("should redirect after save", () => {
+    it("should redirect to Hosts table after saving", () => {
       pom.interceptApis([
         pom.api.updateHostSuccess,
         pom.api.hostUpdatedSuccess,
@@ -164,126 +163,95 @@ describe("HostEdit", () => {
       cy.get("#pathname").contains("hosts");
     });
   });
-});
 
-describe("Host Edit: Region & site dropdown", () => {
-  it("should be enabled when api responds at least one instance having no workload", () => {
-    pom.interceptApis([
-      pom.api.getInstances,
-      pom.api.hostSuccess,
-      pom.api.siteByIdSuccess,
-      pom.api.regionsSuccess,
-      pom.api.sitesSuccess,
-    ]);
-    cy.mount(<HostEdit />, {
-      routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
-      routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
-      reduxStore: store,
+  describe("Region & Site Dropdown Behavior", () => {
+    it("should enable dropdowns when API responds with instances/workloads", () => {
+      pom.el.regionCombobox.should("not.be.disabled");
+      pom.el.siteCombobox.should("not.be.disabled");
     });
-    pom.waitForApis();
-    pom.el.regionCombobox.should("not.be.disabled");
-    pom.el.siteCombobox.should("not.be.disabled");
-  });
 
-  it("should not contain None", () => {
-    pom.interceptApis([
-      pom.api.getInstances,
-      pom.api.hostSuccess,
-      pom.api.siteByIdSuccess,
-      pom.api.regionsSuccess,
-      pom.api.sitesSuccess,
-    ]);
-    cy.mount(<HostEdit />, {
-      routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
-      routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
-      reduxStore: store,
+    it("should have the correct region ID in the sitesSuccess request URL", () => {
+      const expectedRegionId = regionSalemId;
+
+      cy.get(`@${pom.api.sitesSuccess}`)
+        .its("request.url")
+        .then((url: string) => {
+          const match = url.match(
+            `region.resourceId%3D%27${expectedRegionId}%27`,
+          );
+          expect(match && match.length > 0).to.be.eq(true);
+        });
     });
-    pom.waitForApis();
 
-    pom.el.regionCombobox.should("not.be.disabled");
-    pom.el.siteCombobox.should("not.be.disabled");
-
-    pom.el.siteCombobox.find("button").click();
-    cy.should("not.contain", "None");
-  });
-
-  it("should update site", () => {
-    pom.interceptApis([
-      pom.api.getInstances,
-      pom.api.hostSuccess,
-      pom.api.siteByIdSuccess,
-      pom.api.regionsSuccess,
-      pom.api.sitesSuccess,
-    ]);
-    cy.mount(<HostEdit />, {
-      routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
-      routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
-      reduxStore: store,
+    it("should not contain 'None' in the Site dropdown", () => {
+      pom.el.siteCombobox.find("button").click();
+      cy.should("not.contain", "None");
     });
-    pom.waitForApis();
 
-    pom.el.regionCombobox.should("not.be.disabled");
-    pom.el.siteCombobox.should("not.be.disabled");
+    it("should update the selected Site", () => {
+      pom.el.siteCombobox.find("button").click();
+      cy.contains(siteMinimartTwoName).click();
 
-    pom.el.siteCombobox.find("button").click();
-    cy.contains(siteMinimartTwoName).click();
+      const expectedReq: eim.HostWrite = {
+        name: mockHost.name,
+        siteId: siteMinimartTwo.resourceId,
+        inheritedMetadata: mockHost.inheritedMetadata,
+        metadata: mockHost.metadata,
+      };
+      if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)
+        delete expectedReq.site?.region?.parentRegion?.parentRegion;
 
-    const expectedReq: eim.HostWrite = {
-      name: mockHost.name,
-      siteId: siteMinimartTwo.resourceId,
-      inheritedMetadata: mockHost.inheritedMetadata,
-      metadata: mockHost.metadata,
-    };
-    if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)
-      delete expectedReq.site?.region?.parentRegion?.parentRegion;
+      pom.interceptApis([
+        pom.api.updateHostSuccess,
+        pom.api.hostUpdatedSuccess,
+      ]);
+      pom.el.updateHostButton.click();
+      cy.get(`@${pom.api.updateHostSuccess}`)
+        .its("request.body")
+        .should("deep.equal", expectedReq);
+      pom.waitForApis();
 
-    pom.interceptApis([pom.api.updateHostSuccess, pom.api.hostUpdatedSuccess]);
-    pom.el.updateHostButton.click();
-    cy.get(`@${pom.api.updateHostSuccess}`)
-      .its("request.body")
-      .should("deep.equal", expectedReq);
-    pom.waitForApis();
-
-    pom.el.siteCombobox
-      .find("input")
-      .should("contain.value", siteMinimartTwo.name);
-  });
-
-  it("should disabled on empty instance list having no workload", () => {
-    pom.interceptApis([
-      pom.api.getInstancesEmpty,
-      pom.api.hostSuccess,
-      pom.api.siteByIdSuccess,
-      pom.api.regionsSuccess,
-      pom.api.sitesSuccess,
-    ]);
-    cy.mount(<HostEdit />, {
-      routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
-      routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
-      reduxStore: store,
+      pom.el.siteCombobox
+        .find("input")
+        .should("contain.value", siteMinimartTwo.name);
     });
-    pom.waitForApis();
 
-    pom.el.regionCombobox.should("be.disabled");
-    pom.el.siteCombobox.should("be.disabled");
-  });
+    it("should disable dropdowns when no instances/workloads are available", () => {
+      pom.interceptApis([
+        pom.api.getInstancesEmpty,
+        pom.api.hostSuccess,
+        pom.api.siteByIdSuccess,
+        pom.api.regionsSuccess,
+        pom.api.sitesSuccess,
+      ]);
+      cy.mount(<HostEdit />, {
+        routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
+        reduxStore: store,
+      });
+      pom.waitForApis();
 
-  it("should disabled on instance list failed to fetch", () => {
-    pom.interceptApis([
-      pom.api.getInstances500,
-      pom.api.hostSuccess,
-      pom.api.siteByIdSuccess,
-      pom.api.regionsSuccess,
-      pom.api.sitesSuccess,
-    ]);
-    cy.mount(<HostEdit />, {
-      routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
-      routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
-      reduxStore: store,
+      pom.el.regionCombobox.should("be.disabled");
+      pom.el.siteCombobox.should("be.disabled");
     });
-    pom.waitForApis();
 
-    pom.el.regionCombobox.should("be.disabled");
-    pom.el.siteCombobox.should("be.disabled");
+    it("should disable dropdowns when instance API fails", () => {
+      pom.interceptApis([
+        pom.api.getInstances500,
+        pom.api.hostSuccess,
+        pom.api.siteByIdSuccess,
+        pom.api.regionsSuccess,
+        pom.api.sitesSuccess,
+      ]);
+      cy.mount(<HostEdit />, {
+        routerProps: { initialEntries: [`/host/${mockHost.resourceId}/edit`] },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
+        reduxStore: store,
+      });
+      pom.waitForApis();
+
+      pom.el.regionCombobox.should("be.disabled");
+      pom.el.siteCombobox.should("be.disabled");
+    });
   });
 });

@@ -1,16 +1,21 @@
 # Infrastructure
 
-> Warning: This readme file is outdated.
+> Warning: This README file is outdated.
 
-## Running in dev mode
+[CORS]: https://developer.mozilla.org/en-US/docs/Glossary/CORS
 
-When running the Infrastructure application locally, you might want to spin up a mock server, you can do that by:
+## Running in Development Mode
+
+When running the Infrastructure application locally,
+you might want to spin up a mock server.
+You can do that by using the following command:
 
 ```shell
 REACT_LP_MOCK_API=true npm start
 ```
 
-If you are running Infrastructure standalone and want to enable HMR, you can run this command before starting the server:
+If you are running Infrastructure standalone and want to enable HMR,
+you can run this command before starting the server:
 
 ```shell
 REACT_INFRA_HMR=true
@@ -18,26 +23,35 @@ REACT_INFRA_HMR=true
 
 ## Running against a real API server
 
-In order to contact a real API server while running the UI on your local machine and explicit [CORS](https://developer.mozilla.org/en-US/docs/Glossary/CORS) header must be set.
-That can be done by installing the Infrastructure helm chart providing the following flag:
+To contact a real API server while running the UI on your local machine,
+an explicit [CORS] header must be set.
+This can be done by installing the Infrastructure helm chart
+and providing the following flag:
 
 ```shell
 --set serviceArgs.allowedCorsOrigins="http://localhost:8080\,http://localhost:8082"
 ```
 
-or by adding these lines to the value file.
+Alternatively, you can add these lines to the `values.yaml` file:
 
 ```yaml
 serviceArgs:
   allowedCorsOrigins: "http://localhost:8080,http://localhost:8082"
 ```
 
-NOTE that if the Infrastructure services are deployed using the `mi-umbrella` chart, the parameters must we wrapped under `mi-api` to take effect, eg:
-`--set mi-api.serviceArgs.allowedCorsOrigins="http://localhost:8080,http://localhost:8082"`
+Note that if the Infrastructure services are deployed
+using the `mi-umbrella` chart, the parameters must be wrapped
+under `mi-api` to take effect, e.g.:
 
-> If you need to run the UI locally against a remote API server managed by someone else, make sure the above settings are applied.
+```shell
+--set mi-api.serviceArgs.allowedCorsOrigins="http://localhost:8080,http://localhost:8082"
+```
 
-When running the UI itself, we can then configure the appropriate API server in `public/runtime-config.js`:
+> If you need to run the UI locally against a remote API server
+> managed by someone else, make sure the above settings are applied.
+
+When running the UI itself,
+configure the appropriate API server in `public/runtime-config.js`:
 
 ```js
 ...
@@ -51,19 +65,23 @@ When running the UI itself, we can then configure the appropriate API server in 
 
 ## Running Standalone Infrastructure
 
-With a coder environment that has the Orch UI's deployed at <https://web-ui.kind.internal>, the followng can be done to run INFRA (infrastructure) as a standalone application.
+With a Coder environment that has
+the Orch UI deployed at <https://web-ui.kind.internal>,
+the following steps can be taken to run
+INFRA (Infrastructure) as a standalone application:
 
-1. Delete the web-ui pods
+1. Delete the web-ui pods:
 
-```
+```shell
 helm delete -n orch-ui-system web-ui
 ```
 
-2. Install the standalone chart
+1. Install the standalone chart:
 
-```
+```shell
 helm install -n orch-ui-system fm-ui ./deploy/ -f ./deploy/examples/mi-standalone-apis.yaml
 ```
 
-3. Wait for the pods to restart. You should now see a `fm-ui` pod running alongside the `medata-broker`. Visit <https://web-ui.kind.internal/>
-
+1. Wait for the pods to restart.
+   You should now see an `fm-ui` pod running alongside the `metadata-broker`.
+   Visit <https://web-ui.kind.internal/>

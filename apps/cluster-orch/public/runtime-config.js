@@ -6,14 +6,16 @@
 // SPDX-FileCopyrightText: (C) 2022 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 
+const fqdn = "kind.internal"
+
 window.__RUNTIME_CONFIG__ = {
   AUTH: "true",
-  KC_URL: "https://keycloak.kind.internal",
+  KC_URL: `https://keycloak.${fqdn}`,
   KC_REALM: "master",
   KC_CLIENT_ID: "webui-client",
   SESSION_TIMEOUT: 0,
-  OBSERVABILITY_URL: "https://observability-ui.kind.internal",
-  DOCUMENTATION_URL: "https://web-ui.kind.internal/",
+  OBSERVABILITY_URL: `https://observability-ui.${fqdn}`,
+  DOCUMENTATION_URL: `https://web-ui.${fqdn}/`,
   DOCUMENTATION: [
     {
       src: "/dashboard",
@@ -173,14 +175,14 @@ window.__RUNTIME_CONFIG__ = {
   },
   TITLE: "Edge Orchestrator",
   API: {
-    CATALOG: "https://api.kind.internal",
-    ADM: "https://api.kind.internal",
-    ARM: "https://api.kind.internal",
-    CO: "https://api.kind.internal",
-    INFRA: "https://api.kind.internal",
-    MB: "https://api.kind.internal",
-    ALERT: "https://web-ui.kind.internal/api",
-    TM: "https://api.kind.internal/",
+    CATALOG: `https://api.${fqdn}`,
+    ADM: `https://api.${fqdn}`,
+    ARM: `https://api.${fqdn}`,
+    CO: `https://api.${fqdn}`,
+    INFRA: `https://api.${fqdn}`,
+    MB: `https://api.${fqdn}`,
+    ALERT: `https://web-ui.${fqdn}/api`,
+    TM: `https://api.${fqdn}/`,
   },
   VERSIONS: {
     orchestrator: "unknown",
