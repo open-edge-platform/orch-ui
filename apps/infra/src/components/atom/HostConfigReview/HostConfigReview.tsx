@@ -49,6 +49,22 @@ export const HostConfigReview = ({
   const hasFailedToProvision = (host: HostData) => {
     return typeof hostResults.get(host.name) === "string" ? 1 : 0;
   };
+
+  const sbFdeValue = (host: HostData, sbFdeEnabled: boolean) => {
+    const notSupported: eim.SecurityFeature[] = [
+      "SECURITY_FEATURE_UNSPECIFIED",
+      "SECURITY_FEATURE_NONE",
+    ];
+    if (
+      !host.instance?.os?.securityFeature ||
+      notSupported.includes(host.instance.os.securityFeature)
+    ) {
+      return "Not supported by OS";
+    } else {
+      return sbFdeEnabled ? "Enabled" : "Disabled";
+    }
+  };
+
   const details = () => {
     const sortedHostResults = hostsValues.sort((a, b) => {
       const aHasFailed: number = hasFailedToProvision(a);
@@ -79,7 +95,7 @@ export const HostConfigReview = ({
                     Secure Boot and Full Disk Encryption
                   </th>
                   <th data-cy="tableHeaderCell">Trusted Compute</th>
-                  <th data-cy="tableHeaderCell">Public SSH Key</th>
+                  <th data-cy="tableHeaderCell">SSH Key Name</th>
                 </tr>
               </thead>
               <tbody>
@@ -101,7 +117,7 @@ export const HostConfigReview = ({
                         {host.instance?.os ? host.instance.os.name : "-"}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Enabled" : "Disabled"}
+                        {sbFdeValue(host, sbFdeEnabled)}
                       </td>
                       <td data-cy="tableRowCell">
                         {getTrustedComputeCompatibility(host).text}
