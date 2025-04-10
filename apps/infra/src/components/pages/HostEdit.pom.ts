@@ -227,6 +227,8 @@ const getApiEndpoints = (
     },
     getInstances500: {
       route: instanceRoute,
+      statusCode: 500,
+      networkError: true,
     },
   };
 

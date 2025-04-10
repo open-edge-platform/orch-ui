@@ -41,7 +41,7 @@ jobs:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
     outputs:
-      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'common.mk') || '' == 'false' }}
+      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'package-lock.json') ||'' == 'false' }}
     steps:
       - name: Log details
         run: |
@@ -51,6 +51,7 @@ jobs:
     needs: setup-conditions
     if: needs.setup-conditions.outputs.common_condition == 'true'
     uses: ./.github/workflows/library.yml
+    secrets: inherit
 
   e2e-tests-pipeline:
     uses: ./.github/workflows/e2e-tests.yml
@@ -58,78 +59,68 @@ jobs:
 
   pre-merge-pipeline:
     needs: [detect-changed-folders, setup-conditions]
-    if: needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null
+    if: ${{ needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null) }}
     strategy:
       fail-fast: false
       matrix:
-        project_folder: ${{ fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
+        project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@feature/push-dev-images
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
-      run_build: true
+      run_build: false
       run_lint: true
       run_test: true
       run_validate_clean_folder: true
       run_docker_build: true
+      run_docker_push: true
       run_scan_containers: true
       run_artifact: false
       run_helm_build: true
+      run_helm_push: true
       run_reuse_check: true
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
       orch_ci_repo_ref: main
+      version_suffix: "-pr-${{ github.event.number }}"
     secrets: inherit
 
-  pre-merge-pipeline-all:
-    needs: setup-conditions
-    if: needs.setup-conditions.outputs.common_condition == 'true'
-    strategy:
-      fail-fast: false
-      matrix:
-        project_folder: ["admin", "app-orch", "cluster-orch", "infra", "root"]
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
-    with:
-      bootstrap_tools: "base,helm,yq,jq"
-      run_security_scans: true
-      run_version_check: true
-      run_dep_version_check: false
-      run_build: true
-      run_lint: true
-      run_test: true
-      run_validate_clean_folder: true
-      run_docker_build: true
-      run_scan_containers: true
-      run_artifact: false
-      run_helm_build: true
-      run_reuse_check: true
-      prefix_tag_separator: "/"
-      project_folder: apps/${{ matrix.project_folder }}
-      orch_ci_repo_ref: main
-    secrets: inherit
   final-check:
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [Detect-changed-folders, pre-merge-pipeline, pre-merge-pipeline-all, e2e-tests-pipeline]
+    needs: [detect-changed-folders, setup-conditions, library-pipeline, e2e-tests-pipeline, pre-merge-pipeline]
     steps:
       - name: Final Status Check
         run: |
           pre_merge_pipeline_result="${{ needs.pre-merge-pipeline.result }}"
-          pre_merge_pipeline_result_all="${{ needs.pre-merge-pipeline-all.result }}"
           e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
+          library_pipeline_result="${{ needs.library-pipeline.result }}"
           detect_changed_folders="${{ needs.detect-changed-folders.outputs.changed_apps }}"
-          echo "E2E test pipeline result: $e2e_tests_pipeline_result"
+
           echo "Pre-merge pipeline result: $pre_merge_pipeline_result"
-          echo "Pre-merge pipeline all result: $pre_merge_pipeline_result_all"
+          echo "E2E test pipeline result: $e2e_tests_pipeline_result"
+          echo "Library pipeline result: $library_pipeline_result"
           echo "Detect-changed-folders: $detect_changed_folders"
 
-          if [ "$detect_changed_folders" == "[]" ] && [ "$e2e_tests_pipeline_result" == "success" ]; then
-            echo "No project changes found. E2E check passed successfully."
-          elif [ "$pre_merge_pipeline_result" == "success" ] || [ "$pre_merge_pipeline_result_all" == "success" ]; then
-            echo "At least one pre-merge check passed successfully."
-          else
-            echo "Both pre-merge checks failed or were skipped. PR can't get merged."
+          # E2E tests pipeline should always succeed regardless of other changes
+          if [ "$e2e_tests_pipeline_result" != "success" ]; then
+            echo "E2E tests pipeline failed. PR can't be merged."
             exit 1
           fi
+
+          # Check library pipeline only if it was required to run (otherwise it will be "skipped")
+          if [ "${{ needs.setup-conditions.outputs.common_condition }}" == "true" ] && [ "$library_pipeline_result" != "success" ]; then
+            echo "Library pipeline check failed. PR can't be merged."
+            exit 1
+          fi
+
+          # Check pre-merge pipeline only if it was required to run
+          has_changes="${{ needs.detect-changed-folders.outputs.changed_apps != '[]' || needs.setup-conditions.outputs.common_condition == 'true' }}"
+          if [ "$has_changes" == "true" ] && [ "$pre_merge_pipeline_result" != "success" ]; then
+            echo "Pre-merge pipeline failed. PR can't be merged."
+            exit 1
+          fi
+
+          echo "All required checks have passed. PR can be merged."
