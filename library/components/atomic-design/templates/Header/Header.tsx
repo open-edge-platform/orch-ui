@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getUserToken } from "@orch-ui/utils";
+import { clearAllStorage, getUserToken } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { CSSProperties, ReactElement } from "react";
 import { useAuth } from "react-oidc-context";
@@ -93,6 +93,7 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
           {
             displayText: "Logout",
             onSelect: () => {
+              clearAllStorage();
               signoutRedirect({
                 post_logout_redirect_uri: window.location.origin,
               });

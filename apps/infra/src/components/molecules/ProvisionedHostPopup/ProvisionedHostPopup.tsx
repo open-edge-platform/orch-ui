@@ -76,7 +76,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     eim.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
 
   /** Is host a `Provisioned Host with assigned workload`. Here, Workload and Cluster are synonymous */
-  const isAssigned = host.instance && isHostAssigned([host.instance]);
+  const isAssigned = host.instance && isHostAssigned(host.instance);
   const workloadReference =
     host.instance &&
     host.instance.workloadMembers?.find(

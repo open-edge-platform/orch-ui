@@ -210,3 +210,11 @@ export const getObservabilityUrl = (): string | undefined => {
 };
 
 export const stripTrailingSlash = (str: string) => str.replace(/\/$/, "");
+
+export const clearAllStorage = () => {
+  // Clear localStorage
+  localStorage.clear();
+
+  // Clear sessionStorage
+  sessionStorage.clear();
+};

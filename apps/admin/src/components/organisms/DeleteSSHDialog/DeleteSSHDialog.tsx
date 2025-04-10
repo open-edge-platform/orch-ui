@@ -66,8 +66,8 @@ const DeleteSSHDialog = ({
     >
       <div {...cy} className="delete-ssh-confirmation-content">
         <p data-cy="confirmationMessage">
-          Are you sure you want to delete this public SSH key? This action
-          cannot be undone.
+          Are you sure you want to delete this SSH key? This action cannot be
+          undone.
         </p>
       </div>
     </Modal>
