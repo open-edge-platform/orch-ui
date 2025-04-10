@@ -9,7 +9,6 @@ import {
   HostsTablePom,
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
-import { cyGet } from "@orch-ui/tests";
 import { NetworkLog } from "../../support/network-logs";
 import { EIM_USER } from "../../support/utilities";
 import { deleteHostViaApi } from "../helpers";
@@ -68,16 +67,16 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.dataCy("aside", { timeout: 10 * 1000 })
         .contains("button", "Hosts")
         .click();
-      cyGet("registerHosts").click();
+      cy.dataCy("registerHosts").click();
       cy.url().should("contain", "register-hosts");
       cy.wait("@getHosts");
 
       // fill in the form to register a new host
       addHostsFormPom.newHostNamePom.root
         .should("be.visible")
-        .type(testRegisterHostData!.name);
+        .type(testRegisterHostData.name);
       addHostsFormPom.newSerialNumberPom.root.type(
-        testRegisterHostData!.serialNumber,
+        testRegisterHostData.serialNumber,
       );
 
       //isAutoOnboarded/isAutoProvisioned points to actual <input/> which is not visible,
@@ -94,14 +93,26 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // verify that the host is registered
       hostsPom.hostContextSwitcherPom.el.all.click();
       cy.wait("@getHosts");
+
+      hostsTablePom.table.root.should("be.visible");
+
       hostsTablePom.el.search
         .should("be.visible")
-        .type(testRegisterHostData.serialNumber, { force: true });
+        .type(testRegisterHostData.serialNumber, {
+          force: true,
+        });
       // allow the search to complete before we count the number of rows
       hostsTablePom.el.search.should(
         "have.value",
         testRegisterHostData.serialNumber,
       );
+      cy.url().should(
+        "contain",
+        `searchTerm=${testRegisterHostData.serialNumber}`,
+      );
+
+      // NOTE that there is still room for this test to fail, if we have two hosts with SN SN1234AB and SN1234ABC
+      // searching for SN1234AB will return both hosts
       hostsTablePom.getTableRows().should("have.length", 1);
     });
 
