@@ -137,7 +137,7 @@ for APP in "${APPS[@]}"; do
          CHART_STATUS=$(git status --porcelain "apps/$APP/deploy/Chart.yaml" | xargs)
          echo "status: $CHART_STATUS"
          if [[ $CHART_STATUS != M* ]]; then
-            if [ version_changed == 1]; then
+            if [ version_changed == 1 ]; then
 	       echo -e "${RED}ERROR: apps/$APP/deploy/Chart.yaml was not modified and should have been. Check yq version.${NC}"
                exit 1
             else
