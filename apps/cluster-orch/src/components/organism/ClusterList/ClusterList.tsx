@@ -95,10 +95,10 @@ const ClusterList = ({
         projectName,
         filter: getFilter<cm.ClusterInfo>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "providerStatus.indicator"],
+          ["name", "lifecyclePhase.indicator"],
           Operator.OR,
           false,
-          { "providerStatus.indicator": "providerStatus" },
+          { "lifecyclePhase.indicator": "lifecyclePhase" },
         ),
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         pageSize: searchParams.get("pageSize")

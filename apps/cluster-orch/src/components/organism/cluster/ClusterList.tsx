@@ -78,10 +78,10 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
         projectName: SharedStorage.project?.name ?? "",
         filter: getFilter<cm.ClusterInfoRead>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "providerStatus.indicator", "kubernetesVersion"],
+          ["name", "lifecyclePhase.indicator", "kubernetesVersion"],
           Operator.OR,
           false,
-          { "providerStatus.indicator": "providerStatus" },
+          { "lifecyclePhase.indicator": "lifecyclePhase" },
         ),
         orderBy: getOrder(
           searchParams.get("column"),
