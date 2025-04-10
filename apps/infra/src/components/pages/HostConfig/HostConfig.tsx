@@ -32,6 +32,7 @@ import {
   HostConfigSteps,
   HostData,
   removeHost,
+  reset,
   resetMultiHostForm,
   selectContainsHosts,
   selectFirstHost,
@@ -354,6 +355,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
 
   const goToListPage = () => {
     dispatch(resetTree(location.pathname + location.search));
+    dispatch(reset());
     navigate("../../hosts", { relative: "path" });
   };
 
