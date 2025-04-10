@@ -41,7 +41,7 @@ jobs:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
     outputs:
-      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'common.mk') || '' == 'false' }}
+      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'package-lock.json') ||'' == 'false' }}
     steps:
       - name: Log details
         run: |
