@@ -15,6 +15,7 @@
     box-shadow: 1px -2px 4px 0px rgba(4, 4, 4, 0.12);
     background-color: var(--spark-color-theme-dark-gray900);
   }
+
   &__buttons {
     button:first-child {
       margin-left: auto;
@@ -24,5 +25,13 @@
   //The second button provides the same function as primary, don't need two
   .spark-message-banner .spark-button-group .spark-button-secondary {
     display: none;
+  }
+
+  .host-provisioning-stepper {
+    .spark-stepper-step-active {
+      span {
+        font-weight: 500;
+      }
+    }
   }
 }

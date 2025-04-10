@@ -282,7 +282,7 @@ describe("<HostConfig/>", () => {
     beforeEach(() => {
       const formStatus: HostConfigFormStatus = {
         ...initialState.formStatus,
-        currentStep: HostConfigSteps["Add SSH public key to hosts"],
+        currentStep: HostConfigSteps["Enable Local Access"],
         enablePrevBtn: false,
         enableNextBtn: true,
         hasValidationError: false,
@@ -363,7 +363,7 @@ describe("<HostConfig/>", () => {
     beforeEach(() => {
       const formStatus: HostConfigFormStatus = {
         ...initialState.formStatus,
-        currentStep: HostConfigSteps["Add SSH public key to hosts"],
+        currentStep: HostConfigSteps["Enable Local Access"],
         enablePrevBtn: false,
         enableNextBtn: true,
         hasValidationError: false,
