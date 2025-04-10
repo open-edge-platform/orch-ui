@@ -8,7 +8,6 @@ import { MetadataDisplayPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
   assignedWorkloadHostTwo as hostTwo,
-  instanceTwo,
   repeatedScheduleOne,
   SiteStore,
 } from "@orch-ui/utils";
@@ -46,7 +45,6 @@ type ApiAliases =
   | "getEmptyHostSchedules"
   | "getHostSchedules"
   | "deleteHostSchedule"
-  | "instanceSuccess"
   | "getHostRepeatedSchedules";
 
 type LicenseApiAliases =
@@ -176,15 +174,6 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
       method: "DELETE",
       route: "**/schedules/single/*",
       statusCode: 200,
-    },
-    // Instance
-    instanceSuccess: {
-      route: "**/instances*",
-      statusCode: 200,
-      response: {
-        instances: [instanceTwo],
-        has_next: false,
-      },
     },
   };
 };

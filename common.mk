@@ -10,7 +10,7 @@ SHELL = bash -e -o pipefail
 # This is used in CI to add a suffix to the version when/if publishing images in the pre-merge job
 VERSION_SUFFIX              ?= ""
 
-VERSION                     ?= $(shell cat ./VERSION)$(VERSION_SUFFIX)
+VERSION                     ?= $(shell cat ./VERSION)$(VERSION_SUFFIX | xargs)
 GIT_BRANCH                  ?= $(shell git branch --show-current | sed -r 's/[\/]+/-/g')$(VERSION_SUFFIX)
 
 
