@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
-SHELL         := bash -e -o pipefail
+SHELL         := bash -eu -o pipefail
 
 .PHONY: license
 
@@ -30,6 +30,7 @@ docker-push: ## push all docker containers
 	for dir in $(PROJECTS); do $(MAKE) -C apps/$$dir $@; done
 
 docker-list: ## list all docker containers
+	@echo "images:"
 	@for dir in $(PROJECTS); do $(MAKE) -C apps/$$dir $@; done
 
 CHARTS = apps/admin/deploy apps/app-orch/deploy apps/cluster-orch/deploy apps/infra/deploy apps/root/deploy
@@ -47,17 +48,32 @@ helm-list: ## List top-level helm charts, tag format, and versions in YAML forma
 	@echo "charts:"
 	@for dir in $(PROJECTS); do \
 		version=$$(cat "apps/$${dir}/deploy/Chart.yaml" | yq .version) ;\
-		echo "  $${dir}:" ;\
+		echo "  orch-ui-$${dir}:" ;\
 		echo "    version: $${version}" ;\
 	  	echo "    gitTagPrefix: 'apps/$${dir}/'" ;\
 	  	echo "    outDir: 'apps/$${dir}/'" ;\
 	done
 
-### help target ###
-help: ## Print help for each target
-	@echo $(PROJECT_NAME) make targets
+admin-%: ## Run admin subproject's tasks
+	$(MAKE) -C apps/admin $*
+
+app-orch-%: ## Run app-orch subproject's tasks
+	$(MAKE) -C apps/app-orch $*
+
+cluster-orch-%: ## Run cluster-orch subproject's tasks
+	$(MAKE) -C apps/cluster-orch $*
+
+infra-%: ## Run infra subproject's tasks
+	$(MAKE) -C apps/infra $*
+
+root-%: ## Run root subproject's tasks
+	$(MAKE) -C apps/root $*
+
+#### Help Target ####
+help: ## print help for each target
+	@echo orch-ui make targets
 	@echo "Target               Makefile:Line    Description"
 	@echo "-------------------- ---------------- -----------------------------------------"
-	@grep -H -n '^[[:alnum:]_-]*:.* ##' $(MAKEFILE_LIST) \
+	@grep -H -n '^[[:alnum:]%_-]*:.* ##' $(MAKEFILE_LIST) \
     | sort -t ":" -k 3 \
     | awk 'BEGIN  {FS=":"}; {sub(".* ## ", "", $$4)}; {printf "%-20s %-16s %s\n", $$3, $$1 ":" $$2, $$4};'
