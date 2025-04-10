@@ -90,9 +90,9 @@ describe("Cluster orch Smoke test:", () => {
           });
         });
 
-        getHostsViaApi(activeProject).then((hostList) => {
+        getHostsViaApi(activeProject, uuid).then((hostList) => {
           expect(hostList.length).to.be.greaterThan(0);
-          currentHost = hostList.find((host) => host.uuid === uuid);
+          currentHost = hostList[0]; // as the host is fetched by uuid, there can be only 1 host
           hostId = currentHost.resourceId!;
           configureHostViaAPI(activeProject, data.hostName, hostId, siteId);
           cy.log(`Configured host with hostId ${hostId}`);

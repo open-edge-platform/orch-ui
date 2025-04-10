@@ -53,7 +53,7 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
   let deploymentDisplayName: string;
   let regionId: string, siteId: string, hostId: string;
   let currentHost: eim.HostRead;
-  const uuid = Cypress.env("EN_UUID");
+  let uuid: string;
 
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
@@ -90,6 +90,13 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
       deploymentPackageDisplayName = testData.deploymentPackage.displayName!;
       deploymentDisplayName = testData.deployments.displayName!;
     });
+
+    uuid = Cypress.env("EN_UUID");
+    if (!Cypress.env("EN_UUID")) {
+      throw new Error(
+        "Please set the EN UUID via CYPRESS_EN_UUID environment variable",
+      );
+    }
   });
 
   afterEach(() => {
@@ -108,14 +115,13 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
           (regionResourceId) => {
             regionId = regionResourceId;
             cy.log(`ResourceId of the region created ${regionId}`);
-          },
-        );
-
-        // Creating site
-        createSiteViaApi(activeProject, regionId, testData.site).then(
-          (siteResourceId) => {
-            siteId = siteResourceId;
-            cy.log(`ResourceId of the region created ${siteId}`);
+            // Creating site
+            createSiteViaApi(activeProject, regionId, testData.site).then(
+              (siteResourceId) => {
+                siteId = siteResourceId;
+                cy.log(`ResourceId of the region created ${siteId}`);
+              },
+            );
           },
         );
 
