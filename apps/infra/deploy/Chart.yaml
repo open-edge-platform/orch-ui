@@ -9,6 +9,4 @@ version: 1.0.8-dev
 
 appVersion: "1.0.8-dev"
 dependencies: []
-annotations:
-  revision: a19b4129595953f77935f27abe20d58350a77e49
-  created: "2025-04-09T21:45:19Z"
+annotations: {}

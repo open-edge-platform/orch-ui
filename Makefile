@@ -47,12 +47,12 @@ helm-clean: ## clean all helm charts
 helm-list: ## List top-level helm charts, tag format, and versions in YAML format
 	@echo "charts:"
 	@for dir in $(PROJECTS); do \
-		version=$$(cat "apps/$${dir}/deploy/Chart.yaml" | yq .version) ;\
-		echo "  orch-ui-$${dir}:" ;\
-		echo "    version: $${version}" ;\
-	  	echo "    gitTagPrefix: 'apps/$${dir}/'" ;\
-	  	echo "    outDir: 'apps/$${dir}/'" ;\
-	done
+    version=$$(cat "apps/$${dir}/deploy/Chart.yaml" | yq .version) ;\
+    echo "  orch-ui-$${dir}:" ;\
+    echo "    version: $${version}" ;\
+    echo "    gitTagPrefix: 'apps/$${dir}/'" ;\
+    echo "    outDir: 'apps/$${dir}/'" ;\
+  done
 
 admin-%: ## Run admin subproject's tasks
 	$(MAKE) -C apps/admin $*

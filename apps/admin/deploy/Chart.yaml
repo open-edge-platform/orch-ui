@@ -11,6 +11,4 @@ version: 2.0.8-dev
 appVersion: "2.0.8-dev"
 annotations:
   api_observability_monitor: 0.0.5
-  revision: a19b4129595953f77935f27abe20d58350a77e49
-  created: "2025-04-09T21:45:04Z"
 dependencies: []
