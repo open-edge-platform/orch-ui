@@ -31,7 +31,7 @@ DOCKER_REGISTRY=<registry-name> DOCKER_REPOSITORY=edge-orch/orch-ui VERSION=dev-
 
 > Note: Ensure that `<registry-name>` is consistent across all commands referenced in this guide.
 
-## Update Cluster Configuration file to Docker Image in Local or Online Registry
+## Update Coder with Custom Built Images
 
 Update the cluster configuration for deployment, locate the configuration in the `edge-manageability-framework` repository (e.g., `dev-coder-minimal`) and modify it as shown below:
 
