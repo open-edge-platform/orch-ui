@@ -51,4 +51,26 @@ describe("<NameAndTemplate/>", () => {
 
     pom.el.clusterName.should("not.have.attr", "aria-invalid");
   });
+
+  it("should allow only dot and hyphens in middle of name", () => {
+    // Invalid cluster name
+    pom.el.clusterName.clear().type(".test-cluster");
+    pom.el.clusterName.should("have.attr", "aria-invalid", "true");
+
+    pom.el.clusterName.clear().type("test-hello.cluster");
+    pom.el.clusterName.should("not.have.attr", "aria-invalid");
+  });
+
+  it("should not allow any capital case", () => {
+    // Invalid cluster name type 1
+    pom.el.clusterName.clear().type("Test-Cluster");
+    pom.el.clusterName.should("have.attr", "aria-invalid", "true");
+
+    pom.el.clusterName.clear().type("test");
+    pom.el.clusterName.should("not.have.attr", "aria-invalid");
+
+    // Invalid cluster name type 2
+    pom.el.clusterName.type("-clusterT");
+    pom.el.clusterName.should("have.attr", "aria-invalid", "true");
+  });
 });

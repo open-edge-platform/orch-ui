@@ -22,14 +22,13 @@ import { SecuritySwitch } from "../SecuritySwitch/SecuritySwitch";
 import "./HostDetails.scss";
 
 const dataCy = "details";
+const validNameRegex = /^[a-zA-Z-_0-9./: ]{1,20}$/;
 
-/** Return true for valid and false for invalid host name */
-export const isValidHostName = (name?: string) =>
-  // If host name is not explicitly defined as string, then we do not show error.
-  name === undefined ||
-  name === "" ||
-  // If host name is defined as a string or an empty string, then we perform validation on it.
-  (name.length !== 0 && name.length <= 20 && /^[a-zA-Z-_0-9./: ]+$/.test(name));
+export const isValidHostName = (name?: string) => {
+  return (
+    name != undefined && name.trim().length > 0 && validNameRegex.test(name)
+  );
+};
 
 const containsDuplicatedName = (duplicates: string[], name?: string) => {
   if (!name) return false;
@@ -93,7 +92,11 @@ export const HostDetails = ({
   }, [osOptionValue]);
 
   useEffect(() => {
-    if (isGlobalSbFdeActive) {
+    if (
+      isGlobalSbFdeActive &&
+      instance?.os?.securityFeature ===
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+    ) {
       setLocalSecurityIsSbAndFdeEnabled(securityIsSbAndFdeEnabled);
       dispatch(
         setSecurity({
@@ -106,14 +109,62 @@ export const HostDetails = ({
     }
   }, [securityIsSbAndFdeEnabled]);
 
+  useEffect(() => {
+    dispatch(
+      setSecurity({
+        hostId: hostId,
+        value: "SECURITY_FEATURE_NONE",
+      }),
+    );
+    if (
+      instance?.os &&
+      instance.os.securityFeature !==
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+    ) {
+      setLocalSecurityIsSbAndFdeEnabled(false);
+      if (isGlobalSbFdeActive && securityIsSbAndFdeEnabled) {
+        dispatch(setIsGlobalSbFdeActive(false));
+      }
+    }
+  }, [instance?.os?.securityFeature]);
+
   const osSelectDisabled = !!originalOs;
 
   const getErrorMessage = () => {
-    if (!isValidHostName(localName)) {
+    if (!localName || localName.trim().length == 0)
+      return "Name cannot be empty";
+    if (!validNameRegex.test(localName))
       return "Name should not contain special characters";
-    }
-    if (containsDuplicatedName(duplicatedHostNames, localName)) {
+    if (containsDuplicatedName(duplicatedHostNames, localName))
       return "Name should be unique";
+  };
+
+  const getSbFde = () => {
+    if (
+      instance?.os?.securityFeature ===
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+    ) {
+      return (
+        <SecuritySwitch
+          value={localSecurityIsSbAndFdeEnabled}
+          onChange={(sbFdeEnabled) => {
+            dispatch(setIsGlobalSbFdeActive(false));
+            dispatch(
+              setSecurity({
+                hostId: hostId,
+                value: sbFdeEnabled
+                  ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+                  : "SECURITY_FEATURE_NONE",
+              }),
+            );
+            setLocalSecurityIsSbAndFdeEnabled(sbFdeEnabled);
+          }}
+        />
+      );
+    } else if (instance?.os?.securityFeature) {
+      return <i>Not supported by OS</i>;
+    } else {
+      return <></>;
     }
   };
 
@@ -159,21 +210,7 @@ export const HostDetails = ({
             setLocalOsOptionValue(os?.resourceId ?? "");
           }}
         />
-        <SecuritySwitch
-          value={localSecurityIsSbAndFdeEnabled}
-          onChange={(sbFdeEnabled) => {
-            dispatch(setIsGlobalSbFdeActive(false));
-            dispatch(
-              setSecurity({
-                hostId: hostId,
-                value: sbFdeEnabled
-                  ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
-                  : "SECURITY_FEATURE_NONE",
-              }),
-            );
-            setLocalSecurityIsSbAndFdeEnabled(sbFdeEnabled);
-          }}
-        />
+        {getSbFde()}
       </Flex>
     </div>
   );

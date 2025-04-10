@@ -79,7 +79,8 @@ const HostStatusCounter = ({
           [],
         ),
       )
-        .then((hostGuids) => getHostStatus(dispatch, hostGuids))
+        // NOTE: above `getHostList` is returing `node.id (s)` string[] array, which is a hostId.
+        .then((hostId) => getHostStatus(dispatch, hostId))
         .then((status) => {
           setStatus(status);
         })
