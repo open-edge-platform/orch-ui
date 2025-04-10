@@ -31,9 +31,71 @@ DOCKER_REGISTRY=<registry-name> DOCKER_REPOSITORY=edge-orch/orch-ui VERSION=dev-
 
 > Note: Ensure that `<registry-name>` is consistent across all commands referenced in this guide.
 
+## Update Cluster Configuration file to Docker Image in Local or Online Registry
+
+Update the cluster configuration for deployment, locate the configuration in the `edge-manageability-framework` repository (e.g., `dev-coder-minimal`) and modify it as shown below:
+
+```yaml
+postCustomTemplateOverwrite:
+  web-ui-root:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: <IfNotPresent|Always|Never>
+      repository: edge-orch/orch-ui/root
+      tag: "dev-version-1"
+  web-ui-app-orch:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: <IfNotPresent|Always|Never>
+      repository: edge-orch/orch-ui/app-orch
+      tag: "dev-version-1"
+  web-ui-cluster-orch:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: <IfNotPresent|Always|Never>
+      repository: edge-orch/orch-ui/cluster-orch
+      tag: "dev-version-1"
+  web-ui-infra:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: <IfNotPresent|Always|Never>
+      repository: edge-orch/orch-ui/cluster-orch
+      tag: "dev-version-1"
+  web-ui-admin:
+    image:
+      registry:
+        name: <registry-name>
+      pullPolicy: <IfNotPresent|Always|Never>
+      repository: edge-orch/orch-ui/admin
+      tag: "dev-version-1"
+```
+
+If you only build one app you will only provide an image override for that app under the `postCustomTemplateOverwrite:`.
+
+If you are going for local docker image, we suggest using `pullPolicy: Never` or `pullPolicy: IfNotPresent`. Also for local please see the section [Load Docker Image into KinD](#load-docker-image-into-kind-kubernetes-in-docker).
+
+You can also Build images to an online registry (e.g., DockerHub).
+For this, Push the image to the online registry using below command:
+
+```shell
+
+VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
+
+```
+
+> Note: `<registry-name>` is the location of the online-registry and `<my-tag>` the image tag you want to use in UI from the online registry.
+
+If you are pulling a docker image from an online registry set `pullPolicy: Always`.
+
 ## Load Docker Image into KinD (Kubernetes in Docker)
 
-> Note: This method works only if the orchestrator is deployed in KinD and the cluster name is `kind` (unless configured with KIND_CLUSTER_NAME=`<my-cluster>`). For KinD to recognize the built image, it must be loaded into the cluster.
+In order for your KinD cluster to recognize local images that are build by docker, we need to load the image into KinD cluster.
+
+> Note: This method works only if the orchestrator is deployed in KinD and the cluster name is `kind` (unless configured with KIND_CLUSTER_NAME=`<my-cluster>`).
 
 To load the image into KinD, use the following command:
 
@@ -43,124 +105,12 @@ DOCKER_REGISTRY=<registry-name> DOCKER_REPOSITORY=edge-orch/orch-ui  VERSION=dev
 
 > Note: Ensure that `<registry-name>` matches the registry used to build the image.
 
-## Method 1: Update Coder with Locally Built Images
-
-To update the cluster configuration for deployment, locate the configuration in the `edge-manageability-framework` repository (e.g., `dev-coder-minimal`) and modify it as shown below:
-
-```yaml
-postCustomTemplateOverwrite:
-  web-ui-root:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: <IfNotPresent|Always|Never>
-      repository: edge-orch/orch-ui/root
-      tag: "dev-version-1"
-  web-ui-app-orch:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: <IfNotPresent|Always|Never>
-      repository: edge-orch/orch-ui/app-orch
-      tag: "dev-version-1"
-  web-ui-cluster-orch:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: <IfNotPresent|Always|Never>
-      repository: edge-orch/orch-ui/cluster-orch
-      tag: "dev-version-1"
-  web-ui-infra:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: <IfNotPresent|Always|Never>
-      repository: edge-orch/orch-ui/cluster-orch
-      tag: "dev-version-1"
-  web-ui-admin:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: <IfNotPresent|Always|Never>
-      repository: edge-orch/orch-ui/admin
-      tag: "dev-version-1"
-```
-
-> Note: If you only build one app you will only provide an image override for that app under the `postCustomTemplateOverwrite:`.
-
-Lastly, [Apply the Docker Image for a UI app](#apply-the-docker-image-change-for-a-ui-app)
-
-## Method 2: Publish Images to a Hosted/Cloud-Based Registry
-
-- Build images to an online registry (e.g., DockerHub), use the following commands:
-
-```shell
-
-VERSION=`<my-tag>` DOCKER_REGISTRY=`<registry-name>` make docker-build
-
-```
-
-- Push the image to the online registry using below command:
-
-```shell
-
-VERSION=<my-tag> DOCKER_REGISTRY=<registry-name> make docker-push
-
-```
-
-- Make update to the cluster configuration for deployment, locate the configuration in the `edge-manageability-framework` repository (e.g., `dev-coder-minimal`) and modify it as shown below:
-
-> Note: in below `<registry-name>` is the location of the online-registry and `<my-tag>` the image tag you want to use in UI from the online registry.
-
-```yaml
-
-postCustomTemplateOverwrite:
-  web-ui-root:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: Always
-      repository: edge-orch/orch-ui/root
-      tag: <my-tag>
-  web-ui-app-orch:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: Always
-      repository: edge-orch/orch-ui/app-orch
-      tag: <my-tag>
-  web-ui-cluster-orch:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: Always
-      repository: edge-orch/orch-ui/cluster-orch
-      tag: <my-tag>
-  web-ui-infra:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: Always
-      repository: edge-orch/orch-ui/cluster-orch
-      tag: <my-tag>
-  web-ui-admin:
-    image:
-      registry:
-        name: <registry-name>
-      pullPolicy: Always
-      repository: edge-orch/orch-ui/admin
-      tag: <my-tag>
-
-```
-
-Lastly, [Apply the Docker Image for a UI app](#apply-the-docker-image-change-for-a-ui-app)
-
 ## Apply the Docker Image Change for a UI App
 
-To apply the Docker image change for a UI app, navigate to the `edge-manageability-framework` repository. For any cluster configuration (e.g., `dev-coder-minimal`), use the following command:
+To apply the Docker image change for a UI app, navigate to the `edge-manageability-framework` repository. For any cluster configuration `profile` (e.g., `dev-coder-minimal`), use the following command:
 
 ```bash
-mage deploy:orchLocal dev-coder-minimal
+mage deploy:orchLocal <profile>
 ```
 
 ## Update an existing deployment with custom charts
@@ -229,10 +179,10 @@ The following example contains the ClusterOrch, AppOrch, Root, Infra, Admin, and
 
 After making any changes in any of the above files, commit your changes into a `dev branch` that's part of the `edge-manageability-framework`.
 
-## Apply the Helm Chart for a UI MFE
+### Apply the Helm Chart for a UI MFE
 
-For any cluster-configuration, say `dev-coder-minimal`, use the following command to apply the helm chart changes:
+For any cluster-configuration `profile`, say `dev-coder-minimal`, use the following command to apply the helm chart changes:
 
 ```bash
-mage deploy:orchLocal dev-coder-minimal
+mage deploy:orchLocal <profile>
 ```
