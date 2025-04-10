@@ -309,7 +309,7 @@ const ClusterNodesTableBySite = ({
             columns={columns}
             siteId={siteId}
             hasWorkload={false}
-            category="active"
+            category="healthy"
             selectable
             selectedHosts={selectedHosts}
             poll={poll}
