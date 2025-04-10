@@ -33,22 +33,21 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     instanceHosts: string[] = [];
 
   before(() => {
-    const verifyHostDataFile = "./cypress/e2e/infra/data/provision-host.json";
-    cy.readFile(verifyHostDataFile, "utf-8").then((data) => {
-      if (!isTestProvisionHostData(data)) {
-        throw new Error(
-          `Invalid test data in ${verifyHostDataFile}: ${JSON.stringify(data)}`,
-        );
-      }
-      testVerifyHostData = data;
-
-      // If we have a Serial Number passed in we are testing with VEN in CI/CD, should only be one host
-      serialNumber = Cypress.env("EN_SERIAL_NUMBER");
-      if (serialNumber) {
-        testVerifyHostData.hosts = [testVerifyHostData.hosts[0]];
-        testVerifyHostData.hosts[0].serialNumber = serialNumber;
-      }
-    });
+    // If we have a Serial Number passed in we are testing with VEN in CI/CD, should only be one host
+    serialNumber = Cypress.env("EN_SERIAL_NUMBER");
+    if (serialNumber) {
+      const verifyHostDataFile = "./cypress/e2e/infra/data/provision-host.json";
+      cy.readFile(verifyHostDataFile, "utf-8").then((data) => {
+        if (!isTestProvisionHostData(data)) {
+          throw new Error(
+            `Invalid test data in ${verifyHostDataFile}: ${JSON.stringify(data)}`,
+          );
+        }
+        testVerifyHostData = data;
+      });
+      testVerifyHostData.hosts = [testVerifyHostData.hosts[0]];
+      testVerifyHostData.hosts[0].serialNumber = serialNumber;
+    }
   });
 
   describe("when verifying provisioned hosts", () => {
