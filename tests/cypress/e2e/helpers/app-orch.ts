@@ -76,6 +76,5 @@ export function getDeploymentsMFETab() {
 
 /** get sidebar option by name */
 export function getSidebarTabByName(tabName: string) {
-  cy.waitForPageTransition();
   return cy.dataCy("sidebar").contains(tabName).should("be.visible");
 }
