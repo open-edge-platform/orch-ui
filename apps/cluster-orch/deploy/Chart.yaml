@@ -8,6 +8,6 @@ version: 2.0.12
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "2.0.12"
+appVersion: "2.0.13-dev"
 annotations: {}
 dependencies: []
