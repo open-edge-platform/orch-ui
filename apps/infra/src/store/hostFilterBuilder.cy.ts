@@ -20,6 +20,46 @@ const defaultSearchTerm: string = "searchTerm1";
 
 describe("When constructing the host filter builder", () => {
   let state: HostFilterBuilderState = {} as HostFilterBuilderState;
+
+  describe("the lifeCycleStateQuery should", () => {
+    it("contain a mapping for each lifecycle state", () => {
+      // Check that the map has entries for all lifecycle states
+      expect(lifeCycleStateQuery.size).to.equal(
+        Object.keys(LifeCycleState).length,
+      );
+
+      // Check if all enum values have corresponding query mappings
+      for (const state in LifeCycleState) {
+        if (isNaN(Number(state))) {
+          // Skip numeric keys from enum
+          expect(
+            lifeCycleStateQuery.has(
+              LifeCycleState[state as keyof typeof LifeCycleState],
+            ),
+          ).to.be.true;
+        }
+      }
+    });
+
+    it("return correct query strings for each lifecycle state", () => {
+      // Verify specific query strings for each lifecycle state
+      expect(lifeCycleStateQuery.get(LifeCycleState.Healthy)).to.include(
+        "instance.currentState=INSTANCE_STATE_RUNNING",
+      );
+      expect(lifeCycleStateQuery.get(LifeCycleState.Provisioned)).to.include(
+        "currentState=HOST_STATE_ONBOARDED AND has(instance)",
+      );
+      expect(lifeCycleStateQuery.get(LifeCycleState.Onboarded)).to.include(
+        "currentState=HOST_STATE_ONBOARDED AND NOT has(instance)",
+      );
+      expect(lifeCycleStateQuery.get(LifeCycleState.Registered)).to.include(
+        "currentState=HOST_STATE_REGISTERED OR currentState=HOST_STATE_UNSPECIFIED",
+      );
+
+      expect(lifeCycleStateQuery.get(LifeCycleState.All)).to.be.undefined;
+    });
+  });
+
   describe("the life cycle state should", () => {
     beforeEach(() => {
       state = {
