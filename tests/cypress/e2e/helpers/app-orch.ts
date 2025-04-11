@@ -77,5 +77,5 @@ export function getDeploymentsMFETab() {
 
 /** get sidebar option by name */
 export function getSidebarTabByName(tabName: string) {
-  return cyGet("sidebar").contains(tabName);
+  return cyGet("sidebar").contains(tabName).should("be.visible");
 }

@@ -117,7 +117,6 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
     });
     let displayName: string;
     before(() => {
-      // TODO: fix this to testData.deploymentPackage!.displayName! after opensource is deployable to coder
       displayName = testData
         .deploymentPackage!.displayName!.toLowerCase()
         .split(" ")
