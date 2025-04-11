@@ -4,7 +4,6 @@
  */
 
 import { adm, catalog } from "@orch-ui/apis";
-import { cyGet } from "../../support/cyBase";
 
 // --- Interfaces ---
 export interface RegistryChart {
@@ -77,5 +76,6 @@ export function getDeploymentsMFETab() {
 
 /** get sidebar option by name */
 export function getSidebarTabByName(tabName: string) {
-  return cyGet("sidebar").contains(tabName).should("be.visible");
+  cy.waitForPageTransition();
+  return cy.dataCy("sidebar").contains(tabName).should("be.visible");
 }
