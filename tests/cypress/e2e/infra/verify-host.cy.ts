@@ -6,13 +6,7 @@
 import { TablePom } from "@orch-ui/components";
 import { NetworkLog } from "../../support/network-logs";
 import { EIM_USER } from "../../support/utilities";
-import {
-  deleteRegionViaApi,
-  deleteSiteViaApi,
-  getHostsViaApi,
-  getRegionViaAPi,
-  getSiteViaApi,
-} from "../helpers";
+import { getHostsViaApi, getRegionViaAPi, getSiteViaApi } from "../helpers";
 import {
   isTestProvisionHostData,
   TestProvisionHostData,
@@ -113,8 +107,8 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // provisionedHosts.forEach((resourceId) => {
       //   deleteHostViaApi(activeProject, resourceId);
       // });
-      deleteSiteViaApi(activeProject, regionId, siteId);
-      deleteRegionViaApi(activeProject, regionId);
+      // deleteSiteViaApi(activeProject, regionId, siteId);
+      // deleteRegionViaApi(activeProject, regionId);
 
       netLog.save();
       netLog.clear();
