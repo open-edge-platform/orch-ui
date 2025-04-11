@@ -7,8 +7,6 @@ import { TablePom } from "@orch-ui/components";
 import { NetworkLog } from "../../support/network-logs";
 import { EIM_USER } from "../../support/utilities";
 import {
-  deleteHostInstanceViaApi,
-  deleteHostViaApi,
   deleteRegionViaApi,
   deleteSiteViaApi,
   getHostsViaApi,
@@ -109,12 +107,12 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     });
 
     afterEach(() => {
-      instanceHosts.forEach((resourceId) => {
-        deleteHostInstanceViaApi(activeProject, resourceId);
-      });
-      provisionedHosts.forEach((resourceId) => {
-        deleteHostViaApi(activeProject, resourceId);
-      });
+      // instanceHosts.forEach((resourceId) => {
+      //   deleteHostInstanceViaApi(activeProject, resourceId);
+      // });
+      // provisionedHosts.forEach((resourceId) => {
+      //   deleteHostViaApi(activeProject, resourceId);
+      // });
       deleteSiteViaApi(activeProject, regionId, siteId);
       deleteRegionViaApi(activeProject, regionId);
 
