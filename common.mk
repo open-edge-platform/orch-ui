@@ -68,7 +68,7 @@ all: help
 build: ../../node_modules ## @HELP Builds the react application using webpack
 	NODE_ENV=production npm run app:$(PROJECT_NAME):build
 
-docker-build:  ## @HELP Build the docker image
+docker-build: build ## @HELP Build the docker image
 	cp -r ../../library/nginxCommon .
 	echo "$(VERSION)"
 
