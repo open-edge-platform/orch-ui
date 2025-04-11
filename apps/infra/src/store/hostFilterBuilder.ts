@@ -46,7 +46,7 @@ const getIndicator = (
 export const lifeCycleStateQuery = new Map<LifeCycleState, string | undefined>([
   [
     LifeCycleState.Healthy,
-    "(currentState=HOST_STATE_ONBOARDED AND has(instance) AND instance.currentState=INSTANCE_STATE_RUNNING )",
+    "(currentState=HOST_STATE_ONBOARDED AND has(instance) AND instance.currentState=INSTANCE_STATE_RUNNING)",
   ],
   [
     LifeCycleState.Provisioned,
