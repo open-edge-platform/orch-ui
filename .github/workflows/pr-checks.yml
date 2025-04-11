@@ -12,7 +12,7 @@ jobs:
   detect-changed-folders:
     runs-on: 'ubuntu-latest'
     outputs:
-      changed_files_root: ${{ steps.root-file-changes.outputs.changed_projects }}
+      changed_files_root: ${{ steps.root-file-changes.outputs.changed_files }}
       changed_projects_root: ${{ steps.discover-changes.outputs.changed_projects }}
       changed_apps: ${{ steps.discover-changes-apps.outputs.changed_projects }}
     steps:
