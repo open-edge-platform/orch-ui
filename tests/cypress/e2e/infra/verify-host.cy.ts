@@ -44,9 +44,9 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
           );
         }
         testVerifyHostData = data;
+        testVerifyHostData.hosts = [testVerifyHostData.hosts[0]];
+        testVerifyHostData.hosts[0].serialNumber = serialNumber;
       });
-      testVerifyHostData.hosts = [testVerifyHostData.hosts[0]];
-      testVerifyHostData.hosts[0].serialNumber = serialNumber;
     }
   });
 
