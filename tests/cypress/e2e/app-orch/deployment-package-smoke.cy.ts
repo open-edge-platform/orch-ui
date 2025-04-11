@@ -22,96 +22,96 @@ import AppOrchPom from "./app-orch-smoke.pom";
 
 const pom = new AppOrchPom("appOrchLayout");
 
-Cypress._.times(20, () => {
-  describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
-    const netLog = new NetworkLog();
-    let testData: TestData;
-    let registryNameId: string;
+describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
+  const netLog = new NetworkLog();
+  let testData: TestData;
+  let registryNameId: string;
 
-    /** Get to Applications SidebarTab */
-    const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
-      cy.login(user);
-      cy.visit("/");
-      getDeploymentsMFETab().click();
-    };
+  /** Get to Applications SidebarTab */
+  const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
+    cy.login(user);
+    cy.visit("/");
+    getDeploymentsMFETab().click();
+  };
 
-    /** Prereq: Add Application Registry, Application */
-    const initPrequisite = () => {
-      initPageByUser(); // Get to Applications Tab
-      getSidebarTabByName("Applications").click();
-      // Add registry
-      pom.applicationsPom.tabs.getTab("Registries").click();
-      pom.addRegistry(testData.registry!);
+  /** Prereq: Add Application Registry, Application */
+  const initPrequisite = () => {
+    initPageByUser(); // Get to Applications Tab
+    getSidebarTabByName("Applications").click();
+    // Add registry
+    pom.applicationsPom.tabs.getTab("Registries").click();
+    pom.addRegistry(testData.registry!);
 
-      // Add application
-      pom.applicationsPom.tabs.getTab("Applications").click();
-      cy.waitForPageTransition();
-      pom.applicationsPom.el.addApplicationButton.click();
-      pom.addApplication(
-        { ...testData.registry!, name: registryNameId },
-        testData.registryChart!,
-        testData.application!,
-        testData.applicationProfile!,
-      );
-    };
+    // Add application
+    pom.applicationsPom.tabs.getTab("Applications").click();
+    cy.waitForPageTransition();
+    pom.applicationsPom.el.addApplicationButton.click();
+    pom.addApplication(
+      { ...testData.registry!, name: registryNameId },
+      testData.registryChart!,
+      testData.application!,
+      testData.applicationProfile!,
+    );
+  };
 
-    /** Prereq: Remove Application Registry, Application (that was added in initPrequisite) */
-    const deinitPrequisite = () => {
-      initPageByUser(); // Get to Applications Tab
-      // Remove Application
-      getSidebarTabByName("Applications").click();
-      pom.removeApplication(testData.application!.name);
+  /** Prereq: Remove Application Registry, Application (that was added in initPrequisite) */
+  const deinitPrequisite = () => {
+    initPageByUser(); // Get to Applications Tab
+    // Remove Application
+    getSidebarTabByName("Applications").click();
+    pom.removeApplication(testData.application!.name);
 
-      // Remove Registry
-      cy.visit("/");
-      getDeploymentsMFETab().click();
-      getSidebarTabByName("Applications").click();
-      pom.applicationsPom.tabs.getTab("Registries").click();
-      pom.removeRegistry(registryNameId); // Delete the added registry by name (id)
-    };
+    // Remove Registry
+    cy.visit("/");
+    getDeploymentsMFETab().click();
+    getSidebarTabByName("Applications").click();
+    pom.applicationsPom.tabs.getTab("Registries").click();
+    pom.removeRegistry(registryNameId); // Delete the added registry by name (id)
+  };
 
-    before(() => {
-      const dataFile =
-        Cypress.env("DATA_FILE") ||
-        "./cypress/e2e/app-orch/data/app-orch-smoke.json";
-      cy.readFile(dataFile, "utf-8").then((data) => {
-        if (
-          // Registry related test-data
-          !isRegistryTestDataPresent(data) ||
-          !isRegistryChartTestDataPresent(data) ||
-          // Application related test-data
-          !isApplicationTestDataPresent(data) ||
-          !isApplicationProfileTestDataPresent(data) ||
-          // Deployment Package related test-data
-          !isDeploymentPackageTestDataPresent(data)
-        ) {
-          throw new Error(
-            "Require valid: registry, registryChart, application & deploymentPackage\n" +
-              `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
-          );
-        }
-        testData = data;
-        registryNameId = testData
-          .registry!.displayName!.toLowerCase()
-          .split(" ")
-          .join("-");
+  before(() => {
+    const dataFile =
+      Cypress.env("DATA_FILE") ||
+      "./cypress/e2e/app-orch/data/app-orch-smoke.json";
+    cy.readFile(dataFile, "utf-8").then((data) => {
+      if (
+        // Registry related test-data
+        !isRegistryTestDataPresent(data) ||
+        !isRegistryChartTestDataPresent(data) ||
+        // Application related test-data
+        !isApplicationTestDataPresent(data) ||
+        !isApplicationProfileTestDataPresent(data) ||
+        // Deployment Package related test-data
+        !isDeploymentPackageTestDataPresent(data)
+      ) {
+        throw new Error(
+          "Require valid: registry, registryChart, application & deploymentPackage\n" +
+            `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
+        );
+      }
+      testData = data;
+      registryNameId = testData
+        .registry!.displayName!.toLowerCase()
+        .split(" ")
+        .join("-");
 
-        netLog.interceptAll(["**/v1/**", "**/v3/**"]);
-        initPrequisite(); // Initialize things needed for test before it runs
-        netLog.save("app_orch_e2e_deployment_package_smoke_before");
-        netLog.clear();
-      });
-    });
-
-    afterEach(() => {
-      netLog.save();
+      netLog.interceptAll(["**/v1/**", "**/v3/**"]);
+      initPrequisite(); // Initialize things needed for test before it runs
+      netLog.save("app_orch_e2e_deployment_package_smoke_before");
       netLog.clear();
     });
+  });
 
-    after(() => {
-      deinitPrequisite(); // Deinitialize everything for any future E2E test.
-    });
+  afterEach(() => {
+    netLog.save();
+    netLog.clear();
+  });
 
+  after(() => {
+    deinitPrequisite(); // Deinitialize everything for any future E2E test.
+  });
+
+  Cypress._.times(2, () => {
     describe(`the ${APP_ORCH_READWRITE_USER.username}`, () => {
       beforeEach(() => {
         initPageByUser();
@@ -176,19 +176,19 @@ Cypress._.times(20, () => {
       // TODO: describe for Deployment Package clone
       // TODO: describe for Deployment Package edit
     });
+  });
 
-    describe(`the ${APP_ORCH_READ_USER.username}`, () => {
-      beforeEach(() => {
-        initPageByUser(APP_ORCH_READ_USER);
-        getSidebarTabByName("Deployment Packages").click();
-      });
-      describe("on create deployment package", () => {
-        it("should not be able to create", () => {
-          pom.deploymentPackagesPom.createButtonPom.el.button.should(
-            "have.class",
-            "spark-button-disabled",
-          );
-        });
+  describe(`the ${APP_ORCH_READ_USER.username}`, () => {
+    beforeEach(() => {
+      initPageByUser(APP_ORCH_READ_USER);
+      getSidebarTabByName("Deployment Packages").click();
+    });
+    describe("on create deployment package", () => {
+      it("should not be able to create", () => {
+        pom.deploymentPackagesPom.createButtonPom.el.button.should(
+          "have.class",
+          "spark-button-disabled",
+        );
       });
     });
   });
