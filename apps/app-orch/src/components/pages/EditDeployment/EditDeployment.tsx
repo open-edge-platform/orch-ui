@@ -420,6 +420,7 @@ const EditDeployment = () => {
         appVersion: deployment.appVersion,
         profileName: currentPackageProfile ? currentPackageProfile.name : "",
         displayName: currentDeploymentName,
+        deploymentType: deployment.deploymentType,
         targetClusters,
         overrideValues: overrideValues || [],
         publisherName: "intel", // FIXME remove once the API support it

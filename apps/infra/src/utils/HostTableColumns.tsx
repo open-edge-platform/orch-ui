@@ -201,7 +201,7 @@ const serialNumberUuid: TableColumn<HostData> = {
 const publicSshKey = (
   popupFn: (host: HostData) => JSX.Element,
 ): TableColumn<HostData> => ({
-  Header: "Public SSH Key",
+  Header: "SSH Key Name",
   accessor: (host) => popupFn(host),
 });
 
