@@ -1,14 +1,14 @@
 {
   "hosts": [
     {
-      "name": "provisioned-host-1",
+      "name": "cypress-host-1",
       "serialNumber": "ENIVMND3B4721P"
     },
     {
-      "name": "provisioned-host-2",
+      "name": "cypress-host-2",
       "serialNumber": "ENIVMPE2A3946Q"
     }
   ],
-  "region": "french-polynesia",
-  "site": "rangiroa"
+  "region": "cypress-region",
+  "site": "cypress-site"
 }
