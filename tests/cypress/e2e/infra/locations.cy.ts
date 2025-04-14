@@ -139,7 +139,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
           });
         });
       });
-      netLog.save("infra_locaitons");
+      netLog.save("infra_locations");
     });
     after(() => {
       _.forEach(testSiteIds, (s) => {
