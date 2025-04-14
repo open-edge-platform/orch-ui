@@ -44,7 +44,7 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
           expect(match && match.length > 0).to.eq(true);
         });
 
-      cy.get("#pathname").contains("/infrastructure/deauthorized-hosts");
+      cy.get("#pathname").contains("/infrastructure/hosts");
     });
   });
 
