@@ -11,6 +11,7 @@ import {
   HostData,
   selectHosts,
   setPublicSshKey,
+  unSetPublicSshKey,
 } from "../../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { HostTableColumn } from "../../../../utils/HostTableColumns";
@@ -30,6 +31,10 @@ export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {
 
   const onPublicKeySelect = (hostId, localAccount) => {
     dispatch(setPublicSshKey({ hostId: hostId, value: localAccount }));
+  };
+
+  const unsetPublicKey = (hostId) => {
+    dispatch(unSetPublicSshKey({ hostId: hostId }));
   };
 
   // returns a identifier corresponding to the host
@@ -55,6 +60,7 @@ export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {
         localAccounts={localAccounts}
         host={host}
         onPublicKeySelect={onPublicKeySelect}
+        unsetPublicKey={unsetPublicKey}
       />
     )),
   ];

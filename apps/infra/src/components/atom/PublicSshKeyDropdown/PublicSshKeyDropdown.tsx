@@ -12,12 +12,14 @@ interface PublicSshKeyDropdownProps {
   hostId: string;
   host: HostData;
   onPublicKeySelect?: (hostId: string, acount: eim.LocalAccount) => void;
+  unsetPublicKey?: (hostId: string) => void;
   localAccounts: eim.LocalAccountRead[] | undefined;
 }
 export const PublicSshKeyDropdown = ({
   hostId,
   host,
   onPublicKeySelect,
+  unsetPublicKey,
   localAccounts,
 }: PublicSshKeyDropdownProps) => {
   const cy = { "data-cy": dataCy };
@@ -29,9 +31,12 @@ export const PublicSshKeyDropdown = ({
         name="sshKey"
         placeholder="None"
         size={DropdownSize.Medium}
-        selectedKey={host.instance?.localAccountID}
+        selectedKey={host.instance?.localAccountID || "None"}
         onSelectionChange={(key) => {
-          if (onPublicKeySelect) {
+          if (key === "None" && unsetPublicKey) {
+            unsetPublicKey(hostId);
+          }
+          if (onPublicKeySelect && key !== "None") {
             const selectedAccount = localAccounts?.find(
               (account) => account.resourceId === key.toString(),
             );
@@ -40,6 +45,9 @@ export const PublicSshKeyDropdown = ({
           }
         }}
       >
+        <Item textValue="None" key="None">
+          None
+        </Item>
         {localAccounts?.map((option) => {
           return <Item key={option.resourceId}>{option.username}</Item>;
         })}
