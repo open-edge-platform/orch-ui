@@ -70,6 +70,7 @@ beforeEach(() => {
   netLog.intercept();
 });
 afterEach(() => {
+  netLog.save("infra_locations");
   netLog.clear();
 });
 
@@ -139,7 +140,6 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
           });
         });
       });
-      netLog.save("infra_locaitons");
     });
     after(() => {
       _.forEach(testSiteIds, (s) => {

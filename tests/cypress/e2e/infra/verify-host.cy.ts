@@ -97,8 +97,6 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
           .contains("Provisioned", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the Host to be provisioned
           .should("contain.text", "Provisioned");
       });
-
-      netLog.save("infra_verify-host");
     });
 
     afterEach(() => {
@@ -111,6 +109,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // deleteSiteViaApi(activeProject, regionId, siteId);
       // deleteRegionViaApi(activeProject, regionId);
 
+      netLog.save("infra_verify-host");
       netLog.clear();
     });
   });
