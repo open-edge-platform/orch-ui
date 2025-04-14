@@ -114,11 +114,13 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // NOTE that there is still room for this test to fail, if we have two hosts with SN SN1234AB and SN1234ABC
       // searching for SN1234AB will return both hosts
       hostsTablePom.getTableRows().should("have.length", 1);
+
+      netLog.save("infra_register-host");
     });
 
     afterEach(() => {
       if (registeredHostId) deleteHostViaApi(activeProject, registeredHostId);
-      netLog.save();
+
       netLog.clear();
     });
   });

@@ -147,6 +147,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         });
       }
       cy.url().should("contain", "infrastructure/hosts");
+      netLog.save("infra_provision-host");
     });
 
     afterEach(() => {
@@ -161,7 +162,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       });
       if (siteId) deleteSiteViaApi(activeProject, regionId, siteId);
       if (regionId) deleteRegionViaApi(activeProject, regionId);
-      netLog.save();
+
       netLog.clear();
     });
   });
