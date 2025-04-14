@@ -129,14 +129,14 @@ export const getHostStatus = async (
  */
 export const getHosts = async (
   dispatch: AppDispatch,
-  uuids: string[],
+  hostIds: string[],
 ): Promise<eim.HostRead[]> => {
   // fetch details from all hosts at the same time
-  const hostsQueries = uuids.map((uuid) => {
+  const hostsQueries = hostIds.map((resourceId) => {
     return dispatch(
       eim.eim.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
         projectName: SharedStorage.project?.name ?? "",
-        uuid,
+        filter: `resourceId='${resourceId}'`,
       }),
     );
   });
