@@ -107,11 +107,13 @@ jobs:
           e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
           library_pipeline_result="${{ needs.library-pipeline.result }}"
           detect_changed_folders="${{ needs.detect-changed-folders.outputs.changed_apps }}"
+          common_condition="${{ needs.setup-conditions.outputs.common_condition }}"
 
           echo "Pre-merge pipeline result: $pre_merge_pipeline_result"
           echo "E2E test pipeline result: $e2e_tests_pipeline_result"
           echo "Library pipeline result: $library_pipeline_result"
           echo "Detect-changed-folders: $detect_changed_folders"
+          echo "Common Condition: $common_condition"
 
           # E2E tests pipeline should always succeed regardless of other changes
           if [ "$e2e_tests_pipeline_result" != "success" ]; then
