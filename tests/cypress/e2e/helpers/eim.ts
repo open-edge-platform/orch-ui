@@ -35,6 +35,25 @@ export const createRegionViaAPi = (
     });
 };
 
+export const getRegionViaAPi = (
+  project: string,
+  regionName: string,
+): Chainable<eim.RegionRead[]> => {
+  return cy
+    .authenticatedRequest<eim.RegionsListRead>({
+      method: "GET",
+      url: `/v1/projects/${project}/regions`,
+      body: {
+        name: regionName,
+      },
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+
+      return cy.wrap(response.body.regions);
+    });
+};
+
 export const createSiteViaApi = (
   project: string,
   regionId: string,
@@ -53,6 +72,27 @@ export const createSiteViaApi = (
       const success = response.status === 201;
       expect(success).to.be.true;
       return cy.wrap(response.body.resourceId!);
+    });
+};
+
+export const getSiteViaApi = (
+  project: string,
+  regionId: string,
+  siteName: string,
+): Chainable<eim.SiteRead[]> => {
+  return cy
+    .authenticatedRequest<eim.SitesListRead>({
+      method: "GET",
+      url: `/v1/projects/${project}/regions/${regionId}/sites`,
+      body: {
+        name: siteName,
+        regionId: regionId,
+      },
+    })
+    .then((response) => {
+      const success = response.status === 200;
+      expect(success).to.be.true;
+      return cy.wrap(response.body.sites);
     });
 };
 
