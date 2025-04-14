@@ -49,12 +49,7 @@ describe("<HostsTableRowExpansionDetail/>", () => {
           ...hostThree,
           instance: {
             ...hostThree.instance,
-            desiredOs: {
-              name: "desiredOsName",
-              sha256: "desiredOsSha256",
-              updateSources: [],
-              osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
-            },
+            desiredOs: undefined,
           },
         }}
       />,
