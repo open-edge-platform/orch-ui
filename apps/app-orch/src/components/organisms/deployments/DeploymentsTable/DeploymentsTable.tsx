@@ -272,10 +272,10 @@ export const DeploymentsTable = ({
 
   /** Return true if deployments list is empty after a successful api fetch */
   const isEmpty = () =>
-    isSuccess && (!data.deployments || data.deployments.length === 0);
+    isSuccess &&
+    (!data.deployments || data.deployments.length === 0) &&
+    !searchTerm;
 
-  /** Table or Empty Component */
-  let tableContent;
   /** An action button on right-side the search */
   let setupDeploymentRibbonButton = (
     <Button
@@ -315,31 +315,33 @@ export const DeploymentsTable = ({
 
   if (isError) return <ApiError error={error} />;
   else if (isLoading) return <TableLoader />;
-  else if (!data || isEmpty()) {
-    tableContent = (
-      <>
-        <Ribbon
-          showSearch
-          onSearchChange={onDeploymentTableSearch}
-          defaultValue={searchTerm}
-        />
-        <Empty
-          dataCy="empty"
-          icon="cube-detached"
-          title="There are no Deployments currently available."
-          subTitle="To deploy Applications, select Setup a Deployment."
-          actions={[
-            {
-              name: "Setup a Deployment",
-              action: () => navigate("../deployments/setup-deployment"),
-              disable: !hasPermission,
-            },
-          ]}
-        />
-      </>
-    );
-  } else if (isSuccess && data.deployments && data.deployments.length > 0) {
-    tableContent = (
+
+  const getTableContent = () => {
+    if (!data || isEmpty()) {
+      return (
+        <>
+          <Ribbon
+            showSearch
+            onSearchChange={onDeploymentTableSearch}
+            defaultValue={searchTerm}
+          />
+          <Empty
+            dataCy="empty"
+            icon="cube-detached"
+            title="There are no Deployments currently available."
+            subTitle="To deploy Applications, select Setup a Deployment."
+            actions={[
+              {
+                name: "Setup a Deployment",
+                action: () => navigate("../deployments/setup-deployment"),
+                disable: !hasPermission,
+              },
+            ]}
+          />
+        </>
+      );
+    }
+    return (
       <div data-cy="deploymentsTableTableContent" className="deployments-table">
         <Table
           key="deployments-table"
@@ -398,7 +400,7 @@ export const DeploymentsTable = ({
         />
       </div>
     );
-  }
+  };
 
   return (
     <div className="deployments-table" data-cy="deploymentsTable">
@@ -424,7 +426,7 @@ export const DeploymentsTable = ({
           cancelCb={() => setDeleteConfirmationOpen(false)}
         />
       )}
-      {tableContent}
+      {getTableContent()}
     </div>
   );
 };
