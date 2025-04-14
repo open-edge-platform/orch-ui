@@ -118,7 +118,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
     afterEach(() => {
       if (registeredHostId) deleteHostViaApi(activeProject, registeredHostId);
-      netLog.save();
+      netLog.save("infra_register-host");
       netLog.clear();
     });
   });

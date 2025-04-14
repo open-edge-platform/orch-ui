@@ -161,7 +161,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       });
       if (siteId) deleteSiteViaApi(activeProject, regionId, siteId);
       if (regionId) deleteRegionViaApi(activeProject, regionId);
-      netLog.save();
+      netLog.save("infra_provision-host");
       netLog.clear();
     });
   });
