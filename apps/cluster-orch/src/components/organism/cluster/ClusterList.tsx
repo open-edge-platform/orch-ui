@@ -78,8 +78,10 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
         projectName: SharedStorage.project?.name ?? "",
         filter: getFilter<cm.ClusterInfoRead>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "providerStatus.indicator", "kubernetesVersion"],
+          ["name", "lifecyclePhase.indicator", "kubernetesVersion"],
           Operator.OR,
+          false,
+          { "lifecyclePhase.indicator": "lifecyclePhase" },
         ),
         orderBy: getOrder(
           searchParams.get("column"),
@@ -228,7 +230,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
         return (
           <AggregatedStatuses<AggregatedStatusesMap>
             statuses={clusterToStatuses(table.row.original)}
-            defaultStatusName="lifecyclePhase"
+            defaultStatusName="providerStatus"
           />
         );
       },

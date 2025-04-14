@@ -11,7 +11,7 @@ const dataCySelectors = ["loader", "error"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 type ClusterApiAliases = "getClusterSuccess" | "getCluster500";
 
-type HostApiAliases = "getHostByUuidSuccess" | "getHostByUuid500";
+type HostApiAliases = "getHostByResourceIdSuccess" | "getHostByResourceId500";
 type SiteApiAliases = "getSiteSalem" | "getSiteSuccess" | "getSite500";
 type ApiAliases = ClusterApiAliases | HostApiAliases | SiteApiAliases;
 
@@ -54,16 +54,18 @@ const hostEndpoints: CyApiDetails<
   HostApiAliases,
   eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
-  getHostByUuidSuccess: {
-    route: "/v1/projects/**/compute/hosts?uuid=*",
+  getHostByResourceIdSuccess: {
+    route: "**/compute/hosts?filter=resourceId%3D**",
+    statusCode: 200,
     response: {
       hasNext: false,
       hosts: [hostTwo],
       totalElements: 1,
     },
   },
-  getHostByUuid500: {
-    route: "/v1/projects/**/compute/hosts?uuid=*",
+  getHostByResourceId500: {
+    route: "**/compute/hosts?filter=resourceId%3D**",
+    statusCode: 500,
     networkError: true,
   },
 };

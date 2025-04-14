@@ -15,7 +15,7 @@ export enum HostConfigSteps {
   "Enter Host Details",
   "Add Host Labels",
   "Enable Local Access",
-  "Complete Configuration",
+  "Complete Setup",
 }
 const totalSteps = Object.keys(HostConfigSteps).length / 2;
 

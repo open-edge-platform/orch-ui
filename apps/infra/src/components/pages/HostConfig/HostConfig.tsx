@@ -32,6 +32,7 @@ import {
   HostConfigSteps,
   HostData,
   removeHost,
+  reset,
   resetMultiHostForm,
   selectContainsHosts,
   selectFirstHost,
@@ -336,7 +337,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const handlePrev = () => dispatch(goToPrevStep());
   const handleNext = async () => {
     switch (currentStep) {
-      case HostConfigSteps["Complete Configuration"]:
+      case HostConfigSteps["Complete Setup"]:
         // TODO save Host metadata
         if (autoProvision) {
           //Check if anything is already registered, if so remove it from list
@@ -353,6 +354,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   };
 
   const goToListPage = () => {
+    dispatch(reset());
     dispatch(resetTree(location.pathname + location.search));
     navigate("../../hosts", { relative: "path" });
   };
@@ -424,6 +426,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         steps={steps}
         activeStep={currentStep}
         data-cy="hostConfigureStepper"
+        className="host-provisioning-stepper"
       />
 
       {apiErrorData !== undefined && (
@@ -453,7 +456,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         {currentStep === HostConfigSteps["Enable Local Access"] && (
           <AddSshPublicKey localAccounts={localAccountsList?.localAccounts} />
         )}
-        {currentStep === HostConfigSteps["Complete Configuration"] && (
+        {currentStep === HostConfigSteps["Complete Setup"] && (
           <HostConfigReview
             hostResults={hostResults}
             localAccounts={localAccountsList?.localAccounts}
