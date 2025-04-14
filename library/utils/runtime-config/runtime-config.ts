@@ -52,7 +52,7 @@ export class RuntimeConfig {
   public static get documentationUrl(): string {
     return (
       window.__RUNTIME_CONFIG__?.DOCUMENTATION_URL ??
-      "https://edc.intel.com/content/www/us/en/secure/design/confidential/tools/edge-orchestration/"
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/main"
     );
   }
 
