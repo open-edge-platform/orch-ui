@@ -80,15 +80,21 @@ for APP in "${APPS[@]}"; do
       # Copy the version array to a previous version
       prev_version_parts=("${next_version_parts[@]}")
 
+      echo -e "Read in version: $(IFS='.'; echo "${next_version_parts[*]}")"
+
       # Check to see if the -dev is there (assumption if it's a 4 part version, the 4th part is the -dev)
       version_changed=1
       if [ $length -eq 4 ]; then
          # Decrement the 3 decimal place of the version number to create the previous
          prev_version_parts[2]=$((prev_version_parts[2] - 1))
 
+         echo -e "Prev_version after decrement: $(IFS='.'; echo "${prev_version_parts[*]}")"
+
          # Remove -dev part
          unset 'prev_version_parts[-1]'
          unset 'next_version_parts[-1]'
+         echo -e "Prev_version after remove dev: $(IFS='.'; echo "${prev_version_parts[*]}")"
+
          echo -e ""
       else
          # Note -dev does not exist.  
