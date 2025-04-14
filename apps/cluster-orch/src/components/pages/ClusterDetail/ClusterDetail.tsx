@@ -409,7 +409,7 @@ function ClusterDetail({
         <div data-cy={`${dataCy}Status`}>
           <AggregatedStatuses<AggregatedStatusesMap>
             statuses={clusterToStatuses(clusterDetail)}
-            defaultStatusName="providerStatus"
+            defaultStatusName="lifecyclePhase"
           />
         </div>
       </header>
