@@ -76,21 +76,23 @@ const Layout = () => {
               </CSSTransition>
             </SwitchTransition>
 
-            <Toast
-              data-cy="toast"
-              {...toastProps}
-              onHide={() => {
-                dispatch(
-                  setProps({
-                    ...toastProps,
-                    visibility: ToastVisibility.Hide,
-                  }),
-                );
-              }}
-              className={
-                toastProps.visibility !== ToastVisibility.Show ? "d-none" : ""
-              }
-            />
+            {toastProps.visibility === ToastVisibility.Show && (
+              <Toast
+                data-cy="toast"
+                {...toastProps}
+                onHide={() => {
+                  dispatch(
+                    setProps({
+                      ...toastProps,
+                      visibility: ToastVisibility.Hide,
+                    }),
+                  );
+                }}
+                className={
+                  toastProps.visibility !== ToastVisibility.Show ? "d-none" : ""
+                }
+              />
+            )}
           </>
         }
       />

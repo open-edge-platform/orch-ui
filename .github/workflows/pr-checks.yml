@@ -12,11 +12,16 @@ jobs:
   detect-changed-folders:
     runs-on: 'ubuntu-latest'
     outputs:
+      changed_files_root: ${{ steps.root-file-changes.outputs.changed_files }}
       changed_projects_root: ${{ steps.discover-changes.outputs.changed_projects }}
       changed_apps: ${{ steps.discover-changes-apps.outputs.changed_projects }}
     steps:
       - name: Git safe directory
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: Discover changed files at root level
+        uses: open-edge-platform/orch-ci/discover-changed-files@main
+        id: root-file-changes
 
       - name: Discover changed folders at root level
         uses: open-edge-platform/orch-ci/discover-changed-subfolders@main
@@ -41,11 +46,15 @@ jobs:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
     outputs:
-      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'common.mk') || '' == 'false' }}
+      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') || '' == 'false' }}
     steps:
       - name: Log details
         run: |
-          echo "Did library or .github dirs change? ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || '' == 'false' }}"
+          echo "Did library change? ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') }}"
+          echo "Did .github change? ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') }}"
+          echo "Did common.mk change? ${{ contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') }}"
+          echo "Did package-lock.json change? ${{ contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') }}"
+          echo "Common condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') || '' == 'false' }}"
 
   library-pipeline:
     needs: setup-conditions
