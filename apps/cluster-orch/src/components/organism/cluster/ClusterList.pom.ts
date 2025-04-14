@@ -56,7 +56,7 @@ const successEndpoints: CyApiDetails<
     },
   },
   clusterListWithFilter: {
-    route: `${route}filter=name%3Dtesting+OR+providerStatus%3Dtesting+OR+kubernetesVersion%3Dtesting`,
+    route: `${route}filter=name%3Dtesting+OR+lifecyclePhase%3Dtesting+OR+kubernetesVersion%3Dtesting`,
     statusCode: 200,
     response: {
       clusters: [clusterOne, clusterTwo],
