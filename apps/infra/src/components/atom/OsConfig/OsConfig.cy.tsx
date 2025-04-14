@@ -10,23 +10,25 @@ import { OsConfigPom } from "./OsConfig.pom";
 
 const pom = new OsConfigPom();
 describe("<OsConfig/>", () => {
+  const os: eim.OperatingSystemResourceRead = {
+    resourceId: "currentOsId",
+    name: "currentOsName",
+    sha256: "currentOsSha256",
+    updateSources: [],
+    osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+  };
+
   it("should render empty", () => {
     cy.mount(<OsConfig />);
     pom.root.should("exist");
     pom.root.should("contain.text", "(Not set)");
   });
-  it("should not render any update", () => {
+  it("should render any update", () => {
     cy.mount(
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: {
-            resourceId: "currentOsId",
-            name: "currentOsName",
-            sha256: "currentOsSha256",
-            updateSources: [],
-            osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
-          },
+          currentOs: os,
           desiredOs: {
             resourceId: "desiredOsId",
             name: "desiredOsName",
@@ -37,16 +39,9 @@ describe("<OsConfig/>", () => {
         }}
       />,
     );
-    pom.el.osUpdate.should("not.exist");
+    pom.el.osUpdate.should("exist");
   });
-  it("should render any update", () => {
-    const os: eim.OperatingSystemResourceRead = {
-      resourceId: "currentOsId",
-      name: "currentOsName",
-      sha256: "currentOsSha256",
-      updateSources: [],
-      osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
-    };
+  it("should render not any update", () => {
     cy.mount(
       <OsConfig
         instance={{
@@ -63,13 +58,7 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: {
-            resourceId: "currentOsId",
-            name: "currentOsName",
-            sha256: "currentOsSha256",
-            updateSources: [],
-            osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
-          },
+          currentOs: os,
         }}
       />,
     );
