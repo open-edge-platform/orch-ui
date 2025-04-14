@@ -75,7 +75,7 @@ jobs:
         project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@feature/push-dev-images
     with:
-      bootstrap_tools: "base,helm,yq,jq"
+      bootstrap_tools: "base,helm,yq,jq,go"
       run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
