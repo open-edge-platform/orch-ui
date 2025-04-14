@@ -67,7 +67,7 @@ const ClusterList = ({
       Cell: (table) => (
         <AggregatedStatuses<AggregatedStatusesMap>
           statuses={clusterToStatuses(table.row.original)}
-          defaultStatusName="lifecyclePhase"
+          defaultStatusName="providerStatus"
         />
       ),
     },
@@ -95,8 +95,10 @@ const ClusterList = ({
         projectName,
         filter: getFilter<cm.ClusterInfo>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "providerStatus.indicator"],
+          ["name", "lifecyclePhase.indicator"],
           Operator.OR,
+          false,
+          { "lifecyclePhase.indicator": "lifecyclePhase" },
         ),
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         pageSize: searchParams.get("pageSize")

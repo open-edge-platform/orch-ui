@@ -58,7 +58,7 @@ describe("<ClusterDetail />", () => {
         "contain.text",
         aggregateStatuses<ClusterGenericStatuses>(
           clusterToStatuses(pom.testCluster),
-          "lifecyclePhase",
+          "providerStatus",
         ).message,
       );
     });

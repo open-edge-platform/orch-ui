@@ -43,6 +43,7 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
+        AppOrchUI: `AppOrchUI@http://localhost:8081/remoteEntry.js`,
         ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
         EimUI: `EimUI@/mfe/infrastructure/remoteEntry.js`,
       },

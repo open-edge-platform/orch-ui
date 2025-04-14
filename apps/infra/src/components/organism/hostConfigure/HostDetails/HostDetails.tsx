@@ -194,9 +194,7 @@ export const HostDetails = ({
           <p className="sn-uuid__sn">
             {serialNumber == "" ? "No serial number present" : serialNumber}
           </p>
-          <p className="sn-uuid__uuid">
-            {uuid === "" ? "No UUID value present" : uuid}
-          </p>
+          <p className="sn-uuid__uuid">{uuid || "No UUID present"}</p>
         </div>
         <OsProfileDropdown
           hostOs={originalOs}

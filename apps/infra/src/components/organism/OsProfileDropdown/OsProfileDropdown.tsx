@@ -78,7 +78,7 @@ const OsProfileDropdown = ({
           label={hideLabel ? "" : "Operating System Profile"}
           name="osProfile"
           data-cy="osProfile"
-          placeholder={singleHostConfig ? "Select operating system" : ""}
+          placeholder={singleHostConfig ? "Select OS Profile" : ""}
           size={DropdownSize.Medium}
           selectedKey={value}
           isDisabled={value === "" && !singleHostConfig}
