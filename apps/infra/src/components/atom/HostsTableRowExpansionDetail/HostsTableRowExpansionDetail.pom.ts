@@ -9,6 +9,7 @@ const dataCySelectors = [
   "hostName",
   "uuid",
   "cpuModel",
+  "osUpdate",
   "trustedCompute",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
