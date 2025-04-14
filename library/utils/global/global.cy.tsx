@@ -159,6 +159,13 @@ describe("the global utilities", () => {
         getFilter<Test>("testing", fieldsList, Operator.OR, true),
       ).to.equal('name="testing" OR description="testing" OR nest.a="testing"');
     });
+    it("should use mapping if provided", () => {
+      expect(
+        getFilter<Test>("testing", fieldsList, Operator.OR, false, {
+          "nest.a": "remapped",
+        }),
+      ).to.equal("name=testing OR description=testing OR remapped=testing");
+    });
   });
 
   describe("getOrder", () => {

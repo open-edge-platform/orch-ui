@@ -110,8 +110,12 @@ export const HostConfigReview = ({
                     <tr data-cy="tableRow">
                       <td data-cy="tableRowCell">{host.name}</td>
                       <td data-cy="tableRowCell">
-                        <div className="serial-number">{host.serialNumber}</div>
-                        <div className="uuid">{host.uuid}</div>
+                        <div className="serial-number">
+                          {host.serialNumber || "No serial number present"}
+                        </div>
+                        <div className="uuid">
+                          {host.uuid || "No UUID present"}
+                        </div>
                       </td>
                       <td data-cy="tableRowCell">
                         {host.instance?.os ? host.instance.os.name : "-"}
@@ -212,8 +216,8 @@ export const HostConfigReview = ({
             <div className="icon-container">
               <Icon
                 className="hosts-overview-icon"
-                artworkStyle="regular"
-                icon="rack-mount"
+                artworkStyle="light"
+                icon="host"
                 onClick={() => setExpanded((e) => !e)}
               />
             </div>

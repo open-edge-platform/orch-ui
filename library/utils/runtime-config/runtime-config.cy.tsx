@@ -142,7 +142,7 @@ describe("RuntimeConfig", () => {
 
     it("should return the default documentation link", () => {
       expect(RuntimeConfig.documentationUrl).to.equal(
-        "https://edc.intel.com/content/www/us/en/secure/design/confidential/tools/edge-orchestration/",
+        "https://docs.openedgeplatform.intel.com/edge-manage-docs/main",
       );
     });
   });
