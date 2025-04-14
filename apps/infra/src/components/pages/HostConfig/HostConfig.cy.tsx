@@ -445,7 +445,7 @@ describe("<HostConfig/>", () => {
 
   describe("when saving the Host", () => {
     const formStatus: HostConfigFormStatus = {
-      currentStep: HostConfigSteps["Complete Configuration"],
+      currentStep: HostConfigSteps["Complete Setup"],
       enablePrevBtn: false,
       enableNextBtn: true,
       globalOsValue: "",
