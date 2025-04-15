@@ -117,7 +117,7 @@ const SshKeysAddEditDrawer = ({
               }
               errorMessage={
                 errors.username !== undefined
-                  ? "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens"
+                  ? "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens (Max 32 characters)"
                   : ""
               }
               size={InputSize.Large}

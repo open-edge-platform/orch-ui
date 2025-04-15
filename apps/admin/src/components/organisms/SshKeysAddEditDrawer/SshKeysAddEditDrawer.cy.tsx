@@ -9,6 +9,9 @@ import SshKeysAddEditDrawerPom, {
   fakeSshKey,
 } from "./SshKeysAddEditDrawer.pom";
 
+const errorMessage =
+  "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens (Max 32 characters)";
+
 const pom = new SshKeysAddEditDrawerPom();
 describe("<SshKeysAddEditDrawer/>", () => {
   beforeEach(() => {
@@ -50,8 +53,6 @@ describe("<SshKeysAddEditDrawer/>", () => {
   });
 
   it("should enforce username format validation", () => {
-    const errorMessage =
-      "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens";
     /* should show error when inputting a invalid format */
     pom.el.drawerFormBody.should("not.contain.text", errorMessage); // default no error
 
@@ -66,6 +67,13 @@ describe("<SshKeysAddEditDrawer/>", () => {
     pom.el.sshKeyUsername.type("@fake-key"); // in continuation error when inputting a special character
     pom.el.sshKeyUsername.blur();
     pom.el.drawerFormBody.should("contain.text", errorMessage);
+  });
+
+  it("should show error when username exceeds 32 characters", () => {
+    // 32 characters
+    pom.el.sshKeyUsername.clear().type("abcdefghijklmnopqrstuvwxyzabcdefg"); // input exceeding 32 characters
+    pom.el.sshKeyUsername.blur();
+    pom.el.drawerFormBody.should("contain.text", errorMessage); // error message should be shown
   });
 
   it("should call onAdd by footer close button", () => {
