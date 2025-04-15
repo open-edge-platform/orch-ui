@@ -35,7 +35,11 @@ To develop Edge Orchestrator, the following development prerequisites are requir
 - Access to the Edge Orchestrator API endpoints
 - Code editor (VS Code recommended)
 
-This project is structured as a micro front-end (MFE) architecture with 5 separate React applications:
+This project is a "mono-repo" example of micro front ends (MFEs), with minimal amount of configuration per project.
+
+> Note that MFEs and libraries are being moved to independent repost
+
+There are 5 apps in this repository:
 
 - root - Glues everything together, displays the other apps
 - app-orch - Manages the Application Catalog and Deployments
@@ -119,6 +123,6 @@ For support, start with [Troubleshooting](https://docs.openedgeplatform.intel.co
 
 ## License
 
-Edge Orchestrator is licensed under [Apache 2.0 License](LICENSES/Apache-2.0.txt).
+Orchestrator GUI Web User Interface is licensed under [Apache 2.0 License](LICENSES/Apache-2.0.txt).
 
 Last Updated Date: April 03, 2025
