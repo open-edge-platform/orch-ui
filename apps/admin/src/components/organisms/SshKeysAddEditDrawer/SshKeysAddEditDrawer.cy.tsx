@@ -10,7 +10,7 @@ import SshKeysAddEditDrawerPom, {
 } from "./SshKeysAddEditDrawer.pom";
 
 const errorMessage =
-  "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens (Max 32 characters)";
+  "Name must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens (Max 32 characters)";
 
 const pom = new SshKeysAddEditDrawerPom();
 describe("<SshKeysAddEditDrawer/>", () => {
