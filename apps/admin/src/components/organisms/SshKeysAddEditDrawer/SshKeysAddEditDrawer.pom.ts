@@ -32,12 +32,6 @@ class SshKeysAddEditDrawerPom extends CyPom<Selectors> {
     return this.root.find("[data-testid='drawer-header-close-btn']");
   }
 
-  getNameErrorMessage() {
-    return this.el.sshKeyUsername
-      .parent()
-      .siblings(".spark-fieldtext-wrapper-size-l-invalid-label");
-  }
-
   fillSshForm(localAccounts: eim.LocalAccount) {
     this.el.sshKeyUsername.clear().type(localAccounts.username);
     this.el.sshPublicKey.clear().type(localAccounts.sshKey);
