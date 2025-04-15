@@ -155,6 +155,12 @@ const ClusterList = ({
             return prev;
           });
         }}
+        onChangePageSize={(pageSize: number) => {
+          setSearchParams((prev) => {
+            prev.set("pageSize", pageSize.toString());
+            return prev;
+          });
+        }}
         // Selection feature
         canSelectRows={isForm}
         getRowId={(cluster) => cluster.name!}
