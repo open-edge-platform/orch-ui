@@ -168,7 +168,7 @@ describe("Cluster orch Smoke test:", () => {
       tablePom
         .getCell(1, 3, { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the cluster to be running
         .should(($el) => {
-          expect($el, "Cluster is not active").to.contain.text("active");
+          expect($el, "Cluster status message").to.contain.text("active");
         });
 
       tablePom.getCell(1, 2).contains(data.clusterName).click();
