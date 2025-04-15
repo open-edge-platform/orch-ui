@@ -129,6 +129,8 @@ jobs:
 
           # Check pre-merge pipeline only if it was required to run
           has_changes="${{ needs.detect-changed-folders.outputs.changed_apps != '[]' || needs.setup-conditions.outputs.common_condition == 'true' }}"
+          echo "Has changes: $has_changes"
+          echo "Pre merge pipeline result: $pre_merge_pipeline_result"
           if [ "$has_changes" == "true" ] && [ "$pre_merge_pipeline_result" != "success" ]; then
             echo "Pre-merge pipeline failed. PR can't be merged."
             exit 1
