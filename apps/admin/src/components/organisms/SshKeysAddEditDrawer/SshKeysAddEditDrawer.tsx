@@ -116,7 +116,9 @@ const SshKeysAddEditDrawer = ({
                 errors.username !== undefined ? "invalid" : "valid"
               }
               errorMessage={
-                errors.username !== undefined ? "Key/User name is required" : ""
+                errors.username !== undefined
+                  ? "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens"
+                  : ""
               }
               size={InputSize.Large}
               pattern="^[a-z][a-z0-9-]{0,31}$"
