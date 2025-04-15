@@ -49,7 +49,7 @@ describe("<SshKeysAddEditDrawer/>", () => {
     pom.el.addEditBtn.should("have.class", "spark-button-disabled");
   });
 
-  it("should show error when inputting a invalid format", () => {
+  it("should validate username input", () => {
     const errorMessage =
       "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens";
     /* should show error when inputting a invalid format */
