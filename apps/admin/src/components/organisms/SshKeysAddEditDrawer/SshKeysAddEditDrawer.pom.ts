@@ -7,6 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [
+  "drawerFormBody",
   "sshKeyUsername",
   "sshPublicKey",
   "sshInputErrorMessage",
@@ -29,6 +30,12 @@ class SshKeysAddEditDrawerPom extends CyPom<Selectors> {
 
   getHeaderCloseButton() {
     return this.root.find("[data-testid='drawer-header-close-btn']");
+  }
+
+  getNameErrorMessage() {
+    return this.el.sshKeyUsername
+      .parent()
+      .siblings(".spark-fieldtext-wrapper-size-l-invalid-label");
   }
 
   fillSshForm(localAccounts: eim.LocalAccount) {

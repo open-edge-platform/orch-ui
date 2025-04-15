@@ -49,6 +49,25 @@ describe("<SshKeysAddEditDrawer/>", () => {
     pom.el.addEditBtn.should("have.class", "spark-button-disabled");
   });
 
+  it("should show error when inputting a invalid format", () => {
+    const errorMessage =
+      "Username must begin with a lowercase letter and contain only lowercase letters, numbers, and hyphens";
+    /* should show error when inputting a invalid format */
+    pom.el.drawerFormBody.should("not.contain.text", errorMessage); // default no error
+
+    pom.el.sshKeyUsername.clear().type("-"); // error when inputting a hyphen instead of a lowercase letter
+    pom.el.sshKeyUsername.blur();
+    pom.el.drawerFormBody.should("contain.text", errorMessage);
+
+    pom.el.sshKeyUsername.clear().type("test-user"); // valid input
+    pom.el.sshKeyUsername.blur();
+    pom.el.drawerFormBody.should("not.contain.text", errorMessage);
+
+    pom.el.sshKeyUsername.type("@fake-key"); // in continuation error when inputting a special character
+    pom.el.sshKeyUsername.blur();
+    pom.el.drawerFormBody.should("contain.text", errorMessage);
+  });
+
   it("should call onAdd by footer close button", () => {
     const testLocalAccount = { username: "test-user", sshKey: fakeSshKey };
     pom.root.should("exist");
