@@ -43,6 +43,24 @@ This project is structured as a micro front-end (MFE) architecture with 5 separa
 - infra - Manages the Hosts (Edge Infrastructure)
 - admin - The administrator features (settings and alerts)
 
+In addition, there is a common library that is shared across all apps.
+
+(Note: All sub-projects are React based)
+
+```mermaid
+graph TD
+    linkStyle default interpolate basis
+    A[Root]
+
+    A -->|HTTP| B(Cluster Orch)
+    A -->|HTTP| D[Admin]
+    A -->|HTTP| E[App Orch]
+    A -->|HTTP| F[Infrastructure]
+    G[Shared Library]
+
+    style G fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
+```
+
 ### Development Workflow
 
 1. Install dependencies:
