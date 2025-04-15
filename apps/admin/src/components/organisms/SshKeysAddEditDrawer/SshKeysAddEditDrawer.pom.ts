@@ -7,6 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [
+  "drawerFormBody",
   "sshKeyUsername",
   "sshPublicKey",
   "sshInputErrorMessage",
