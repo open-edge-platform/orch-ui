@@ -15,7 +15,7 @@ export enum HostConfigSteps {
   "Enter Host Details",
   "Add Host Labels",
   "Enable Local Access",
-  "Complete Configuration",
+  "Complete Setup",
 }
 const totalSteps = Object.keys(HostConfigSteps).length / 2;
 
@@ -344,6 +344,15 @@ export const configureHost = createSlice({
       host.instance.localAccountID = action.payload.value.resourceId;
       configureHost.caseReducers.validateStep(state);
     },
+    unSetPublicSshKey(state, action: PayloadAction<{ hostId: string }>) {
+      const id = action.payload.hostId;
+      const host = selectHost(state, id);
+      if (!host.instance) {
+        return;
+      }
+      delete host.instance.localAccountID;
+      configureHost.caseReducers.validateStep(state);
+    },
     validateStep,
   },
 });
@@ -373,6 +382,7 @@ export const {
   setAutoOnboardValue,
   setAutoProvisionValue,
   setPublicSshKey,
+  unSetPublicSshKey,
 } = configureHost.actions;
 
 // selectors

@@ -16,7 +16,7 @@ describe("<SiteByCluster/>", () => {
     beforeEach(() => {
       pom.interceptApis([
         pom.api.getClusterSuccess,
-        pom.api.getHostByUuidSuccess,
+        pom.api.getHostByResourceIdSuccess,
         pom.api.getSiteSuccess,
       ]);
       cy.mount(<SiteByCluster clusterName={clusterTwo.name as string} />);
@@ -51,7 +51,10 @@ describe("<SiteByCluster/>", () => {
 
   describe("when the host API fails", () => {
     beforeEach(() => {
-      pom.interceptApis([pom.api.getClusterSuccess, pom.api.getHostByUuid500]);
+      pom.interceptApis([
+        pom.api.getClusterSuccess,
+        pom.api.getHostByResourceId500,
+      ]);
       cy.mount(<SiteByCluster clusterName={clusterTwo.name as string} />);
       pom.waitForApis();
     });
@@ -64,7 +67,7 @@ describe("<SiteByCluster/>", () => {
     beforeEach(() => {
       pom.interceptApis([
         pom.api.getClusterSuccess,
-        pom.api.getHostByUuidSuccess,
+        pom.api.getHostByResourceIdSuccess,
         pom.api.getSite500,
       ]);
       cy.mount(<SiteByCluster clusterName={clusterTwo.name as string} />);

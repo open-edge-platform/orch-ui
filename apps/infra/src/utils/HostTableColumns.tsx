@@ -134,7 +134,7 @@ const status: TableColumn<eim.HostRead> = {
 
 const os: TableColumn<eim.HostRead> = {
   Header: "Operating System",
-  accessor: (host) => host.instance?.os?.name ?? "-",
+  accessor: (host) => host.instance?.currentOs?.name ?? "-",
   Cell: (table: { row: { original: eim.HostRead } }) => {
     return <OsConfig instance={table.row.original.instance} iconOnly />;
   },
@@ -191,8 +191,10 @@ const serialNumberUuid: TableColumn<HostData> = {
     const uuid = table.row.original.uuid;
     return (
       <>
-        <div className="serial-number">{serialNumber}</div>
-        <div className="uuid">{uuid}</div>
+        <div className="serial-number">
+          {serialNumber || "No serial number present"}
+        </div>
+        <div className="uuid">{uuid || "No UUID present"}</div>
       </>
     );
   },

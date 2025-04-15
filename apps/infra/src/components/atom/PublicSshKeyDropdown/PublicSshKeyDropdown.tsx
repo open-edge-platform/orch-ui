@@ -5,7 +5,8 @@
 import { eim } from "@orch-ui/apis";
 import { Dropdown, Item } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
-import { HostData } from "../../../store/configureHost";
+import { HostData, unSetPublicSshKey } from "../../../store/configureHost";
+import { useAppDispatch } from "../../../store/hooks";
 
 const dataCy = "publicSshKeyDropdown";
 interface PublicSshKeyDropdownProps {
@@ -21,6 +22,8 @@ export const PublicSshKeyDropdown = ({
   localAccounts,
 }: PublicSshKeyDropdownProps) => {
   const cy = { "data-cy": dataCy };
+  const dispatch = useAppDispatch();
+
   return (
     <div {...cy} className="public-ssh-key-dropdown">
       <Dropdown
@@ -29,9 +32,12 @@ export const PublicSshKeyDropdown = ({
         name="sshKey"
         placeholder="None"
         size={DropdownSize.Medium}
-        selectedKey={host.instance?.localAccountID}
+        selectedKey={host.instance?.localAccountID || "None"}
         onSelectionChange={(key) => {
-          if (onPublicKeySelect) {
+          if (key === "None") {
+            dispatch(unSetPublicSshKey({ hostId: hostId }));
+          }
+          if (onPublicKeySelect && key !== "None") {
             const selectedAccount = localAccounts?.find(
               (account) => account.resourceId === key.toString(),
             );
@@ -40,6 +46,9 @@ export const PublicSshKeyDropdown = ({
           }
         }}
       >
+        <Item textValue="None" key="None">
+          None
+        </Item>
         {localAccounts?.map((option) => {
           return <Item key={option.resourceId}>{option.username}</Item>;
         })}

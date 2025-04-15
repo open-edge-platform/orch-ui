@@ -25,12 +25,7 @@ describe("<PublicSshKeyDropdown/>", () => {
     );
     pom.root.should("exist");
     pom.sshKeyDrpopdown.openDropdown(pom.root);
-    pom.sshKeyDrpopdown.selectDropdownValue(
-      pom.root,
-      "sshKey",
-      "ssh-mock-0",
-      "ssh-mock-0",
-    );
+    pom.sshKeyDrpopdown.selectNthListItemValue(2); // Select the second item
     cy.get("@onPublicKeySelect").should(
       "have.been.calledWith",
       onboardedHostOne.resourceId,

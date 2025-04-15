@@ -62,6 +62,8 @@ module.exports = {
         "./App": "./src/App",
         "./DeploymentsStatus":
           "./src/components/organisms/deployments/DashboardDeploymentsStatus/DashboardDeploymentsStatus",
+        "./DeploymentLink":
+          "./src/components/atoms/DeploymentLink/DeploymentLinkRemote",
       },
       shared: {
         "@spark-design/css": dependencies["@spark-design/css"],
