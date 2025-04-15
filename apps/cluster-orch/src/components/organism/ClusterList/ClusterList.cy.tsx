@@ -35,4 +35,23 @@ describe("<ClusterList/>", () => {
     cy.get(".spark-pagination-list").contains(2).click();
     pom.waitForApis();
   });
+
+  it("changes page size when onChangePageSize is called", () => {
+    // Intercept API call with different page size
+    pom.interceptApis([pom.api.clusterMockedWithPageSize]);
+    pom.table.root
+      .find("[data-testid='pagination-control-pagesize']")
+      .find(".spark-icon-chevron-down")
+      .click();
+    cy.get(".spark-popover .spark-list-item").contains("100").click();
+    pom.waitForApis();
+
+    // Check api response
+    cy.get(`@${pom.api.clusterMockedWithPageSize}`)
+      .its("request.url")
+      .then((url: string) => {
+        const match = url.match(/pageSize=100/);
+        return expect(match && match.length > 0).to.be.true;
+      });
+  });
 });
