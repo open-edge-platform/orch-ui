@@ -87,8 +87,8 @@ for APP in "${APPS[@]}"; do
          prev_version_parts[2]=$((prev_version_parts[2] - 1))
 
          # Remove -dev part
-         unset 'prev_version_parts[-1]'
-         unset 'next_version_parts[-1]'
+         unset 'prev_version_parts[3]'
+         unset 'next_version_parts[3]'
          echo -e ""
       else
          # Note -dev does not exist.  

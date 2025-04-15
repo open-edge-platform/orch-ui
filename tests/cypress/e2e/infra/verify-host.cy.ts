@@ -88,15 +88,14 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .contains("button", "Hosts")
         .click();
 
-      if (serialNumber) {
-        cy.wait(1000 * 60 * 5); // wait for the host to be provisioned ~5min
-      }
-
       testVerifyHostData.hosts.forEach((host) => {
         tablePom.search(host.serialNumber);
         tablePom.getRows().should("have.length", 1);
         cy.contains(host.serialNumber).should("be.visible");
-        tablePom.getCell(1, 3).should("contain.text", "Provisioned");
+        tablePom
+          .getCell(1, 3)
+          .contains("Provisioned", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the Host to be provisioned
+          .should("contain.text", "Provisioned");
       });
     });
 
@@ -110,7 +109,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // deleteSiteViaApi(activeProject, regionId, siteId);
       // deleteRegionViaApi(activeProject, regionId);
 
-      netLog.save();
+      netLog.save("infra_verify-host");
       netLog.clear();
     });
   });

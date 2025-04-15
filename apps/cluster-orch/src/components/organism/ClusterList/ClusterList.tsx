@@ -67,7 +67,7 @@ const ClusterList = ({
       Cell: (table) => (
         <AggregatedStatuses<AggregatedStatusesMap>
           statuses={clusterToStatuses(table.row.original)}
-          defaultStatusName="providerStatus"
+          defaultStatusName="lifecyclePhase"
         />
       ),
     },
@@ -152,6 +152,12 @@ const ClusterList = ({
         onChangePage={(index: number) => {
           setSearchParams((prev) => {
             prev.set("offset", (index * pageSize).toString());
+            return prev;
+          });
+        }}
+        onChangePageSize={(pageSize: number) => {
+          setSearchParams((prev) => {
+            prev.set("pageSize", pageSize.toString());
             return prev;
           });
         }}
