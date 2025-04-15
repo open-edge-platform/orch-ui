@@ -51,7 +51,7 @@ header:
     - src: /dashboard
       dest: /user_guide/monitor_deployments/index.html
     - src: /admin/ssh-keys
-      dest: /user_guide/index.html
+      dest: /user_guide/set_up_edge_infra/configure_ssh_public_keys.html
     - src: /applications/deployments
       dest: /user_guide/package_software/deployments.html
     - src: /applications/deployment/*
@@ -117,7 +117,7 @@ header:
     - src: /infrastructure/regions/*
       dest: /user_guide/set_up_edge_infra/location/view_region_detail.html
     - src: /infrastructure/hosts/set-up-provisioning
-      dest: /user_guide/index.html
+      dest: /user_guide/set_up_edge_infra/provision_host.html
     - src: /infrastructure/regions/*/sites/new
       dest: /user_guide/set_up_edge_infra/location/add_site.html
     - src: /admin/alerts
