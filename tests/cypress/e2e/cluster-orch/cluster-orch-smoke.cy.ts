@@ -117,10 +117,7 @@ describe("Cluster orch Smoke test:", () => {
         url: "**/v2/**/templates?*",
       }).as("getTemplates");
 
-      cy.dataCy("emptyActionBtn")
-        .contains("Create Cluster")
-        .should("be.visible")
-        .click();
+      cy.contains("Create Cluster").should("be.visible").click();
 
       cy.waitForPageTransition();
 
