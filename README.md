@@ -35,9 +35,10 @@ To develop Edge Orchestrator, the following development prerequisites are requir
 - Access to the Edge Orchestrator API endpoints
 - Code editor (VS Code recommended)
 
-This project is a "mono-repo" example of micro front ends (MFEs), with minimal amount of configuration per project.
+This project is a "mono-repo" example of micro front ends (MFEs),
+with a minimal amount of configuration per project.
 
-> Note that MFEs and libraries are being moved to independent repost
+> Note that MFEs and libraries are being moved to independent repositories.
 
 There are 5 apps in this repository:
 
@@ -49,7 +50,7 @@ There are 5 apps in this repository:
 
 In addition, there is a common library that is shared across all apps.
 
-(Note: All sub-projects are React based)
+(Note: All sub-projects are React-based)
 
 ```mermaid
 graph TD
