@@ -243,7 +243,7 @@ const ClusterCreation = () => {
         return {
           ...prev,
           message:
-            "Cluster is created. redirecting you back to the Clusters page...",
+            "Cluster is created. Redirecting you back to the Clusters page...",
           state: ToastState.Success,
           visibility: ToastVisibility.Show,
         };
