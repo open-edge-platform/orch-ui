@@ -229,7 +229,8 @@ export class TablePom extends CyPom<Selectors> {
   }
 
   public getRows(options?: cyOptions): Cy {
-    return cy.get(this.rootCy, options).find(".table-row");
+    // NOTE we need to reconcile the cypress configs in order to use .dataCy
+    return cy.get(`[data-cy="${this.rootCy}"]`, options).find(".table-row");
   }
 
   public getColumnHeader(index: number): Cy {
