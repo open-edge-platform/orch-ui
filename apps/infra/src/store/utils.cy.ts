@@ -55,9 +55,9 @@ describe("helper store/utils", () => {
       expect(`${hh}:${mm}`).to.be.eq(expectedTime);
     };
 
-    testDateTime(1713000000, "13/Apr/2024", "09:20");
-    testDateTime(1715886058, "16/May/2024", "19:00");
-    testDateTime(1813060000, "15/Jun/2027", "11:46");
+    testDateTime(1713000000, "13-Apr-2024", "09:20");
+    testDateTime(1715886058, "16-May-2024", "19:00");
+    testDateTime(1813060000, "15-Jun-2027", "11:46");
   });
 
   it("getNextCircularValue", () => {
