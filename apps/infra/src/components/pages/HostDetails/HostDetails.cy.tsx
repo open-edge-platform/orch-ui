@@ -48,7 +48,7 @@ describe("HostDetails", () => {
     });
 
     it("will generate the correct active nav value", () => {
-      cyGet("active").should("contain.text", "Active");
+      cyGet("active").should("contain.text", "Hosts");
     });
 
     it("should display the Host information", () => {
