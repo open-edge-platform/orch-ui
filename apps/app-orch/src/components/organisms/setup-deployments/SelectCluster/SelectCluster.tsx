@@ -5,22 +5,22 @@
 
 import { cm } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
+import { RuntimeConfig } from "@orch-ui/utils";
 import { Text, TextField } from "@spark-design/react";
 import { InputSize, TextSize } from "@spark-design/tokens";
 import React, { Suspense, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getDisplayNameValidationErrorMessage } from "../../../../utils/global";
-import ClusterDetails from "../ClusterDetails/ClusterDetails";
 import "./SelectCluster.scss";
 
-const ClusterListRemote = React.lazy(() => {
-  //TODO: how to stub React.lazy method so we don't
-  //need Cypress logic in the component
-  const isComponentTesting = window?.Cypress?.testingType === "component";
-  return isComponentTesting
-    ? import("../../../atoms/MockComponent")
-    : import("ClusterOrchUI/ClusterList");
-});
+const ClusterListRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
+  ? React.lazy(() => import("ClusterOrchUI/ClusterList"))
+  : null;
+
+const ClusterDetailsDrawerRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
+  ? React.lazy(() => import("ClusterOrchUI/ClusterDetailsDrawer"))
+  : null;
 
 const dataCy = "selectCluster";
 
@@ -31,25 +31,50 @@ export enum SelectClusterMode {
 
 interface SelectClusterProps {
   mode: SelectClusterMode;
+  canSelectRows?: boolean;
   selectedIds: string[];
-  onSelect: (selectedRowData: cm.ClusterInfo, isSelected: boolean) => void;
   currentDeploymentName?: string;
+  onSelect: (selectedRowData: cm.ClusterInfo, isSelected: boolean) => void;
+  // TODO: rename this to onFormComplete(boolean: isCompleted)
   onDeploymentNameChange?: (name: string) => void;
-  isForm?: boolean;
+  __ClusterListRemote?: React.LazyExoticComponent<
+    React.ComponentType<any>
+  > | null;
+  __ClusterDetailsDrawerRemote?: React.LazyExoticComponent<
+    React.ComponentType<any>
+  > | null;
 }
 
 const SelectCluster = ({
   mode = SelectClusterMode.CREATE,
+  canSelectRows = true,
   selectedIds,
-  onSelect,
   currentDeploymentName,
+  onSelect,
   onDeploymentNameChange,
-  isForm = true,
+  __ClusterListRemote = ClusterListRemote,
+  __ClusterDetailsDrawerRemote = ClusterDetailsDrawerRemote,
 }: SelectClusterProps) => {
   const cy = { "data-cy": dataCy };
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
-  const [currentCluster, setCurrentCluster] = useState<any>(null);
+  const [isClusterDetailsDrawerOpen, setIsClusterDetailsDrawerOpen] =
+    useState<boolean>(false);
+  const [currentCluster, setCurrentCluster] = useState<
+    cm.ClusterInfo | undefined
+  >();
+
+  const showClusterDetails = (clusterInfo: cm.ClusterInfo) => {
+    setIsClusterDetailsDrawerOpen(true);
+    setCurrentCluster(clusterInfo);
+    navigate({ ...location, search: "" });
+  };
+  const onHide = () => {
+    setIsClusterDetailsDrawerOpen(false);
+    setCurrentCluster(undefined);
+    navigate({ ...location, search: "" });
+  };
 
   const {
     control,
@@ -63,9 +88,9 @@ const SelectCluster = ({
 
   return (
     <div {...cy} className="select-cluster">
-      {isForm && (
+      {canSelectRows && (
         <>
-          <Text size="l" data-cy="title">
+          <Text size={TextSize.Large} data-cy="title">
             {mode === SelectClusterMode.EDIT ? "Change" : "Enter"} Deployment
             Details
           </Text>
@@ -111,25 +136,27 @@ const SelectCluster = ({
           )}
         </>
       )}
-      <Suspense fallback={<SquareSpinner />}>
-        <ClusterListRemote
-          selectedClusterIds={selectedIds}
-          onSelect={onSelect}
-          isForm={isForm}
-          onShowDetails={(clusterInfo: any) => {
-            setIsDrawerOpen(true);
-            setCurrentCluster(clusterInfo);
-          }}
-        />
-      </Suspense>
-      <ClusterDetails
-        cluster={currentCluster ?? {}}
-        isOpen={isDrawerOpen}
-        onCloseDrawer={() => {
-          setIsDrawerOpen(false);
-          setCurrentCluster(undefined);
-        }}
-      />
+
+      {__ClusterListRemote && (
+        <Suspense fallback={<SquareSpinner />}>
+          <__ClusterListRemote
+            selectedClusterIds={selectedIds}
+            onSelect={onSelect}
+            canSelectRows={canSelectRows}
+            onShowDetails={showClusterDetails}
+          />
+        </Suspense>
+      )}
+
+      {__ClusterDetailsDrawerRemote && isClusterDetailsDrawerOpen && (
+        <Suspense fallback={<SquareSpinner />}>
+          <__ClusterDetailsDrawerRemote
+            cluster={currentCluster ?? {}}
+            isOpen
+            onHide={onHide}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };
