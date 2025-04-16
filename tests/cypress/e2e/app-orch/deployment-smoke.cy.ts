@@ -5,6 +5,7 @@
 
 import { catalog, eim } from "@orch-ui/apis";
 import { DeploymentDetailsPom } from "@orch-ui/app-orch-poms";
+import { RibbonPom, TablePom } from "@orch-ui/components";
 import {
   APP_ORCH_READWRITE_USER,
   EIM_USER,
@@ -13,8 +14,10 @@ import { NetworkLog } from "../../support/network-logs";
 import {
   createApplicationViaApi,
   createDeploymentPackageViaApi,
+  createRegistryViaApi,
   deleteApplicationViaApi,
   deleteDeploymentPackageViaApi,
+  deleteRegistryViaApi,
   getDeploymentsMFETab,
   getSidebarTabByName,
   isApplicationProfileTestDataPresent,
@@ -44,9 +47,12 @@ import AppOrchPom from "./app-orch-smoke.pom";
 
 const pom = new AppOrchPom("appOrchLayout");
 const deploymentDetailsPom = new DeploymentDetailsPom();
+const tablePom = new TablePom();
+const ribbonPom = new RibbonPom("table");
 describe("APP_ORCH E2E: Deployments Smoke tests", () => {
   const netLog = new NetworkLog();
   let testData: TestData;
+  let registry: Partial<catalog.Registry>;
   let application: catalog.Application;
   let deploymentPackage: catalog.DeploymentPackage;
   let deploymentPackageDisplayName: string;
@@ -145,7 +151,16 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
 
     it("should setup edge manager pre-requisites", () => {
       cy.currentProject().then((activeProject) => {
+        const testRegistry = testData.registry;
         const testApp = testData.application;
+
+        if (testRegistry) {
+          createRegistryViaApi(activeProject, testRegistry).then((reg) => {
+            registry = reg;
+            cy.log(`Registry created with registry name ${registry.name}`);
+          });
+        }
+
         // Creating application
         createApplicationViaApi(activeProject, testApp).then((app) => {
           application = app;
@@ -181,6 +196,14 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
           });
           createClusterViaApi(activeProject, cluster).then(() => {
             cy.log(`Cluster is created with cluster name ${cluster.name}`);
+            cy.url({ timeout: 4000 }).should("not.contain", "create");
+            cy.url().should("contain", "infrastructure/clusters");
+            ribbonPom.search(cluster.name!);
+            tablePom.getCell(1, 1).should("be.visible");
+            tablePom
+              .getCell(1, 3)
+              .contains("active", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the cluster to be running
+              .should("contain.text", "active");
           });
         });
       });
@@ -261,6 +284,9 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
     // cleanup
     it("should delete edge manager pre-requisites", () => {
       cy.currentProject().then((project) => {
+        if (registry.name) {
+          deleteRegistryViaApi(project, registry.name);
+        }
         if (testData.cluster.name) {
           deleteClusterViaApi(project, testData.cluster.name);
         }

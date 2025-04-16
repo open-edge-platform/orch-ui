@@ -96,6 +96,35 @@ export function getSidebarTabByName(tabName: string) {
     .should("be.visible");
 }
 
+export const createRegistryViaApi = (
+  project: string,
+  registry: Partial<catalog.Registry>,
+): Chainable => {
+  return cy
+    .authenticatedRequest<Partial<catalog.Registry>>({
+      method: "POST",
+      url: `/v3/projects/${project}/catalog/registries`,
+      body: registry,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
+export const deleteRegistryViaApi = (
+  project: string,
+  registryName: string,
+): Chainable => {
+  return cy
+    .authenticatedRequest({
+      method: "DELETE",
+      url: `/v3/projects/${project}/catalog/registries/${registryName}`,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
 export const createApplicationViaApi = (
   project: string,
   application: catalog.Application,

@@ -1,6 +1,7 @@
 {
   "registry": {
     "displayName": "Test Registry",
+    "name": "test-registry",
     "rootUrl": "http://www.test-registry.com",
     "inventoryUrl": "http://www.test-registry.com/inventory",
     "type": "HELM",
@@ -18,7 +19,7 @@
     "version": "0.1.0",
     "chartName": "wordpress1",
     "chartVersion": "0.1.0",
-    "helmRegistryName": "bitnami-helm",
+    "helmRegistryName": "test-registry",
     "profiles": [
       {
         "name": "default",
