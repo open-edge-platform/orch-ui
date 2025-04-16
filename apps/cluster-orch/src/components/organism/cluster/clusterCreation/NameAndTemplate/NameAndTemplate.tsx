@@ -43,7 +43,7 @@ const NameAndTemplate = () => {
     } else {
       setValid(false);
       setErrorMessage(
-        "A valid DNS name is required. Can contain only lowercase letters (a-z), numbers (0-9), and hyphens (-), and must start and end with a letter or number, not a hyphen",
+        "A valid DNS name is required. Can contain only lowercase letters (a-z), numbers (0-9), and hyphens (-), and must start and end with a letter or number, not a hyphen.",
       );
     }
   };
