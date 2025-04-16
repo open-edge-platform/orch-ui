@@ -14,8 +14,8 @@ export enum HostConfigSteps {
   "Select Site" = 0,
   "Enter Host Details",
   "Add Host Labels",
-  "Add SSH public key to hosts",
-  "Complete Configuration",
+  "Enable Local Access",
+  "Complete Setup",
 }
 const totalSteps = Object.keys(HostConfigSteps).length / 2;
 
@@ -344,6 +344,15 @@ export const configureHost = createSlice({
       host.instance.localAccountID = action.payload.value.resourceId;
       configureHost.caseReducers.validateStep(state);
     },
+    unSetPublicSshKey(state, action: PayloadAction<{ hostId: string }>) {
+      const id = action.payload.hostId;
+      const host = selectHost(state, id);
+      if (!host.instance) {
+        return;
+      }
+      delete host.instance.localAccountID;
+      configureHost.caseReducers.validateStep(state);
+    },
     validateStep,
   },
 });
@@ -373,6 +382,7 @@ export const {
   setAutoOnboardValue,
   setAutoProvisionValue,
   setPublicSshKey,
+  unSetPublicSshKey,
 } = configureHost.actions;
 
 // selectors
@@ -425,6 +435,22 @@ export const selectAreHostsSetSecureEnabled = (state: RootState) =>
     (hd) =>
       hd.instance?.securityFeature ===
       "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+  );
+
+export const selectAreHostsOsSetSecureEnabled = (state: RootState) =>
+  Object.values(state.configureHost.hosts).every(
+    (hd) =>
+      hd.instance?.os?.securityFeature ===
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+  );
+
+export const selectAreHostsOsSetSecureDisabled = (state: RootState) =>
+  Object.values(state.configureHost.hosts).every(
+    (hd) =>
+      !hd.instance ||
+      !hd.instance.os ||
+      hd.instance?.os?.securityFeature !==
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   );
 
 export const selectAreHostsSetSecureDisabled = (state: RootState) =>

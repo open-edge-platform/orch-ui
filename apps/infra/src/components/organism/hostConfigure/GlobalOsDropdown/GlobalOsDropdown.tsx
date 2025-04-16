@@ -58,7 +58,7 @@ export const GlobalOsDropdown = ({
         label=""
         name="globalOs"
         isDisabled={isDisabled}
-        placeholder="Select operating system"
+        placeholder="Select OS Profile"
         size={DropdownSize.Medium}
         selectedKey={value}
         onSelectionChange={(key) => onSelectionChange?.(key.toString())}

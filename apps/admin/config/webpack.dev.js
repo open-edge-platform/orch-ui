@@ -58,6 +58,7 @@ const devConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
+        AppOrchUI: `AppOrchUI@http://localhost:8081/remoteEntry.js`,
         ClusterOrchUI: `ClusterOrchUI@http://localhost:8083/remoteEntry.js`,
         EimUI: `EimUI@http://localhost:8082/remoteEntry.js`,
       },

@@ -55,7 +55,7 @@ describe("<AddSshPublicKey/>", () => {
   it("should render table headers", () => {
     pom.tablePom.getColumnHeader(0).should("contain", "Host Name");
     pom.tablePom.getColumnHeader(1).should("contain", "Serial Number and UUID");
-    pom.tablePom.getColumnHeader(2).should("contain", "Public SSH Key");
+    pom.tablePom.getColumnHeader(2).should("contain", "SSH Key Name");
   });
 
   it("should render relevant values in columns", () => {
@@ -68,7 +68,7 @@ describe("<AddSshPublicKey/>", () => {
       .should("exist");
   });
 
-  it("should select public ssh key from dropdown", () => {
+  it("should select ssh key from dropdown", () => {
     pom.sshKeyDropdownPom.sshKeyDrpopdown.openDropdown(
       pom.tablePom.getCell(1, 3),
     );

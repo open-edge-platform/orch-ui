@@ -102,7 +102,7 @@ const GenericHostPopup = ({
   // Add additional options
   popupOptions.push({
     displayText: "Deauthorize",
-    disable: hasPermission,
+    disable: hasPermission || host.currentState === "HOST_STATE_UNTRUSTED",
     onSelect: () => onDeauthorize && onDeauthorize(hostId),
   });
 

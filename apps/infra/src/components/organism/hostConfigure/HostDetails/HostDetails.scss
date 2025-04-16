@@ -13,15 +13,24 @@
     &__sn,
     &__uuid {
       margin: 0;
+      font-weight: 400;
     }
     &__uuid {
-      font-size: 0.8rem;
-      color: var(--spark-color-theme-light-gray600);
+      font-size: 0.75rem;
+      color: var(--spark-color-theme-light-gray700);
+    }
+    &__sn {
+      font-size: 0.875rem;
+      color: var(--spark-color-theme-light-gray900);
     }
   }
 
   .spark-fieldtext-wrapper-is-invalid {
     padding-left: 0.625rem;
     margin-top: -0.25rem;
+  }
+
+  i {
+    margin-left: 0.8rem;
   }
 }

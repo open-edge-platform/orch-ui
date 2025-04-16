@@ -18,7 +18,7 @@ import {
 import {
   API_INTERVAL,
   checkAuthAndRole,
-  CONSTANTS,
+  getCustomStatusOnIdleAggregation,
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
@@ -117,18 +117,6 @@ const HostDetails: React.FC = () => {
       pollingInterval: API_INTERVAL,
     },
   );
-
-  // Get instance if exists
-  const { data: instance, isSuccess: isInstanceSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeInstancesQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        hostId: id,
-      },
-      {
-        skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
-      },
-    );
 
   const sitesQuery =
     eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
@@ -292,8 +280,7 @@ const HostDetails: React.FC = () => {
     }
   };
 
-  const isAssigned =
-    instance && instance.instances && isHostAssigned(instance.instances);
+  const isAssigned = isHostAssigned(host?.instance);
 
   // These steps will set's the breadcrumb in Host Details page
   let hostBreadcrumb = { text: "Getting host...", link: "#" };
@@ -323,8 +310,7 @@ const HostDetails: React.FC = () => {
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));
 
-    const isAssigned =
-      instance && instance.instances && isHostAssigned(instance.instances);
+    const isAssigned = isHostAssigned(host?.instance);
 
     if (host && isAssigned !== undefined) {
       const nextActiveItem = host.site
@@ -380,13 +366,7 @@ const HostDetails: React.FC = () => {
         </Heading>
         <HostDetailsActions
           basePath="../"
-          host={{
-            ...host,
-            instance:
-              isInstanceSuccess && instance.instances.length > 0
-                ? instance.instances[0]
-                : undefined,
-          }}
+          host={host}
           jsx={
             <button
               className="spark-button spark-button-action spark-button-size-l spark-focus-visible spark-focus-visible-self spark-focus-visible-snap"
@@ -407,16 +387,13 @@ const HostDetails: React.FC = () => {
           Status: &nbsp;
           <AggregatedStatuses<HostGenericStatuses>
             defaultStatusName="hostStatus"
-            statuses={hostToStatuses(
-              host,
-              isInstanceSuccess && instance.instances.length > 0
-                ? instance.instances[0]
-                : undefined,
-            )}
-            defaultMessages={{ idle: CONSTANTS.HOST_STATUS.NOT_CONNECTED }}
+            statuses={hostToStatuses(host, host.instance)}
+            customAggregationStatus={{
+              idle: () => getCustomStatusOnIdleAggregation(host),
+            }}
           />
           {isOSUpdateAvailable(host?.instance) && (
-            <label className={"update-available"}>
+            <label className="update-available" data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
             </label>
@@ -471,28 +448,18 @@ const HostDetails: React.FC = () => {
               <td>UUID</td>
               <td data-cy="guid">{host.uuid || "-"}</td>
             </tr>
-            {host.site && (
-              <>
-                <tr>
-                  <td>OS</td>
-                  <td data-cy="osProfiles">
-                    {(isInstanceSuccess &&
-                      instance.instances.length > 0 &&
-                      instance.instances[0].os?.name) ||
-                      "-"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Updates</td>
-                  <td data-cy="desiredOsProfiles">
-                    {(isInstanceSuccess &&
-                      instance.instances.length > 0 &&
-                      instance.instances[0].desiredOs?.name) ||
-                      "-"}
-                  </td>
-                </tr>
-              </>
-            )}
+            <tr>
+              <td>OS</td>
+              <td data-cy="osProfiles">
+                {host?.instance?.currentOs?.name ?? "-"}
+              </td>
+            </tr>
+            <tr>
+              <td>Updates</td>
+              <td data-cy="desiredOsProfiles">
+                {host?.instance?.desiredOs?.name ?? "-"}
+              </td>
+            </tr>
             {host.site && (
               <tr>
                 <td>Site</td>

@@ -174,14 +174,17 @@ export const getFilter = <T>(
   searchableFields: Leaves<T>[],
   operator: Operator,
   withQuotes = false,
+  fieldMapping: { [key: string]: string } = {},
 ) => {
   if (searchTerm === "") return undefined;
   const filter: string[] = [];
   searchableFields.forEach((field) => {
+    const fieldStr = String(field);
+    const fieldKey = Object.hasOwn(fieldMapping, fieldStr)
+      ? fieldMapping[fieldStr]
+      : fieldStr;
     filter.push(
-      withQuotes
-        ? `${String(field)}="${searchTerm}"`
-        : `${String(field)}=${searchTerm}`,
+      withQuotes ? `${fieldKey}="${searchTerm}"` : `${fieldKey}=${searchTerm}`,
     );
   });
   if (operator !== Operator.NOT) return filter.join(` ${operator} `);
@@ -210,3 +213,11 @@ export const getObservabilityUrl = (): string | undefined => {
 };
 
 export const stripTrailingSlash = (str: string) => str.replace(/\/$/, "");
+
+export const clearAllStorage = () => {
+  // Clear localStorage
+  localStorage.clear();
+
+  // Clear sessionStorage
+  sessionStorage.clear();
+};

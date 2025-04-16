@@ -93,7 +93,7 @@ const DeauthorizeNodeConfirmationDialog = ({
         })
         .then(() => {
           setErrorInfo();
-          navigate("/infrastructure/deauthorized-hosts");
+          navigate("/infrastructure/hosts", { relative: "path" });
         });
     } catch (e) {
       setErrorInfo(e);

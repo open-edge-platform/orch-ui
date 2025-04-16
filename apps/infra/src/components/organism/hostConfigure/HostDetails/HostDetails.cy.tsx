@@ -174,6 +174,8 @@ describe("<Details/>", () => {
             },
           );
         });
+      pom.el.osProfileSetting.should("not.exist");
+      pom.root.should("contain.text", "Not supported by OS");
     });
   });
 });
