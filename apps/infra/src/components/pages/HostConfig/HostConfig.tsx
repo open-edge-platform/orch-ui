@@ -130,7 +130,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     eim.usePostV1ProjectsByProjectNameComputeInstancesMutation();
 
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
-    useState<boolean>(true);
+    useState<boolean>(false);
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [createdInstances, setCreatedInstances] = useState<Set<string>>(
     new Set(),
