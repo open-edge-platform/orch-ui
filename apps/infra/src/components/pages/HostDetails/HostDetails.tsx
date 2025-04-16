@@ -11,7 +11,6 @@ import {
   Flex,
   MetadataDisplay,
   setActiveNavItem,
-  setBreadcrumb,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -51,10 +50,8 @@ import { eim } from "@orch-ui/apis";
 import {
   configuredBreadcrumb,
   homeBreadcrumb,
-  hostsActiveNavItem,
   hostsBreadcrumb,
-  hostsConfiguredNavItem,
-  hostsOnboardedNavItem,
+  hostsNavItem,
   unconfiguredBreadcrumb,
 } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
@@ -307,20 +304,10 @@ const HostDetails: React.FC = () => {
       link: "#",
     },
   ];
+
   useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-
-    const isAssigned = isHostAssigned(host?.instance);
-
-    if (host && isAssigned !== undefined) {
-      const nextActiveItem = host.site
-        ? isAssigned
-          ? hostsActiveNavItem
-          : hostsConfiguredNavItem
-        : hostsOnboardedNavItem;
-      dispatch(setActiveNavItem(nextActiveItem));
-    }
-  }, [breadcrumb]);
+    dispatch(setActiveNavItem(hostsNavItem));
+  }, []);
 
   /* Render Host Details by API states */
   if (!host && (hostQuery.isError || hostsQuery.isError)) {

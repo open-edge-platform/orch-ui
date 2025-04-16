@@ -10,7 +10,6 @@ import {
   MetadataForm,
   MetadataPair,
   setActiveNavItem,
-  setBreadcrumb,
   SquareSpinner,
 } from "@orch-ui/components";
 import {
@@ -40,9 +39,8 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   homeBreadcrumb,
-  hostsActiveNavItem,
   hostsBreadcrumb,
-  hostsConfiguredNavItem,
+  hostsNavItem,
 } from "../../routes/const";
 import { useAppDispatch } from "../../store/hooks";
 import {
@@ -243,15 +241,8 @@ const HostEdit = () => {
   );
 
   useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    if (host) {
-      dispatch(
-        setActiveNavItem(
-          isAssigned ? hostsActiveNavItem : hostsConfiguredNavItem,
-        ),
-      );
-    }
-  }, [breadcrumb]);
+    dispatch(setActiveNavItem(hostsNavItem));
+  }, []);
 
   const updateHostEdits = () => {
     // UPDATE HOST
