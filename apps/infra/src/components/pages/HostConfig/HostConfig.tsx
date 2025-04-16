@@ -8,6 +8,7 @@ import {
   ConfirmationDialog,
   Flex,
   MessageBannerAlertState,
+  setActiveNavItem,
 } from "@orch-ui/components";
 import {
   hasRole as hasRoleDefault,
@@ -26,6 +27,7 @@ import {
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { clusterNavItem } from "../../../routes/const";
 import {
   goToNextStep,
   goToPrevStep,
@@ -128,7 +130,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     eim.usePostV1ProjectsByProjectNameComputeInstancesMutation();
 
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
-    useState<boolean>(false);
+    useState<boolean>(true);
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [createdInstances, setCreatedInstances] = useState<Set<string>>(
     new Set(),
@@ -520,7 +522,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
             const hostId = host.resourceId;
 
             const query = `?regionId=${regionId}&regionName=${regionName}&siteId=${siteId}&siteName=${siteName}&hostId=${hostId}`;
-
+            dispatch(setActiveNavItem(clusterNavItem));
             navigate(`/infrastructure/clusters/create${query}`, {
               relative: "path",
             });
