@@ -184,7 +184,8 @@ export const getHumanReadableDuration = (durationSeconds: number) => {
 /** Convert date-time in seconds format to `date, hh, mm` format  */
 export const getDateTimeFromSeconds = (seconds: number) => {
   const dateString = new Date(seconds * 1000).toUTCString().split(" ");
-  const date = [dateString[1], dateString[2], dateString[3]].join("/");
+  // this will return date in `30-Jun-2023` format (which is supported in safari and chrome)
+  const date = [dateString[1], dateString[2], dateString[3]].join("-");
   const time = dateString[4].split(":");
   const [hh, mm] = [time[0], time[1]];
   return [date, hh, mm];
