@@ -199,7 +199,7 @@ export const convertTimeInLocalTimezone = (
   mm: string,
   date?: string,
 ) => {
-  let adjustedDate = date ?? new Date().toDateString();
+  const adjustedDate = date ?? new Date().toDateString();
   const localDateTime = new Date(`${adjustedDate} ${hh}:${mm}:00 GMT`);
   const computedOffset = localDateTime.toString().match(/GMT(-|\+)([0-9]+)/);
   const localeDateTimeString = localDateTime.toString();
