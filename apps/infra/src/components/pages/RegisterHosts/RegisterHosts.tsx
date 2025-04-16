@@ -4,7 +4,11 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { Flex, MessageBannerAlertState } from "@orch-ui/components";
+import {
+  Flex,
+  MessageBannerAlertState,
+  setActiveNavItem,
+} from "@orch-ui/components";
 import {
   Button,
   ButtonGroup,
@@ -16,7 +20,9 @@ import {
   ButtonSize,
   ButtonVariant,
 } from "@spark-design/tokens";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { hostsNavItem } from "../../../routes/const";
 import {
   reset,
   selectUnregisteredHosts,
@@ -42,7 +48,9 @@ const RegisterHosts = () => {
 
   const [registerHost] =
     eim.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
-
+  useEffect(() => {
+    dispatch(setActiveNavItem(hostsNavItem));
+  }, []);
   return (
     <div {...cy} className={className}>
       <Heading semanticLevel={4}>Register Hosts</Heading>
