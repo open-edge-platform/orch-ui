@@ -92,7 +92,11 @@ export const HostDetails = ({
   }, [osOptionValue]);
 
   useEffect(() => {
-    if (isGlobalSbFdeActive) {
+    if (
+      isGlobalSbFdeActive &&
+      instance?.os?.securityFeature ===
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+    ) {
       setLocalSecurityIsSbAndFdeEnabled(securityIsSbAndFdeEnabled);
       dispatch(
         setSecurity({
@@ -105,6 +109,25 @@ export const HostDetails = ({
     }
   }, [securityIsSbAndFdeEnabled]);
 
+  useEffect(() => {
+    dispatch(
+      setSecurity({
+        hostId: hostId,
+        value: "SECURITY_FEATURE_NONE",
+      }),
+    );
+    if (
+      instance?.os &&
+      instance.os.securityFeature !==
+        "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+    ) {
+      setLocalSecurityIsSbAndFdeEnabled(false);
+      if (isGlobalSbFdeActive && securityIsSbAndFdeEnabled) {
+        dispatch(setIsGlobalSbFdeActive(false));
+      }
+    }
+  }, [instance?.os?.securityFeature]);
+
   const osSelectDisabled = !!originalOs;
 
   const getErrorMessage = () => {
@@ -114,6 +137,35 @@ export const HostDetails = ({
       return "Name should not contain special characters";
     if (containsDuplicatedName(duplicatedHostNames, localName))
       return "Name should be unique";
+  };
+
+  const getSbFde = () => {
+    if (
+      instance?.os?.securityFeature ===
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+    ) {
+      return (
+        <SecuritySwitch
+          value={localSecurityIsSbAndFdeEnabled}
+          onChange={(sbFdeEnabled) => {
+            dispatch(setIsGlobalSbFdeActive(false));
+            dispatch(
+              setSecurity({
+                hostId: hostId,
+                value: sbFdeEnabled
+                  ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+                  : "SECURITY_FEATURE_NONE",
+              }),
+            );
+            setLocalSecurityIsSbAndFdeEnabled(sbFdeEnabled);
+          }}
+        />
+      );
+    } else if (instance?.os?.securityFeature) {
+      return <i>Not supported by OS</i>;
+    } else {
+      return <></>;
+    }
   };
 
   return (
@@ -142,9 +194,7 @@ export const HostDetails = ({
           <p className="sn-uuid__sn">
             {serialNumber == "" ? "No serial number present" : serialNumber}
           </p>
-          <p className="sn-uuid__uuid">
-            {uuid === "" ? "No UUID value present" : uuid}
-          </p>
+          <p className="sn-uuid__uuid">{uuid || "No UUID present"}</p>
         </div>
         <OsProfileDropdown
           hostOs={originalOs}
@@ -158,21 +208,7 @@ export const HostDetails = ({
             setLocalOsOptionValue(os?.resourceId ?? "");
           }}
         />
-        <SecuritySwitch
-          value={localSecurityIsSbAndFdeEnabled}
-          onChange={(sbFdeEnabled) => {
-            dispatch(setIsGlobalSbFdeActive(false));
-            dispatch(
-              setSecurity({
-                hostId: hostId,
-                value: sbFdeEnabled
-                  ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
-                  : "SECURITY_FEATURE_NONE",
-              }),
-            );
-            setLocalSecurityIsSbAndFdeEnabled(sbFdeEnabled);
-          }}
-        />
+        {getSbFde()}
       </Flex>
     </div>
   );

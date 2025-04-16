@@ -4,7 +4,11 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { SharedStorage, WorkloadMemberKind } from "@orch-ui/utils";
+import {
+  API_INTERVAL,
+  SharedStorage,
+  WorkloadMemberKind,
+} from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 interface ClusterNameAssociatedToHostProps {
   host: eim.HostRead;
@@ -22,7 +26,7 @@ const ClusterNameAssociatedToHost = ({
         projectName,
         instanceId,
       },
-      { skip: !instanceId },
+      { skip: !instanceId, pollingInterval: API_INTERVAL },
     );
 
   const workloadMember = data?.workloadMembers?.find(

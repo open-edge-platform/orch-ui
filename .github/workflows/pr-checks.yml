@@ -12,11 +12,16 @@ jobs:
   detect-changed-folders:
     runs-on: 'ubuntu-latest'
     outputs:
+      changed_files_root: ${{ steps.root-file-changes.outputs.changed_files }}
       changed_projects_root: ${{ steps.discover-changes.outputs.changed_projects }}
       changed_apps: ${{ steps.discover-changes-apps.outputs.changed_projects }}
     steps:
       - name: Git safe directory
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: Discover changed files at root level
+        uses: open-edge-platform/orch-ci/discover-changed-files@main
+        id: root-file-changes
 
       - name: Discover changed folders at root level
         uses: open-edge-platform/orch-ci/discover-changed-subfolders@main
@@ -41,16 +46,21 @@ jobs:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
     outputs:
-      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_projects_root, 'common.mk') || '' == 'false' }}
+      common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') || '' == 'false' }}
     steps:
       - name: Log details
         run: |
-          echo "Did library or .github dirs change? ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || '' == 'false' }}"
+          echo "Did library change? ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') }}"
+          echo "Did .github change? ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') }}"
+          echo "Did common.mk change? ${{ contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') }}"
+          echo "Did package-lock.json change? ${{ contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') }}"
+          echo "Common condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') || '' == 'false' }}"
 
   library-pipeline:
     needs: setup-conditions
     if: needs.setup-conditions.outputs.common_condition == 'true'
     uses: ./.github/workflows/library.yml
+    secrets: inherit
 
   e2e-tests-pipeline:
     uses: ./.github/workflows/e2e-tests.yml
@@ -97,11 +107,13 @@ jobs:
           e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
           library_pipeline_result="${{ needs.library-pipeline.result }}"
           detect_changed_folders="${{ needs.detect-changed-folders.outputs.changed_apps }}"
+          common_condition="${{ needs.setup-conditions.outputs.common_condition }}"
 
           echo "Pre-merge pipeline result: $pre_merge_pipeline_result"
           echo "E2E test pipeline result: $e2e_tests_pipeline_result"
           echo "Library pipeline result: $library_pipeline_result"
           echo "Detect-changed-folders: $detect_changed_folders"
+          echo "Common Condition: $common_condition"
 
           # E2E tests pipeline should always succeed regardless of other changes
           if [ "$e2e_tests_pipeline_result" != "success" ]; then
@@ -116,7 +128,9 @@ jobs:
           fi
 
           # Check pre-merge pipeline only if it was required to run
-          has_changes="${{ needs.detect-changed-folders.outputs.changed_apps != '[]' || needs.setup-conditions.outputs.common_condition == 'true' }}"
+          has_changes="${{ needs.detect-changed-folders.outputs.changed_apps[0] != null || needs.setup-conditions.outputs.common_condition == 'true' }}"
+          echo "Has changes: $has_changes"
+          echo "Pre merge pipeline result: $pre_merge_pipeline_result"
           if [ "$has_changes" == "true" ] && [ "$pre_merge_pipeline_result" != "success" ]; then
             echo "Pre-merge pipeline failed. PR can't be merged."
             exit 1

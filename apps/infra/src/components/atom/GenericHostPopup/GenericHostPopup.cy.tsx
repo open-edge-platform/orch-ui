@@ -73,6 +73,19 @@ describe("<GenericHostPopup/>", () => {
       pom.getActionPopupBySearchText("Deauthorize").click();
       cy.get("@onDeauthorize").should("be.called");
     });
+    it("should disable Deauthorize button when host.currentState is HOST_STATE_UNTRUSTED", () => {
+      cy.mount(
+        <GenericHostPopup
+          host={{ ...hostOne, currentState: "HOST_STATE_UNTRUSTED" }}
+          showViewDetailsOption
+          onDeauthorize={cy.stub().as("onDeauthorize")}
+        />,
+      );
+      pom.popupPom.root.click();
+      pom
+        .getActionPopupBySearchText("Deauthorize")
+        .should("have.class", "popup__option-item-disable");
+    });
     it("should call onDelete when `Delete` is clicked", () => {
       pom.getActionPopupBySearchText("Delete").click();
       cy.get("@onDelete").should("be.called");

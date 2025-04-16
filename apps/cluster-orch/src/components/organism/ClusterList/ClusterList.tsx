@@ -95,8 +95,10 @@ const ClusterList = ({
         projectName,
         filter: getFilter<cm.ClusterInfo>(
           searchParams.get("searchTerm") ?? "",
-          ["name", "providerStatus.indicator"],
+          ["name", "lifecyclePhase.indicator"],
           Operator.OR,
+          false,
+          { "lifecyclePhase.indicator": "lifecyclePhase" },
         ),
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
         pageSize: searchParams.get("pageSize")
@@ -150,6 +152,12 @@ const ClusterList = ({
         onChangePage={(index: number) => {
           setSearchParams((prev) => {
             prev.set("offset", (index * pageSize).toString());
+            return prev;
+          });
+        }}
+        onChangePageSize={(pageSize: number) => {
+          setSearchParams((prev) => {
+            prev.set("pageSize", pageSize.toString());
             return prev;
           });
         }}

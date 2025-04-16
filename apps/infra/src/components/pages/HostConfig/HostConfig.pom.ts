@@ -66,6 +66,7 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   public regionSiteTreePom = new RegionSiteTreePom();
   public hostsDetailsPom = new HostsDetailsPom();
   public globalOsDropdownPom = new SiDropdown("globalOsDropdown");
+  public osDropdownPom = new SiDropdown("osProfile");
 
   constructor(public rootCy: string = "hostConfig") {
     super(rootCy, [...dataCySelectors], {
@@ -86,7 +87,11 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  public provisionHost(site: string, metadata: eim.Metadata) {
+  public provisionHost(
+    site: string,
+    metadata: eim.Metadata,
+    isSingle: boolean = false,
+  ) {
     // search for site
     this.regionAndSiteConfigurePom.search(site);
     // select site
@@ -94,8 +99,13 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
     // click next
     this.el.next.click();
     // select an os
-    this.globalOsDropdownPom.openDropdown(this.globalOsDropdownPom.root);
-    this.globalOsDropdownPom.selectNthListItemValue(1);
+    if (isSingle) {
+      this.osDropdownPom.openDropdown(this.osDropdownPom.root);
+      this.osDropdownPom.selectNthListItemValue(1);
+    } else {
+      this.globalOsDropdownPom.openDropdown(this.globalOsDropdownPom.root);
+      this.globalOsDropdownPom.selectNthListItemValue(1);
+    }
     // click next
     this.el.next.click();
     // TODO add host label

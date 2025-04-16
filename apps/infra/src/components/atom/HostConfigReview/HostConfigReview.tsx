@@ -4,12 +4,12 @@
  */
 import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
+import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { HostData, selectHosts } from "../../../store/configureHost";
 import { useAppSelector } from "../../../store/hooks";
-
 import "./HostConfigReview.scss";
 
 const dataCy = "hostConfigReview";
@@ -49,6 +49,22 @@ export const HostConfigReview = ({
   const hasFailedToProvision = (host: HostData) => {
     return typeof hostResults.get(host.name) === "string" ? 1 : 0;
   };
+
+  const sbFdeValue = (host: HostData, sbFdeEnabled: boolean) => {
+    const notSupported: eim.SecurityFeature[] = [
+      "SECURITY_FEATURE_UNSPECIFIED",
+      "SECURITY_FEATURE_NONE",
+    ];
+    if (
+      !host.instance?.os?.securityFeature ||
+      notSupported.includes(host.instance.os.securityFeature)
+    ) {
+      return "Not supported by OS";
+    } else {
+      return sbFdeEnabled ? "Enabled" : "Disabled";
+    }
+  };
+
   const details = () => {
     const sortedHostResults = hostsValues.sort((a, b) => {
       const aHasFailed: number = hasFailedToProvision(a);
@@ -79,7 +95,7 @@ export const HostConfigReview = ({
                     Secure Boot and Full Disk Encryption
                   </th>
                   <th data-cy="tableHeaderCell">Trusted Compute</th>
-                  <th data-cy="tableHeaderCell">Public SSH Key</th>
+                  <th data-cy="tableHeaderCell">SSH Key Name</th>
                 </tr>
               </thead>
               <tbody>
@@ -94,17 +110,21 @@ export const HostConfigReview = ({
                     <tr data-cy="tableRow">
                       <td data-cy="tableRowCell">{host.name}</td>
                       <td data-cy="tableRowCell">
-                        <div className="serial-number">{host.serialNumber}</div>
-                        <div className="uuid">{host.uuid}</div>
+                        <div className="serial-number">
+                          {host.serialNumber || "No serial number present"}
+                        </div>
+                        <div className="uuid">
+                          {host.uuid || "No UUID present"}
+                        </div>
                       </td>
                       <td data-cy="tableRowCell">
                         {host.instance?.os ? host.instance.os.name : "-"}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Enabled" : "Disabled"}
+                        {sbFdeValue(host, sbFdeEnabled)}
                       </td>
                       <td data-cy="tableRowCell">
-                        {sbFdeEnabled ? "Compatible" : "Not compatible"}
+                        {getTrustedComputeCompatibility(host).text}
                       </td>
                       <td data-cy="tableRowCell">
                         {selectedAccount ? selectedAccount.username : "-"}
@@ -196,8 +216,8 @@ export const HostConfigReview = ({
             <div className="icon-container">
               <Icon
                 className="hosts-overview-icon"
-                artworkStyle="regular"
-                icon="rack-mount"
+                artworkStyle="light"
+                icon="host"
                 onClick={() => setExpanded((e) => !e)}
               />
             </div>

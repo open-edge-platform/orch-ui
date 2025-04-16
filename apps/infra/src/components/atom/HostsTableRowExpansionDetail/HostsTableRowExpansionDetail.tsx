@@ -7,7 +7,6 @@ import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { Flex, TrustedCompute } from "@orch-ui/components";
 import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { ScheduleMaintenanceStatusTag } from "../../molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
-import { OsConfig } from "../OsConfig/OsConfig";
 import "./HostsTableRowExpansionDetail.scss";
 const dataCy = "hostsTableRowExpansionDetail";
 interface HostsTableRowExpansionDetailProps {
@@ -43,9 +42,9 @@ const HostsTableRowExpansionDetail = ({
           </div>
         </Flex>
         <Flex cols={[3, 9]}>
-          <b className={`${className}__label`}>Latest Updates</b>
-          <div className={`${className}__content`}>
-            <OsConfig instance={host.instance} iconOnly />
+          <b className={`${className}__label`}>Available Update</b>
+          <div className={`${className}__content`} data-cy="osUpdate">
+            {host.instance?.desiredOs?.name ?? <em>(No Update)</em>}
           </div>
           <b className={`${className}__label`}>Trusted Compute</b>
           <div className={`${className}__content`} data-cy="trustedCompute">

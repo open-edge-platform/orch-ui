@@ -28,6 +28,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import HostsStatusByCluster from "../../atoms/HostsStatusByCluster/HostsStatusByCluster";
 import SiteByCluster from "../../atoms/SiteByCluster/SiteByCluster";
+import "./DeploymentSiteSummary.scss";
 
 const { useDeploymentServiceListDeploymentClustersQuery } = adm;
 
@@ -58,6 +59,7 @@ interface DeploymentSiteSummaryProps {
  */
 const DeploymentSiteSummary = ({ deployment }: DeploymentSiteSummaryProps) => {
   const cy = { "data-cy": dataCy };
+  const className = "deployment-site-summary";
   const [searchParams, setSearchParams] = useSearchParams();
 
   const columns: TableColumn<DeploymentSite>[] = [
@@ -207,7 +209,7 @@ const DeploymentSiteSummary = ({ deployment }: DeploymentSiteSummaryProps) => {
   };
 
   return (
-    <div {...cy}>
+    <div {...cy} className={className}>
       <Heading semanticLevel={3} size="s">
         Sites
       </Heading>
@@ -219,7 +221,7 @@ const DeploymentSiteSummary = ({ deployment }: DeploymentSiteSummaryProps) => {
         showIcon
         outlined
       />
-      <div className="pa-2" data-cy="siteTable">
+      <div className="site-table" data-cy="siteTable">
         {getSiteTable()}
       </div>
     </div>

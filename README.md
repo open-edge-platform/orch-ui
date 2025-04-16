@@ -1,12 +1,18 @@
+<!---
+  SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+  SPDX-License-Identifier: Apache-2.0
+-->
+
 # Orchestrator GUI Web User Interface
 
 ## Overview
 
 This implements the web user interface for the Orchestrator,
-allowing the user to perform most of the product's features in an intuitive,
-visual manner without having to learn all the complexities of the APIs.
-That being said, everything the Web UI does and shows comes from the APIs.
-This UI is intended for day-to-day edge operators, who want to be able to:
+allowing the user to do most of the features of the product in an
+intuitive, visual, manor without having learn all the complexities
+of the APIs.  That being said, everything the Web UI does and shows
+comes from the APIs.  This UI is intended for the day to day edge
+operators, who want to be able to:
 
 - Register, Onboard and Provision hosts
 - Create and manage Clusters
@@ -21,7 +27,7 @@ This UI is intended for day-to-day edge operators, who want to be able to:
 
 ## Get Started
 
-## Edge Orchestrator Micro Front Ends
+### Edge Orchestrator Mirco Front Ends
 
 This project is a "mono-repo" example of micro front ends (MFEs),
 with a minimal amount of configuration per project.
@@ -54,13 +60,55 @@ graph TD
     style G fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
 ```
 
-Read more about Orchestrator GUI Web User Interface in the [User Guide](https://website-name.com).
+## Develop
 
-See the [Documentation](https://website-name.com) to get started using
-Orchestrator GUI Web User Interface.
+Before developing UI related features or tests in Orchestrator GUI Web User Interface, following development prerequisites are required:
+
+- [Node JS](https://nodejs.org/en/download)
+
+  ```bash
+  node -v
+  v23.6.0
+  ```
+
+- To install [Node JS dependencies](https://www.npmjs.com/) for Orchestrator GUI Web User Interface, execute following command at base folder of repo:
+
+  ```bash
+  npm ci
+  ```
+
+The code for UI is written in [React](https://react.dev/). The React component code follows the pattern by taking the reference from [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/).
+
+- To run development server execute following command at base folder of repo:
+
+  ```bash
+  npm run app:<mfe-app-name> # <mfe-app-name> can be app-orch, cluster-orch, root, admin and infra.
+  ```
+
+> Note: `<mfe-app-name>` can be app-orch, cluster-orch, root, admin and infra.
+
+The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
+
+```bash
+cd tests/<mfe-app-name> # change current working directory to `mfe testing folder within tests folder`
+npx cypress open # [--component <component|e2e> --spec ../../apps/<mfe-app-name>/src/components/<path-to-test-files>]
+
+# Alternatively to `cypress open` (for GUI), you can also run cypress with CLI using below command
+npx cypress run # [--component <component|e2e> --spec ../../apps/<mfe-app-name>/src/components/<path-to-test-files>]
+```
+
+For testing your changes in a virtual machine with deployment, refer to [Build and Deploy Guide](./docs/build.md) documentation.
+
+## Contribute
+
+To learn how to contribute to the project, see the [Contributor's Guide](./CONTRIBUTING.md)
+
+## Community and Support
+
+To learn more about the project, its community, and governance, visit the Edge Orchestrator Community. For support, start with Troubleshooting or contact us.
 
 ## License
 
-Orchestrator GUI Web User Interface is licensed under [Apache 2.0 License](LICENSES/Apache-2.0.txt).
+Orchestrator GUI Web User Interface is licensed under \[Apache-2.0](./LICENSES/Apache-2.0.txt).
 
-Last Updated Date: {April 03, 2025}
+Last Updated Date: {April 7, 2025}

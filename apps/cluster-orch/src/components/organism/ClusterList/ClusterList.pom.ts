@@ -16,7 +16,8 @@ type ApiAliases =
   | "clusterMocked"
   | "cluster500"
   | "clusterMockedWithFilter"
-  | "clusterMockedWithOffset";
+  | "clusterMockedWithOffset"
+  | "clusterMockedWithPageSize";
 
 const route = "**/v2/**/clusters**";
 
@@ -49,6 +50,14 @@ const endpoints: CyApiDetails<
     response: {
       clusters: [clusterInfo1, clusterInfo2],
       totalElements: 20,
+    },
+  },
+  clusterMockedWithPageSize: {
+    route: `${route}pageSize=100&offset=0*`,
+    statusCode: 200,
+    response: {
+      clusters: [clusterInfo1, clusterInfo2],
+      totalElements: 100,
     },
   },
   cluster500: {

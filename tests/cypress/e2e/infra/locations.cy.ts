@@ -70,7 +70,7 @@ beforeEach(() => {
   netLog.intercept();
 });
 afterEach(() => {
-  netLog.save();
+  netLog.save("infra_locations");
   netLog.clear();
 });
 

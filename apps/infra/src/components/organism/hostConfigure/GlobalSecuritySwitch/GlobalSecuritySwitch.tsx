@@ -6,6 +6,8 @@
 import { ToggleSwitch } from "@spark-design/react";
 import { ToggleSwitchSize } from "@spark-design/tokens";
 import {
+  selectAreHostsOsSetSecureDisabled,
+  selectAreHostsOsSetSecureEnabled,
   selectIsGlobalSbFdeActive,
   setIsGlobalSbFdeActive,
 } from "../../../../store/configureHost";
@@ -24,7 +26,26 @@ export const GlobalSecuritySwitch = ({
   const cy = { "data-cy": dataCy };
 
   const isGlobalSbFdeActive = useAppSelector(selectIsGlobalSbFdeActive);
+  const allHostsOsSetSecureEnabled = useAppSelector(
+    selectAreHostsOsSetSecureEnabled,
+  );
+  const allHostsOsSetSecurityDisabled = useAppSelector(
+    selectAreHostsOsSetSecureDisabled,
+  );
   const dispatch = useAppDispatch();
+
+  const count = () => {
+    if (value) {
+      return isGlobalSbFdeActive &&
+        (allHostsOsSetSecureEnabled || allHostsOsSetSecurityDisabled)
+        ? "All"
+        : "Some";
+    } else {
+      return isGlobalSbFdeActive || allHostsOsSetSecurityDisabled
+        ? "All"
+        : "Some";
+    }
+  };
 
   return (
     <div {...cy} className="global-security-switch">
@@ -36,10 +57,10 @@ export const GlobalSecuritySwitch = ({
           dispatch(setIsGlobalSbFdeActive(true));
           onChange?.(isSelected);
         }}
+        isDisabled={allHostsOsSetSecurityDisabled}
         size={ToggleSwitchSize.Medium}
       >
-        {value ? "Enabled" : "Disabled"} for{" "}
-        {isGlobalSbFdeActive ? "All" : "Some"} Hosts
+        {value ? "Enabled" : "Disabled"} for {count()} Hosts
       </ToggleSwitch>
     </div>
   );
