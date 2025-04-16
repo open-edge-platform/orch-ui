@@ -184,7 +184,8 @@ export const getHumanReadableDuration = (durationSeconds: number) => {
 /** Convert date-time in seconds format to `date, hh, mm` format  */
 export const getDateTimeFromSeconds = (seconds: number) => {
   const dateString = new Date(seconds * 1000).toUTCString().split(" ");
-  const date = [dateString[1], dateString[2], dateString[3]].join("/");
+  // this will return date in `30-Jun-2023` format (which is supported in safari and chrome)
+  const date = [dateString[1], dateString[2], dateString[3]].join("-");
   const time = dateString[4].split(":");
   const [hh, mm] = [time[0], time[1]];
   return [date, hh, mm];
@@ -198,10 +199,8 @@ export const convertTimeInLocalTimezone = (
   mm: string,
   date?: string,
 ) => {
-  let adjustedDate = date
-    ? new Date(date).toDateString()
-    : new Date().toDateString();
-  adjustedDate = adjustedDate.replace("-", "/");
+  console.log("date", date);
+  let adjustedDate = date ?? new Date().toDateString();
   const localDateTime = new Date(`${adjustedDate} ${hh}:${mm}:00 GMT`);
   const computedOffset = localDateTime.toString().match(/GMT(-|\+)([0-9]+)/);
   const localeDateTimeString = localDateTime.toString();

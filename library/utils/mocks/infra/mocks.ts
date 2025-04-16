@@ -772,7 +772,7 @@ export const handlers = [
   }),
 
   // schedules
-  rest.get(`${baseURL}/schedules`, async (req, res, ctx) => {
+  rest.get(`${baseURL}/compute/schedules`, async (req, res, ctx) => {
     const hostId = req.url.searchParams.get("hostID");
     const siteId = req.url.searchParams.get("siteID");
     const regionId = req.url.searchParams.get("regionID");
