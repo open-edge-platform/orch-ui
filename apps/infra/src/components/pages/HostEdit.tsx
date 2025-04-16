@@ -14,7 +14,6 @@ import {
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
-  isHostAssigned,
   parseError,
   Role,
   SharedStorage,
@@ -37,11 +36,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  homeBreadcrumb,
-  hostsBreadcrumb,
-  hostsNavItem,
-} from "../../routes/const";
+import { hostsNavItem } from "../../routes/const";
 import { useAppDispatch } from "../../store/hooks";
 import {
   disableMessageBanner,
@@ -201,26 +196,6 @@ const HostEdit = () => {
     eim.usePutV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
-
-  const isAssigned = isHostAssigned(host?.instance);
-
-  // These steps will set's the breadcrumb in Host Details page
-  const breadcrumb = useMemo(() => {
-    return [
-      homeBreadcrumb,
-      host ? hostsBreadcrumb : { text: "Getting host...", link: "#" },
-      {
-        text: `${host?.name || id}`,
-        link: `${host && host.site ? (isAssigned ? "host" : "unassigned-host") : "unconfigured-host"}/${
-          host?.resourceId
-        }`,
-      },
-      {
-        text: "Edit Host",
-        link: "#",
-      },
-    ];
-  }, [host]);
 
   const metadataContent = useMemo(
     () => (

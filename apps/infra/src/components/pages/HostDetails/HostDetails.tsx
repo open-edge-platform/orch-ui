@@ -21,7 +21,6 @@ import {
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
-  isHostAssigned,
   isOSUpdateAvailable,
   parseError,
   Role,
@@ -47,13 +46,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./HostDetails.scss";
 
 import { eim } from "@orch-ui/apis";
-import {
-  configuredBreadcrumb,
-  homeBreadcrumb,
-  hostsBreadcrumb,
-  hostsNavItem,
-  unconfiguredBreadcrumb,
-} from "../../../routes/const";
+import { hostsNavItem } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import {
   setErrorInfo,
@@ -276,34 +269,6 @@ const HostDetails: React.FC = () => {
       dispatch(showMessageNotification(failMessage));
     }
   };
-
-  const isAssigned = isHostAssigned(host?.instance);
-
-  // These steps will set's the breadcrumb in Host Details page
-  let hostBreadcrumb = { text: "Getting host...", link: "#" };
-  if (host) {
-    hostBreadcrumb = host.site
-      ? isAssigned
-        ? hostsBreadcrumb
-        : configuredBreadcrumb
-      : unconfiguredBreadcrumb;
-  } else if (hostQuery.isError || hostsQuery.isError) {
-    hostBreadcrumb = hostsBreadcrumb;
-  }
-  const breadcrumb = [
-    homeBreadcrumb,
-    hostBreadcrumb,
-    {
-      text: `${id}`,
-      link: `${host && host.site ? "host" : "unconfigured-host"}/${
-        host?.resourceId
-      }`,
-    },
-    {
-      text: "View Details",
-      link: "#",
-    },
-  ];
 
   useEffect(() => {
     dispatch(setActiveNavItem(hostsNavItem));
