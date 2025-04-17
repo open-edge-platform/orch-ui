@@ -70,12 +70,15 @@ runs:
         for CHART_PATH in $(eval $CHART_FIND_CMD 2>/dev/null || echo ""); do
           echo "Processing Helm chart: $CHART_PATH"
 
-          # Extract current version from Chart.yaml
-          CHART_VERSION=$(grep -E '^version:' "$CHART_PATH" | awk '{print $2}' | tr -d '"' | tr -d "'")
+          export VERSIONFILE="$CHART_PATH"
 
-          if [[ -n "$CHART_VERSION" && "$CHART_VERSION" != *"-dev"* ]]; then
-            NEXT_CHART_VERSION=$(get_next_version "$CHART_VERSION" "-dev")
-            echo "Updating Helm chart $CHART_PATH from $CHART_VERSION to $NEXT_CHART_VERSION"
+          RELEASE_VERSION=0
+          read_version
+          check_if_releaseversion
+
+          if [ $RELEASE_VERSION -eq 1 ]; then
+            NEXT_CHART_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
+            echo "Updating Helm chart $CHART_PATH from $NEW_VERSION to $NEXT_CHART_VERSION"
 
             # Update the version field in Chart.yaml
             sed -i "s/^version:.*$/version: $NEXT_CHART_VERSION/" "$CHART_PATH"
@@ -94,24 +97,32 @@ runs:
         done
 
         if [ $CHANGES_MADE -eq 1 ]; then
-          git commit -m "Update version files to next dev version"
+          git commit -m "Update VERSION files and Helm charts to next dev version"
+
+          echo "------------------------------------------------------"
+          echo "Summary of updates:"
+          git diff --name-only HEAD~1 HEAD | while read file; do
+            echo "- $file"
+          done
+          echo "------------------------------------------------------"
+
           git push origin $BRANCH_NAME
 
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           echo "changes_made=true" >> $GITHUB_OUTPUT
         else
-          echo "No VERSION files found to update"
+          echo "No VERSION files or Helm charts found to update"
           echo "changes_made=false" >> $GITHUB_OUTPUT
         fi
 
-    # - name: Create Pull Request
-    #   if: steps.update_versions.outputs.changes_made == 'true'
-    #   shell: bash
-    #   env:
-    #     GH_TOKEN: ${{ github.token }}
-    #   run: |
-    #     gh pr create \
-    #       --title "Version bump to -dev" \
-    #       --body "Automatically bumping version files to next development iteration (-dev suffix)." \
-    #       --base main \
-    #       --head ${{ steps.update_versions.outputs.branch_name }}
+    - name: Create Pull Request
+      if: steps.update_versions.outputs.changes_made == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh pr create \
+          --title "Version bump to -dev" \
+          --body "Automatically bumping version files to next development iteration (-dev suffix)." \
+          --base main \
+          --head ${{ steps.update_versions.outputs.branch_name }}
