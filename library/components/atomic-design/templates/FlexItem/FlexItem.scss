@@ -27,7 +27,7 @@ $sizes: (
 }
 
 .flex-item {
-  overflow: hidden;
+  overflow: visible;
   text-overflow: ellipsis;
   @include medias($sizes);
 
