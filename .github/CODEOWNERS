@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# These owners will be the default owners for everything in the repo. Unless a
+# later match takes precedence, these owners will be requested for review when
+# someone opens a pull request.
+
+# Everything requires UI team review by default
+* @teone @fjcooper5 @satya-in @mamanzan @RPG-coder-intc @dlemiech @riyaz-ghati @vigneshintel
