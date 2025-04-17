@@ -4,9 +4,14 @@
 ---
 name: PR Checks
 
+# on:
+#   pull_request:
+#     types: [opened, reopened, synchronize]
+
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - non-existent-branch-abc
 
 jobs:
   detect-changed-folders:
