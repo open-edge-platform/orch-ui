@@ -75,7 +75,7 @@ jobs:
         project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@feature/push-dev-images
     with:
-      bootstrap_tools: "base,helm,yq,jq,go"
+      bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
@@ -128,7 +128,7 @@ jobs:
           fi
 
           # Check pre-merge pipeline only if it was required to run
-          has_changes="${{ needs.detect-changed-folders.outputs.changed_apps != '[]' || needs.setup-conditions.outputs.common_condition == 'true' }}"
+          has_changes="${{ needs.detect-changed-folders.outputs.changed_apps[0] != null || needs.setup-conditions.outputs.common_condition == 'true' }}"
           echo "Has changes: $has_changes"
           echo "Pre merge pipeline result: $pre_merge_pipeline_result"
           if [ "$has_changes" == "true" ] && [ "$pre_merge_pipeline_result" != "success" ]; then

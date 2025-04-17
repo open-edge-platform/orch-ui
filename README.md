@@ -1,12 +1,18 @@
+<!---
+  SPDX-FileCopyrightText: (C) 2022 Intel Corporation
+  SPDX-License-Identifier: Apache-2.0
+-->
+
 # Orchestrator GUI Web User Interface
 
 ## Overview
 
 This implements the web user interface for the Orchestrator,
-allowing the user to perform most of the product's features in an intuitive,
-visual manner without having to learn all the complexities of the APIs.
-That being said, everything the Web UI does and shows comes from the APIs.
-This UI is intended for day-to-day edge operators, who want to be able to:
+allowing the user to do most of the features of the product in an
+intuitive, visual, manor without having learn all the complexities
+of the APIs.  That being said, everything the Web UI does and shows
+comes from the APIs.  This UI is intended for the day to day edge
+operators, who want to be able to:
 
 - Register, Onboard and Provision hosts
 - Create and manage Clusters
@@ -23,17 +29,7 @@ Read more about Edge Orchestrator in the [User Guide](https://docs.openedgeplatf
 
 ## Get Started
 
-See the [Documentation](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/get_started_guide/index.html) to get started using Edge Orchestrator.
-
-## Develop
-
-To develop Edge Orchestrator, the following development prerequisites are required:
-
-- Node.js (LTS version recommended)
-- npm (comes with Node.js)
-- Modern web browser (Chrome, Firefox, Edge)
-- Access to the Edge Orchestrator API endpoints
-- Code editor (VS Code recommended)
+### Edge Orchestrator Micro Front Ends
 
 This project is a "mono-repo" example of micro front ends (MFEs),
 with a minimal amount of configuration per project.
@@ -66,50 +62,66 @@ graph TD
     style G fill:#ccc,stroke:#999,stroke-width:1px,color:#000,stroke-dasharray: 5 5
 ```
 
-### Development Workflow
+## Develop
 
-1. Install dependencies:
-   ```
-   npm install
-   ```
+Before developing UI related features or tests in Orchestrator GUI Web User Interface, following development prerequisites are required:
 
-2. Start the development environment:
-   ```
-   npm run start
-   ```
-   This will concurrently run all MFEs. The root application will be available at http://localhost:8080, which provides navigation to all other MFEs.
+- [Node JS](https://nodejs.org/en/download)
 
+  ```bash
+  node -v
+  v23.6.0
+  ```
+
+- To install [Node JS dependencies](https://www.npmjs.com/) for Orchestrator GUI Web User Interface, execute following command at base folder of repo:
+
+  ```bash
+  npm ci
+  ```
+
+The code for UI is written in [React](https://react.dev/). The React component code follows the pattern by taking the reference from [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/).
+
+The project uses Webpack for bundling, TypeScript for type safety, and Cypress for testing.
+The application is separated into multiple micro front-ends that can be developed, tested independently.
+
+- To run development server execute following command at base folder of repo:
+
+  ```bash
+  npm run app:<mfe-app-name> # <mfe-app-name> can be app-orch, cluster-orch, root, admin and infra.
+  ```
+
+> Note: `<mfe-app-name>` can be app-orch, cluster-orch, root, admin and infra.
+
+- To run all MFEs concurrently:
+
+  ```bash
+  npm run start
+  ```
+
+  This will concurrently run all MFEs. The root application will be available at http://localhost:8080, which provides navigation to all other MFEs.
+
+- To build MFEs:
+
+  ```bash
+  npm run app:<mfe-app-name>:build # <mfe-app-name> can be app-orch, cluster-orch, root, admin and infra.
+  ```
 ### Running with mock data
 If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_LP_MOCK_API` environment variable value to `true`
 
 Set this value BEFORE you run the `npm run start`. 
 
 ### Testing
+The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
 
-- Run component tests (with Cypress):
-  ```
-  npm run tests:component
-  ```
-- Run end-to-end tests (with Cypress):
-  ```
-  npm run tests:e2e
-  ```
+```bash
+cd tests/<mfe-app-name> # change current working directory to `mfe testing folder within tests folder`
+npx cypress open # [--component <component|e2e> --spec ../../apps/<mfe-app-name>/src/components/<path-to-test-files>]
 
-### Building the application
+# Alternatively to `cypress open` (for GUI), you can also run cypress with CLI using below command
+npx cypress run # [--component <component|e2e> --spec ../../apps/<mfe-app-name>/src/components/<path-to-test-files>]
+```
 
-- Build all applications:
-  ```
-  npm run app:admin:build
-  npm run app:infra:build
-  npm run app:app-orch:build
-  npm run app:root:build
-  npm run app:cluster-orch:build
-  ```
-- Or build individual applications as needed using the specific build scripts
-
-### Project Structure
-
-The project uses Webpack for bundling, TypeScript for type safety, and Cypress for testing. The application is separated into multiple micro front-ends that can be developed, tested independently.
+For testing your changes in a virtual machine with deployment, refer to [Build and Deploy Guide](./docs/build.md) documentation.
 
 ## Contribute
 
@@ -117,13 +129,10 @@ To learn how to contribute to the project, see the [Contributor's Guide](https:/
 
 ## Community and Support
 
-To learn more about the project, its community, and governance, visit the [Edge Orchestrator
-Community](https://github.com/open-edge-platform).
-
-For support, start with [Troubleshooting](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/troubleshooting/index.html) or [contact us](https://github.com/open-edge-platform).
+To learn more about the project, its community, and governance, visit the Edge Orchestrator Community. For support, start with Troubleshooting or contact us.
 
 ## License
 
-Orchestrator GUI Web User Interface is licensed under [Apache 2.0 License](LICENSES/Apache-2.0.txt).
+Orchestrator GUI Web User Interface is licensed under \[Apache-2.0](LICENSES/Apache-2.0.txt).
 
-Last Updated Date: April 03, 2025
+Last Updated Date: {April 7, 2025}
