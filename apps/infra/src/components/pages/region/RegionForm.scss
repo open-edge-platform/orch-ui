@@ -67,6 +67,10 @@
     }
   }
 
+  .flex-item {
+    overflow: visible;
+  }
+
   .spark-flex-item:not(:last-child) &-item {
     padding-right: 1rem;
   }
