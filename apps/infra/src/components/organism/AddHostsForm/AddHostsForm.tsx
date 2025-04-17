@@ -23,7 +23,7 @@ export type AddHostsFormItem = {
 export type AddHostsFormItems = { hosts: AddHostsFormItem[] };
 
 export enum ErrorMessages {
-  SerialNumberMaxLengthExceeded = "Maximum of 20 characters allowed",
+  MaxLengthExceeded = "Maximum of 20 characters allowed",
   HostNameExists = "Name already exists",
   SerialNumberExists = "Serial number already exists",
   RequireSerialNumber = "Required if Uuid not provided",
@@ -56,9 +56,9 @@ const AddHostsForm = () => {
     mode: "onChange",
   });
 
-  const checkSerialNumberLength = (value: string) => {
+  const checkLength = (value: string) => {
     const exceedsLength = value.length > 20;
-    return !exceedsLength || ErrorMessages.SerialNumberMaxLengthExceeded;
+    return !exceedsLength || ErrorMessages.MaxLengthExceeded;
   };
 
   const dispatchNewHosts = () => {
@@ -85,7 +85,7 @@ const AddHostsForm = () => {
 
   useEffect(() => {
     const hostKeys = Object.keys(hosts);
-    //grab all the hosts that have a resourceId, aka succesfully registered via API
+    //grab all the hosts that have a resourceId, aka successfully registered via API
     const registered: string[] = [];
     hostKeys.forEach((key) => {
       const host = hosts[key];
@@ -163,8 +163,10 @@ const AddHostsForm = () => {
                   placeholder="Host Name"
                   id={`host-${index}-name`}
                   value={field.name}
+                  maxLength={20}
                   inputsProperty={`hosts.${index}.name`}
                   validate={{
+                    noMaxLengthExceeded: (value: string) => checkLength(value),
                     //@ts-ignore
                     noDuplicate: (value: string) => {
                       const hosts = [...getValues().hosts];
@@ -188,14 +190,14 @@ const AddHostsForm = () => {
                   isRequired={false}
                   id={`host-${index}-serial-number`}
                   value={field.serialNumber}
+                  maxLength={20}
                   inputsProperty={`hosts.${index}.serialNumber`}
                   onChange={() => {
                     trigger(`hosts.${index}.uuid`);
                     dispatchNewHosts();
                   }}
                   validate={{
-                    noMaxLengthExceeded: (value: string) =>
-                      checkSerialNumberLength(value),
+                    noMaxLengthExceeded: (value: string) => checkLength(value),
                     require: (value: string) => {
                       if (value === "") {
                         const row = getValues(`hosts.${index}`);
