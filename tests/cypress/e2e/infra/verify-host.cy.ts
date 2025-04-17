@@ -93,9 +93,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         tablePom.getRows().should("have.length", 1);
         cy.contains(host.serialNumber).should("be.visible");
         tablePom
-          .getCell(1, 3)
-          .contains("Provisioned", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the Host to be provisioned
-          .should("contain.text", "Provisioned");
+          .getCell(1, 3, { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the Host to be provisioned)
+          .should(($el) => {
+            expect($el, "Host status").to.contain.text("Provisioned");
+          });
       });
     });
 
