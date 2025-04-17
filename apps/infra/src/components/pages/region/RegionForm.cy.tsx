@@ -242,7 +242,7 @@ describe("<RegionForm />", () => {
         pom.el.name.should("have.value", "region-0123456789123");
       });
 
-      it("shows error on name for less than minimum for region name", () => {
+      it("should show error on region name for less than min length on characters", () => {
         pom.interceptApis([pom.api.createRegionMocked, pom.api.postMetadata]);
         pom.el.name.type("h");
         pom.el.name
