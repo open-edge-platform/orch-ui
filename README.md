@@ -64,6 +64,8 @@ graph TD
 
 ## Develop
 
+### Prerequisites and Setup
+
 Before developing UI related features or tests in Orchestrator GUI Web User Interface, following development prerequisites are required:
 
 - [Node JS](https://nodejs.org/en/download)
@@ -105,6 +107,7 @@ The application is separated into multiple micro front-ends that can be develope
   ```bash
   npm run app:<mfe-app-name>:build # <mfe-app-name> can be app-orch, cluster-orch, root, admin and infra.
   ```
+
 ### Running with mock data
 If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_LP_MOCK_API` environment variable value to `true`
 
