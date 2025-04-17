@@ -1,0 +1,117 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+---
+name: Increment to Next -dev Version
+description: Updates VERSION files to next dev version after a release
+
+inputs:
+  exclude_paths:
+    description: "Comma-separated list of path patterns to exclude from search"
+    required: false
+    default: "*/node_modules/*,*/dist/*,*/build/*,*/vendor/*,*/bin/*,*/pkg/*,*/.git/*"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Git identity
+      shell: bash
+      run: |
+        git config --global user.name "Github Bot"
+        git config --global user.email "github-bot@intel.com"
+
+    - name: Find and update VERSION files
+      id: update_versions
+      shell: bash
+      run: |
+        source ${{ github.action_path }}/tagging-lib.sh
+
+        CURRENT_DATE=$(date +%d-%m-%Y-%H%M%S)
+        BRANCH_NAME="update-versions-${CURRENT_DATE}"
+        git checkout -b $BRANCH_NAME
+
+        CHANGES_MADE=0
+
+        IFS=',' read -ra EXCLUDE_PATHS <<< "${{ inputs.exclude_paths }}"
+        FIND_CMD="find . -name VERSION -type f"
+
+        for EXCLUDE in "${EXCLUDE_PATHS[@]}"; do
+          FIND_CMD="$FIND_CMD -not -path \"$EXCLUDE\""
+        done
+
+        echo "Executing: $FIND_CMD"
+
+        for VERSION_PATH in $(eval $FIND_CMD 2>/dev/null || echo ""); do
+          echo "Processing $VERSION_PATH"
+          export VERSIONFILE="$VERSION_PATH"
+
+          RELEASE_VERSION=0
+          read_version
+          check_if_releaseversion
+
+          if [ $RELEASE_VERSION -eq 1 ]; then
+            NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
+            echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
+
+            echo "$NEXT_VERSION" > "$VERSION_PATH"
+            git add "$VERSION_PATH"
+            CHANGES_MADE=1
+          fi
+        done
+
+        # Process Helm Chart.yaml files
+        CHART_FIND_CMD="find . -name Chart.yaml -type f"
+
+        for EXCLUDE in "${EXCLUDE_PATHS[@]}"; do
+          CHART_FIND_CMD="$CHART_FIND_CMD -not -path \"$EXCLUDE\""
+        done
+
+        echo "Executing: $CHART_FIND_CMD"
+
+        for CHART_PATH in $(eval $CHART_FIND_CMD 2>/dev/null || echo ""); do
+          echo "Processing Helm chart: $CHART_PATH"
+
+          # Extract current version from Chart.yaml
+          CHART_VERSION=$(grep -E '^version:' "$CHART_PATH" | awk '{print $2}' | tr -d '"' | tr -d "'")
+
+          if [[ -n "$CHART_VERSION" && "$CHART_VERSION" != *"-dev"* ]]; then
+            NEXT_CHART_VERSION=$(get_next_version "$CHART_VERSION" "-dev")
+            echo "Updating Helm chart $CHART_PATH from $CHART_VERSION to $NEXT_CHART_VERSION"
+
+            # Update the version field in Chart.yaml
+            sed -i "s/^version:.*$/version: $NEXT_CHART_VERSION/" "$CHART_PATH"
+
+            # Also update appVersion if it exists and doesn't have -dev suffix
+            APP_VERSION=$(grep -E '^appVersion:' "$CHART_PATH" | awk '{print $2}' | tr -d '"' | tr -d "'")
+            if [[ -n "$APP_VERSION" && "$APP_VERSION" != *"-dev"* ]]; then
+              NEXT_APP_VERSION=$(get_next_version "$APP_VERSION" "-dev")
+              echo "Updating appVersion from $APP_VERSION to $NEXT_APP_VERSION"
+              sed -i "s/^appVersion:.*$/appVersion: \"$NEXT_APP_VERSION\"/" "$CHART_PATH"
+            fi
+
+            git add "$CHART_PATH"
+            CHANGES_MADE=1
+          fi
+        done
+
+        if [ $CHANGES_MADE -eq 1 ]; then
+          git commit -m "Update version files to next dev version"
+          git push origin $BRANCH_NAME
+
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "changes_made=true" >> $GITHUB_OUTPUT
+        else
+          echo "No VERSION files found to update"
+          echo "changes_made=false" >> $GITHUB_OUTPUT
+        fi
+
+    # - name: Create Pull Request
+    #   if: steps.update_versions.outputs.changes_made == 'true'
+    #   shell: bash
+    #   env:
+    #     GH_TOKEN: ${{ github.token }}
+    #   run: |
+    #     gh pr create \
+    #       --title "Version bump to -dev" \
+    #       --body "Automatically bumping version files to next development iteration (-dev suffix)." \
+    #       --base main \
+    #       --head ${{ steps.update_versions.outputs.branch_name }}
