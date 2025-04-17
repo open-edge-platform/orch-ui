@@ -133,6 +133,6 @@ To learn more about the project, its community, and governance, visit the Edge O
 
 ## License
 
-Orchestrator GUI Web User Interface is licensed under \[Apache-2.0](LICENSES/Apache-2.0.txt).
+Orchestrator GUI Web User Interface is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
 
 Last Updated Date: {April 7, 2025}
