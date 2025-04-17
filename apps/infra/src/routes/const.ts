@@ -5,6 +5,15 @@
 
 import { BreadcrumbPiece, CollapsableListItem } from "@orch-ui/components";
 
+export const clusterManagementRoute = "clusters";
+export const clusterDetailRoute = "cluster/:clusterName";
+export const clusterEditRoute = "cluster/:clusterName/edit";
+export const clusterCreateRoute = "clusters/create";
+export const locationRoute = "locations";
+export const addRegionRoute = "regions/:regionId";
+export const addSubRegionRoute = "regions/parent/:parentRegionId/:regionId";
+export const addSiteRoute = "regions/:regionId/sites/:siteId";
+
 export const regionsRoute = "regions";
 export const sitesRoute = "sites";
 export const hostsRoute = "hosts";
@@ -15,6 +24,20 @@ export const unconfiguredDetailsRoute = "unconfigured-host/:id";
 export const hostDetailsGuidRoute = "host/uuid/:uuid";
 export const unconfiguredDetailsGuidRoute = "unconfigured-host/uuid/:uuid";
 export const hostConfigureRoute = "unconfigured-host/configure";
+
+export const allClusterRoutes = [
+  clusterManagementRoute,
+  clusterDetailRoute,
+  clusterEditRoute,
+  clusterCreateRoute,
+];
+export const allHostRoutes = [hostsRoute, hostDetailsRoute, hostConfigureRoute];
+export const allLocationRoutes = [
+  locationRoute,
+  addRegionRoute,
+  addSubRegionRoute,
+  addSiteRoute,
+];
 
 export type InfraRoute =
   | typeof regionsRoute

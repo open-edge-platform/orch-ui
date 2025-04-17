@@ -8,7 +8,6 @@ import {
   CollapsableList,
   CollapsableListItem,
   Flex,
-  getActiveNavItem,
   MessageBanner as _MessageBanner,
   SidebarMain,
 } from "@orch-ui/components";
@@ -20,10 +19,13 @@ import {
 } from "@orch-ui/utils";
 import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { matchPath } from "react-router";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {
+  allClusterRoutes,
+  allLocationRoutes,
   clusterNavItem,
   hostsNavItem,
   InfraRoute,
@@ -45,6 +47,20 @@ const createMenuItems = () => {
   return items;
 };
 
+const selectActiveMenu = (activePath: string): CollapsableListItem<string> => {
+  const cleanPath = activePath.replace(/\/infrastructure/g, "");
+
+  const routeMatches = [
+    { routes: allLocationRoutes, navItem: locationsNavItem },
+    { routes: allClusterRoutes, navItem: clusterNavItem },
+  ];
+
+  const matchedItem = routeMatches.find(({ routes }) =>
+    routes.some((route) => matchPath(route, cleanPath)),
+  );
+
+  return matchedItem?.navItem ?? hostsNavItem;
+};
 export const menuItems = createMenuItems();
 
 export const datacyComponentSelector = "eimLayout";
@@ -57,8 +73,8 @@ const Layout = () => {
   // Router transitions https://tinyurl.com/2u8kwvk8
   const navigate = useNavigate();
   const location = useLocation();
-  const activeItem = useAppSelector(getActiveNavItem);
   const activePath = location.pathname;
+  const activeItem = useMemo(() => selectActiveMenu(activePath), [activePath]);
 
   // EIM Notification system
   const {
