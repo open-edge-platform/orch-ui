@@ -584,8 +584,10 @@ const RegionForm: React.FC = () => {
         return "Name is required";
       case "maxLength":
         return "Name can't be more than 20 characters";
+      case "minLength":
+        return "Name must be at least 2 characters";
       default:
-        return "Name must be 2-20 characters, starting and ending with alphanumeric characters, and may contain periods or hyphens in between.";
+        return "Name must start and end with alphanumeric characters, and may contain periods or hyphens in between.";
     }
   };
 
@@ -611,6 +613,8 @@ const RegionForm: React.FC = () => {
               control={control}
               rules={{
                 required: true,
+                minLength: 2,
+                maxLength: 20,
                 pattern: new RegExp(
                   "^$|^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$",
                 ),
@@ -623,6 +627,7 @@ const RegionForm: React.FC = () => {
                   isRequired={true}
                   pattern="^$|^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$"
                   maxLength={20}
+                  minLength={2}
                   isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
                   validationState={
                     errors.name && Object.keys(errors.name).length > 0
