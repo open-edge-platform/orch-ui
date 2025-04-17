@@ -166,7 +166,7 @@ const AddHostsForm = () => {
                   maxLength={20}
                   inputsProperty={`hosts.${index}.name`}
                   validate={{
-                    noMaxLengthExceeded: (value: string) => checkLength(value),
+                    noMaxLengthExceeded: checkLength,
                     //@ts-ignore
                     noDuplicate: (value: string) => {
                       const hosts = [...getValues().hosts];
