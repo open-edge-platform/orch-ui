@@ -5,4 +5,10 @@
 
 .repeated-schedule-maintenance-form {
   padding-bottom: 15rem;
+
+  // ITEP-27128 - Adding a prop in flex to overflow visible
+  // to avoid the text overflow in the flex item.
+  .flex-item {
+    overflow: visible;
+  }
 }
