@@ -43,13 +43,18 @@ describe("<AddHostsForm/>", () => {
       pom.el.add.should("have.class", "spark-button-disabled");
     });
 
-    it("error on max length exceeded for serial number", () => {
+    it("cannot put more than 20 characters for serial number", () => {
       pom.newSerialNumberPom.root.type("123456789012345678901");
-      pom.newSerialNumberPom
-        .getInvalidEl()
-        .should("be.visible")
-        .contains(ErrorMessages.SerialNumberMaxLengthExceeded);
-      pom.el.add.should("have.class", "spark-button-disabled");
+      pom.newSerialNumberPom.root
+        .invoke("val")
+        .should("equal", "12345678901234567890");
+    });
+
+    it("cannot put more than 20 characters for host name", () => {
+      pom.newHostNamePom.root.type("123456789012345678901");
+      pom.newHostNamePom.root
+        .invoke("val")
+        .should("equal", "12345678901234567890");
     });
 
     it("error on incorrect serial number format", () => {
