@@ -133,6 +133,8 @@ export const HostDetails = ({
   const getErrorMessage = () => {
     if (!localName || localName.trim().length == 0)
       return "Name cannot be empty";
+    if (localName.trim().length > 20)
+      return "Name should not exceed more than 20 characters";
     if (!validNameRegex.test(localName))
       return "Name should not contain special characters";
     if (containsDuplicatedName(duplicatedHostNames, localName))
