@@ -197,7 +197,7 @@ const AddHostsForm = () => {
                     dispatchNewHosts();
                   }}
                   validate={{
-                    noMaxLengthExceeded: (value: string) => checkLength(value),
+                    noMaxLengthExceeded: checkLength,
                     require: (value: string) => {
                       if (value === "") {
                         const row = getValues(`hosts.${index}`);
