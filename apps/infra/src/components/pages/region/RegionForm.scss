@@ -9,6 +9,10 @@
     justify-content: space-between;
   }
 
+  &-item {
+    height: 5.5rem;
+  }
+
   .name-field {
     padding-right: 2rem;
   }
@@ -26,25 +30,6 @@
   // Additional space for error message
   .spark-text-field-container {
     height: 3rem;
-  }
-
-  &-form-item {
-    width: 100%;
-    margin-bottom: 0.5rem;
-
-    &-right {
-      margin-left: 4rem;
-    }
-
-    &-btn-container {
-      width: 100%;
-
-      button {
-        margin-top: 2rem;
-        margin-left: auto;
-        margin-bottom: 2rem;
-      }
-    }
   }
 
   .spark-combobox {
@@ -65,10 +50,6 @@
     .spark-combobox-button-label {
       width: 100% !important;
     }
-  }
-
-  .flex-item {
-    overflow: visible;
   }
 
   .spark-flex-item:not(:last-child) &-item {
