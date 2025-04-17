@@ -335,6 +335,7 @@ const HostsTable = ({
         canPaginate
         isServerSidePaginated
         totalOverallRowsCount={data.totalElements}
+        initialState={{ pageSize, pageIndex: Math.floor(offset / pageSize) }}
         onChangePage={(index: number) => {
           setSearchParams((prev) => {
             prev.set("offset", (index * pageSize).toString());
