@@ -10,7 +10,11 @@
   }
 
   &-item {
-    height: 5.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .flex-item {
+    overflow: visible
   }
 
   .name-field {

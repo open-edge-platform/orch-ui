@@ -232,7 +232,7 @@ describe("<RegionForm />", () => {
           .parentsUntil(".spark-text-field-container")
           .should(
             "contain.text",
-            "Name may only contain alphanumeric characters, symbols (. -) only and cannot end with a symbol",
+            "Name must be 2-20 characters, starting and ending with alphanumeric characters, and may contain periods or hyphens in between.",
           );
       });
 

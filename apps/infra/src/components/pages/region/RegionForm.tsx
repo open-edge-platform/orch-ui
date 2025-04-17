@@ -585,7 +585,7 @@ const RegionForm: React.FC = () => {
       case "maxLength":
         return "Name can't be more than 20 characters";
       default:
-        return "Name may only contain alphanumeric characters, symbols (. -) only and cannot end with a symbol. (Minimum: 2, Maximum: 20)";
+        return "Name must be 2-20 characters, starting and ending with alphanumeric characters, and may contain periods or hyphens in between.";
     }
   };
 
