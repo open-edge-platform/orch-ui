@@ -117,9 +117,6 @@ const HostsTable = ({
   getSelectionId = (row) => row.resourceId!,
 }: HostsTableProps) => {
   const cy = { "data-cy": dataCy };
-  const defaultPageSize = {
-    pageSize: 10,
-  };
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
@@ -131,6 +128,7 @@ const HostsTable = ({
   // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
   const offset = parseInt(searchParams.get("offset") ?? "0");
+
   // const sortColumn =
   //   columnApiNameToDisplayName(columns, searchParams.get("column")) ?? "Name";
   const sortDirection = (searchParams.get("direction") as Direction) ?? "asc";
@@ -163,7 +161,6 @@ const HostsTable = ({
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        ...defaultPageSize,
         offset,
         pageSize,
         orderBy: getOrder(searchParams.get("column") ?? "name", sortDirection),
@@ -179,6 +176,11 @@ const HostsTable = ({
 
   const onSearchChange = (searchTerm: string) => {
     setSearchParams((prev) => {
+      const previousSearchTerm = prev.get("searchTerm");
+
+      if ((!previousSearchTerm || previousSearchTerm === null) && !searchTerm)
+        return prev;
+
       // reset page offset before getting search result
       prev.set("offset", "0");
       //apply search
