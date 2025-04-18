@@ -20,17 +20,15 @@ interface ClusterEditNodeReviewProps {
   /** Notify any changes to node via the node dropdown */
   onNodeUpdate: (node: cm.NodeInfo, value: NodeRoles) => void;
   /** Notify click on Add Host button */
-  onAddNode: () => void;
+  onAddNode?: () => void;
   /** Notify click on Remove Host button */
-  onRemoveNode: (node: cm.NodeInfo) => void;
+  onRemoveNode?: (node: cm.NodeInfo) => void;
 }
 
 const ClusterEditNodeReview = ({
   clusterNodeList = [],
   configuredClusterNode = [],
   onNodeUpdate,
-  onAddNode,
-  onRemoveNode,
 }: ClusterEditNodeReviewProps) => {
   const cy = { "data-cy": dataCy };
 
