@@ -160,6 +160,11 @@ printf '\n\n%*s\n' "$(tput cols)" '' | tr ' ' '-'
 echo -e "${BOLD}Git Actions${NC}"
 printf '%*s\n' "$(tput cols)" '' | tr ' ' '-'
 
+# To make the release notes portable to EMF release, replace the (#XX) PR numbers at the end of each line, which would have been mapped by git to the local repo,
+# which won't work if pasted into the EMF repo, to a full path to the UI repo.
+sed -E 's/\(#([0-9]+)\)$/[(#\1)](https:\/\/github.com\/open-edge-platform\/orch-ui\/pull\/\1)/' temp_release_notes.txt > temp_release_notes_links.txt
+mv temp_release_notes_links.txt temp_release_notes.txt
+
 if ask_yes_no "Commit release to git"; then
    echo -e "${NC}"
    nano temp_release_notes.txt
