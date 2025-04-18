@@ -11,7 +11,6 @@ import {
   setBreadcrumb as setClusterBreadcrumb,
 } from "@orch-ui/components";
 import {
-  metadataPairToObject as labelsToObject,
   ObjectKeyValue,
   objectToMetadataPair,
   SharedStorage,
@@ -63,11 +62,12 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     {},
   );
   const currentCluster = useAppSelector(getCluster);
+  // Labels is of type `object` in API. This is not recognized as ObjectKeyValue `{[key: string]: string}`
+  const currentClusterLabel = (currentCluster.labels ?? {}) as ObjectKeyValue;
 
   const [clusterTemplateName, setClusterTemplateName] = useState<string>("");
   const [clusterTemplateVersion, setClusterTemplateVersion] =
     useState<string>("");
-
   const [inheritedMeta, setInheritedMeta] = useState<MetadataPair[]>([]); // Set Inherited Data
   const [firstHostId, setFirstHostId] = useState<string>();
   const [siteId, setSiteId] = useState<string>();
@@ -332,7 +332,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         projectName: SharedStorage.project?.name ?? "",
         name: currentCluster.name ?? "",
         clusterLabels: {
-          labels: labelsToObject(objectToLabels(currentCluster.labels)),
+          labels: currentClusterLabel,
         },
       }).unwrap();
       promises.push(p);
@@ -341,9 +341,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         projectName: SharedStorage.project?.name ?? "",
         metadataList: {
           metadata: [
-            ...objectToMetadataPair(
-              (currentCluster.labels || {}) as ObjectKeyValue,
-            ),
+            ...objectToMetadataPair(currentClusterLabel),
             ...inheritedMeta,
           ],
         },
@@ -371,11 +369,9 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         clusterName={clusterName}
       />
 
-      {/** TODO: MetadataLabel needs to be refactored. This causing a performance issue with rerendering in circle. */}
       <MetadataLabels
-        // Labels is of type `object` which is not recognized as ObjectKeyValue `{[key: string]: string}`
         inheritedMetadata={inheritedMeta}
-        clusterLabels={(currentCluster.labels ?? {}) as ObjectKeyValue}
+        clusterLabels={currentClusterLabel}
       />
 
       {siteData && siteData.region && (
