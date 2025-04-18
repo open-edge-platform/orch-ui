@@ -584,8 +584,10 @@ const RegionForm: React.FC = () => {
         return "Name is required";
       case "maxLength":
         return "Name can't be more than 20 characters";
+      case "minLength":
+        return "Name must be at least 2 characters";
       default:
-        return "Name may only contain alphanumeric characters, symbols (. -) only and cannot end with a symbol";
+        return "Name must start and end with alphanumeric characters, and may contain periods or hyphens in between.";
     }
   };
 
@@ -611,6 +613,8 @@ const RegionForm: React.FC = () => {
               control={control}
               rules={{
                 required: true,
+                minLength: 2,
+                maxLength: 20,
                 pattern: new RegExp(
                   "^$|^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$",
                 ),
@@ -623,6 +627,7 @@ const RegionForm: React.FC = () => {
                   isRequired={true}
                   pattern="^$|^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$"
                   maxLength={20}
+                  minLength={2}
                   isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
                   validationState={
                     errors.name && Object.keys(errors.name).length > 0
@@ -659,96 +664,51 @@ const RegionForm: React.FC = () => {
             </div>
           )}
         </Flex>
-        <br />
-        <Flex cols={[12]}>
-          <div className="region-form-item">
-            <Combobox
-              isRequired={true}
-              size="l"
-              label="Region Type"
-              name="regionType"
-              data-cy="regionType"
-              onInputChange={setRegionType}
-              allowsCustomValue={true}
-              inputValue={regionType}
-              isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
-              isInvalid={!validateRegionType()}
-              validationState={validateRegionType() ? "valid" : "invalid"}
-              errorMessage="Region Type only contain alphanumeric characters, symbols (. -) only and cannot end with a symbol"
-            >
-              {allRegionTypes.map((t) => (
-                <Item key={t.toLowerCase()}>{t}</Item>
-              ))}
-            </Combobox>
-          </div>
-        </Flex>
-        <br />
-        <Flex cols={[12]}>
-          <div className="region-form-item">
-            <Combobox
-              label="Parent Region"
-              data-cy="parentRegion"
-              placeholder={returnRegionName(parentRegion)}
-              size={ComboboxSize.Large}
-              variant={ComboboxVariant.Primary}
-              isDisabled={true}
-              autoComplete="parent-region"
-              onSelectionChange={(value: string) => setParentRegion(value)}
-            >
-              <Item textValue="None" key="None">
-                None
-              </Item>
-              {regions
-                ? regions
-                    .filter((r) => r.resourceId !== regionId)
-                    .map((region) => (
-                      <Item textValue={region.name} key={region.resourceId}>
-                        {region.name}
-                      </Item>
-                    ))
-                : []}
-            </Combobox>
-          </div>
-        </Flex>
-
-        {/* {regionId !== "new" && regionInfo && (
-          <>
-            <RegionsTable
-              parentRegionId={regionInfo.resourceId}
-              hasPermission={hasPermissions}
-              hiddenColumns={["select"]}
-              basePath="../"
-              showSearch={false}
-              subtitle="Subregions"
-            />
-
-            <SiteTable
-              actions={actions}
-              regionId={regionId}
-              hasPermission={hasPermissions}
-              hiddenColumns={["select", "region"]}
-              basePath={"../../regions"}
-              showSearch={false}
-              subtitle="Sites"
-              source="region"
-            />
-            {deleteConfirmationOpen && (
-              <ConfirmationDialog
-                showTriggerButton={false}
-                content={`Are you sure you want to delete Site "${
-                  siteToDelete?.name ?? siteToDelete?.resourceId
-                }"?`}
-                isOpen={deleteConfirmationOpen}
-                confirmCb={() => deleteSiteFn(siteToDelete?.resourceId ?? "")}
-                confirmBtnText="Delete"
-                confirmBtnVariant={ButtonVariant.Alert}
-                cancelCb={() => setDeleteConfirmationOpen(false)}
-              />
-            )}
-          </>
-        )} */}
-
-        <br />
+        <div className="region-form-item">
+          <Combobox
+            isRequired={true}
+            size="l"
+            label="Region Type"
+            name="regionType"
+            data-cy="regionType"
+            onInputChange={setRegionType}
+            allowsCustomValue={true}
+            inputValue={regionType}
+            isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
+            isInvalid={!validateRegionType()}
+            validationState={validateRegionType() ? "valid" : "invalid"}
+            errorMessage="Region Type only contain alphanumeric characters, symbols (. -) only and cannot end with a symbol"
+          >
+            {allRegionTypes.map((t) => (
+              <Item key={t.toLowerCase()}>{t}</Item>
+            ))}
+          </Combobox>
+        </div>
+        <div className="region-form-item">
+          <Combobox
+            label="Parent Region"
+            data-cy="parentRegion"
+            placeholder={returnRegionName(parentRegion)}
+            size={ComboboxSize.Large}
+            variant={ComboboxVariant.Primary}
+            isDisabled={true}
+            autoComplete="parent-region"
+            onSelectionChange={(value: string) => setParentRegion(value)}
+          >
+            <Item textValue="None" key="None">
+              None
+            </Item>
+            {regions
+              ? regions
+                  .filter((r) => r.resourceId !== regionId)
+                  .map((region) => (
+                    <Item textValue={region.name} key={region.resourceId}>
+                      {region.name}
+                    </Item>
+                  ))
+              : []}
+          </Combobox>
+        </div>
 
         <Heading semanticLevel={4} size={HeaderSize.Medium}>
           Advanced Settings
