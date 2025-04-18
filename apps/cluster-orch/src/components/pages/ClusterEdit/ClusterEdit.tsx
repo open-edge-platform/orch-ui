@@ -10,7 +10,12 @@ import {
   setActiveNavItem,
   setBreadcrumb as setClusterBreadcrumb,
 } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import {
+  metadataPairToObject as labelsToObject,
+  ObjectKeyValue,
+  objectToMetadataPair,
+  SharedStorage,
+} from "@orch-ui/utils";
 import { Button, ButtonGroup, Heading, Toast } from "@spark-design/react";
 import {
   ButtonSize,
@@ -64,7 +69,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     useState<string>("");
 
   const [inheritedMeta, setInheritedMeta] = useState<MetadataPair[]>([]); // Set Inherited Data
-  const [userDefinedMeta, setUserDefinedMeta] = useState<MetadataPair[]>([]); // Set Custom Input data
   const [firstHostId, setFirstHostId] = useState<string>();
   const [siteId, setSiteId] = useState<string>();
 
@@ -112,6 +116,29 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       },
       { skip: !siteId || !SharedStorage.project?.name },
     );
+
+  // Inherited metadata array for metadata display
+  useEffect(() => {
+    if (siteData) {
+      const regionMeta = siteData?.inheritedMetadata?.location ?? [];
+      const siteMeta = siteData?.metadata ?? [];
+      /** Combine Region and Site Metadata (a.k.a Inherited Metadata) */
+      const combinedMetadata = [
+        ...regionMeta.map(({ key, value }) => ({
+          key,
+          value,
+          type: "region",
+        })),
+        ...siteMeta.map(({ key, value }) => ({
+          key,
+          value,
+          type: "site",
+        })),
+      ];
+      setInheritedMeta(combinedMetadata);
+    }
+  }, [siteData]);
+
   const [
     editClusterByTemplateName,
     { isSuccess: isEditTemplateSuccess, isError: isEditTemplateError },
@@ -267,14 +294,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
     return newNodes;
   };
-  // labels to object
-  const labelsToObject = (pairs: MetadataPair[]) => {
-    const labelObject: any = {};
-    pairs.forEach((tags) => {
-      labelObject[tags.key] = tags.value;
-    });
-    return labelObject;
-  };
 
   // object to labels
   const objectToLabels = (data: any) => {
@@ -321,7 +340,12 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       const metadataP = updateMetadata({
         projectName: SharedStorage.project?.name ?? "",
         metadataList: {
-          metadata: [...userDefinedMeta, ...inheritedMeta],
+          metadata: [
+            ...objectToMetadataPair(
+              (currentCluster.labels || {}) as ObjectKeyValue,
+            ),
+            ...inheritedMeta,
+          ],
         },
       }).unwrap();
       promises.push(metadataP);
@@ -349,11 +373,9 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
       {/** TODO: MetadataLabel needs to be refactored. This causing a performance issue with rerendering in circle. */}
       <MetadataLabels
-        regionMeta={siteData?.inheritedMetadata?.location ?? []}
-        siteMeta={siteData?.metadata ?? []}
-        clusterLabels={currentCluster.labels ?? {}}
-        getInheritedMeta={(meta) => setInheritedMeta(meta)}
-        getUserDefinedMeta={(meta) => setUserDefinedMeta(meta)}
+        // Labels is of type `object` which is not recognized as ObjectKeyValue `{[key: string]: string}`
+        inheritedMetadata={inheritedMeta}
+        clusterLabels={(currentCluster.labels ?? {}) as ObjectKeyValue}
       />
 
       {siteData && siteData.region && (

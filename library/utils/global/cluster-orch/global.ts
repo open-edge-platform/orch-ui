@@ -6,6 +6,7 @@
 import { cm } from "@orch-ui/apis";
 import {
   GenericStatus,
+  MetadataPair,
   Status as IconStatus,
   Status,
 } from "@orch-ui/components";
@@ -185,4 +186,31 @@ export const getTrustedComputeCluster = (
         "This cluster does not contain any host that has Secure Boot and Full Disk Encryption enabled.",
     };
   }
+};
+
+/** Label Object type */
+export interface ObjectKeyValue {
+  [key: string]: string;
+}
+
+/** Label Object to MetadataPair */
+export const objectToMetadataPair = (data: ObjectKeyValue) => {
+  const labelPair: MetadataPair[] = [];
+  Object.entries(data).forEach(function (entry) {
+    const label = {
+      key: entry[0],
+      value: entry[1],
+    };
+    labelPair.push(label);
+  });
+  return labelPair;
+};
+
+// labels to object
+export const metadataPairToObject = (pairs: MetadataPair[]) => {
+  const labelObject: any = {};
+  pairs.forEach((tags) => {
+    labelObject[tags.key] = tags.value;
+  });
+  return labelObject;
 };
