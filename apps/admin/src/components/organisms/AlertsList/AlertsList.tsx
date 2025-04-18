@@ -11,10 +11,10 @@ import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import AlertDisplayName from "../../atoms/AlertDisplayName/AlertDisplayName";
 import AlertSource from "../../atoms/AlertSource/AlertSource";
 import AlertDrawer from "../AlertDrawer/AlertDrawer";
 import "./AlertsList.scss";
-import AlertDisplayName from "../../atoms/AlertDisplayName/AlertDisplayName";
 
 const dataCy = "alertsList";
 
@@ -57,9 +57,11 @@ const AlertsList = () => {
               setIsOpen(true);
             }}
           >
-            {alertDefinition
-              ? <AlertDisplayName alertDefinition={alertDefinition} />
-              : table.row.original.alertDefinitionId}
+            {alertDefinition ? (
+              <AlertDisplayName alertDefinition={alertDefinition} />
+            ) : (
+              table.row.original.alertDefinitionId
+            )}
           </Button>
         );
       },

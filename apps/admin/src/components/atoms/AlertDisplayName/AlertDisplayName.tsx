@@ -31,7 +31,9 @@ const AlertDisplayName = ({ alertDefinition }: AlertDisplayNameProps) => {
   return (
     <div {...cy} className="alert-display-name">
       <Text size="m">
-        {isSuccess && alertDefinitionTemplate.annotations && alertDefinitionTemplate.annotations["display_name"]
+        {isSuccess &&
+        alertDefinitionTemplate.annotations &&
+        alertDefinitionTemplate.annotations["display_name"]
           ? alertDefinitionTemplate.annotations["display_name"]
           : alertDefinition.name}
       </Text>
