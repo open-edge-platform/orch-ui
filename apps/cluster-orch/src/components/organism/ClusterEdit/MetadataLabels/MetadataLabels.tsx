@@ -7,13 +7,10 @@ import {
   Flex,
   MetadataDisplay,
   MetadataForm,
+  MetadataPair,
   TypedMetadata,
 } from "@orch-ui/components";
-import {
-  metadataPairToObject,
-  ObjectKeyValue,
-  objectToMetadataPair,
-} from "@orch-ui/utils";
+import { metadataPairToObject } from "@orch-ui/utils";
 import { Heading, MessageBanner } from "@spark-design/react";
 import { useAppDispatch } from "../../../../store/hooks";
 import { updateClusterLabels } from "../../../../store/reducers/cluster";
@@ -21,7 +18,7 @@ import { updateClusterLabels } from "../../../../store/reducers/cluster";
 const dataCy = "metadataLabels";
 interface MetadataLabelsProps {
   inheritedMetadata: TypedMetadata[];
-  clusterLabels: ObjectKeyValue;
+  clusterLabels: MetadataPair[];
 }
 
 const MetadataLabels = ({
@@ -51,11 +48,12 @@ const MetadataLabels = ({
 
         <Flex cols={[6, 6]}>
           <MetadataForm
-            pairs={objectToMetadataPair(clusterLabels)}
+            pairs={clusterLabels}
             leftLabelText="Key"
             rightLabelText="Value"
             buttonText="+"
             onUpdate={(metadata) => {
+              // Update the cluster labels in the redux store
               dispatch(updateClusterLabels(metadataPairToObject(metadata)));
             }}
           />

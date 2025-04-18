@@ -371,7 +371,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
       <MetadataLabels
         inheritedMetadata={inheritedMeta}
-        clusterLabels={currentClusterLabel}
+        clusterLabels={objectToMetadataPair(currentClusterLabel)}
       />
 
       {siteData && siteData.region && (
