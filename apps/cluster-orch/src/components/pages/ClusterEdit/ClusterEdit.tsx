@@ -295,22 +295,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     return newNodes;
   };
 
-  // object to labels
-  const objectToLabels = (data: any) => {
-    const labelPair: MetadataPair[] = [];
-    Object.keys(data).map(function (personNamedIndex) {
-      if (data) {
-        const label = {
-          key: personNamedIndex,
-          value: data[personNamedIndex],
-        };
-        labelPair.push(label);
-        return data[personNamedIndex];
-      }
-    });
-    return labelPair;
-  };
-
   /**
    * editHandler checks for all the required updates and creates a list of promises
    * with all the required calls. Then sends all the requests in parallel.
