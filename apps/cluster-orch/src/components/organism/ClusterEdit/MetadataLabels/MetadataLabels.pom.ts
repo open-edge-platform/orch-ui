@@ -18,5 +18,12 @@ class MetadataLabelsPom extends CyPom<Selectors> {
   constructor(public rootCy: string = "metadataLabels") {
     super(rootCy, [...dataCySelectors]);
   }
+
+  getMetadataKeyInput(index: number) {
+    return this.metadataForm.el.pair
+      .eq(index)
+      .find("[data-cy='metadataKey'] input")
+      .first();
+  }
 }
 export default MetadataLabelsPom;
