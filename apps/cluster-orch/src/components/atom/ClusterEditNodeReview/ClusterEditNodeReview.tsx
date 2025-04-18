@@ -5,8 +5,7 @@
 
 import { cm } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
-import { Button, Heading, Table } from "@spark-design/react";
-import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
+import { Heading, Table } from "@spark-design/react";
 import { NodeTableColumns } from "../../../utils/NodeTableColumns";
 import NodeRoleDropdown from "../NodeRoleDropdown/NodeRoleDropdown";
 
@@ -56,17 +55,18 @@ const ClusterEditNodeReview = ({
         />
       );
     }),
-    NodeTableColumns.actions((node) => (
-      <Button
-        data-cy="removeHostBtn"
-        className="remove-host-button"
-        size={ButtonSize.Medium}
-        variant={ButtonVariant.Ghost}
-        onPress={() => onRemoveNode(node)}
-      >
-        Remove from Cluster
-      </Button>
-    )),
+    /** This is not supported by Cluster Manager (cm) Api */
+    // NodeTableColumns.actions((node) => (
+    //   <Button
+    //     data-cy="removeHostBtn"
+    //     className="remove-host-button"
+    //     size={ButtonSize.Medium}
+    //     variant={ButtonVariant.Ghost}
+    //     onPress={() => onRemoveNode(node)}
+    //   >
+    //     Remove from Cluster
+    //   </Button>
+    // )),
   ];
 
   return (
@@ -96,7 +96,8 @@ const ClusterEditNodeReview = ({
         "No hosts available."
       )}
 
-      <Button
+      {/** This is not supported by Cluster Manager (cm) Api */}
+      {/* <Button
         data-cy="addHostBtn"
         className="add-host-button"
         size={ButtonSize.Large}
@@ -104,7 +105,7 @@ const ClusterEditNodeReview = ({
         onPress={onAddNode}
       >
         Add Host
-      </Button>
+      </Button> */}
     </div>
   );
 };
