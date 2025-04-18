@@ -14,6 +14,7 @@ import { useSearchParams } from "react-router-dom";
 import AlertSource from "../../atoms/AlertSource/AlertSource";
 import AlertDrawer from "../AlertDrawer/AlertDrawer";
 import "./AlertsList.scss";
+import AlertDisplayName from "../../atoms/AlertDisplayName/AlertDisplayName";
 
 const dataCy = "alertsList";
 
@@ -44,7 +45,7 @@ const AlertsList = () => {
       Header: "Alert",
       accessor: "alertDefinitionId",
       Cell: (table: { row: { original: omApi.Alert } }) => {
-        const filteredADs = alertDefinitions?.alertDefinitions?.filter(
+        const alertDefinition = alertDefinitions?.alertDefinitions?.find(
           (ad) => ad.id === table.row.original.alertDefinitionId,
         );
         return (
@@ -56,8 +57,8 @@ const AlertsList = () => {
               setIsOpen(true);
             }}
           >
-            {filteredADs && filteredADs.length > 0
-              ? filteredADs[0].name
+            {alertDefinition
+              ? <AlertDisplayName alertDefinition={alertDefinition} />
               : table.row.original.alertDefinitionId}
           </Button>
         );

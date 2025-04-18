@@ -27,10 +27,11 @@ const AlertDisplayName = ({ alertDefinition }: AlertDisplayNameProps) => {
       skip: !alertDefinition.id || !SharedStorage.project?.name,
     },
   );
+
   return (
     <div {...cy} className="alert-display-name">
       <Text size="m">
-        {isSuccess && alertDefinitionTemplate.annotations
+        {isSuccess && alertDefinitionTemplate.annotations && alertDefinitionTemplate.annotations["display_name"]
           ? alertDefinitionTemplate.annotations["display_name"]
           : alertDefinition.name}
       </Text>
