@@ -5,8 +5,7 @@
 
 import { cm } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
-import { Button, Heading, Table } from "@spark-design/react";
-import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
+import { Heading, Table } from "@spark-design/react";
 import { NodeTableColumns } from "../../../utils/NodeTableColumns";
 import NodeRoleDropdown from "../NodeRoleDropdown/NodeRoleDropdown";
 
@@ -21,17 +20,15 @@ interface ClusterEditNodeReviewProps {
   /** Notify any changes to node via the node dropdown */
   onNodeUpdate: (node: cm.NodeInfo, value: NodeRoles) => void;
   /** Notify click on Add Host button */
-  onAddNode: () => void;
+  onAddNode?: () => void;
   /** Notify click on Remove Host button */
-  onRemoveNode: (node: cm.NodeInfo) => void;
+  onRemoveNode?: (node: cm.NodeInfo) => void;
 }
 
 const ClusterEditNodeReview = ({
   clusterNodeList = [],
   configuredClusterNode = [],
   onNodeUpdate,
-  onAddNode,
-  onRemoveNode,
 }: ClusterEditNodeReviewProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -56,17 +53,18 @@ const ClusterEditNodeReview = ({
         />
       );
     }),
-    NodeTableColumns.actions((node) => (
-      <Button
-        data-cy="removeHostBtn"
-        className="remove-host-button"
-        size={ButtonSize.Medium}
-        variant={ButtonVariant.Ghost}
-        onPress={() => onRemoveNode(node)}
-      >
-        Remove from Cluster
-      </Button>
-    )),
+    /** This is not supported by Cluster Manager (cm) Api */
+    // NodeTableColumns.actions((node) => (
+    //   <Button
+    //     data-cy="removeHostBtn"
+    //     className="remove-host-button"
+    //     size={ButtonSize.Medium}
+    //     variant={ButtonVariant.Ghost}
+    //     onPress={() => onRemoveNode(node)}
+    //   >
+    //     Remove from Cluster
+    //   </Button>
+    // )),
   ];
 
   return (
@@ -96,7 +94,8 @@ const ClusterEditNodeReview = ({
         "No hosts available."
       )}
 
-      <Button
+      {/** This is not supported by Cluster Manager (cm) Api */}
+      {/* <Button
         data-cy="addHostBtn"
         className="add-host-button"
         size={ButtonSize.Large}
@@ -104,7 +103,7 @@ const ClusterEditNodeReview = ({
         onPress={onAddNode}
       >
         Add Host
-      </Button>
+      </Button> */}
     </div>
   );
 };
