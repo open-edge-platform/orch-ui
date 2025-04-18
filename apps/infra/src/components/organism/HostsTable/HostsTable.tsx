@@ -178,8 +178,7 @@ const HostsTable = ({
     setSearchParams((prev) => {
       const previousSearchTerm = prev.get("searchTerm");
 
-      if ((!previousSearchTerm || previousSearchTerm === null) && !searchTerm)
-        return prev;
+      if (!previousSearchTerm && !searchTerm) return prev;
 
       // reset page offset before getting search result
       prev.set("offset", "0");
