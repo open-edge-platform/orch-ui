@@ -15,8 +15,8 @@ import {
   objectToMetadataPair,
 } from "@orch-ui/utils";
 import { Heading, MessageBanner } from "@spark-design/react";
-import { updateClusterLabels } from "src/store/reducers/cluster";
 import { useAppDispatch } from "../../../../store/hooks";
+import { updateClusterLabels } from "../../../../store/reducers/cluster";
 
 const dataCy = "metadataLabels";
 interface MetadataLabelsProps {
