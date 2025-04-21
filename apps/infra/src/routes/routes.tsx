@@ -17,10 +17,18 @@ import Hosts from "../components/pages/Hosts/Hosts";
 import RegionForm from "../components/pages/region/RegionForm";
 import SiteForm from "../components/pages/site/SiteForm";
 import {
+  addRegionRoute,
+  addSiteRoute,
+  addSubRegionRoute,
+  clusterCreateRoute,
+  clusterDetailRoute,
+  clusterEditRoute,
+  clusterManagementRoute,
   hostConfigureRoute,
   hostDetailsGuidRoute,
   hostDetailsRoute,
   hostsRoute,
+  locationRoute,
   unassignedDetailsRoute,
   unconfiguredDetailsGuidRoute,
   unconfiguredDetailsRoute,
@@ -67,15 +75,15 @@ export const createChildRoutes = () => {
       element: <Navigate to={hostsRoute} replace />,
     },
     {
-      path: "regions/:regionId",
+      path: addRegionRoute,
       element: <RegionForm />,
     },
     {
-      path: "regions/parent/:parentRegionId/:regionId",
+      path: addSubRegionRoute,
       element: <RegionForm />,
     },
     {
-      path: "regions/:regionId/sites/:siteId",
+      path: addSiteRoute,
       element: <SiteForm />,
     },
     {
@@ -83,7 +91,7 @@ export const createChildRoutes = () => {
       element: <SiteForm />,
     },
     {
-      path: "locations",
+      path: locationRoute,
       element: <Locations />,
     },
     {
@@ -177,10 +185,10 @@ const addClusterRoute = (path: string, subComponent: RemoteComponent) => {
 };
 
 if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
-  addClusterRoute("clusters", ClusterManagement);
-  addClusterRoute("cluster/:clusterName", ClusterDetail);
-  addClusterRoute("cluster/:clusterName/edit", ClusterEdit);
-  addClusterRoute("clusters/create", ClusterCreation);
+  addClusterRoute(clusterManagementRoute, ClusterManagement);
+  addClusterRoute(clusterDetailRoute, ClusterDetail);
+  addClusterRoute(clusterEditRoute, ClusterEdit);
+  addClusterRoute(clusterCreateRoute, ClusterCreation);
 }
 
 export const childRoutes = routes;
