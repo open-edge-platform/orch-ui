@@ -56,6 +56,9 @@ runs:
             VERSION_DIR=$(dirname "$VERSION_PATH")
             UPDATE_SCRIPT="$VERSION_DIR/.update-versions.sh"
 
+            echo "DEBUG: VERSION_DIR = $VERSION_DIR"
+            echo "DEBUG: UPDATE_SCRIPT = $UPDATE_SCRIPT"
+
             if [ -f "$UPDATE_SCRIPT" ]; then
               echo "Found .update-versions.sh in $VERSION_DIR, executing..."
               chmod +x "$UPDATE_SCRIPT"
