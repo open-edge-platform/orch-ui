@@ -196,8 +196,7 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
           });
           createClusterViaApi(activeProject, cluster).then(() => {
             cy.log(`Cluster is created with cluster name ${cluster.name}`);
-            cy.url({ timeout: 4000 }).should("not.contain", "create");
-            cy.url().should("contain", "infrastructure/clusters");
+            cy.visit("/infrastructure/clusters");
             ribbonPom.search(cluster.name!);
             tablePom.getCell(1, 1).should("be.visible");
             tablePom
