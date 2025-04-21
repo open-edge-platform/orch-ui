@@ -12,6 +12,9 @@ else
 fi
 
 app_name=$(basename "$(pwd)")
+echo "Current directory before cd: $(pwd)"
 cd ../../
+echo "Current directory after cd: $(pwd)"
+echo "Checking if tools directory exists: $(ls -la | grep tools)"
 
 bash ./tools/set-version.sh "$app_name" "$new_version"
