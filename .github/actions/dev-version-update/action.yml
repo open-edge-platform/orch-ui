@@ -52,15 +52,15 @@ runs:
             NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
             echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
 
-            # Check if .update-versions.sh exists in the same directory and execute it
+            # Check if .update-version.sh exists in the same directory and execute it
             VERSION_DIR=$(dirname "$VERSION_PATH")
-            UPDATE_SCRIPT="$VERSION_DIR/.update-versions.sh"
+            UPDATE_SCRIPT="$VERSION_DIR/.update-version.sh"
 
             echo "DEBUG: VERSION_DIR = $VERSION_DIR"
             echo "DEBUG: UPDATE_SCRIPT = $UPDATE_SCRIPT"
 
             if [ -f "$UPDATE_SCRIPT" ]; then
-              echo "Found .update-versions.sh in $VERSION_DIR, executing..."
+              echo "Found .update-version.sh in $VERSION_DIR, executing..."
               chmod +x "$UPDATE_SCRIPT"
               "$UPDATE_SCRIPT" "$NEXT_VERSION"
             fi
