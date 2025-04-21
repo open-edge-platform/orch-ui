@@ -89,6 +89,12 @@ describe("<Details/>", () => {
         pom.el.name.type("$$");
         cy.contains("Name should not contain special characters");
       });
+
+      it("should not allow more characters than allowed", () => {
+        pom.el.name.clear();
+        pom.el.name.type("123456789012345678901");
+        pom.el.name.should("have.value", "12345678901234567890");
+      });
     });
   });
 

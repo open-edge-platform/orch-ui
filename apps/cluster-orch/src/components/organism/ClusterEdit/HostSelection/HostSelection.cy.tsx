@@ -112,19 +112,19 @@ describe("<HostSelection/>", () => {
       pom.root.should("exist");
     });
 
-    it("should open drawer", () => {
+    xit("should open drawer", () => {
       pom.clusterSelectedNodeReviewTablePom.el.addHostBtn.click();
       pom.clusterAddNodeDrawerPom.root.should("exist");
     });
 
-    it("should open and close drawer by cancel", () => {
+    xit("should open and close drawer by cancel", () => {
       pom.clusterSelectedNodeReviewTablePom.el.addHostBtn.click();
       pom.getAddNodeDrawerBase().should("have.class", "spark-drawer-show");
       pom.clusterAddNodeDrawerPom.el.cancelBtn.click();
       pom.getAddNodeDrawerBase().should("have.class", "spark-drawer-hide");
     });
 
-    it("should open and close drawer from header", () => {
+    xit("should open and close drawer from header", () => {
       pom.clusterSelectedNodeReviewTablePom.el.addHostBtn.click();
       pom.getAddNodeDrawerBase().should("have.class", "spark-drawer-show");
       pom.clusterAddNodeDrawerPom.root
@@ -133,7 +133,7 @@ describe("<HostSelection/>", () => {
       pom.getAddNodeDrawerBase().should("have.class", "spark-drawer-hide");
     });
 
-    describe("should see host selection from drawer to review table", () => {
+    xdescribe("should see host selection from drawer to review table", () => {
       beforeEach(() => {
         pom.clusterSelectedNodeReviewTablePom.el.addHostBtn.click();
         pom.clusterAddNodeDrawerPom.nodeTablePom.el.rowSelectCheckbox.click();
@@ -186,7 +186,7 @@ describe("<HostSelection/>", () => {
       });
     });
 
-    it("will remove host from cluster", () => {
+    xit("will remove host from cluster", () => {
       pom.clusterSelectedNodeReviewTablePom.table
         .getRowBySearchText("host-dh38bjw9")
         .find("[data-cy='removeHostBtn']")

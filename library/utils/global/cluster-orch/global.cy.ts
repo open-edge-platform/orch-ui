@@ -4,64 +4,14 @@
  */
 
 import { cm } from "@orch-ui/apis";
-import { Status } from "@orch-ui/components";
+import { MetadataPair } from "@orch-ui/components";
 import {
-  clusterStatusToIconStatus,
-  clusterStatusToText,
   getTrustedComputeCluster,
+  metadataPairToObject,
+  objectToMetadataPair,
 } from "./global";
 
 describe("The Utils", () => {
-  describe("clusterStatusToText", () => {
-    it("should convert status to text correctly", () => {
-      const assertions: {
-        [key in Exclude<cm.ClusterInfo["status"], undefined>]: string;
-      } = {
-        init: "Init",
-        creating: "Creating",
-        reconciling: "Reconciling",
-        active: "Running",
-        updating: "Updating",
-        removing: "Removing",
-        inactive: "Down",
-        error: "Error",
-      };
-      for (const key in assertions) {
-        expect(
-          clusterStatusToText(
-            key as Exclude<cm.ClusterInfo["status"], undefined>,
-          ),
-        ).eq(assertions[key as Exclude<cm.ClusterInfo["status"], undefined>]);
-      }
-      expect(clusterStatusToText()).eq("unknown");
-    });
-  });
-
-  describe("clusterStatusToIconStatus", () => {
-    it("should return status correctly", () => {
-      const assertions: {
-        [key in Exclude<cm.ClusterInfo["status"], undefined>]: string;
-      } = {
-        init: Status.Ready,
-        creating: Status.NotReady,
-        reconciling: Status.NotReady,
-        active: Status.Ready,
-        updating: Status.NotReady,
-        removing: Status.NotReady,
-        inactive: Status.Error,
-        error: Status.Error,
-      };
-      for (const key in assertions) {
-        expect(
-          clusterStatusToIconStatus(
-            key as Exclude<cm.ClusterInfo["status"], undefined>,
-          ),
-        ).eq(assertions[key as Exclude<cm.ClusterInfo["status"], undefined>]);
-      }
-      expect(clusterStatusToIconStatus()).eq(Status.Unknown);
-    });
-  });
-
   describe("getTrustedComputeCluster", () => {
     it("should return compatible when trusted-compute-compatible label is true", () => {
       const cluster = {
@@ -119,6 +69,44 @@ describe("The Utils", () => {
         tooltip:
           "This cluster does not contain any host that has Secure Boot and Full Disk Encryption enabled.",
       });
+    });
+  });
+
+  describe("objectToMetadataPair", () => {
+    it("should convert object to metadata pair correctly", () => {
+      const data = {
+        key1: "value1",
+        key2: "value2",
+      };
+      const result = objectToMetadataPair(data);
+      expect(result).to.deep.equal([
+        { key: "key1", value: "value1" },
+        { key: "key2", value: "value2" },
+      ]);
+    });
+    it("should return empty array when object is empty", () => {
+      const data = {};
+      const result = objectToMetadataPair(data);
+      expect(result).to.deep.equal([]);
+    });
+  });
+
+  describe("metadataPairToObject", () => {
+    it("should convert metadata pair to object correctly", () => {
+      const pairs = [
+        { key: "key1", value: "value1" },
+        { key: "key2", value: "value2" },
+      ];
+      const result = metadataPairToObject(pairs);
+      expect(result).to.deep.equal({
+        key1: "value1",
+        key2: "value2",
+      });
+    });
+    it("should return empty object when pairs are empty", () => {
+      const pairs: MetadataPair[] = [];
+      const result = metadataPairToObject(pairs);
+      expect(result).to.deep.equal({});
     });
   });
 });

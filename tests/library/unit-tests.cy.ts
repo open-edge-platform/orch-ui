@@ -69,6 +69,7 @@ import "../../library/components/atomic-design/templates/SidebarMain/SidebarMain
 //utils
 import "../../library/utils/authConfig/authConfig.cy.tsx";
 import "../../library/utils/fileHandler/fileHandler.cy.tsx";
+import "../../library/utils/global/cluster-orch/global.cy.ts";
 import "../../library/utils/global/global.cy.tsx";
 import "../../library/utils/mocks/baseStore.cy.ts";
 import "../../library/utils/route-helpers/routeHelpers.cy.tsx";

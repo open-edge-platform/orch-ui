@@ -28,6 +28,7 @@ lib
 !library/@spark-design/utils/lib
 tests/cypress-mochawesome-reporter.log
 apps/**/*.tgz
+temp_release_notes.txt
 
 #python
 __pycache__
