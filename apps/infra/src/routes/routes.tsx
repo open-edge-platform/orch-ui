@@ -17,21 +17,19 @@ import Hosts from "../components/pages/Hosts/Hosts";
 import RegionForm from "../components/pages/region/RegionForm";
 import SiteForm from "../components/pages/site/SiteForm";
 import {
-  addRegionRoute,
-  addSiteRoute,
-  addSubRegionRoute,
   clusterCreateRoute,
   clusterDetailRoute,
   clusterEditRoute,
   clusterManagementRoute,
-  hostConfigureRoute,
-  hostDetailsGuidRoute,
   hostDetailsRoute,
+  hostEditRoute,
+  hostProvisioningRoute,
+  hostRegisterRoute,
   hostsRoute,
   locationRoute,
-  unassignedDetailsRoute,
-  unconfiguredDetailsGuidRoute,
-  unconfiguredDetailsRoute,
+  regionRoute,
+  siteRoute,
+  subRegionRoute,
 } from "./const";
 
 import { BreadcrumbWrapper } from "../components/atom/BreadcrumbWrapper/BreadcrumbWrapper";
@@ -75,21 +73,21 @@ export const createChildRoutes = () => {
       element: <Navigate to={hostsRoute} replace />,
     },
     {
-      path: addRegionRoute,
+      path: regionRoute,
       element: <RegionForm />,
     },
     {
-      path: addSubRegionRoute,
+      path: subRegionRoute,
       element: <RegionForm />,
     },
     {
-      path: addSiteRoute,
+      path: siteRoute,
       element: <SiteForm />,
     },
-    {
-      path: "sites/:siteId",
-      element: <SiteForm />,
-    },
+    // {
+    //   path: "sites/:siteId",
+    //   element: <SiteForm />,
+    // },
     {
       path: locationRoute,
       element: <Locations />,
@@ -99,11 +97,11 @@ export const createChildRoutes = () => {
       element: <Hosts />,
     },
     {
-      path: `${hostsRoute}/set-up-provisioning`,
+      path: hostProvisioningRoute,
       element: <HostConfig />,
     },
     {
-      path: "register-hosts",
+      path: hostRegisterRoute,
       element: (
         <RBACWrapper
           showTo={[Role.INFRA_MANAGER_WRITE]}
@@ -114,44 +112,44 @@ export const createChildRoutes = () => {
       ),
     },
     {
-      path: `${hostDetailsRoute}/edit`,
+      path: hostEditRoute,
       element: <HostEdit />,
     },
-    {
-      path: `${unassignedDetailsRoute}/edit`,
-      element: <HostEdit />,
-    },
+    // {
+    //   path: `${unassignedDetailsRoute}/edit`,
+    //   element: <HostEdit />,
+    // },
     {
       path: hostDetailsRoute,
       element: <HostDetails />,
     },
-    {
-      path: unassignedDetailsRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: hostDetailsGuidRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: unconfiguredDetailsRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: unconfiguredDetailsGuidRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: hostConfigureRoute,
-      element: (
-        <RBACWrapper
-          showTo={[Role.INFRA_MANAGER_WRITE]}
-          missingRoleContent={<PermissionDenied />}
-        >
-          <HostConfig />
-        </RBACWrapper>
-      ),
-    },
+    // {
+    //   path: unassignedDetailsRoute,
+    //   element: <HostDetails />,
+    // },
+    // {
+    //   path: hostDetailsGuidRoute,
+    //   element: <HostDetails />,
+    // },
+    // {
+    //   path: unconfiguredDetailsRoute,
+    //   element: <HostDetails />,
+    // },
+    // {
+    //   path: unconfiguredDetailsGuidRoute,
+    //   element: <HostDetails />,
+    // },
+    // {
+    //   path: hostConfigureRoute,
+    //   element: (
+    //     <RBACWrapper
+    //       showTo={[Role.INFRA_MANAGER_WRITE]}
+    //       missingRoleContent={<PermissionDenied />}
+    //     >
+    //       <HostConfig />
+    //     </RBACWrapper>
+    //   ),
+    // },
     {
       path: "/admin/*",
       element: (

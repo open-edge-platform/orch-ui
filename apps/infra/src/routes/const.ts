@@ -10,15 +10,41 @@ export const clusterDetailRoute = "cluster/:clusterName";
 export const clusterEditRoute = "cluster/:clusterName/edit";
 export const clusterCreateRoute = "clusters/create";
 export const locationRoute = "locations";
-export const addRegionRoute = "regions/:regionId";
-export const addSubRegionRoute = "regions/parent/:parentRegionId/:regionId";
-export const addSiteRoute = "regions/:regionId/sites/:siteId";
+export const regionRoute = "regions/:regionId";
+export const subRegionRoute = "regions/parent/:parentRegionId/:regionId";
+export const siteRoute = "regions/:regionId/sites/:siteId";
+export const hostsRoute = "hosts";
+export const hostDetailsRoute = "host/:id";
+export const hostEditRoute = "host/:id/edit";
+export const hostRegisterRoute = "register-hosts";
+export const hostProvisioningRoute = "/hosts/set-up-provisioning";
 
+// Path generators for all dynamic routes
+export const getClusterDetailPath = (clusterName: string) =>
+  clusterDetailRoute.replace(":clusterName", clusterName);
+
+export const getClusterEditPath = (clusterName: string) =>
+  clusterEditRoute.replace(":clusterName", clusterName);
+
+export const getRegionPath = (regionId: string) =>
+  regionRoute.replace(":regionId", regionId);
+
+export const getSubRegionPath = (parentRegionId: string, regionId: string) =>
+  subRegionRoute
+    .replace(":parentRegionId", parentRegionId)
+    .replace(":regionId", regionId);
+
+export const getSitePath = (regionId: string, siteId: string) =>
+  siteRoute.replace(":regionId", regionId).replace(":siteId", siteId);
+
+export const getHostDetailsPath = (id: string) =>
+  hostDetailsRoute.replace(":id", id);
+
+export const getHostEditPath = (id: string) => hostEditRoute.replace(":id", id);
+// Needed ??????
 export const regionsRoute = "regions";
 export const sitesRoute = "sites";
-export const hostsRoute = "hosts";
 export const summary = "summary";
-export const hostDetailsRoute = "host/:id";
 export const unassignedDetailsRoute = "unassigned-host/:id";
 export const unconfiguredDetailsRoute = "unconfigured-host/:id";
 export const hostDetailsGuidRoute = "host/uuid/:uuid";
@@ -34,9 +60,9 @@ export const allClusterRoutes = [
 export const allHostRoutes = [hostsRoute, hostDetailsRoute, hostConfigureRoute];
 export const allLocationRoutes = [
   locationRoute,
-  addRegionRoute,
-  addSubRegionRoute,
-  addSiteRoute,
+  regionRoute,
+  subRegionRoute,
+  siteRoute,
 ];
 
 export type InfraRoute =
