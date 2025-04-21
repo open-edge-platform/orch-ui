@@ -52,52 +52,24 @@ runs:
             NEXT_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
             echo "Updating $VERSION_PATH from $NEW_VERSION to $NEXT_VERSION"
 
+            # Check if .update-versions.sh exists in the same directory and execute it
+            VERSION_DIR=$(dirname "$VERSION_PATH")
+            UPDATE_SCRIPT="$VERSION_DIR/.update-versions.sh"
+
+            if [ -f "$UPDATE_SCRIPT" ]; then
+              echo "Found .update-versions.sh in $VERSION_DIR, executing..."
+              chmod +x "$UPDATE_SCRIPT"
+              "$UPDATE_SCRIPT" "$NEXT_VERSION"
+            fi
+
             echo "$NEXT_VERSION" > "$VERSION_PATH"
             git add "$VERSION_PATH"
             CHANGES_MADE=1
           fi
         done
 
-        # Process Helm Chart.yaml files
-        CHART_FIND_CMD="find . -name Chart.yaml -type f"
-
-        for EXCLUDE in "${EXCLUDE_PATHS[@]}"; do
-          CHART_FIND_CMD="$CHART_FIND_CMD -not -path \"$EXCLUDE\""
-        done
-
-        echo "Executing: $CHART_FIND_CMD"
-
-        for CHART_PATH in $(eval $CHART_FIND_CMD 2>/dev/null || echo ""); do
-          echo "Processing Helm chart: $CHART_PATH"
-
-          export VERSIONFILE="$CHART_PATH"
-
-          RELEASE_VERSION=0
-          read_version
-          check_if_releaseversion
-
-          if [ $RELEASE_VERSION -eq 1 ]; then
-            NEXT_CHART_VERSION=$(get_next_version "$NEW_VERSION" "-dev")
-            echo "Updating Helm chart $CHART_PATH from $NEW_VERSION to $NEXT_CHART_VERSION"
-
-            # Update the version field in Chart.yaml
-            sed -i "s/^version:.*$/version: $NEXT_CHART_VERSION/" "$CHART_PATH"
-
-            # Also update appVersion if it exists and doesn't have -dev suffix
-            APP_VERSION=$(grep -E '^appVersion:' "$CHART_PATH" | awk '{print $2}' | tr -d '"' | tr -d "'")
-            if [[ -n "$APP_VERSION" && "$APP_VERSION" != *"-dev"* ]]; then
-              NEXT_APP_VERSION=$(get_next_version "$APP_VERSION" "-dev")
-              echo "Updating appVersion from $APP_VERSION to $NEXT_APP_VERSION"
-              sed -i "s/^appVersion:.*$/appVersion: \"$NEXT_APP_VERSION\"/" "$CHART_PATH"
-            fi
-
-            git add "$CHART_PATH"
-            CHANGES_MADE=1
-          fi
-        done
-
         if [ $CHANGES_MADE -eq 1 ]; then
-          git commit -m "Update VERSION files and Helm charts to next dev version"
+          git commit -m "Update VERSION files to next dev version"
 
           echo "------------------------------------------------------"
           echo "Summary of updates:"
@@ -106,23 +78,23 @@ runs:
           done
           echo "------------------------------------------------------"
 
-          git push origin $BRANCH_NAME
+          # git push origin $BRANCH_NAME
 
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          echo "changes_made=true" >> $GITHUB_OUTPUT
+          # echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          # echo "changes_made=true" >> $GITHUB_OUTPUT
         else
-          echo "No VERSION files or Helm charts found to update"
+          echo "No VERSION files found to update"
           echo "changes_made=false" >> $GITHUB_OUTPUT
         fi
 
-    - name: Create Pull Request
-      if: steps.update_versions.outputs.changes_made == 'true'
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh pr create \
-          --title "Version bump to -dev" \
-          --body "Automatically bumping version files to next development iteration (-dev suffix)." \
-          --base main \
-          --head ${{ steps.update_versions.outputs.branch_name }}
+    # - name: Create Pull Request
+    #   if: steps.update_versions.outputs.changes_made == 'true'
+    #   shell: bash
+    #   env:
+    #     GH_TOKEN: ${{ github.token }}
+    #   run: |
+    #     gh pr create \
+    #       --title "Version bump to -dev" \
+    #       --body "Automatically bumping version files to next development iteration (-dev suffix)." \
+    #       --base main \
+    #       --head ${{ steps.update_versions.outputs.branch_name }}
