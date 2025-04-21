@@ -11,4 +11,7 @@ else
   exit 1
 fi
 
-bash ./tools/set-version.sh "$new_version"
+app_name=$(basename "$(pwd)")
+cd ../../
+
+bash ./tools/set-version.sh "$app_name" "$new_version"
