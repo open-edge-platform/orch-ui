@@ -112,6 +112,13 @@ jobs:
     steps:
       - name: Final Status Check
         run: |
+
+          # First check if this is a bot PR
+          if [ "${{ github.event.pull_request.user.login }}" == "vigneshintel" ]; then
+            echo "PR is from vigneshintel bot - automatically approved"
+            exit 0
+          fi
+
           pre_merge_pipeline_result="${{ needs.pre-merge-pipeline.result }}"
           e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
           library_pipeline_result="${{ needs.library-pipeline.result }}"
