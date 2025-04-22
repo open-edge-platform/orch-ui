@@ -49,6 +49,9 @@ async function prepare() {
     const { clusterHandlers, clusterTemplateHandlers } = await import(
       "../../../library/utils/mocks/cluster-orch/mocks"
     );
+    const { tenantManagerHandlers, observabilityHandlers } = await import(
+      "../../../library/utils/mocks/tenancy/index"
+    );
 
     const worker = setupWorker(
       ...eim_handlers,
@@ -58,6 +61,8 @@ async function prepare() {
       ...clusterHandlers,
       ...clusterTemplateHandlers,
       ...mb_handlers.handlers,
+      ...tenantManagerHandlers,
+      ...observabilityHandlers,
     );
     return worker.start();
   }

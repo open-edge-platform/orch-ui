@@ -7,7 +7,7 @@ import { omApi } from "@orch-ui/apis";
 
 export const alertDefinitionOne: omApi.AlertDefinition = {
   id: "Host-ConnectionLostID",
-  name: "Host - Connection Lost",
+  name: "HostConnectionLost",
   state: "applied",
   values: {
     threshold: "30",
@@ -17,7 +17,7 @@ export const alertDefinitionOne: omApi.AlertDefinition = {
 
 export const alertDefinitionTwo: omApi.AlertDefinition = {
   id: "Host-Error-ID",
-  name: "Host - Error",
+  name: "HostError",
   state: "applied",
   values: {
     threshold: "30",
@@ -27,7 +27,7 @@ export const alertDefinitionTwo: omApi.AlertDefinition = {
 
 export const alertDefinitionThree: omApi.AlertDefinition = {
   id: "Host-CPUUsageID",
-  name: "Host - CPU Usage",
+  name: "HostCPUUsage",
   state: "applied",
   values: {
     threshold: "30",
@@ -37,7 +37,7 @@ export const alertDefinitionThree: omApi.AlertDefinition = {
 
 export const alertDefinitionFour: omApi.AlertDefinition = {
   id: "Host-RAM-Usage-ID",
-  name: "Host - RAM Usage",
+  name: "HostRAMUsage",
   state: "new",
   values: {
     threshold: "30",
@@ -47,7 +47,7 @@ export const alertDefinitionFour: omApi.AlertDefinition = {
 
 export const alertDefinitionFive: omApi.AlertDefinition = {
   id: "Deployment-Down-ID",
-  name: "Deployment - Down",
+  name: "DeploymentDown",
   state: "applied",
   values: {
     threshold: "30",
@@ -57,7 +57,7 @@ export const alertDefinitionFive: omApi.AlertDefinition = {
 
 export const alertDefinitionSix: omApi.AlertDefinition = {
   id: "Deployment-Error-ID",
-  name: "Deployment - Error",
+  name: "DeploymentError",
   state: "applied",
   values: {
     threshold: "30",
@@ -67,7 +67,7 @@ export const alertDefinitionSix: omApi.AlertDefinition = {
 
 export const alertDefinitionSeven: omApi.AlertDefinition = {
   id: "Cluster-Down-ID",
-  name: "Cluster - Down",
+  name: "ClusterDown",
   state: "new",
   values: {
     threshold: "30",
@@ -77,7 +77,7 @@ export const alertDefinitionSeven: omApi.AlertDefinition = {
 
 export const alertDefinitionEight: omApi.AlertDefinition = {
   id: "Cluster-Error-ID",
-  name: "Cluster - Error",
+  name: "ClusterError",
   state: "applied",
   values: {
     threshold: "30",
@@ -87,7 +87,7 @@ export const alertDefinitionEight: omApi.AlertDefinition = {
 
 export const alertDefinitionNine: omApi.AlertDefinition = {
   id: "Cluster-CPU-Usage-ID",
-  name: "Cluster - CPU Usage",
+  name: "ClusterCPUUsage",
   state: "applied",
   values: {
     threshold: "30",
@@ -97,7 +97,7 @@ export const alertDefinitionNine: omApi.AlertDefinition = {
 
 export const alertDefinitionTen: omApi.AlertDefinition = {
   id: "Cluster-RAM-Usage-ID",
-  name: "Cluster - RAM Usage",
+  name: "ClusterRAMUsage",
   state: "applied",
   values: {
     threshold: "30",
