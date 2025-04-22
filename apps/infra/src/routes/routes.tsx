@@ -28,11 +28,11 @@ import {
   hostsRoute,
   locationRoute,
   regionRoute,
+  regionSiteRoute,
   siteRoute,
   subRegionRoute,
 } from "./const";
 
-import { BreadcrumbWrapper } from "../components/atom/BreadcrumbWrapper/BreadcrumbWrapper";
 import { HostConfig } from "../components/pages/HostConfig/HostConfig";
 import HostEdit from "../components/pages/HostEdit";
 import { Locations } from "../components/pages/Locations/Locations";
@@ -60,10 +60,6 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
   );
 }
 
-const Admin = RuntimeConfig.isEnabled("ADMIN")
-  ? React.lazy(async () => await import("Admin/App"))
-  : null;
-
 export const createChildRoutes = () => {
   const routes: RouteObject[] = [];
 
@@ -81,13 +77,13 @@ export const createChildRoutes = () => {
       element: <RegionForm />,
     },
     {
+      path: regionSiteRoute,
+      element: <SiteForm />,
+    },
+    {
       path: siteRoute,
       element: <SiteForm />,
     },
-    // {
-    //   path: "sites/:siteId",
-    //   element: <SiteForm />,
-    // },
     {
       path: locationRoute,
       element: <Locations />,
@@ -115,53 +111,9 @@ export const createChildRoutes = () => {
       path: hostEditRoute,
       element: <HostEdit />,
     },
-    // {
-    //   path: `${unassignedDetailsRoute}/edit`,
-    //   element: <HostEdit />,
-    // },
     {
       path: hostDetailsRoute,
       element: <HostDetails />,
-    },
-    // {
-    //   path: unassignedDetailsRoute,
-    //   element: <HostDetails />,
-    // },
-    // {
-    //   path: hostDetailsGuidRoute,
-    //   element: <HostDetails />,
-    // },
-    // {
-    //   path: unconfiguredDetailsRoute,
-    //   element: <HostDetails />,
-    // },
-    // {
-    //   path: unconfiguredDetailsGuidRoute,
-    //   element: <HostDetails />,
-    // },
-    // {
-    //   path: hostConfigureRoute,
-    //   element: (
-    //     <RBACWrapper
-    //       showTo={[Role.INFRA_MANAGER_WRITE]}
-    //       missingRoleContent={<PermissionDenied />}
-    //     >
-    //       <HostConfig />
-    //     </RBACWrapper>
-    //   ),
-    // },
-    {
-      path: "/admin/*",
-      element: (
-        <RBACWrapper
-          showTo={[Role.ALERTS_READ, Role.ALERTS_WRITE]}
-          missingRoleContent={<PermissionDenied />}
-        >
-          <Suspense fallback={<SquareSpinner message="One moment..." />}>
-            {Admin !== null ? <Admin /> : "Administration disabled"}
-          </Suspense>
-        </RBACWrapper>
-      ),
     },
   );
 
@@ -174,11 +126,15 @@ export const createChildRoutes = () => {
 };
 const routes = createChildRoutes();
 
-const addClusterRoute = (path: string, subComponent: RemoteComponent) => {
-  if (subComponent)
+const addClusterRoute = (path: string, SubComponent: RemoteComponent) => {
+  if (SubComponent)
     routes.push({
       path,
-      element: <BreadcrumbWrapper subComponent={subComponent} />,
+      element: (
+        <Suspense fallback={<SquareSpinner message="One moment..." />}>
+          <SubComponent />
+        </Suspense>
+      ),
     });
 };
 

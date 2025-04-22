@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "./src/components/atom/BreadcrumbWrapper/BreadcrumbWrapper.cy.tsx";
 import "./src/components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost.cy.tsx";
 import "./src/components/atom/GenericHostPopup/GenericHostPopup.cy.tsx";
 import "./src/components/atom/HostConfigReview/HostConfigReview.cy.tsx";
@@ -66,8 +65,6 @@ import "./src/components/organism/ScheduleMaintenanceDrawer/ScheduleMaintenanceD
 import "./src/components/organism/ScheduleMaintenanceForm/ScheduleMaintenanceForm.cy.tsx";
 import "./src/components/organism/ScheduleMaintenanceList/ScheduleMaintenanceList.cy.tsx";
 import "./src/components/organism/SingleScheduleMaintenanceForm/SingleScheduleMaintenanceForm.cy.tsx";
-import "./src/components/organism/site/SitesDropdown/SitesDropdown.cy.tsx";
-import "./src/components/organism/site/SitesTable.cy.tsx";
 import "./src/components/organism/TelemetryLogsForm/TelemetryLogsForm.cy.tsx";
 import "./src/components/organism/TelemetryMetricsForm/TelemetryMetricsForm.cy.tsx";
 import "./src/components/pages/HostConfig/HostConfig.cy.tsx";
