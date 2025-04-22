@@ -75,7 +75,7 @@ runs:
           git commit -m "Update VERSION files to next dev version"
 
           echo "------------------------------------------------------"
-          echo "Summary of updates:"
+          echo "Updated files:"
           git diff --name-only HEAD~1 HEAD | while read file; do
             echo "- $file"
           done
@@ -94,7 +94,7 @@ runs:
     #   if: steps.update_versions.outputs.changes_made == 'true'
     #   shell: bash
     #   env:
-    #     GH_TOKEN: ${{ github.token }}
+    #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   run: |
     #     gh pr create \
     #       --title "Version bump to -dev" \
