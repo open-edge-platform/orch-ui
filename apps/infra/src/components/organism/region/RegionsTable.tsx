@@ -25,7 +25,7 @@ import {
 import { Button, Heading, Tag, Text, Tooltip } from "@spark-design/react";
 import { ButtonSize, HeaderSize } from "@spark-design/tokens";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { regionsRoute } from "../../../routes/const";
+import { getRegionPath, getSubRegionPath } from "../../../routes/const";
 import "./RegionsTable.scss";
 
 interface RegionsTableProps {
@@ -233,11 +233,11 @@ const RegionsTable = ({
       size={ButtonSize.Large}
       onPress={() => {
         if (parentRegionId) {
-          navigate(`../../${regionsRoute}/parent/${parentRegionId}/new`, {
+          navigate(`../../${getSubRegionPath(parentRegionId, "new")}`, {
             relative: "path",
           });
         } else {
-          navigate(`../${regionsRoute}/new`, { relative: "path" });
+          navigate(`../${getRegionPath("new")}`, { relative: "path" });
         }
       }}
     >
@@ -255,14 +255,11 @@ const RegionsTable = ({
               name: parentRegionId ? "Add a Subregion" : "Add a Region",
               action: () => {
                 if (parentRegionId) {
-                  navigate(
-                    `../../${regionsRoute}/parent/${parentRegionId}/new`,
-                    {
-                      relative: "path",
-                    },
-                  );
+                  navigate(`../../${getSubRegionPath(parentRegionId, "new")}`, {
+                    relative: "path",
+                  });
                 } else {
-                  navigate(`../${regionsRoute}/new`, { relative: "path" });
+                  navigate(`../${getRegionPath("new")}`, { relative: "path" });
                 }
               },
               disable: !hasPermission,

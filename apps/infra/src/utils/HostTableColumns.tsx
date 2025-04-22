@@ -7,6 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { aggregateStatuses, TableColumn } from "@orch-ui/components";
 import { hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
+import { getHostDetailsPath } from "src/routes/const";
 import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost";
 import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
@@ -39,10 +40,7 @@ const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
   };
 };
 
-const name = (
-  basePath: string = "",
-  isRegistered: boolean = false,
-): TableColumn<eim.HostRead> => {
+const name = (basePath: string = ""): TableColumn<eim.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -54,15 +52,13 @@ const name = (
       }
     },
     Cell: (table: { row: { original: eim.HostRead } }) => {
-      const result = isRegistered
-        ? table.row.original.resourceId
-        : `${table.row.original.site ? "host" : "unconfigured-host"}/${table.row.original.resourceId}`;
-      return (
-        <Link to={`${basePath}${result}`} relative="path">
-          {table.row.original.name !== ""
-            ? table.row.original.name
-            : table.row.original.resourceId}
+      const hostId = table.row.original.resourceId;
+      return hostId ? (
+        <Link to={`${basePath}${getHostDetailsPath(hostId)}`} relative="path">
+          {table.row.original.name !== "" ? table.row.original.name : hostId}
         </Link>
+      ) : (
+        <>{table.row.original.name}</>
       );
     },
   };

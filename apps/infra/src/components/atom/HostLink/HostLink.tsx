@@ -7,6 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getHostDetailsPath } from "src/routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setErrorInfo } from "../../../store/notifications";
 
@@ -71,16 +72,16 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
     }
   }, [hostsQuery]);
 
-  return (
+  return host?.resourceId ? (
     <Link
       {...cy}
       className="host-link"
-      to={`/infrastructure/${host?.site ? "host" : "unconfigured-host"}/${
-        host?.resourceId
-      }`}
+      to={`/infrastructure/${getHostDetailsPath(host.resourceId)}`}
       relative="path"
     >
-      {host?.name || host?.resourceId}
+      {host.name || host.resourceId}
     </Link>
+  ) : (
+    <>{host?.name}</>
   );
 };
