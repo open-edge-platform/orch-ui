@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Copyright 2023 Intel Corp.
-# SPDX-License-Identifier: LicenseRef-Intel
+# Copyright 2025 Intel Corp.
+# SPDX-License-Identifier: Apache-2.0
 
 if [ -n "$1" ]
 then
