@@ -11,7 +11,6 @@ on:
 jobs:
   detect-changed-folders:
     runs-on: 'ubuntu-latest'
-    if: github.event.pull_request.user.login != 'github-actions[bot]'
     outputs:
       changed_files_root: ${{ steps.root-file-changes.outputs.changed_files }}
       changed_projects_root: ${{ steps.discover-changes.outputs.changed_projects }}
