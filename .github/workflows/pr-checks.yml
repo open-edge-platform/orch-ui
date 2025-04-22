@@ -16,7 +16,6 @@ on:
 jobs:
   detect-changed-folders:
     runs-on: 'ubuntu-latest'
-    if: github.event.pull_request.user.login != 'vigneshintel'
     outputs:
       changed_files_root: ${{ steps.root-file-changes.outputs.changed_files }}
       changed_projects_root: ${{ steps.discover-changes.outputs.changed_projects }}
@@ -41,7 +40,6 @@ jobs:
 
   license-check:
     runs-on: 'ubuntu-latest'
-    if: github.event.pull_request.user.login != 'vigneshintel'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -52,7 +50,6 @@ jobs:
   setup-conditions:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
-    if: github.event.pull_request.user.login != 'vigneshintel'
     outputs:
       common_condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') || '' == 'false' }}
     steps:
@@ -66,18 +63,17 @@ jobs:
 
   library-pipeline:
     needs: setup-conditions
-    if: ${{ github.event.pull_request.user.login != 'vigneshintel' && needs.setup-conditions.outputs.common_condition == 'true' }}
+    if: needs.setup-conditions.outputs.common_condition == 'true'
     uses: ./.github/workflows/library.yml
     secrets: inherit
 
   e2e-tests-pipeline:
     uses: ./.github/workflows/e2e-tests.yml
-    if: github.event.pull_request.user.login != 'vigneshintel'
     secrets: inherit
 
   pre-merge-pipeline:
     needs: [detect-changed-folders, setup-conditions]
-    if: ${{ github.event.pull_request.user.login != 'vigneshintel' && (needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null)) }}
+    if: ${{ needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null) }}
     strategy:
       fail-fast: false
       matrix:
@@ -112,13 +108,6 @@ jobs:
     steps:
       - name: Final Status Check
         run: |
-
-          # First check if this is a bot PR
-          if [ "${{ github.event.pull_request.user.login }}" == "vigneshintel" ]; then
-            echo "PR is from vigneshintel bot - automatically approved"
-            exit 0
-          fi
-
           pre_merge_pipeline_result="${{ needs.pre-merge-pipeline.result }}"
           e2e_tests_pipeline_result="${{ needs.e2e-tests-pipeline.result }}"
           library_pipeline_result="${{ needs.library-pipeline.result }}"
