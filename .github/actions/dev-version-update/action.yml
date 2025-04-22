@@ -66,7 +66,7 @@ runs:
             fi
 
             echo "$NEXT_VERSION" > "$VERSION_PATH"
-            git add "$VERSION_PATH"
+            git add -A
             CHANGES_MADE=1
           fi
         done
