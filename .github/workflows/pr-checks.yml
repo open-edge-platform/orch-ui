@@ -66,18 +66,18 @@ jobs:
 
   library-pipeline:
     needs: setup-conditions
-    if: ${{ github.event.pull_request.user.login != 'sys-orch' && needs.setup-conditions.outputs.common_condition == 'true' }}
+    if: ${{ github.event.pull_request.user.login != 'vigneshintel' && needs.setup-conditions.outputs.common_condition == 'true' }}
     uses: ./.github/workflows/library.yml
     secrets: inherit
 
   e2e-tests-pipeline:
     uses: ./.github/workflows/e2e-tests.yml
-    if: github.event.pull_request.user.login != 'sys-orch'
+    if: github.event.pull_request.user.login != 'vigneshintel'
     secrets: inherit
 
   pre-merge-pipeline:
     needs: [detect-changed-folders, setup-conditions]
-    if: ${{ github.event.pull_request.user.login != 'sys-orch' && (needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null)) }}
+    if: ${{ github.event.pull_request.user.login != 'vigneshintel' && (needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null)) }}
     strategy:
       fail-fast: false
       matrix:
