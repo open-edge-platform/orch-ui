@@ -10,7 +10,6 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
-  setActiveNavItem,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -46,7 +45,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./HostDetails.scss";
 
 import { eim } from "@orch-ui/apis";
-import { hostsNavItem } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import {
   setErrorInfo,
@@ -269,10 +267,6 @@ const HostDetails: React.FC = () => {
       dispatch(showMessageNotification(failMessage));
     }
   };
-
-  useEffect(() => {
-    dispatch(setActiveNavItem(hostsNavItem));
-  }, []);
 
   /* Render Host Details by API states */
   if (!host && (hostQuery.isError || hostsQuery.isError)) {

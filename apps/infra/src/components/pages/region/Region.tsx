@@ -3,13 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  ConfirmationDialog,
-  Popup,
-  setActiveNavItem,
-  setBreadcrumb,
-  TableColumn,
-} from "@orch-ui/components";
+import { ConfirmationDialog, Popup, TableColumn } from "@orch-ui/components";
 import {
   checkAuthAndRole,
   parseError,
@@ -17,7 +11,7 @@ import {
   SharedStorage,
 } from "@orch-ui/utils";
 import { Heading, Icon } from "@spark-design/react";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RegionsTable from "../../organism/region/RegionsTable";
 import "./Region.scss";
@@ -25,11 +19,6 @@ import "./Region.scss";
 import { eim } from "@orch-ui/apis";
 import { ButtonVariant, ToastState } from "@spark-design/tokens";
 import { ScheduleMaintenanceDrawer } from "../../../components/organism/ScheduleMaintenanceDrawer/ScheduleMaintenanceDrawer";
-import {
-  homeBreadcrumb,
-  regionsBreadcrumb,
-  regionsMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setErrorInfo, showToast } from "../../../store/notifications";
 
@@ -38,11 +27,7 @@ export default function Region() {
   const navigate = useNavigate();
   const [deleteRegion] =
     eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
-  const breadcrumb = useMemo(() => [homeBreadcrumb, regionsBreadcrumb], []);
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(regionsMenuItem));
-  }, []);
+
   const [regionToDelete, setRegionToDelete] = useState<eim.RegionRead | null>(
     null,
   );

@@ -9,8 +9,6 @@ import {
   Flex,
   MetadataForm,
   MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb,
   TableLoader,
 } from "@orch-ui/components";
 import {
@@ -53,13 +51,6 @@ import TelemetryLogsForm, {
 import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
-import {
-  homeBreadcrumb,
-  locationsBreadcrumb,
-  sitesBreadcrumb,
-  sitesCreateBreadcrumb,
-  sitesMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setTreeBranchNodeCollapse } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
@@ -171,25 +162,6 @@ const SiteForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const breadcrumb = useMemo(() => {
-    if (siteId === "new") {
-      return [locationsBreadcrumb, sitesCreateBreadcrumb];
-    }
-    return [
-      homeBreadcrumb,
-      sitesBreadcrumb,
-      {
-        // text may show `undefined` if template.name is not available
-        // especially when an error (404), consider siteId specified
-        text: `${site?.name || siteId}`,
-        link: `regions/${regionId}/sites/${siteId}`,
-      },
-    ];
-  }, [site]);
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(sitesMenuItem));
-  }, [breadcrumb]);
 
   const [hasSiteMetadata, setHasSiteMetadata] = useState(false);
   const [createSite] =

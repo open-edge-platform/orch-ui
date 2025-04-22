@@ -4,13 +4,12 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { ContextSwitcher, setActiveNavItem } from "@orch-ui/components";
+import { ContextSwitcher } from "@orch-ui/components";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { hostsNavItem } from "../../../routes/const";
 import { reset } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -43,10 +42,6 @@ const Hosts = () => {
       dispatch(reset());
     }
     dispatch(buildFilter());
-  }, []);
-
-  useEffect(() => {
-    dispatch(setActiveNavItem(hostsNavItem));
   }, []);
 
   const hostTableActionButtons = (

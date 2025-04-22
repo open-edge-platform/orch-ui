@@ -5,13 +5,10 @@
 
 import {
   ApiError,
-  BreadcrumbPiece,
   ConfirmationDialog,
   Flex,
   Popup,
   PopupOption,
-  setActiveNavItem,
-  setBreadcrumb,
   TableLoader,
 } from "@orch-ui/components";
 import {
@@ -47,7 +44,7 @@ import {
   RadioButtonSize,
   ToastState,
 } from "@spark-design/tokens";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import "./RegionForm.scss";
@@ -59,14 +56,6 @@ import TelemetryLogsForm, {
 import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
-import {
-  getRegionsByIdBreadcrumb,
-  homeBreadcrumb,
-  locationsBreadcrumb,
-  regionsBreadcrumb,
-  regionsCreateBreadcrumb,
-  regionsMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   selectBranches,
@@ -209,53 +198,8 @@ const RegionForm: React.FC = () => {
       "None (Top level region)"
     );
   };
-
-  const getParents = (
-    currentRegion: eim.RegionRead | undefined,
-    regions: eim.RegionRead[] | undefined,
-    parents: BreadcrumbPiece[] = [],
-  ): BreadcrumbPiece[] => {
-    if (!currentRegion || !regions) return parents;
-    const parent = regions.find(
-      (r) => r.resourceId === currentRegion.parentRegion?.resourceId,
-    );
-    if (parent) {
-      parents.unshift(
-        getRegionsByIdBreadcrumb(parent.resourceId ?? "", parent.name),
-      );
-      return getParents(parent, regions, parents);
-    } else {
-      return parents;
-    }
-  };
   const dispatch = useAppDispatch();
   const branches = useAppSelector(selectBranches);
-  const breadcrumb = useMemo(() => {
-    if (regionId === "new" && parentRegionId) {
-      return [
-        locationsBreadcrumb,
-        regionsBreadcrumb,
-        getRegionsByIdBreadcrumb(
-          parentRegionId,
-          returnRegionName(parentRegionId),
-        ),
-        regionsCreateBreadcrumb,
-      ];
-    }
-    if (regionId === "new") {
-      return [locationsBreadcrumb, regionsCreateBreadcrumb];
-    }
-    const regionsTree = getParents(regionInfo, regions, [
-      getRegionsByIdBreadcrumb(regionId ?? "", returnRegionName(regionId)),
-    ]);
-    return [homeBreadcrumb, regionsBreadcrumb].concat(regionsTree || []);
-  }, [regionInfo, regions]);
-
-  useEffect(() => {
-    //dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setBreadcrumb([]));
-    dispatch(setActiveNavItem(regionsMenuItem));
-  }, [breadcrumb]);
 
   const {
     control,

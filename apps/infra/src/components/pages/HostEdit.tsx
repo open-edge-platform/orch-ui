@@ -9,7 +9,6 @@ import {
   Flex,
   MetadataForm,
   MetadataPair,
-  setActiveNavItem,
   SquareSpinner,
 } from "@orch-ui/components";
 import {
@@ -36,7 +35,6 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { hostsNavItem } from "../../routes/const";
 import { useAppDispatch } from "../../store/hooks";
 import {
   disableMessageBanner,
@@ -214,10 +212,6 @@ const HostEdit = () => {
     ),
     [metadataPairs],
   );
-
-  useEffect(() => {
-    dispatch(setActiveNavItem(hostsNavItem));
-  }, []);
 
   const updateHostEdits = () => {
     // UPDATE HOST
