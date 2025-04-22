@@ -22,3 +22,5 @@ jobs:
       - name: Run Version Update Action
         # uses: open-edge-platform/orch-ci/dev-version-update@main
         uses: ./.github/actions/dev-version-update
+        with:
+          gh_token: ${{ secrets.SYS_ORCH_GITHUB }}

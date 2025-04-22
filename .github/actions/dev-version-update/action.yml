@@ -9,6 +9,9 @@ inputs:
     description: "Comma-separated list of path patterns to exclude from search"
     required: false
     default: "*/node_modules/*,*/dist/*,*/build/*,*/vendor/*,*/bin/*,*/pkg/*,*/.git/*"
+  gh_token:
+    required: true
+    description: "GitHub token for creating pull request"
 
 runs:
   using: "composite"
@@ -94,7 +97,7 @@ runs:
       if: steps.update_versions.outputs.changes_made == 'true'
       shell: bash
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ inputs.gh_token }}
       run: |
         gh pr create \
           --title "Version bump to -dev" \
