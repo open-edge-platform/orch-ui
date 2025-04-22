@@ -10,7 +10,11 @@ import { MessageBanner } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
+  getCurrentDeploymentPackage,
+  getCurrentPackageProfile,
+  profileParameterOverridesSelector,
   setDeploymentApplications,
+  setProfileParameterOverrides,
   setupDeploymentEmptyMandatoryParams,
 } from "../../../../store/reducers/setupDeployment";
 import ApplicationProfileParameterOverrideForm from "../../../atoms/ApplicationProfileParameterOverrideForm/ApplicationProfileParameterOverrideForm";
@@ -24,18 +28,81 @@ export interface OverrideValuesList {
 }
 
 export interface OverrideProfileTableProps {
-  selectedPackage: catalog.DeploymentPackage;
-  selectedProfile: catalog.DeploymentProfile;
-  overrideValues: OverrideValuesList;
-  onOverrideValuesUpdate: (updatedOverrideValues: OverrideValuesList) => void;
+  // selectedPackage: catalog.DeploymentPackage;
+  // selectedProfile: catalog.DeploymentProfile;
+  /*  overrideValues: OverrideValuesList;
+  onOverrideValuesUpdate: (updatedOverrideValues: OverrideValuesList) => void; */
 }
 
-const OverrideProfileTable = ({
-  selectedPackage,
-  selectedProfile,
-  overrideValues,
-  onOverrideValuesUpdate,
-}: OverrideProfileTableProps) => {
+interface ApplicationProfileOverrideSubComponentProps {
+  app: catalog.Application;
+  // selectedProfile: catalog.DeploymentProfile;
+  // overrideValues: OverrideValuesList;
+  // onOverrideUpdate: (
+  //   appName: string,
+  //   updatedOverrideValue: adm.OverrideValues,
+  // ) => void;
+}
+
+const ApplicationProfileOverrideSubComponent = ({
+  app,
+  // selectedProfile,
+  // overrideValues,
+  // onOverrideUpdate,
+}: ApplicationProfileOverrideSubComponentProps) => {
+  useEffect(() => {
+    console.log("MOUNTED");
+  }, []);
+
+  const dispatch = useAppDispatch();
+  const selectedProfile = useAppSelector(getCurrentPackageProfile);
+  /** Application Profile configuration on the selected deployment package profile */
+  const appProfile = app.profiles?.find(
+    (profile) =>
+      // Check if the application profile name is what is seen selected in the selected deployment package profile
+      profile.name === selectedProfile?.applicationProfiles[app.name],
+  );
+
+  const overrideValues = useAppSelector(profileParameterOverridesSelector);
+
+  /** stored override values belonging specifically to the application */
+  const overrides = overrideValues[app.name] ?? { appName: app.name };
+
+  if (!appProfile) {
+    return (
+      <MessageBanner
+        messageTitle="Error while reading Parameter Template"
+        messageBody={`No profile found for app "${app.name}@${app.version} in Deployment Profile ${selectedProfile?.name}"`}
+        variant="error"
+      />
+    );
+  }
+
+  return (
+    <ApplicationProfileParameterOverrideForm
+      application={app}
+      applicationProfile={appProfile}
+      parameterOverrides={overrides}
+      onParameterUpdate={(updatedOverrideValue: adm.OverrideValues) => {
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: { [app.name]: updatedOverrideValue },
+            clear: false,
+          }),
+        );
+      }}
+    />
+  );
+};
+
+const OverrideProfileTable = (
+  {
+    // selectedPackage,
+    // selectedProfile,
+    /*   overrideValues,
+  onOverrideValuesUpdate, */
+  }: OverrideProfileTableProps,
+) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
@@ -46,6 +113,12 @@ const OverrideProfileTable = ({
   const mandatoryEmptyParams = useAppSelector(
     setupDeploymentEmptyMandatoryParams,
   );
+
+  const selectedPackage = useAppSelector(getCurrentDeploymentPackage);
+
+  const selectedProfile = useAppSelector(getCurrentPackageProfile);
+  const overrideValues = useAppSelector(profileParameterOverridesSelector);
+
   const appsWithEmptyMandatoryParams = mandatoryEmptyParams.map((key) => {
     const parts = key.split(".");
     return parts[0];
@@ -85,7 +158,7 @@ const OverrideProfileTable = ({
 
   // When the Deployment Package changes, load the application list
   useEffect(() => {
-    if (selectedPackage) {
+    if (selectedPackage && selectedProfile) {
       setIsloading(true);
       loadPackageApplications(selectedPackage)
         .then((apps: catalog.Application[]) => {
@@ -101,7 +174,7 @@ const OverrideProfileTable = ({
         .catch(setParsedErr)
         .finally(() => setIsloading(false));
     }
-  }, [selectedPackage, selectedProfile, overrideValues]);
+  }, [selectedPackage, selectedProfile /* , overrideValues */]);
 
   const columns: TableColumn<catalog.Application>[] = [
     {
@@ -143,43 +216,43 @@ const OverrideProfileTable = ({
   ];
 
   /** This will render application profiles with override form upon row expand */
-  const RenderSubComponent = ({
-    row: { original: app },
-  }: {
-    row: { original: catalog.Application };
-  }) => {
-    /** Application Profile configuration on the selected deployment package profile */
-    const appProfile = app.profiles?.find(
-      (profile) =>
-        // Check if the application profile name is what is seen selected in the selected deployment package profile
-        profile.name === selectedProfile.applicationProfiles[app.name],
-    );
-    /** stored override values belonging specifically to the application */
-    const overrides = overrideValues[app.name] ?? { appName: app.name };
+  // const RenderSubComponent = ({
+  //   row: { original: app },
+  // }: {
+  //   row: { original: catalog.Application };
+  // }) => {
+  //   /** Application Profile configuration on the selected deployment package profile */
+  //   const appProfile = app.profiles?.find(
+  //     (profile) =>
+  //       // Check if the application profile name is what is seen selected in the selected deployment package profile
+  //       profile.name === selectedProfile.applicationProfiles[app.name],
+  //   );
+  //   /** stored override values belonging specifically to the application */
+  //   const overrides = overrideValues[app.name] ?? { appName: app.name };
 
-    if (!appProfile) {
-      return (
-        <MessageBanner
-          messageTitle="Error while reading Parameter Template"
-          messageBody={`No profile found for app "${app.name}@${app.version} in Deployment Profile ${selectedProfile.name}"`}
-          variant="error"
-        />
-      );
-    }
+  //   if (!appProfile) {
+  //     return (
+  //       <MessageBanner
+  //         messageTitle="Error while reading Parameter Template"
+  //         messageBody={`No profile found for app "${app.name}@${app.version} in Deployment Profile ${selectedProfile.name}"`}
+  //         variant="error"
+  //       />
+  //     );
+  //   }
 
-    return (
-      <ApplicationProfileParameterOverrideForm
-        application={app}
-        applicationProfile={appProfile}
-        parameterOverrides={overrides}
-        onParameterUpdate={(updatedOverrideValue: adm.OverrideValues) =>
-          onOverrideValuesUpdate({
-            [app.name]: updatedOverrideValue,
-          })
-        }
-      />
-    );
-  };
+  //   return (
+  //     <ApplicationProfileParameterOverrideForm
+  //       application={app}
+  //       applicationProfile={appProfile}
+  //       parameterOverrides={overrides}
+  //       onParameterUpdate={(updatedOverrideValue: adm.OverrideValues) =>
+  //         onOverrideValuesUpdate({
+  //           [app.name]: updatedOverrideValue,
+  //         })
+  //       }
+  //     />
+  //   );
+  // };
 
   const getContent = () => {
     if (isLoading || !applications) return <TableLoader />;
@@ -193,7 +266,9 @@ const OverrideProfileTable = ({
             data={applications ?? []}
             totalOverallRowsCount={applications.length}
             canPaginate={false}
-            subRow={(row) => <RenderSubComponent row={row} />}
+            subRow={(row) => (
+              <ApplicationProfileOverrideSubComponent app={row.original} />
+            )}
           />
         )}
       </>

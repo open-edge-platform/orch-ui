@@ -21,12 +21,18 @@ type SetupDeploymentState = {
   applications: catalog.Application[];
   mandatoryParams: MandatoryParams;
   editPrevProfileName: string;
+  profileParameterOverrides: OverrideValuesList;
+  currentDeploymentPackage: catalog.DeploymentPackage | null;
+  currentPackageProfile: catalog.DeploymentProfile | null;
 };
 
 const initialState: SetupDeploymentState = {
   applications: [],
   mandatoryParams: {},
   editPrevProfileName: "",
+  profileParameterOverrides: {},
+  currentDeploymentPackage: null,
+  currentPackageProfile: null,
 };
 
 export const setupDeployment = createSlice({
@@ -84,6 +90,37 @@ export const setupDeployment = createSlice({
     clearMandatoryParams(state: SetupDeploymentState) {
       state.mandatoryParams = {};
     },
+    setProfileParameterOverrides(
+      state: SetupDeploymentState,
+      action: PayloadAction<{
+        profileParameterOverrides: OverrideValuesList;
+        clear: boolean;
+      }>,
+    ) {
+      console.log("setProfileParameterOverrides:", action.payload);
+      const isClear = action.payload.clear;
+      if (isClear) {
+        state.profileParameterOverrides =
+          action.payload.profileParameterOverrides;
+      } else {
+        state.profileParameterOverrides = {
+          ...state.profileParameterOverrides,
+          ...action.payload.profileParameterOverrides,
+        };
+      }
+    },
+    setCurrentDeploymentPackage(
+      state: SetupDeploymentState,
+      action: PayloadAction<catalog.DeploymentPackage | null>,
+    ) {
+      state.currentDeploymentPackage = action.payload;
+    },
+    setCurrentPackageProfile(
+      state: SetupDeploymentState,
+      action: PayloadAction<catalog.DeploymentProfile | null>,
+    ) {
+      state.currentPackageProfile = action.payload;
+    },
   },
 });
 
@@ -107,11 +144,25 @@ export const setupDeploymentEmptyMandatoryParams = (state: RootState) =>
 export const editDeploymentPrevProfileName = (state: RootState) =>
   state.setupDeployment.editPrevProfileName;
 
+export const profileParameterOverridesSelector = (state: RootState) =>
+  state.setupDeployment.profileParameterOverrides;
+
+export const getCurrentDeploymentPackage = (state: RootState) =>
+  state.setupDeployment.currentDeploymentPackage;
+
+export const getCurrentPackageProfile = (state: RootState) =>
+  state.setupDeployment.currentPackageProfile;
+
+export const wholeStateSelector = (state: RootState) => state.setupDeployment;
+
 export const {
   setDeploymentApplications,
   updateMandatoryParam,
   clearMandatoryParams,
   setEditPrevProfileName,
+  setProfileParameterOverrides,
+  setCurrentDeploymentPackage,
+  setCurrentPackageProfile,
 } = setupDeployment.actions;
 
 export default setupDeployment.reducer;

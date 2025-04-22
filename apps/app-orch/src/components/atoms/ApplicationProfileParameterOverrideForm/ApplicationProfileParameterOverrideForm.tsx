@@ -68,7 +68,7 @@ const ApplicationProfileParameterOverrideForm = ({
 
   const overrideHandler = (value: ParameterOverrideValuePair) => {
     let updatedParameterOverrides: ParameterOverrideValuePair = mergeRecursive(
-      selectedValues,
+      structuredClone(selectedValues),
       value,
     );
     removeEmptyValues(updatedParameterOverrides);

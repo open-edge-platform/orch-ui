@@ -3,14 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm, catalog } from "@orch-ui/apis";
+import { adm } from "@orch-ui/apis";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   clearMandatoryParams,
   editDeploymentPrevProfileName,
+  getCurrentDeploymentPackage,
+  getCurrentPackageProfile,
+  profileParameterOverridesSelector,
   setEditPrevProfileName,
+  setProfileParameterOverrides,
 } from "../../../../store/reducers/setupDeployment";
+
 import DeploymentProfileForm from "../../profiles/DeploymentProfileForm/DeploymentProfileForm";
 import { OverrideValuesList } from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 
@@ -18,27 +23,29 @@ const dataCy = "changeProfileValues";
 
 interface ChangeProfileValuesProps {
   deployment?: adm.DeploymentRead;
-  deploymentPackage?: catalog.DeploymentPackage;
-  deploymentProfile?: catalog.DeploymentProfile;
-  overrideValues: OverrideValuesList;
-  onOverrideValuesUpdate: (
-    updatedOverrideValues: OverrideValuesList,
-    clear: boolean,
-  ) => void;
+  // deploymentPackage?: catalog.DeploymentPackage;
+  // deploymentProfile?: catalog.DeploymentProfile;
+  // overrideValues: OverrideValuesList;
+  // onOverrideValuesUpdate: (
+  //   updatedOverrideValues: OverrideValuesList,
+  //   clear: boolean,
+  // ) => void;
 }
 
 const ChangeProfileValues = ({
   deployment,
-  deploymentPackage,
-  deploymentProfile,
-  overrideValues,
-  onOverrideValuesUpdate,
+  // deploymentPackage,
+  // deploymentProfile,
+  // overrideValues,
+  // onOverrideValuesUpdate,
 }: ChangeProfileValuesProps) => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
   const prevProfileName = useAppSelector(editDeploymentPrevProfileName);
-
+  const overrideValues = useAppSelector(profileParameterOverridesSelector);
+  const deploymentProfile = useAppSelector(getCurrentPackageProfile);
+  const deploymentPackage = useAppSelector(getCurrentDeploymentPackage);
   useEffect(() => {
     if (!deployment || deployment.profileName !== deploymentProfile?.name) {
       if (
@@ -46,7 +53,13 @@ const ChangeProfileValues = ({
         prevProfileName !== deploymentProfile?.name
       ) {
         dispatch(clearMandatoryParams());
-        onOverrideValuesUpdate({}, true);
+        // onOverrideValuesUpdate({}, true);
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: {},
+            clear: true,
+          }),
+        );
       }
     } else {
       const valuesList: OverrideValuesList = {};
@@ -58,11 +71,24 @@ const ChangeProfileValues = ({
           valuesList[ov.appName] = structuredClone(ov);
         });
         dispatch(clearMandatoryParams());
-        onOverrideValuesUpdate(valuesList, true);
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: valuesList,
+            clear: true,
+          }),
+        );
+        // onOverrideValuesUpdate(valuesList, true);
       } else {
-        onOverrideValuesUpdate(overrideValues, true);
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: overrideValues,
+            clear: true,
+          }),
+        );
+        // onOverrideValuesUpdate(overrideValues, true);
       }
     }
+    console.log("DISPATCHED FROM CHANGE PROFILE VALUES..");
     dispatch(setEditPrevProfileName(deploymentProfile?.name ?? ""));
   }, [deploymentProfile]);
 
@@ -71,10 +97,10 @@ const ChangeProfileValues = ({
       <DeploymentProfileForm
         selectedPackage={deploymentPackage ?? undefined}
         selectedProfile={deploymentProfile ?? undefined}
-        onOverrideValuesUpdate={(updatedOverrideValues) =>
-          onOverrideValuesUpdate(updatedOverrideValues, false)
-        }
-        overrideValues={overrideValues}
+        // onOverrideValuesUpdate={(updatedOverrideValues) =>
+        //   onOverrideValuesUpdate(updatedOverrideValues, false)
+        // }
+        // overrideValues={overrideValues}
       />
     </div>
   );
