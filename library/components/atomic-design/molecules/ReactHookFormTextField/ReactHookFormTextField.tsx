@@ -23,6 +23,7 @@ export interface ReactHookFormTextFieldProps<T extends FieldValues> {
   label?: string;
   type?: "text" | "search" | "url" | "tel" | "email" | "password";
   isRequired?: boolean;
+  maxLength?: number;
   isDisabled?: boolean;
   placeholder?: string;
   validate?: Record<string, Validate<PathValue<T, Path<T>>, T>>;
@@ -41,6 +42,7 @@ export const ReactHookFormTextField = <T extends FieldValues>({
   label,
   type = "text",
   isRequired = true,
+  maxLength = undefined,
   placeholder,
   isDisabled,
   validate,
@@ -79,6 +81,7 @@ export const ReactHookFormTextField = <T extends FieldValues>({
             label={label}
             isDisabled={isDisabled}
             placeholder={placeholder}
+            maxLength={maxLength}
             validationState={validationState as any}
             errorMessage={message}
             value={value}

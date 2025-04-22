@@ -25,9 +25,11 @@ operators, who want to be able to:
 - View the state of the system
 - View Cluster templates and import new templates
 
+Read more about Edge Orchestrator in the [User Guide](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/index.html).
+
 ## Get Started
 
-### Edge Orchestrator Mirco Front Ends
+### Edge Orchestrator Micro Front Ends
 
 This project is a "mono-repo" example of micro front ends (MFEs),
 with a minimal amount of configuration per project.
@@ -62,6 +64,8 @@ graph TD
 
 ## Develop
 
+### Prerequisites and Setup
+
 Before developing UI related features or tests in Orchestrator GUI Web User Interface, following development prerequisites are required:
 
 - [Node JS](https://nodejs.org/en/download)
@@ -79,6 +83,9 @@ Before developing UI related features or tests in Orchestrator GUI Web User Inte
 
 The code for UI is written in [React](https://react.dev/). The React component code follows the pattern by taking the reference from [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/).
 
+The project uses Webpack for bundling, TypeScript for type safety, and Cypress for testing.
+The application is separated into multiple micro front-ends that can be developed, tested independently.
+
 - To run development server execute following command at base folder of repo:
 
   ```bash
@@ -87,6 +94,26 @@ The code for UI is written in [React](https://react.dev/). The React component c
 
 > Note: `<mfe-app-name>` can be app-orch, cluster-orch, root, admin and infra.
 
+- To run all MFEs concurrently:
+
+  ```bash
+  npm run start
+  ```
+
+  This will concurrently run all MFEs. The root application will be available at http://localhost:8080, which provides navigation to all other MFEs.
+
+- To build MFEs:
+
+  ```bash
+  npm run app:<mfe-app-name>:build # <mfe-app-name> can be app-orch, cluster-orch, root, admin and infra.
+  ```
+
+### Running with mock data
+If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_LP_MOCK_API` environment variable value to `true`
+
+Set this value BEFORE you run the `npm run start`. 
+
+### Testing
 The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
 
 ```bash
@@ -101,14 +128,15 @@ For testing your changes in a virtual machine with deployment, refer to [Build a
 
 ## Contribute
 
-To learn how to contribute to the project, see the [Contributor's Guide](./CONTRIBUTING.md)
+To learn how to contribute to the project, see the [Contributor's Guide](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/contributor_guide/index.html).
 
 ## Community and Support
 
-To learn more about the project, its community, and governance, visit the Edge Orchestrator Community. For support, start with Troubleshooting or contact us.
+To learn more about the project, its community, and governance, visit
+the [Edge Orchestrator Community](https://github.com/open-edge-platform).
 
 ## License
 
-Orchestrator GUI Web User Interface is licensed under \[Apache-2.0](./LICENSES/Apache-2.0.txt).
+Orchestrator GUI Web User Interface is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
 
 Last Updated Date: {April 7, 2025}

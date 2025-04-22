@@ -16,18 +16,22 @@ import AlertDefinitionDuration, {
 } from "../../atoms/AlertDefinitionDuration/AlertDefinitionDuration";
 import AlertDefinitionEnable from "../../atoms/AlertDefinitionEnable/AlertDefinitionEnable";
 import AlertDefinitionThreshold from "../../atoms/AlertDefinitionThreshold/AlertDefinitionThreshold";
-import "./AlertDefinitionsList.scss";
+import AlertDisplayName from "../../atoms/AlertDisplayName/AlertDisplayName";
 
 const dataCy = "alertDefinitionsList";
 
 const AlertDefinitionsList = () => {
   const cy = { "data-cy": dataCy };
+
+  const dispatch = useAppDispatch();
+
   const [alertDefinitionsTableData, setAlertDefinitionsTableData] = useState<
     omApi.AlertDefinition[]
   >([]);
   const [actions, setActions] = useState<
     omApi.PatchProjectAlertDefinitionApiArg[]
   >([]);
+
   const [patchAlertDefinition] = omApi.usePatchProjectAlertDefinitionMutation();
   const {
     data: alertDefinitions,
@@ -38,10 +42,11 @@ const AlertDefinitionsList = () => {
   } = omApi.useGetProjectAlertDefinitionsQuery({
     projectName: SharedStorage.project?.name ?? "",
   });
+
   useEffect(() => {
     setAlertDefinitionsTableData(alertDefinitions?.alertDefinitions ?? []);
   }, [alertDefinitions, isSuccess]);
-  const dispatch = useAppDispatch();
+
   const updateAlertDefinitions = async () => {
     const requests: Promise<unknown>[] = [];
     if (actions && actions.length > 0) {
@@ -157,6 +162,7 @@ const AlertDefinitionsList = () => {
     newTableData.splice(index, 1, targetRow);
     setAlertDefinitionsTableData(newTableData);
   };
+
   const columns = [
     {
       Header: "Enabled",
@@ -173,6 +179,9 @@ const AlertDefinitionsList = () => {
     {
       Header: "Name",
       accessor: "name",
+      Cell: (table: { row: { original: omApi.AlertDefinition } }) => (
+        <AlertDisplayName alertDefinition={table.row.original} />
+      ),
     },
     {
       Header: "Threshold",
