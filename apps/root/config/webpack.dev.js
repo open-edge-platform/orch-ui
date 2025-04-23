@@ -28,14 +28,12 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: process.env.REACT_LP_REMOTE_EP
-      ? `http://${process.env.REACT_LP_REMOTE_EP}:8080/`
-      : "http://localhost:8080/",
+    publicPath: `http://localhost:${devServer.server.address().port}/`,
   },
   devServer: {
     port: 8080,
     historyApiFallback: true,
-    hot: false,
+    hot: true,
     open: false,
     watchFiles: ["src/**/*.tsx", "src/**/*.ts", "public/**/*"],
     headers: {

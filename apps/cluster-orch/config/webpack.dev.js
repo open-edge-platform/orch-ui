@@ -18,14 +18,11 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: process.env.REACT_LP_REMOTE_EP
-      ? `http://${process.env.REACT_LP_REMOTE_EP}:8083/`
-      : "http://localhost:8083/",
+    publicPath: `http://localhost:${devServer.server.address().port}/`,
   },
   devServer: {
     port: 8083,
     historyApiFallback: true,
-    hot: false,
     open: false,
     watchFiles: ["src/**/*.tsx", "src/**/*.ts", "public/**/*"],
     headers: {
@@ -38,9 +35,12 @@ const devConfig = {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
-      const port = devServer.server.address().port;
-      openBrowser(`http://localhost:${port}`);
+      if (!process.env.ROOT === "true") {
+        const port = devServer.server.address().port;
+        openBrowser(`http://localhost:${port}`);
+      }
     },
+    hot: process.env.REACT_MA_HMR === "true" ? true : false,
   },
   optimization: {
     nodeEnv: mode,
@@ -48,16 +48,8 @@ const devConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        EimUI: `EimUI@http://${
-          process.env.REACT_LP_REMOTE_EP
-            ? process.env.REACT_LP_REMOTE_EP
-            : "localhost"
-        }:8082/remoteEntry.js`,
-        Admin: `Admin@http://${
-          process.env.REACT_LP_REMOTE_EP
-            ? process.env.REACT_LP_REMOTE_EP
-            : "localhost"
-        }:8084/remoteEntry.js`,
+        EimUI: `EimUI@http://localhost:8082/remoteEntry.js`,
+        Admin: `Admin@http://localhost:8084/remoteEntry.js`,
       },
     }),
     new HtmlWebpackPlugin({
