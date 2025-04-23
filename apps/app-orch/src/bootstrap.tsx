@@ -40,7 +40,7 @@ const runMocks = async () => {
 
 const prepare = async () => {
   /* devblock:start */
-  if (process.env.REACT_LP_MOCK_API === "true") {
+  if (process.env.REACT_MOCK_API === "true") {
     return runMocks();
   }
   /* devblock:end */

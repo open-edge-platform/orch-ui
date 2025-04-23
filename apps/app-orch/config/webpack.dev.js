@@ -17,9 +17,7 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: process.env.REACT_LP_REMOTE_EP
-      ? `http://${process.env.REACT_LP_REMOTE_EP}:8081/`
-      : "http://localhost:8081/",
+    publicPath: "auto",
   },
   devServer: {
     port: 8081,
@@ -38,8 +36,10 @@ const devConfig = {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
-      const port = devServer.server.address().port;
-      openBrowser(`http://localhost:${port}`);
+      if (!process.env.ROOT === "true") {
+        const port = devServer.server.address().port;
+        openBrowser(`http://localhost:${port}`);
+      }
     },
     hot: process.env.REACT_MA_HMR === "true" ? true : false,
   },
@@ -50,21 +50,9 @@ const devConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        ClusterOrchUI: `ClusterOrchUI@http://${
-          process.env.REACT_LP_REMOTE_EP
-            ? process.env.REACT_LP_REMOTE_EP
-            : "localhost"
-        }:8083/remoteEntry.js`,
-        EimUI: `EimUI@http://${
-          process.env.REACT_LP_REMOTE_EP
-            ? process.env.REACT_LP_REMOTE_EP
-            : "localhost"
-        }:8082/remoteEntry.js`,
-        Admin: `Admin@http://${
-          process.env.REACT_LP_REMOTE_EP
-            ? process.env.REACT_LP_REMOTE_EP
-            : "localhost"
-        }:8084/remoteEntry.js`,
+        ClusterOrchUI: `ClusterOrchUI@http://localhost:8083/remoteEntry.js`,
+        EimUI: `EimUI@http://localhost:8082/remoteEntry.js`,
+        Admin: `Admin@http://localhost:8084/remoteEntry.js`,
       },
     }),
     ...(process.env.REACT_MA_HMR === "true"
