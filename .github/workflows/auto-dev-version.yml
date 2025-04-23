@@ -3,11 +3,15 @@
 ---
 name: Update Versions to -dev
 
+# on:
+#   push:
+#     branches:
+#       - main
+#       - release-*
+
 on:
-  push:
-    branches:
-      - main
-      - release-*
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
   update-version:
@@ -16,4 +20,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run Version Update Action
-        uses: open-edge-platform/orch-ci/dev-version-update@main
+        # uses: open-edge-platform/orch-ci/dev-version-update@main
+        # uses: ./.github/actions/dev-version-update
+        uses: open-edge-platform/orch-ci/dev-version-update@feature/update-version
+        with:
+          gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
