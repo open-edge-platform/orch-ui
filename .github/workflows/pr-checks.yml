@@ -56,14 +56,6 @@ jobs:
         run: |
           bash -c "diff -u <(echo -n) <(git diff .)"
 
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: License check
-        run: make license
-
   setup-conditions:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
