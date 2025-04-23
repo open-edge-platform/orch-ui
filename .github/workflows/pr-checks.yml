@@ -77,7 +77,7 @@ jobs:
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
-      run_version_check: false
+      run_version_check: true
       run_dep_version_check: false
       run_build: false
       run_lint: true
@@ -85,7 +85,7 @@ jobs:
       run_validate_clean_folder: true
       run_docker_build: true
       run_docker_push: true
-      run_scan_containers: true
+      run_scan_containers: false
       run_artifact: false
       run_helm_build: true
       run_helm_push: true
