@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const REACT_LP = /^REACT_LP_/i;
+const REACT_LP = /^REACT_/i;
 function getClientEnvironment() {
   const raw = Object.keys(process.env)
     .filter((key) => REACT_LP.test(key))

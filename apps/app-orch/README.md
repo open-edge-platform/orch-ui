@@ -7,7 +7,7 @@ you might want to spin up a mock server.
 You can do that by using the following command:
 
 ```shell
-REACT_LP_MOCK_API=true npm start
+REACT_MOCK_API=true npm start
 ```
 
 For Hot Module Replacement (HMR),
