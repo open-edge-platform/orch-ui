@@ -17,7 +17,7 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: `auto`,
+    publicPath: "auto",
   },
   devServer: {
     port: 8081,
