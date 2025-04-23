@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const REACT_LP = /^REACT_/i;
+const REGEX = /^REACT_/i;
 function getClientEnvironment() {
   const raw = Object.keys(process.env)
-    .filter((key) => REACT_LP.test(key))
+    .filter((key) => REGEX.test(key))
     .reduce((env, key) => {
       env[key] = process.env[key];
       return env;
