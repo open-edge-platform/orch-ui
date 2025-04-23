@@ -85,7 +85,6 @@ jobs:
       run_validate_clean_folder: true
       run_docker_build: true
       run_docker_push: true
-      run_scan_containers: false
       run_artifact: false
       run_helm_build: true
       run_helm_push: true
