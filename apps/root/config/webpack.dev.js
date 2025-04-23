@@ -9,6 +9,7 @@ const commonConfig = require("./webpack.common");
 const openBrowser = require("react-dev-utils/openBrowser");
 
 const mode = "development";
+const port = 8080;
 const devConfig = {
   mode: mode,
   devtool: "source-map",
@@ -28,7 +29,7 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: `http://localhost:${devServer.server.address().port}/`,
+    publicPath: `auto`,
   },
   devServer: {
     port: 8080,
