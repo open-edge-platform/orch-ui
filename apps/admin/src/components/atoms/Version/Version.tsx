@@ -34,7 +34,7 @@ const Version = () => {
       <Text size={TextSize.Large} data-cy={"orchVersion"}>
         Version {version}
       </Text>
-      <Text>Copyright 2024 Intel. All rights reserved.</Text>
+      <Text>Copyright 2025 Intel. All rights reserved.</Text>
     </Card>
   );
 
