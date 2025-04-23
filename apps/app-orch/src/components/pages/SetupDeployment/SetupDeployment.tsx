@@ -26,7 +26,7 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { useEffect, useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createDeploymentBreadcrumb,
@@ -95,7 +95,7 @@ const SetupDeployment = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-
+  const [stepJsx, setStepJsx] = useState<ReactElement | null>(null);
   // Stepper: Overall state controls
   const [currentStep, setCurrentStep] = useState(0);
   const [isNextDisabled, setIsNextDisabled] = useState<boolean>(false);
@@ -231,6 +231,150 @@ const SetupDeployment = () => {
       }
     }
   }, [currentDeploymentPackage]);
+
+  useEffect(() => {
+    let nextJsx: ReactElement | null = null;
+    switch (availableSteps[currentStep]) {
+      case SetupDeploymentSteps["Select a Package"]:
+        nextJsx = (
+          <SelectPackage
+            key="selectPackage"
+            onSelect={(dep) => dispatch(setCurrentDeploymentPackage(dep))}
+            selectedPackage={currentDeploymentPackage ?? undefined}
+          />
+        );
+        break;
+      case SetupDeploymentSteps["Select a Profile"]:
+        if (currentDeploymentPackage) {
+          nextJsx = (
+            <SelectProfilesTable
+              key="selectProfile"
+              selectedPackage={currentDeploymentPackage}
+              selectedProfile={currentPackageProfile ?? undefined}
+              onProfileSelect={(profile) =>
+                dispatch(setCurrentPackageProfile(profile))
+              }
+            />
+          );
+        }
+        break;
+      case SetupDeploymentSteps["Override Profile Values"]:
+        nextJsx = (
+          <ChangeProfileValues
+            deploymentPackage={currentDeploymentPackage ?? undefined}
+            deploymentProfile={currentPackageProfile ?? undefined}
+          />
+        );
+        break;
+      case SetupDeploymentSteps["Network Interconnect"]:
+        nextJsx = (
+          <NetworkInterconnect
+            networks={projectNetworks}
+            selectedNetwork={selectedNetwork}
+            applications={currentDeploymentPackage?.applicationReferences}
+            selectedServices={exposedServices}
+            onNetworkUpdate={(value) => {
+              setSelectedNetwork(value);
+              if (value === "") {
+                setExposedServices((prev) => {
+                  const curr = prev;
+                  curr.forEach((se) => {
+                    se.enabled = false;
+                  });
+                  return curr;
+                });
+              }
+            }}
+            onExportsUpdate={(appRef, isExported) => {
+              setExposedServices((prev) => {
+                const curr = prev;
+                const idx = curr.findIndex(
+                  ({ appName }) => appName === appRef.name,
+                );
+                curr[idx].enabled = isExported;
+                return curr;
+              });
+            }}
+          ></NetworkInterconnect>
+        );
+        break;
+      case SetupDeploymentSteps["Select Deployment Type"]:
+        nextJsx = (
+          <SelectDeploymentType
+            key={"SelectDeploymentType"}
+            type={type}
+            setType={setType}
+          />
+        );
+        break;
+      case SetupDeploymentSteps["Enter Deployment Details"]:
+        if (!currentDeploymentPackage) {
+          // TODO @Zano any hint on how to best handle this?
+          throw new Error("Missing required parameters");
+        }
+        if (type === DeploymentType.MANUAL) {
+          nextJsx = (
+            <SelectCluster
+              mode={SelectClusterMode.CREATE}
+              selectedIds={selectedClusters.map((cluster) => cluster.name!)}
+              onSelect={(cluster: cm.ClusterInfo, isSelected: boolean) => {
+                setSelectedClusters((prev) => {
+                  if (isSelected) {
+                    return prev.concat(cluster as cm.ClusterInfoRead);
+                  } else {
+                    return prev.filter((c) => c.name !== cluster.name);
+                  }
+                });
+              }}
+              currentDeploymentName={currentDeploymentName ?? ""}
+              onDeploymentNameChange={setCurrentDeploymentName}
+            />
+          );
+        } else {
+          nextJsx = (
+            <>
+              <SetupMetadata
+                mode={SetupMetadataMode.CREATE}
+                metadataPairs={currentMetadata}
+                applicationPackage={currentDeploymentPackage}
+                currentDeploymentName={currentDeploymentName ?? ""}
+                onDeploymentNameChange={setCurrentDeploymentName}
+                onMetadataUpdate={(m) => {
+                  setCurrentMetadata(m);
+                }}
+              />
+            </>
+          );
+        }
+        break;
+      case SetupDeploymentSteps["Review"]:
+        if (!currentDeploymentPackage || !currentDeploymentName) {
+          // TODO @Zano any hint on how to best handle this?
+          throw new Error("Missing required parameters");
+        }
+        nextJsx = (
+          <Review
+            selectedPackage={currentDeploymentPackage}
+            selectedDeploymentName={currentDeploymentName}
+            selectedProfileName={currentPackageProfile!.name}
+            selectedMetadata={currentMetadata}
+            selectedClusters={selectedClusters}
+            type={type}
+          />
+        );
+        break;
+    }
+    if (nextJsx !== null) {
+      setStepJsx(nextJsx);
+    }
+  }, [
+    availableSteps,
+    currentStep,
+    currentPackageProfile,
+    profileParameterOverrides,
+    selectedClusters,
+    currentMetadata,
+  ]);
 
   useEffect(() => {
     setIsNextDisabled(currentDeploymentPackage === null);
@@ -446,120 +590,7 @@ const SetupDeployment = () => {
         activeStep={currentStep}
         data-cy="stepper"
       />
-      <div className="setup-deployment__content">
-        {availableSteps[currentStep] ===
-          SetupDeploymentSteps["Select a Package"] && (
-          <SelectPackage
-            key="selectPackage"
-            onSelect={(dep) => dispatch(setCurrentDeploymentPackage(dep))}
-            selectedPackage={currentDeploymentPackage ?? undefined}
-          />
-        )}
-
-        {availableSteps[currentStep] ===
-          SetupDeploymentSteps["Select a Profile"] &&
-          currentDeploymentPackage && (
-            <SelectProfilesTable
-              key="selectProfile"
-              selectedPackage={currentDeploymentPackage}
-              selectedProfile={currentPackageProfile ?? undefined}
-              onProfileSelect={(profile) =>
-                dispatch(setCurrentPackageProfile(profile))
-              }
-            />
-          )}
-
-        {availableSteps[currentStep] ===
-          SetupDeploymentSteps["Override Profile Values"] && (
-          <ChangeProfileValues
-            deploymentPackage={currentDeploymentPackage ?? undefined}
-            deploymentProfile={currentPackageProfile ?? undefined}
-          />
-        )}
-
-        {availableSteps[currentStep] ===
-          SetupDeploymentSteps["Network Interconnect"] && (
-          <NetworkInterconnect
-            networks={projectNetworks}
-            selectedNetwork={selectedNetwork}
-            applications={currentDeploymentPackage?.applicationReferences}
-            selectedServices={exposedServices}
-            onNetworkUpdate={(value) => {
-              setSelectedNetwork(value);
-              if (value === "") {
-                setExposedServices((prev) => {
-                  const curr = prev;
-                  curr.forEach((se) => {
-                    se.enabled = false;
-                  });
-                  return curr;
-                });
-              }
-            }}
-            onExportsUpdate={(appRef, isExported) => {
-              setExposedServices((prev) => {
-                const curr = prev;
-                const idx = curr.findIndex(
-                  ({ appName }) => appName === appRef.name,
-                );
-                curr[idx].enabled = isExported;
-                return curr;
-              });
-            }}
-          />
-        )}
-        {availableSteps[currentStep] ===
-          SetupDeploymentSteps["Select Deployment Type"] && (
-          <SelectDeploymentType
-            key={"SelectDeploymentType"}
-            type={type}
-            setType={setType}
-          />
-        )}
-        {availableSteps[currentStep] ===
-          SetupDeploymentSteps["Enter Deployment Details"] && (
-          <>
-            {type === DeploymentType.MANUAL ? (
-              <SelectCluster
-                mode={SelectClusterMode.CREATE}
-                selectedIds={selectedClusters.map((cluster) => cluster.name!)}
-                onSelect={(cluster: cm.ClusterInfo, isSelected: boolean) => {
-                  setSelectedClusters((prev) => {
-                    if (isSelected) {
-                      return prev.concat(cluster as cm.ClusterInfoRead);
-                    } else {
-                      return prev.filter((c) => c.name !== cluster.name);
-                    }
-                  });
-                }}
-                currentDeploymentName={currentDeploymentName ?? ""}
-                onDeploymentNameChange={setCurrentDeploymentName}
-              />
-            ) : (
-              <SetupMetadata
-                mode={SetupMetadataMode.CREATE}
-                metadataPairs={currentMetadata}
-                applicationPackage={currentDeploymentPackage!}
-                currentDeploymentName={currentDeploymentName ?? ""}
-                onDeploymentNameChange={setCurrentDeploymentName}
-                onMetadataUpdate={(m) => {
-                  setCurrentMetadata(m);
-                }}
-              />
-            )}
-          </>
-        )}
-        {availableSteps[currentStep] === SetupDeploymentSteps["Review"] && (
-          <Review
-            selectedPackage={currentDeploymentPackage!}
-            selectedDeploymentName={currentDeploymentName!}
-            selectedProfileName={currentPackageProfile!.name}
-            selectedMetadata={currentMetadata}
-            selectedClusters={selectedClusters}
-            type={type}
-          />
-        )}
-      </div>
+      <div className="setup-deployment__content">{stepJsx}</div>
       <ButtonGroup
         className="setup-deployment__actions"
         align={ButtonGroupAlignment.End}
