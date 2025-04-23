@@ -42,6 +42,28 @@ jobs:
       - name: License check
         run: make license
 
+  matching-versions:
+    name: Check that VERSION files and Chart versions match
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Apply all versions
+        run: make apply-all-versions
+
+      - name: Validate clean folder
+        run: |
+          bash -c "diff -u <(echo -n) <(git diff .)"
+
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: License check
+        run: make license
+
   setup-conditions:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
