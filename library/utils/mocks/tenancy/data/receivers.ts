@@ -14,14 +14,14 @@ export const receiver: omApi.Receiver = {
     from: "test",
     to: {
       enabled: [
-        "LastNameA, FirstNameA <firstnamea.lastnamea@intel.com>",
-        "LastNameB, FirstNameB <firstnameb.lastnameb@intel.com>",
+        "LastNameA, FirstNameA <firstnamea.lastnamea@domain.com>",
+        "LastNameB, FirstNameB <firstnameb.lastnameb@domain.com>",
       ],
       allowed: [
-        "LastNameA, FirstNameA <firstnamea.lastnamea@intel.com>",
-        "LastNameB, FirstNameB <firstnameb.lastnameb@intel.com>",
-        "LastNameC, FirstNameC <firstnamec.lastnamec@intel.com>",
-        "LastNameD, FirstNameD <firstnamed.lastnamed@intel.com>",
+        "LastNameA, FirstNameA <firstnamea.lastnamea@domain.com>",
+        "LastNameB, FirstNameB <firstnameb.lastnameb@domain.com>",
+        "LastNameC, FirstNameC <firstnamec.lastnamec@domain.com>",
+        "LastNameD, FirstNameD <firstnamed.lastnamed@domain.com>",
       ],
     },
   },
