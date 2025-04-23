@@ -26,7 +26,7 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createDeploymentBreadcrumb,
@@ -40,6 +40,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   getCurrentDeploymentPackage,
   getCurrentPackageProfile,
+  profileParameterOverridesSelector,
   setCurrentDeploymentPackage,
   setCurrentPackageProfile,
   setupDeploymentHasEmptyMandatoryParams,
@@ -47,10 +48,17 @@ import {
 } from "../../../store/reducers/setupDeployment";
 import { setProps } from "../../../store/reducers/toast";
 import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
-
-import { OverrideValuesList } from "../../organisms/setup-deployments/OverrideProfileValues/OverrideProfileTable";
+import NetworkInterconnect from "../../organisms/setup-deployments/NetworkInterconnect/NetworkInterconnect";
+import Review from "../../organisms/setup-deployments/Review/Review";
+import SelectCluster, {
+  SelectClusterMode,
+} from "../../organisms/setup-deployments/SelectCluster/SelectCluster";
+import SelectDeploymentType from "../../organisms/setup-deployments/SelectDeploymentType/SelectDeploymentType";
 import SelectPackage from "../../organisms/setup-deployments/SelectPackage/SelectPackage";
 import SelectProfilesTable from "../../organisms/setup-deployments/SelectProfileTable/SelectProfileTable";
+import SetupMetadata, {
+  SetupMetadataMode,
+} from "../../organisms/setup-deployments/SetupMetadata/SetupMetadata";
 import "./SetupDeployment.scss";
 
 type params = {
@@ -90,7 +98,6 @@ const SetupDeployment = () => {
 
   // Stepper: Overall state controls
   const [currentStep, setCurrentStep] = useState(0);
-  const [stepJsx, setStepJsx] = useState<ReactElement | null>(null);
   const [isNextDisabled, setIsNextDisabled] = useState<boolean>(false);
   // This will disable click on final step's `Deploy` button until api reponds back with a failure for retry
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
@@ -99,18 +106,14 @@ const SetupDeployment = () => {
   const [steps, setSteps] = useState<StepperStep[]>([]);
 
   // Step 1: Select Package states
-  // const [currentDeploymentPackage, setCurrentDeploymentPackage] =
-  //   useState<catalog.DeploymentPackage | null>(null);
   const currentDeploymentPackage = useAppSelector(getCurrentDeploymentPackage);
 
   // Step 2: Select a Profile states
-  // const [currentPackageProfile, setCurrentPackageProfile] =
-  //   useState<catalog.DeploymentProfile | null>(null);
   const currentPackageProfile = useAppSelector(getCurrentPackageProfile);
   // Step 3: Override profile values states
-  const [profileParameterOverrides, setProfileParameterOverrides] =
-    useState<OverrideValuesList>({});
-
+  const profileParameterOverrides = useAppSelector(
+    profileParameterOverridesSelector,
+  );
   const emptyMandatoryParams = useAppSelector(
     setupDeploymentHasEmptyMandatoryParams,
   );
@@ -469,19 +472,91 @@ const SetupDeployment = () => {
         {availableSteps[currentStep] ===
           SetupDeploymentSteps["Override Profile Values"] && (
           <ChangeProfileValues
-          // deploymentPackage={currentDeploymentPackage ?? undefined}
-          // deploymentProfile={currentPackageProfile ?? undefined}
-          /* overrideValues={profileParameterOverrides}
-            onOverrideValuesUpdate={(updatedOverrideValues, clear) => {
-              if (clear) {
-                setProfileParameterOverrides(updatedOverrideValues);
-              } else {
-                setProfileParameterOverrides((prevOverrideValues) => ({
-                  ...prevOverrideValues,
-                  ...updatedOverrideValues,
-                }));
+            deploymentPackage={currentDeploymentPackage ?? undefined}
+            deploymentProfile={currentPackageProfile ?? undefined}
+          />
+        )}
+
+        {availableSteps[currentStep] ===
+          SetupDeploymentSteps["Network Interconnect"] && (
+          <NetworkInterconnect
+            networks={projectNetworks}
+            selectedNetwork={selectedNetwork}
+            applications={currentDeploymentPackage?.applicationReferences}
+            selectedServices={exposedServices}
+            onNetworkUpdate={(value) => {
+              setSelectedNetwork(value);
+              if (value === "") {
+                setExposedServices((prev) => {
+                  const curr = prev;
+                  curr.forEach((se) => {
+                    se.enabled = false;
+                  });
+                  return curr;
+                });
               }
-            }} */
+            }}
+            onExportsUpdate={(appRef, isExported) => {
+              setExposedServices((prev) => {
+                const curr = prev;
+                const idx = curr.findIndex(
+                  ({ appName }) => appName === appRef.name,
+                );
+                curr[idx].enabled = isExported;
+                return curr;
+              });
+            }}
+          />
+        )}
+        {availableSteps[currentStep] ===
+          SetupDeploymentSteps["Select Deployment Type"] && (
+          <SelectDeploymentType
+            key={"SelectDeploymentType"}
+            type={type}
+            setType={setType}
+          />
+        )}
+        {availableSteps[currentStep] ===
+          SetupDeploymentSteps["Enter Deployment Details"] && (
+          <>
+            {type === DeploymentType.MANUAL ? (
+              <SelectCluster
+                mode={SelectClusterMode.CREATE}
+                selectedIds={selectedClusters.map((cluster) => cluster.name!)}
+                onSelect={(cluster: cm.ClusterInfo, isSelected: boolean) => {
+                  setSelectedClusters((prev) => {
+                    if (isSelected) {
+                      return prev.concat(cluster as cm.ClusterInfoRead);
+                    } else {
+                      return prev.filter((c) => c.name !== cluster.name);
+                    }
+                  });
+                }}
+                currentDeploymentName={currentDeploymentName ?? ""}
+                onDeploymentNameChange={setCurrentDeploymentName}
+              />
+            ) : (
+              <SetupMetadata
+                mode={SetupMetadataMode.CREATE}
+                metadataPairs={currentMetadata}
+                applicationPackage={currentDeploymentPackage!}
+                currentDeploymentName={currentDeploymentName ?? ""}
+                onDeploymentNameChange={setCurrentDeploymentName}
+                onMetadataUpdate={(m) => {
+                  setCurrentMetadata(m);
+                }}
+              />
+            )}
+          </>
+        )}
+        {availableSteps[currentStep] === SetupDeploymentSteps["Review"] && (
+          <Review
+            selectedPackage={currentDeploymentPackage!}
+            selectedDeploymentName={currentDeploymentName!}
+            selectedProfileName={currentPackageProfile!.name}
+            selectedMetadata={currentMetadata}
+            selectedClusters={selectedClusters}
+            type={type}
           />
         )}
       </div>

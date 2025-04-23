@@ -7,30 +7,22 @@ import { catalog } from "@orch-ui/apis";
 import { MessageBanner, Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import { useAppSelector } from "../../../../store/hooks";
-import {
-  getCurrentDeploymentPackage,
-  setupDeploymentHasMandatoryParams,
-} from "../../../../store/reducers/setupDeployment";
+import { setupDeploymentHasMandatoryParams } from "../../../../store/reducers/setupDeployment";
 import OverrideProfileTable from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import "./DeploymentProfileForm.scss";
 
 const dataCy = "DeploymentProfileForm";
 
 export interface DeploymentProfileFormProps {
-  // selectedPackage?: catalog.DeploymentPackage;
+  selectedPackage?: catalog.DeploymentPackage;
   selectedProfile?: catalog.DeploymentProfile;
-  /* overrideValues: OverrideValuesList;
-  onOverrideValuesUpdate: (updatedOverrideValues: OverrideValuesList) => void; */
 }
 
 const DeploymentProfileForm = ({
-  // selectedPackage,
+  selectedPackage,
   selectedProfile,
-  /*   overrideValues,
-  onOverrideValuesUpdate, */
 }: DeploymentProfileFormProps) => {
   const cy = { "data-cy": dataCy };
-  const selectedPackage = useAppSelector(getCurrentDeploymentPackage);
   const hadMandatoryParams = useAppSelector(setupDeploymentHasMandatoryParams);
 
   return (
@@ -71,10 +63,8 @@ const DeploymentProfileForm = ({
       <div className="override-profile-values-container">
         {selectedPackage && selectedProfile ? (
           <OverrideProfileTable
-          // selectedPackage={selectedPackage}
-          // selectedProfile={selectedProfile}
-          /* overrideValues={overrideValues}
-            onOverrideValuesUpdate={onOverrideValuesUpdate} */
+            selectedPackage={selectedPackage}
+            selectedProfile={selectedProfile}
           />
         ) : (
           <div data-cy="DeploymentProfileFormError">

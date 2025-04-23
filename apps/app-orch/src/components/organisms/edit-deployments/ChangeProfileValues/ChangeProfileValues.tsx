@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm } from "@orch-ui/apis";
+import { adm, catalog } from "@orch-ui/apis";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   clearMandatoryParams,
   editDeploymentPrevProfileName,
-  getCurrentDeploymentPackage,
-  getCurrentPackageProfile,
   profileParameterOverridesSelector,
   setEditPrevProfileName,
   setProfileParameterOverrides,
@@ -23,29 +21,21 @@ const dataCy = "changeProfileValues";
 
 interface ChangeProfileValuesProps {
   deployment?: adm.DeploymentRead;
-  // deploymentPackage?: catalog.DeploymentPackage;
-  // deploymentProfile?: catalog.DeploymentProfile;
-  // overrideValues: OverrideValuesList;
-  // onOverrideValuesUpdate: (
-  //   updatedOverrideValues: OverrideValuesList,
-  //   clear: boolean,
-  // ) => void;
+  deploymentPackage?: catalog.DeploymentPackage;
+  deploymentProfile?: catalog.DeploymentProfile;
 }
 
 const ChangeProfileValues = ({
   deployment,
-  // deploymentPackage,
-  // deploymentProfile,
-  // overrideValues,
-  // onOverrideValuesUpdate,
+  deploymentPackage,
+  deploymentProfile,
 }: ChangeProfileValuesProps) => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
   const prevProfileName = useAppSelector(editDeploymentPrevProfileName);
   const overrideValues = useAppSelector(profileParameterOverridesSelector);
-  const deploymentProfile = useAppSelector(getCurrentPackageProfile);
-  const deploymentPackage = useAppSelector(getCurrentDeploymentPackage);
+
   useEffect(() => {
     if (!deployment || deployment.profileName !== deploymentProfile?.name) {
       if (
@@ -53,7 +43,6 @@ const ChangeProfileValues = ({
         prevProfileName !== deploymentProfile?.name
       ) {
         dispatch(clearMandatoryParams());
-        // onOverrideValuesUpdate({}, true);
         dispatch(
           setProfileParameterOverrides({
             profileParameterOverrides: {},
@@ -77,7 +66,6 @@ const ChangeProfileValues = ({
             clear: true,
           }),
         );
-        // onOverrideValuesUpdate(valuesList, true);
       } else {
         dispatch(
           setProfileParameterOverrides({
@@ -85,10 +73,9 @@ const ChangeProfileValues = ({
             clear: true,
           }),
         );
-        // onOverrideValuesUpdate(overrideValues, true);
       }
     }
-    console.log("DISPATCHED FROM CHANGE PROFILE VALUES..");
+
     dispatch(setEditPrevProfileName(deploymentProfile?.name ?? ""));
   }, [deploymentProfile]);
 
@@ -97,10 +84,6 @@ const ChangeProfileValues = ({
       <DeploymentProfileForm
         selectedPackage={deploymentPackage ?? undefined}
         selectedProfile={deploymentProfile ?? undefined}
-        // onOverrideValuesUpdate={(updatedOverrideValues) =>
-        //   onOverrideValuesUpdate(updatedOverrideValues, false)
-        // }
-        // overrideValues={overrideValues}
       />
     </div>
   );
