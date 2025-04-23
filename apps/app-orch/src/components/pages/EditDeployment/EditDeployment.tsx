@@ -200,17 +200,6 @@ const EditDeployment = () => {
             deployment={apiDeployment.deployment}
             deploymentPackage={deploymentPackage}
             deploymentProfile={currentPackageProfile}
-            overrideValues={profileParameterOverrides}
-            onOverrideValuesUpdate={(updatedOverrideValues, clear) => {
-              if (clear) {
-                setProfileParameterOverrides(updatedOverrideValues);
-              } else {
-                setProfileParameterOverrides((prevOverrideValues) => ({
-                  ...prevOverrideValues,
-                  ...updatedOverrideValues,
-                }));
-              }
-            }}
           />
         );
         break;
