@@ -17,7 +17,6 @@ jobs:
       run_lint: false # TODO fix lint and enable
       run_test: false
       run_build: true
-      run_scan_containers: false
       prefix_tag_separator: "/"
       project_folder: tests
       orch_ci_repo_ref: main
