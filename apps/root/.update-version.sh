@@ -11,9 +11,6 @@ else
   exit 1
 fi
 
-# Determine path relative to repository - don't assume we need to cd
-echo "Current directory: $(pwd)"
-
 # Check if VERSIONFILE is set and not empty
 if [ -z "${VERSIONFILE}" ]; then
   echo "ERROR: VERSIONFILE environment variable is not set or empty"

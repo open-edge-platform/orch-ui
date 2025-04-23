@@ -3,15 +3,11 @@
 ---
 name: Update Versions to -dev
 
-# on:
-#   push:
-#     branches:
-#       - main
-#       - release-*
-
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - main
+      - release-*
 
 jobs:
   update-version:
