@@ -232,7 +232,7 @@ describe("<RegionForm />", () => {
           .parentsUntil(".spark-text-field-container")
           .should(
             "contain.text",
-            "Name may only contain alphanumeric characters, symbols (. -) only and cannot end with a symbol",
+            "Name must start and end with alphanumeric characters, and may contain periods or hyphens in between.",
           );
       });
 
@@ -240,6 +240,14 @@ describe("<RegionForm />", () => {
         pom.interceptApis([pom.api.createRegionMocked, pom.api.postMetadata]);
         pom.el.name.type("region-0123456789123456");
         pom.el.name.should("have.value", "region-0123456789123");
+      });
+
+      it("should show error on region name for less than min length on characters", () => {
+        pom.interceptApis([pom.api.createRegionMocked, pom.api.postMetadata]);
+        pom.el.name.type("h");
+        pom.el.name
+          .parentsUntil(".spark-text-field-container")
+          .should("contain.text", "Name must be at least 2 characters");
       });
 
       it("should validate on invalid type with special symbol", () => {

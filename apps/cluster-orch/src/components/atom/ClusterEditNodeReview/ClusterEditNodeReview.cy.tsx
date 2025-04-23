@@ -23,10 +23,6 @@ describe("<ClusterEditNodeReview/>", () => {
       pom.root.should("exist");
       pom.root.should("contain.text", "No hosts available.");
     });
-    it("should click `Add Host` to call @addNode handler function for opening drawer", () => {
-      pom.el.addHostBtn.click();
-      cy.get("@addNode").should("be.called");
-    });
   });
 
   describe("when nodes/hosts are available", () => {

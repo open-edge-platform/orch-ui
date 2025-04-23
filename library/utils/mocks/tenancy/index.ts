@@ -6,6 +6,6 @@
 /* devblock:start */
 export * from "./data";
 export { handlers as tenantManagerHandlers } from "./handlers";
-export { handlers as observabilityHandlers } from "./observagilityMocks";
+export { handlers as observabilityHandlers } from "./observabilityMocks";
 export { handlers as projectHandlers, projectStore } from "./projectsMocks";
 /* devblock:end */

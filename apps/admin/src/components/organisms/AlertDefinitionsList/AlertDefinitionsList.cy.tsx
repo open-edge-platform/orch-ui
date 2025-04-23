@@ -15,4 +15,13 @@ describe("<AlertDefinitionsList/>", () => {
     pom.root.should("exist");
     pom.table.getRows().should("have.length", multipleAlertDefinitions.length);
   });
+  it("should show alert definition name", () => {
+    pom.interceptApis([pom.api.alertDefinitionSingle]);
+    cy.mount(<AlertDefinitionsList />);
+    pom.waitForApis();
+    pom.alertDisplayNamePom.root.should(
+      "contain.text",
+      "Host - Connection Lost",
+    );
+  });
 });
