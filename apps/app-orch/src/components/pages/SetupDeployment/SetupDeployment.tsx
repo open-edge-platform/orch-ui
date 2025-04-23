@@ -44,7 +44,6 @@ import {
   setCurrentDeploymentPackage,
   setCurrentPackageProfile,
   setupDeploymentHasEmptyMandatoryParams,
-  wholeStateSelector,
 } from "../../../store/reducers/setupDeployment";
 import { setProps } from "../../../store/reducers/toast";
 import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
@@ -227,7 +226,7 @@ const SetupDeployment = () => {
         (p) => p.name === currentDeploymentPackage.defaultProfileName,
       );
       if (defaultProfile !== undefined) {
-        setCurrentPackageProfile({ ...defaultProfile });
+        dispatch(setCurrentPackageProfile({ ...defaultProfile }));
       }
     }
   }, [currentDeploymentPackage]);
@@ -438,10 +437,6 @@ const SetupDeployment = () => {
       );
     }
   }, [currentDeploymentPackage?.applicationReferences]);
-
-  //   useState<OverrideValuesList>({});
-  const wholeState = useAppSelector(wholeStateSelector);
-  console.log("Whole State:", wholeState);
 
   const convertMetadataPairsToObject = (
     metadataPairs: MetadataPair[],

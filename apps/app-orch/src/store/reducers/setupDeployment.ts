@@ -153,8 +153,6 @@ export const getCurrentDeploymentPackage = (state: RootState) =>
 export const getCurrentPackageProfile = (state: RootState) =>
   state.setupDeployment.currentPackageProfile;
 
-export const wholeStateSelector = (state: RootState) => state.setupDeployment;
-
 export const {
   setDeploymentApplications,
   updateMandatoryParam,

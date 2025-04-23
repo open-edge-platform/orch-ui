@@ -88,7 +88,7 @@ export const removeEmptyValues = (values: ParameterOverrideValuePair) => {
   });
 };
 
-const removeEmptyObjects = (
+export const removeEmptyObjects = (
   values: ParameterOverrideValuePair,
 ): ParameterOverrideValuePair => {
   const objectNonEmptyKeys: ParameterOverrideValuePair = {};
