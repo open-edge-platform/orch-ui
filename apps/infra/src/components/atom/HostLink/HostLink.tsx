@@ -7,7 +7,7 @@ import { eim } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getHostDetailsPath } from "src/routes/const";
+import { getHostDetailsPath } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setErrorInfo } from "../../../store/notifications";
 
