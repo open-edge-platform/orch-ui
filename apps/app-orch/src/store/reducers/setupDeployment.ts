@@ -97,9 +97,7 @@ export const setupDeployment = createSlice({
         clear: boolean;
       }>,
     ) {
-      console.log("setProfileParameterOverrides:", action.payload);
-      const isClear = action.payload.clear;
-      if (isClear) {
+      if (action.payload.clear) {
         state.profileParameterOverrides =
           action.payload.profileParameterOverrides;
       } else {

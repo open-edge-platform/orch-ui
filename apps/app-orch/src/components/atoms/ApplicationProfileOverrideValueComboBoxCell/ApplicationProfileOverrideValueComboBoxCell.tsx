@@ -145,7 +145,6 @@ const ApplicationProfileOverrideValueComboBoxCell = ({
     setValid(value.length === 0 || value.trim().length !== 0);
   };
 
-  // Moved overrideHandler from parent component
   const handleOverride = (value: ParameterOverrideValuePair) => {
     let updatedParameterOverrides: ParameterOverrideValuePair = mergeRecursive(
       structuredClone(selectedValues),
