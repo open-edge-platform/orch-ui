@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { applicationOne, packageWithParameterTemplates } from "@orch-ui/utils";
+import { applicationOne, appOneName, profileOneName } from "@orch-ui/utils";
 import ApplicationProfileOverrideSubComponent from "./ApplicationProfileOverrideSubComponent";
 import ApplicationProfileOverrideSubComponentPom from "./ApplicationProfileOverrideSubComponent.pom";
 
@@ -13,7 +13,10 @@ describe("<ApplicationProfileOverrideSubComponent/>", () => {
     cy.mount(
       <ApplicationProfileOverrideSubComponent
         app={applicationOne}
-        selectedProfile={packageWithParameterTemplates.profiles![1]}
+        selectedProfile={{
+          name: "",
+          applicationProfiles: { [appOneName]: profileOneName },
+        }}
       />,
     );
     pom.root.should("exist");

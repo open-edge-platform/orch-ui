@@ -13,9 +13,13 @@ interface ApplicationProfileOverrideSubComponentProps {
   selectedProfile: catalog.DeploymentProfile;
 }
 
+const dataCy = "applicationProfileOverrideSubComponent";
+
 /** This will render application profiles with override form upon row expand */
 const ApplicationProfileOverrideSubComponent = memo(
   ({ app, selectedProfile }: ApplicationProfileOverrideSubComponentProps) => {
+    const cy = { "data-cy": dataCy };
+
     /** Application Profile configuration on the selected deployment package profile */
     const appProfile = app.profiles?.find(
       (profile) =>
@@ -34,10 +38,12 @@ const ApplicationProfileOverrideSubComponent = memo(
     }
 
     return (
-      <ApplicationProfileParameterOverrideForm
-        application={app}
-        applicationProfile={appProfile}
-      />
+      <div {...cy}>
+        <ApplicationProfileParameterOverrideForm
+          application={app}
+          applicationProfile={appProfile}
+        />
+      </div>
     );
   },
 );
