@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 export const clusterManagementRoute = "clusters";
 export const clusterDetailRoute = "cluster/:clusterName";
 export const clusterEditRoute = "cluster/:clusterName/edit";
