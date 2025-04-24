@@ -111,10 +111,10 @@ const ReceiversList = ({ isOpen = false, setIsOpen }: ReceiversListProps) => {
     const emailsEnabled = receivers[0]?.emailConfig?.to?.enabled ?? [];
     for (let i = 0; i < emails.length; i++) {
       // TODO: replace with a library to split name and email address
-      // Email in this format: LastName, FirstName <last.first@intel.com>
+      // Email in this format: LastName, FirstName <last.first@domain.com>
       const userInfo = emails[i].split("<");
       // if userInfo[1] exist means API side is returning email address in above format
-      // if not means API is still returning old format last.first@intel.com
+      // if not means API is still returning old format last.first@domain.com
       // in both cases, for name cell we should show userInfo[0], so check needed
       const name = userInfo[0].trim();
       const email = userInfo[1]

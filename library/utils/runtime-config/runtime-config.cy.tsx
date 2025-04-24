@@ -63,7 +63,7 @@ const comboConfig: IRuntimeConfig = {
 
 describe("RuntimeConfig", () => {
   beforeEach(() => {
-    window.process = { env: { REACT_LP_MOCK_API: "false" } };
+    window.process = { env: { REACT_MOCK_API: "false" } };
   });
   it("should return the title", () => {
     window.__RUNTIME_CONFIG__ = runtimeConfig;
@@ -160,9 +160,9 @@ describe("RuntimeConfig", () => {
         // eslint-disable-next-line
         expect(RuntimeConfig.isAuthEnabled()).to.be.true;
       });
-      describe("when the REACT_LP_MOCK_API is true", () => {
+      describe("when the REACT_MOCK_API is true", () => {
         it("should return false", () => {
-          window.process = { env: { REACT_LP_MOCK_API: "true" } };
+          window.process = { env: { REACT_MOCK_API: "true" } };
           expect(RuntimeConfig.isAuthEnabled()).to.be.false;
         });
       });
@@ -177,9 +177,9 @@ describe("RuntimeConfig", () => {
       };
       window.__RUNTIME_CONFIG__ = cfg;
     });
-    describe("when the REACT_LP_MOCK_API is true", () => {
+    describe("when the REACT_MOCK_API is true", () => {
       it("should return the current origin", () => {
-        window.process = { env: { REACT_LP_MOCK_API: "true" } };
+        window.process = { env: { REACT_MOCK_API: "true" } };
         expect(RuntimeConfig.infraApiUrl).to.eq(window.location.origin);
       });
     });

@@ -6,7 +6,7 @@
 // SPDX-FileCopyrightText: (C) 2022 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 
-const fqdn = "kind.internal"
+const fqdn = "kind.internal";
 
 window.__RUNTIME_CONFIG__ = {
   AUTH: "true",
@@ -73,7 +73,7 @@ window.__RUNTIME_CONFIG__ = {
     CO: `https://api.${fqdn}`,
     INFRA: `https://api.${fqdn}`,
     MB: `https://api.${fqdn}`,
-    ALERT: `https://web-ui.${fqdn}/api`,
+    ALERT: `https://api.${fqdn}/`,
     TM: `https://api.${fqdn}/`,
   },
   VERSIONS: {
