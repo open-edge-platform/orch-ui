@@ -18,16 +18,16 @@ import {
   API_INTERVAL,
   Direction,
   getFilter,
-  getInfraPath,
   getOrder,
   Operator,
   regionRoute,
   SharedStorage,
   subRegionRoute,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, Heading, Tag, Text, Tooltip } from "@spark-design/react";
 import { ButtonSize, HeaderSize } from "@spark-design/tokens";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "./RegionsTable.scss";
 
 interface RegionsTableProps {
@@ -92,7 +92,7 @@ const RegionsTable = ({
     },
     { pollingInterval: API_INTERVAL },
   );
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const columns: TableColumn<eim.RegionRead>[] = [
     {
@@ -235,11 +235,9 @@ const RegionsTable = ({
       size={ButtonSize.Large}
       onPress={() => {
         if (parentRegionId) {
-          navigate(
-            getInfraPath(subRegionRoute, { parentRegionId, regionId: "new" }),
-          );
+          navigate(subRegionRoute, { parentRegionId, regionId: "new" });
         } else {
-          navigate(getInfraPath(regionRoute, { regionId: "new" }));
+          navigate(regionRoute, { regionId: "new" });
         }
       }}
     >
@@ -257,14 +255,12 @@ const RegionsTable = ({
               name: parentRegionId ? "Add a Subregion" : "Add a Region",
               action: () => {
                 if (parentRegionId) {
-                  navigate(
-                    getInfraPath(subRegionRoute, {
-                      parentRegionId,
-                      regionId: "new",
-                    }),
-                  );
+                  navigate(subRegionRoute, {
+                    parentRegionId,
+                    regionId: "new",
+                  });
                 } else {
-                  navigate(getInfraPath(regionRoute, { regionId: "new" }));
+                  navigate(regionRoute, { regionId: "new" });
                 }
               },
               disable: !hasPermission,

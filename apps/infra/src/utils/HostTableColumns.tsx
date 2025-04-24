@@ -39,7 +39,7 @@ const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
   };
 };
 
-const name = (basePath: string = ""): TableColumn<eim.HostRead> => {
+const name = (): TableColumn<eim.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",

@@ -88,7 +88,7 @@ export interface HostsTableProps {
 }
 
 const hostColumns: TableColumn<eim.HostRead>[] = [
-  HostTableColumn.name("../"),
+  HostTableColumn.name(),
   HostTableColumn.status,
   HostTableColumn.serialNumber,
   HostTableColumn.os,
