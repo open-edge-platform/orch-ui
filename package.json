@@ -4,7 +4,7 @@
   "description": "Edge Orchestrator User Interface",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run app:admin\" \"npm run app:infra\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
+    "start": "export ROOT=true; concurrently \"npm run app:admin\" \"npm run app:infra\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
     "app:admin": "cd apps/admin && webpack serve --config=config/webpack.dev.js",
     "app:admin:build": "cd apps/admin && webpack --config=config/webpack.prod.js",
     "app:admin:lint": "cd apps/admin && prettier --check ./src && eslint ./src",
