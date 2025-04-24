@@ -9,13 +9,6 @@ import {
   RBACWrapper,
   SquareSpinner,
 } from "@orch-ui/components";
-import { Role, RuntimeConfig } from "@orch-ui/utils";
-import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
-import { Navigate, RouteObject } from "react-router-dom";
-import HostDetails from "../components/pages/HostDetails/HostDetails";
-import Hosts from "../components/pages/Hosts/Hosts";
-import RegionForm from "../components/pages/region/RegionForm";
-import SiteForm from "../components/pages/site/SiteForm";
 import {
   clusterCreateRoute,
   clusterDetailRoute,
@@ -29,9 +22,17 @@ import {
   locationRoute,
   regionRoute,
   regionSiteRoute,
+  Role,
+  RuntimeConfig,
   siteRoute,
   subRegionRoute,
-} from "./const";
+} from "@orch-ui/utils";
+import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
+import { Navigate, RouteObject } from "react-router-dom";
+import HostDetails from "../components/pages/HostDetails/HostDetails";
+import Hosts from "../components/pages/Hosts/Hosts";
+import RegionForm from "../components/pages/region/RegionForm";
+import SiteForm from "../components/pages/site/SiteForm";
 
 import { HostConfig } from "../components/pages/HostConfig/HostConfig";
 import HostEdit from "../components/pages/HostEdit";

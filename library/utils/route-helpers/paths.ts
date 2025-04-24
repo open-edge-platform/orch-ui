@@ -1,0 +1,44 @@
+export const clusterManagementRoute = "clusters";
+export const clusterDetailRoute = "cluster/:clusterName";
+export const clusterEditRoute = "cluster/:clusterName/edit";
+export const clusterCreateRoute = "clusters/create";
+export const locationRoute = "locations";
+export const regionRoute = "regions/:regionId";
+export const subRegionRoute = "regions/parent/:parentRegionId/:regionId";
+export const regionSiteRoute = "regions/:regionId/sites/:siteId";
+export const siteRoute = "sites/:siteId";
+export const hostsRoute = "hosts";
+export const hostDetailsRoute = "host/:id";
+export const hostEditRoute = "host/:id/edit";
+export const hostRegisterRoute = "register-hosts";
+export const hostProvisioningRoute = "/hosts/set-up-provisioning";
+
+export const allClusterRoutes = [
+  clusterManagementRoute,
+  clusterDetailRoute,
+  clusterEditRoute,
+  clusterCreateRoute,
+];
+export const allHostRoutes = [
+  hostsRoute,
+  hostDetailsRoute,
+  hostEditRoute,
+  hostRegisterRoute,
+  hostProvisioningRoute,
+];
+export const allLocationRoutes = [
+  locationRoute,
+  regionRoute,
+  subRegionRoute,
+  regionSiteRoute,
+  siteRoute,
+];
+
+export const allInfraRoutes = [
+  ...allClusterRoutes,
+  ...allHostRoutes,
+  ...allLocationRoutes,
+] as const;
+type RoutesTuple = typeof allInfraRoutes;
+
+export type InfraRoute = RoutesTuple[number];

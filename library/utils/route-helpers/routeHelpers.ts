@@ -4,7 +4,13 @@
  */
 
 import React, { createRef } from "react";
-import { Location, RouteObject } from "react-router-dom";
+import {
+  generatePath,
+  Location,
+  PathParam,
+  RouteObject,
+} from "react-router-dom";
+import { InfraRoute } from "./paths";
 
 export type RouteObjectWithRef = RouteObject & {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -30,3 +36,10 @@ export const mapChildRoutes = (routes: RouteObject[]): RouteObject[] => {
 
 // matches .page $transition-duration in transitions.scss
 export const innerTransitionTimeout = 300;
+
+export const getInfraPath = (
+  route: InfraRoute,
+  params?: {
+    [key in PathParam<InfraRoute>]: string | null;
+  },
+): string => `/infrastructure/${generatePath(route, params ?? {})}`;
