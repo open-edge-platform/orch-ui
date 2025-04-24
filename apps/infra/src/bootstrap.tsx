@@ -33,7 +33,7 @@ import { setupWorker } from "msw";
 //Note: had to 'clear site data' from the Storage section in Edge for mock to work.
 async function prepare() {
   /* devblock:start */
-  if (process.env.REACT_LP_MOCK_API === "true") {
+  if (process.env.REACT_MOCK_API === "true") {
     const { handlers } = await import(
       "../../../library/utils/mocks/infra/mocks"
     );
