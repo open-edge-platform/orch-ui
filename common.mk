@@ -39,7 +39,6 @@ LABEL_DESCRIPTION           := $(shell echo "Orch UI")
 LABEL_LICENSE               ?= $(shell echo "Apache-2.0")
 LABEL_TITLE                 ?= ${DOCKER_REPOSITORY}
 LABEL_URL                   ?= ${DOCKER_LABEL_VCS_URL}
-LABEL_MAINTAINER            ?= $(shell echo "Orch UI Maintainers <orchui-maint@intel.com>")
 
 DOCKER_LABEL_ARGS         ?= \
 	--label org.opencontainers.image.source="${DOCKER_LABEL_VCS_URL}" \
@@ -49,8 +48,7 @@ DOCKER_LABEL_ARGS         ?= \
 	--label org.opencontainers.image.description="${LABEL_DESCRIPTION}" \
 	--label org.opencontainers.image.licenses="${LABEL_LICENSE}" \
 	--label org.opencontainers.image.title="${LABEL_TITLE}" \
-	--label org.opencontainers.image.url="${LABEL_URL}" \
-	--label maintainer="${LABEL_MAINTAINER}"
+	--label org.opencontainers.image.url="${LABEL_URL}"
 
 # example DOCKER_EXTRA_ARGS="--progress=plain"
 DOCKER_EXTRA_ARGS ?=
