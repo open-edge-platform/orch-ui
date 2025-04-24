@@ -10,7 +10,7 @@ import {
   PathParam,
   RouteObject,
 } from "react-router-dom";
-import { InfraRoute } from "./paths";
+import { infraMfePrefix, InfraRoute } from "./paths";
 
 export type RouteObjectWithRef = RouteObject & {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -42,4 +42,4 @@ export const getInfraPath = (
   params?: {
     [key in PathParam<InfraRoute>]: string | null;
   },
-): string => `/infrastructure/${generatePath(route, params ?? {})}`;
+): string => `${infraMfePrefix + generatePath(route, params ?? {})}`;

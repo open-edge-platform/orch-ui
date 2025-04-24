@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
+export const infraMfePrefix = "/infrastructure/";
 
 export const clusterManagementRoute = "clusters";
 export const clusterDetailRoute = "cluster/:clusterName";
@@ -44,6 +45,7 @@ export const allInfraRoutes = [
   ...allHostRoutes,
   ...allLocationRoutes,
 ] as const;
+
 type RoutesTuple = typeof allInfraRoutes;
 
 export type InfraRoute = RoutesTuple[number];
