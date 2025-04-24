@@ -5,13 +5,12 @@
 
 import { eim } from "@orch-ui/apis";
 import { aggregateStatuses, TableColumn } from "@orch-ui/components";
-import { hostToStatuses } from "@orch-ui/utils";
+import { getInfraPath, hostDetailsRoute, hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost";
 import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
-import { getHostDetailsPath } from "../routes/const";
 import { HostData } from "../store/configureHost";
 
 const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
@@ -54,7 +53,10 @@ const name = (basePath: string = ""): TableColumn<eim.HostRead> => {
     Cell: (table: { row: { original: eim.HostRead } }) => {
       const hostId = table.row.original.resourceId;
       return hostId ? (
-        <Link to={`${basePath}${getHostDetailsPath(hostId)}`} relative="path">
+        <Link
+          to={`${getInfraPath(hostDetailsRoute, { id: hostId })}`}
+          relative="path"
+        >
           {table.row.original.name !== "" ? table.row.original.name : hostId}
         </Link>
       ) : (

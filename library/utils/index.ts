@@ -9,6 +9,7 @@ export * from "./echarts/EChartOptions";
 export * from "./error-handler/errorHandler";
 export * from "./fileHandler/fileHandler";
 export * from "./route-helpers/routeHelpers";
+export * from "./route-helpers/paths";
 
 export * from "./shared-storage/shared-storage";
 export * from "./global";

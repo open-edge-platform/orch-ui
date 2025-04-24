@@ -5,8 +5,11 @@
 
 import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TableColumn } from "@orch-ui/components";
-import { regions as allRegions } from "@orch-ui/utils";
-import { getRegionPath } from "../../../routes/const";
+import {
+  getInfraPath,
+  regionRoute,
+  regions as allRegions,
+} from "@orch-ui/utils";
 import RegionsTable from "./RegionsTable";
 import RegionsTablePom from "./RegionsTable.pom";
 
@@ -53,7 +56,9 @@ describe("<RegionTable /> with mocked data should ", () => {
     });
     it("render the Add button", () => {
       emptyPom.el.emptyActionBtn.click();
-      pom.getPath().should("contain", getRegionPath("new"));
+      pom
+        .getPath()
+        .should("contain", getInfraPath(regionRoute, { regionId: "new" }));
     });
   });
 

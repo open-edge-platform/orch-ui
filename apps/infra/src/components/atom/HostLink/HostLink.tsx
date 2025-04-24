@@ -4,10 +4,14 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { parseError, SharedStorage } from "@orch-ui/utils";
+import {
+  getInfraPath,
+  hostDetailsRoute,
+  parseError,
+  SharedStorage,
+} from "@orch-ui/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getHostDetailsPath } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setErrorInfo } from "../../../store/notifications";
 
@@ -76,7 +80,7 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
     <Link
       {...cy}
       className="host-link"
-      to={`/infrastructure/${getHostDetailsPath(host.resourceId)}`}
+      to={`${getInfraPath(hostDetailsRoute, { id: host.resourceId })}`}
       relative="path"
     >
       {host.name || host.resourceId}

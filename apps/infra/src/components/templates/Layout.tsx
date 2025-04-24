@@ -12,8 +12,14 @@ import {
   SidebarMain,
 } from "@orch-ui/components";
 import {
+  allClusterRoutes,
+  allLocationRoutes,
+  clusterManagementRoute,
   hasRole,
+  hostsRoute,
+  InfraRoute,
   innerTransitionTimeout,
+  locationRoute,
   Role,
   RuntimeConfig,
 } from "@orch-ui/utils";
@@ -23,17 +29,39 @@ import { useEffect, useMemo } from "react";
 import { matchPath } from "react-router";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import {
-  allClusterRoutes,
-  allLocationRoutes,
-  clusterNavItem,
-  hostsNavItem,
-  InfraRoute,
-  locationsNavItem,
-} from "../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { hideToast, setMessageBanner } from "../../store/notifications";
 import "./Layout.scss";
+
+const defaultNavItem: CollapsableListItem<string> = {
+  icon: "minus",
+  route: "",
+  value: "",
+};
+
+const clusterNavItem: CollapsableListItem<string> = {
+  ...defaultNavItem,
+  route: clusterManagementRoute,
+  icon: "globe",
+  value: "Clusters",
+  divider: true,
+};
+
+const hostsNavItem: CollapsableListItem<string> = {
+  ...defaultNavItem,
+  route: hostsRoute,
+  value: "Hosts",
+  isBold: false,
+  divider: true,
+};
+
+const locationsNavItem: CollapsableListItem<string> = {
+  ...defaultNavItem,
+  route: locationRoute,
+  icon: "cube-detached",
+  value: "Locations",
+  divider: true,
+};
 
 const createMenuItems = () => {
   const items: CollapsableListItem<string>[] = [];

@@ -18,14 +18,16 @@ import {
   API_INTERVAL,
   Direction,
   getFilter,
+  getInfraPath,
   getOrder,
   Operator,
+  regionRoute,
   SharedStorage,
+  subRegionRoute,
 } from "@orch-ui/utils";
 import { Button, Heading, Tag, Text, Tooltip } from "@spark-design/react";
 import { ButtonSize, HeaderSize } from "@spark-design/tokens";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { getRegionPath, getSubRegionPath } from "../../../routes/const";
 import "./RegionsTable.scss";
 
 interface RegionsTableProps {
@@ -233,11 +235,11 @@ const RegionsTable = ({
       size={ButtonSize.Large}
       onPress={() => {
         if (parentRegionId) {
-          navigate(`../../${getSubRegionPath(parentRegionId, "new")}`, {
-            relative: "path",
-          });
+          navigate(
+            getInfraPath(subRegionRoute, { parentRegionId, regionId: "new" }),
+          );
         } else {
-          navigate(`../${getRegionPath("new")}`, { relative: "path" });
+          navigate(getInfraPath(regionRoute, { regionId: "new" }));
         }
       }}
     >
@@ -255,11 +257,14 @@ const RegionsTable = ({
               name: parentRegionId ? "Add a Subregion" : "Add a Region",
               action: () => {
                 if (parentRegionId) {
-                  navigate(`../../${getSubRegionPath(parentRegionId, "new")}`, {
-                    relative: "path",
-                  });
+                  navigate(
+                    getInfraPath(subRegionRoute, {
+                      parentRegionId,
+                      regionId: "new",
+                    }),
+                  );
                 } else {
-                  navigate(`../${getRegionPath("new")}`, { relative: "path" });
+                  navigate(getInfraPath(regionRoute, { regionId: "new" }));
                 }
               },
               disable: !hasPermission,
