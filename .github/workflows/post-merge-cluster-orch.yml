@@ -15,7 +15,7 @@ on:
 
 jobs:
   post-merge-pipeline:
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@feature/push-dev-images
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@main
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_version_check: true
