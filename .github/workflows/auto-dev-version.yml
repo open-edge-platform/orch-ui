@@ -16,8 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run Version Update Action
-        # uses: open-edge-platform/orch-ci/dev-version-update@main
-        # uses: ./.github/actions/dev-version-update
-        uses: open-edge-platform/orch-ci/dev-version-update@feature/update-version
+        uses: open-edge-platform/orch-ci/dev-version-update@main
         with:
           gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
