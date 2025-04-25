@@ -10,7 +10,7 @@ import {
   PathParam,
   RouteObject,
 } from "react-router-dom";
-import { infraMfePrefix, InfraRoute } from "./paths";
+import { infraMfePrefix } from "./paths";
 
 export type RouteObjectWithRef = RouteObject & {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -37,9 +37,9 @@ export const mapChildRoutes = (routes: RouteObject[]): RouteObject[] => {
 // matches .page $transition-duration in transitions.scss
 export const innerTransitionTimeout = 300;
 
-export const getInfraPath = (
-  route: InfraRoute,
+export const getInfraPath = <Path extends string>(
+  route: Path,
   params?: {
-    [key in PathParam<InfraRoute>]: string | null;
+    [key in PathParam<Path>]: string | null;
   },
-): string => `${infraMfePrefix + generatePath(route, params ?? {})}`;
+): string => `${infraMfePrefix + generatePath<Path>(route, params)}`;

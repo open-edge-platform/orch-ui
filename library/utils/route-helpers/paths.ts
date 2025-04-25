@@ -24,21 +24,21 @@ export const allClusterRoutes = [
   clusterDetailRoute,
   clusterEditRoute,
   clusterCreateRoute,
-];
+] as const;
 export const allHostRoutes = [
   hostsRoute,
   hostDetailsRoute,
   hostEditRoute,
   hostRegisterRoute,
   hostProvisioningRoute,
-];
+] as const;
 export const allLocationRoutes = [
   locationRoute,
   regionRoute,
   subRegionRoute,
   regionSiteRoute,
   siteRoute,
-];
+] as const;
 
 export const allInfraRoutes = [
   ...allClusterRoutes,
