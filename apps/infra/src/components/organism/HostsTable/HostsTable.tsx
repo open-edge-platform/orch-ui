@@ -15,15 +15,17 @@ import {
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import {
   API_INTERVAL,
   checkAuthAndRole,
   Direction,
   getOrder,
+  hostProvisioningRoute,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { useEffect } from "react";
@@ -120,7 +122,7 @@ const HostsTable = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const [onboardHost] =
     eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
@@ -216,10 +218,7 @@ const HostsTable = ({
       dispatch(reset());
       // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
-      const path = "../hosts/set-up-provisioning";
-      navigate(path, {
-        relative: "path",
-      });
+      navigate(hostProvisioningRoute);
     }
   };
 

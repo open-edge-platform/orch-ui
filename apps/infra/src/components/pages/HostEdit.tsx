@@ -13,9 +13,11 @@ import {
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  hostsRoute,
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -34,7 +36,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import {
   disableMessageBanner,
@@ -61,7 +63,7 @@ const HostEdit = () => {
 
   const { id } = useParams<urlParams>() as urlParams;
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const { control: controlBasicInfo } = useForm<HostInputs>({
     mode: "all",
@@ -245,7 +247,7 @@ const HostEdit = () => {
           );
           setTimeout(() => {
             dispatch(disableMessageBanner());
-            navigate("../../hosts");
+            navigate(hostsRoute);
           }, 3000);
         })
         .catch((e) => {
@@ -429,7 +431,7 @@ const HostEdit = () => {
                 variant="primary"
                 data-cy="cancelHostButton"
                 onPress={() => {
-                  navigate("../../hosts");
+                  navigate(hostsRoute);
                 }}
               >
                 Cancel

@@ -8,13 +8,15 @@ import { AggregatedStatuses, Flex, SquareSpinner } from "@orch-ui/components";
 import {
   getCustomStatusOnIdleAggregation,
   HostGenericStatuses,
+  hostRegisterRoute,
   hostToStatuses,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, Heading, Icon } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import moment from "moment";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import HostDetailsActions from "../../organism/hosts/HostDetailsActions/HostDetailsActions";
 import "./RegisteredHostDetails.scss";
 
@@ -22,7 +24,7 @@ const dataCy = "registeredHostDetails";
 export const RegisteredHostDetails = () => {
   const cy = { "data-cy": dataCy };
   const className = "registered-host-details";
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const { resourceId } = useParams();
 
   const { data: host } =
@@ -101,7 +103,7 @@ export const RegisteredHostDetails = () => {
           <Button
             variant={ButtonVariant.Secondary}
             size={ButtonSize.Large}
-            onPress={() => navigate("../registered-hosts")}
+            onPress={() => navigate(hostRegisterRoute)}
           >
             Back
           </Button>

@@ -13,11 +13,13 @@ import {
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  locationRoute,
   logError,
   parseError,
   Role,
   SharedStorage,
   SparkTableColumn,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -44,7 +46,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import TelemetryLogsForm, {
   SystemLogPair,
 } from "../../../components/organism/TelemetryLogsForm/TelemetryLogsForm";
@@ -160,7 +162,7 @@ const SiteForm = () => {
   });
 
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   const [hasSiteMetadata, setHasSiteMetadata] = useState(false);
@@ -476,12 +478,6 @@ const SiteForm = () => {
             state: ToastState.Success,
           }),
         );
-
-        if (regionId) {
-          navigate("../../../../locations", { relative: "path" });
-        } else {
-          navigate("../../locations", { relative: "path" });
-        }
       } else {
         // dispatch to update the edited site details in redux store
         handleSiteViewAction(dispatch, response);
@@ -491,9 +487,8 @@ const SiteForm = () => {
             state: ToastState.Success,
           }),
         );
-
-        navigate("../../../../locations", { relative: "path" });
       }
+      navigate(locationRoute);
     } catch (error) {
       setErrorInfo(error);
       dispatch(
@@ -734,15 +729,9 @@ const SiteForm = () => {
           variant={ButtonVariant.Secondary}
           size={ButtonSize.Large}
           onPress={() => {
+            navigate(locationRoute);
             if (regionId && location.search.includes("source=region")) {
-              navigate("../../../../locations", { relative: "path" });
               dispatch(setTreeBranchNodeCollapse(regionId));
-            } else {
-              let redirectPath = "../../../../locations";
-              if (location.pathname.includes("sites/new")) {
-                redirectPath = "../../locations";
-              }
-              navigate(redirectPath, { relative: "path" });
             }
           }}
         >

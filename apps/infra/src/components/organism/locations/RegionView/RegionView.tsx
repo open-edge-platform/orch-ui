@@ -5,10 +5,9 @@
 
 import { eim } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { regionRoute, SharedStorage, useInfraNavigate } from "@orch-ui/utils";
 import { Dropdown, Heading, Item } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
-import { useNavigate } from "react-router-dom";
 import { TelemetryProfileLogs } from "../../../../components/molecules/locations/TelemetryProfileLogs/TelemetryProfileLogs";
 import { TelemetryProfileMetrics } from "../../../../components/molecules/locations/TelemetryProfileMetrics/TelemetryProfileMetrics";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -31,7 +30,7 @@ export const RegionView = () => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
   const region = useAppSelector(selectRegion);
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const className = "region-view";
 
   //if you get here from a search result, metadata will be missing
@@ -76,7 +75,7 @@ export const RegionView = () => {
                 dispatch(setRegionToDelete(region));
                 break;
               case RegionViewActions.Edit:
-                navigate(`../regions/${region.resourceId}`);
+                navigate(regionRoute, { regionId: region.resourceId ?? "" });
                 break;
               case RegionViewActions["Schedule Maintenance"]:
                 dispatch(

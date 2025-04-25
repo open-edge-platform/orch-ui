@@ -5,9 +5,13 @@
 
 import { eim } from "@orch-ui/apis";
 import { Popup, PopupOption } from "@orch-ui/components";
-import { checkAuthAndRole, Role } from "@orch-ui/utils";
+import {
+  checkAuthAndRole,
+  hostDetailsRoute,
+  Role,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import { useNavigate } from "react-router-dom";
 
 const dataCy = "genericHostPopup";
 
@@ -58,7 +62,6 @@ const GenericHostPopup = ({
   jsx = (
     <Icon artworkStyle="light" icon="ellipsis-v" data-cy="defaultPopupButton" />
   ),
-  basePath = "",
   showViewDetailsOption,
   showDeleteOption = true,
   onViewDetails,
@@ -77,7 +80,7 @@ const GenericHostPopup = ({
 
   const cy = { "data-cy": dataCy };
   const hostId = host.resourceId!;
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const hasPermission = !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]);
 
   const popupOptions: PopupOption[] = [];
@@ -87,9 +90,7 @@ const GenericHostPopup = ({
       onSelect: () => {
         if (onViewDetails) onViewDetails(hostId);
         else {
-          navigate(`${basePath}../host/${hostId}`, {
-            relative: "path",
-          });
+          navigate(hostDetailsRoute, { id: hostId });
         }
       },
     });

@@ -7,12 +7,13 @@ import { ConfirmationDialog, Popup, TableColumn } from "@orch-ui/components";
 import {
   checkAuthAndRole,
   parseError,
+  regionRoute,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Heading, Icon } from "@spark-design/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import RegionsTable from "../../organism/region/RegionsTable";
 import "./Region.scss";
 
@@ -24,7 +25,7 @@ import { setErrorInfo, showToast } from "../../../store/notifications";
 
 export default function Region() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const [deleteRegion] =
     eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
 
@@ -71,8 +72,8 @@ export default function Region() {
               {
                 displayText: "View Details",
                 onSelect: () => {
-                  navigate(`../regions/${region.resourceId}`, {
-                    relative: "path",
+                  navigate(regionRoute, {
+                    regionId: region.resourceId ?? "",
                   });
                 },
               },

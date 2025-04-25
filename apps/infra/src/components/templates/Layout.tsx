@@ -22,12 +22,13 @@ import {
   locationRoute,
   Role,
   RuntimeConfig,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
 import { useEffect, useMemo } from "react";
 import { matchPath } from "react-router";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { hideToast, setMessageBanner } from "../../store/notifications";
@@ -99,7 +100,7 @@ const Layout = () => {
   const dispatch = useAppDispatch();
 
   // Router transitions https://tinyurl.com/2u8kwvk8
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const location = useLocation();
   const activePath = location.pathname;
   const activeItem = useMemo(() => selectActiveMenu(activePath), [activePath]);

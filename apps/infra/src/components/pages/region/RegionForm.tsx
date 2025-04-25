@@ -13,10 +13,12 @@ import {
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  locationRoute,
   logError,
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -46,7 +48,7 @@ import {
 } from "@spark-design/tokens";
 import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./RegionForm.scss";
 
 import { eim, mbApi } from "@orch-ui/apis";
@@ -57,11 +59,7 @@ import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  selectBranches,
-  setIsEmpty,
-  setTreeBranchNodeCollapse,
-} from "../../../store/locations";
+import { selectBranches, setIsEmpty } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
 
 const baseRegionTypes = ["Country", "State", "County", "Region", "City"];
@@ -85,9 +83,7 @@ const RegionForm: React.FC = () => {
       })
         .unwrap()
         .then(() => {
-          navigate(regionId ? "../../locations" : "../locations", {
-            relative: "path",
-          });
+          navigate(locationRoute);
         })
         .catch((error) => {
           dispatch(
@@ -104,7 +100,7 @@ const RegionForm: React.FC = () => {
     setIsDeleteOpen(false);
   };
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const { regionId } = useParams<{ regionId: string }>();
   const { parentRegionId } = useParams<{ parentRegionId: string }>();
   const { data: { regions } = {} } =
@@ -303,16 +299,7 @@ const RegionForm: React.FC = () => {
     return <ApiError error={error} />;
   }
 
-  const redirectToLocationsPage = async () => {
-    if (parentRegionId) {
-      navigate("../../../../locations", { relative: "path" });
-      dispatch(setTreeBranchNodeCollapse(parentRegionId));
-    }
-    // jump to region details page from `/regions/{region-id}/new` (or /:regionid)
-    else {
-      navigate("../../locations", { relative: "path" });
-    }
-  };
+  const redirectToLocationsPage = async () => navigate(locationRoute);
 
   const getMetricsGroup = (id: string): eim.TelemetryMetricsGroup => {
     const group = metricsgroup.find((group) => {
