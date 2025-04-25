@@ -4,14 +4,16 @@
  */
 
 import { PathParam, useNavigate } from "react-router-dom";
+import { InfraRoute } from "./paths";
 import { getInfraPath } from "./routeHelpers";
 
 export const useInfraNavigate = () => {
   const navigate = useNavigate();
-  return <Path extends string>(
+  return <Path extends InfraRoute>(
     route: Path,
     params?: {
       [key in PathParam<Path>]: string | null;
     },
-  ) => navigate(getInfraPath(route, params));
+    query?: string,
+  ) => navigate(getInfraPath(route, params, query));
 };
