@@ -51,7 +51,7 @@ header:
     - src: /dashboard
       dest: /user_guide/monitor_deployments/index.html
     - src: /admin/ssh-keys
-      dest: /user_guide/set_up_edge_infra/configure_ssh_public_keys.html
+      dest: /user_guide/additional_howtos/configure_ssh_public_keys.html
     - src: /applications/deployments
       dest: /user_guide/package_software/deployments.html
     - src: /applications/deployment/*
@@ -93,7 +93,7 @@ header:
     - src: /infrastructure/cluster/*/edit
       dest: /user_guide/set_up_edge_infra/edit_clusters.html
     - src: /infrastructure/hosts
-      dest: /user_guide/set_up_edge_infra/active_hosts.html
+      dest: /user_guide/set_up_edge_infra/provisioned_hosts_main.html
     - src: /infrastructure/host/*
       dest: /user_guide/set_up_edge_infra/active_host_details.html
     - src: /infrastructure/host/*/edit
@@ -130,6 +130,8 @@ header:
       dest: /user_guide/additional_howtos/view_cluster_template.html
     - src: /admin/os-profiles
       dest: /shared/shared_os_profile.html
+    - src: /admin/about
+      dest: /user_guide/additional_howtos/index.html
 
 # List of versions used to populate the "About" page
 # they are all set to `unknown` as it's `edge-manageability-framework` responsibility
