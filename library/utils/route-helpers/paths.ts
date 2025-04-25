@@ -2,7 +2,8 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-export const infraMfePrefix = "/infrastructure/";
+export const infraMfePrefix =
+  location.port === "8082" ? "/" : "/infrastructure/";
 
 export const clusterManagementRoute = "clusters";
 export const clusterDetailRoute = "cluster/:clusterName";
