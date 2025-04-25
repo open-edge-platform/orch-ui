@@ -27,8 +27,9 @@ const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
     Cell: (table: { row: { original: eim.HostRead } }) => {
       return (
         <Link
-          to={`${basePath}${table.row.original.resourceId}`}
-          relative="path"
+          to={getInfraPath(hostDetailsRoute, {
+            id: table.row.original?.resourceId ?? "",
+          })}
         >
           {table.row.original.name !== ""
             ? table.row.original.name

@@ -6,6 +6,8 @@
 import { eim } from "@orch-ui/apis";
 import {
   API_INTERVAL,
+  clusterDetailRoute,
+  getInfraPath,
   SharedStorage,
   WorkloadMemberKind,
 } from "@orch-ui/utils";
@@ -38,7 +40,7 @@ const ClusterNameAssociatedToHost = ({
       {clusterName ? (
         <Link
           data-cy="clusterLink"
-          to={`/infrastructure/cluster/${clusterName}`}
+          to={getInfraPath(clusterDetailRoute, { clusterName: clusterName })}
         >
           {clusterName}
         </Link>

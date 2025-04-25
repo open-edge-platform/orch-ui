@@ -6,6 +6,8 @@
 import { eim, enhancedEimSlice } from "@orch-ui/apis";
 import { AggregatedStatuses, aggregateStatuses } from "@orch-ui/components";
 import {
+  getInfraPath,
+  hostDetailsRoute,
   HostGenericStatuses,
   hostToStatuses,
   SparkTableColumn,
@@ -25,7 +27,11 @@ const name: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
   Cell: (table: {
     row: { original: enhancedEimSlice.InstanceReadModified };
   }) => (
-    <Link to={`../host/${table.row.original.host?.resourceId}`} relative="path">
+    <Link
+      to={getInfraPath(hostDetailsRoute, {
+        id: table.row.original.host?.resourceId ?? "",
+      })}
+    >
       {table.row.original.host?.name ?? table.row.original.host?.resourceId}
     </Link>
   ),

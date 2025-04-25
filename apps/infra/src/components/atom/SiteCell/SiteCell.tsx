@@ -5,7 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { getInfraPath, regionSiteRoute, SharedStorage } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 const dataCy = "siteCell";
 
@@ -44,7 +44,10 @@ const SiteCell = ({ siteId, basePath = "", regionId = "*" }: SiteCellProps) => {
   return (
     <Link
       {...cy}
-      to={`${basePath}regions/${site.region?.resourceId}/sites/${siteId}`}
+      to={getInfraPath(regionSiteRoute, {
+        regionId: site.region?.resourceId ?? "",
+        siteId: siteId,
+      })}
       relative="path"
     >
       {site.name}
