@@ -132,7 +132,13 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({
           url: `/v2/projects/${queryArg.projectName}/templates`,
-          params: { default: queryArg["default"] },
+          params: {
+            default: queryArg["default"],
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+            orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+          },
         }),
         providesTags: ["Cluster Templates"],
       }),
@@ -291,6 +297,14 @@ export type GetV2ProjectsByProjectNameTemplatesApiArg = {
   projectName: string;
   /** When set to true, gets only the default template information */
   default?: boolean;
+  /** The maximum number of items to return. */
+  pageSize?: number;
+  /** Index of the first item to return. It is almost always used in conjunction with the 'pageSize' query. */
+  offset?: number;
+  /** The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used. */
+  orderBy?: string;
+  /** Filters the entries based on the filter provided. */
+  filter?: string;
 };
 export type PostV2ProjectsByProjectNameTemplatesApiResponse =
   /** status 201 OK */ string;
@@ -410,8 +424,6 @@ export type StatusInfo = {
 export type NodeInfo = {
   /** The unique identifier of this host. */
   id?: string;
-  name?: string;
-  os?: string;
   role?: string;
   status?: StatusInfo;
 };
@@ -498,6 +510,8 @@ export type TemplateInfo = {
 export type TemplateInfoList = {
   defaultTemplateInfo?: DefaultTemplateInfo;
   templateInfoList?: TemplateInfo[];
+  /** The count of items in the entire list, regardless of pagination. */
+  totalElements?: number;
 };
 export type VersionList = {
   versionList?: string[];
