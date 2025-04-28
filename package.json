@@ -4,7 +4,7 @@
   "description": "Edge Orchestrator User Interface",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run app:admin\" \"npm run app:infra\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
+    "start": "cross-env ROOT=true; concurrently \"npm run app:admin\" \"npm run app:infra\" \"npm run app:cluster-orch\" \"npm run app:app-orch\" \"npm run app:root\"",
     "app:admin": "cd apps/admin && webpack serve --config=config/webpack.dev.js",
     "app:admin:build": "cd apps/admin && webpack --config=config/webpack.prod.js",
     "app:admin:lint": "cd apps/admin && prettier --check ./src && eslint ./src",
@@ -56,6 +56,7 @@
     "@types/react-transition-group": "^4.4.12",
     "concurrently": "^9.1.2",
     "copy-webpack-plugin": "^12.0.2",
+    "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "cypress": "^13.17.0",
     "cypress-keycloak": "^2.0.2",

@@ -25,7 +25,7 @@ import { clusterOrchHandlers, metadataBrokerHandler } from "@orch-ui/utils";
 
 async function prepare() {
   /* devblock:start */
-  if (process.env.REACT_LP_MOCK_API === "true") {
+  if (process.env.REACT_MOCK_API === "true") {
     const worker = setupWorker(
       ...clusterOrchHandlers.clusterTemplateHandlers,
       ...clusterOrchHandlers.clusterHandlers,

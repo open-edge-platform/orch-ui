@@ -30,7 +30,7 @@ import { setupWorker } from "msw";
 // people to run the UI with mock data
 async function prepare() {
   /* devblock:start */
-  if (process.env.REACT_LP_MOCK_API === "true") {
+  if (process.env.REACT_MOCK_API === "true") {
     const { handlers: eim_handlers } = await import(
       "../../../library/utils/mocks/infra/mocks"
     );
