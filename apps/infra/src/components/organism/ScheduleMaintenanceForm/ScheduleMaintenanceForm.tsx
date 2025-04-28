@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { infra, enhancedEimSlice } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import {
   Button,
@@ -131,13 +131,13 @@ export const ScheduleMaintenanceForm = ({
 
   /* APIs */
   const [postSingleMaintenance] =
-    eim.usePostV1ProjectsByProjectNameSchedulesSingleMutation();
+    infra.usePostV1ProjectsByProjectNameSchedulesSingleMutation();
   const [postRepeatedMaintenance] =
-    eim.usePostV1ProjectsByProjectNameSchedulesRepeatedMutation();
+    infra.usePostV1ProjectsByProjectNameSchedulesRepeatedMutation();
   const [editSingleMaintenance] =
-    eim.usePutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.usePutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
   const [editRepeatedMaintenance] =
-    eim.usePutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
+    infra.usePutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
 
   /** Add new maintenance via INFRA-API */
   const submitMaintenance = () => {
@@ -370,7 +370,7 @@ export const ScheduleMaintenanceForm = ({
               label="Maintenance Type*"
               placeholder="Select type"
               selectedKey={maintenance?.scheduleStatus}
-              onSelectionChange={(selectedKey: eim.ScheduleStatus) => {
+              onSelectionChange={(selectedKey: infra.ScheduleStatus) => {
                 onUpdate({ ...maintenance, scheduleStatus: selectedKey });
               }}
               size={DropdownSize.Large}

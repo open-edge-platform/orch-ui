@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwoUuid as hostTwoGuid,
   regionUsWestId,
@@ -17,8 +16,8 @@ import { StoreUtils } from "./utils";
 
 describe("The Utils", () => {
   describe("convert host", () => {
-    xit("should conver eim.HostRead to Host correctly", () => {
-      const hostTwoGeneral: eim.Host = {
+    xit("should conver infra.HostRead to Host correctly", () => {
+      const hostTwoGeneral: infra.Host = {
         currentPowerState: "POWER_STATE_ON",
         inheritedMetadata: {
           location: hostFourMetadata,
@@ -33,8 +32,8 @@ describe("The Utils", () => {
         hostTwoGeneral,
       );
     });
-    xit("should conver eim.HostRead to eim.HostWrite correctly", () => {
-      const hostTwoWrite: eim.HostWrite = {
+    xit("should conver infra.HostRead to infra.HostWrite correctly", () => {
+      const hostTwoWrite: infra.HostWrite = {
         currentPowerState: "POWER_STATE_ON",
         inheritedMetadata: {
           ou: [
@@ -68,7 +67,7 @@ describe("The Utils", () => {
   });
   describe("convert instance", () => {
     it("should conver InstanceReadModified to Instance correctly", () => {
-      const instanceOneGeneral: eim.Instance = {
+      const instanceOneGeneral: infra.Instance = {
         name: "Instance One",
         kind: "INSTANCE_KIND_METAL",
         os: osUbuntu,
@@ -77,8 +76,8 @@ describe("The Utils", () => {
         instanceOneGeneral,
       );
     });
-    xit("should conver InstanceReadModified to eim.InstanceWrite correctly", () => {
-      const instanceOneWrite: eim.InstanceWrite = {
+    xit("should conver InstanceReadModified to infra.InstanceWrite correctly", () => {
+      const instanceOneWrite: infra.InstanceWrite = {
         name: "Instance One",
         kind: "INSTANCE_KIND_METAL",
         os: osUbuntu,

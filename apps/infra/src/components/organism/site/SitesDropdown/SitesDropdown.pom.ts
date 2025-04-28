@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { SiDropdown } from "@orch-ui/poms";
 import {
   CyApiDetail,
@@ -27,7 +26,7 @@ export type ApiAliases =
 const sitesStore = new SiteStore();
 const sites = sitesStore.list();
 
-const getSites: CyApiDetail<eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse> =
+const getSites: CyApiDetail<infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse> =
   {
     route: `**/v1/projects/${defaultActiveProject.name}/regions/**/sites?pageSize=*`,
     response: {
@@ -49,7 +48,7 @@ interface ErrorResponse {
 
 export const endpoints: CyApiDetails<
   ApiAliases,
-  | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
   | ErrorResponse
 > = {
   getAllSites: getSites,

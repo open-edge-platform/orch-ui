@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { infra, enhancedEimSlice } from "@orch-ui/apis";
 import { Drawer, IconVariant, Item, Tabs } from "@spark-design/react";
 import { useState } from "react";
 import { DrawerHeader } from "../../../components/molecules/DrawerHeader/DrawerHeader";
@@ -56,11 +56,11 @@ export const ScheduleMaintenanceDrawer = ({
 
   // Note: target can be host or site. If targetSite is set then targetHost is undefined (not-set).
   if (targetEntityType === "region") {
-    resetMaintenance.targetRegion = targetEntity as eim.RegionRead;
+    resetMaintenance.targetRegion = targetEntity as infra.RegionRead;
   } else if (targetEntityType === "site") {
-    resetMaintenance.targetSite = targetEntity as eim.SiteRead;
+    resetMaintenance.targetSite = targetEntity as infra.SiteRead;
   } else {
-    resetMaintenance.targetHost = targetEntity as eim.HostRead;
+    resetMaintenance.targetHost = targetEntity as infra.HostRead;
   }
 
   const [maintenance, setMaintenance] =
@@ -121,17 +121,17 @@ export const ScheduleMaintenanceDrawer = ({
             maintenanceEdit.targetHost &&
             !maintenanceEdit.targetHost.resourceId
           ) {
-            maintenanceEdit.targetHost = targetEntity as eim.HostRead;
+            maintenanceEdit.targetHost = targetEntity as infra.HostRead;
           } else if (
             maintenanceEdit.targetSite &&
             !maintenanceEdit.targetSite.resourceId
           ) {
-            maintenanceEdit.targetSite = targetEntity as eim.SiteRead;
+            maintenanceEdit.targetSite = targetEntity as infra.SiteRead;
           } else if (
             maintenanceEdit.targetRegion &&
             !maintenanceEdit.targetRegion.resourceId
           ) {
-            maintenanceEdit.targetRegion = targetEntity as eim.RegionRead;
+            maintenanceEdit.targetRegion = targetEntity as infra.RegionRead;
           }
 
           setMaintenance(maintenanceEdit);

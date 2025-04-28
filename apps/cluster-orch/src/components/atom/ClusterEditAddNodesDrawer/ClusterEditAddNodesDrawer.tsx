@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Button, Drawer } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
@@ -15,7 +15,7 @@ import ClusterNodesTableBySite, {
 const dataCy = "clusterEditAddNodesDrawer";
 
 type ClusterCompleteInfo = cm.ClusterDetailInfo & cm.ClusterInfo;
-const convertEimHostToCmNode = (host: eim.HostRead, role?: NodeRoles) => ({
+const convertEimHostToCmNode = (host: infra.HostRead, role?: NodeRoles) => ({
   id: host.resourceId,
   serial: host.serialNumber,
   os: host.instance?.os?.name,
@@ -35,7 +35,7 @@ interface ClusterEditAddNodesDrawerProps {
   HostsTableRemote?: React.LazyExoticComponent<React.ComponentType<any>> | null;
 }
 
-type HostRole = eim.HostRead & { role?: NodeRoles };
+type HostRole = infra.HostRead & { role?: NodeRoles };
 
 const ClusterEditAddNodesDrawer = ({
   cluster,
@@ -53,7 +53,7 @@ const ClusterEditAddNodesDrawer = ({
   );
 
   //TODO : 22694 Site information to be updated from labels
-  const [site] = useState<eim.SiteRead>();
+  const [site] = useState<infra.SiteRead>();
 
   return (
     <div {...cy} className="cluster-edit-add-nodes-drawer">

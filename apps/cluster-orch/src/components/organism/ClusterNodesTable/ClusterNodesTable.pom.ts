@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import NodeRoleDropdownPom from "../../atom/NodeRoleDropdown/NodeRoleDropdown.pom";
@@ -17,7 +16,7 @@ const route = "**/v1/**/compute/hosts?filter=resourceId**";
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
   getHosts: {
     route,

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { infra, enhancedEimSlice } from "@orch-ui/apis";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Badge } from "@spark-design/react";
 import { useEffect, useState } from "react";
@@ -25,24 +25,24 @@ export const ScheduleMaintenanceStatusTag = ({
   const cy = { "data-cy": dataCy };
   const [isInMaintenance, setIsInMaintenance] = useState<boolean>(false);
 
-  const apiFilter: eim.GetV1ProjectsByProjectNameComputeSchedulesApiArg = {
+  const apiFilter: infra.GetV1ProjectsByProjectNameComputeSchedulesApiArg = {
     projectName: SharedStorage.project?.name ?? "",
     unixEpoch: Math.trunc(+new Date() / 1000).toString(),
   };
 
   switch (targetEntityType) {
     case "region":
-      apiFilter.regionId = (targetEntity as eim.RegionRead).resourceId;
+      apiFilter.regionId = (targetEntity as infra.RegionRead).resourceId;
       break;
     case "site":
-      apiFilter.siteId = (targetEntity as eim.SiteRead).resourceId;
+      apiFilter.siteId = (targetEntity as infra.SiteRead).resourceId;
       break;
     default:
-      apiFilter.hostId = (targetEntity as eim.HostRead).resourceId;
+      apiFilter.hostId = (targetEntity as infra.HostRead).resourceId;
   }
 
   const { data: schedules, isSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeSchedulesQuery(apiFilter, {
+    infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(apiFilter, {
       skip: !apiFilter.hostId && !apiFilter.siteId && !apiFilter.regionId,
       ...(poll ? { pollingInterval: API_INTERVAL } : {}),
     });

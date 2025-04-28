@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 
@@ -19,7 +18,7 @@ type SuccessScheduleApiAliases =
 type ErrorScheduleApiAliases = "getSchedulesError";
 type ApiAliases = SuccessScheduleApiAliases | ErrorScheduleApiAliases;
 
-const emptyResponse: eim.GetV1ProjectsByProjectNameComputeSchedulesApiResponse =
+const emptyResponse: infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse =
   {
     SingleSchedules: [],
     RepeatedSchedules: [],
@@ -29,7 +28,7 @@ const emptyResponse: eim.GetV1ProjectsByProjectNameComputeSchedulesApiResponse =
 
 const successScheduleEndpoints: CyApiDetails<
   SuccessScheduleApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
 > = {
   getEmptySchedules: {
     route: "**/schedules*",
@@ -82,7 +81,7 @@ const successScheduleEndpoints: CyApiDetails<
 
 const errorScheduleEndpoints: CyApiDetails<
   ErrorScheduleApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
 > = {
   getSchedulesError: {
     route: "**/schedules*",

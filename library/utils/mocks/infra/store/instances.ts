@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedEimSlice, infra } from "@orch-ui/apis";
 import { clusterFiveName } from "../../cluster-orch/data/clusterOrchIds";
 import {
   instanceFiveId,
@@ -285,7 +285,7 @@ export const registeredInstanceOne: enhancedEimSlice.InstanceReadModified = {
   ],
 };
 
-export const mockSsh: eim.LocalAccountRead = {
+export const mockSsh: infra.LocalAccountRead = {
   resourceId: "ssh-abcd81",
   username: "all-groups-example-user",
   sshKey:
@@ -302,7 +302,7 @@ export const generateSshMocks = (size = 10, offset = 0, mock = mockSsh) =>
 export class InstanceStore extends BaseStore<
   "instanceID",
   enhancedEimSlice.InstanceReadModified,
-  eim.Instance
+  infra.Instance
 > {
   instanceIndex = 0;
 
@@ -347,7 +347,7 @@ export class InstanceStore extends BaseStore<
     });
   }
 
-  assignHostToInstance(id: string, host: eim.HostRead) {
+  assignHostToInstance(id: string, host: infra.HostRead) {
     const instance = this.get(id);
     if (instance) {
       this.put(id, { ...instance, host });
@@ -355,11 +355,11 @@ export class InstanceStore extends BaseStore<
   }
 
   convert(
-    body: eim.Instance,
+    body: infra.Instance,
     id?: string,
-    host?: eim.HostRead,
-    os?: eim.OperatingSystemResourceRead,
-    localAccount?: eim.LocalAccountRead,
+    host?: infra.HostRead,
+    os?: infra.OperatingSystemResourceRead,
+    localAccount?: infra.LocalAccountRead,
   ): enhancedEimSlice.InstanceReadModified {
     const currentTime = +new Date();
     return {
@@ -377,11 +377,12 @@ export class InstanceStore extends BaseStore<
         body.provisioningStatusIndicator ?? "STATUS_INDICATION_IN_PROGRESS",
       provisioningStatus: "Provisioning In Progress",
       provisioningStatusTimestamp: currentTime,
-      host: host ?? (body.host as eim.HostRead),
-      os: os ?? (body.currentOs as eim.OperatingSystemResourceRead),
-      currentOs: os ?? (body.currentOs as eim.OperatingSystemResourceRead),
-      desiredOs: os ?? (body.desiredOs as eim.OperatingSystemResourceRead),
-      localAccount: localAccount ?? (body.localAccount as eim.LocalAccountRead),
+      host: host ?? (body.host as infra.HostRead),
+      os: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
+      currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
+      desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
+      localAccount:
+        localAccount ?? (body.localAccount as infra.LocalAccountRead),
       timestamps: {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -390,10 +391,10 @@ export class InstanceStore extends BaseStore<
   }
 
   post(
-    body: eim.Instance,
-    host?: eim.HostRead,
-    os?: eim.OperatingSystemResourceRead,
-    localAccount?: eim.LocalAccountRead,
+    body: infra.Instance,
+    host?: infra.HostRead,
+    os?: infra.OperatingSystemResourceRead,
+    localAccount?: infra.LocalAccountRead,
   ) {
     const data = this.convert(
       body,

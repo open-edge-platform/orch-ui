@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { siteOregonPortland } from "@orch-ui/utils";
 
@@ -15,7 +14,7 @@ const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites/${si
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
 > = {
   getSiteSuccess: {
     route: route,

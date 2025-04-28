@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwo as hostTwo,
   regionSalemId,
@@ -93,7 +93,7 @@ describe("<HostEdit />", () => {
 
     it("should update Host name", () => {
       // we're making sure all the existing properties are sent
-      const expectedReq: eim.HostWrite = {
+      const expectedReq: infra.HostWrite = {
         name: newHostName,
         siteId: mockHost.site?.resourceId,
         inheritedMetadata: mockHost.inheritedMetadata,
@@ -124,7 +124,7 @@ describe("<HostEdit />", () => {
           value: "production",
         },
       ];
-      const expectedReq: eim.Host = {
+      const expectedReq: infra.Host = {
         uuid: mockHost.uuid,
         inheritedMetadata: mockHost.inheritedMetadata,
         name: newHostName,
@@ -192,7 +192,7 @@ describe("<HostEdit />", () => {
       pom.el.siteCombobox.find("button").click();
       cy.contains(siteMinimartTwoName).click();
 
-      const expectedReq: eim.HostWrite = {
+      const expectedReq: infra.HostWrite = {
         name: mockHost.name,
         siteId: siteMinimartTwo.resourceId,
         inheritedMetadata: mockHost.inheritedMetadata,

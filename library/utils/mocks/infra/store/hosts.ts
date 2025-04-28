@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedEimSlice, infra } from "@orch-ui/apis";
 import { Operator } from "../../../interfaces/Pagination";
 import { BaseStore } from "../../baseStore";
 import * as metadataBrokerMocks from "../../metadata-broker";
@@ -78,7 +78,7 @@ import { StoreUtils } from "./utils";
 type KeyValuePairs = { [key: string]: string };
 
 // Configured/Assigned Hosts
-export const hostOneMetadata: eim.Metadata = [
+export const hostOneMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -93,7 +93,7 @@ export const hostOneMetadata: eim.Metadata = [
   },
 ];
 
-export const hostTwoMetadata: eim.Metadata = [
+export const hostTwoMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -108,7 +108,7 @@ export const hostTwoMetadata: eim.Metadata = [
   },
 ];
 
-export const hostThreeMetadata: eim.Metadata = [
+export const hostThreeMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -119,7 +119,7 @@ export const hostThreeMetadata: eim.Metadata = [
   },
 ];
 
-export const hostFourMetadata: eim.Metadata = [
+export const hostFourMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersTwo,
@@ -130,7 +130,7 @@ export const hostFourMetadata: eim.Metadata = [
   },
 ];
 
-export const hostFiveMetadata: eim.Metadata = [
+export const hostFiveMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersTwo,
@@ -141,7 +141,7 @@ export const hostFiveMetadata: eim.Metadata = [
   },
 ];
 
-export const hostSixMetadata: eim.Metadata = [
+export const hostSixMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersTwo,
@@ -152,7 +152,7 @@ export const hostSixMetadata: eim.Metadata = [
   },
 ];
 
-export interface HostMock extends eim.HostRead {
+export interface HostMock extends infra.HostRead {
   deauthorized?: boolean;
   instance?: enhancedEimSlice.InstanceReadModified;
 }
@@ -302,7 +302,7 @@ export const provisionedHostThree: HostMock = {
 };
 
 // Unconfigured Hosts
-const onboardedHostMetadata: eim.Metadata = [
+const onboardedHostMetadata: infra.Metadata = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -591,9 +591,9 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
 
   getSummary(
     filter?: string | null,
-  ): eim.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse {
+  ): infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse {
     let hosts = this.resources;
-    const hostStat: eim.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse =
+    const hostStat: infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse =
       {
         total: 0,
         running: 0,
@@ -630,7 +630,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
         hosts = hosts.filter((host) => {
           let matchSimilarity = 0;
 
-          // Host eim.Metadata: Both Inherited and Host-Specific
+          // Host infra.Metadata: Both Inherited and Host-Specific
           const metadataSet: KeyValuePairs = {};
           host.inheritedMetadata?.location?.forEach(({ key, value }) => {
             metadataSet[key] = value;
@@ -652,7 +652,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
       }
 
       hostStat.total! += hosts.length;
-      hosts.map((host: eim.HostRead) => {
+      hosts.map((host: infra.HostRead) => {
         if (!host.site) {
           hostStat.unallocated! += 1;
         }
@@ -672,7 +672,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
 }
 
 const hostsList = new HostStore().list();
-export const hosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse = {
+export const hosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse = {
   hasNext: false,
   hosts: hostsList,
   totalElements: hostsList.length,
@@ -682,7 +682,7 @@ const assignedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "has(instance.workloadMembers) AND has(site)",
 });
-export const assignedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
+export const assignedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
   {
     hasNext: false,
     hosts: assignedHostList,
@@ -693,7 +693,7 @@ const provisionedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(instance.workloadMembers) AND has(site)",
 });
-export const provisionedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
+export const provisionedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
   {
     hasNext: false,
     hosts: provisionedHostList,
@@ -704,7 +704,7 @@ const onboardedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(site)",
 });
-export const onboardedHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
+export const onboardedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
   {
     hasNext: false,
     hosts: onboardedHostList,
@@ -715,7 +715,7 @@ const registeredHostList = new HostStore().list({
   deviceUuid: null,
   filter: "currentState=HOST_STATE_REGISTERED",
 });
-export const registeredHosts: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse =
+export const registeredHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
   {
     hasNext: false,
     hosts: registeredHostList,

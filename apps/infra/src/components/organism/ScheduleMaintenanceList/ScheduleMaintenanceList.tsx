@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { infra, enhancedEimSlice } from "@orch-ui/apis";
 import {
   ApiError,
   ConfirmationDialog,
@@ -66,7 +66,7 @@ const removeExpiredSingleSchedules = (
 
 /** Convert RepeatedSchedule API response object to ScheduleMaintenance */
 const convertRepeatedMaintenanceScheduleAPIScheduleMaintenance = (
-  repeatedScheduleMaintenance: eim.SingleScheduleRead,
+  repeatedScheduleMaintenance: infra.SingleScheduleRead,
 ): enhancedEimSlice.ScheduleMaintenanceRead => ({
   resourceId: repeatedScheduleMaintenance.repeatedScheduleID,
   name:
@@ -93,7 +93,7 @@ const convertRepeatedMaintenanceScheduleAPIScheduleMaintenance = (
 
 /** Convert SingleSchedule2 API response object to ScheduleMaintenance */
 const convertSingleMaintenanceScheduleAPIScheduleMaintenance = (
-  singleScheduleMaintenance: eim.SingleScheduleRead2,
+  singleScheduleMaintenance: infra.SingleScheduleRead2,
 ): enhancedEimSlice.ScheduleMaintenanceRead => ({
   resourceId: singleScheduleMaintenance.resourceId,
   name:
@@ -144,9 +144,9 @@ export const ScheduleMaintenanceList = ({
     useState<enhancedEimSlice.ScheduleMaintenanceRead>();
 
   const [deleteMaintenanceWithoutRepeat] =
-    eim.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
   const [deleteMaintenanceWithRepeat] =
-    eim.useDeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
 
   // TODO#2: move this to new maintenance list
   /** Delete a maintenance via INFRA-API */
@@ -201,7 +201,7 @@ export const ScheduleMaintenanceList = ({
     isLoading,
     isError,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
     {
       projectName,
       ...targetIds,

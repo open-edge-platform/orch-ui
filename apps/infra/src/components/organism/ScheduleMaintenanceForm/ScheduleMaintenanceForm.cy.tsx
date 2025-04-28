@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { infra, enhancedEimSlice } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import {
   assignedWorkloadHostOne as hostOne,
@@ -40,11 +40,11 @@ const TestingComponent = ({
   };
   // Note: target can be host or site. If targetSite is set then targetHost is undefined (not-set).
   if (mockEntityType === "region") {
-    initialMaintenanceFormData.targetRegion = mockEntity as eim.RegionRead;
+    initialMaintenanceFormData.targetRegion = mockEntity as infra.RegionRead;
   } else if (mockEntityType === "site") {
-    initialMaintenanceFormData.targetSite = mockEntity as eim.SiteRead;
+    initialMaintenanceFormData.targetSite = mockEntity as infra.SiteRead;
   } else {
-    initialMaintenanceFormData.targetHost = mockEntity as eim.HostRead;
+    initialMaintenanceFormData.targetHost = mockEntity as infra.HostRead;
   }
   const [maintenance, setMaintenance] =
     useState<enhancedEimSlice.ScheduleMaintenance>(initialMaintenanceFormData);

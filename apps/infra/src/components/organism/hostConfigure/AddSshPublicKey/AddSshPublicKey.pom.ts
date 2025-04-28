@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { InstanceStore } from "@orch-ui/utils";
@@ -16,7 +15,7 @@ const instanceStore = new InstanceStore();
 
 export const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameLocalAccountsApiResponse
+  infra.GetV1ProjectsByProjectNameLocalAccountsApiResponse
 > = {
   getLocalAccounts: {
     route: "**/localAccounts?*",

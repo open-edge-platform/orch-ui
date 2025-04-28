@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { SiDropdown } from "@orch-ui/poms";
 import {
   CyApiDetail,
@@ -28,7 +27,7 @@ const route = `**/v1/projects/${defaultActiveProject.name}/compute/os?*`;
 
 const osResourceStore = new OsResourceStore();
 
-export const getOsResources: CyApiDetail<eim.GetV1ProjectsByProjectNameComputeOsApiResponse> =
+export const getOsResources: CyApiDetail<infra.GetV1ProjectsByProjectNameComputeOsApiResponse> =
   {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/os?pageSize=*`,
     response: {
@@ -40,7 +39,8 @@ export const getOsResources: CyApiDetail<eim.GetV1ProjectsByProjectNameComputeOs
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeOsApiResponse | eim.ProblemDetailsRead
+  | infra.GetV1ProjectsByProjectNameComputeOsApiResponse
+  | infra.ProblemDetailsRead
 > = {
   getOSResources: getOsResources,
   getOSResourcesError500: {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { SquareSpinner, TypedMetadata } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import React, { Suspense, useEffect } from "react";
@@ -32,8 +32,8 @@ export interface SearchTypeItem {
   name: string;
 }
 interface SelectSiteForClusterProps {
-  selectedSite?: eim.SiteRead;
-  selectedRegion?: eim.Region;
+  selectedSite?: infra.SiteRead;
+  selectedRegion?: infra.Region;
   onSelectedInheritedMeta: (value: TypedMetadata[]) => void;
 }
 
@@ -55,7 +55,7 @@ const SelectSite = ({
   const preSiteName = query.get("siteName");
 
   const { data: preSelectedSite, isLoading } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: preRegionId ?? "*",
@@ -105,7 +105,7 @@ const SelectSite = ({
     onSelectedInheritedMeta([...regionMetadata, ...siteMetadata]);
   }, [selectedSite, currentLocations]);
 
-  const handleOnSiteSelected = (site: eim.SiteRead) => {
+  const handleOnSiteSelected = (site: infra.SiteRead) => {
     dispatch(updateRegionName(site.region?.name ?? ""));
     dispatch(updateRegionId(site.region?.resourceId ?? ""));
     dispatch(updateSiteId(site.resourceId ?? ""));

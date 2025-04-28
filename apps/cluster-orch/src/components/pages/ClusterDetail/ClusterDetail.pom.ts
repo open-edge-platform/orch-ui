@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ConfirmationDialogPom, MetadataDisplayPom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { Cy, CyApiDetails, CyPom } from "@orch-ui/tests";
@@ -45,7 +45,7 @@ const kubeconfigRoute = "**/v2/**/clusters/kubeconfigs/**";
 const firstHostRoute = "**/v1/projects/**/compute/hosts/**";
 const siteRoute = "/v1/projects/**/regions/**/sites/**";
 
-const siteRestaurantOne: eim.SiteRead = {
+const siteRestaurantOne: infra.SiteRead = {
   name: "Restaurant 01",
   region: { name: regionPortlandId },
   resourceId: "site-1",
@@ -73,7 +73,7 @@ const successClusterEndpoints: CyApiDetails<
 };
 const successHostEndpointconst: CyApiDetails<
   HostSuccessApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
 > = {
   getFirstHostData: {
     route: firstHostRoute,
@@ -88,7 +88,7 @@ const successHostEndpointconst: CyApiDetails<
 
 const successSiteEndpoint: CyApiDetails<
   SiteSuccessApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
 > = {
   getSiteData: {
     route: siteRoute,

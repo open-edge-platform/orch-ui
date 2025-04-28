@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { infra, enhancedEimSlice } from "@orch-ui/apis";
 import { AggregatedStatuses, aggregateStatuses } from "@orch-ui/components";
 import {
   HostGenericStatuses,
@@ -33,7 +33,7 @@ const name: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
 
 const status: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
   Header: "Status",
-  //TODO: eim.HostRead is not directly coming from item.host
+  //TODO: infra.HostRead is not directly coming from item.host
   accessor: (item) =>
     aggregateStatuses(hostToStatuses(item.host!, item), "hostStatus").message,
   Cell: (table: {
@@ -42,7 +42,7 @@ const status: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
     <AggregatedStatuses<HostGenericStatuses>
       defaultStatusName="hostStatus"
       statuses={hostToStatuses(
-        table.row.original.host! as eim.HostRead,
+        table.row.original.host! as infra.HostRead,
         table.row.original.host?.instance,
       )}
     />

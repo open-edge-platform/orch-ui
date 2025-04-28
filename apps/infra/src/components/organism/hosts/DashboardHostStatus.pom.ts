@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { DashboardStatusPom } from "@orch-ui/components";
 import {
   CyApiDetails,
@@ -38,7 +37,7 @@ const hostStore = new HostStore();
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse
 > = {
   getHostSummary: {
     route,

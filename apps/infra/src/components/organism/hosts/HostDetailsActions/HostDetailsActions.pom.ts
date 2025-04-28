@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { instanceOne, workloadOne, workloadOneId } from "@orch-ui/utils";
 import OnboardedHostPopupPom from "../../../molecules/OnboardedHostPopup/OnboardedHostPopup.pom";
@@ -22,7 +21,7 @@ type ApiAliases = InstanceApiAliases | DeleteApiAliases;
 
 const instanceEndpoints: CyApiDetails<
   InstanceApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse
+  infra.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse
 > = {
   getInstanceWithWorkload: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/instances/**`,
@@ -48,8 +47,8 @@ const instanceEndpoints: CyApiDetails<
 
 const deleteEndpoints: CyApiDetails<
   DeleteApiAliases,
-  eim.DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
-  // | eim.DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse
+  infra.DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  // | infra.DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse
 > = {
   deleteHost: {
     method: "DELETE",

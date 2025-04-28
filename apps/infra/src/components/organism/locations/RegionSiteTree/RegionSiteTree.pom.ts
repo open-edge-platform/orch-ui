@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { TreePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import { RegionPom } from "../../../../components/atom/locations/Region/Region.pom";
@@ -27,7 +26,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
     response: {
       hasNext: false,
       regions: [{ resourceId: "root-1", name: "Root 1" }],
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   getRootRegionsEmptyMocked: {
     route: "**/regions*NOT%20has%28parentRegion%29*",
@@ -36,7 +35,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       regions: [],
       totalElements: 0,
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   getRoot1RegionsMocked: {
     route: "**/regions*parentRegion.resourceId%3D%22root-1%22*",
@@ -47,7 +46,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
         { resourceId: "region-1.1", name: "Region 1.1" },
         { resourceId: "region-1.2", name: "Region 1.2" },
       ],
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   getRegions500: {
     route: "**/regions*",
@@ -87,7 +86,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
         },
       ],
       totalElements: 1,
-    } as eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse,
   },
 };
 

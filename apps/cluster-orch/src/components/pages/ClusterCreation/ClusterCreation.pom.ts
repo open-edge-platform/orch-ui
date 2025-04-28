@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim, mbApi } from "@orch-ui/apis";
+import { cm, mbApi } from "@orch-ui/apis";
 import { MetadataFormPom, TablePom } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -20,9 +20,9 @@ import { setNodesSpec } from "../../../store/reducers/nodeSpec";
 import ClusterNodesTableBySite from "../../organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite.pom";
 import ClusterNodesTablePom from "../../organism/ClusterNodesTable/ClusterNodesTable.pom";
 
-type ModifiedInstance = Omit<eim.InstanceRead, "os" | "host"> & {
-  os: eim.OperatingSystemResourceRead;
-  host: eim.HostRead;
+type ModifiedInstance = Omit<infra.InstanceRead, "os" | "host"> & {
+  os: infra.OperatingSystemResourceRead;
+  host: infra.HostRead;
 };
 
 const dataCySelectors = [
@@ -93,7 +93,7 @@ const errorClusterEndpoint: CyApiDetails<
 
 const regionEndpoint: CyApiDetails<
   GetRegions,
-  eim.GetV1ProjectsByProjectNameRegionsApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsApiResponse
 > = {
   getRegions: {
     route: `**/v1/projects/${defaultActiveProject.name}/regions*`,
@@ -114,7 +114,7 @@ const regionEndpoint: CyApiDetails<
 
 const rootRegionExpandEndpoint: CyApiDetails<
   ExpandRegions,
-  eim.GetV1ProjectsByProjectNameRegionsApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsApiResponse
 > = {
   expandRegion: {
     route: "**/regions*parentRegion.resourceId%3D%22region-portland%22*",
@@ -155,7 +155,7 @@ export const siteOne = {
 
 const siteEndpoint: CyApiDetails<
   GetSites,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
 > = {
   getSites: {
     route: `**/v1/projects/${defaultActiveProject.name}/sites*`,
@@ -199,7 +199,7 @@ const instanceOne: ModifiedInstance = {
 };
 const instancesEndpoint: CyApiDetails<
   GetInstances,
-  eim.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+  infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
 > = {
   getInstances: {
     route: "**/v1/projects/**/compute/instances**",

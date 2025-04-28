@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { MessageBanner } from "@spark-design/react";
 import { MessageBannerAlertState } from "@spark-design/tokens";
@@ -20,7 +20,7 @@ import "./AddSshPublicKey.scss";
 const dataCy = "addSshPublicKey";
 
 interface AddSshPublicKeyProps {
-  localAccounts?: eim.LocalAccountRead[];
+  localAccounts?: infra.LocalAccountRead[];
 }
 
 export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {

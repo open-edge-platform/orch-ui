@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne, ClusterStore, regionPortlandId } from "@orch-ui/utils";
 
 const dataCySelectors = ["clusterDropdown"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-const site: eim.SiteRead = {
+const site: infra.SiteRead = {
   siteID: "restaurant-one",
   resourceId: "restaurant-one",
   inheritedMetadata: {
@@ -25,7 +25,7 @@ const site: eim.SiteRead = {
   region: { name: regionPortlandId, resourceId: regionPortlandId },
 };
 
-export const hostOne: eim.HostRead = {
+export const hostOne: infra.HostRead = {
   resourceId: "host-dh38bjw9",
   uuid: "4c4c4544-0044-4210-8031-c2c04f305239",
   name: "host-unassign1",
@@ -128,7 +128,7 @@ const clusterSuccessEndpoint: CyApiDetails<
 
 const hostSuccessEndpoint: CyApiDetails<
   SuccessHostApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
 > = {
   getHostById: {
     route: hostByIdRoute,
@@ -139,7 +139,7 @@ const hostSuccessEndpoint: CyApiDetails<
 
 const siteSuccessEndpoint: CyApiDetails<
   SuccessSiteApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
 > = {
   getSiteById: {
     route: siteByIdRoute,

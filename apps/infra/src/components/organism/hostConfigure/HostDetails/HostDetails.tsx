@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { TextField } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
@@ -41,7 +41,7 @@ interface HostDetailsProps {
   duplicatedHostNames?: string[];
   osOptionValue?: string;
   securityIsSbAndFdeEnabled?: boolean;
-  onOsOptionChange?: (os: eim.OperatingSystemResource, effect: boolean) => void;
+  onOsOptionChange?: (os: infra.OperatingSystemResource, effect: boolean) => void;
 }
 
 // eslint-disable-next-line max-statements

@@ -5,7 +5,6 @@
 
 import { TablePom } from "@orch-ui/components";
 import { NetworkLog } from "../../support/network-logs";
-import { EIM_USER } from "../../support/utilities";
 import { getHostsViaApi, getRegionViaAPi, getSiteViaApi } from "../helpers";
 import {
   isTestProvisionHostData,

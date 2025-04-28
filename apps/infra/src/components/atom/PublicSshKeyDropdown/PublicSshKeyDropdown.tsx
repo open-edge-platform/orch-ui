@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Dropdown, Item } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
 import { HostData, unSetPublicSshKey } from "../../../store/configureHost";
@@ -12,8 +12,8 @@ const dataCy = "publicSshKeyDropdown";
 interface PublicSshKeyDropdownProps {
   hostId: string;
   host: HostData;
-  onPublicKeySelect?: (hostId: string, acount: eim.LocalAccount) => void;
-  localAccounts: eim.LocalAccountRead[] | undefined;
+  onPublicKeySelect?: (hostId: string, acount: infra.LocalAccount) => void;
+  localAccounts: infra.LocalAccountRead[] | undefined;
 }
 export const PublicSshKeyDropdown = ({
   hostId,

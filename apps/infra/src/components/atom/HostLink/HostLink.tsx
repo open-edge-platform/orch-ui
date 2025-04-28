@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -21,9 +21,9 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
-  const [host, setHost] = useState<eim.HostRead>();
+  const [host, setHost] = useState<infra.HostRead>();
 
-  const hostsQuery = eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       uuid: uuid,
@@ -34,7 +34,7 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
     },
   );
 
-  const hostQuery = eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+  const hostQuery = infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       hostId: id ?? "",

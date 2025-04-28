@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { ConfirmationDialogPom, TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import {
@@ -51,7 +50,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       regions: store.list(),
       totalElements: totalElements,
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   getRegionsAfterDeleteMocked: {
     route: `${route}?*`,
@@ -61,7 +60,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       // pretend that one of the regions was deleted
       regions: store.list().slice(1),
       totalElements: totalElements - 1,
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   getRegionsUpdatedMocked: {
     route: `${route}?*`,
@@ -83,7 +82,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
           return r;
         }),
       totalElements: Math.min(10, totalElements),
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   regionsListSuccess: {
     route: `${route}?*`,
@@ -91,7 +90,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       regions: store.list().slice(0, 10),
       totalElements: Math.min(10, totalElements),
-    } as eim.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
   },
   regionsListNotFound: {
     route: `${route}?*`,

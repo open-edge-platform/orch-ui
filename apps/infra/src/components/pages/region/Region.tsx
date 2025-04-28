@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import RegionsTable from "../../organism/region/RegionsTable";
 import "./Region.scss";
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ButtonVariant, ToastState } from "@spark-design/tokens";
 import { ScheduleMaintenanceDrawer } from "../../../components/organism/ScheduleMaintenanceDrawer/ScheduleMaintenanceDrawer";
 import {
@@ -37,17 +37,17 @@ export default function Region() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [deleteRegion] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
   const breadcrumb = useMemo(() => [homeBreadcrumb, regionsBreadcrumb], []);
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));
     dispatch(setActiveNavItem(regionsMenuItem));
   }, []);
-  const [regionToDelete, setRegionToDelete] = useState<eim.RegionRead | null>(
+  const [regionToDelete, setRegionToDelete] = useState<infra.RegionRead | null>(
     null,
   );
   const [scheduleMaintenanceRegion, setScheduleMaintenanceRegion] = useState<
-    eim.RegionRead | undefined
+    infra.RegionRead | undefined
   >();
 
   const deleteRegionFn = async (regionId: string) => {
@@ -72,7 +72,7 @@ export default function Region() {
     setRegionToDelete(null);
   };
 
-  const actions: TableColumn<eim.RegionRead> = {
+  const actions: TableColumn<infra.RegionRead> = {
     Header: "Action",
     textAlign: "center",
     padding: "0",

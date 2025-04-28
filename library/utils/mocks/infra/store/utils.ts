@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedEimSlice, infra } from "@orch-ui/apis";
 
 export class StoreUtils {
   public static randomString(): string {
@@ -16,7 +16,7 @@ export class StoreUtils {
    * for example `host.status="HOST_STATUS_RUNNING"` which is a readonly,
    * the option will be removed with the substituted value.
    **/
-  public static convertToGeneralHost(host: eim.HostRead): eim.Host {
+  public static convertToGeneralHost(host: infra.HostRead): infra.Host {
     const newHost = { ...host };
 
     // Remove all read-only values
@@ -54,7 +54,7 @@ export class StoreUtils {
     };
   }
 
-  public static convertToWriteHost(host: eim.HostRead): eim.HostWrite {
+  public static convertToWriteHost(host: infra.HostRead): infra.HostWrite {
     const newHost = { ...host };
 
     // Remove all read-only values
@@ -97,8 +97,8 @@ export class StoreUtils {
 
   public static convertToWriteInstance(
     instance: enhancedEimSlice.InstanceReadModified,
-  ): eim.InstanceWrite {
-    const newInstance: eim.InstanceWrite = {
+  ): infra.InstanceWrite {
+    const newInstance: infra.InstanceWrite = {
       name: instance.name,
       kind: instance.kind,
       hostID: instance.host?.resourceId ?? "",
@@ -123,9 +123,9 @@ export class StoreUtils {
     return newInstance;
   }
   public static convertToGeneralInstance(
-    instance: eim.InstanceRead,
-  ): eim.Instance {
-    const newInstance: eim.Instance = {
+    instance: infra.InstanceRead,
+  ): infra.Instance {
+    const newInstance: infra.Instance = {
       name: instance.name,
       kind: instance.kind,
       host: instance.host,
@@ -142,14 +142,14 @@ export class StoreUtils {
     return newInstance;
   }
 
-  public static convertToWriteSite(site: eim.SiteRead): eim.SiteWrite {
+  public static convertToWriteSite(site: infra.SiteRead): infra.SiteWrite {
     const copySite = { ...site };
 
     // Remove all read-only values
     if (copySite.resourceId !== undefined) delete copySite.resourceId;
     if (copySite.siteID !== undefined) delete copySite.siteID;
 
-    const newSite: eim.SiteWrite = { ...copySite };
+    const newSite: infra.SiteWrite = { ...copySite };
     if (copySite.ou) newSite.ou = this.convertToGeneralOu(copySite.ou);
     if (copySite.region)
       newSite.region = this.convertToWriteRegion(copySite.region);
@@ -157,14 +157,16 @@ export class StoreUtils {
     return newSite;
   }
 
-  public static convertToWriteRegion(region: eim.RegionRead): eim.RegionWrite {
+  public static convertToWriteRegion(
+    region: infra.RegionRead,
+  ): infra.RegionWrite {
     const copyRegion = { ...region };
 
     // Remove all read-only values
     if (copyRegion.resourceId !== undefined) delete copyRegion.resourceId;
     if (copyRegion.regionID !== undefined) delete copyRegion.regionID;
 
-    const newRegion: eim.RegionWrite = { ...copyRegion };
+    const newRegion: infra.RegionWrite = { ...copyRegion };
     if (copyRegion.parentRegion !== undefined)
       newRegion.parentRegion = this.convertToWriteRegion(
         copyRegion.parentRegion,
@@ -174,7 +176,7 @@ export class StoreUtils {
     return newRegion;
   }
 
-  public static convertToGeneralOu(ou: eim.OuRead): eim.Ou {
+  public static convertToGeneralOu(ou: infra.OuRead): infra.Ou {
     const newOu = { ...ou };
 
     // Remove all read-only values

@@ -7,7 +7,7 @@ import { SiDropdown, SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { regions, siteOregonPortland, updateSite } from "@orch-ui/utils";
 
-import { eim, mbApi } from "@orch-ui/apis";
+import { mbApi } from "@orch-ui/apis";
 import { MetadataFormPom } from "@orch-ui/components";
 import {
   TelemetryGroupsLogsApis,
@@ -46,7 +46,7 @@ const hostsEndpoints: CyApiDetails<HostsApi> = {
       hosts: [],
       hasNext: false,
       totalElements: 0,
-    } as eim.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
   },
 };
 
@@ -65,8 +65,8 @@ type SingleSiteApis =
 
 const singleSiteEndpoints: CyApiDetails<
   SingleSiteApis,
-  eim.Site | eim.ProblemDetails,
-  eim.Site
+  infra.Site | infra.ProblemDetails,
+  infra.Site
 > = {
   createSite: {
     route: route,
@@ -132,7 +132,7 @@ const singleSiteEndpoints: CyApiDetails<
 };
 
 type RegionsApis = "getRegions" | "getRegionsMocked";
-const regionsEndpoints: CyApiDetails<RegionsApis, eim.RegionsList> = {
+const regionsEndpoints: CyApiDetails<RegionsApis, infra.RegionsList> = {
   getRegions: {
     route: `**v1/projects/${defaultActiveProject.name}/regions?*`,
   },
@@ -205,7 +205,7 @@ class SiteFormPom extends CyPom<Selectors, ApiAliases> {
     this.root.find(`${className} input`).clear().type(value.toString());
   }
   //TODO: need SI support for data- attribute on <TextField />
-  public submit(site: eim.SiteWrite) {
+  public submit(site: infra.SiteWrite) {
     cy.contains("Add New Site").should("be.visible");
     if (!site.name) {
       throw new Error("A name must be specified on Site create");

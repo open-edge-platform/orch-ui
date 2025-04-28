@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { MetadataDisplayPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
@@ -66,7 +65,7 @@ mockHostNoHostLabels.metadata = [];
 
 const mockHostNoSite = structuredClone(mockHost);
 mockHostNoSite.site = undefined;
-export const hostNoName: eim.HostRead = {
+export const hostNoName: infra.HostRead = {
   ...mockHost,
   name: "",
 };
@@ -76,7 +75,7 @@ const emptyResponse = {
   SingleSchedules: [],
   RepeatedSchedules: [],
 };
-const schedule123: eim.SingleSchedule2 = {
+const schedule123: infra.SingleSchedule2 = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule123",
   startSeconds: 1688148856,

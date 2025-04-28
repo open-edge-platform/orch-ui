@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   CheckboxSelectionList,
   CheckboxSelectionOption,
@@ -72,7 +72,7 @@ const HostSearchFilters = () => {
 
   // Update OS profiles options by api response
   const { data: osProfiles, isSuccess: isOSSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeOsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeOsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
       },

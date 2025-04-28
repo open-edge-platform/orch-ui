@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Button, Dropdown, Icon, Item, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
@@ -22,9 +22,9 @@ export type TelemetryLogsProfile = {
   targetInstance?: string;
   targetSite?: string;
   targetRegion?: string;
-  logLevel: eim.TelemetrySeverityLevel;
+  logLevel: infra.TelemetrySeverityLevel;
   logsGroupId: string;
-  logsGroup?: eim.TelemetryLogsGroup;
+  logsGroup?: infra.TelemetryLogsGroup;
 };
 
 export type SystemLogPair = {
@@ -45,7 +45,7 @@ export enum ErrorMessages {
 interface TelemetryLogsFormProps {
   onUpdate: (systemLogPairs: SystemLogPair[]) => void;
   pairs?: SystemLogPair[];
-  //getLogObjects: (logObj: eim.TelemetryLogsProfile | undefined) => void;
+  //getLogObjects: (logObj: infra.TelemetryLogsProfile | undefined) => void;
 }
 
 const TelemetryLogsForm = ({
@@ -54,7 +54,7 @@ const TelemetryLogsForm = ({
 }: TelemetryLogsFormProps) => {
   const cy = { "data-cy": dataCy };
   const { data: logsResponse } =
-    eim.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     }); //how to use isLoading and isSuccess in both calls
   const [valid, setValid] = useState<boolean>(true);
@@ -65,8 +65,8 @@ const TelemetryLogsForm = ({
     logSource: "",
     logLevel: "",
   };
-  const [, setSelectedLogLevel] = useState<eim.TelemetrySeverityLevel>(
-    "" as eim.TelemetrySeverityLevel,
+  const [, setSelectedLogLevel] = useState<infra.TelemetrySeverityLevel>(
+    "" as infra.TelemetrySeverityLevel,
   );
 
   const logTypesCount = logsResponse
@@ -192,7 +192,7 @@ const TelemetryLogsForm = ({
                       key.toString(),
                     );
                     setSelectedLogLevel(
-                      key.toString() as eim.TelemetrySeverityLevel,
+                      key.toString() as infra.TelemetrySeverityLevel,
                     );
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);

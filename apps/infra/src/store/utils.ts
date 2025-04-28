@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedEimSlice, infra } from "@orch-ui/apis";
 import { MessageBannerAlertState } from "@orch-ui/components";
 import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { SerializedError } from "@reduxjs/toolkit";
@@ -118,13 +118,13 @@ const showMessageBanner = (
 
 export const deleteHostInstanceFn = (
   dispatch: AppDispatch,
-  host: eim.HostRead,
-  instance?: eim.InstanceRead,
+  host: infra.HostRead,
+  instance?: infra.InstanceRead,
 ): Promise<ApiPromiseType> => {
   let promise = new Promise<ApiPromiseType>(() => {});
   const deleteHostFn = () => {
     return dispatch(
-      eim.eim.endpoints.deleteV1ProjectsByProjectNameComputeHostsAndHostId.initiate(
+      infra.infra.endpoints.deleteV1ProjectsByProjectNameComputeHostsAndHostId.initiate(
         {
           projectName: SharedStorage.project?.name ?? "",
           hostId: host.resourceId ?? "",
@@ -138,7 +138,7 @@ export const deleteHostInstanceFn = (
 
   const deleteInstanceFn = () => {
     return dispatch(
-      eim.eim.endpoints.deleteV1ProjectsByProjectNameComputeInstancesAndInstanceId.initiate(
+      infra.infra.endpoints.deleteV1ProjectsByProjectNameComputeInstancesAndInstanceId.initiate(
         {
           projectName: SharedStorage.project?.name ?? "",
           instanceId: instance?.instanceID ?? host.instance?.instanceID ?? "",

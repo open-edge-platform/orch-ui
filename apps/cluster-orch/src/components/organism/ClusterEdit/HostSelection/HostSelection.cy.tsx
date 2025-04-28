@@ -18,9 +18,9 @@ const HostTableRemoteMock = ({
   selectedHostIds = [],
   onHostSelect,
 }: {
-  columns: TableColumn<eim.HostRead>[];
+  columns: TableColumn<infra.HostRead>[];
   selectedHostIds?: string[];
-  onHostSelect: (host: eim.Host, isSelected: boolean) => void;
+  onHostSelect: (host: infra.Host, isSelected: boolean) => void;
 }) => {
   return (
     <Table

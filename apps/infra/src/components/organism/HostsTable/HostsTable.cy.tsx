@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, RibbonPom } from "@orch-ui/components";
 import { cyGet, encodeURLQuery } from "@orch-ui/tests";
 import { useState } from "react";
@@ -25,7 +25,7 @@ interface TestComponentProps {
 }
 
 const TestCompoent = ({ selectable }: TestComponentProps) => {
-  const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
+  const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
   const { messageBanner } = useAppSelector(
     (state) => state.notificationStatusList,
   );
@@ -36,7 +36,7 @@ const TestCompoent = ({ selectable }: TestComponentProps) => {
       <HostsTable
         selectable={selectable}
         unsetSelectedHosts={() => setSelectedHosts([])}
-        onHostSelect={(row: eim.HostRead, isSelected: boolean) => {
+        onHostSelect={(row: infra.HostRead, isSelected: boolean) => {
           setSelectedHosts((prev) => {
             return isSelected
               ? prev.concat(row)

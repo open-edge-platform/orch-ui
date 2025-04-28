@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TreeBranchProps, TreeNode } from "@orch-ui/components";
 import {
   Region,
@@ -26,7 +26,7 @@ interface ComponentsProps {
 }
 
 export const createRegion = (
-  region: eim.RegionRead,
+  region: infra.RegionRead,
   isRoot: boolean = false,
   isLoading: boolean = false,
   isExpanded: boolean = false,
@@ -57,7 +57,7 @@ export const createRegion = (
 };
 
 export const createSite = (
-  site: eim.SiteRead,
+  site: infra.SiteRead,
   callbacks: RegionSiteTreeCallbacks,
   componentProps: ComponentsProps,
 ): TreeBranchProps<TreeNode> => {
@@ -81,7 +81,7 @@ export const generateTreeBranchJSX = (
   switch (branch.type) {
     case "region":
       return createRegion(
-        branch.data as eim.RegionRead,
+        branch.data as infra.RegionRead,
         branch.isRoot,
         branch.isLoading,
         branch.isExpanded,
@@ -89,7 +89,7 @@ export const generateTreeBranchJSX = (
         componentProps,
       );
     case "site":
-      return createSite(branch.data as eim.SiteRead, callbacks, componentProps);
+      return createSite(branch.data as infra.SiteRead, callbacks, componentProps);
   }
 };
 

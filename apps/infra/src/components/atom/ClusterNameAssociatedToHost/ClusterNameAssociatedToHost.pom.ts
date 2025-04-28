@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = ["clusterLink", "notAssigned"] as const;
@@ -25,14 +24,14 @@ const endpoints: CyApiDetails<ApiAliases> = {
           },
         },
       ],
-    } as eim.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
+    } as infra.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
   },
   getClusterNameEmpty: {
     route: url,
     statusCode: 200,
     response: {
       workloadMembers: [],
-    } as eim.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
+    } as infra.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
   },
 };
 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   Popup,
@@ -27,7 +27,7 @@ const OSProfiles = () => {
 
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedOsProfile, setSelectedOsProfile] = useState<
-    eim.OperatingSystemResourceRead | undefined
+    infra.OperatingSystemResourceRead | undefined
   >();
 
   const {
@@ -35,7 +35,7 @@ const OSProfiles = () => {
     isLoading,
     isError,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeOsQuery({
+  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
@@ -67,7 +67,7 @@ const OSProfiles = () => {
     );
   }
 
-  const columns: TableColumn<eim.OperatingSystemResourceRead>[] = [
+  const columns: TableColumn<infra.OperatingSystemResourceRead>[] = [
     {
       Header: "Name",
       accessor: "name",
@@ -79,7 +79,7 @@ const OSProfiles = () => {
     {
       Header: "Security",
       accessor: "securityFeature",
-      Cell: (table: { row: { original: eim.OperatingSystemResourceRead } }) => {
+      Cell: (table: { row: { original: infra.OperatingSystemResourceRead } }) => {
         const securityFeature = table.row.original.securityFeature;
         return securityFeature
           ? OSProfileSecurityFeatures[securityFeature]

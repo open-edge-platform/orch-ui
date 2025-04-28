@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { ConfirmationDialogPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import {
@@ -120,7 +120,7 @@ const successEndpoints: CyApiDetails<
 
 const hostEndpoints: CyApiDetails<
   HostSuccessApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
   getHosts: {
     route: hostRoute,

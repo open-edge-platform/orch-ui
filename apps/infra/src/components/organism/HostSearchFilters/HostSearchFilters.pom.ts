@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CheckboxSelectionListPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { osRedHat } from "@orch-ui/utils";
@@ -26,7 +25,7 @@ const generateOperatingSystems = (size = 10, osMock = osRedHat) =>
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeOsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeOsApiResponse
 > = {
   getOperatingSystems: {
     route: `**/projects/${defaultActiveProject.name}/compute/os*`,

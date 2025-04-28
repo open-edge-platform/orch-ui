@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyApiDetail, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { osUbuntu } from "@orch-ui/utils";
 import OsProfileDropdownPom, {
@@ -18,7 +17,7 @@ type ApiAliases =
   | "getProvidersWithNoDefaultOs"
   | "getOsResources";
 
-const getProvidersWithDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNameProvidersApiResponse> =
+const getProvidersWithDefaultOs: CyApiDetail<infra.GetV1ProjectsByProjectNameProvidersApiResponse> =
   {
     route: `**/v1/projects/${defaultActiveProject.name}/providers?filter=name%3D%22infra_onboarding%22`,
     response: {
@@ -35,7 +34,7 @@ const getProvidersWithDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNameProvi
     },
   };
 
-const getProvidersWithNoDefaultOs: CyApiDetail<eim.GetV1ProjectsByProjectNameProvidersApiResponse> =
+const getProvidersWithNoDefaultOs: CyApiDetail<infra.GetV1ProjectsByProjectNameProvidersApiResponse> =
   {
     route: `**/v1/projects/${defaultActiveProject.name}/providers?filter=name%3D%22infra_onboarding%22`,
     response: {

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { OsResourceStore } from "@orch-ui/utils";
@@ -18,7 +17,8 @@ const route = `**/v1/projects/${defaultActiveProject.name}/compute/os?*`;
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeOsApiResponse | eim.ProblemDetailsRead
+  | infra.GetV1ProjectsByProjectNameComputeOsApiResponse
+  | infra.ProblemDetailsRead
 > = {
   getOSResources: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/os?pageSize=*`,
