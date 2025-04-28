@@ -119,6 +119,9 @@ export const setupDeployment = createSlice({
     ) {
       state.currentPackageProfile = action.payload;
     },
+    resetDeployment() {
+      return initialState;
+    },
   },
 });
 
@@ -159,6 +162,7 @@ export const {
   setProfileParameterOverrides,
   setCurrentDeploymentPackage,
   setCurrentPackageProfile,
+  resetDeployment,
 } = setupDeployment.actions;
 
 export default setupDeployment.reducer;

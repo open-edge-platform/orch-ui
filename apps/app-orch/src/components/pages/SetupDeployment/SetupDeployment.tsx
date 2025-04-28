@@ -41,6 +41,7 @@ import {
   getCurrentDeploymentPackage,
   getCurrentPackageProfile,
   profileParameterOverridesSelector,
+  resetDeployment,
   setCurrentDeploymentPackage,
   setCurrentPackageProfile,
   setupDeploymentHasEmptyMandatoryParams,
@@ -162,6 +163,12 @@ const SetupDeployment = () => {
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));
     dispatch(setActiveNavItem(deploymentsNavItem));
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetDeployment());
+    };
   }, []);
 
   useEffect(() => {
