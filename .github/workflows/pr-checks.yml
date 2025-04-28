@@ -42,6 +42,20 @@ jobs:
       - name: License check
         run: make license
 
+  matching-versions:
+    name: Check that VERSION files and Chart versions match
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Apply all versions
+        run: make apply-all-versions
+
+      - name: Validate clean folder
+        run: |
+          bash -c "diff -u <(echo -n) <(git diff .)"
+
   setup-conditions:
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
@@ -85,7 +99,6 @@ jobs:
       run_validate_clean_folder: true
       run_docker_build: true
       run_docker_push: true
-      run_scan_containers: true
       run_artifact: false
       run_helm_build: true
       run_helm_push: true

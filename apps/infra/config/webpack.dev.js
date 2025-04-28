@@ -31,9 +31,7 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: process.env.REACT_LP_REMOTE_EP
-      ? `http://${process.env.REACT_LP_REMOTE_EP}:8082/`
-      : "http://localhost:8082/",
+    publicPath: "auto",
   },
   devServer: {
     open: false,
@@ -52,8 +50,10 @@ const devConfig = {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
-      const port = devServer.server.address().port;
-      openBrowser(`http://localhost:${port}`);
+      if (!process.env.ROOT === "true") {
+        const port = devServer.server.address().port;
+        openBrowser(`http://localhost:${port}`);
+      }
     },
     hot: process.env.REACT_INFRA_HMR === "true" ? true : false,
   },

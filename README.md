@@ -109,9 +109,9 @@ The application is separated into multiple micro front-ends that can be develope
   ```
 
 ### Running with mock data
-If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_LP_MOCK_API` environment variable value to `true`
+If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_MOCK_API` environment variable value to `true`
 
-Set this value BEFORE you run the `npm run start`. 
+Set this value BEFORE you run the `npm run start`.
 
 ### Testing
 The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
