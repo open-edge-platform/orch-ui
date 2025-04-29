@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { infra } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { assignedWorkloadHostOne, instanceTwo } from "@orch-ui/utils";

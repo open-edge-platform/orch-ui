@@ -137,7 +137,8 @@ const SshKeysTable = ({
     getOrder(searchParams.get("column"), sortDirection) ?? "username asc";
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
 
-  const [addSshKey] = infra.usePostV1ProjectsByProjectNameLocalAccountsMutation();
+  const [addSshKey] =
+    infra.usePostV1ProjectsByProjectNameLocalAccountsMutation();
   const {
     data: localAccountData,
     isSuccess,

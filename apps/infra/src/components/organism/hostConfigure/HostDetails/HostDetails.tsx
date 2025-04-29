@@ -41,7 +41,10 @@ interface HostDetailsProps {
   duplicatedHostNames?: string[];
   osOptionValue?: string;
   securityIsSbAndFdeEnabled?: boolean;
-  onOsOptionChange?: (os: infra.OperatingSystemResource, effect: boolean) => void;
+  onOsOptionChange?: (
+    os: infra.OperatingSystemResource,
+    effect: boolean,
+  ) => void;
 }
 
 // eslint-disable-next-line max-statements

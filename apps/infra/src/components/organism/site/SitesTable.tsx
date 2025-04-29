@@ -96,9 +96,12 @@ const SiteTable = ({
     isSuccess,
     isLoading,
     error,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(queryArgs, {
-    pollingInterval: API_INTERVAL,
-  });
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    queryArgs,
+    {
+      pollingInterval: API_INTERVAL,
+    },
+  );
 
   const navigate = useNavigate();
 

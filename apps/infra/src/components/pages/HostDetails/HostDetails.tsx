@@ -106,17 +106,18 @@ const HostDetails: React.FC = () => {
     },
   );
 
-  const hostQuery = infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      hostId: id,
-    },
-    {
-      skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
-      refetchOnMountOrArgChange: true,
-      pollingInterval: API_INTERVAL,
-    },
-  );
+  const hostQuery =
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        hostId: id,
+      },
+      {
+        skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
+        refetchOnMountOrArgChange: true,
+        pollingInterval: API_INTERVAL,
+      },
+    );
 
   const sitesQuery =
     infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(

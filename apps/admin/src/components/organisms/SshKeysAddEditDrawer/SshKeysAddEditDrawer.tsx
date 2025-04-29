@@ -47,9 +47,8 @@ const SshKeysAddEditDrawer = ({
   const cy = { "data-cy": dataCy };
 
   const resetValue: infra.LocalAccount = { username: "", sshKey: "" };
-  const [localAccountWrite, setLocalAccountWrite] = useState<infra.LocalAccount>(
-    defaultLocalAccount ?? resetValue,
-  );
+  const [localAccountWrite, setLocalAccountWrite] =
+    useState<infra.LocalAccount>(defaultLocalAccount ?? resetValue);
   const [isSshValid, setIsSshValid] = useState<boolean>(true);
 
   const {

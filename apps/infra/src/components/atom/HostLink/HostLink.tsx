@@ -34,15 +34,16 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
     },
   );
 
-  const hostQuery = infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      hostId: id ?? "",
-    },
-    {
-      skip: !id, // Skip call if url does not include host-id
-    },
-  );
+  const hostQuery =
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        hostId: id ?? "",
+      },
+      {
+        skip: !id, // Skip call if url does not include host-id
+      },
+    );
 
   useEffect(() => {
     if (!hostQuery.isLoading && !hostQuery.isError && hostQuery.data && id) {

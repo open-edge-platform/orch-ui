@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { infra, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedEimSlice, infra } from "@orch-ui/apis";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Badge } from "@spark-design/react";
 import { useEffect, useState } from "react";

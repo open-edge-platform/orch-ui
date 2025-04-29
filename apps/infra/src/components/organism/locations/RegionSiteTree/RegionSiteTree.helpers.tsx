@@ -89,7 +89,11 @@ export const generateTreeBranchJSX = (
         componentProps,
       );
     case "site":
-      return createSite(branch.data as infra.SiteRead, callbacks, componentProps);
+      return createSite(
+        branch.data as infra.SiteRead,
+        callbacks,
+        componentProps,
+      );
   }
 };
 

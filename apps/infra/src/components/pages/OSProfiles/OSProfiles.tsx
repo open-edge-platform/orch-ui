@@ -79,7 +79,9 @@ const OSProfiles = () => {
     {
       Header: "Security",
       accessor: "securityFeature",
-      Cell: (table: { row: { original: infra.OperatingSystemResourceRead } }) => {
+      Cell: (table: {
+        row: { original: infra.OperatingSystemResourceRead };
+      }) => {
         const securityFeature = table.row.original.securityFeature;
         return securityFeature
           ? OSProfileSecurityFeatures[securityFeature]

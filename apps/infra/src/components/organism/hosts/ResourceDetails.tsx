@@ -54,7 +54,9 @@ const ResourceDetails = <T extends ResourceType>({
         setJsx(<Gpu data={data as infra.HostResourcesGpuRead[]} />);
         break;
       case "Interfaces":
-        setJsx(<Interfaces data={data as infra.HostResourcesInterfaceRead[]} />);
+        setJsx(
+          <Interfaces data={data as infra.HostResourcesInterfaceRead[]} />,
+        );
         break;
       case "USB":
         setJsx(<Usb data={data as infra.HostResourcesUsbRead} />);

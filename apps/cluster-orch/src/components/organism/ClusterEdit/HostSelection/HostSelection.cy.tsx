@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { clusterOne, provisionedHostTwo } from "@orch-ui/utils";
 import React from "react";
