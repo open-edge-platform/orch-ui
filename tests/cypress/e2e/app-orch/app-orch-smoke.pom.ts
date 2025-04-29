@@ -229,12 +229,11 @@ class AppOrchPom extends CyPom<Selectors> {
       .find("[data-cy='rhfComboboxEntryKey']")
       .first()
       .type("color");
-    cy.get(".spark-popover").contains("color").click();
     cyGet("setupMetadata")
       .find("[data-cy='rhfComboboxEntryValue']")
       .first()
       .type("blue");
-    cy.get(".spark-popover").contains("blue").click();
+
     cyGet("setupMetadata").find("[data-cy='add']").click();
     cyGet("nextBtn").click();
 
