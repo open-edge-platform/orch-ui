@@ -5,7 +5,7 @@
 
 import { eim } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { hostsRoute, SharedStorage, useInfraNavigate } from "@orch-ui/utils";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { useAppDispatch } from "../../../../store/hooks";
@@ -35,6 +35,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const { host, basePath } = props;
 
   const dispatch = useAppDispatch();
+  const navigate = useInfraNavigate();
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
     useState<boolean>(false);
@@ -138,6 +139,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
           buttonPlacement="left-reverse"
           confirmCb={() => {
             deleteHostInstanceFn(dispatch, host);
+            if (basePath) navigate(hostsRoute);
             setDeleteConfirmationOpen(false);
           }}
           confirmBtnText="Delete"
