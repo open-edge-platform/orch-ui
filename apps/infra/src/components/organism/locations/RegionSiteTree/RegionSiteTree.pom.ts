@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import { infra } from "@orch-ui/apis";
 import { TreePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import { RegionPom } from "../../../../components/atom/locations/Region/Region.pom";

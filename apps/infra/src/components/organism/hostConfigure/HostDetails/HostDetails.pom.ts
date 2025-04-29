@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import { infra } from "@orch-ui/apis";
 import { CyApiDetail, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { osUbuntu } from "@orch-ui/utils";
 import OsProfileDropdownPom, {

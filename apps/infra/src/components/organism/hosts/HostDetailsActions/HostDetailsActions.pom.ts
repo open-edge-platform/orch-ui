@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import { infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { instanceOne, workloadOne, workloadOneId } from "@orch-ui/utils";
 import OnboardedHostPopupPom from "../../../molecules/OnboardedHostPopup/OnboardedHostPopup.pom";

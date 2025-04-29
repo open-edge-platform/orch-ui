@@ -7,7 +7,7 @@ import { SiDropdown, SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { regions, siteOregonPortland, updateSite } from "@orch-ui/utils";
 
-import { mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 import { MetadataFormPom } from "@orch-ui/components";
 import {
   TelemetryGroupsLogsApis,

@@ -15,7 +15,7 @@ import {
   SiteStore,
 } from "@orch-ui/utils";
 
-import { mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 
 const metadataRoute = "**/v1/projects/**/metadata";
 
