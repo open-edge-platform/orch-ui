@@ -31,7 +31,7 @@ echo -e "${CYAN}Generate RTK endpoints APIs${NC}"
 #npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
 
 echo -e "${CYAN}Generate EDGE_INFRA_MANAGER RTK endpoints APIs${NC}"
-npx @rtk-query/codegen-openapi ${prefix}eim/eimApis.config.json
+npx @rtk-query/codegen-openapi ${prefix}infra/infraApis.config.json
 
 echo -e "${CYAN}Generate CLUSTER_MANAGER RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}cluster-manager/clusterManagerApis.config.json

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { Icon, Tooltip } from "@spark-design/react";
 import { ToastState } from "@spark-design/tokens";
@@ -15,7 +15,7 @@ import "./SshKeyInUseByHostsCell.scss";
 const dataCy = "sshKeyInUseByHostsCell";
 
 interface SshKeyInUseByHostsCellProps {
-  localAccount: eim.LocalAccountRead;
+  localAccount: infra.LocalAccountRead;
 }
 
 const SshKeyInUseByHostsCell = ({
@@ -28,7 +28,7 @@ const SshKeyInUseByHostsCell = ({
     data: instanceList,
     isError,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeInstancesQuery({
+  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery({
     projectName: SharedStorage.project?.name ?? "",
     filter: `has(localaccount) AND localaccount.resourceId="${localAccount.resourceId}"`,
   });

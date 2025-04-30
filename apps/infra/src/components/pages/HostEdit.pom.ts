@@ -15,7 +15,7 @@ import {
   SiteStore,
 } from "@orch-ui/utils";
 
-import { eim, mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 
 const metadataRoute = "**/v1/projects/**/metadata";
 
@@ -63,11 +63,11 @@ type ApiAliases =
   | InstanceApiAliases;
 
 type HostEditApiResponseType =
-  | eim.Host
-  | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
-  | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
-  | eim.GetV1ProjectsByProjectNameRegionsApiResponse
-  | eim.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+  | infra.Host
+  | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  | infra.GetV1ProjectsByProjectNameRegionsApiResponse
+  | infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
   | mbApi.MetadataList;
 const getApiEndpoints = (
   hostId = HostEditPom.testHost.resourceId,
@@ -102,7 +102,7 @@ const getApiEndpoints = (
   });
 
   /* --- Api Intercept Definitions starts here --- */
-  const successHostEndpoints: CyApiDetails<HostApiAliases, eim.Host> = {
+  const successHostEndpoints: CyApiDetails<HostApiAliases, infra.Host> = {
     hostSuccess: {
       route: hostDetailRoute,
       response: mockHost,
@@ -146,8 +146,8 @@ const getApiEndpoints = (
 
   const successSiteEndpoints: CyApiDetails<
     SiteApiAliases,
-    | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
-    | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+    | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+    | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
   > = {
     siteByIdSuccess: {
       route: siteByIdRoute,
@@ -169,7 +169,7 @@ const getApiEndpoints = (
 
   const successRegionEndpoints: CyApiDetails<
     RegionApiAliases,
-    eim.GetV1ProjectsByProjectNameRegionsApiResponse
+    infra.GetV1ProjectsByProjectNameRegionsApiResponse
   > = {
     regionsSuccess: {
       route: regionsRoute,
@@ -187,7 +187,7 @@ const getApiEndpoints = (
 
   const successInstanceEndpoints: CyApiDetails<
     InstanceApiAliases,
-    eim.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+    infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
   > = {
     getInstances: {
       route: instanceRoute,

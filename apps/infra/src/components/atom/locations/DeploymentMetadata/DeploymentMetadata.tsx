@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Text } from "@spark-design/react";
 import "./DeploymentMetadata.scss";
@@ -11,7 +11,7 @@ import "./DeploymentMetadata.scss";
 const dataCy = "deploymentMetadata";
 
 interface DeploymentMetadataProps {
-  site?: eim.SiteRead;
+  site?: infra.SiteRead;
 }
 
 export const DeploymentMetadata = ({ site }: DeploymentMetadataProps) => {

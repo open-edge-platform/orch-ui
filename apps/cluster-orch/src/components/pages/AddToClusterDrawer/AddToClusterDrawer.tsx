@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { ApiError } from "@orch-ui/components";
 import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { Button, ButtonGroup, Drawer } from "@spark-design/react";
@@ -13,7 +13,7 @@ import "./AddToClusterDrawer.scss";
 
 const dataCy = "addToClusterDrawer";
 interface AddToClusterDrawerProps {
-  host: eim.HostRead;
+  host: infra.HostRead;
   isDrawerShown?: boolean;
   setHideDrawer: () => void;
 }

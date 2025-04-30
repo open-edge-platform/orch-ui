@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -59,7 +59,7 @@ const crudMaintenanceIntercepts: CyApiDetails<CrudMaintenanceApiAliases> = {
 };
 const maintenanceIntercepts: CyApiDetails<
   MaintenanceApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
 > = {
   getMaintenance: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/schedules?**`,

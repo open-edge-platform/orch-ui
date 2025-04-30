@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   columnApiNameToDisplayName,
@@ -50,7 +50,7 @@ const dataCy = "sshKeysTable";
 
 interface SshDrawerControl {
   isOpen: boolean;
-  localAccount?: eim.LocalAccountRead;
+  localAccount?: infra.LocalAccountRead;
 }
 
 interface SshKeysTableProps {
@@ -67,23 +67,23 @@ const SshKeysTable = ({
     isOpen: false,
   });
   const [selectedSshToDelete, setSelectedSshToDelete] = useState<
-    eim.LocalAccountRead | undefined
+    infra.LocalAccountRead | undefined
   >();
   const dispatch = useAppDispatch();
 
-  const openViewDrawer = (localAccount: eim.LocalAccountRead) => {
+  const openViewDrawer = (localAccount: infra.LocalAccountRead) => {
     setIsViewDrawerOpen({
       isOpen: true,
       localAccount: localAccount,
     });
   };
 
-  const columns: TableColumn<eim.LocalAccountRead>[] = [
+  const columns: TableColumn<infra.LocalAccountRead>[] = [
     {
       Header: "Key Name",
       apiName: "username",
       accessor: (ssh) => ssh.username,
-      Cell: (table: { row: { original: eim.LocalAccountRead } }) => (
+      Cell: (table: { row: { original: infra.LocalAccountRead } }) => (
         <Link
           data-cy={`${table.row.original.username}SshLink`}
           to=""
@@ -97,7 +97,7 @@ const SshKeysTable = ({
       Header: "Key",
       apiName: "sshKey",
       accessor: (ssh) => ssh.sshKey,
-      Cell: (table: { row: { original: eim.LocalAccountRead } }) => (
+      Cell: (table: { row: { original: infra.LocalAccountRead } }) => (
         <TextTruncate
           maxLength={50}
           text={table.row.original.sshKey}
@@ -108,13 +108,13 @@ const SshKeysTable = ({
     },
     {
       Header: "In Use",
-      Cell: (table: { row: { original: eim.LocalAccountRead } }) => (
+      Cell: (table: { row: { original: infra.LocalAccountRead } }) => (
         <SshKeyInUseByHostsCell localAccount={table.row.original} />
       ),
     },
     {
       Header: "Action",
-      Cell: (table: { row: { original: eim.LocalAccountRead } }) => {
+      Cell: (table: { row: { original: infra.LocalAccountRead } }) => {
         const localAccount = table.row.original;
         return (
           <SshKeysPopup
@@ -137,19 +137,20 @@ const SshKeysTable = ({
     getOrder(searchParams.get("column"), sortDirection) ?? "username asc";
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
 
-  const [addSshKey] = eim.usePostV1ProjectsByProjectNameLocalAccountsMutation();
+  const [addSshKey] =
+    infra.usePostV1ProjectsByProjectNameLocalAccountsMutation();
   const {
     data: localAccountData,
     isSuccess,
     isError,
     error,
-  } = eim.useGetV1ProjectsByProjectNameLocalAccountsQuery(
+  } = infra.useGetV1ProjectsByProjectNameLocalAccountsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       pageSize,
       offset,
       orderBy,
-      filter: getFilter<eim.LocalAccount>(
+      filter: getFilter<infra.LocalAccount>(
         searchParams.get("searchTerm") ?? "",
         ["username"],
         Operator.OR,
@@ -190,7 +191,7 @@ const SshKeysTable = ({
     />
   );
 
-  const onSshAdd = (localAccount: eim.LocalAccount) => {
+  const onSshAdd = (localAccount: infra.LocalAccount) => {
     const showError = (err?: any) => {
       dispatch(
         showToast({

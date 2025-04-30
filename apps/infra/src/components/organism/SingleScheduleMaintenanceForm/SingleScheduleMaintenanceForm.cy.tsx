@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import { useState } from "react";
@@ -14,12 +14,12 @@ import { SingleScheduleMaintenanceFormPom } from "./SingleScheduleMaintenanceFor
 const TestingComponent = ({
   baseMaintenance,
 }: {
-  baseMaintenance: enhancedEimSlice.ScheduleMaintenance;
+  baseMaintenance: enhancedInfraSlice.ScheduleMaintenance;
 }) => {
   const {
     control: formControl,
     formState: { errors: formErrors },
-  } = useForm<enhancedEimSlice.ScheduleMaintenance>({
+  } = useForm<enhancedInfraSlice.ScheduleMaintenance>({
     mode: "all",
     defaultValues: baseMaintenance,
     values: baseMaintenance,
@@ -31,7 +31,7 @@ const TestingComponent = ({
     utc: "+00:00",
   });
   const [maintenance, setMaintenance] =
-    useState<enhancedEimSlice.ScheduleMaintenance>(baseMaintenance);
+    useState<enhancedInfraSlice.ScheduleMaintenance>(baseMaintenance);
   return (
     <>
       <SingleScheduleMaintenanceForm
@@ -52,13 +52,13 @@ const TestingComponent = ({
 
 const pom = new SingleScheduleMaintenanceFormPom();
 describe("<SingleScheduleMaintenanceForm/>", () => {
-  const baseMaintenanceFormData: enhancedEimSlice.ScheduleMaintenance = {
+  const baseMaintenanceFormData: enhancedInfraSlice.ScheduleMaintenance = {
     type: "no-repeat",
     name: "",
     scheduleStatus: "SCHEDULE_STATUS_UNSPECIFIED",
     targetHost: hostOne,
   };
-  const expectedMaintenance: enhancedEimSlice.ScheduleMaintenance = {
+  const expectedMaintenance: enhancedInfraSlice.ScheduleMaintenance = {
     name: "Single Maintenance",
     scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
     type: "no-repeat",

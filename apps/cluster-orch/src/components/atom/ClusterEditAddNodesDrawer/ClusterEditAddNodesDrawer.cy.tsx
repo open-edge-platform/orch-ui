@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { clusterOne, provisionedHostOne } from "@orch-ui/utils";
 import React from "react";
@@ -19,9 +19,9 @@ const HostTableRemoteMock = ({
   selectedHostIds = [],
   onHostSelect,
 }: {
-  columns: TableColumn<eim.HostRead>[];
+  columns: TableColumn<infra.HostRead>[];
   selectedHostIds?: string[];
-  onHostSelect: (host: eim.Host, isSelected: boolean) => void;
+  onHostSelect: (host: infra.Host, isSelected: boolean) => void;
 }) => {
   return (
     <Table

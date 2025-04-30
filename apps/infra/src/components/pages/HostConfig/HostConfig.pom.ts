@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiErrorPom, MetadataFormPom } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetail, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -25,15 +25,15 @@ const route = `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`;
 const instancesRoute = `**/v1/projects/${defaultActiveProject.name}/compute/instances`;
 
 const patchComputeHostsAndHostId: CyApiDetail<
-  eim.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
-  eim.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
+  infra.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
+  infra.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
 > = {
   route,
   response: provisionedHostOne,
   method: "PATCH",
 };
 
-const patchComputeHostsAndHostId400: CyApiDetail<eim.ProblemDetailsRead> = {
+const patchComputeHostsAndHostId400: CyApiDetail<infra.ProblemDetailsRead> = {
   route,
   response: {
     message: "A Host error message",
@@ -43,14 +43,14 @@ const patchComputeHostsAndHostId400: CyApiDetail<eim.ProblemDetailsRead> = {
 };
 
 const postInstances: CyApiDetail<
-  eim.PostV1ProjectsByProjectNameComputeInstancesApiResponse,
-  eim.PostV1ProjectsByProjectNameComputeInstancesApiResponse
+  infra.PostV1ProjectsByProjectNameComputeInstancesApiResponse,
+  infra.PostV1ProjectsByProjectNameComputeInstancesApiResponse
 > = {
   route: instancesRoute,
   response: provisionedInstanceOne,
   method: "POST",
 };
-const postInstances400: CyApiDetail<eim.ProblemDetailsRead> = {
+const postInstances400: CyApiDetail<infra.ProblemDetailsRead> = {
   route: instancesRoute,
   response: {
     message: "An Instance error message",
@@ -89,7 +89,7 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   public provisionHost(
     site: string,
-    metadata: eim.Metadata,
+    metadata: infra.Metadata,
     isSingle: boolean = false,
   ) {
     // search for site

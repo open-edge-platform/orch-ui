@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim, mbApi } from "@orch-ui/apis";
+import { cm, infra, mbApi } from "@orch-ui/apis";
 import {
   ConfirmationDialogPom,
   MetadataDisplayPom,
@@ -158,7 +158,7 @@ const successScheduleEndpoint: CyApiDetails<SuccessSchedules> = {
 
 const successSitesEndpoint: CyApiDetails<
   SuccessSitesApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
 > = {
   siteSuccess: {
     route: siteByIdRoute,
@@ -169,7 +169,7 @@ const successSitesEndpoint: CyApiDetails<
 };
 const errorSitesEndpoint: CyApiDetails<
   ErrorSitesApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
 > = {
   siteError: {
     route: siteByIdRoute,
@@ -177,17 +177,18 @@ const errorSitesEndpoint: CyApiDetails<
   },
 };
 
-const successFirstHostEndpoint: CyApiDetails<SuccessFirstHost, eim.HostRead> = {
-  firstHostSuccess: {
-    route: firstHostRoute,
-    statusCode: 200,
-    response: {
-      resourceId: "test-host",
-      name: "Host One",
-      site: siteOregonPortland,
+const successFirstHostEndpoint: CyApiDetails<SuccessFirstHost, infra.HostRead> =
+  {
+    firstHostSuccess: {
+      route: firstHostRoute,
+      statusCode: 200,
+      response: {
+        resourceId: "test-host",
+        name: "Host One",
+        site: siteOregonPortland,
+      },
     },
-  },
-};
+  };
 
 class ClusterEditPom extends CyPom<Selectors, ApiAliases> {
   public clusterTemplateDropdown = new SiDropdown("clusterTemplateDropdown");

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   clusterFiveId,
   clusterFiveName,
@@ -30,7 +30,7 @@ import {
 import { BaseStore } from "./baseStore";
 
 // Cluster workloads
-export const workloadOne: eim.WorkloadRead = {
+export const workloadOne: infra.WorkloadRead = {
   workloadId: workloadOneId,
   externalId: clusterOneId,
   members: [],
@@ -40,7 +40,7 @@ export const workloadOne: eim.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadTwo: eim.WorkloadRead = {
+export const workloadTwo: infra.WorkloadRead = {
   workloadId: workloadTwoId,
   externalId: clusterTwoId,
   members: [],
@@ -50,7 +50,7 @@ export const workloadTwo: eim.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadThree: eim.WorkloadRead = {
+export const workloadThree: infra.WorkloadRead = {
   workloadId: workloadThreeId,
   externalId: clusterThreeId,
   members: [],
@@ -60,7 +60,7 @@ export const workloadThree: eim.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadFour: eim.WorkloadRead = {
+export const workloadFour: infra.WorkloadRead = {
   workloadId: workloadFourId,
   externalId: clusterFourId,
   members: [],
@@ -70,7 +70,7 @@ export const workloadFour: eim.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadFive: eim.WorkloadRead = {
+export const workloadFive: infra.WorkloadRead = {
   workloadId: workloadFiveId,
   externalId: clusterFiveId,
   members: [],
@@ -80,7 +80,7 @@ export const workloadFive: eim.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadSix: eim.WorkloadRead = {
+export const workloadSix: infra.WorkloadRead = {
   workloadId: workloadSixId,
   externalId: clusterSixId,
   members: [],
@@ -91,7 +91,7 @@ export const workloadSix: eim.WorkloadRead = {
 };
 
 // `Unspecified` workloads
-export const workloadUnspecifiedOne: eim.WorkloadRead = {
+export const workloadUnspecifiedOne: infra.WorkloadRead = {
   workloadId: workloadUnspecifiedOneId,
   externalId: "",
   members: [],
@@ -103,8 +103,8 @@ export const workloadUnspecifiedOne: eim.WorkloadRead = {
 
 export class WorkloadStore extends BaseStore<
   "workloadId",
-  eim.WorkloadRead,
-  eim.Workload
+  infra.WorkloadRead,
+  infra.Workload
 > {
   workloadIndex = 0;
 
@@ -122,7 +122,7 @@ export class WorkloadStore extends BaseStore<
     super("workloadId", workloadList);
   }
 
-  convert(body: eim.Workload): eim.WorkloadRead {
+  convert(body: infra.Workload): infra.WorkloadRead {
     const currentTime = new Date().toISOString();
     return {
       ...body,
@@ -137,11 +137,11 @@ export class WorkloadStore extends BaseStore<
     };
   }
 
-  get(id: string): eim.WorkloadRead | undefined {
+  get(id: string): infra.WorkloadRead | undefined {
     return this.resources.find((workload) => workload.workloadId === id);
   }
 
-  list(): eim.WorkloadRead[] {
+  list(): infra.WorkloadRead[] {
     return this.resources;
   }
 }

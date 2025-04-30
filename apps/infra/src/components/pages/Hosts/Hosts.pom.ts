@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ContextSwitcherPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
@@ -15,7 +15,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "getHost";
 
-const generateHosts = (size = 10, hostMock: eim.HostRead = hostOne) =>
+const generateHosts = (size = 10, hostMock: infra.HostRead = hostOne) =>
   [...Array(size).keys()].map((i) => ({
     ...hostMock,
     name: `Host ${i}`,
@@ -25,7 +25,7 @@ const generateHosts = (size = 10, hostMock: eim.HostRead = hostOne) =>
 const hostRoute = `**/projects/${defaultActiveProject.name}/compute/hosts*`;
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
   getHost: {
     route: hostRoute,

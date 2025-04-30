@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { StatusIcon } from "@orch-ui/components";
 import {
   hostProviderStatusToString,
@@ -32,7 +32,7 @@ interface HostsStatusByClusterProps {
   getHosts?: (
     dispatch: AppDispatch,
     uuids: string[],
-  ) => Promise<eim.HostRead[]>;
+  ) => Promise<infra.HostRead[]>;
 }
 
 /**
@@ -50,7 +50,7 @@ const HostsStatusByCluster = ({
   const cy = { "data-cy": dataCy };
 
   const [error, setError] = useState<InternalError | undefined>();
-  const [hosts, setHosts] = useState<eim.HostRead[]>([]);
+  const [hosts, setHosts] = useState<infra.HostRead[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

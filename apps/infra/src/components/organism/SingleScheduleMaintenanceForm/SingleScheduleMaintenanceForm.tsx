@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { TextField } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
@@ -15,11 +15,11 @@ import { Timezone } from "../../../utils/worldTimezones";
 
 const dataCy = "singleScheduleMaintenanceForm";
 export interface SingleScheduleMaintenanceFormProps {
-  maintenance: enhancedEimSlice.ScheduleMaintenance;
+  maintenance: enhancedInfraSlice.ScheduleMaintenance;
   timezone: Timezone;
-  formControl: Control<enhancedEimSlice.ScheduleMaintenance, any>;
-  formErrors: FieldErrors<enhancedEimSlice.ScheduleMaintenance>;
-  onUpdate: (maintenance: enhancedEimSlice.ScheduleMaintenance) => void;
+  formControl: Control<enhancedInfraSlice.ScheduleMaintenance, any>;
+  formErrors: FieldErrors<enhancedInfraSlice.ScheduleMaintenance>;
+  onUpdate: (maintenance: enhancedInfraSlice.ScheduleMaintenance) => void;
 }
 interface SingleScheduleInputState {
   startDate?: string;

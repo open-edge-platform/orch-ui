@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
 import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { TextField } from "@spark-design/react";
@@ -49,7 +49,7 @@ const DeauthorizeHostStandalone = ({
 
   const navigate = useNavigate();
   const [deauthorizeHost] =
-    eim.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
+    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
 
   const deauthDialogContent = (
     <div {...cy} className="deauthorize-host-standalone">

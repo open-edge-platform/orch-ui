@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import {
   assignedWorkloadHostOne as hostOne,
@@ -30,24 +30,26 @@ const TestingComponent = ({
   mockEntity = hostOne,
   mockEntityType = "host",
 }: {
-  mockEntity?: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
-  mockEntityType?: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  mockEntity?: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
+  mockEntityType?: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
 }) => {
-  const initialMaintenanceFormData: enhancedEimSlice.ScheduleMaintenance = {
+  const initialMaintenanceFormData: enhancedInfraSlice.ScheduleMaintenance = {
     type: "no-repeat",
     name: "",
     scheduleStatus: "SCHEDULE_STATUS_UNSPECIFIED",
   };
   // Note: target can be host or site. If targetSite is set then targetHost is undefined (not-set).
   if (mockEntityType === "region") {
-    initialMaintenanceFormData.targetRegion = mockEntity as eim.RegionRead;
+    initialMaintenanceFormData.targetRegion = mockEntity as infra.RegionRead;
   } else if (mockEntityType === "site") {
-    initialMaintenanceFormData.targetSite = mockEntity as eim.SiteRead;
+    initialMaintenanceFormData.targetSite = mockEntity as infra.SiteRead;
   } else {
-    initialMaintenanceFormData.targetHost = mockEntity as eim.HostRead;
+    initialMaintenanceFormData.targetHost = mockEntity as infra.HostRead;
   }
   const [maintenance, setMaintenance] =
-    useState<enhancedEimSlice.ScheduleMaintenance>(initialMaintenanceFormData);
+    useState<enhancedInfraSlice.ScheduleMaintenance>(
+      initialMaintenanceFormData,
+    );
   const [isClosed, setIsClosed] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   return (
@@ -83,7 +85,7 @@ describe("<ScheduleMaintenanceForm/>", () => {
       utc: "-00:00",
     },
   };
-  const expectedMaintenance: enhancedEimSlice.ScheduleMaintenance = {
+  const expectedMaintenance: enhancedInfraSlice.ScheduleMaintenance = {
     name: defaultFill.name,
     scheduleStatus: defaultFill.scheduleStatus!,
     type: "no-repeat",
