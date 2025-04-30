@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import {
   ApiError,
   ConfirmationDialog,
@@ -44,19 +44,19 @@ interface ScheduleMaintenanceTargetIds {
 }
 
 export interface ScheduleMaintenanceListProps {
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
-  targetEntityType?: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
+  targetEntityType?: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
   sort?: number[];
   onEditSelection: (
-    maintenance: enhancedEimSlice.ScheduleMaintenanceRead,
+    maintenance: enhancedInfraSlice.ScheduleMaintenanceRead,
   ) => void;
   onClose: () => void;
 }
 
 /** This function will remove any expired single maintenance from list via end_seconds */
 const removeExpiredSingleSchedules = (
-  singleScheduleMaintenance: enhancedEimSlice.ScheduleMaintenanceRead[],
-): enhancedEimSlice.ScheduleMaintenanceRead[] =>
+  singleScheduleMaintenance: enhancedInfraSlice.ScheduleMaintenanceRead[],
+): enhancedInfraSlice.ScheduleMaintenanceRead[] =>
   singleScheduleMaintenance.filter(
     (maintenance) =>
       !maintenance.single?.endSeconds ||
@@ -67,7 +67,7 @@ const removeExpiredSingleSchedules = (
 /** Convert RepeatedSchedule API response object to ScheduleMaintenance */
 const convertRepeatedMaintenanceScheduleAPIScheduleMaintenance = (
   repeatedScheduleMaintenance: infra.SingleScheduleRead,
-): enhancedEimSlice.ScheduleMaintenanceRead => ({
+): enhancedInfraSlice.ScheduleMaintenanceRead => ({
   resourceId: repeatedScheduleMaintenance.repeatedScheduleID,
   name:
     repeatedScheduleMaintenance.name ??
@@ -94,7 +94,7 @@ const convertRepeatedMaintenanceScheduleAPIScheduleMaintenance = (
 /** Convert SingleSchedule2 API response object to ScheduleMaintenance */
 const convertSingleMaintenanceScheduleAPIScheduleMaintenance = (
   singleScheduleMaintenance: infra.SingleScheduleRead2,
-): enhancedEimSlice.ScheduleMaintenanceRead => ({
+): enhancedInfraSlice.ScheduleMaintenanceRead => ({
   resourceId: singleScheduleMaintenance.resourceId,
   name:
     singleScheduleMaintenance.name ??
@@ -141,7 +141,7 @@ export const ScheduleMaintenanceList = ({
     dispatch(showMessageNotification(message));
   };
   const [maintenanceOnDelete, setMaintenanceOnDelete] =
-    useState<enhancedEimSlice.ScheduleMaintenanceRead>();
+    useState<enhancedInfraSlice.ScheduleMaintenanceRead>();
 
   const [deleteMaintenanceWithoutRepeat] =
     infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
@@ -151,7 +151,7 @@ export const ScheduleMaintenanceList = ({
   // TODO#2: move this to new maintenance list
   /** Delete a maintenance via INFRA-API */
   const deleteMaintenance = (
-    maintenance: enhancedEimSlice.ScheduleMaintenanceRead,
+    maintenance: enhancedInfraSlice.ScheduleMaintenanceRead,
   ) => {
     let apiCall;
     if (maintenance.resourceId) {
@@ -211,7 +211,7 @@ export const ScheduleMaintenanceList = ({
     },
   );
 
-  const combinedMaintenanceList: enhancedEimSlice.ScheduleMaintenance[] =
+  const combinedMaintenanceList: enhancedInfraSlice.ScheduleMaintenance[] =
     isSuccess
       ? [
           ...removeExpiredSingleSchedules(
@@ -226,7 +226,7 @@ export const ScheduleMaintenanceList = ({
       : [];
   const totalElements = isSuccess ? maintenanceJoin.totalElements : 0;
 
-  const columns: TableColumn<enhancedEimSlice.ScheduleMaintenance>[] = [
+  const columns: TableColumn<enhancedInfraSlice.ScheduleMaintenance>[] = [
     {
       Header: "Name",
       accessor: "name",
@@ -244,7 +244,7 @@ export const ScheduleMaintenanceList = ({
       Header: "Action",
       textAlign: "center",
       Cell: (table: {
-        row: { original: enhancedEimSlice.ScheduleMaintenanceRead };
+        row: { original: enhancedInfraSlice.ScheduleMaintenanceRead };
       }) => {
         const maintenance = table.row.original;
         return (
@@ -276,7 +276,7 @@ export const ScheduleMaintenanceList = ({
   const maintenanceSubRow = ({
     original: maintenanceDetails,
   }: {
-    original: enhancedEimSlice.ScheduleMaintenance;
+    original: enhancedInfraSlice.ScheduleMaintenance;
   }) => <ScheduleMaintenanceSubComponent maintenance={maintenanceDetails} />;
 
   const getContent = () => {

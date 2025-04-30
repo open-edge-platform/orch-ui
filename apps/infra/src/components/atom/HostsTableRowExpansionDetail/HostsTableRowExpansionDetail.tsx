@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { Flex, TrustedCompute } from "@orch-ui/components";
 import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { ScheduleMaintenanceStatusTag } from "../../molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
@@ -27,7 +27,7 @@ const HostsTableRowExpansionDetail = ({
             <span>{host.name}</span>
             <ScheduleMaintenanceStatusTag
               targetEntity={
-                "HostRead" as enhancedEimSlice.ScheduleMaintenanceTargetEntity
+                "HostRead" as enhancedInfraSlice.ScheduleMaintenanceTargetEntity
               }
               targetEntityType="host"
             />

@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Badge } from "@spark-design/react";
 import { useEffect, useState } from "react";
 import "./ScheduleMaintenanceStatusTag.scss";
 const dataCy = "scheduleMaintenanceStatusTag";
 export interface ScheduleMaintenanceStatusTagProps {
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
-  targetEntityType: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
+  targetEntityType: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
   className?: string;
   poll?: boolean;
 }

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import {
   AggregatedStatus,
   FieldLabels,
@@ -145,9 +145,9 @@ export const isHostAssigned = (instance?: infra.InstanceRead): boolean => {
 };
 
 export const inheritedScheduleToString = (
-  item: enhancedEimSlice.ScheduleMaintenanceRead,
+  item: enhancedInfraSlice.ScheduleMaintenanceRead,
   targetEntityType: string,
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity,
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity,
 ) => {
   if (
     item.targetRegion &&

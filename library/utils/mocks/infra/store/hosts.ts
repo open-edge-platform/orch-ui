@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { Operator } from "../../../interfaces/Pagination";
 import { BaseStore } from "../../baseStore";
 import * as metadataBrokerMocks from "../../metadata-broker";
@@ -154,7 +154,7 @@ export const hostSixMetadata: infra.Metadata = [
 
 export interface HostMock extends infra.HostRead {
   deauthorized?: boolean;
-  instance?: enhancedEimSlice.InstanceReadModified;
+  instance?: enhancedInfraSlice.InstanceReadModified;
 }
 
 // export const hostNoName: HostMock = {

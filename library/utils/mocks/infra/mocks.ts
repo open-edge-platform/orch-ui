@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { GenericStatus } from "@orch-ui/components";
 import { rest } from "msw";
 import { SharedStorage } from "../..";
@@ -96,7 +96,7 @@ const randomizeHostList = (hosts: infra.HostRead[]): HostMock[] => {
   return hosts as HostMock[];
 };
 const randomizeInstanceHostList = (
-  instanceList: enhancedEimSlice.InstanceReadModified[],
+  instanceList: enhancedInfraSlice.InstanceReadModified[],
 ) => {
   if (IS_MOCK_RANDOMIZE_ENABLED) {
     return instanceList.map((instance, i) => {
@@ -684,7 +684,7 @@ export const handlers = [
     if (instances && instances.length > 0) {
       instances = randomizeInstanceHostList(
         instances,
-      ) as enhancedEimSlice.InstanceReadModified[];
+      ) as enhancedInfraSlice.InstanceReadModified[];
     }
 
     return await res(

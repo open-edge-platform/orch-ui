@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 
 export class StoreUtils {
   public static randomString(): string {
@@ -48,7 +48,7 @@ export class StoreUtils {
       ...newHost,
       instance: newHost.instance
         ? this.convertToWriteInstance(
-            newHost.instance as enhancedEimSlice.InstanceReadModified,
+            newHost.instance as enhancedInfraSlice.InstanceReadModified,
           )
         : undefined,
     };
@@ -87,7 +87,7 @@ export class StoreUtils {
       ...newHost,
       instance: newHost.instance
         ? this.convertToWriteInstance(
-            newHost.instance as enhancedEimSlice.InstanceReadModified,
+            newHost.instance as enhancedInfraSlice.InstanceReadModified,
           )
         : undefined,
       siteId: newHost.site?.siteID ?? undefined,
@@ -96,7 +96,7 @@ export class StoreUtils {
   }
 
   public static convertToWriteInstance(
-    instance: enhancedEimSlice.InstanceReadModified,
+    instance: enhancedInfraSlice.InstanceReadModified,
   ): infra.InstanceWrite {
     const newInstance: infra.InstanceWrite = {
       name: instance.name,

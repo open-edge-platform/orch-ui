@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { Drawer, IconVariant, Item, Tabs } from "@spark-design/react";
 import { useState } from "react";
 import { DrawerHeader } from "../../../components/molecules/DrawerHeader/DrawerHeader";
@@ -22,9 +22,9 @@ interface TabItem {
 
 export interface ScheduleMaintenanceDrawerProps {
   /** target entity on which the schedule maintenance is applied on. Host/Site */
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
   /** target entity type: host, site or region */
-  targetEntityType?: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  targetEntityType?: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
   /** show drawer control */
   isDrawerShown: boolean;
   isHeaderPrefixButtonShown?: boolean;
@@ -48,7 +48,7 @@ export const ScheduleMaintenanceDrawer = ({
   const cy = { "data-cy": dataCy };
 
   /** Maintenance when reset */
-  const resetMaintenance: enhancedEimSlice.ScheduleMaintenanceRead = {
+  const resetMaintenance: enhancedInfraSlice.ScheduleMaintenanceRead = {
     type: "no-repeat",
     name: "",
     scheduleStatus: "SCHEDULE_STATUS_UNSPECIFIED",
@@ -64,7 +64,7 @@ export const ScheduleMaintenanceDrawer = ({
   }
 
   const [maintenance, setMaintenance] =
-    useState<enhancedEimSlice.ScheduleMaintenanceRead>(resetMaintenance);
+    useState<enhancedInfraSlice.ScheduleMaintenanceRead>(resetMaintenance);
 
   const tabItems: TabItem[] = [
     {
@@ -115,7 +115,7 @@ export const ScheduleMaintenanceDrawer = ({
         targetEntity={targetEntity}
         targetEntityType={targetEntityType}
         onEditSelection={(
-          maintenanceEdit: enhancedEimSlice.ScheduleMaintenanceRead,
+          maintenanceEdit: enhancedInfraSlice.ScheduleMaintenanceRead,
         ) => {
           if (
             maintenanceEdit.targetHost &&

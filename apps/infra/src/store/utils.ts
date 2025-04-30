@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { MessageBannerAlertState } from "@orch-ui/components";
 import { InternalError, SharedStorage } from "@orch-ui/utils";
 import { SerializedError } from "@reduxjs/toolkit";
@@ -37,7 +37,7 @@ export const errorMessageBanner = (text: string = ""): _MessageBannerState => ({
 
 export const isRepeatedMaintenance = (
   maintenance: any,
-): maintenance is enhancedEimSlice.RepeatedMaintenance => {
+): maintenance is enhancedInfraSlice.RepeatedMaintenance => {
   return (
     "type" in maintenance &&
     (maintenance.type === "repeat-weekly" ||
@@ -51,7 +51,7 @@ export const isRepeatedMaintenance = (
 };
 export const isSingleMaintenance = (
   maintenance: any,
-): maintenance is enhancedEimSlice.SingleMaintenance => {
+): maintenance is enhancedInfraSlice.SingleMaintenance => {
   return (
     "type" in maintenance &&
     maintenance.type === "no-repeat" &&

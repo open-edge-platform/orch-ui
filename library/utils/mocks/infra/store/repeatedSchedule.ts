@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { BaseStore } from "./baseStore";
 import { assignedWorkloadHostFour, assignedWorkloadHostOne } from "./hosts";
 import { regionUsWest } from "./regions";
@@ -25,7 +25,7 @@ export const repeatedScheduleOne: infra.SingleScheduleRead = {
 };
 
 /* Start of schedule maintenance data for repeat type*/
-export const repeatWeeklyMaintenanceFor11PMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const repeatWeeklyMaintenanceFor11PMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -41,7 +41,7 @@ export const repeatWeeklyMaintenanceFor11PMUTC: enhancedEimSlice.ScheduleMainten
     },
   };
 
-export const repeatWeeklyMaintenanceFor11AMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const repeatWeeklyMaintenanceFor11AMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -57,7 +57,7 @@ export const repeatWeeklyMaintenanceFor11AMUTC: enhancedEimSlice.ScheduleMainten
     },
   };
 
-export const maintenanceRepeatDaysFor11PMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const maintenanceRepeatDaysFor11PMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -74,7 +74,7 @@ export const maintenanceRepeatDaysFor11PMUTC: enhancedEimSlice.ScheduleMaintenan
     },
   };
 
-export const maintenanceRepeatDaysFor11AMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const maintenanceRepeatDaysFor11AMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",

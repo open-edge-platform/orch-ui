@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { clusterFiveName } from "../../cluster-orch/data/clusterOrchIds";
 import {
   instanceFiveId,
@@ -46,7 +46,7 @@ import {
 } from "./workload";
 
 // Assigned Instance: with workloadMemberId is "notnull"
-export const instanceOne: enhancedEimSlice.InstanceReadModified = {
+export const instanceOne: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceOneId,
   resourceId: instanceOneId,
   name: "Instance One",
@@ -70,7 +70,7 @@ export const instanceOne: enhancedEimSlice.InstanceReadModified = {
   desiredState: "INSTANCE_STATE_RUNNING",
 };
 
-export const instanceTwo: enhancedEimSlice.InstanceReadModified = {
+export const instanceTwo: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceTwoId,
   resourceId: instanceTwoId,
   name: "Instance Two",
@@ -102,7 +102,7 @@ export const instanceTwo: enhancedEimSlice.InstanceReadModified = {
   trustedAttestationStatus: "Failed: PCR Measurement Mismatch",
 };
 
-export const instanceThree: enhancedEimSlice.InstanceReadModified = {
+export const instanceThree: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceThreeId,
   resourceId: instanceThreeId,
   name: "Instance Three",
@@ -124,7 +124,7 @@ export const instanceThree: enhancedEimSlice.InstanceReadModified = {
   trustedAttestationStatus: "Verified",
 };
 
-export const instanceFour: enhancedEimSlice.InstanceReadModified = {
+export const instanceFour: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceFourId,
   resourceId: instanceFourId,
   name: "Instance Four",
@@ -151,7 +151,7 @@ export const instanceFour: enhancedEimSlice.InstanceReadModified = {
   updateStatusTimestamp: +new Date(),
 };
 
-export const instanceFive: enhancedEimSlice.InstanceReadModified = {
+export const instanceFive: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceFiveId,
   resourceId: instanceFiveId,
   name: "Instance Five",
@@ -177,7 +177,7 @@ export const instanceFive: enhancedEimSlice.InstanceReadModified = {
   desiredState: "INSTANCE_STATE_RUNNING",
 };
 
-export const instanceSix: enhancedEimSlice.InstanceReadModified = {
+export const instanceSix: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceSixId,
   resourceId: instanceSixId,
   name: "Instance Six",
@@ -205,7 +205,7 @@ export const instanceSix: enhancedEimSlice.InstanceReadModified = {
 };
 
 // Unassigned Hosts: Below Instance must have no workloadMemberIds
-export const provisionedInstanceOne: enhancedEimSlice.InstanceReadModified = {
+export const provisionedInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   instanceID: provisionedInstanceOneId,
   resourceId: provisionedInstanceOneId,
   name: "Instance Unassign One",
@@ -217,7 +217,7 @@ export const provisionedInstanceOne: enhancedEimSlice.InstanceReadModified = {
   os: osUbuntu,
 };
 
-export const provisionedInstanceTwo: enhancedEimSlice.InstanceReadModified = {
+export const provisionedInstanceTwo: enhancedInfraSlice.InstanceReadModified = {
   instanceID: provisionedInstanceTwoId,
   resourceId: provisionedInstanceTwoId,
   name: "Instance Unassign Two",
@@ -229,19 +229,20 @@ export const provisionedInstanceTwo: enhancedEimSlice.InstanceReadModified = {
   os: osRedHat,
 };
 
-export const provisionedInstanceThree: enhancedEimSlice.InstanceReadModified = {
-  instanceID: provisionedInstanceThreeId,
-  resourceId: provisionedInstanceThreeId,
-  name: "Instance Unassign Three",
-  instanceStatusIndicator: "STATUS_INDICATION_ERROR",
-  instanceStatus: "Error message",
-  instanceStatusTimestamp: 1717761389,
-  kind: "INSTANCE_KIND_UNSPECIFIED",
-  desiredState: "INSTANCE_STATE_RUNNING",
-  os: osUbuntu,
-};
+export const provisionedInstanceThree: enhancedInfraSlice.InstanceReadModified =
+  {
+    instanceID: provisionedInstanceThreeId,
+    resourceId: provisionedInstanceThreeId,
+    name: "Instance Unassign Three",
+    instanceStatusIndicator: "STATUS_INDICATION_ERROR",
+    instanceStatus: "Error message",
+    instanceStatusTimestamp: 1717761389,
+    kind: "INSTANCE_KIND_UNSPECIFIED",
+    desiredState: "INSTANCE_STATE_RUNNING",
+    os: osUbuntu,
+  };
 
-export const instanceOnboardedOne: enhancedEimSlice.InstanceReadModified = {
+export const instanceOnboardedOne: enhancedInfraSlice.InstanceReadModified = {
   instanceID: instanceOnboardedOneId,
   resourceId: instanceOnboardedOneId,
   name: "Instance Onboarded One",
@@ -252,7 +253,7 @@ export const instanceOnboardedOne: enhancedEimSlice.InstanceReadModified = {
   os: osUbuntu,
 };
 
-export const instanceUnspecified: enhancedEimSlice.InstanceReadModified = {
+export const instanceUnspecified: enhancedInfraSlice.InstanceReadModified = {
   currentState: "INSTANCE_STATE_UNSPECIFIED",
   instanceID: "inst-ebfe2da9",
   resourceId: "inst-ebfe2da9",
@@ -264,7 +265,7 @@ export const instanceUnspecified: enhancedEimSlice.InstanceReadModified = {
   instanceStatusTimestamp: 1717761389,
 };
 
-export const registeredInstanceOne: enhancedEimSlice.InstanceReadModified = {
+export const registeredInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   instanceID: "registered-host-1",
   resourceId: "registered-host-1",
   name: "Instance One",
@@ -301,7 +302,7 @@ export const generateSshMocks = (size = 10, offset = 0, mock = mockSsh) =>
 
 export class InstanceStore extends BaseStore<
   "instanceID",
-  enhancedEimSlice.InstanceReadModified,
+  enhancedInfraSlice.InstanceReadModified,
   infra.Instance
 > {
   instanceIndex = 0;
@@ -360,7 +361,7 @@ export class InstanceStore extends BaseStore<
     host?: infra.HostRead,
     os?: infra.OperatingSystemResourceRead,
     localAccount?: infra.LocalAccountRead,
-  ): enhancedEimSlice.InstanceReadModified {
+  ): enhancedInfraSlice.InstanceReadModified {
     const currentTime = +new Date();
     return {
       ...body,
@@ -411,7 +412,7 @@ export class InstanceStore extends BaseStore<
     workloadMemberID?: string | null;
     hostId?: string | null;
     filter?: string | null;
-  }): enhancedEimSlice.InstanceReadModified[] {
+  }): enhancedInfraSlice.InstanceReadModified[] {
     let result = this.resources;
 
     /* --- Server side filtering Logic: from here --- */

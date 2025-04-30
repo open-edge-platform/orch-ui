@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TreeBranchState, TreeBranchStateUtils } from "./locations.treeBranch";
 
@@ -14,8 +14,8 @@ export interface _LocationsRootState {
 }
 
 interface LocationScheduleMaintenanceTargetEntity {
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
-  targetEntityType: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
+  targetEntityType: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
   showBack?: boolean;
 }
 

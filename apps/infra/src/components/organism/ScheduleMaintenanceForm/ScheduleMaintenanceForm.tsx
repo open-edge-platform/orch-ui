@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import {
   Button,
@@ -50,9 +50,9 @@ import { Flex } from "@orch-ui/components";
 const dataCy = "newScheduleMaintenanceForm";
 
 export interface ScheduleMaintenanceFormProps {
-  maintenance: enhancedEimSlice.ScheduleMaintenanceRead;
-  targetEntityType?: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
-  onUpdate: (maintenance: enhancedEimSlice.ScheduleMaintenanceRead) => void;
+  maintenance: enhancedInfraSlice.ScheduleMaintenanceRead;
+  targetEntityType?: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
+  onUpdate: (maintenance: enhancedInfraSlice.ScheduleMaintenanceRead) => void;
   onSave: () => void;
   onClose: () => void;
 }
@@ -67,7 +67,7 @@ export const ScheduleMaintenanceForm = ({
 }: ScheduleMaintenanceFormProps) => {
   const cy = { "data-cy": dataCy };
 
-  const targetData: enhancedEimSlice.ScheduleMaintenanceTargetData = {
+  const targetData: enhancedInfraSlice.ScheduleMaintenanceTargetData = {
     targetHostId: maintenance.targetHost?.resourceId,
     targetSiteId: maintenance.targetSite?.resourceId,
     targetRegionId: maintenance.targetRegion?.resourceId,
@@ -116,7 +116,7 @@ export const ScheduleMaintenanceForm = ({
     control: formControl,
     formState: { errors: formErrors },
     handleSubmit,
-  } = useForm<enhancedEimSlice.ScheduleMaintenanceRead>({
+  } = useForm<enhancedInfraSlice.ScheduleMaintenanceRead>({
     mode: "all",
     defaultValues: maintenance,
     values: maintenance,
@@ -397,7 +397,7 @@ export const ScheduleMaintenanceForm = ({
               placeholder="Select type"
               selectedKey={maintenance?.type}
               onSelectionChange={(
-                selectedKey: enhancedEimSlice.ScheduleMaintenanceType,
+                selectedKey: enhancedInfraSlice.ScheduleMaintenanceType,
               ) => {
                 onUpdate({ ...maintenance, type: selectedKey });
               }}

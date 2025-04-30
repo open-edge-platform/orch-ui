@@ -3,14 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { Timezone } from "../../../utils/worldTimezones";
 import { RepeatedScheduleMaintenanceFormPom } from "../RepeatedScheduleMaintenanceForm/RepeatedScheduleMaintenanceForm.pom";
 import { SingleScheduleMaintenanceFormPom } from "../SingleScheduleMaintenanceForm/SingleScheduleMaintenanceForm.pom";
 
 export type ScheduleMaintenanceBasicFill = Partial<
-  Pick<enhancedEimSlice.ScheduleMaintenance, "name" | "scheduleStatus" | "type">
+  Pick<
+    enhancedInfraSlice.ScheduleMaintenance,
+    "name" | "scheduleStatus" | "type"
+  >
 > & {
   timezone?: Timezone;
 };

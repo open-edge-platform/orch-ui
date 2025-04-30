@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { BaseStore } from "./baseStore";
 import {
   assignedWorkloadHostFour,
@@ -67,7 +67,7 @@ const scheduleFive: infra.SingleScheduleRead2 = {
 };
 
 /* Start of schedule maintenance data for no-repeat type*/
-export const noRepeatMaintenance: enhancedEimSlice.ScheduleMaintenance = {
+export const noRepeatMaintenance: enhancedInfraSlice.ScheduleMaintenance = {
   name: "schedule3",
   scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
   type: "no-repeat",
@@ -78,7 +78,7 @@ export const noRepeatMaintenance: enhancedEimSlice.ScheduleMaintenance = {
   },
 };
 
-export const noRepeatOpenEndedMaintenance: enhancedEimSlice.ScheduleMaintenance =
+export const noRepeatOpenEndedMaintenance: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "no-repeat-openended-maintenance",
     scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",

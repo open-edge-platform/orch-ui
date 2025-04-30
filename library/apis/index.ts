@@ -21,7 +21,7 @@ export { coApi as cmSlice } from "./cluster-manager/apiSlice";
 export * as cm from "./cluster-manager/clusterManagerApis";
 export { infraApi as infraSlice } from "./infra/apiSlice";
 // Enhanced Api Slice
-export * as enhancedEimSlice from "./infra/enhancedApiSlice";
+export * as enhancedInfraSlice from "./infra/enhancedApiSlice";
 export * as infra from "./infra/infra";
 export { metadataBrokerApi as mbSlice } from "./metadata-broker/apiSlice";
 export * as mbApi from "./metadata-broker/generated";

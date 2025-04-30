@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne,
   assignedWorkloadHostTwo,
@@ -36,7 +36,7 @@ describe("The Utils", () => {
   describe("inheritedScheduleToString", () => {
     const convertSingleSchedule2ToScheduleMaintenance = (
       maintenance: infra.SingleSchedule,
-    ): enhancedEimSlice.ScheduleMaintenance => ({
+    ): enhancedInfraSlice.ScheduleMaintenance => ({
       name: maintenance.name,
       scheduleStatus: maintenance.scheduleStatus,
       type: "repeat-weekly",
