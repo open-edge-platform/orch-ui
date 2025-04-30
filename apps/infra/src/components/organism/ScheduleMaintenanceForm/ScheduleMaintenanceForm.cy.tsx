@@ -47,7 +47,9 @@ const TestingComponent = ({
     initialMaintenanceFormData.targetHost = mockEntity as infra.HostRead;
   }
   const [maintenance, setMaintenance] =
-    useState<enhancedInfraSlice.ScheduleMaintenance>(initialMaintenanceFormData);
+    useState<enhancedInfraSlice.ScheduleMaintenance>(
+      initialMaintenanceFormData,
+    );
   const [isClosed, setIsClosed] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   return (
