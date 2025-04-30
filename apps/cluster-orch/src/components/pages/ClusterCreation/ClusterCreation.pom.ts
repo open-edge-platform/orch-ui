@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, mbApi } from "@orch-ui/apis";
+import { cm, infra, mbApi } from "@orch-ui/apis";
 import { MetadataFormPom, TablePom } from "@orch-ui/components";
 import { SiDropdown } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";

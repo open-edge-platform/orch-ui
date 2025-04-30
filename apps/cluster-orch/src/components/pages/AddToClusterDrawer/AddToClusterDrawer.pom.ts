@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { clusterOne, ClusterStore, regionPortlandId } from "@orch-ui/utils";
 

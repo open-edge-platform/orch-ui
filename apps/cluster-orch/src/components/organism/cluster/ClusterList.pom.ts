@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { ConfirmationDialogPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import {
