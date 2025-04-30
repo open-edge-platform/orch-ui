@@ -47,7 +47,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import "./HostDetails.scss";
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   configuredBreadcrumb,
   homeBreadcrumb,
@@ -88,13 +88,13 @@ const HostDetails: React.FC = () => {
   const { id, uuid } = useParams<urlParams>() as urlParams;
 
   /* Managing Host/Host-Resource details with api-hooks & states */
-  const [host, setHost] = useState<eim.HostRead>();
+  const [host, setHost] = useState<infra.HostRead>();
   const [showResourceDetails, setShowResourceDetails] =
     useState<boolean>(false);
   const [resourceTitle, setResourceTitle] = useState<ResourceTypeTitle>();
   const [resourceData, setResourceData] = useState<ResourceType | null>(null);
   // Calling Host-related APIs
-  const hostsQuery = eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       uuid: uuid,
@@ -106,20 +106,21 @@ const HostDetails: React.FC = () => {
     },
   );
 
-  const hostQuery = eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      hostId: id,
-    },
-    {
-      skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
-      refetchOnMountOrArgChange: true,
-      pollingInterval: API_INTERVAL,
-    },
-  );
+  const hostQuery =
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        hostId: id,
+      },
+      {
+        skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
+        refetchOnMountOrArgChange: true,
+        pollingInterval: API_INTERVAL,
+      },
+    );
 
   const sitesQuery =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: "*", // sitesFiltered logic can be updated with host regionId mapping
@@ -175,9 +176,9 @@ const HostDetails: React.FC = () => {
   const [deleteMaintenanceSchedule] =
     // For Deactivating Maintenance option within Maintenance message banner or Host-Actions popup.
     // This option is only available within configured host details
-    eim.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
   const { data: schedules } =
-    eim.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
+    infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: id,
@@ -226,7 +227,7 @@ const HostDetails: React.FC = () => {
       // OR Filtered host has atleast one periodically repeated active maintenance schedule
       (schedules.RepeatedSchedules && schedules.RepeatedSchedules.length > 0));
   /** This will trigger an API call to Deactivate Maintenance: if host & the maintenance for that host exist */
-  const deactivateMaintenance = (host: eim.HostRead) => {
+  const deactivateMaintenance = (host: infra.HostRead) => {
     if (filteredMaintenance.length !== 0) {
       dispatch(
         showMessageNotification({

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
 import { humanFileSize } from "@orch-ui/utils";
 import { Table } from "@spark-design/react";
@@ -12,12 +12,12 @@ import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 
 const Storage = ({
   data,
-}: ResourceDetailsDisplayProps<eim.HostResourcesStorageRead[]>) => {
-  const columns: TableColumn<eim.HostResourcesStorageRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HostResourcesStorageRead[]>) => {
+  const columns: TableColumn<infra.HostResourcesStorageRead>[] = [
     { Header: "WWID", accessor: "wwid" },
     {
       Header: "Capacity",
-      accessor: (data: eim.HostResourcesStorageRead) => {
+      accessor: (data: infra.HostResourcesStorageRead) => {
         const formatData = humanFileSize(parseInt(data.capacityBytes ?? "0"));
         if (!formatData) return null;
         return `${formatData.value} ${formatData.units}`;

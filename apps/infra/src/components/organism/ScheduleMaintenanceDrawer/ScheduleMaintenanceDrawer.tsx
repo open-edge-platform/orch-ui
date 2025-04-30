@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { Drawer, IconVariant, Item, Tabs } from "@spark-design/react";
 import { useState } from "react";
 import { DrawerHeader } from "../../../components/molecules/DrawerHeader/DrawerHeader";
@@ -22,9 +22,9 @@ interface TabItem {
 
 export interface ScheduleMaintenanceDrawerProps {
   /** target entity on which the schedule maintenance is applied on. Host/Site */
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
   /** target entity type: host, site or region */
-  targetEntityType?: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  targetEntityType?: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
   /** show drawer control */
   isDrawerShown: boolean;
   isHeaderPrefixButtonShown?: boolean;
@@ -48,7 +48,7 @@ export const ScheduleMaintenanceDrawer = ({
   const cy = { "data-cy": dataCy };
 
   /** Maintenance when reset */
-  const resetMaintenance: enhancedEimSlice.ScheduleMaintenanceRead = {
+  const resetMaintenance: enhancedInfraSlice.ScheduleMaintenanceRead = {
     type: "no-repeat",
     name: "",
     scheduleStatus: "SCHEDULE_STATUS_UNSPECIFIED",
@@ -56,15 +56,15 @@ export const ScheduleMaintenanceDrawer = ({
 
   // Note: target can be host or site. If targetSite is set then targetHost is undefined (not-set).
   if (targetEntityType === "region") {
-    resetMaintenance.targetRegion = targetEntity as eim.RegionRead;
+    resetMaintenance.targetRegion = targetEntity as infra.RegionRead;
   } else if (targetEntityType === "site") {
-    resetMaintenance.targetSite = targetEntity as eim.SiteRead;
+    resetMaintenance.targetSite = targetEntity as infra.SiteRead;
   } else {
-    resetMaintenance.targetHost = targetEntity as eim.HostRead;
+    resetMaintenance.targetHost = targetEntity as infra.HostRead;
   }
 
   const [maintenance, setMaintenance] =
-    useState<enhancedEimSlice.ScheduleMaintenanceRead>(resetMaintenance);
+    useState<enhancedInfraSlice.ScheduleMaintenanceRead>(resetMaintenance);
 
   const tabItems: TabItem[] = [
     {
@@ -115,23 +115,23 @@ export const ScheduleMaintenanceDrawer = ({
         targetEntity={targetEntity}
         targetEntityType={targetEntityType}
         onEditSelection={(
-          maintenanceEdit: enhancedEimSlice.ScheduleMaintenanceRead,
+          maintenanceEdit: enhancedInfraSlice.ScheduleMaintenanceRead,
         ) => {
           if (
             maintenanceEdit.targetHost &&
             !maintenanceEdit.targetHost.resourceId
           ) {
-            maintenanceEdit.targetHost = targetEntity as eim.HostRead;
+            maintenanceEdit.targetHost = targetEntity as infra.HostRead;
           } else if (
             maintenanceEdit.targetSite &&
             !maintenanceEdit.targetSite.resourceId
           ) {
-            maintenanceEdit.targetSite = targetEntity as eim.SiteRead;
+            maintenanceEdit.targetSite = targetEntity as infra.SiteRead;
           } else if (
             maintenanceEdit.targetRegion &&
             !maintenanceEdit.targetRegion.resourceId
           ) {
-            maintenanceEdit.targetRegion = targetEntity as eim.RegionRead;
+            maintenanceEdit.targetRegion = targetEntity as infra.RegionRead;
           }
 
           setMaintenance(maintenanceEdit);

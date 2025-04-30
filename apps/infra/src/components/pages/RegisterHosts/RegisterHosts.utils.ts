@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import {
   HostData,
@@ -17,17 +17,18 @@ export const registerHostPost = async (
   hosts: { [id: string]: HostData },
   autoOnboard: boolean,
 ): Promise<number> => {
-  const calls: Promise<eim.HostRead>[] = [];
+  const calls: Promise<infra.HostRead>[] = [];
   Object.keys(hosts).forEach((name) => {
     const host = hosts[name];
-    const payload: eim.PostV1ProjectsByProjectNameComputeHostsRegisterApiArg = {
-      projectName: SharedStorage.project?.name ?? "",
-      hostRegisterInfo: {
-        ...host,
-        uuid: host.uuid || undefined,
-        autoOnboard,
-      },
-    };
+    const payload: infra.PostV1ProjectsByProjectNameComputeHostsRegisterApiArg =
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        hostRegisterInfo: {
+          ...host,
+          uuid: host.uuid || undefined,
+          autoOnboard,
+        },
+      };
 
     calls.push(registerHost(payload).unwrap());
   });

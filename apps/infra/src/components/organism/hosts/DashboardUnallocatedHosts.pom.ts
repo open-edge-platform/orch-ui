@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { CounterWheelPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import { onboardedHostOne, onboardedHostTwo } from "@orch-ui/utils";
@@ -28,7 +27,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
     statusCode: 200,
     response: {
       hosts: [onboardedHostOne, onboardedHostTwo],
-    } as eim.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
   },
   hostsListError400: {
     route,

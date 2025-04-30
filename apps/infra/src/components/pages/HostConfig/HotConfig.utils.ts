@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { HostData } from "../../../store/configureHost";
 
-export const isHostRead = (object: any): object is eim.HostRead => {
+export const isHostRead = (object: any): object is infra.HostRead => {
   return typeof object === "object" && object !== null && object.resourceId;
 };
 
-// eim.HostRead successfull API call that returns updated values
+// infra.HostRead successfull API call that returns updated values
 // string = error message from API failure
 // undefined = no API call made
-export type HostConfigResponse = eim.HostRead | string | undefined;
+export type HostConfigResponse = infra.HostRead | string | undefined;
 
 export const createRegisteredHost = async (
   host: HostData,

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { isOSUpdateAvailable } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import "./OsConfig.scss";
 const dataCy = "osConfig";
 export interface OsConfigProps {
-  instance?: eim.InstanceRead;
+  instance?: infra.InstanceRead;
   iconOnly?: boolean;
 }
 

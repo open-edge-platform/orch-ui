@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type HostStatus = eim.HostRead["hostStatus"];
+type HostStatus = infra.HostRead["hostStatus"];
 type OverallHostStatus =
   | HostStatus
-  | eim.ScheduleStatus
-  | eim.StatusIndicatorRead;
+  | infra.ScheduleStatus
+  | infra.StatusIndicatorRead;
 
 export const hostStatusSliceName = "hostStatusList";
 

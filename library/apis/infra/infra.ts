@@ -1,4 +1,4 @@
-import { eimApi as api } from "./apiSlice";
+import { infraApi as api } from "./apiSlice";
 export const addTagTypes = [
   "Compute",
   "Host",
@@ -1077,7 +1077,7 @@ const injectedRtkApi = api
     }),
     overrideExisting: false,
   });
-export { injectedRtkApi as eim };
+export { injectedRtkApi as infra };
 export type GetV1ProjectsByProjectNameComputeApiResponse =
   /** status 200 A compute object */ HostsListRead;
 export type GetV1ProjectsByProjectNameComputeApiArg = {

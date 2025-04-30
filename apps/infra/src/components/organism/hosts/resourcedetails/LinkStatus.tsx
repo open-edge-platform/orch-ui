@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Status, StatusIcon } from "@orch-ui/components";
 
 interface LinkStatusProps {
-  status: eim.LinkStateRead["type"];
+  status: infra.LinkStateRead["type"];
 }
 
 const LinkStatus = ({ status }: LinkStatusProps) => {

@@ -4,7 +4,6 @@
  */
 
 import * as _ from "lodash";
-import { eim } from "../../../../library/apis";
 import Chainable = Cypress.Chainable;
 
 export const validateEimTab = () => {
@@ -22,7 +21,7 @@ export const createRegionViaAPi = (
   regionName: string,
 ): Chainable<string> => {
   return cy
-    .authenticatedRequest<eim.RegionRead>({
+    .authenticatedRequest<infra.RegionRead>({
       method: "POST",
       url: `/v1/projects/${project}/regions`,
       body: {
@@ -38,9 +37,9 @@ export const createRegionViaAPi = (
 export const getRegionViaAPi = (
   project: string,
   regionName: string,
-): Chainable<eim.RegionRead[]> => {
+): Chainable<infra.RegionRead[]> => {
   return cy
-    .authenticatedRequest<eim.RegionsListRead>({
+    .authenticatedRequest<infra.RegionsListRead>({
       method: "GET",
       url: `/v1/projects/${project}/regions`,
       body: {
@@ -60,7 +59,7 @@ export const createSiteViaApi = (
   siteName: string,
 ): Chainable<string> => {
   return cy
-    .authenticatedRequest<eim.SiteRead>({
+    .authenticatedRequest<infra.SiteRead>({
       method: "POST",
       url: `/v1/projects/${project}/regions/${regionId}/sites`,
       body: {
@@ -79,9 +78,9 @@ export const getSiteViaApi = (
   project: string,
   regionId: string,
   siteName: string,
-): Chainable<eim.SiteRead[]> => {
+): Chainable<infra.SiteRead[]> => {
   return cy
-    .authenticatedRequest<eim.SitesListRead>({
+    .authenticatedRequest<infra.SitesListRead>({
       method: "GET",
       url: `/v1/projects/${project}/regions/${regionId}/sites`,
       body: {

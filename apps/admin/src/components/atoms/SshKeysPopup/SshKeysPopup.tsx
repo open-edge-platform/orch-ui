@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Popup } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 
 const dataCy = "sshKeysPopup";
 interface SshKeysPopupProps {
-  localAccount: eim.LocalAccountRead;
+  localAccount: infra.LocalAccountRead;
   onViewDetails?: () => void;
   onDelete?: () => void;
 }
@@ -24,7 +24,7 @@ const SshKeysPopup = ({
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   const { data, isSuccess, refetch } =
-    eim.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+    infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `has(localaccount) AND localaccount.resourceId="${localAccount.resourceId}"`,

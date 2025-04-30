@@ -6,7 +6,7 @@
 import {
   adm,
   cm,
-  enhancedEimSlice as miApi,
+  enhancedInfraSlice as miApi,
   mbApi,
   tmSlice,
 } from "@orch-ui/apis";

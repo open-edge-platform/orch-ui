@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TableColumn, TablePom } from "@orch-ui/components";
 import {
   Cy,
@@ -23,13 +22,13 @@ import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetailPom from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail.pom";
 import HostPopupPom from "../../molecules/ProvisionedHostPopup/ProvisionedHostPopup.pom";
 
-export const unconfiguredColumn: TableColumn<eim.HostRead>[] = [
+export const unconfiguredColumn: TableColumn<infra.HostRead>[] = [
   HostTableColumn.name("../"),
   HostTableColumn.guid,
   HostTableColumn.serialNumber,
   HostTableColumn.status,
 ];
-export const configuredColumns: TableColumn<eim.HostRead>[] = [
+export const configuredColumns: TableColumn<infra.HostRead>[] = [
   ...unconfiguredColumn,
   HostTableColumn.site,
 ];
@@ -96,7 +95,7 @@ const hostResponseOfSize10Total18 = {
 
 const genericHostSuccessEndpoints: CyApiDetails<
   GenericHostSuccessApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
   getHostsListEmpty: {
     route: route,
@@ -175,7 +174,7 @@ const genericHostSuccessEndpoints: CyApiDetails<
 
 const specificHostSuccessApiEndpoints: CyApiDetails<
   SpecificHostSuccessApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
   getOnboardedHosts: {
     route: `${route}filter=${encodeURLQuery("((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR (currentState=HOST_STATE_ERROR AND NOT desiredState=HOST_STATE_REGISTERED)) AND (NOT has(site) OR NOT has(instance) OR NOT instance.desiredState=INSTANCE_STATE_RUNNING)")}**`,

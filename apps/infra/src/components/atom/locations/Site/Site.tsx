@@ -3,20 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Icon } from "@spark-design/react";
 import { Link } from "react-router-dom";
 import "./Site.scss";
 const dataCy = "site";
 
 export interface SiteDynamicProps {
-  viewHandler?: (site: eim.SiteRead) => void;
-  handleOnSiteSelected?: (value: eim.SiteRead) => void;
-  selectedSite?: eim.SiteRead;
+  viewHandler?: (site: infra.SiteRead) => void;
+  handleOnSiteSelected?: (value: infra.SiteRead) => void;
+  selectedSite?: infra.SiteRead;
   isSelectable?: boolean;
 }
 export interface SiteExtendedProps extends SiteDynamicProps {
-  site: eim.SiteRead;
+  site: infra.SiteRead;
 }
 
 export const Site = ({

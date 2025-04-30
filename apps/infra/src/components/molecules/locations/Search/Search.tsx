@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, eimSlice } from "@orch-ui/apis";
+import { infra, infraSlice } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { Button, Dropdown, Item, TextField } from "@spark-design/react";
 import {
@@ -55,7 +55,7 @@ export const Search = ({
   const handleOnChange = useCallback(
     _debounce((value: string) => {
       //get rid of cache, about to create new tree
-      dispatch(eimSlice.util.resetApiState());
+      dispatch(infraSlice.util.resetApiState());
       if (value.length > 1) dispatch(setSearchTerm(value));
       else {
         dispatch(setSearchTerm(undefined));
@@ -66,7 +66,7 @@ export const Search = ({
 
   const handleOnSelectionChange = (key: Key) => {
     const result = searchTypes.find((item) => item.id === key)!;
-    dispatch(eim.eim.util.invalidateTags([{ type: "Location" }]));
+    dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
     dispatch(setSearchType(result.id as SearchTypes));
   };
 
@@ -76,7 +76,7 @@ export const Search = ({
     searchType === SearchTypes.All || searchType === SearchTypes.Sites;
   const projectName = SharedStorage.project?.name ?? "";
   const { data: searchResults, isFetching } =
-    eim.useGetV1ProjectsByProjectNameLocationsQuery(
+    infra.useGetV1ProjectsByProjectNameLocationsQuery(
       {
         projectName,
         name: searchTerm,
@@ -117,7 +117,7 @@ export const Search = ({
         interiorButtonIcon="cross"
         interiorButtonOnPress={() => {
           setLocalSearchTerm("");
-          dispatch(eimSlice.util.resetApiState());
+          dispatch(infraSlice.util.resetApiState());
           dispatch(setSearchTerm(undefined));
         }}
       />
@@ -129,7 +129,7 @@ export const Search = ({
         variant={ButtonVariant.Secondary}
         onPress={() => {
           if (!canSearch) return;
-          dispatch(eim.eim.util.invalidateTags([{ type: "Location" }]));
+          dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
           dispatch(setSearchTerm(searchTerm));
         }}
       >

@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 
 // TODO: Create a Host Resource store
-export const hostResourceGpus: eim.HostResourcesGpuRead[] = [
+export const hostResourceGpus: infra.HostResourcesGpuRead[] = [
   {
     deviceName: "Device 1",
     vendor: "Vendor A",
@@ -39,7 +39,7 @@ export const hostResourceGpus: eim.HostResourcesGpuRead[] = [
   },
 ];
 
-export const hostResourceNics: eim.HostResourcesInterfaceRead[] = [
+export const hostResourceNics: infra.HostResourcesInterfaceRead[] = [
   {
     bmcInterface: false,
     ipaddresses: [
@@ -125,7 +125,7 @@ export const hostResourceNics: eim.HostResourcesInterfaceRead[] = [
   },
 ];
 
-export const hostResourceStorage: eim.HostResourcesStorageRead[] = [
+export const hostResourceStorage: infra.HostResourcesStorageRead[] = [
   {
     // 3.8 TB
     vendor: "23423",
@@ -152,7 +152,7 @@ export const hostResourceStorage: eim.HostResourcesStorageRead[] = [
   },
 ];
 
-export const hostResourceUsb: eim.HostResourcesUsbRead[] = [
+export const hostResourceUsb: infra.HostResourcesUsbRead[] = [
   {
     addr: "32412351",
     bus: "100004",

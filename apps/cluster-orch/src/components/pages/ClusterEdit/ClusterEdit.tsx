@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim, mbApi } from "@orch-ui/apis";
+import { cm, infra, mbApi } from "@orch-ui/apis";
 import {
   BreadcrumbPiece,
   MetadataPair,
@@ -99,7 +99,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
   // Used to get site id for drawer
   const { data: firstClusterHost, isSuccess: isHostSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: firstHostId as string,
@@ -108,7 +108,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     );
   // Used to get region id for drawer
   const { data: siteData } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: "*", // Cluster or associated host have no region information

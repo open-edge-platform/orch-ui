@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, eimSlice, mbSlice } from "@orch-ui/apis";
+import { infra, infraSlice, mbSlice } from "@orch-ui/apis";
 
 const RegionTag = "Region";
 const RegionListTag = "RegionList";
@@ -20,14 +20,14 @@ const WorkloadTag = "Workload";
 const WorkloadListTag = "WorkloadList";
 const InstanceListTag = "InstanceList";
 
-export interface InstanceReadModified extends eim.InstanceRead {
-  host?: eim.HostRead;
+export interface InstanceReadModified extends infra.InstanceRead {
+  host?: infra.HostRead;
 }
 
 export type ScheduleMaintenanceTargetEntity =
-  | eim.HostRead
-  | eim.SiteRead
-  | eim.RegionRead;
+  | infra.HostRead
+  | infra.SiteRead
+  | infra.RegionRead;
 export type ScheduleMaintenanceTargetEntityType = "host" | "site" | "region";
 /** Schedule Maintenance targets that are fed into the APIs based on the Target Entity type */
 export interface ScheduleMaintenanceTargetData {
@@ -44,17 +44,20 @@ type commonMaintenanceFields = "name" | "scheduleStatus";
 type commonMaintenanceTargets = "targetHost" | "targetSite" | "targetRegion";
 interface _ScheduleMaintenance {
   type: ScheduleMaintenanceType;
-  targetHost?: eim.HostRead;
-  targetSite?: eim.SiteRead;
-  targetRegion?: eim.RegionRead;
+  targetHost?: infra.HostRead;
+  targetSite?: infra.SiteRead;
+  targetRegion?: infra.RegionRead;
   single?: Partial<
     Omit<
-      eim.SingleSchedule2,
+      infra.SingleSchedule2,
       commonMaintenanceFields | commonMaintenanceTargets
     >
   > & { isOpenEnded?: boolean };
   repeated?: Partial<
-    Omit<eim.SingleSchedule, commonMaintenanceFields | commonMaintenanceTargets>
+    Omit<
+      infra.SingleSchedule,
+      commonMaintenanceFields | commonMaintenanceTargets
+    >
   > & {
     countPrevMonthOnTzGMT?: boolean;
     countNextMonthOnTzGMT?: boolean;
@@ -62,7 +65,7 @@ interface _ScheduleMaintenance {
 }
 
 export type ScheduleMaintenance = _ScheduleMaintenance &
-  Pick<eim.SingleSchedule2, commonMaintenanceFields>;
+  Pick<infra.SingleSchedule2, commonMaintenanceFields>;
 export interface ScheduleMaintenanceRead extends ScheduleMaintenance {
   resourceId?: string;
 }
@@ -76,7 +79,7 @@ export type RepeatedMaintenance = Pick<
   commonScheduleTypeFields
 > & {
   repeated: Omit<
-    eim.SingleSchedule,
+    infra.SingleSchedule,
     commonMaintenanceFields | commonMaintenanceTargets
   > & {
     countPrevMonthOnTzGMT?: boolean;
@@ -88,7 +91,7 @@ export type SingleMaintenance = Pick<
   commonScheduleTypeFields
 > & {
   single: Omit<
-    eim.SingleSchedule2,
+    infra.SingleSchedule2,
     commonMaintenanceFields | commonMaintenanceTargets
   > & { isOpenEnded?: boolean };
 };
@@ -101,7 +104,7 @@ export const metadataEnhancedApi = mbSlice.enhanceEndpoints({
     },
   },
 });
-export const miEnhancedApi = eimSlice.enhanceEndpoints({
+export const miEnhancedApi = infraSlice.enhanceEndpoints({
   addTagTypes: [
     RegionListTag,
     SiteListTag,

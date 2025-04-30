@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TreeNode } from "@orch-ui/components";
 import { RootSiteCounts, SearchResult, SearchTypes } from "./locations";
 
 export type TreeBranchType = "region" | "site";
-export interface TreeBranchState<T = eim.RegionRead | eim.SiteRead>
+export interface TreeBranchState<T = infra.RegionRead | infra.SiteRead>
   extends TreeNode {
   data: T;
   name: string;
@@ -24,7 +24,7 @@ export class TreeBranchStateUtils {
     searchForId: string,
     branches?: TreeBranchState[],
     findParent?: boolean,
-    parent?: TreeBranchState<eim.RegionRead | eim.SiteRead>,
+    parent?: TreeBranchState<infra.RegionRead | infra.SiteRead>,
   ): TreeBranchState | undefined {
     if (!branches) return;
 
@@ -76,12 +76,12 @@ export class TreeBranchStateUtils {
     return nextParent;
   }
 
-  static getParentRegion(branch: TreeBranchState): eim.RegionRead | null {
+  static getParentRegion(branch: TreeBranchState): infra.RegionRead | null {
     const { data } = branch;
     const parent = TreeBranchStateUtils.isRegionRead(data)
-      ? (data as eim.RegionRead).parentRegion
+      ? (data as infra.RegionRead).parentRegion
       : TreeBranchStateUtils.isSiteRead(data)
-        ? (data as eim.SiteRead).region
+        ? (data as infra.SiteRead).region
         : null;
 
     if (parent === undefined)
@@ -89,33 +89,37 @@ export class TreeBranchStateUtils {
     return parent;
   }
 
-  static isRegionRead = (data: any): data is eim.RegionRead => {
+  static isRegionRead = (data: any): data is infra.RegionRead => {
     return "parentRegion" in data;
   };
 
-  static isSiteRead = (data: any): data is eim.SiteRead => {
+  static isSiteRead = (data: any): data is infra.SiteRead => {
     return "region" in data;
   };
 
-  static createRegion(region: eim.RegionRead): TreeBranchState<eim.RegionRead> {
+  static createRegion(
+    region: infra.RegionRead,
+  ): TreeBranchState<infra.RegionRead> {
     return this.createBranch(region, "region");
   }
 
-  static createSite(site: eim.SiteRead): TreeBranchState<eim.SiteRead> {
+  static createSite(site: infra.SiteRead): TreeBranchState<infra.SiteRead> {
     return this.createBranch(site, "site");
   }
 
   static createRegions(
-    regions: eim.RegionRead[],
-  ): TreeBranchState<eim.RegionRead>[] {
-    return regions.map((region: eim.RegionRead) => this.createRegion(region));
+    regions: infra.RegionRead[],
+  ): TreeBranchState<infra.RegionRead>[] {
+    return regions.map((region: infra.RegionRead) => this.createRegion(region));
   }
 
-  static createSites(sites: eim.SiteRead[]): TreeBranchState<eim.SiteRead>[] {
-    return sites.map((site: eim.SiteRead) => this.createSite(site));
+  static createSites(
+    sites: infra.SiteRead[],
+  ): TreeBranchState<infra.SiteRead>[] {
+    return sites.map((site: infra.SiteRead) => this.createSite(site));
   }
 
-  static createBranch<BranchDataType extends eim.RegionRead | eim.SiteRead>(
+  static createBranch<BranchDataType extends infra.RegionRead | infra.SiteRead>(
     data: BranchDataType,
     type: TreeBranchType,
   ): TreeBranchState<BranchDataType> {
@@ -131,9 +135,10 @@ export class TreeBranchStateUtils {
     results: SearchResult[],
     searchType: SearchTypes,
     rootSiteCounts?: RootSiteCounts[],
-  ): TreeBranchState<eim.RegionRead | eim.SiteRead>[] {
-    const updatedBranches: TreeBranchState<eim.RegionRead | eim.SiteRead>[] =
-      [];
+  ): TreeBranchState<infra.RegionRead | infra.SiteRead>[] {
+    const updatedBranches: TreeBranchState<
+      infra.RegionRead | infra.SiteRead
+    >[] = [];
     results
       .slice()
       .reverse()
@@ -175,7 +180,7 @@ export class TreeBranchStateUtils {
 
           if (searchType === SearchTypes.Regions && type === "site") return;
           if (!node.children) node.children = [];
-          const newChild: TreeBranchState<eim.RegionRead | eim.SiteRead> = {
+          const newChild: TreeBranchState<infra.RegionRead | infra.SiteRead> = {
             id: resourceId,
             data: {
               resourceId,
@@ -185,11 +190,11 @@ export class TreeBranchStateUtils {
             type,
           };
           if (type === "region")
-            (newChild.data as eim.RegionRead).parentRegion = {
+            (newChild.data as infra.RegionRead).parentRegion = {
               resourceId: result.parentId,
             };
           if (type === "site")
-            (newChild.data as eim.SiteRead).region = {
+            (newChild.data as infra.SiteRead).region = {
               resourceId: result.parentId,
               name: node.data.name,
             };
