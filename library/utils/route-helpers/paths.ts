@@ -10,10 +10,7 @@
  * @constant
  * @type {string}
  */
-export const infraMfePrefix =
-  location.port === "8082" || window.Cypress?.testingType === "component"
-    ? "/"
-    : "/infrastructure/";
+export const infraMfePrefix = "/infrastructure/";
 
 export const clusterManagementRoute = "clusters";
 export const clusterDetailRoute = "cluster/:clusterName";
