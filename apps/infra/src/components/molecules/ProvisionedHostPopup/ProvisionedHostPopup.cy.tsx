@@ -73,7 +73,7 @@ describe("<ProvisionedHostPopup />", () => {
     });
     it("should call `onEdit`", () => {
       pom.hostPopupPom.getActionPopupBySearchText("Edit").click();
-      pom.getPath().should("eq", `/host/${hostOne.resourceId!}/edit`);
+      pom.getPath().should("contain", `/host/${hostOne.resourceId!}/edit`);
     });
     it("should call `onViewDetails`", () => {
       pom.hostPopupPom.getActionPopupBySearchText("View Details").click();

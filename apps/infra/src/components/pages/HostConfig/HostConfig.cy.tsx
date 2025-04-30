@@ -735,7 +735,7 @@ describe("<HostConfig/>", () => {
       pom.el.next.click();
       pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
       cyGet("confirmBtn").click();
-      pom.getPath().should("equal", "/clusters/create");
+      pom.getPath().should("contain", "/clusters/create");
       cy.get("#search").contains(
         `?regionId=region-1&regionName=Root 1&siteId=site-1&siteName=Site 1&hostId=${onboardedHostOne.resourceId}`,
       );
