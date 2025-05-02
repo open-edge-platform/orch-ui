@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   CounterWheel,
   MetadataPairs,
@@ -24,7 +24,7 @@ const DashboardUnallocatedHostsWheel = ({
   metadata?: MetadataPairs;
 }) => {
   const { data, isSuccess, isLoading, isError } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         // If metadata exists then add call `host API` with optional metadata filter

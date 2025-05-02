@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import {
@@ -27,8 +27,8 @@ import "./RegisterHostDrawer.scss";
 const dataCy = "registerHostDrawer";
 export interface RegisterHostDrawerProps {
   isOpen: boolean;
-  onHide: (registerHost: eim.HostRegisterInfo) => void;
-  host?: eim.HostRead;
+  onHide: (registerHost: infra.HostRegisterInfo) => void;
+  host?: infra.HostRead;
 }
 
 export const RegisterHostDrawer = ({
@@ -38,22 +38,22 @@ export const RegisterHostDrawer = ({
 }: RegisterHostDrawerProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
-  const formDefault: eim.HostRegisterInfo = {
+  const formDefault: infra.HostRegisterInfo = {
     name: host?.name ?? "",
     serialNumber: host?.serialNumber ?? "",
     uuid: host?.uuid,
     autoOnboard: host?.desiredState === "HOST_STATE_ONBOARDED",
   };
   const [hostRegisterInfo, setHostRegisterInfo] =
-    useState<eim.HostRegisterInfo>(formDefault);
+    useState<infra.HostRegisterInfo>(formDefault);
   const [registerHost] =
-    eim.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
   const [updateHost] =
-    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
+    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
   const {
     control: registerHostInfoControl,
     formState: { errors: formErrors },
-  } = useForm<eim.HostRegisterInfo>({
+  } = useForm<infra.HostRegisterInfo>({
     mode: "all",
     defaultValues: hostRegisterInfo,
     values: hostRegisterInfo,

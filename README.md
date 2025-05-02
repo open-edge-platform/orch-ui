@@ -9,7 +9,7 @@
 
 This implements the web user interface for the Orchestrator,
 allowing the user to do most of the features of the product in an
-intuitive, visual, manor without having learn all the complexities
+intuitive, visual, manner without having learn all the complexities
 of the APIs.  That being said, everything the Web UI does and shows
 comes from the APIs.  This UI is intended for the day to day edge
 operators, who want to be able to:
@@ -109,9 +109,9 @@ The application is separated into multiple micro front-ends that can be develope
   ```
 
 ### Running with mock data
-If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_LP_MOCK_API` environment variable value to `true`
+If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_MOCK_API` environment variable value to `true`
 
-Set this value BEFORE you run the `npm run start`. 
+Set this value BEFORE you run the `npm run start`.
 
 ### Testing
 The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,

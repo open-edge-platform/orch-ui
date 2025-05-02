@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { assignedHosts } from "@orch-ui/utils";
 import React, { useEffect } from "react";
@@ -23,11 +23,11 @@ const HostTableRemoteMock = ({
   onDataLoad,
   mockHosts = [assignedHosts.hosts[0]],
 }: {
-  columns: TableColumn<eim.HostRead>[];
-  selectedHosts?: eim.HostRead[];
-  onHostSelect: (host: eim.Host, isSelected: boolean) => void;
-  onDataLoad?: (hosts: eim.HostRead[]) => void;
-  mockHosts?: eim.HostRead[];
+  columns: TableColumn<infra.HostRead>[];
+  selectedHosts?: infra.HostRead[];
+  onHostSelect: (host: infra.Host, isSelected: boolean) => void;
+  onDataLoad?: (hosts: infra.HostRead[]) => void;
+  mockHosts?: infra.HostRead[];
 }) => {
   useEffect(() => {
     if (onDataLoad) {
@@ -68,7 +68,7 @@ const store = setupStore({
     },
   ],
 });
-const mockSite: eim.SiteRead = {
+const mockSite: infra.SiteRead = {
   resourceId: "site-a",
   name: "Site A",
   region: {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   DetailedStatuses,
   Empty,
@@ -27,7 +27,7 @@ import ResourceIndicator from "../ResourceIndicator";
 import "./HostDetailsTab.scss";
 
 interface HostDetailsTabProps {
-  host: eim.HostRead;
+  host: infra.HostRead;
   onShowCategoryDetails: (title: ResourceTypeTitle, data: ResourceType) => void;
 }
 

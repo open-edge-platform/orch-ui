@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { instanceOne, instanceTwo } from "@orch-ui/utils";
 import { OsConfig } from "./OsConfig";
 import { OsConfigPom } from "./OsConfig.pom";
 
 const pom = new OsConfigPom();
 describe("<OsConfig/>", () => {
-  const os: eim.OperatingSystemResourceRead = {
+  const os: infra.OperatingSystemResourceRead = {
     resourceId: "currentOsId",
     name: "currentOsName",
     sha256: "currentOsSha256",

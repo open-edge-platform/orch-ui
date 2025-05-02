@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   Button,
   ButtonGroup,
@@ -28,13 +28,13 @@ interface SshKeysAddEditDrawerProps {
   /** Is the drawer open in current state of UI. */
   isOpen?: boolean;
   /** Initial local account value (used in case of edit) */
-  defaultLocalAccount?: eim.LocalAccountRead;
+  defaultLocalAccount?: infra.LocalAccountRead;
   /** This will be executed when we ckick any of the close button or drawer backdrop.  */
   onHide: () => void;
   /** This will be executed when we click the Add button */
-  onAdd?: (ssh: eim.LocalAccount) => void;
+  onAdd?: (ssh: infra.LocalAccount) => void;
   /** This will be executed when we click the Edit button */
-  onEdit?: (ssh: eim.LocalAccountRead) => void;
+  onEdit?: (ssh: infra.LocalAccountRead) => void;
 }
 
 const SshKeysAddEditDrawer = ({
@@ -46,10 +46,9 @@ const SshKeysAddEditDrawer = ({
 }: SshKeysAddEditDrawerProps) => {
   const cy = { "data-cy": dataCy };
 
-  const resetValue: eim.LocalAccount = { username: "", sshKey: "" };
-  const [localAccountWrite, setLocalAccountWrite] = useState<eim.LocalAccount>(
-    defaultLocalAccount ?? resetValue,
-  );
+  const resetValue: infra.LocalAccount = { username: "", sshKey: "" };
+  const [localAccountWrite, setLocalAccountWrite] =
+    useState<infra.LocalAccount>(defaultLocalAccount ?? resetValue);
   const [isSshValid, setIsSshValid] = useState<boolean>(true);
 
   const {
@@ -57,7 +56,7 @@ const SshKeysAddEditDrawer = ({
     handleSubmit,
     unregister,
     formState: { errors, isValid },
-  } = useForm<eim.LocalAccount>({
+  } = useForm<infra.LocalAccount>({
     mode: "all",
     values: localAccountWrite,
   });

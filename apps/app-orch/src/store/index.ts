@@ -8,7 +8,7 @@ import {
   arm,
   catalog,
   cm,
-  enhancedEimSlice as miApi,
+  enhancedInfraSlice as miApi,
   mbApi,
   tmSlice,
 } from "@orch-ui/apis";

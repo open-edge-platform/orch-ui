@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Heading, Icon } from "@spark-design/react";
 import { useState } from "react";
 import { ResourceDetailsDisplayProps } from "../ResourceDetails";
@@ -11,7 +11,7 @@ import InterfaceDetails from "./InterfaceDetails";
 import "./Interfaces.scss";
 
 interface InterfaceProps {
-  intf: eim.HostResourcesInterfaceRead;
+  intf: infra.HostResourcesInterfaceRead;
 }
 
 const Interface = ({ intf }: InterfaceProps) => {
@@ -35,7 +35,7 @@ const Interface = ({ intf }: InterfaceProps) => {
 
 const Interfaces = ({
   data,
-}: ResourceDetailsDisplayProps<eim.HostResourcesInterfaceRead[]>) => (
+}: ResourceDetailsDisplayProps<infra.HostResourcesInterfaceRead[]>) => (
   <div data-cy="interface">
     {data && data.map((i) => <Interface intf={i} />)}
   </div>

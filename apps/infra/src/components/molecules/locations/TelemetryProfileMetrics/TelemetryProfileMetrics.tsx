@@ -3,22 +3,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiError, Flex, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import "./TelemetryProfileMetrics.scss";
 const dataCy = "telemetryProfileMetrics";
 export interface TelemetryProfileMetricsProps {
-  region?: eim.RegionRead;
-  site?: eim.SiteRead;
+  region?: infra.RegionRead;
+  site?: infra.SiteRead;
 }
 export const TelemetryProfileMetrics = ({
   region,
   site,
 }: TelemetryProfileMetricsProps) => {
   const cy = { "data-cy": dataCy };
-  const args: eim.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg =
+  const args: infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg =
     {
       telemetryMetricsGroupId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
@@ -34,7 +34,7 @@ export const TelemetryProfileMetrics = ({
     isError,
     isLoading,
     error,
-  } = eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
     args,
     {
       skip: Object.keys(args).length === 0,

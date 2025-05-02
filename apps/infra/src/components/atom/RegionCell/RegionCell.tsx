@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import React from "react";
@@ -28,7 +28,7 @@ const RegionCell: React.FC<RegionCellProps> = (props) => {
     data: region,
     isLoading,
     isError,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
     {
       projectName: projectName,
       regionId: regionId!,

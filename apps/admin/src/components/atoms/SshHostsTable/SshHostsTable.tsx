@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   Empty,
@@ -19,7 +19,7 @@ const dataCy = "sshHostsTable";
 
 interface SshHostsTableProps {
   /** Local account having ssh which is getting used by the host that are displayed. */
-  localAccount: eim.LocalAccountRead;
+  localAccount: infra.LocalAccountRead;
   poll?: boolean;
   AggregateHostStatusRemote?: React.LazyExoticComponent<
     React.ComponentType<any>
@@ -29,7 +29,7 @@ const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 
-type InstanceReadModified = eim.InstanceRead & { host?: eim.HostRead };
+type InstanceReadModified = infra.InstanceRead & { host?: infra.HostRead };
 
 const SshHostsTable = ({
   localAccount,
@@ -38,7 +38,7 @@ const SshHostsTable = ({
 }: SshHostsTableProps) => {
   const cy = { "data-cy": dataCy };
   const filter = `has(localaccount) AND localaccount.resourceId="${localAccount.resourceId}"`;
-  const columns: TableColumn<eim.InstanceRead>[] = [
+  const columns: TableColumn<infra.InstanceRead>[] = [
     {
       Header: "Name",
       apiName: "name",
@@ -48,12 +48,12 @@ const SshHostsTable = ({
     {
       Header: "Status",
       accessor: (item: InstanceReadModified) => item.host!.hostStatus,
-      Cell: (table: { row: { original: eim.InstanceRead } }) => (
+      Cell: (table: { row: { original: infra.InstanceRead } }) => (
         <Suspense fallback={<SquareSpinner />}>
           {AggregateHostStatusRemote !== null ? (
             <AggregateHostStatusRemote
               instance={table.row.original}
-              host={table.row.original.host as eim.HostRead}
+              host={table.row.original.host as infra.HostRead}
             />
           ) : (
             "Remote Error"
@@ -69,7 +69,7 @@ const SshHostsTable = ({
     isLoading,
     isError,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter,

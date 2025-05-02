@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
 import { Table } from "@spark-design/react";
 import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 
 const Usb = ({
   data,
-}: ResourceDetailsDisplayProps<eim.HostResourcesUsbRead>) => {
-  const columns: TableColumn<eim.HostResourcesUsbRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HostResourcesUsbRead>) => {
+  const columns: TableColumn<infra.HostResourcesUsbRead>[] = [
     { Header: "Class", accessor: "class" },
     { Header: "Serial", accessor: "serial" },
     { Header: "Vendor Id", accessor: "idVendor" },

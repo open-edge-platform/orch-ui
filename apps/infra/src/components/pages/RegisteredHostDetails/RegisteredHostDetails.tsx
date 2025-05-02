@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { AggregatedStatuses, Flex, SquareSpinner } from "@orch-ui/components";
 import {
   getCustomStatusOnIdleAggregation,
@@ -26,7 +26,7 @@ export const RegisteredHostDetails = () => {
   const { resourceId } = useParams();
 
   const { data: host } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: resourceId!,

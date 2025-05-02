@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiError, SquareSpinner, Tree, TreeNode } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -83,7 +83,7 @@ export const RegionSiteTree = ({
     isError: isErrorRegions,
     refetch,
     isUninitialized, // If query is not fetched before
-  } = eim.useGetV1ProjectsByProjectNameRegionsQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       // TODO: use `parent` param here rather than `filter`
@@ -106,7 +106,7 @@ export const RegionSiteTree = ({
 
   const getSiteCount = async (id: string) => {
     const apiCallRegion =
-      eim.eim.endpoints.getV1ProjectsByProjectNameRegions.initiate(
+      infra.infra.endpoints.getV1ProjectsByProjectNameRegions.initiate(
         {
           projectName: SharedStorage.project?.name ?? "",
           filter: `resourceId="${id}"`,
@@ -126,7 +126,7 @@ export const RegionSiteTree = ({
     data: { sites } = {},
     isFetching: isFetchingSites,
     isError: isErrorSites,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       orderBy: ORDER_BY,
@@ -143,22 +143,22 @@ export const RegionSiteTree = ({
   const hasSiteResults = !isFetchingSites && sites;
 
   const viewRegionAction = useCallback(
-    (region: eim.RegionRead) => handleViewRegionAction(dispatch, region),
+    (region: infra.RegionRead) => handleViewRegionAction(dispatch, region),
     [],
   );
   const viewSiteAction = useCallback(
-    (site: eim.SiteRead) => handleSiteViewAction(dispatch, site),
+    (site: infra.SiteRead) => handleSiteViewAction(dispatch, site),
     [],
   );
   const addSiteAction = useCallback(
-    (region: eim.RegionRead) => handleAddSiteAction(navigate, region),
+    (region: infra.RegionRead) => handleAddSiteAction(navigate, region),
     [],
   );
   const subRegionAction = useCallback(
-    (region: eim.RegionRead) => handleSubRegionAction(navigate, region),
+    (region: infra.RegionRead) => handleSubRegionAction(navigate, region),
     [],
   );
-  const scheduleMaintenanceAction = useCallback((region: eim.RegionRead) => {
+  const scheduleMaintenanceAction = useCallback((region: infra.RegionRead) => {
     dispatch(
       setMaintenanceEntity({
         targetEntity: region,
@@ -182,7 +182,7 @@ export const RegionSiteTree = ({
       localStorage.getItem(clearTree) === "true"
     ) {
       localStorage.removeItem(clearTree);
-      dispatch(eim.eim.util.invalidateTags([{ type: "Region" }]));
+      dispatch(infra.infra.util.invalidateTags([{ type: "Region" }]));
       dispatch(resetTree(location.pathname + location.search));
       return;
     }
@@ -215,12 +215,12 @@ export const RegionSiteTree = ({
     if (!showSingleSelection || !selectedSite || !selectedSite.name) {
       return;
     }
-    dispatch(eim.eim.util.invalidateTags([{ type: "Location" }]));
+    dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
     dispatch(setSearchTerm(selectedSite.name));
   }, [showSingleSelection, selectedSite]);
 
   const createSingleSelectionTree = (): TreeBranchState<
-    eim.SiteRead | eim.RegionRead
+    infra.SiteRead | infra.RegionRead
   >[] => {
     if (!selectedSite || !selectedSite.resourceId)
       throw new Error("Selected site is missing resourceId");

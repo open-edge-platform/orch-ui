@@ -69,6 +69,14 @@ infra-%: ## Run infra subproject's tasks
 root-%: ## Run root subproject's tasks
 	$(MAKE) -C apps/root $*
 
+apply-all-versions:
+	make -C apps/admin apply-version
+	make -C apps/app-orch apply-version
+	make -C apps/cluster-orch apply-version
+	make -C apps/infra apply-version
+	make -C apps/root apply-version
+	@echo "Applied version to all projects"
+
 #### Help Target ####
 help: ## print help for each target
 	@echo orch-ui make targets

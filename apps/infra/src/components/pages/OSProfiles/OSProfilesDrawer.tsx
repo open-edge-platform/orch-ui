@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 
 import { Drawer } from "@spark-design/react";
 
@@ -12,7 +12,7 @@ import "./OSProfiles.scss";
 
 interface OSProfileDrawerProps {
   showDrawer: boolean;
-  selectedOsProfile: eim.OperatingSystemResourceRead;
+  selectedOsProfile: infra.OperatingSystemResourceRead;
   setShowDrawer: (show: boolean) => void;
 }
 

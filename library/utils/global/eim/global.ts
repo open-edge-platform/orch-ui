@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import {
   AggregatedStatus,
   FieldLabels,
@@ -31,7 +31,7 @@ export type HostGenericStatuses = {
 };
 
 export const hostStatusIndicatorToIconStatus = (
-  host: eim.HostRead,
+  host: infra.HostRead,
 ): IconStatus => {
   switch (host.hostStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
@@ -52,8 +52,8 @@ const statusWithDetails = (status: string, details?: string) => {
 };
 
 export const hostToStatuses = (
-  host: eim.HostRead,
-  instance?: eim.InstanceRead, // TODO we should be able to use host.instance
+  host: infra.HostRead,
+  instance?: infra.InstanceRead, // TODO we should be able to use host.instance
 ): HostGenericStatuses => {
   const hgs: HostGenericStatuses = {};
   if (host.hostStatusIndicator) {
@@ -135,19 +135,19 @@ export const generateClusterName = (siteName: string, hostName: string) =>
   `${siteName}-${hostName}`.replaceAll(" ", "-");
 
 /** Returns `true` if Host is assigned to a cluster. Else returns `false`. */
-export const isHostAssigned = (instance?: eim.InstanceRead): boolean => {
+export const isHostAssigned = (instance?: infra.InstanceRead): boolean => {
   return instance && instance.workloadMembers
     ? instance.workloadMembers.some(
-        (workloadMember: eim.WorkloadMemberRead) =>
+        (workloadMember: infra.WorkloadMemberRead) =>
           workloadMember.kind === "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
       )
     : false;
 };
 
 export const inheritedScheduleToString = (
-  item: enhancedEimSlice.ScheduleMaintenanceRead,
+  item: enhancedInfraSlice.ScheduleMaintenanceRead,
   targetEntityType: string,
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity,
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity,
 ) => {
   if (
     item.targetRegion &&
@@ -165,7 +165,7 @@ export const inheritedScheduleToString = (
 };
 
 /** Decide the text to display for schedule maintenance status */
-export const scheduleStatusToString = (status?: eim.ScheduleStatus) => {
+export const scheduleStatusToString = (status?: infra.ScheduleStatus) => {
   if (!status) {
     return "Unspecified";
   }
@@ -204,7 +204,7 @@ export const hostStatusFields: FieldLabels<HostGenericStatuses> = {
 };
 
 export const statusIndicatorToIconStatus = (
-  statusIndicator: eim.StatusIndicator,
+  statusIndicator: infra.StatusIndicator,
 ): IconStatus => {
   switch (statusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
@@ -220,7 +220,9 @@ export const statusIndicatorToIconStatus = (
   }
 };
 
-export const isOSUpdateAvailable = (instance: eim.InstanceRead | undefined) => {
+export const isOSUpdateAvailable = (
+  instance: infra.InstanceRead | undefined,
+) => {
   const desiredOsId = instance?.desiredOs?.resourceId;
   const currentOs = instance?.currentOs;
   return (
@@ -231,7 +233,7 @@ export const isOSUpdateAvailable = (instance: eim.InstanceRead | undefined) => {
 
 const getHostProvisionTitles = (
   hostName: string,
-  provisioningStatusIndicator?: eim.StatusIndicatorRead,
+  provisioningStatusIndicator?: infra.StatusIndicatorRead,
 ) => {
   switch (provisioningStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
@@ -253,7 +255,7 @@ const getHostProvisionTitles = (
 
 const getHostOnboardingTitles = (
   hostName: string,
-  onboardingStatusIndicator?: eim.StatusIndicatorRead,
+  onboardingStatusIndicator?: infra.StatusIndicatorRead,
 ) => {
   const onboardingMsg = {
     title: `${hostName} is onboarded`,
@@ -278,7 +280,7 @@ const getHostOnboardingTitles = (
 
 const getHostRegistrationTitles = (
   hostName: string,
-  registrationStatusIndicator?: eim.StatusIndicatorRead,
+  registrationStatusIndicator?: infra.StatusIndicatorRead,
 ) => {
   const registrationMsg = {
     title: `${hostName} is registered`,
@@ -302,7 +304,7 @@ const getHostRegistrationTitles = (
 
 const getHostCurrentStateTitles = (
   hostName: string,
-  currenState?: eim.HostState,
+  currenState?: infra.HostState,
 ) => {
   switch (currenState) {
     case "HOST_STATE_UNTRUSTED":
@@ -327,7 +329,7 @@ const getHostCurrentStateTitles = (
 
 /* Titles to be displayed in Host Status popover */
 export const getPopOverTitles = (
-  host: eim.HostRead,
+  host: infra.HostRead,
 ): {
   title?: string;
   subTitle?: string;
@@ -377,7 +379,7 @@ export const getPopOverTitles = (
 // --------------------------------------
 
 /** @deprecated  */
-export const hostStatusToString = (status?: eim.StatusIndicatorRead) => {
+export const hostStatusToString = (status?: infra.StatusIndicatorRead) => {
   if (!status) {
     return "Unspecified";
   }
@@ -386,7 +388,7 @@ export const hostStatusToString = (status?: eim.StatusIndicatorRead) => {
 
 /** Decide the text to display for aggregated host status (actual host status, host in maintenance) */
 /** @deprecated  */
-export const hostProviderStatusToString = (host?: eim.HostRead): string => {
+export const hostProviderStatusToString = (host?: infra.HostRead): string => {
   if (!host) {
     return "Unspecified";
   }
@@ -407,7 +409,7 @@ export const hostProviderStatusToString = (host?: eim.HostRead): string => {
 
 // currentState mapping for host to messages
 export const hostStateMapping: Record<
-  eim.HostState,
+  infra.HostState,
   { status: IconStatus; message: string }
 > = {
   HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
@@ -421,7 +423,7 @@ export const hostStateMapping: Record<
 
 // Host status and messages when all modern statuses are in idle status
 export const getCustomStatusOnIdleAggregation = (
-  host: eim.HostRead,
+  host: infra.HostRead,
 ): AggregatedStatus => {
   if (!host.currentState || host.currentState === "HOST_STATE_UNSPECIFIED")
     return { status: IconStatus.Unknown, message: "Unknown" };
@@ -456,7 +458,7 @@ export const getCustomStatusOnIdleAggregation = (
  * Otherwise, it returns an object with text "Not compatible" and a corresponding tooltip.
  */
 export const getTrustedComputeCompatibility = (
-  host: eim.HostWrite,
+  host: infra.HostWrite,
 ): TrustedComputeCompatibility => {
   if (
     host?.instance?.securityFeature ===
