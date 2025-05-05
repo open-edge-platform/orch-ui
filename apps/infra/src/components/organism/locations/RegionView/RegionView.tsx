@@ -75,7 +75,8 @@ export const RegionView = () => {
                 dispatch(setRegionToDelete(region));
                 break;
               case RegionViewActions.Edit:
-                navigate(regionRoute, { regionId: region.resourceId ?? "" });
+                if (region.resourceId)
+                  navigate(regionRoute, { regionId: region.resourceId });
                 break;
               case RegionViewActions["Schedule Maintenance"]:
                 dispatch(

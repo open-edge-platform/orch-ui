@@ -28,7 +28,7 @@ export const handleAddSiteAction = (
   navigate(
     regionSiteRoute,
     {
-      regionId: region.resourceId ?? "",
+      regionId: region.resourceId,
       siteId: "new",
     },
     "?source=region",
@@ -41,7 +41,7 @@ export const handleSubRegionAction = (
 ) => {
   if (!region || !region.resourceId) return;
   navigate(subRegionRoute, {
-    parentRegionId: region.resourceId ?? "",
+    parentRegionId: region.resourceId,
     regionId: "new",
   });
 };

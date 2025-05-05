@@ -85,9 +85,10 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       displayText: "Edit",
       disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
       onSelect: async () => {
-        navigate(hostEditRoute, {
-          id: host.resourceId ?? "",
-        });
+        if (host.resourceId)
+          navigate(hostEditRoute, {
+            id: host.resourceId,
+          });
       },
     },
     {

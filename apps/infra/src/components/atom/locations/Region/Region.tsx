@@ -102,7 +102,8 @@ export const Region = ({
                     dispatch(setLoadingBranch(ROOT_REGIONS));
                   else
                     dispatch(setLoadingBranch(region.parentRegion.resourceId));
-                  navigate(regionRoute, { regionId: region.resourceId ?? "" });
+                  if (region.resourceId)
+                    navigate(regionRoute, { regionId: region.resourceId });
                 },
               },
               {
