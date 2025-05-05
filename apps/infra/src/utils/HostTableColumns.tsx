@@ -13,7 +13,7 @@ import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 import { HostData } from "../store/configureHost";
 
-const _name = (basePath: string = ""): TableColumn<infra.HostRead> => {
+const _name = (): TableColumn<infra.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -40,7 +40,7 @@ const _name = (basePath: string = ""): TableColumn<infra.HostRead> => {
   };
 };
 
-const name = (basePath: string = ""): TableColumn<infra.HostRead> => {
+const name = (): TableColumn<infra.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",

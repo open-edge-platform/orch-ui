@@ -14,7 +14,7 @@ export interface SiteCellProps {
   regionId?: string;
   basePath?: string;
 }
-const SiteCell = ({ siteId, basePath = "", regionId = "*" }: SiteCellProps) => {
+const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
   const cy = { "data-cy": dataCy };
 
   const {
