@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TableColumn } from "@orch-ui/components";
 import {
   getInfraPath,
@@ -27,7 +27,7 @@ describe("<RegionTable /> with mocked data should ", () => {
   });
 
   it("show the defined actions", () => {
-    const actions: TableColumn<eim.RegionRead> = {
+    const actions: TableColumn<infra.RegionRead> = {
       Header: "Action",
       Cell: () => <div>Action Column</div>,
     };

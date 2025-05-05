@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Popup, PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
@@ -17,7 +17,7 @@ const dataCy = "genericHostPopup";
 
 export interface GenericHostPopupProps {
   /** host for which this popup affects upon. */
-  host: eim.HostRead;
+  host: infra.HostRead;
   /** Additional Popup Options based on the host lifecycle contect */
   additionalPopupOptions?: PopupOption[];
   /**

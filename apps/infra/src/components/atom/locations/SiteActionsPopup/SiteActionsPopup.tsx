@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Popup, SquareSpinner } from "@orch-ui/components";
 import { regionSiteRoute, useInfraNavigate } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -15,7 +15,7 @@ import {
 
 const dataCy = "siteActionsPopup";
 export interface SiteActionsPopupProps {
-  site: eim.SiteRead;
+  site: infra.SiteRead;
 }
 
 export const SiteActionsPopup = ({ site }: SiteActionsPopupProps) => {

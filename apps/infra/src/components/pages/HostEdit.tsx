@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 import {
   ApiError,
   Flex,
@@ -70,9 +70,9 @@ const HostEdit = () => {
   });
 
   /* Host Edit states */
-  const [host, setHost] = useState<eim.HostRead>();
-  const [selectedSite, setSelectedSite] = useState<eim.SiteRead>();
-  const [selectedRegion, setSelectedRegion] = useState<eim.RegionRead>();
+  const [host, setHost] = useState<infra.HostRead>();
+  const [selectedSite, setSelectedSite] = useState<infra.SiteRead>();
+  const [selectedRegion, setSelectedRegion] = useState<infra.RegionRead>();
   const [metadataPairs, setMetadataPairs] = useState<MetadataPair[]>([]);
   const [hasMetadataError, setHasMetadataError] = useState<boolean>(false);
 
@@ -83,7 +83,7 @@ const HostEdit = () => {
     isSuccess,
     isLoading,
     isError,
-  } = eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       hostId: id,
@@ -111,7 +111,7 @@ const HostEdit = () => {
   // Then, Get site data mentioned by host(.template.site) to get the region & site selected by default
   const isRegionNotSelected = !selectedRegion; // This is required to convert to boolean as Region is object not boolean
   const { data: hostSiteData } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
       {
         // IMPORTANT: we used the "rid" fallback to pass anything else than empty string
         // for 24.11 api requires any non-empty value to return the site data
@@ -132,7 +132,7 @@ const HostEdit = () => {
     isSuccess: isInstanceSuccess,
     isLoading: isInstanceLoading,
     isError: isInstanceError,
-  } = eim.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       hostId: host?.resourceId,
@@ -142,7 +142,7 @@ const HostEdit = () => {
   );
 
   const { data: regionData, isLoading: isRegionLoading } =
-    eim.useGetV1ProjectsByProjectNameRegionsQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsQuery(
       { projectName: SharedStorage.project?.name ?? "" },
       { skip: !host || !isRegionNotSelected },
     );
@@ -166,7 +166,7 @@ const HostEdit = () => {
 
   // If Host & Region API data are both loaded
   const { data: siteData, isLoading: isSiteLoading } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `region.resourceId='${selectedRegion?.resourceId ?? ""}'`,
@@ -193,7 +193,7 @@ const HostEdit = () => {
     isInstanceError;
 
   const [updateHost] =
-    eim.usePutV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
+    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 

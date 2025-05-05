@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import {
   assignedWorkloadHostFour as hostFour,
   assignedWorkloadHostOne as hostOne,
@@ -27,8 +27,8 @@ const TestingComponent = ({
   mockEntity,
   mockEntityType,
 }: {
-  mockEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
-  mockEntityType?: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  mockEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
+  mockEntityType?: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
 }) => {
   const [shown, setShown] = useState<boolean>(true);
   const dispatch = useAppDispatch();
@@ -123,7 +123,7 @@ describe("<ScheduleMaintenanceDrawer/>", () => {
   });
 
   describe("edit maintenance for a host", () => {
-    const inputMaintenance: enhancedEimSlice.ScheduleMaintenance = {
+    const inputMaintenance: enhancedInfraSlice.ScheduleMaintenance = {
       name: "New Name",
       scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
       type: "repeat-monthly",

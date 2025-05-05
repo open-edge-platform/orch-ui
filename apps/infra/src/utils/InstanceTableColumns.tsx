@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { AggregatedStatuses, aggregateStatuses } from "@orch-ui/components";
 import {
   getInfraPath,
@@ -15,7 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 
-const name: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
+const name: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
   Header: "Name",
   accessor: (item) => {
     if (item.host?.name) {
@@ -25,7 +25,7 @@ const name: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
     }
   },
   Cell: (table: {
-    row: { original: enhancedEimSlice.InstanceReadModified };
+    row: { original: enhancedInfraSlice.InstanceReadModified };
   }) => (
     <Link
       to={getInfraPath(hostDetailsRoute, {
@@ -37,39 +37,39 @@ const name: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
   ),
 };
 
-const status: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
+const status: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
   Header: "Status",
-  //TODO: eim.HostRead is not directly coming from item.host
+  //TODO: infra.HostRead is not directly coming from item.host
   accessor: (item) =>
     aggregateStatuses(hostToStatuses(item.host!, item), "hostStatus").message,
   Cell: (table: {
-    row: { original: enhancedEimSlice.InstanceReadModified };
+    row: { original: enhancedInfraSlice.InstanceReadModified };
   }) => (
     <AggregatedStatuses<HostGenericStatuses>
       defaultStatusName="hostStatus"
       statuses={hostToStatuses(
-        table.row.original.host! as eim.HostRead,
+        table.row.original.host! as infra.HostRead,
         table.row.original.host?.instance,
       )}
     />
   ),
 };
 
-const serial: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
+const serial: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
   Header: "Serial",
   accessor: (instance) => instance.host?.serialNumber ?? "-",
 };
 
-const os: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
+const os: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
   Header: "Operating System",
   accessor: (instance) => instance.os?.name ?? "-",
 };
 
-const site: SparkTableColumn<enhancedEimSlice.InstanceReadModified> = {
+const site: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
   Header: "Site",
   accessor: "host.site.siteID",
   Cell: (table: {
-    row: { original: enhancedEimSlice.InstanceReadModified };
+    row: { original: enhancedInfraSlice.InstanceReadModified };
   }) => {
     return (
       <SiteCell

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ConfirmationDialog,
   Empty,
@@ -60,9 +60,9 @@ export const Locations = () => {
   const navigate = useInfraNavigate();
   const dispatch = useDispatch();
   const [deleteRegion] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
   const [deleteSite] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
   const region = useAppSelector(selectRegion);
   const regionToDelete = useAppSelector(selectRegionToDelete);
   const siteToDelete = useAppSelector(selectSiteToDelete);
@@ -278,14 +278,14 @@ export const Locations = () => {
                 maintenanceEntity.targetEntityType === "site"
               ) {
                 dispatch(
-                  setSite(maintenanceEntity.targetEntity as eim.SiteRead),
+                  setSite(maintenanceEntity.targetEntity as infra.SiteRead),
                 );
               } else if (
                 maintenanceEntity.showBack &&
                 maintenanceEntity.targetEntityType === "region"
               ) {
                 dispatch(
-                  setRegion(maintenanceEntity.targetEntity as eim.RegionRead),
+                  setRegion(maintenanceEntity.targetEntity as infra.RegionRead),
                 );
               }
               dispatch(setMaintenanceEntity(undefined));

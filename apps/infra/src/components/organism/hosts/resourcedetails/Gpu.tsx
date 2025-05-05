@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
 import { Table } from "@spark-design/react";
 import { ResourceDetailsDisplayProps } from "../ResourceDetails";
@@ -11,8 +11,8 @@ import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 const dataCy = "gpu";
 const Gpu = ({
   data,
-}: ResourceDetailsDisplayProps<eim.HostResourcesGpuRead[]>) => {
-  const columns: TableColumn<eim.HostResourcesGpuRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HostResourcesGpuRead[]>) => {
+  const columns: TableColumn<infra.HostResourcesGpuRead>[] = [
     { Header: "Model", accessor: "deviceName" },
     { Header: "Vendor", accessor: "vendor" },
     {

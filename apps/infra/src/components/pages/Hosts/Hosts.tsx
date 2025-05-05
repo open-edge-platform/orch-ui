@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ContextSwitcher } from "@orch-ui/components";
 import {
   checkAuthAndRole,
@@ -36,7 +36,7 @@ const Hosts = () => {
   const location = useLocation();
   const className = "hosts";
   const navigate = useInfraNavigate();
-  const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
+  const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
   const [showRegisterDrawer, setShowRegisterDrawer] = useState<boolean>(false);
 
@@ -89,7 +89,7 @@ const Hosts = () => {
         }
         selectedHosts={selectedHosts}
         unsetSelectedHosts={() => setSelectedHosts([])}
-        onHostSelect={(row: eim.HostRead, isSelected: boolean) => {
+        onHostSelect={(row: infra.HostRead, isSelected: boolean) => {
           setSelectedHosts((prev) => {
             if (isSelected) {
               return prev.concat(row);

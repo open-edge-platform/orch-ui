@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import {
   IRuntimeConfig,
@@ -288,7 +288,7 @@ describe("<HostConfig/>", () => {
         hasValidationError: false,
       };
       // convert to a WriteHost and set the values that the form would set
-      const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
+      const mockHost: infra.HostWrite = StoreUtils.convertToWriteHost(
         structuredClone(onboardedHostOne),
       );
       mockHost.siteId = siteOregonPortland.resourceId;
@@ -332,7 +332,7 @@ describe("<HostConfig/>", () => {
         const responseData = interception.response?.body;
 
         // ssh key details
-        const selectedAccount: eim.LocalAccountRead =
+        const selectedAccount: infra.LocalAccountRead =
           responseData.localAccounts[0];
 
         addSshPublicKeyPom.sshKeyDropdownPom.sshKeyDrpopdown.openDropdown(
@@ -369,7 +369,7 @@ describe("<HostConfig/>", () => {
         hasValidationError: false,
       };
       // convert to a WriteHost and set the values that the form would set
-      const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
+      const mockHost: infra.HostWrite = StoreUtils.convertToWriteHost(
         structuredClone(onboardedHostOne),
       );
       mockHost.siteId = siteOregonPortland.resourceId;
@@ -416,7 +416,7 @@ describe("<HostConfig/>", () => {
         const responseData = interception.response?.body;
 
         // ssh key details
-        const selectedAccount: eim.LocalAccountRead =
+        const selectedAccount: infra.LocalAccountRead =
           responseData.localAccounts[0];
 
         addSshPublicKeyPom.sshKeyDropdownPom.sshKeyDrpopdown.openDropdown(
@@ -453,7 +453,7 @@ describe("<HostConfig/>", () => {
       hasValidationError: false,
     };
     // convert to a WriteHost and set the values that the form would set
-    const mockHost: eim.HostWrite = StoreUtils.convertToWriteHost(
+    const mockHost: infra.HostWrite = StoreUtils.convertToWriteHost(
       structuredClone(onboardedHostOne),
     );
     mockHost.siteId = siteOregonPortland.resourceId;
@@ -495,7 +495,7 @@ describe("<HostConfig/>", () => {
           hosts: {
             hostId: {
               ...mockHost,
-              // region is only part of the redux state, not eim.HostWrite
+              // region is only part of the redux state, not infra.HostWrite
               region: regionUsWest,
               // NOTE this next line emulates a Host that already has a OS installed
               originalOs: osUbuntu,
@@ -521,7 +521,7 @@ describe("<HostConfig/>", () => {
         pom.el.next.click();
         pom.waitForApi([pom.api.patchComputeHostsAndHostId]);
 
-        const expectedResult: eim.HostWrite = {
+        const expectedResult: infra.HostWrite = {
           name: onboardedHostOne.name,
           siteId: siteOregonPortland.resourceId,
           metadata: testMetadata,
@@ -549,7 +549,7 @@ describe("<HostConfig/>", () => {
     });
     describe("and Host does not have OS Installed", () => {
       // simulate that some set the OSProfile/Security in Redux via the <Details /> component
-      const testInstance: eim.InstanceWrite = {
+      const testInstance: infra.InstanceWrite = {
         securityFeature:
           "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
         os: osUbuntu,
@@ -563,9 +563,9 @@ describe("<HostConfig/>", () => {
           hosts: {
             hostId: {
               ...mockHost,
-              // region is only part of the redux state, not eim.HostWrite
+              // region is only part of the redux state, not infra.HostWrite
               region: regionUsWest,
-              // hostId is only part of the redux state, not eim.HostWrite
+              // hostId is only part of the redux state, not infra.HostWrite
               resourceId: onboardedHostOne.resourceId,
             },
           },
@@ -591,7 +591,7 @@ describe("<HostConfig/>", () => {
         pom.el.next.click();
         pom.waitForApis();
 
-        const expectedResult: eim.InstanceWrite = {
+        const expectedResult: infra.InstanceWrite = {
           name: `${onboardedHostOne.name}-instance`,
           hostID: onboardedHostOne.resourceId,
           kind: "INSTANCE_KIND_METAL",

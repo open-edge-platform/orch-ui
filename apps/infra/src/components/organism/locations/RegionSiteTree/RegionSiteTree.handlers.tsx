@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { regionSiteRoute, subRegionRoute } from "@orch-ui/utils";
 import {
   setLoadingBranch,
@@ -14,13 +14,16 @@ import { AppDispatch } from "../../../../store/store";
 
 export const handleViewRegionAction = (
   dispatch: AppDispatch,
-  region: eim.RegionRead,
+  region: infra.RegionRead,
 ) => {
   if (!region.resourceId) return;
   dispatch(setRegion(region));
 };
 
-export const handleAddSiteAction = (navigate: any, region: eim.RegionRead) => {
+export const handleAddSiteAction = (
+  navigate: any,
+  region: infra.RegionRead,
+) => {
   if (!region.resourceId) return;
   navigate(
     regionSiteRoute,
@@ -34,7 +37,7 @@ export const handleAddSiteAction = (navigate: any, region: eim.RegionRead) => {
 
 export const handleSubRegionAction = (
   navigate: any,
-  region: eim.RegionRead,
+  region: infra.RegionRead,
 ) => {
   if (!region || !region.resourceId) return;
   navigate(subRegionRoute, {
@@ -45,7 +48,7 @@ export const handleSubRegionAction = (
 
 export const handleSiteViewAction = (
   dispatch: AppDispatch,
-  site: eim.SiteRead,
+  site: infra.SiteRead,
 ) => {
   if (!site.resourceId || !site.region || !site.region.resourceId) return;
   dispatch(setLoadingBranch(site.region.resourceId));

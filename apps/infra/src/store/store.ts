@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice, mbApi, tmSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, mbApi, tmSlice } from "@orch-ui/apis";
 import { UiSlice, uiSliceName } from "@orch-ui/components";
 import {
   Action,
@@ -24,8 +24,8 @@ const rootReducer = combineReducers({
   configureHost: configureHostReducer,
   locations: locationsReducer,
   hostFilterBuilder: hostFilterBuilderReducer,
-  [enhancedEimSlice.miEnhancedApi.reducerPath]:
-    enhancedEimSlice.miEnhancedApi.reducer,
+  [enhancedInfraSlice.miEnhancedApi.reducerPath]:
+    enhancedInfraSlice.miEnhancedApi.reducer,
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
   [uiSliceName]: UiSlice,
   [tmSlice.reducerPath]: tmSlice.reducer,
@@ -39,7 +39,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         serializableCheck: false,
         immutableCheck: false,
       })
-        .concat(enhancedEimSlice.miEnhancedApi.middleware)
+        .concat(enhancedInfraSlice.miEnhancedApi.middleware)
         .concat(mbApi.metadataBroker.middleware)
         .concat(tmSlice.middleware),
     preloadedState,
@@ -53,7 +53,7 @@ export const store = configureStore({
       serializableCheck: true,
       immutableCheck: true,
     })
-      .concat(enhancedEimSlice.miEnhancedApi.middleware)
+      .concat(enhancedInfraSlice.miEnhancedApi.middleware)
       .concat(mbApi.metadataBroker.middleware)
       .concat(tmSlice.middleware),
 });

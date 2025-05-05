@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   FieldLabels,
@@ -24,7 +24,7 @@ import "./HostStatusPopover.scss";
 
 const dataCy = "hostStatusPopover";
 export interface HostStatusPopoverProps {
-  data: eim.HostRead;
+  data: infra.HostRead;
 }
 
 type FieldLabel = {

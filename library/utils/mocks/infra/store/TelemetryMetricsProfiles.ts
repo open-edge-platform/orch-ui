@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { telemetryMetricsGroup1 } from "../data";
 import { BaseStore } from "./baseStore";
 
-export const TelemetryMetricsProfile1: eim.TelemetryMetricsProfileRead = {
+export const TelemetryMetricsProfile1: infra.TelemetryMetricsProfileRead = {
   profileId: "tmprofile1",
   targetInstance: "tinstance",
   targetSite: "tsite",
@@ -20,13 +20,13 @@ export const TelemetryMetricsProfile1: eim.TelemetryMetricsProfileRead = {
 let index = 0;
 export class TelemetryMetricsProfilesStore extends BaseStore<
   "profileId",
-  eim.TelemetryMetricsProfileRead,
-  eim.TelemetryMetricsProfile
+  infra.TelemetryMetricsProfileRead,
+  infra.TelemetryMetricsProfile
 > {
   convert(
-    body: eim.TelemetryMetricsProfile,
+    body: infra.TelemetryMetricsProfile,
     id?: string | undefined,
-  ): eim.TelemetryMetricsProfileRead {
+  ): infra.TelemetryMetricsProfileRead {
     return {
       ...body,
       profileId: id,
@@ -45,7 +45,9 @@ export class TelemetryMetricsProfilesStore extends BaseStore<
     super("profileId", [TelemetryMetricsProfile1]);
   }
 
-  create(body: eim.TelemetryMetricsProfile): eim.TelemetryMetricsProfileRead {
+  create(
+    body: infra.TelemetryMetricsProfile,
+  ): infra.TelemetryMetricsProfileRead {
     const id = index++;
     const pid = `profile-${id}`;
     const data = this.convert(body, pid);

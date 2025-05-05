@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
 import {
   hostsRoute,
@@ -52,7 +52,7 @@ const DeauthorizeHostStandalone = ({
 
   const navigate = useInfraNavigate();
   const [deauthorizeHost] =
-    eim.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
+    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
 
   const deauthDialogContent = (
     <div {...cy} className="deauthorize-host-standalone">

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   telemetryLogsGroup1,
   telemetryLogsGroup2,
@@ -11,13 +11,13 @@ import {
 } from "../data";
 import { BaseStore } from "./baseStore";
 
-const TelemetryLogsGroups: eim.TelemetryLogsGroupRead[] = [
+const TelemetryLogsGroups: infra.TelemetryLogsGroupRead[] = [
   telemetryLogsGroup1,
   telemetryLogsGroup2,
   telemetryLogsGroup3,
 ];
 
-export const telemetryLogsGroupList: eim.TelemetryLogsGroupListRead = {
+export const telemetryLogsGroupList: infra.TelemetryLogsGroupListRead = {
   TelemetryLogsGroups,
   hasNext: true,
   totalElements: TelemetryLogsGroups.length,
@@ -25,13 +25,13 @@ export const telemetryLogsGroupList: eim.TelemetryLogsGroupListRead = {
 
 export class TelemetryLogsGroupListStore extends BaseStore<
   "telemetryLogsGroupId",
-  eim.TelemetryLogsGroupRead
+  infra.TelemetryLogsGroupRead
 > {
   constructor() {
     super("telemetryLogsGroupId", TelemetryLogsGroups);
   }
 
-  convert(body: eim.TelemetryLogsGroupRead): eim.TelemetryLogsGroupRead {
+  convert(body: infra.TelemetryLogsGroupRead): infra.TelemetryLogsGroupRead {
     return body;
   }
 }

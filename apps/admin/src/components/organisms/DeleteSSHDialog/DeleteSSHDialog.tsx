@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Modal } from "@orch-ui/components";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { ButtonVariant, ModalSize } from "@spark-design/tokens";
@@ -12,7 +12,7 @@ import "./DeleteSSHDialog.scss";
 const dataCy = "deleteSSHDialog";
 
 interface DeleteSSHDialogProps {
-  ssh: eim.LocalAccountRead;
+  ssh: infra.LocalAccountRead;
   onCancel: () => void;
   onDelete?: () => void;
   onError?: (err: string) => void;
@@ -30,7 +30,7 @@ const DeleteSSHDialog = ({
   const cy = { "data-cy": dataCy };
 
   const [deleteSsh] =
-    eim.useDeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdMutation();
 
   const onDeleteSsh = () => {
     const sshName = ssh.sshKey;

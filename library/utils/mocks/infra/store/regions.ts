@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   regionAshlandId,
   regionCaliforniaId,
@@ -24,14 +24,14 @@ import { SiteStore } from "./sites";
 import { StoreUtils } from "./utils";
 
 /**
- * Aggregates eim.Metadata from the current region and the inherited ones
+ * Aggregates infra.Metadata from the current region and the inherited ones
  */
-export const combineMetadata = (r?: eim.RegionRead): eim.Metadata => {
+export const combineMetadata = (r?: infra.RegionRead): infra.Metadata => {
   if (!r) {
     return [];
   }
 
-  const m: eim.Metadata = [];
+  const m: infra.Metadata = [];
   if (r.metadata) {
     m.concat(...r.metadata);
   }
@@ -42,14 +42,14 @@ export const combineMetadata = (r?: eim.RegionRead): eim.Metadata => {
 };
 
 /**
- * Generates a mock region, so that the eim.Metadata are set as we expect to save them
+ * Generates a mock region, so that the infra.Metadata are set as we expect to save them
  */
 export const createRegion = (
   id: string,
   type: string,
   name: string,
-  parent?: eim.RegionRead,
-): eim.RegionRead => {
+  parent?: infra.RegionRead,
+): infra.RegionRead => {
   return {
     regionID: id,
     resourceId: id,
@@ -62,94 +62,94 @@ export const createRegion = (
 
 /* Region order is west to east chronology  */
 
-export const regionUsWest: eim.RegionRead = createRegion(
+export const regionUsWest: infra.RegionRead = createRegion(
   regionUsWestId,
   "Area",
   "Us-West",
 );
 
-export const regionSalem: eim.RegionRead = createRegion(
+export const regionSalem: infra.RegionRead = createRegion(
   regionSalemId,
   "City",
   "Salem",
   regionUsWest,
 );
 
-export const regionPortland: eim.RegionRead = createRegion(
+export const regionPortland: infra.RegionRead = createRegion(
   regionPortlandId,
   "City",
   "Portland",
   regionUsWest,
 );
 
-export const regionAshland: eim.RegionRead = createRegion(
+export const regionAshland: infra.RegionRead = createRegion(
   regionAshlandId,
   "City",
   "Ashland",
   regionUsWest,
 );
 
-export const regionCalifornia: eim.RegionRead = createRegion(
+export const regionCalifornia: infra.RegionRead = createRegion(
   regionCaliforniaId,
   "State",
   "California",
   regionUsWest,
 );
 
-export const regionUsMidwest: eim.RegionRead = createRegion(
+export const regionUsMidwest: infra.RegionRead = createRegion(
   regionUsMidwestId,
   "Area",
   "US Midwest",
 );
 
-export const regionChicago: eim.RegionRead = createRegion(
+export const regionChicago: infra.RegionRead = createRegion(
   regionChicagoId,
   "City",
   "Chicago",
   regionUsMidwest,
 );
 
-export const regionUsEast: eim.RegionRead = createRegion(
+export const regionUsEast: infra.RegionRead = createRegion(
   regionUsEastId,
   "Area",
   "Us East",
 );
 
-export const regionDayton: eim.RegionRead = createRegion(
+export const regionDayton: infra.RegionRead = createRegion(
   regionDaytonId,
   "City",
   "Dayton",
   regionUsEast,
 );
 
-export const regionColumbus: eim.RegionRead = createRegion(
+export const regionColumbus: infra.RegionRead = createRegion(
   regionColumbusId,
   "City",
   "Columbus",
   regionUsEast,
 );
 
-export const regionEu: eim.RegionRead = createRegion(
+export const regionEu: infra.RegionRead = createRegion(
   regionEuId,
   "Continent",
   "Europe",
 );
 
-export const regionEuSouth: eim.RegionRead = createRegion(
+export const regionEuSouth: infra.RegionRead = createRegion(
   regionEuSouthId,
   "Area",
   "Southern Europe",
   regionEu,
 );
 
-export const regionEuIta: eim.RegionRead = createRegion(
+export const regionEuIta: infra.RegionRead = createRegion(
   regionEuItaId,
   "Country",
   "Italy",
   regionEuSouth,
 );
 
-export const regions: eim.GetV1ProjectsByProjectNameRegionsApiResponse = {
+export const regions: infra.GetV1ProjectsByProjectNameRegionsApiResponse = {
   hasNext: false,
   regions: [
     regionUsWest,
@@ -164,8 +164,8 @@ export const regions: eim.GetV1ProjectsByProjectNameRegionsApiResponse = {
 
 export class RegionStore extends BaseStore<
   "resourceId",
-  eim.RegionRead,
-  eim.Region
+  infra.RegionRead,
+  infra.Region
 > {
   constructor() {
     super("resourceId", [
@@ -184,7 +184,7 @@ export class RegionStore extends BaseStore<
     ]);
   }
 
-  list(parent?: string | null): eim.RegionRead[] {
+  list(parent?: string | null): infra.RegionRead[] {
     if (parent === "null") {
       return this.resources.filter((r) => r.parentRegion === undefined);
     }
@@ -197,7 +197,7 @@ export class RegionStore extends BaseStore<
     return this.resources;
   }
 
-  getTotalSiteInRegion(region: eim.RegionRead, siteStore: SiteStore) {
+  getTotalSiteInRegion(region: infra.RegionRead, siteStore: SiteStore) {
     if (region.resourceId) {
       let siteList = siteStore.list({ regionId: region.resourceId }).length;
       this.list(region.resourceId).forEach((subRegion) => {
@@ -208,7 +208,7 @@ export class RegionStore extends BaseStore<
     return 0;
   }
 
-  convert(body: eim.Region, id?: string): eim.RegionRead {
+  convert(body: infra.Region, id?: string): infra.RegionRead {
     const randomString = StoreUtils.randomString();
     const currentTime = new Date().toISOString();
     return {
@@ -219,7 +219,7 @@ export class RegionStore extends BaseStore<
         createdAt: currentTime,
         updatedAt: currentTime,
       },
-      parentRegion: body.parentRegion as eim.RegionRead,
+      parentRegion: body.parentRegion as infra.RegionRead,
     };
   }
 }

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import ClusterNameAssociatedToHost from "./ClusterNameAssociatedToHost";
 import ClusterNameAssociatedToHostPom from "./ClusterNameAssociatedToHost.pom";
 
 const pom = new ClusterNameAssociatedToHostPom();
-const defaultHost: eim.HostRead = {
+const defaultHost: infra.HostRead = {
   name: "host-1",
   instance: { resourceId: "host-1-id" },
 };

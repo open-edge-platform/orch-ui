@@ -50,8 +50,8 @@ const staggeredBaseQueryWith404NoRetry = retry(
   },
 );
 
-export const eimApi = createApi({
-  reducerPath: "eimApi",
+export const infraApi = createApi({
+  reducerPath: "infraApi",
   refetchOnMountOrArgChange: "Cypress" in window,
   baseQuery: staggeredBaseQueryWith404NoRetry,
   endpoints: () => ({}),

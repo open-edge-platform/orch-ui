@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   regionAshlandId,
   regionChicagoId,
@@ -43,7 +43,7 @@ import {
 } from "./regions";
 import { StoreUtils } from "./utils";
 
-export const siteOregonPortland: eim.SiteRead = {
+export const siteOregonPortland: infra.SiteRead = {
   siteID: siteOregonPortlandId,
   resourceId: siteOregonPortlandId,
   inheritedMetadata: {
@@ -72,7 +72,7 @@ export const siteOregonPortland: eim.SiteRead = {
   ],
 };
 
-export const siteSantaClara: eim.SiteRead = {
+export const siteSantaClara: infra.SiteRead = {
   siteID: siteSantaClaraId,
   resourceId: siteSantaClaraId,
   inheritedMetadata: {
@@ -96,7 +96,7 @@ export const siteSantaClara: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteBoston: eim.SiteRead = {
+export const siteBoston: infra.SiteRead = {
   siteID: siteBostonId,
   resourceId: siteBostonId,
   inheritedMetadata: {
@@ -119,7 +119,7 @@ export const siteBoston: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteRestaurantOne: eim.SiteRead = {
+export const siteRestaurantOne: infra.SiteRead = {
   siteID: siteRestaurantOneId,
   resourceId: siteRestaurantOneId,
   inheritedMetadata: {
@@ -142,7 +142,7 @@ export const siteRestaurantOne: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteRestaurantTwo: eim.SiteRead = {
+export const siteRestaurantTwo: infra.SiteRead = {
   siteID: siteRestaurantTwoId,
   resourceId: siteRestaurantTwoId,
   inheritedMetadata: {
@@ -175,7 +175,7 @@ export const siteRestaurantTwo: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteRestaurantThree: eim.SiteRead = {
+export const siteRestaurantThree: infra.SiteRead = {
   siteID: siteRestaurantThreeId,
   resourceId: siteRestaurantThreeId,
   inheritedMetadata: {
@@ -202,7 +202,7 @@ export const siteRestaurantThree: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteMinimartOne: eim.SiteRead = {
+export const siteMinimartOne: infra.SiteRead = {
   siteID: siteMinimartOneId,
   resourceId: siteMinimartOneId,
   inheritedMetadata: {
@@ -243,7 +243,7 @@ export const siteMinimartOne: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteMinimartTwo: eim.SiteRead = {
+export const siteMinimartTwo: infra.SiteRead = {
   siteID: siteMinimartTwoId,
   resourceId: siteMinimartTwoId,
   inheritedMetadata: {
@@ -266,7 +266,7 @@ export const siteMinimartTwo: eim.SiteRead = {
   siteLng: 0,
 };
 
-export const siteStore: eim.SiteRead = {
+export const siteStore: infra.SiteRead = {
   siteID: siteStoreId,
   resourceId: siteStoreId,
   inheritedMetadata: {
@@ -303,7 +303,11 @@ export const updateSite = {
   siteLng: 0,
 };
 
-export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
+export class SiteStore extends BaseStore<
+  "resourceId",
+  infra.SiteRead,
+  infra.Site
+> {
   constructor() {
     super("resourceId", [
       siteOregonPortland,
@@ -318,7 +322,7 @@ export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
     ]);
   }
 
-  list(params?: { regionId: string | null }): eim.SiteRead[] {
+  list(params?: { regionId: string | null }): infra.SiteRead[] {
     if (params?.regionId != null) {
       return this.resources.filter(
         (r) => r.region?.regionID === params.regionId,
@@ -327,7 +331,7 @@ export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
     return this.resources;
   }
 
-  convert(body: eim.SiteWrite, id?: string): eim.SiteRead {
+  convert(body: infra.SiteWrite, id?: string): infra.SiteRead {
     const randomString = StoreUtils.randomString();
     const siteID = id ?? `site-${randomString}`;
     const currentTime = new Date().toISOString();
@@ -335,7 +339,7 @@ export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
       createdAt: currentTime,
       updatedAt: currentTime,
     };
-    const resultSite: eim.SiteRead = {
+    const resultSite: infra.SiteRead = {
       siteID,
       resourceId: siteID,
       ...body,
@@ -357,7 +361,7 @@ export class SiteStore extends BaseStore<"resourceId", eim.SiteRead, eim.Site> {
         metadata: [],
         timestamps,
       },
-      region: body.region as eim.RegionRead,
+      region: body.region as infra.RegionRead,
     };
 
     return resultSite;

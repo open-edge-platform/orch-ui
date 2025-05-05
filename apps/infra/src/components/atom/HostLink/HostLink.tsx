@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   getInfraPath,
   hostDetailsRoute,
@@ -26,9 +26,9 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
-  const [host, setHost] = useState<eim.HostRead>();
+  const [host, setHost] = useState<infra.HostRead>();
 
-  const hostsQuery = eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       uuid: uuid,
@@ -39,15 +39,16 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
     },
   );
 
-  const hostQuery = eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      hostId: id ?? "",
-    },
-    {
-      skip: !id, // Skip call if url does not include host-id
-    },
-  );
+  const hostQuery =
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        hostId: id ?? "",
+      },
+      {
+        skip: !id, // Skip call if url does not include host-id
+      },
+    );
 
   useEffect(() => {
     if (!hostQuery.isLoading && !hostQuery.isError && hostQuery.data && id) {

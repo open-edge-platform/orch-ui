@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import Gpu from "./Gpu";
 import GpuPom from "./Gpu.pom";
 
 const pom = new GpuPom();
 describe("<Gpu />", () => {
-  const gpu: eim.HostResourcesGpuRead = {
+  const gpu: infra.HostResourcesGpuRead = {
     capabilities: ["capabilities1", "capabilities2"],
     description: "description",
     deviceName: "deviceName",

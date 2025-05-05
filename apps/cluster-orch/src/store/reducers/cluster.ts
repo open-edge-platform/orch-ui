@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 type ModifiedClusterDetailInfo = cm.ClusterDetailInfo & {
-  selectedSite?: eim.SiteRead;
+  selectedSite?: infra.SiteRead;
 };
 
 const initialState: ModifiedClusterDetailInfo = {

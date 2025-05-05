@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { regionPortland } from "@orch-ui/utils";
 import Region from "./Region";
 import RegionPom from "./Region.pom";
@@ -18,7 +18,7 @@ describe("<Region />", () => {
     });
     it("should render a list of regions", () => {
       cy.contains("Regions");
-      const regions: eim.GetV1ProjectsByProjectNameRegionsApiResponse =
+      const regions: infra.GetV1ProjectsByProjectNameRegionsApiResponse =
         pom.getDetailOfApi(pom.api.regionsListSuccess, "response");
       pom.regionsTable.getRows().should("have.length", regions.regions?.length);
     });

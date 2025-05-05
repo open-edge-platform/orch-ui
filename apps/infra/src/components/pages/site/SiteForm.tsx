@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 import {
   ApiError,
   Flex,
@@ -74,7 +74,7 @@ const SiteForm = () => {
     isError,
     isFetching,
     error,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
     {
       regionId: regionId ?? "", //TODO: not used in EIM endpoint
       projectName: SharedStorage.project?.name ?? "",
@@ -86,7 +86,7 @@ const SiteForm = () => {
   );
 
   const { data: region } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: regionId ?? "",
@@ -100,7 +100,7 @@ const SiteForm = () => {
     isError: profileMetricIsError,
     isSuccess: profileMetricSuccess,
     isLoading: profileMetricLoading,
-  } = eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
     {
       telemetryMetricsGroupId: "group-id", //TODO: not used in real endpoint
       projectName: SharedStorage.project?.name ?? "",
@@ -117,7 +117,7 @@ const SiteForm = () => {
     isError: profileLogIsError,
     isSuccess: profileLogSuccess,
     isLoading: profileLogLoading,
-  } = eim.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
+  } = infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
     {
       telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
       projectName: SharedStorage.project?.name ?? "",
@@ -156,7 +156,7 @@ const SiteForm = () => {
     return logPairs;
   };
 
-  const regionsQuery = eim.useGetV1ProjectsByProjectNameRegionsQuery({
+  const regionsQuery = infra.useGetV1ProjectsByProjectNameRegionsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
@@ -167,24 +167,24 @@ const SiteForm = () => {
 
   const [hasSiteMetadata, setHasSiteMetadata] = useState(false);
   const [createSite] =
-    eim.usePostV1ProjectsByProjectNameRegionsAndRegionIdSitesMutation();
+    infra.usePostV1ProjectsByProjectNameRegionsAndRegionIdSitesMutation();
   const [updateSite] =
-    eim.usePutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+    infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
   const [createLogProfile] =
-    eim.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
+    infra.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
   const [editLogProfile] =
-    eim.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const { data: logsResponse } =
-    eim.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
   const logsgroup = logsResponse?.TelemetryLogsGroups ?? [];
   const [createMetricProfile] =
-    eim.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
+    infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
   const [editMetricProfile] =
-    eim.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const { data: metricsResponse } =
-    eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
   const metricsgroup = metricsResponse?.TelemetryMetricsGroups ?? [];
@@ -197,9 +197,9 @@ const SiteForm = () => {
   const [currentSystemLog, setCurrentSystemLog] =
     useState<SystemLogPair[]>(getLogPairs());
   const [deleteMetricProfile] =
-    eim.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const [deleteLogProfile] =
-    eim.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const [inheritedMetadata, setInheritedMetadata] = useState<MetadataPair[]>(
     [],
   );
@@ -235,7 +235,7 @@ const SiteForm = () => {
     );
   }, [site?.metadata]);
 
-  const getMetricsGroup = (id: string): eim.TelemetryMetricsGroup => {
+  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroup => {
     const group = metricsgroup.find((group) => {
       return group.telemetryMetricsGroupId === id;
     });
@@ -248,7 +248,7 @@ const SiteForm = () => {
     };
   };
 
-  const getLogsGroup = (id: string): eim.TelemetryLogsGroup => {
+  const getLogsGroup = (id: string): infra.TelemetryLogsGroup => {
     const group = logsgroup.find((group) => {
       return group.telemetryLogsGroupId === id;
     });
@@ -268,7 +268,7 @@ const SiteForm = () => {
     setValue,
     trigger,
     formState: { errors, isValid },
-  } = useForm<eim.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg>(
+  } = useForm<infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg>(
     {
       mode: "all",
     },
@@ -276,7 +276,7 @@ const SiteForm = () => {
 
   // reset form registered defaultValue when API response returns to check field sanity
   useEffect(() => {
-    const defaultValue: eim.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg =
+    const defaultValue: infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg =
       {
         regionId: regionId ?? "", //TODO: not used in real endpoint
         projectName: SharedStorage.project?.name ?? "",
@@ -341,9 +341,9 @@ const SiteForm = () => {
   }
 
   const save: SubmitHandler<
-    eim.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
+    infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
   > = async (formData) => {
-    const site: eim.SiteWrite = {
+    const site: infra.SiteWrite = {
       name: formData.site.name,
       siteLat: formData.site.siteLat
         ? Math.round(formData.site.siteLat * Math.pow(10, 7))
@@ -356,7 +356,7 @@ const SiteForm = () => {
     };
 
     try {
-      let siteOperation: Promise<eim.PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse>;
+      let siteOperation: Promise<infra.PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse>;
 
       if (siteId === "new") {
         siteOperation = createSite({
@@ -373,11 +373,11 @@ const SiteForm = () => {
         }).unwrap();
       }
 
-      const response: eim.SiteRead = await siteOperation;
+      const response: infra.SiteRead = await siteOperation;
       const allPromises: Promise<any>[] = [];
 
       for (const metricPair of currentSystemMetric) {
-        const metricProfile: eim.TelemetryMetricsProfile = {
+        const metricProfile: infra.TelemetryMetricsProfile = {
           targetSite: response.siteID,
           metricsInterval: parseInt(metricPair.interval),
           metricsGroupId: metricPair.metricType,
@@ -405,9 +405,9 @@ const SiteForm = () => {
       }
 
       for (const logPair of currentSystemLog) {
-        const logProfile: eim.TelemetryLogsProfile = {
+        const logProfile: infra.TelemetryLogsProfile = {
           targetSite: response.siteID,
-          logLevel: logPair.logLevel as eim.TelemetrySeverityLevel,
+          logLevel: logPair.logLevel as infra.TelemetrySeverityLevel,
           logsGroupId: logPair.logSource,
           logsGroup: getLogsGroup(logPair.logSource),
         };
