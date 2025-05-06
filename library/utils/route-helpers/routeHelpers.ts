@@ -10,7 +10,7 @@ import {
   PathParam,
   RouteObject,
 } from "react-router-dom";
-import { infraMfePrefix, InfraRoute } from "./paths";
+import { InfraRoute } from "./paths";
 
 export type RouteObjectWithRef = RouteObject & {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -47,6 +47,7 @@ export const innerTransitionTimeout = 300;
  * @param query - Optional query string to append to the URL (defaults to empty string)
  * @returns Full infrastructure path string with prefix, generated path, and query
  */
+export const infraMfePrefix = "/infrastructure/";
 export const getInfraPath = <Path extends InfraRoute>(
   route: Path,
   params?: {

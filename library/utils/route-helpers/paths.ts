@@ -2,15 +2,6 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-/**
- * Determines the prefix path for infrastructure micro-frontend routes.
- * Returns '/' when the application is running on port 8082 or in Cypress component testing mode,
- * otherwise returns '/infrastructure/'. Logics need to be more optimised
- *
- * @constant
- * @type {string}
- */
-export const infraMfePrefix = "/infrastructure/";
 
 export const clusterManagementRoute = "clusters";
 export const clusterDetailRoute = "cluster/:clusterName";
