@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { catalog, eim } from "@orch-ui/apis";
+import { catalog, infra } from "@orch-ui/apis";
 import { DeploymentDetailsPom } from "@orch-ui/app-orch-poms";
 import { RibbonPom, TablePom } from "@orch-ui/components";
 import {
@@ -58,7 +58,7 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
   let deploymentPackageDisplayName: string;
   let deploymentDisplayName: string;
   let regionId: string, siteId: string, hostId: string;
-  let currentHost: eim.HostRead;
+  let currentHost: infra.HostRead;
   let uuid: string;
 
   /** Get to Applications SidebarTab */
@@ -196,6 +196,7 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
           });
           createClusterViaApi(activeProject, cluster).then(() => {
             cy.log(`Cluster is created with cluster name ${cluster.name}`);
+          });
         });
       });
     });
