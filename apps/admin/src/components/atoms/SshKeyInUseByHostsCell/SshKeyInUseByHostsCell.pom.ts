@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { instanceOne, provisionedHostOne } from "@orch-ui/utils";
 
@@ -20,7 +19,7 @@ export const fakeSshKey =
 const localAccountId = "localaccount-1";
 const sshKeyName = "test-key-name";
 const currentTime = new Date().toISOString();
-const mockInstance: eim.InstanceRead = {
+const mockInstance: infra.InstanceRead = {
   ...instanceOne,
   host: provisionedHostOne,
   localAccount: {
@@ -39,7 +38,7 @@ const generateInstanceMocks = (
   size = 10,
   mock = mockInstance,
   offset = 0,
-): eim.InstanceRead[] =>
+): infra.InstanceRead[] =>
   [...Array(size).keys()].map((index) => ({
     ...mock,
     resourceId: `instance-${index + offset}`,
@@ -50,7 +49,7 @@ const instanceUrlOnLocalAccount =
   "**/compute/instances?filter=has%28localaccount%29*";
 const sshInstanceEndpoint: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+  infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
 > = {
   getSshInstances: {
     route: instanceUrlOnLocalAccount,

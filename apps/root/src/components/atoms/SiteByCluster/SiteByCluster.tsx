@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { InternalError, parseError } from "@orch-ui/utils";
 import { MessageBanner, ProgressLoader } from "@spark-design/react";
 import { useEffect, useState } from "react";
@@ -27,16 +27,16 @@ const SiteByCluster = ({ clusterName }: SiteByClusterProps) => {
 
   useEffect(() => {
     getHostsList(dispatch, [clusterName])
-      .then((guids) => {
+      .then((hostIds) => {
         // clusters don't span across site, so regardless of the number of nodes
         // we only need to know where the first one is
-        if (guids.length === 0) {
+        if (hostIds.length === 0) {
           setError({
             status: "CUSTOM_ERROR",
             data: `Cluster ${clusterName} does not have any node`,
           });
         } else {
-          return getHosts(dispatch, [guids[0]]);
+          return getHosts(dispatch, [hostIds[0]]);
         }
       })
       .then((hosts) => {
@@ -50,7 +50,7 @@ const SiteByCluster = ({ clusterName }: SiteByClusterProps) => {
           return getSite(dispatch, hosts[0].site.resourceId ?? "");
         }
       })
-      .then((res: eim.SiteRead) => {
+      .then((res: infra.SiteRead) => {
         setIsLoading(false);
         setRegionId(res?.region?.resourceId);
         setSiteName(res?.name);

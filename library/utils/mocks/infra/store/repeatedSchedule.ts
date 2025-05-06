@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { BaseStore } from "./baseStore";
 import { assignedWorkloadHostFour, assignedWorkloadHostOne } from "./hosts";
 import { regionUsWest } from "./regions";
 import { siteBoston } from "./sites";
 
 // Day of month example
-export const repeatedScheduleOne: eim.SingleScheduleRead = {
+export const repeatedScheduleOne: infra.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule1",
   name: "r-schedule1",
   scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -25,7 +25,7 @@ export const repeatedScheduleOne: eim.SingleScheduleRead = {
 };
 
 /* Start of schedule maintenance data for repeat type*/
-export const repeatWeeklyMaintenanceFor11PMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const repeatWeeklyMaintenanceFor11PMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -41,7 +41,7 @@ export const repeatWeeklyMaintenanceFor11PMUTC: enhancedEimSlice.ScheduleMainten
     },
   };
 
-export const repeatWeeklyMaintenanceFor11AMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const repeatWeeklyMaintenanceFor11AMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -57,7 +57,7 @@ export const repeatWeeklyMaintenanceFor11AMUTC: enhancedEimSlice.ScheduleMainten
     },
   };
 
-export const maintenanceRepeatDaysFor11PMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const maintenanceRepeatDaysFor11PMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -74,7 +74,7 @@ export const maintenanceRepeatDaysFor11PMUTC: enhancedEimSlice.ScheduleMaintenan
     },
   };
 
-export const maintenanceRepeatDaysFor11AMUTC: enhancedEimSlice.ScheduleMaintenance =
+export const maintenanceRepeatDaysFor11AMUTC: enhancedInfraSlice.ScheduleMaintenance =
   {
     name: "r-schedule1",
     scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -93,7 +93,7 @@ export const maintenanceRepeatDaysFor11AMUTC: enhancedEimSlice.ScheduleMaintenan
 /* End of schedule maintenance data for repeat type*/
 
 // Day of week example
-const repeatedScheduleTwo: eim.SingleScheduleRead = {
+const repeatedScheduleTwo: infra.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule2",
   name: "r-schedule2",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -107,7 +107,7 @@ const repeatedScheduleTwo: eim.SingleScheduleRead = {
 };
 
 // Maintenance all days (user may have set this by repeat - days of month's or day of week's select all)
-const repeatedScheduleThree: eim.SingleScheduleRead = {
+const repeatedScheduleThree: infra.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule3",
   name: "r-schedule3",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -120,7 +120,7 @@ const repeatedScheduleThree: eim.SingleScheduleRead = {
   durationSeconds: 1800,
 };
 
-export const repeatedScheduleOnSite: eim.SingleScheduleRead = {
+export const repeatedScheduleOnSite: infra.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule-site",
   name: "r-schedule-site",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -132,7 +132,7 @@ export const repeatedScheduleOnSite: eim.SingleScheduleRead = {
   cronMonth: "*",
   durationSeconds: 1800,
 };
-export const repeatedScheduleOnRegion: eim.SingleScheduleRead = {
+export const repeatedScheduleOnRegion: infra.SingleScheduleRead = {
   repeatedScheduleID: "repeated-schedule-region",
   name: "r-schedule-region",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -147,8 +147,8 @@ export const repeatedScheduleOnRegion: eim.SingleScheduleRead = {
 
 export class RepeatedScheduleStore extends BaseStore<
   "repeatedScheduleID",
-  eim.SingleScheduleRead,
-  eim.SingleSchedule
+  infra.SingleScheduleRead,
+  infra.SingleSchedule
 > {
   repeatedScheduleIndex = 0;
   constructor() {
@@ -162,12 +162,12 @@ export class RepeatedScheduleStore extends BaseStore<
   }
 
   convert(
-    repeatedSchedule: eim.SingleSchedule,
+    repeatedSchedule: infra.SingleSchedule,
     id?: string,
-    targetRegion?: eim.RegionRead,
-    targetSite?: eim.SiteRead,
-    targetHost?: eim.HostRead,
-  ): eim.SingleScheduleRead {
+    targetRegion?: infra.RegionRead,
+    targetSite?: infra.SiteRead,
+    targetHost?: infra.HostRead,
+  ): infra.SingleScheduleRead {
     const currentTimeStr = new Date().toISOString();
     return {
       ...repeatedSchedule,
@@ -184,11 +184,11 @@ export class RepeatedScheduleStore extends BaseStore<
   }
 
   post(
-    repeatedSchedule: eim.SingleScheduleWrite,
-    targetRegion?: eim.RegionRead,
-    targetSite?: eim.SiteRead,
-    targetHost?: eim.HostRead,
-  ): eim.SingleScheduleRead {
+    repeatedSchedule: infra.SingleScheduleWrite,
+    targetRegion?: infra.RegionRead,
+    targetSite?: infra.SiteRead,
+    targetHost?: infra.HostRead,
+  ): infra.SingleScheduleRead {
     const newSchedule = this.convert(
       repeatedSchedule,
       undefined,
@@ -200,7 +200,7 @@ export class RepeatedScheduleStore extends BaseStore<
     return newSchedule;
   }
 
-  list(host?: eim.HostRead | null): eim.SingleScheduleRead[] {
+  list(host?: infra.HostRead | null): infra.SingleScheduleRead[] {
     if (host) {
       return this.resources.filter((h) => h.targetHost === host);
     }

@@ -10,7 +10,6 @@ import {
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
 import { NetworkLog } from "../../support/network-logs";
-import { EIM_USER } from "../../support/utilities";
 import { deleteHostViaApi } from "../helpers";
 import {
   isTestRegisterHostData,
@@ -118,7 +117,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
     afterEach(() => {
       if (registeredHostId) deleteHostViaApi(activeProject, registeredHostId);
-      netLog.save();
+      netLog.save("infra_register-host");
       netLog.clear();
     });
   });

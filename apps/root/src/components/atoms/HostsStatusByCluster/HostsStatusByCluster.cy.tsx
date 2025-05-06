@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { AppDispatch } from "../../../store/store";
 import HostsStatusByCluster from "./HostsStatusByCluster";
 import HostsStatusByClusterPom from "./HostsStatusByCluster.pom";
 
 const createMockHost = (status: {
-  indicator?: eim.StatusIndicatorRead;
+  indicator?: infra.StatusIndicatorRead;
   message?: string;
   timestamp?: number;
-}): eim.HostRead => {
+}): infra.HostRead => {
   return {
     resourceId: "test-host",
     name: "Test Host",
@@ -29,7 +29,7 @@ describe("<HostsStatusByCluster/>", () => {
       dispatch: AppDispatch,
       clusterNames?: string[],
     ) => Promise<string[]>,
-    gh: (dispatch: AppDispatch, uuids: string[]) => Promise<eim.HostRead[]>;
+    gh: (dispatch: AppDispatch, uuids: string[]) => Promise<infra.HostRead[]>;
 
   beforeEach(() => {
     ghl = cy

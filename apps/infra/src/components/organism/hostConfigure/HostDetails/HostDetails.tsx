@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { TextField } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
@@ -41,7 +41,10 @@ interface HostDetailsProps {
   duplicatedHostNames?: string[];
   osOptionValue?: string;
   securityIsSbAndFdeEnabled?: boolean;
-  onOsOptionChange?: (os: eim.OperatingSystemResource, effect: boolean) => void;
+  onOsOptionChange?: (
+    os: infra.OperatingSystemResource,
+    effect: boolean,
+  ) => void;
 }
 
 // eslint-disable-next-line max-statements
@@ -133,6 +136,8 @@ export const HostDetails = ({
   const getErrorMessage = () => {
     if (!localName || localName.trim().length == 0)
       return "Name cannot be empty";
+    if (localName.trim().length > 20)
+      return "Name should not exceed more than 20 characters";
     if (!validNameRegex.test(localName))
       return "Name should not contain special characters";
     if (containsDuplicatedName(duplicatedHostNames, localName))
@@ -194,9 +199,7 @@ export const HostDetails = ({
           <p className="sn-uuid__sn">
             {serialNumber == "" ? "No serial number present" : serialNumber}
           </p>
-          <p className="sn-uuid__uuid">
-            {uuid === "" ? "No UUID value present" : uuid}
-          </p>
+          <p className="sn-uuid__uuid">{uuid || "No UUID present"}</p>
         </div>
         <OsProfileDropdown
           hostOs={originalOs}

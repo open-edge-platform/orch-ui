@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { ConfirmationDialogPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 import {
@@ -56,7 +56,7 @@ const successEndpoints: CyApiDetails<
     },
   },
   clusterListWithFilter: {
-    route: `${route}filter=name%3Dtesting+OR+providerStatus.indicator%3Dtesting+OR+kubernetesVersion%3Dtesting`,
+    route: `${route}filter=name%3Dtesting+OR+lifecyclePhase%3Dtesting+OR+kubernetesVersion%3Dtesting`,
     statusCode: 200,
     response: {
       clusters: [clusterOne, clusterTwo],
@@ -120,7 +120,7 @@ const successEndpoints: CyApiDetails<
 
 const hostEndpoints: CyApiDetails<
   HostSuccessApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
 > = {
   getHosts: {
     route: hostRoute,

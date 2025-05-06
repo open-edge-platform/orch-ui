@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+---
+name: Update Versions to -dev
+
+on:
+  push:
+    branches:
+      - main
+      - release-*
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run Version Update Action
+        uses: open-edge-platform/orch-ci/dev-version-update@main
+        with:
+          gh_token: ${{ secrets.SYS_ORCH_GITHUB }}

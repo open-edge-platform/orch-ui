@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -32,7 +32,7 @@ interface IProcessStat {
 }
 export interface HostConfigReviewProps {
   hostResults: Map<string, string | true>;
-  localAccounts: eim.LocalAccountRead[] | undefined;
+  localAccounts: infra.LocalAccountRead[] | undefined;
 }
 export const HostConfigReview = ({
   hostResults,
@@ -51,7 +51,7 @@ export const HostConfigReview = ({
   };
 
   const sbFdeValue = (host: HostData, sbFdeEnabled: boolean) => {
-    const notSupported: eim.SecurityFeature[] = [
+    const notSupported: infra.SecurityFeature[] = [
       "SECURITY_FEATURE_UNSPECIFIED",
       "SECURITY_FEATURE_NONE",
     ];
@@ -110,8 +110,12 @@ export const HostConfigReview = ({
                     <tr data-cy="tableRow">
                       <td data-cy="tableRowCell">{host.name}</td>
                       <td data-cy="tableRowCell">
-                        <div className="serial-number">{host.serialNumber}</div>
-                        <div className="uuid">{host.uuid}</div>
+                        <div className="serial-number">
+                          {host.serialNumber || "No serial number present"}
+                        </div>
+                        <div className="uuid">
+                          {host.uuid || "No UUID present"}
+                        </div>
                       </td>
                       <td data-cy="tableRowCell">
                         {host.instance?.os ? host.instance.os.name : "-"}
@@ -212,8 +216,8 @@ export const HostConfigReview = ({
             <div className="icon-container">
               <Icon
                 className="hosts-overview-icon"
-                artworkStyle="regular"
-                icon="rack-mount"
+                artworkStyle="light"
+                icon="host"
                 onClick={() => setExpanded((e) => !e)}
               />
             </div>

@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TablePom } from "@orch-ui/components";
 import {
   AddHostsFormPom,
   HostConfigPom,
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
 import { NetworkLog } from "../../support/network-logs";
-import { EIM_USER } from "../../support/utilities";
 import {
   createRegionViaAPi,
   createSiteViaApi,
@@ -29,10 +27,9 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
   const addHostsFormPom = new AddHostsFormPom();
   const registerHostsPom = new RegisterHostsPom();
   const hostConfigPom = new HostConfigPom();
-  const tablePom = new TablePom();
 
   let testProvisionHostData: TestProvisionHostData,
-    uuid: string,
+    serialNumber: string,
     activeProject: string,
     regionId: string,
     siteId: string,
@@ -40,7 +37,8 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     instanceHosts: string[] = [];
 
   before(() => {
-    const provisionHostDataFile = "./cypress/e2e/infra/data/provision-host.json";
+    const provisionHostDataFile =
+      "./cypress/e2e/infra/data/provision-host.json";
     cy.readFile(provisionHostDataFile, "utf-8").then((data) => {
       if (!isTestProvisionHostData(data)) {
         throw new Error(
@@ -48,14 +46,13 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         );
       }
       testProvisionHostData = data;
-    });
 
-    uuid = Cypress.env("EN_UUID");
-    if (!Cypress.env("EN_UUID")) {
-      throw new Error(
-        "Please set the EN UUID via CYPRESS_EN_UUID environment variable",
-      );
-    }
+      serialNumber = Cypress.env("EN_SERIAL_NUMBER");
+      if (serialNumber) {
+        testProvisionHostData.hosts = [testProvisionHostData.hosts[0]];
+        testProvisionHostData.hosts[0].serialNumber = serialNumber;
+      }
+    });
   });
 
   describe("when provisioning hosts", () => {
@@ -129,9 +126,12 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       //Does all the work of going through the stepper
       cy.dataCy("textField").should("be.visible");
-      hostConfigPom.provisionHost(testProvisionHostData.site, []);
+      hostConfigPom.provisionHost(
+        testProvisionHostData.site,
+        [],
+        serialNumber !== undefined,
+      );
 
-      testProvisionHostData.hosts;
       for (let i = 0; i < testProvisionHostData.hosts.length; i++) {
         cy.wait("@registerHost").then((interception) => {
           expect(interception.response?.statusCode).to.equal(201);
@@ -148,25 +148,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.url().should("contain", "infrastructure/hosts");
     });
 
-    //TODO: Ensure it works with VEN once it is available
-    it("should see a host in provisioned state", () => {
-      cy.dataCy("header").contains("Infrastructure").click();
-      cy.dataCy("aside", { timeout: 10 * 1000 })
-        .contains("button", "Hosts")
-        .click();
-
-      tablePom.search(uuid);
-
-      tablePom.getRows().should("have.length", 1);
-
-      // we need to expand the row to actually check the UUID
-      tablePom.getCell(1, 1).click();
-      cy.contains(uuid).should("be.visible");
-
-      tablePom.getCell(1, 3).should("contain.text", "Provisioned");
-    });
-
     afterEach(() => {
+      // If we are using a serial number skip deletion until after the `verify-host` test
+      if (serialNumber) return;
+
       instanceHosts.forEach((resourceId) => {
         deleteHostInstanceViaApi(activeProject, resourceId);
       });
@@ -175,7 +160,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       });
       if (siteId) deleteSiteViaApi(activeProject, regionId, siteId);
       if (regionId) deleteRegionViaApi(activeProject, regionId);
-      netLog.save();
+      netLog.save("infra_provision-host");
       netLog.clear();
     });
   });

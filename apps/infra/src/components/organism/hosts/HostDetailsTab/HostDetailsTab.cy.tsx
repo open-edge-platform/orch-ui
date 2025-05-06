@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne as hostOne,
   IRuntimeConfig,
@@ -32,7 +32,7 @@ describe("The HostDetailsTab component", () => {
         VERSIONS: {},
       };
 
-      const hostResourceUndefined: eim.HostRead = {
+      const hostResourceUndefined: infra.HostRead = {
         ...hostOne,
       };
 
@@ -50,7 +50,7 @@ describe("The HostDetailsTab component", () => {
   });
   describe("when Host resources are set", () => {
     const storageCapacity = "1073741824"; // 1 GB
-    const hostWithResource: eim.HostRead = {
+    const hostWithResource: infra.HostRead = {
       ...hostOne,
       cpuCores: 4,
       cpuModel: "cpu-model",

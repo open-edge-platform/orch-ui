@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const hostFilterBuilderSliceName = "hostFilterBuilder";
@@ -22,6 +22,7 @@ export enum LifeCycleState {
   Onboarded = "onboarded",
   Registered = "registered",
   All = "all",
+  Healthy = "healthy",
 }
 
 export enum AggregatedStatus {
@@ -33,16 +34,20 @@ export enum AggregatedStatus {
 }
 export const buildStatusQuery = (
   detailedStatuses: string[],
-  statusIndicator: eim.StatusIndicator,
+  statusIndicator: infra.StatusIndicator,
 ) => {
   return `${detailedStatuses.map((value) => `${value}=${statusIndicator}`).join(" OR ")}`;
 };
 
 const getIndicator = (
   value: "IDLE" | "UNSPECIFIED" | "IN_PROGRESS" | "ERROR",
-) => `STATUS_INDICATION_${value}` as eim.StatusIndicator;
+) => `STATUS_INDICATION_${value}` as infra.StatusIndicator;
 
 export const lifeCycleStateQuery = new Map<LifeCycleState, string | undefined>([
+  [
+    LifeCycleState.Healthy,
+    "(currentState=HOST_STATE_ONBOARDED AND has(instance) AND instance.currentState=INSTANCE_STATE_RUNNING)",
+  ],
   [
     LifeCycleState.Provisioned,
     "(currentState=HOST_STATE_ONBOARDED AND has(instance))",

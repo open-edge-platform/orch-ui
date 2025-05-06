@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isValidHostName } from "../components/organism/hostConfigure/HostDetails/HostDetails";
 import { RootState } from "./store";
@@ -15,7 +15,7 @@ export enum HostConfigSteps {
   "Enter Host Details",
   "Add Host Labels",
   "Enable Local Access",
-  "Complete Configuration",
+  "Complete Setup",
 }
 const totalSteps = Object.keys(HostConfigSteps).length / 2;
 
@@ -29,10 +29,10 @@ export interface HostConfigFormStatus {
   hasValidationError: boolean;
 }
 
-export type HostData = eim.HostWrite & { region?: eim.RegionRead } & {
+export type HostData = infra.HostWrite & { region?: infra.RegionRead } & {
   serialNumber?: string;
 } & { resourceId?: string } & {
-  originalOs?: eim.OperatingSystemResourceRead;
+  originalOs?: infra.OperatingSystemResourceRead;
 } & { error?: string };
 
 export interface HostConfigForm {
@@ -167,7 +167,7 @@ export const configureHost = createSlice({
     },
     setNewRegisteredHosts(
       state,
-      action: PayloadAction<{ hosts: eim.HostRead[] }>,
+      action: PayloadAction<{ hosts: infra.HostRead[] }>,
     ) {
       const { hosts } = action.payload;
       state.hosts = {};
@@ -181,7 +181,7 @@ export const configureHost = createSlice({
     },
     updateNewRegisteredHost(
       state,
-      action: PayloadAction<{ host: eim.HostRead }>,
+      action: PayloadAction<{ host: infra.HostRead }>,
     ) {
       const { hosts } = state;
       const { host: newHost } = action.payload;
@@ -191,7 +191,7 @@ export const configureHost = createSlice({
         resourceId: newHost.resourceId,
       };
     },
-    setHosts(state, action: PayloadAction<{ hosts: eim.HostRead[] }>) {
+    setHosts(state, action: PayloadAction<{ hosts: infra.HostRead[] }>) {
       const { hosts } = state;
       const { hosts: selectedHosts } = action.payload;
 
@@ -228,7 +228,7 @@ export const configureHost = createSlice({
       host.name = action.payload.name;
       configureHost.caseReducers.validateStep(state);
     },
-    setMetadata(state, action: PayloadAction<{ metadata: eim.Metadata }>) {
+    setMetadata(state, action: PayloadAction<{ metadata: infra.Metadata }>) {
       const { hosts } = state;
       Object.values(hosts).forEach(
         (hd) => (hd.metadata = action.payload.metadata),
@@ -237,7 +237,7 @@ export const configureHost = createSlice({
 
     setSecurity(
       state,
-      action: PayloadAction<{ hostId: string; value: eim.SecurityFeature }>,
+      action: PayloadAction<{ hostId: string; value: infra.SecurityFeature }>,
     ) {
       const id = action.payload.hostId;
       const host = selectHost(state, id);
@@ -285,7 +285,7 @@ export const configureHost = createSlice({
       state,
       action: PayloadAction<{
         hostId: string;
-        os: eim.OperatingSystemResourceRead;
+        os: infra.OperatingSystemResourceRead;
       }>,
     ) {
       const host = selectHost(state, action.payload.hostId);
@@ -298,12 +298,12 @@ export const configureHost = createSlice({
       host.instance!.os = action.payload.os;
       configureHost.caseReducers.validateStep(state);
     },
-    setRegion(state, action: PayloadAction<{ region: eim.RegionRead }>) {
+    setRegion(state, action: PayloadAction<{ region: infra.RegionRead }>) {
       const { hosts } = state;
       Object.values(hosts).forEach((hd) => (hd.region = action.payload.region));
       configureHost.caseReducers.validateStep(state);
     },
-    setSite(state, action: PayloadAction<{ site: eim.SiteRead }>) {
+    setSite(state, action: PayloadAction<{ site: infra.SiteRead }>) {
       const { hosts } = state;
 
       Object.values(hosts).forEach((hd) => {
@@ -334,7 +334,7 @@ export const configureHost = createSlice({
     },
     setPublicSshKey(
       state,
-      action: PayloadAction<{ hostId: string; value: eim.LocalAccountRead }>,
+      action: PayloadAction<{ hostId: string; value: infra.LocalAccountRead }>,
     ) {
       const id = action.payload.hostId;
       const host = selectHost(state, id);
@@ -342,6 +342,15 @@ export const configureHost = createSlice({
         host.instance = {};
       }
       host.instance.localAccountID = action.payload.value.resourceId;
+      configureHost.caseReducers.validateStep(state);
+    },
+    unSetPublicSshKey(state, action: PayloadAction<{ hostId: string }>) {
+      const id = action.payload.hostId;
+      const host = selectHost(state, id);
+      if (!host.instance) {
+        return;
+      }
+      delete host.instance.localAccountID;
       configureHost.caseReducers.validateStep(state);
     },
     validateStep,
@@ -373,6 +382,7 @@ export const {
   setAutoOnboardValue,
   setAutoProvisionValue,
   setPublicSshKey,
+  unSetPublicSshKey,
 } = configureHost.actions;
 
 // selectors
@@ -453,7 +463,7 @@ export const selectAreHostsSetSecureDisabled = (state: RootState) =>
 export const getHostWrite = (
   state: RootState,
   hostId: string,
-): eim.HostWrite => {
+): infra.HostWrite => {
   const { name, siteId, uuid, metadata } = selectHost(
     state.configureHost,
     hostId,

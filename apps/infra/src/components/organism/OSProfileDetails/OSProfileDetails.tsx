@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { MessageBanner, Text } from "@spark-design/react";
 import OsProfileDetailField from "./OsProfileDetailField";
 
@@ -12,7 +12,7 @@ import "./OSProfileDetails.scss";
 const dataCy = "osProfileDetails";
 
 export const OSProfileSecurityFeatures: {
-  [key in eim.SecurityFeature]: string;
+  [key in infra.SecurityFeature]: string;
 } = {
   SECURITY_FEATURE_UNSPECIFIED: "Unspecified",
   SECURITY_FEATURE_NONE: "None",
@@ -20,7 +20,7 @@ export const OSProfileSecurityFeatures: {
 };
 
 interface OSProfileDetailsProps {
-  os: eim.OperatingSystemResourceRead;
+  os: infra.OperatingSystemResourceRead;
 }
 /**
  * Represents a OS package with its name, version, and distribution.

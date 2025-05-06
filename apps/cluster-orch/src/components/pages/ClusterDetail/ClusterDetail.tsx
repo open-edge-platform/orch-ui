@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
@@ -150,7 +150,7 @@ function ClusterDetail({
     }
   }, [clusterDetail]);
   const { data: firstClusterHost, isSuccess: isFirstHostSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: clusterFirstHostId ?? "",
@@ -168,7 +168,7 @@ function ClusterDetail({
   }, [firstClusterHost]);
 
   const { data: siteData } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: "*", // Cluster or associated host have no region information

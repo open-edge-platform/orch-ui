@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { aggregateStatuses, TableColumn } from "@orch-ui/components";
 import { hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 import { HostData } from "../store/configureHost";
 
-const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
+const _name = (basePath: string = ""): TableColumn<infra.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -24,7 +24,7 @@ const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
         return item.resourceId;
       }
     },
-    Cell: (table: { row: { original: eim.HostRead } }) => {
+    Cell: (table: { row: { original: infra.HostRead } }) => {
       return (
         <Link
           to={`${basePath}${table.row.original.resourceId}`}
@@ -42,7 +42,7 @@ const _name = (basePath: string = ""): TableColumn<eim.HostRead> => {
 const name = (
   basePath: string = "",
   isRegistered: boolean = false,
-): TableColumn<eim.HostRead> => {
+): TableColumn<infra.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -53,7 +53,7 @@ const name = (
         return item.resourceId;
       }
     },
-    Cell: (table: { row: { original: eim.HostRead } }) => {
+    Cell: (table: { row: { original: infra.HostRead } }) => {
       const result = isRegistered
         ? table.row.original.resourceId
         : `${table.row.original.site ? "host" : "unconfigured-host"}/${table.row.original.resourceId}`;
@@ -68,7 +68,7 @@ const name = (
   };
 };
 
-const nameWithoutLink: TableColumn<eim.HostRead> = {
+const nameWithoutLink: TableColumn<infra.HostRead> = {
   Header: "Host Name",
   apiName: "name",
   accessor: (item) => {
@@ -80,22 +80,22 @@ const nameWithoutLink: TableColumn<eim.HostRead> = {
   },
 };
 
-const guid: TableColumn<eim.HostRead> = {
+const guid: TableColumn<infra.HostRead> = {
   Header: "UUID",
   apiName: "uuid",
   accessor: (host) => host.uuid ?? "-",
 };
 
-const serialNumber: TableColumn<eim.HostRead> = {
+const serialNumber: TableColumn<infra.HostRead> = {
   Header: "Serial Number",
   apiName: "serialNumber",
   accessor: (host) => host.serialNumber,
 };
 
-const site: TableColumn<eim.HostRead> = {
+const site: TableColumn<infra.HostRead> = {
   Header: "Site",
   accessor: "site.siteID",
-  Cell: (table: { row: { original: eim.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostRead } }) => {
     return (
       <SiteCell
         siteId={table.row.original.site?.region?.resourceId}
@@ -107,10 +107,10 @@ const site: TableColumn<eim.HostRead> = {
 
 const siteWithCustomBasePath = (
   basePath: string,
-): TableColumn<eim.HostRead> => ({
+): TableColumn<infra.HostRead> => ({
   Header: "Site",
   accessor: "site.siteID",
-  Cell: (table: { row: { original: eim.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostRead } }) => {
     return (
       <SiteCell
         siteId={table.row.original.site?.siteID}
@@ -121,50 +121,50 @@ const siteWithCustomBasePath = (
   },
 });
 
-const status: TableColumn<eim.HostRead> = {
+const status: TableColumn<infra.HostRead> = {
   Header: "Host Status",
   apiName: "hostStatus",
   accessor: (host) =>
     aggregateStatuses(hostToStatuses(host, host.instance), "hostStatus")
       .message || "-",
-  Cell: (table: { row: { original: eim.HostRead } }) => (
+  Cell: (table: { row: { original: infra.HostRead } }) => (
     <HostStatusPopover data={table.row.original} />
   ),
 };
 
-const os: TableColumn<eim.HostRead> = {
+const os: TableColumn<infra.HostRead> = {
   Header: "Operating System",
-  accessor: (host) => host.instance?.os?.name ?? "-",
-  Cell: (table: { row: { original: eim.HostRead } }) => {
+  accessor: (host) => host.instance?.currentOs?.name ?? "-",
+  Cell: (table: { row: { original: infra.HostRead } }) => {
     return <OsConfig instance={table.row.original.instance} iconOnly />;
   },
 };
 
-const reason: TableColumn<eim.HostRead> = {
+const reason: TableColumn<infra.HostRead> = {
   Header: "Deauthorized Reason",
   apiName: "note",
   accessor: "note",
-  Cell: (table: { row: { original: eim.HostRead } }) =>
+  Cell: (table: { row: { original: infra.HostRead } }) =>
     table.row.original.note || <em>(Reason not specified)</em>,
 };
 
-const autoOnboard: TableColumn<eim.HostRead> = {
+const autoOnboard: TableColumn<infra.HostRead> = {
   Header: "Auto Onboard",
   accessor: (host) =>
     host.desiredState === "HOST_STATE_ONBOARDED" ? "Yes" : "No",
 };
 
-const workload: TableColumn<eim.HostRead> = {
+const workload: TableColumn<infra.HostRead> = {
   Header: "Workload",
-  Cell: (table: { row: { original: eim.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostRead } }) => {
     const host = table.row.original;
     return <ClusterNameAssociatedToHost host={host} />;
   },
 };
 
 const actions = (
-  popupFn: (host: eim.HostRead) => JSX.Element,
-): TableColumn<eim.HostRead> => ({
+  popupFn: (host: infra.HostRead) => JSX.Element,
+): TableColumn<infra.HostRead> => ({
   Header: "Actions",
   textAlign: "center",
   padding: "0",
@@ -191,8 +191,10 @@ const serialNumberUuid: TableColumn<HostData> = {
     const uuid = table.row.original.uuid;
     return (
       <>
-        <div className="serial-number">{serialNumber}</div>
-        <div className="uuid">{uuid}</div>
+        <div className="serial-number">
+          {serialNumber || "No serial number present"}
+        </div>
+        <div className="uuid">{uuid || "No UUID present"}</div>
       </>
     );
   },

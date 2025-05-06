@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim, mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 import { ConfirmationDialogPom } from "@orch-ui/components";
 import { SiComboboxPom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -33,7 +33,7 @@ const dataCySelectors = [
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-const regionUsWestUpdated: eim.Region = {
+const regionUsWestUpdated: infra.Region = {
   ...regionUsWest,
   name: `${regionUsWest.name} Updated`,
 };
@@ -46,7 +46,7 @@ const siteStore = new SiteStore();
 const sites = siteStore.list();
 const siteEndpoints: CyApiDetails<
   SiteApis,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
 > = {
   getSites: {
     route: `${route_sites}?*regionID=${regionUsWest.resourceId}`,
@@ -79,7 +79,7 @@ const metadataEndpoints: CyApiDetails<MetadataApis, mbApi.MetadataResponse> = {
 type RegionsApis = "getRegions" | "getRegionsError" | "deleteRegion";
 const regionsEndpoints: CyApiDetails<
   RegionsApis,
-  eim.RegionsList | eim.ProblemDetails
+  infra.RegionsList | infra.ProblemDetails
 > = {
   getRegions: {
     route: `${route}?*`,
@@ -112,8 +112,8 @@ type SingleRegionApis =
 
 const singleRegionEndpoints: CyApiDetails<
   SingleRegionApis,
-  eim.Region | eim.ProblemDetails,
-  eim.Region
+  infra.Region | infra.ProblemDetails,
+  infra.Region
 > = {
   getRegion: {
     route: `${route}/*`,
@@ -199,7 +199,7 @@ class RegionFormPom extends CyPom<Selectors, ApiAliases> {
     });
   }
 
-  public submit(region: eim.Region) {
+  public submit(region: infra.Region) {
     this.root.should("be.visible");
     this.el.name.clear().type(region.name!);
     this.regionType.select("State");

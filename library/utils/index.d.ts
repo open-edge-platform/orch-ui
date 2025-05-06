@@ -10,13 +10,13 @@ declare global {
     __RUNTIME_CONFIG__: IRuntimeConfig;
     process: {
       env: Process & {
-        REACT_LP_MOCK_API: string;
+        REACT_MOCK_API: string;
       };
     };
   }
   interface process {
     env: {
-      REACT_LP_MOCK_API: string;
+      REACT_MOCK_API: string;
     };
   }
 }

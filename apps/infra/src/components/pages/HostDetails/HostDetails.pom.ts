@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { MetadataDisplayPom } from "@orch-ui/components";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
 import {
@@ -21,6 +21,7 @@ const dataCySelectors = [
   "infraHostDetailsMaintenanceBanner",
   "infraHostDetailsHostDescriptionTable",
   "infraHostDetailsDeploymentMetadata",
+  "osUpdateAvailable",
   "guid",
   "serial",
   "osProfiles",
@@ -32,6 +33,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases =
   | "hostSuccess"
+  | "hostSuccessWithOsData"
   | "hostNoNameSuccess"
   | "hostUuidSuccess"
   | "hostSuccessNoHostLabels"
@@ -64,7 +66,7 @@ mockHostNoHostLabels.metadata = [];
 
 const mockHostNoSite = structuredClone(mockHost);
 mockHostNoSite.site = undefined;
-export const hostNoName: eim.HostRead = {
+export const hostNoName: infra.HostRead = {
   ...mockHost,
   name: "",
 };
@@ -74,7 +76,7 @@ const emptyResponse = {
   SingleSchedules: [],
   RepeatedSchedules: [],
 };
-const schedule123: eim.SingleSchedule2 = {
+const schedule123: infra.SingleSchedule2 = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule123",
   startSeconds: 1688148856,
@@ -101,6 +103,33 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
       route: route,
       response: mockHost,
     },
+    hostSuccessWithOsData: {
+      route: route,
+      response: {
+        ...mockHost,
+        instance: {
+          ...mockHost.instance,
+          currentOs: {
+            resourceId: "os-current",
+            name: "CurrentOS",
+            sha256: "CurrentOSSHA256",
+            updateSources: ["CurrentOSUpdateSourceName"],
+            osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+          },
+          desiredOs: {
+            resourceId: "os-desired",
+            name: "DesiredOS",
+            sha256: "DesiredOSSHA256",
+            updateSources: ["DesiredOSUpdateSourceName"],
+          },
+          os: {
+            name: "OS",
+            sha256: "OSSHA256",
+            updateSources: ["OSUpdateSourceName"],
+          },
+        },
+      },
+    },
     hostNoNameSuccess: {
       route: route,
       response: hostNoName,
@@ -111,7 +140,7 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
         hasNext: false,
         hosts: [mockHost],
         totalElements: 1,
-      } as eim.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+      },
     },
     hostSuccessNoHostLabels: {
       route: route,
@@ -185,7 +214,6 @@ export class HostDetailsPom extends CyPom<
   public hostAction: HostDetailsActionsPom;
   public medataBadge: MetadataDisplayPom;
   public hostDetailsTab: HostDetailsTabPom;
-  // public addToClusterPom: AddToClusterDrawerPom;
 
   constructor(
     public hostId: string = "*",
@@ -198,6 +226,13 @@ export class HostDetailsPom extends CyPom<
       "infraHostDetailsDeploymentMetadata",
     );
     this.hostDetailsTab = new HostDetailsTabPom();
-    // this.addToClusterPom = new AddToClusterDrawerPom();
+  }
+
+  getHostDescriptionValueByKey(key: string) {
+    return this.el.infraHostDetailsHostDescriptionTable
+      .contains(key)
+      .closest("td")
+      .siblings("td")
+      .first();
   }
 }

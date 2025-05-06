@@ -3,26 +3,67 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cyGet } from "@orch-ui/tests";
-import { instanceOne, instanceTwo, osTb } from "@orch-ui/utils";
+import { infra } from "@orch-ui/apis";
+import { instanceOne, instanceTwo } from "@orch-ui/utils";
 import { OsConfig } from "./OsConfig";
 import { OsConfigPom } from "./OsConfig.pom";
 
 const pom = new OsConfigPom();
 describe("<OsConfig/>", () => {
-  it("should render component", () => {
+  const os: infra.OperatingSystemResourceRead = {
+    resourceId: "currentOsId",
+    name: "currentOsName",
+    sha256: "currentOsSha256",
+    updateSources: [],
+    osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+  };
+
+  it("should render empty", () => {
     cy.mount(<OsConfig />);
     pom.root.should("exist");
-    pom.root.should("not.contain.text", osTb.name);
+    pom.root.should("contain.text", "(Not set)");
   });
-  it("should render component", () => {
-    cy.mount(<OsConfig instance={instanceOne} />);
-    cyGet("osUpdate").should("not.exist");
+  it("should render any update", () => {
+    cy.mount(
+      <OsConfig
+        instance={{
+          ...instanceOne,
+          currentOs: os,
+          desiredOs: {
+            resourceId: "desiredOsId",
+            name: "desiredOsName",
+            sha256: "desiredOsSha256",
+            updateSources: [],
+            osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+          },
+        }}
+      />,
+    );
+    pom.el.osUpdate.should("exist");
   });
-  it("should render component", () => {
-    cy.mount(<OsConfig instance={instanceTwo} />);
-    cyGet("osUpdate").should("exist");
-    pom.root.should("contain.text", osTb.name);
+  it("should render not any update", () => {
+    cy.mount(
+      <OsConfig
+        instance={{
+          ...instanceOne,
+          currentOs: os,
+          desiredOs: os,
+        }}
+      />,
+    );
+    pom.el.osUpdate.should("not.exist");
+  });
+  it("should render component with os name", () => {
+    cy.mount(
+      <OsConfig
+        instance={{
+          ...instanceOne,
+          currentOs: os,
+        }}
+      />,
+    );
+    pom.el.osUpdate.should("exist");
+    pom.root.should("contain.text", "currentOsName");
   });
   it("should render icon when added", () => {
     cy.mount(<OsConfig instance={instanceTwo} iconOnly />);

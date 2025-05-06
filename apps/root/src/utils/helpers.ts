@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { parseError, SharedStorage } from "@orch-ui/utils";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { AppDispatch } from "../store/store";
@@ -79,7 +79,7 @@ export const getHostStatus = async (
   // fetch details from all hosts at the same time
   const hosts = uniqueHosts.map((hostId: string) => {
     return dispatch(
-      eim.eim.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
+      infra.infra.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
         filter: `resourceId='${hostId}'`,
         projectName: SharedStorage.project?.name ?? "",
       }),
@@ -129,14 +129,14 @@ export const getHostStatus = async (
  */
 export const getHosts = async (
   dispatch: AppDispatch,
-  uuids: string[],
-): Promise<eim.HostRead[]> => {
+  hostIds: string[],
+): Promise<infra.HostRead[]> => {
   // fetch details from all hosts at the same time
-  const hostsQueries = uuids.map((uuid) => {
+  const hostsQueries = hostIds.map((resourceId) => {
     return dispatch(
-      eim.eim.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
+      infra.infra.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
         projectName: SharedStorage.project?.name ?? "",
-        uuid,
+        filter: `resourceId='${resourceId}'`,
       }),
     );
   });
@@ -144,7 +144,7 @@ export const getHosts = async (
   // wait for all requests to come back
   const hostsDetail = await Promise.all(hostsQueries);
 
-  const hosts: eim.HostRead[] = [];
+  const hosts: infra.HostRead[] = [];
   hostsDetail.forEach(({ data: _hosts, isSuccess, error }) => {
     if (isSuccess) {
       if (_hosts.hosts && _hosts.hosts[0]) {
@@ -171,13 +171,13 @@ export const getHosts = async (
 export const getSite = async (
   dispatch: AppDispatch,
   siteId: string,
-): Promise<eim.Site> => {
+): Promise<infra.Site> => {
   const {
     data: site,
     isError,
     error,
   } = await dispatch(
-    eim.eim.endpoints.getV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId.initiate(
+    infra.infra.endpoints.getV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId.initiate(
       {
         siteId: siteId,
         regionId: "*", // host have no region information

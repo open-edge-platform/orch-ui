@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Text } from "@spark-design/react";
 import {
@@ -20,7 +20,7 @@ import "./ScheduleMaintenanceSubComponent.scss";
 const dataCy = "maintenanceTableDecription";
 
 export interface ScheduleMaintenanceSubComponentProps {
-  maintenance: enhancedEimSlice.ScheduleMaintenance;
+  maintenance: enhancedInfraSlice.ScheduleMaintenance;
 }
 
 export const ScheduleMaintenanceSubComponent = ({

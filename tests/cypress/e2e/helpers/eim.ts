@@ -4,7 +4,6 @@
  */
 
 import * as _ from "lodash";
-import { eim } from "../../../../library/apis";
 import Chainable = Cypress.Chainable;
 
 export const validateEimTab = () => {
@@ -22,7 +21,7 @@ export const createRegionViaAPi = (
   regionName: string,
 ): Chainable<string> => {
   return cy
-    .authenticatedRequest<eim.RegionRead>({
+    .authenticatedRequest<infra.RegionRead>({
       method: "POST",
       url: `/v1/projects/${project}/regions`,
       body: {
@@ -35,13 +34,32 @@ export const createRegionViaAPi = (
     });
 };
 
+export const getRegionViaAPi = (
+  project: string,
+  regionName: string,
+): Chainable<infra.RegionRead[]> => {
+  return cy
+    .authenticatedRequest<infra.RegionsListRead>({
+      method: "GET",
+      url: `/v1/projects/${project}/regions`,
+      body: {
+        name: regionName,
+      },
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+
+      return cy.wrap(response.body.regions);
+    });
+};
+
 export const createSiteViaApi = (
   project: string,
   regionId: string,
   siteName: string,
 ): Chainable<string> => {
   return cy
-    .authenticatedRequest<eim.SiteRead>({
+    .authenticatedRequest<infra.SiteRead>({
       method: "POST",
       url: `/v1/projects/${project}/regions/${regionId}/sites`,
       body: {
@@ -53,6 +71,27 @@ export const createSiteViaApi = (
       const success = response.status === 201;
       expect(success).to.be.true;
       return cy.wrap(response.body.resourceId!);
+    });
+};
+
+export const getSiteViaApi = (
+  project: string,
+  regionId: string,
+  siteName: string,
+): Chainable<infra.SiteRead[]> => {
+  return cy
+    .authenticatedRequest<infra.SitesListRead>({
+      method: "GET",
+      url: `/v1/projects/${project}/regions/${regionId}/sites`,
+      body: {
+        name: siteName,
+        regionId: regionId,
+      },
+    })
+    .then((response) => {
+      const success = response.status === 200;
+      expect(success).to.be.true;
+      return cy.wrap(response.body.sites);
     });
 };
 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Popup, PopupOption } from "@orch-ui/components";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -13,7 +13,7 @@ const dataCy = "genericHostPopup";
 
 export interface GenericHostPopupProps {
   /** host for which this popup affects upon. */
-  host: eim.HostRead;
+  host: infra.HostRead;
   /** Additional Popup Options based on the host lifecycle contect */
   additionalPopupOptions?: PopupOption[];
   /**
@@ -102,7 +102,7 @@ const GenericHostPopup = ({
   // Add additional options
   popupOptions.push({
     displayText: "Deauthorize",
-    disable: hasPermission,
+    disable: hasPermission || host.currentState === "HOST_STATE_UNTRUSTED",
     onSelect: () => onDeauthorize && onDeauthorize(hostId),
   });
 

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TablePom } from "@orch-ui/components";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { assignedWorkloadHostOne, instanceTwo } from "@orch-ui/utils";
@@ -16,7 +16,7 @@ type ApiAliases = "getInstanceEmpty" | "getInstance" | "getInstanceError";
 const instanceUrl = "**/instances*";
 const instanceEndpoint: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+  infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
 > = {
   getInstance: {
     route: instanceUrl,

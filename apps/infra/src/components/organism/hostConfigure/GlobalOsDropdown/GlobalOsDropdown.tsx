@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiError, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item, MessageBanner } from "@spark-design/react";
@@ -31,7 +31,7 @@ export const GlobalOsDropdown = ({
     isError,
     isSuccess,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeOsQuery({
+  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
@@ -58,7 +58,7 @@ export const GlobalOsDropdown = ({
         label=""
         name="globalOs"
         isDisabled={isDisabled}
-        placeholder="Select operating system"
+        placeholder="Select OS Profile"
         size={DropdownSize.Medium}
         selectedKey={value}
         onSelectionChange={(key) => onSelectionChange?.(key.toString())}

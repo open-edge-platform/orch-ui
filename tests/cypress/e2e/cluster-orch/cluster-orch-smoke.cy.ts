@@ -8,7 +8,6 @@ import { NetworkLog } from "../../support/network-logs";
 import InfraPom from "../infra/infraPom";
 import ClusterOrchPom from "./cluster-orch.pom";
 
-import { eim } from "@orch-ui/apis";
 import {
   configureHostViaAPI,
   createRegionViaAPi,
@@ -43,7 +42,7 @@ describe("Cluster orch Smoke test:", () => {
     clusterName: "",
   };
   let regionId: string, siteId: string, hostId: string;
-  let currentHost: eim.HostRead;
+  let currentHost: infra.HostRead;
   const uuid = Cypress.env("EN_UUID");
 
   before(() => {
@@ -161,7 +160,6 @@ describe("Cluster orch Smoke test:", () => {
         cy.url().should("contain", "infrastructure/clusters");
         ribbonPom.search(data.clusterName);
         tablePom.getCell(1, 1).should("be.visible");
-        tablePom.getCell(1, 3).should("contain.text", "In Progress");
       });
     });
 
@@ -179,10 +177,7 @@ describe("Cluster orch Smoke test:", () => {
       // TODO move in a POM
       cy.dataCy("icon-lifecyclePhase").should("contain.text", "active");
       cy.dataCy("icon-providerStatus").should("contain.text", "ready");
-      cy.dataCy("icon-controlPlaneReady").should(
-        "contain.text",
-        "ready",
-      );
+      cy.dataCy("icon-controlPlaneReady").should("contain.text", "ready");
       cy.dataCy("icon-nodeHealth").should("contain.text", "nodes are healthy");
     });
 

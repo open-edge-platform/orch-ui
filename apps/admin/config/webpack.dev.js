@@ -28,14 +28,11 @@ const devConfig = {
     plugins: [new TsconfigPathsPlugin({ configFile: "tsconfig.dev.json" })],
   },
   output: {
-    publicPath: process.env.REACT_LP_REMOTE_EP
-      ? `http://${process.env.REACT_LP_REMOTE_EP}:8084/`
-      : "http://localhost:8084/",
+    publicPath: "http://localhost:8084/",
   },
   devServer: {
     port: 8084,
     historyApiFallback: true,
-    hot: false,
     open: false,
     watchFiles: ["src/**/*.tsx", "src/**/*.ts", "public/**/*"],
     headers: {
@@ -48,9 +45,12 @@ const devConfig = {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
-      const port = devServer.server.address().port;
-      openBrowser(`http://localhost:${port}`);
+      if (!process.env.ROOT === "true") {
+        const port = devServer.server.address().port;
+        openBrowser(`http://localhost:${port}`);
+      }
     },
+    hot: process.env.REACT_INFRA_HMR === "true" ? true : false,
   },
   optimization: {
     nodeEnv: mode,
@@ -58,6 +58,7 @@ const devConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
+        AppOrchUI: `AppOrchUI@http://localhost:8081/remoteEntry.js`,
         ClusterOrchUI: `ClusterOrchUI@http://localhost:8083/remoteEntry.js`,
         EimUI: `EimUI@http://localhost:8082/remoteEntry.js`,
       },

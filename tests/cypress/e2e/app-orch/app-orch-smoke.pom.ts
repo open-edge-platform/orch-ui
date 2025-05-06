@@ -53,8 +53,7 @@ class AppOrchPom extends CyPom<Selectors> {
       .should("be.visible")
       .should("have.text", "Add a Registry");
 
-    // NOTE: is being covered by another element:`<div class="spark-toast spark-toast-placement-top-right">...</div>`
-    this.applicationsPom.tabs.el.addRegistryButton.click({ force: true });
+    this.applicationsPom.tabs.el.addRegistryButton.click();
     this.applicationsPom.tabs.registryDrawerPom
       .getDrawerBase()
       .should("have.class", "spark-drawer-show"); // This is required to wait for drawer to completely perform open render

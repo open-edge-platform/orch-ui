@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiError, Empty, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item } from "@spark-design/react";
@@ -13,7 +13,7 @@ interface SitesDropdownProps {
   regionId: string;
   value?: string;
   pageSize?: number;
-  onSelectionChange?: (value: eim.SiteRead) => void;
+  onSelectionChange?: (value: infra.SiteRead) => void;
   disable?: boolean;
 }
 const SitesDropdown = ({
@@ -30,7 +30,7 @@ const SitesDropdown = ({
     isError,
     isSuccess,
     error,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
     {
       projectName,
       pageSize,

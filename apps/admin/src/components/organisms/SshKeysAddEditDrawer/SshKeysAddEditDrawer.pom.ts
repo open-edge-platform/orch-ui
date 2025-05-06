@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [
+  "drawerFormBody",
   "sshKeyUsername",
   "sshPublicKey",
   "sshInputErrorMessage",
@@ -31,7 +31,7 @@ class SshKeysAddEditDrawerPom extends CyPom<Selectors> {
     return this.root.find("[data-testid='drawer-header-close-btn']");
   }
 
-  fillSshForm(localAccounts: eim.LocalAccount) {
+  fillSshForm(localAccounts: infra.LocalAccount) {
     this.el.sshKeyUsername.clear().type(localAccounts.username);
     this.el.sshPublicKey.clear().type(localAccounts.sshKey);
   }

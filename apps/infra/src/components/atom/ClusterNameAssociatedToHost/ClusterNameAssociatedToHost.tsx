@@ -3,11 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
-import { SharedStorage, WorkloadMemberKind } from "@orch-ui/utils";
+import { infra } from "@orch-ui/apis";
+import {
+  API_INTERVAL,
+  SharedStorage,
+  WorkloadMemberKind,
+} from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 interface ClusterNameAssociatedToHostProps {
-  host: eim.HostRead;
+  host: infra.HostRead;
 }
 const dataCy = "clusterNameAssociatedToHost";
 const ClusterNameAssociatedToHost = ({
@@ -17,12 +21,12 @@ const ClusterNameAssociatedToHost = ({
   const projectName = SharedStorage.project?.name ?? "";
   const instanceId = host.instance?.resourceId || "";
   const { data } =
-    eim.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
       {
         projectName,
         instanceId,
       },
-      { skip: !instanceId },
+      { skip: !instanceId, pollingInterval: API_INTERVAL },
     );
 
   const workloadMember = data?.workloadMembers?.find(

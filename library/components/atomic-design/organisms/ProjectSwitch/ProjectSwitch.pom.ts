@@ -4,7 +4,7 @@
  */
 
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { EimUIMessageError } from "@orch-ui/utils";
+import { InfraUIMessageError } from "@orch-ui/utils";
 import { Project } from "../../organisms/ProjectSwitch/ProjectSwitch";
 
 const dataCySelectors = [
@@ -72,7 +72,7 @@ const successEndpoints: CyApiDetails<SuccessApiAliases, Project[]> = {
 
 const errorEndpoints: CyApiDetails<
   ErrrorApiAliases,
-  Partial<EimUIMessageError>
+  Partial<InfraUIMessageError>
 > = {
   getProjectsMissingOrg: {
     route: "*/projects?member-role=true",

@@ -52,7 +52,7 @@ export class RuntimeConfig {
   public static get documentationUrl(): string {
     return (
       window.__RUNTIME_CONFIG__?.DOCUMENTATION_URL ??
-      "https://edc.intel.com/content/www/us/en/secure/design/confidential/tools/edge-orchestration/"
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/main"
     );
   }
 
@@ -140,7 +140,7 @@ export class RuntimeConfig {
     const processEnv =
       window.Cypress?.testingType === "component" ? {} : { ...process.env };
     const env = { ...processEnv, ...window.process?.env };
-    if (env.REACT_LP_MOCK_API && env.REACT_LP_MOCK_API === "true") {
+    if (env.REACT_MOCK_API && env.REACT_MOCK_API === "true") {
       // if the mock server is enabled then we don't need authentication
       return false;
     }
@@ -151,7 +151,7 @@ export class RuntimeConfig {
 
   /**
    * Returns the API url for one of the supported backends.
-   * If `REACT_LP_MOCK_API` is set to true, then it returns the current URL
+   * If `REACT_MOCK_API` is set to true, then it returns the current URL
    */
   private static getApiUrl(server: ApiServer): string {
     const env = { ...process.env, ...window.process?.env };
@@ -161,7 +161,7 @@ export class RuntimeConfig {
     // by returning the default URL when running in the test setup (process.env.test is set via webpack config in tests/webpack.config.js) we can avoid the error
     // NOTE that this is a workaround, the correct solution would be to avoid call this method when its not needed (eg during E2E tests)
 
-    if (env.REACT_LP_MOCK_API === "true" || process.env.test) {
+    if (env.REACT_MOCK_API === "true" || process.env.test) {
       return window.location.origin;
     }
     const urls = window.__RUNTIME_CONFIG__?.API;

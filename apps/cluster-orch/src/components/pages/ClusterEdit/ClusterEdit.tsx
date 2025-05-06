@@ -3,14 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim, mbApi } from "@orch-ui/apis";
+import { cm, infra, mbApi } from "@orch-ui/apis";
 import {
   BreadcrumbPiece,
   MetadataPair,
   setActiveNavItem,
   setBreadcrumb as setClusterBreadcrumb,
 } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import {
+  ObjectKeyValue,
+  objectToMetadataPair,
+  SharedStorage,
+} from "@orch-ui/utils";
 import { Button, ButtonGroup, Heading, Toast } from "@spark-design/react";
 import {
   ButtonSize,
@@ -58,13 +62,13 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     {},
   );
   const currentCluster = useAppSelector(getCluster);
+  // Labels is of type `object` in API. This is not recognized as ObjectKeyValue `{[key: string]: string}`
+  const currentClusterLabel = (currentCluster.labels ?? {}) as ObjectKeyValue;
 
   const [clusterTemplateName, setClusterTemplateName] = useState<string>("");
   const [clusterTemplateVersion, setClusterTemplateVersion] =
     useState<string>("");
-
   const [inheritedMeta, setInheritedMeta] = useState<MetadataPair[]>([]); // Set Inherited Data
-  const [userDefinedMeta, setUserDefinedMeta] = useState<MetadataPair[]>([]); // Set Custom Input data
   const [firstHostId, setFirstHostId] = useState<string>();
   const [siteId, setSiteId] = useState<string>();
 
@@ -95,7 +99,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
   // Used to get site id for drawer
   const { data: firstClusterHost, isSuccess: isHostSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: firstHostId as string,
@@ -104,7 +108,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     );
   // Used to get region id for drawer
   const { data: siteData } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: "*", // Cluster or associated host have no region information
@@ -112,6 +116,29 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       },
       { skip: !siteId || !SharedStorage.project?.name },
     );
+
+  // Inherited metadata array for metadata display
+  useEffect(() => {
+    if (siteData) {
+      const regionMeta = siteData?.inheritedMetadata?.location ?? [];
+      const siteMeta = siteData?.metadata ?? [];
+      /** Combine Region and Site Metadata (a.k.a Inherited Metadata) */
+      const combinedMetadata = [
+        ...regionMeta.map(({ key, value }) => ({
+          key,
+          value,
+          type: "region",
+        })),
+        ...siteMeta.map(({ key, value }) => ({
+          key,
+          value,
+          type: "site",
+        })),
+      ];
+      setInheritedMeta(combinedMetadata);
+    }
+  }, [siteData]);
+
   const [
     editClusterByTemplateName,
     { isSuccess: isEditTemplateSuccess, isError: isEditTemplateError },
@@ -267,30 +294,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
     return newNodes;
   };
-  // labels to object
-  const labelsToObject = (pairs: MetadataPair[]) => {
-    const labelObject: any = {};
-    pairs.forEach((tags) => {
-      labelObject[tags.key] = tags.value;
-    });
-    return labelObject;
-  };
-
-  // object to labels
-  const objectToLabels = (data: any) => {
-    const labelPair: MetadataPair[] = [];
-    Object.keys(data).map(function (personNamedIndex) {
-      if (data) {
-        const label = {
-          key: personNamedIndex,
-          value: data[personNamedIndex],
-        };
-        labelPair.push(label);
-        return data[personNamedIndex];
-      }
-    });
-    return labelPair;
-  };
 
   /**
    * editHandler checks for all the required updates and creates a list of promises
@@ -313,7 +316,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         projectName: SharedStorage.project?.name ?? "",
         name: currentCluster.name ?? "",
         clusterLabels: {
-          labels: labelsToObject(objectToLabels(currentCluster.labels)),
+          labels: currentClusterLabel,
         },
       }).unwrap();
       promises.push(p);
@@ -321,7 +324,10 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       const metadataP = updateMetadata({
         projectName: SharedStorage.project?.name ?? "",
         metadataList: {
-          metadata: [...userDefinedMeta, ...inheritedMeta],
+          metadata: [
+            ...objectToMetadataPair(currentClusterLabel),
+            ...inheritedMeta,
+          ],
         },
       }).unwrap();
       promises.push(metadataP);
@@ -347,13 +353,9 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         clusterName={clusterName}
       />
 
-      {/** TODO: MetadataLabel needs to be refactored. This causing a performance issue with rerendering in circle. */}
       <MetadataLabels
-        regionMeta={siteData?.inheritedMetadata?.location ?? []}
-        siteMeta={siteData?.metadata ?? []}
-        clusterLabels={currentCluster.labels ?? {}}
-        getInheritedMeta={(meta) => setInheritedMeta(meta)}
-        getUserDefinedMeta={(meta) => setUserDefinedMeta(meta)}
+        inheritedMetadata={inheritedMeta}
+        clusterLabels={objectToMetadataPair(currentClusterLabel)}
       />
 
       {siteData && siteData.region && (

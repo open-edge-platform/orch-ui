@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
@@ -31,9 +31,9 @@ export type ProvisionedHostPopupProps = Omit<
    *
    * Note: If instance is assigned make sure instance shows workloadMember before passing to this field.
    **/
-  host: eim.HostRead;
+  host: infra.HostRead;
   onDeauthorizeHostWithoutWorkload?: (hostId: string) => void;
-  onScheduleMaintenance?: (targetEntity: eim.HostRead) => void;
+  onScheduleMaintenance?: (targetEntity: infra.HostRead) => void;
 };
 
 /** This will show all available host actions within popup menu (active/configured, i.e, assigned/unassigned host only) */
@@ -73,7 +73,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     }
   }, [deauthorizeHostWithinWorkloadIsOpen]);
   const [deauthorizeHost] =
-    eim.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
+    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
 
   /** Is host a `Provisioned Host with assigned workload`. Here, Workload and Cluster are synonymous */
   const isAssigned = host.instance && isHostAssigned(host.instance);
@@ -106,8 +106,8 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     provisionedHostPopup.push({
       displayText: "View Metrics",
       onSelect() {
-        const url = `${getObservabilityUrl()}/d/edgenode_host/edge-node?orgId=1&refresh=30s&var-guid=${
-          host.uuid
+        const url = `${getObservabilityUrl()}/d/edgenode_host/edge-node?orgId=1&refresh=30s&var-hostId=${
+          host.resourceId
         }&var-projectId=${project.uID}&var-projectName=${project.name}`;
         window.open(url, "_newtab");
       },

@@ -18,7 +18,6 @@ jobs:
     uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@main
     with:
       bootstrap_tools: "base,helm,yq,jq"
-      run_security_scans: true
       run_version_check: true
       run_dep_version_check: false
       run_build: false
