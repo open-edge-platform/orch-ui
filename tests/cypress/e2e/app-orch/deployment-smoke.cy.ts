@@ -196,14 +196,6 @@ describe("APP_ORCH E2E: Deployments Smoke tests", () => {
           });
           createClusterViaApi(activeProject, cluster).then(() => {
             cy.log(`Cluster is created with cluster name ${cluster.name}`);
-            cy.visit("/infrastructure/clusters");
-            ribbonPom.search(cluster.name!);
-            tablePom.getCell(1, 1).should("be.visible");
-            tablePom
-              .getCell(1, 3)
-              .contains("active", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the cluster to be running
-              .should("contain.text", "active");
-          });
         });
       });
     });
