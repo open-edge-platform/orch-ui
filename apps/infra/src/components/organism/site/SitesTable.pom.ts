@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -53,7 +52,7 @@ const siteResponse = {
 
 const sitesEndpoints: CyApiDetails<
   SiteListApiAliases,
-  | eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
   | ErrorResponse
 > = {
   getAllSites: {
@@ -114,7 +113,7 @@ const sitesEndpoints: CyApiDetails<
 
 const singleSiteEndpoints: CyApiDetails<
   SiteApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
 > = {
   getSingleSite: {
     route: routeSingle,
@@ -136,7 +135,7 @@ const singleSiteEndpoints: CyApiDetails<
 
 const singleRegionEndpoints: CyApiDetails<
   RegionApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse
 > = {
   getSingleRegionMocked: {
     route: "**/regions/*",
@@ -156,7 +155,7 @@ class SitesTablePom extends CyPom<Selectors, ApiAliases> {
     });
   }
 
-  public select(site: eim.SiteRead) {
+  public select(site: infra.SiteRead) {
     const row = this.table.getRowBySearchText(site.name!);
     row.find(".spark-table-cell:nth-child(3) button").click();
   }

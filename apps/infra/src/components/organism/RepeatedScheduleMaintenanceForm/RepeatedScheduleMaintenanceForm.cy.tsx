@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { cyGet } from "@orch-ui/tests";
 import { assignedWorkloadHostOne as hostOne } from "@orch-ui/utils";
 import { useState } from "react";
@@ -20,13 +20,13 @@ const TestingComponent = ({
     utc: "+00:00",
   },
 }: {
-  baseMaintenance: enhancedEimSlice.ScheduleMaintenanceRead;
+  baseMaintenance: enhancedInfraSlice.ScheduleMaintenanceRead;
   initialTimezone?: Timezone;
 }) => {
   const {
     control: formControl,
     formState: { errors: formErrors },
-  } = useForm<enhancedEimSlice.ScheduleMaintenance>({
+  } = useForm<enhancedInfraSlice.ScheduleMaintenance>({
     mode: "all",
     defaultValues: baseMaintenance,
     values: baseMaintenance,
@@ -35,7 +35,7 @@ const TestingComponent = ({
 
   const [timezone] = useState(initialTimezone);
   const [maintenance, setMaintenance] =
-    useState<enhancedEimSlice.ScheduleMaintenanceRead>(baseMaintenance);
+    useState<enhancedInfraSlice.ScheduleMaintenanceRead>(baseMaintenance);
 
   return (
     <>
@@ -65,7 +65,7 @@ const TestingComponent = ({
 
 const pom = new RepeatedScheduleMaintenanceFormPom();
 describe("<RepeatedScheduleMaintenanceForm/>", () => {
-  const baseMaintenanceFormData: enhancedEimSlice.ScheduleMaintenance = {
+  const baseMaintenanceFormData: enhancedInfraSlice.ScheduleMaintenance = {
     type: "repeat-weekly",
     name: "",
     scheduleStatus: "SCHEDULE_STATUS_UNSPECIFIED",
@@ -123,7 +123,7 @@ describe("<RepeatedScheduleMaintenanceForm/>", () => {
   });
 
   describe("`Repeat - day of week` maintenance form", () => {
-    const expectedMaintenance: enhancedEimSlice.ScheduleMaintenance = {
+    const expectedMaintenance: enhancedInfraSlice.ScheduleMaintenance = {
       ...baseMaintenanceFormData,
       type: "repeat-weekly",
       repeated: {
@@ -212,7 +212,7 @@ describe("<RepeatedScheduleMaintenanceForm/>", () => {
   });
 
   describe("should fill `Repeat - day of month` maintenance form", () => {
-    const expectedMaintenance: enhancedEimSlice.ScheduleMaintenance = {
+    const expectedMaintenance: enhancedInfraSlice.ScheduleMaintenance = {
       ...baseMaintenanceFormData,
       type: "repeat-monthly",
       repeated: {

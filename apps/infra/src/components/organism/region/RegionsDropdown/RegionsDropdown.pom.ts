@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { SiDropdown } from "@orch-ui/poms";
 import {
   CyApiDetail,
@@ -27,7 +26,7 @@ const routeAll = `${route}?*`;
 const singleRoute = `${route}/*`;
 
 const regionsStore = new RegionStore();
-const getRegions: CyApiDetail<eim.GetV1ProjectsByProjectNameRegionsApiResponse> =
+const getRegions: CyApiDetail<infra.GetV1ProjectsByProjectNameRegionsApiResponse> =
   {
     route: `**/v1/projects/${defaultActiveProject.name}/regions?pageSize=*`,
     response: {

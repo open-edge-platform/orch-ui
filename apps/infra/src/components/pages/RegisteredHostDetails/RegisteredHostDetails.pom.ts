@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { registeredHostOne } from "@orch-ui/utils";
 
@@ -19,7 +19,7 @@ type ApiAliases = "getRegisteredHost200";
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
 > = {
   getRegisteredHost200: {
     route: "**/compute/hosts/registered-host-1",

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { InternalError, parseError } from "@orch-ui/utils";
 import { MessageBanner, ProgressLoader } from "@spark-design/react";
 import { useEffect, useState } from "react";
@@ -50,7 +50,7 @@ const SiteByCluster = ({ clusterName }: SiteByClusterProps) => {
           return getSite(dispatch, hosts[0].site.resourceId ?? "");
         }
       })
-      .then((res: eim.SiteRead) => {
+      .then((res: infra.SiteRead) => {
         setIsLoading(false);
         setRegionId(res?.region?.resourceId);
         setSiteName(res?.name);

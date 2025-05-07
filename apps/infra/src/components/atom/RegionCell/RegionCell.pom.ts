@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   CyApiDetail,
   CyApiDetails,
@@ -23,7 +22,7 @@ const store = new RegionStore();
 
 const route = `**/v1/projects/${defaultActiveProject.name}/regions/${regionUsWest.resourceId}`;
 
-const getRegionSuccess: CyApiDetail<eim.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse> =
+const getRegionSuccess: CyApiDetail<infra.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse> =
   {
     route: route,
     statusCode: 200,

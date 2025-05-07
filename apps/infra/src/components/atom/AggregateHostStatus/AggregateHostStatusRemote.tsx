@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { AggregatedStatuses } from "@orch-ui/components";
 import { HostGenericStatuses, hostToStatuses } from "@orch-ui/utils";
 import { Provider } from "react-redux";
 import { store } from "../../../store/store";
 
 interface AggregateHostStatusProps {
-  host: eim.HostRead;
-  instance: eim.InstanceRead;
+  host: infra.HostRead;
+  instance: infra.InstanceRead;
 }
 
 const AggregateHostStatusRemote = (props: AggregateHostStatusProps) => (

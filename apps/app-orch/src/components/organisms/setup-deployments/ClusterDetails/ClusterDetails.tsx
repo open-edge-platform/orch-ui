@@ -51,15 +51,15 @@ const ClusterDetails = ({
   //     [] as string[],
   //   ) ?? [];
 
-  // const columns: SparkTableColumn<eim.HostRead>[] = [
+  // const columns: SparkTableColumn<infra.HostRead>[] = [
   //   {
   //     Header: "Host Name",
   //     accessor: "name",
   //   },
   //   {
   //     Header: "Status",
-  //     accessor: (item: eim.HostRead) => hostProviderStatusToString(item),
-  //     Cell: (table: { row: { original: eim.HostRead } }) => (
+  //     accessor: (item: infra.HostRead) => hostProviderStatusToString(item),
+  //     Cell: (table: { row: { original: infra.HostRead } }) => (
   //       <Suspense fallback={<SquareSpinner />}>
   //         {AggregateHostStatus !== null ? (
   //           <AggregateHostStatus
@@ -109,7 +109,7 @@ const ClusterDetails = ({
             />
           </div>
           <div className="cluster-details-host" data-cy="hosts">
-            {/*TODO: Host Table need to be added with fix 
+            {/*TODO: Host Table need to be added with fix
             {HostsTableRemote && (
               <Suspense fallback={<SquareSpinner />}>
                 <HostsTableRemote columns={columns} filterByUuids={guids()} />

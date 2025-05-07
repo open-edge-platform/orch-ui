@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [
@@ -22,7 +22,7 @@ type ApiAliases =
   | "getRegionTelemetryLogs500";
 
 const regionUrl = "**/logprofiles?regionId=region-1.0";
-export const regionTelemetryLogResponse: eim.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse =
+export const regionTelemetryLogResponse: infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse =
   {
     TelemetryLogsProfiles: [
       {

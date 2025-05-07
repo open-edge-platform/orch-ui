@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
@@ -22,7 +21,7 @@ type ApiAliases = SafeApiAliases | SshMutationApiAliases;
 
 const sshListUrl = "**/localAccounts*";
 
-const mockSsh: eim.LocalAccountRead = {
+const mockSsh: infra.LocalAccountRead = {
   resourceId: "ssh-abcd81",
   username: "test-key-name",
   sshKey: fakeSshKey,
@@ -37,7 +36,7 @@ const generateSshMocks = (size = 10, offset = 0, mock = mockSsh) =>
 
 const safeEndpoints: CyApiDetails<
   SafeApiAliases,
-  eim.GetV1ProjectsByProjectNameLocalAccountsApiResponse
+  infra.GetV1ProjectsByProjectNameLocalAccountsApiResponse
 > = {
   getSshList: {
     route: sshListUrl,
@@ -63,8 +62,8 @@ const safeEndpoints: CyApiDetails<
 
 const mutationEndpoints: CyApiDetails<
   SshMutationApiAliases,
-  | eim.PostV1ProjectsByProjectNameLocalAccountsApiResponse
-  | eim.DeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiResponse
+  | infra.PostV1ProjectsByProjectNameLocalAccountsApiResponse
+  | infra.DeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiResponse
 > = {
   postSsh: {
     method: "POST",

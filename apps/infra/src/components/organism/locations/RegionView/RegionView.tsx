@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Heading, Item } from "@spark-design/react";
@@ -39,7 +39,7 @@ export const RegionView = () => {
   //to retrieve the remaining information
   const { resourceId = undefined } = region ?? {};
   const { data: _region } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: resourceId ?? "",

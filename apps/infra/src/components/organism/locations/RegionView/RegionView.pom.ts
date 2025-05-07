@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { TelemetryProfileLogsPom } from "../../../../components/molecules/locations/TelemetryProfileLogs/TelemetryProfileLogs.pom";
 import { TelemetryProfileMetricsPom } from "../../../../components/molecules/locations/TelemetryProfileMetrics/TelemetryProfileMetrics.pom";
@@ -15,7 +14,7 @@ type ApiAliases = "getRegionMocked";
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameRegionsApiResponse
+  infra.GetV1ProjectsByProjectNameRegionsApiResponse
 > = {
   getRegionMocked: {
     route: "**/regions/region-1.0",

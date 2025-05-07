@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   Flex,
   MetadataDisplay,
@@ -32,7 +32,7 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
   const cy = { "data-cy": dataCy };
   // this method is called when the list of Host is loaded
   // in the Host table. We use this to populate data in the Redux store
-  const onHostLoad = (hosts: eim.HostRead[]) => {
+  const onHostLoad = (hosts: infra.HostRead[]) => {
     setIsTrustedComputeCompatible(
       hosts.some(
         (host) =>

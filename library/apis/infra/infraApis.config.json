@@ -1,9 +1,9 @@
 {
   "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-infra-core-edge-infrastructure-manager-openapi-all.yaml",
   "apiFile": "./apiSlice.ts",
-  "apiImport": "eimApi",
-  "outputFile": "./eim.ts",
-  "exportName": "eim",
+  "apiImport": "infraApi",
+  "outputFile": "./infra.ts",
+  "exportName": "infra",
   "hooks": true,
   "tag": true
 }

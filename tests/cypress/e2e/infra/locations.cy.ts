@@ -8,7 +8,6 @@ import { LocationsPom } from "../../../../apps/infra/src/components/pages/Locati
 import RegionFormPom from "../../../../apps/infra/src/components/pages/region/RegionForm.pom";
 import SiteFormPom from "../../../../apps/infra/src/components/pages/site/SiteForm.pom";
 import { NetworkLog } from "../../support/network-logs";
-import { EIM_USER } from "../../support/utilities";
 import { deleteRegionViaApi, deleteSiteViaApi } from "../helpers";
 
 interface TestData {

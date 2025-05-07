@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { mockHost } from "../../pages/HostDetails/HostDetails.pom";
 
@@ -20,7 +19,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       hosts: [mockHost],
       totalElements: 1,
-    } as eim.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
   },
   getHostById: {
     route: "**/compute/hosts/*",
