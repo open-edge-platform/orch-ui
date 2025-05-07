@@ -4,7 +4,11 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { regionSiteRoute, subRegionRoute } from "@orch-ui/utils";
+import {
+  InfraNavigateFunction,
+  regionSiteRoute,
+  subRegionRoute,
+} from "@orch-ui/utils";
 import {
   setLoadingBranch,
   setRegion,
@@ -21,7 +25,7 @@ export const handleViewRegionAction = (
 };
 
 export const handleAddSiteAction = (
-  navigate: any,
+  navigate: InfraNavigateFunction,
   region: infra.RegionRead,
 ) => {
   if (!region.resourceId) return;
@@ -36,7 +40,7 @@ export const handleAddSiteAction = (
 };
 
 export const handleSubRegionAction = (
-  navigate: any,
+  navigate: InfraNavigateFunction,
   region: infra.RegionRead,
 ) => {
   if (!region || !region.resourceId) return;

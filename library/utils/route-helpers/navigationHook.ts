@@ -20,12 +20,19 @@ import { getInfraPath } from "./routeHelpers";
  * // Navigate to a route with parameters
  * navigateToInfra('region', { id: '123' });
  */
+
+export type InfraNavigateFunction = <InfraPath extends InfraRoute>(
+  route: InfraPath,
+  params?: { [key in PathParam<InfraPath>]: string | null },
+  query?: string,
+) => void;
+
 export const useInfraNavigate = () => {
   const navigate = useNavigate();
-  return <Path extends InfraRoute>(
-    route: Path,
+  return <InfraPath extends InfraRoute>(
+    route: InfraPath,
     params?: {
-      [key in PathParam<Path>]: string | null;
+      [key in PathParam<InfraPath>]: string | null;
     },
     query?: string,
   ) => navigate(getInfraPath(route, params, query));

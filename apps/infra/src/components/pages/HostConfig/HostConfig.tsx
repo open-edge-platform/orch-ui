@@ -387,7 +387,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           break;
         case HostProvisiongProcedures.BackToHosts:
           dispatch(resetMultiHostForm());
-          navigate(hostsRoute); //could do route param
+          navigate(hostsRoute);
           break;
       }
     })();
