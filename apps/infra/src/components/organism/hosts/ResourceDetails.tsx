@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { useEffect, useState } from "react";
 import Cpu, { HostResourcesCpuRead } from "./resourcedetails/Cpu";
 import Gpu from "./resourcedetails/Gpu";
@@ -14,11 +14,11 @@ import Usb from "./resourcedetails/Usb";
 
 export type ResourceType =
   | HostResourcesCpuRead[]
-  | eim.HostResourcesStorage[]
-  | eim.HostResourcesInterface[]
-  | eim.HostRead["hostStatus"]
-  | eim.HostResourcesGpuRead[]
-  | eim.HostResourcesUsb
+  | infra.HostResourcesStorage[]
+  | infra.HostResourcesInterface[]
+  | infra.HostRead["hostStatus"]
+  | infra.HostResourcesGpuRead[]
+  | infra.HostResourcesUsb
   | string;
 
 export type ResourceTypeTitle =
@@ -48,16 +48,18 @@ const ResourceDetails = <T extends ResourceType>({
         setJsx(<Memory data={data as string} />);
         break;
       case "Storage":
-        setJsx(<Storage data={data as eim.HostResourcesStorageRead[]} />);
+        setJsx(<Storage data={data as infra.HostResourcesStorageRead[]} />);
         break;
       case "GPUs":
-        setJsx(<Gpu data={data as eim.HostResourcesGpuRead[]} />);
+        setJsx(<Gpu data={data as infra.HostResourcesGpuRead[]} />);
         break;
       case "Interfaces":
-        setJsx(<Interfaces data={data as eim.HostResourcesInterfaceRead[]} />);
+        setJsx(
+          <Interfaces data={data as infra.HostResourcesInterfaceRead[]} />,
+        );
         break;
       case "USB":
-        setJsx(<Usb data={data as eim.HostResourcesUsbRead} />);
+        setJsx(<Usb data={data as infra.HostResourcesUsbRead} />);
     }
   }, [title]);
 

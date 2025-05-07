@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { CyApiDetails, cyGet, CyPom } from "@orch-ui/tests";
 
 const dataCySelectors = [
@@ -22,7 +21,7 @@ type ApiAliases =
 const url = "**/locations**";
 const endpoints: CyApiDetails<
   ApiAliases,
-  eim.GetV1ProjectsByProjectNameLocationsApiResponse
+  infra.GetV1ProjectsByProjectNameLocationsApiResponse
 > = {
   getLocations200: {
     route: url,

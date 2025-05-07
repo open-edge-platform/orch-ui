@@ -31,7 +31,7 @@ declare global {
 
       /**
        * Custom command to make an authenticated request
-       * @example cy.authenticatedRequest<eim.RegionsListRead>({
+       * @example cy.authenticatedRequest<infra.RegionsListRead>({
        *         url: "/v1/projects/sample-project/regions",
        *       }).then((response) => { ... });
        */

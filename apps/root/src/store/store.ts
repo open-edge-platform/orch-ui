@@ -6,7 +6,7 @@
 import {
   adm,
   cm,
-  enhancedEimSlice,
+  enhancedInfraSlice,
   mbApi,
   omSlice,
   tmSlice,
@@ -38,8 +38,8 @@ const admUpdated = deploymentManager.injectEndpoints({
   overrideExisting: true,
 });
 const rootReducer = combineReducers({
-  [enhancedEimSlice.miEnhancedApi.reducerPath]:
-    enhancedEimSlice.miEnhancedApi.reducer,
+  [enhancedInfraSlice.miEnhancedApi.reducerPath]:
+    enhancedInfraSlice.miEnhancedApi.reducer,
   [cm.clusterManagerApis.reducerPath]: cm.clusterManagerApis.reducer,
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
   [omSlice.reducerPath]: omSlice.reducer,
@@ -56,7 +56,7 @@ export const setupStore = (preloadedState?: RootState) => {
         serializableCheck: false,
         immutableCheck: false,
       })
-        .concat(enhancedEimSlice.miEnhancedApi.middleware)
+        .concat(enhancedInfraSlice.miEnhancedApi.middleware)
         .concat(cm.clusterManagerApis.middleware)
         .concat(admUpdated.middleware)
         .concat(mbApi.metadataBroker.middleware)
@@ -73,7 +73,7 @@ export const store = configureStore({
       serializableCheck: true,
       immutableCheck: true,
     })
-      .concat(enhancedEimSlice.miEnhancedApi.middleware)
+      .concat(enhancedInfraSlice.miEnhancedApi.middleware)
       .concat(cm.clusterManagerApis.middleware)
       .concat(admUpdated.middleware)
       .concat(mbApi.metadataBroker.middleware)

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   columnApiNameToDisplayName,
@@ -33,12 +33,12 @@ export type SiteSource = "site" | "region";
 
 interface SiteTableProps {
   regionId: string;
-  actions?: TableColumn<eim.SiteRead>;
+  actions?: TableColumn<infra.SiteRead>;
   hiddenColumns?: string[];
   hasPermission?: boolean;
-  radioSelect?: TableColumn<eim.SiteRead>;
+  radioSelect?: TableColumn<infra.SiteRead>;
   isAllocated?: boolean;
-  tableTextSelect?: (item: eim.SiteRead) => void;
+  tableTextSelect?: (item: infra.SiteRead) => void;
   radioNameSelected?: string;
   hideRibbon?: boolean;
   sort?: number[];
@@ -65,7 +65,7 @@ const SiteTable = ({
   const [searchParams, setSearchParams] = useSearchParams();
 
   // construct query args
-  const queryArgs: eim.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg =
+  const queryArgs: infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg =
     {
       projectName: SharedStorage.project?.name ?? "",
       regionId,
@@ -76,8 +76,8 @@ const SiteTable = ({
         ? parseInt(searchParams.get("offset")!)
         : 0,
       filter: getFilter<
-        Omit<eim.SiteRead, "region"> & {
-          region: Omit<eim.RegionRead, "parentRegion">;
+        Omit<infra.SiteRead, "region"> & {
+          region: Omit<infra.RegionRead, "parentRegion">;
         }
       >(
         searchParams.get("searchTerm") ?? "",
@@ -96,13 +96,16 @@ const SiteTable = ({
     isSuccess,
     isLoading,
     error,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(queryArgs, {
-    pollingInterval: API_INTERVAL,
-  });
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    queryArgs,
+    {
+      pollingInterval: API_INTERVAL,
+    },
+  );
 
   const navigate = useNavigate();
 
-  const columns: TableColumn<eim.SiteRead>[] = [
+  const columns: TableColumn<infra.SiteRead>[] = [
     {
       Header: "Name",
       accessor: (item) => {
@@ -155,7 +158,7 @@ const SiteTable = ({
           return "item";
         }
       },
-      Cell: (table: { row: { original: eim.SiteRead } }) => {
+      Cell: (table: { row: { original: infra.SiteRead } }) => {
         const metadataPairs = table.row.original.metadata ?? [];
         const tags =
           metadataPairs.length > 2 ? (

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const hostStatusSliceName = "hostStatusList";
@@ -14,10 +14,10 @@ export interface _HostStatusRootState {
 
 export interface HostStatusState {
   hostId: string;
-  status: eim.HostRead["hostStatus"] | eim.ScheduleStatus;
+  status: infra.HostRead["hostStatus"] | infra.ScheduleStatus;
 }
 export interface HostStatusList {
-  [hostId: string]: eim.HostRead["hostStatus"] | eim.ScheduleStatus;
+  [hostId: string]: infra.HostRead["hostStatus"] | infra.ScheduleStatus;
 }
 const initialState: HostStatusList = {};
 

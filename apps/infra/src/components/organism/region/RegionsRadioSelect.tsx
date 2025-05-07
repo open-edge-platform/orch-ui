@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { useState } from "react";
 
 const RegionRadioSelect = ({
@@ -11,10 +11,10 @@ const RegionRadioSelect = ({
   row,
   onRadioSelect,
 }: {
-  region?: eim.RegionRead;
-  row: eim.RegionRead;
+  region?: infra.RegionRead;
+  row: infra.RegionRead;
   selectedName?: string;
-  onRadioSelect?: (item: eim.RegionRead) => void;
+  onRadioSelect?: (item: infra.RegionRead) => void;
 }) => {
   const [selected, setSelected] = useState(selectedName);
 

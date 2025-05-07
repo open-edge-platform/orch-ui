@@ -9,7 +9,7 @@
 
 This implements the web user interface for the Orchestrator,
 allowing the user to do most of the features of the product in an
-intuitive, visual, manor without having learn all the complexities
+intuitive, visual, manner without having learn all the complexities
 of the APIs.  That being said, everything the Web UI does and shows
 comes from the APIs.  This UI is intended for the day to day edge
 operators, who want to be able to:

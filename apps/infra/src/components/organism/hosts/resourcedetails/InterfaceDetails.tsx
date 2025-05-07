@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Heading } from "@spark-design/react";
 import IpAddressStatus from "./IpAddressStatus";
 import LinkStatus from "./LinkStatus";
 
 interface InterfaceDetailsProps {
-  intf: eim.HostResourcesInterfaceRead;
+  intf: infra.HostResourcesInterfaceRead;
 }
 
 function InterfaceDetails({ intf }: InterfaceDetailsProps) {

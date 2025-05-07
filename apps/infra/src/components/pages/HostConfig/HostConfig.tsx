@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ConfirmationDialog,
   Flex,
@@ -116,16 +116,16 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const containsHosts = useAppSelector(selectContainsHosts);
   const firstHost =
     Object.keys(hosts).length > 0 ? useAppSelector(selectFirstHost) : undefined;
-  const preselectedSite = firstHost?.site as eim.SiteRead;
+  const preselectedSite = firstHost?.site as infra.SiteRead;
 
   // host register - used when coming in from 'autoProvision' flow, host will not exist
   const [registerHost] =
-    eim.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
   // host update
   const [patchHost] =
-    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
+    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
   const [postInstance] =
-    eim.usePostV1ProjectsByProjectNameComputeInstancesMutation();
+    infra.usePostV1ProjectsByProjectNameComputeInstancesMutation();
 
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
     useState<boolean>(false);
@@ -244,7 +244,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   };
 
   const { data: localAccountsList } =
-    eim.useGetV1ProjectsByProjectNameLocalAccountsQuery({
+    infra.useGetV1ProjectsByProjectNameLocalAccountsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
 
@@ -271,7 +271,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         });
 
       if (!host.originalOs && !createdInstances.has(host.resourceId!)) {
-        const postInstancePayload: eim.PostV1ProjectsByProjectNameComputeInstancesApiArg =
+        const postInstancePayload: infra.PostV1ProjectsByProjectNameComputeInstancesApiArg =
           {
             projectName: SharedStorage.project?.name ?? "",
             body: {
@@ -282,7 +282,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
               name: `${host.name}-instance`,
             },
           };
-        /* 
+        /*
           instance is associated with localAccount selected by user
           in "SSH key" step.
         */

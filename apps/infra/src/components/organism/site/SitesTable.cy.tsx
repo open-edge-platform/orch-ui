@@ -6,7 +6,7 @@
 import SitesTable from "./SitesTable";
 import SitesTablePom from "./SitesTable.pom";
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiErrorPom, EmptyPom, TableColumn } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
 import { regionUsWest, siteOregonPortland } from "@orch-ui/utils";
@@ -38,7 +38,7 @@ describe("<SitesTable />", () => {
     });
 
     it("should show the defined actions", () => {
-      const actions: TableColumn<eim.SiteRead> = {
+      const actions: TableColumn<infra.SiteRead> = {
         Header: "Action",
         Cell: () => <div>Action Column</div>,
       };

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { defaultActiveProject } from "@orch-ui/tests";
 import { SharedStorage } from "@orch-ui/utils";
 import { setupStore } from "../store/store";
@@ -72,7 +72,7 @@ describe("DeploymentsContainer helpers functions", () => {
   });
 
   describe("getHostsStatus", () => {
-    const nodes: eim.HostRead[] = [
+    const nodes: infra.HostRead[] = [
       {
         resourceId: "host-1",
         name: "host-1",
@@ -100,7 +100,7 @@ describe("DeploymentsContainer helpers functions", () => {
     ];
 
     beforeEach(() => {
-      const mockRes: eim.GetV1ProjectsByProjectNameComputeHostsApiResponse = {
+      const mockRes: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse = {
         hosts: [],
         hasNext: false,
         totalElements: 0,

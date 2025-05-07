@@ -2,8 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { Cy, CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -102,7 +101,7 @@ class RegionsTablePom extends CyPom<Selectors, ApiAliases> {
     return this.root.find("tr:nth-child(2)");
   }
 
-  public select(region: eim.RegionRead) {
+  public select(region: infra.RegionRead) {
     const row = this.table.getRowBySearchText(region.name!);
     row.find(".spark-table-cell:nth-child(2) button").click();
   }

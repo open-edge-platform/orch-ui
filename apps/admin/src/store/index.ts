@@ -4,7 +4,7 @@
  */
 
 import {
-  enhancedEimSlice,
+  enhancedInfraSlice,
   omSlice as observabilityMonitor,
   tmSlice as tdmApi,
 } from "@orch-ui/apis";
@@ -19,8 +19,8 @@ import notificationStatusReducer from "./notifications";
 
 const rootReducer = combineReducers({
   notificationStatusList: notificationStatusReducer,
-  [enhancedEimSlice.miEnhancedApi.reducerPath]:
-    enhancedEimSlice.miEnhancedApi.reducer,
+  [enhancedInfraSlice.miEnhancedApi.reducerPath]:
+    enhancedInfraSlice.miEnhancedApi.reducer,
   [observabilityMonitor.reducerPath]: observabilityMonitor.reducer,
   [tdmApi.reducerPath]: tdmApi.reducer,
 });
@@ -33,7 +33,7 @@ export const setupStore = (preloadedState?: RootState) => {
         serializableCheck: false,
         immutableCheck: false,
       })
-        .concat(enhancedEimSlice.miEnhancedApi.middleware)
+        .concat(enhancedInfraSlice.miEnhancedApi.middleware)
         .concat(observabilityMonitor.middleware)
         .concat(tdmApi.middleware),
     preloadedState,
@@ -47,7 +47,7 @@ export const store = configureStore({
       serializableCheck: true,
       immutableCheck: true,
     })
-      .concat(enhancedEimSlice.miEnhancedApi.middleware)
+      .concat(enhancedInfraSlice.miEnhancedApi.middleware)
       .concat(observabilityMonitor.middleware)
       .concat(tdmApi.middleware),
 });

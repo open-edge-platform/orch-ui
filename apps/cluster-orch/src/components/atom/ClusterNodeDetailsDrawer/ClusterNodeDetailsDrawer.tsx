@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex, MetadataDisplay, TypedMetadata } from "@orch-ui/components";
 import { Button, Drawer } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
@@ -12,7 +12,7 @@ const dataCy = "clusterNodeDetailsDrawer";
 
 interface ClusterNodeDetailsDrawerProps {
   isOpen: boolean;
-  host: eim.HostRead;
+  host: infra.HostRead;
   inheritedMeta?: TypedMetadata[];
   onHide: () => void;
 }

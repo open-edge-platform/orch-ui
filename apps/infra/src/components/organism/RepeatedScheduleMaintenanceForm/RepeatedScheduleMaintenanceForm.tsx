@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { TextField } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
@@ -30,12 +30,12 @@ import "./RepeatedScheduleMaintenance.scss";
 const dataCy = "repeatedScheduleMaintenanceForm";
 
 export interface RepeatedScheduleMaintenanceFormProps {
-  maintenance: enhancedEimSlice.ScheduleMaintenanceRead;
+  maintenance: enhancedInfraSlice.ScheduleMaintenanceRead;
   /** Reference of current timezone selection */
   timezone: Timezone;
-  formControl: Control<enhancedEimSlice.ScheduleMaintenance, any>;
-  formErrors: FieldErrors<enhancedEimSlice.ScheduleMaintenance>;
-  onUpdate: (maintenance: enhancedEimSlice.ScheduleMaintenanceRead) => void;
+  formControl: Control<enhancedInfraSlice.ScheduleMaintenance, any>;
+  formErrors: FieldErrors<enhancedInfraSlice.ScheduleMaintenance>;
+  onUpdate: (maintenance: enhancedInfraSlice.ScheduleMaintenanceRead) => void;
 }
 
 /** Get Reference to previous timezone upon change to new timezone. */

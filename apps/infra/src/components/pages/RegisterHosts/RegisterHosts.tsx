@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
   Button,
@@ -41,7 +41,7 @@ const RegisterHosts = () => {
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] =
-    eim.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
 
   return (
     <div {...cy} className={className}>

@@ -19,10 +19,10 @@ export * as arm from "./app-resource-mgr/resourceManagerApis";
 export * as appUtilities from "./app-utilities/appUtilitiesServiceApis";
 export { coApi as cmSlice } from "./cluster-manager/apiSlice";
 export * as cm from "./cluster-manager/clusterManagerApis";
-export { eimApi as eimSlice } from "./eim/apiSlice";
-export * as eim from "./eim/eim";
+export { infraApi as infraSlice } from "./infra/apiSlice";
 // Enhanced Api Slice
-export * as enhancedEimSlice from "./eim/enhancedApiSlice";
+export * as enhancedInfraSlice from "./infra/enhancedApiSlice";
+export * as infra from "./infra/infra";
 export { metadataBrokerApi as mbSlice } from "./metadata-broker/apiSlice";
 export * as mbApi from "./metadata-broker/generated";
 export { observabilityMonitorApi as omSlice } from "./observabilityMonitor/apiSlice";
