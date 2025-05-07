@@ -55,7 +55,7 @@ const DeploymentProfileForm = ({
       {hadMandatoryParams && (
         <MessageBanner
           messageTitle="Parameter value override required"
-          messageBody="There are applcations with mandatory parameters. Please fill all of them before continuing."
+          messageBody="There are applications with mandatory parameters. Please fill all of them before continuing."
           variant="info"
         />
       )}

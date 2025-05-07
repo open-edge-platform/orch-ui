@@ -35,13 +35,15 @@ import {
   homeBreadcrumb,
 } from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setupDeploymentHasEmptyMandatoryParams } from "../../../store/reducers/setupDeployment";
+import {
+  profileParameterOverridesSelector,
+  setupDeploymentHasEmptyMandatoryParams,
+} from "../../../store/reducers/setupDeployment";
 import { setProps } from "../../../store/reducers/toast";
 import { generateMetadataPair } from "../../../utils/global";
 import ChangePackageProfile from "../../organisms/edit-deployments/ChangePackageProfile/ChangePackageProfile";
 import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
 import Review from "../../organisms/edit-deployments/Review/Review";
-import { OverrideValuesList } from "../../organisms/setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import SelectCluster, {
   SelectClusterMode,
 } from "../../organisms/setup-deployments/SelectCluster/SelectCluster";
@@ -149,8 +151,9 @@ const EditDeployment = () => {
   >();
 
   // Step 2: Override Profile Values
-  const [profileParameterOverrides, setProfileParameterOverrides] =
-    useState<OverrideValuesList>({});
+  const profileParameterOverrides = useAppSelector(
+    profileParameterOverridesSelector,
+  );
   //console.log("top lvl overrides val ", profileParameterOverrides);
 
   const emptyMandatoryParams = useAppSelector(

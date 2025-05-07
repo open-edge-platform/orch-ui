@@ -84,7 +84,7 @@ const OverrideProfileTable = ({
 
   // When the Deployment Package changes, load the application list
   useEffect(() => {
-    if (selectedPackage && selectedProfile) {
+    if (selectedPackage) {
       setIsloading(true);
       loadPackageApplications(selectedPackage)
         .then((apps: catalog.Application[]) => {
@@ -100,7 +100,7 @@ const OverrideProfileTable = ({
         .catch(setParsedErr)
         .finally(() => setIsloading(false));
     }
-  }, [selectedPackage, selectedProfile /* , overrideValues */]);
+  }, [selectedPackage, selectedProfile, overrideValues]);
 
   const columns: TableColumn<catalog.Application>[] = [
     {
