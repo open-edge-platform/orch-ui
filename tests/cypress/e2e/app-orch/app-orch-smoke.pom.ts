@@ -199,9 +199,9 @@ class AppOrchPom extends CyPom<Selectors> {
   ) {
     cyGet(`${deploymentPackageName}Selector`)
       .should("be.visible", { timeout: 10000 })
-      .click();
+      .click({ force: true });
     // Select Package
-    cyGet(`${deploymentPackageName}Selector`).click();
+    // cyGet(`${deploymentPackageName}Selector`).click(); //TODO: duplicate of above line
     cyGet("nextBtn").click();
 
     // Select Profiles
