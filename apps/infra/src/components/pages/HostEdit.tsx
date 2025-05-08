@@ -9,16 +9,15 @@ import {
   Flex,
   MetadataForm,
   MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb,
   SquareSpinner,
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
-  isHostAssigned,
+  hostsRoute,
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -37,13 +36,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  homeBreadcrumb,
-  hostsActiveNavItem,
-  hostsBreadcrumb,
-  hostsConfiguredNavItem,
-} from "../../routes/const";
+import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import {
   disableMessageBanner,
@@ -70,7 +63,7 @@ const HostEdit = () => {
 
   const { id } = useParams<urlParams>() as urlParams;
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const { control: controlBasicInfo } = useForm<HostInputs>({
     mode: "all",
@@ -204,26 +197,6 @@ const HostEdit = () => {
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 
-  const isAssigned = isHostAssigned(host?.instance);
-
-  // These steps will set's the breadcrumb in Host Details page
-  const breadcrumb = useMemo(() => {
-    return [
-      homeBreadcrumb,
-      host ? hostsBreadcrumb : { text: "Getting host...", link: "#" },
-      {
-        text: `${host?.name || id}`,
-        link: `${host && host.site ? (isAssigned ? "host" : "unassigned-host") : "unconfigured-host"}/${
-          host?.resourceId
-        }`,
-      },
-      {
-        text: "Edit Host",
-        link: "#",
-      },
-    ];
-  }, [host]);
-
   const metadataContent = useMemo(
     () => (
       <MetadataForm
@@ -241,17 +214,6 @@ const HostEdit = () => {
     ),
     [metadataPairs],
   );
-
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    if (host) {
-      dispatch(
-        setActiveNavItem(
-          isAssigned ? hostsActiveNavItem : hostsConfiguredNavItem,
-        ),
-      );
-    }
-  }, [breadcrumb]);
 
   const updateHostEdits = () => {
     // UPDATE HOST
@@ -285,7 +247,7 @@ const HostEdit = () => {
           );
           setTimeout(() => {
             dispatch(disableMessageBanner());
-            navigate("../../hosts");
+            navigate(hostsRoute);
           }, 3000);
         })
         .catch((e) => {
@@ -469,7 +431,7 @@ const HostEdit = () => {
                 variant="primary"
                 data-cy="cancelHostButton"
                 onPress={() => {
-                  navigate("../../hosts");
+                  navigate(hostsRoute);
                 }}
               >
                 Cancel

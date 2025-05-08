@@ -10,10 +10,13 @@ import {
   MessageBannerAlertState,
 } from "@orch-ui/components";
 import {
+  clusterCreateRoute,
   hasRole as hasRoleDefault,
+  hostsRoute,
   Role,
   RuntimeConfig,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -25,7 +28,6 @@ import {
 } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   goToNextStep,
   goToPrevStep,
@@ -76,7 +78,7 @@ export enum HostProvisiongProcedures {
 export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const cy = { "data-cy": dataCy };
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   const [apiErrorData, setApiErrorData] = useState<{
@@ -327,7 +329,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         setClusterConfirmationOpen(true);
       } else {
         setTimeout(() => {
-          navigate("../../hosts", { relative: "path" });
+          navigate(hostsRoute);
         }, 500);
       }
     }
@@ -356,7 +358,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const goToListPage = () => {
     dispatch(reset());
     dispatch(resetTree(location.pathname + location.search));
-    navigate("../../hosts", { relative: "path" });
+    navigate(hostsRoute);
   };
 
   useEffect(() => {
@@ -385,7 +387,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           break;
         case HostProvisiongProcedures.BackToHosts:
           dispatch(resetMultiHostForm());
-          navigate("../../hosts?reset"); //could do route param
+          navigate(hostsRoute);
           break;
       }
     })();
@@ -520,10 +522,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
             const hostId = host.resourceId;
 
             const query = `?regionId=${regionId}&regionName=${regionName}&siteId=${siteId}&siteName=${siteName}&hostId=${hostId}`;
-
-            navigate(`/infrastructure/clusters/create${query}`, {
-              relative: "path",
-            });
+            navigate(clusterCreateRoute, undefined, query);
             setClusterConfirmationOpen(false);
           }}
           confirmBtnText="Create Now"
@@ -531,7 +530,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           cancelBtnText="Create Later"
           cancelCb={() => {
             setClusterConfirmationOpen(false);
-            navigate("../../hosts", { relative: "path" });
+            navigate(hostsRoute);
           }}
         />
       )}
