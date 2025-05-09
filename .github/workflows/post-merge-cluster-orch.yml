@@ -13,9 +13,15 @@ on:
       - 'apps/cluster-orch/**'
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   post-merge-pipeline:
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@3418f8ec5279259494a2da98d5995c561a951a3a
+    permissions:
+      contents: read
+      security-events: write
+      id-token: write
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@0.1.10
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_version_check: true
@@ -31,4 +37,5 @@ jobs:
       project_folder: apps/cluster-orch
       orch_ci_repo_ref: main
       persist_creds: true
-    secrets: inherit
+    secrets:  # zizmor: ignore[secrets-inherit]
+      inherit

@@ -9,8 +9,13 @@ on:
       - main
       - release-*
 
+permissions: {}
+
 jobs:
   update-version:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
