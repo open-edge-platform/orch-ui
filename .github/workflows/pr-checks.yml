@@ -8,8 +8,12 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+permissions: {}
+
 jobs:
   detect-changed-folders:
+    permissions:
+      contents: read
     runs-on: 'ubuntu-latest'
     outputs:
       changed_files_root: ${{ steps.root-file-changes.outputs.changed_files }}
@@ -34,6 +38,8 @@ jobs:
           project_folder: "apps"
 
   license-check:
+    permissions:
+      contents: read
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
@@ -43,6 +49,8 @@ jobs:
         run: make license
 
   matching-versions:
+    permissions:
+      contents: read
     name: Check that VERSION files and Chart versions match
     runs-on: 'ubuntu-latest'
     steps:
@@ -57,6 +65,8 @@ jobs:
           bash -c "diff -u <(echo -n) <(git diff .)"
 
   setup-conditions:
+    permissions:
+      contents: read
     needs: detect-changed-folders
     runs-on: 'ubuntu-latest'
     outputs:
@@ -71,16 +81,22 @@ jobs:
           echo "Common condition: ${{ contains(needs.detect-changed-folders.outputs.changed_projects_root, 'library') || contains(needs.detect-changed-folders.outputs.changed_projects_root, '.github') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'common.mk') || contains(needs.detect-changed-folders.outputs.changed_files_root, 'package-lock.json') || '' == 'false' }}"
 
   library-pipeline:
+    permissions:
+      contents: read
     needs: setup-conditions
     if: needs.setup-conditions.outputs.common_condition == 'true'
     uses: ./.github/workflows/library.yml
     secrets: inherit
 
   e2e-tests-pipeline:
+    permissions:
+      contents: read
     uses: ./.github/workflows/e2e-tests.yml
     secrets: inherit
 
   pre-merge-pipeline:
+    permissions:
+      contents: read
     needs: [detect-changed-folders, setup-conditions]
     if: ${{ needs.setup-conditions.outputs.common_condition == 'true' || (needs.setup-conditions.outputs.common_condition == 'false' && fromJson(needs.detect-changed-folders.outputs.changed_apps)[0] != null) }}
     strategy:
@@ -110,6 +126,8 @@ jobs:
     secrets: inherit
 
   final-check:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: ${{ always() }}
     needs: [detect-changed-folders, setup-conditions, library-pipeline, e2e-tests-pipeline, pre-merge-pipeline]
