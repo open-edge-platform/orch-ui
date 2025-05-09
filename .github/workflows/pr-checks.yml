@@ -20,15 +20,15 @@ jobs:
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Discover changed files at root level
-        uses: open-edge-platform/orch-ci/discover-changed-files@3418f8ec5279259494a2da98d5995c561a951a3a
+        uses: open-edge-platform/orch-ci/discover-changed-files@0.1.10
         id: root-file-changes
 
       - name: Discover changed folders at root level
-        uses: open-edge-platform/orch-ci/discover-changed-subfolders@3418f8ec5279259494a2da98d5995c561a951a3a
+        uses: open-edge-platform/orch-ci/discover-changed-subfolders@0.1.10
         id: discover-changes
 
       - name: Discover changed apps
-        uses: open-edge-platform/orch-ci/discover-changed-subfolders@3418f8ec5279259494a2da98d5995c561a951a3a
+        uses: open-edge-platform/orch-ci/discover-changed-subfolders@0.1.10
         id: discover-changes-apps
         with:
           project_folder: "apps"
@@ -87,7 +87,7 @@ jobs:
       fail-fast: false
       matrix:
         project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@3418f8ec5279259494a2da98d5995c561a951a3a
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@0.1.10
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
