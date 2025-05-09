@@ -5,13 +5,16 @@
 
 # Orchestrator GUI Web User Interface
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/open-edge-platform/orch-ui/badge)](https://scorecard.dev/viewer/?uri=github.com/open-edge-platform/orch-ui)
+
 ## Overview
 
 This implements the web user interface for the Orchestrator,
 allowing the user to do most of the features of the product in an
 intuitive, visual, manner without having learn all the complexities
-of the APIs.  That being said, everything the Web UI does and shows
-comes from the APIs.  This UI is intended for the day to day edge
+of the APIs. That being said, everything the Web UI does and shows
+comes from the APIs. This UI is intended for the day to day edge
 operators, who want to be able to:
 
 - Register, Onboard and Provision hosts
@@ -109,11 +112,13 @@ The application is separated into multiple micro front-ends that can be develope
   ```
 
 ### Running with mock data
+
 If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_MOCK_API` environment variable value to `true`
 
 Set this value BEFORE you run the `npm run start`.
 
 ### Testing
+
 The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
 
 ```bash
