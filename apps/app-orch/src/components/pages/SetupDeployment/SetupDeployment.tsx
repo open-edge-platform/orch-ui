@@ -37,11 +37,18 @@ import {
   homeBreadcrumb,
 } from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setupDeploymentHasEmptyMandatoryParams } from "../../../store/reducers/setupDeployment";
+import {
+  getCurrentDeploymentPackage,
+  getCurrentPackageProfile,
+  profileParameterOverridesSelector,
+  resetDeployment,
+  setCurrentDeploymentPackage,
+  setCurrentPackageProfile,
+  setupDeploymentHasEmptyMandatoryParams,
+} from "../../../store/reducers/setupDeployment";
 import { setProps } from "../../../store/reducers/toast";
 import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
 import NetworkInterconnect from "../../organisms/setup-deployments/NetworkInterconnect/NetworkInterconnect";
-import { OverrideValuesList } from "../../organisms/setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import Review from "../../organisms/setup-deployments/Review/Review";
 import SelectCluster, {
   SelectClusterMode,
@@ -88,10 +95,9 @@ const SetupDeployment = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-
+  const [stepJsx, setStepJsx] = useState<ReactElement | null>(null);
   // Stepper: Overall state controls
   const [currentStep, setCurrentStep] = useState(0);
-  const [stepJsx, setStepJsx] = useState<ReactElement | null>(null);
   const [isNextDisabled, setIsNextDisabled] = useState<boolean>(false);
   // This will disable click on final step's `Deploy` button until api reponds back with a failure for retry
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
@@ -100,17 +106,14 @@ const SetupDeployment = () => {
   const [steps, setSteps] = useState<StepperStep[]>([]);
 
   // Step 1: Select Package states
-  const [currentDeploymentPackage, setCurrentDeploymentPackage] =
-    useState<catalog.DeploymentPackage | null>(null);
+  const currentDeploymentPackage = useAppSelector(getCurrentDeploymentPackage);
 
   // Step 2: Select a Profile states
-  const [currentPackageProfile, setCurrentPackageProfile] =
-    useState<catalog.DeploymentProfile | null>(null);
-
+  const currentPackageProfile = useAppSelector(getCurrentPackageProfile);
   // Step 3: Override profile values states
-  const [profileParameterOverrides, setProfileParameterOverrides] =
-    useState<OverrideValuesList>({});
-
+  const profileParameterOverrides = useAppSelector(
+    profileParameterOverridesSelector,
+  );
   const emptyMandatoryParams = useAppSelector(
     setupDeploymentHasEmptyMandatoryParams,
   );
@@ -163,6 +166,12 @@ const SetupDeployment = () => {
   }, []);
 
   useEffect(() => {
+    return () => {
+      dispatch(resetDeployment());
+    };
+  }, []);
+
+  useEffect(() => {
     const deploymentPackageKind = currentDeploymentPackage?.kind;
     const steps = Object.keys(SetupDeploymentSteps)
       // filter out the reverse mappings of enums in typescript
@@ -201,7 +210,7 @@ const SetupDeployment = () => {
   );
   useEffect(() => {
     if (selectedApp.data && selectedApp.data.deploymentPackage) {
-      setCurrentDeploymentPackage(selectedApp.data.deploymentPackage);
+      dispatch(setCurrentDeploymentPackage(selectedApp.data.deploymentPackage));
       setCurrentStep(SetupDeploymentSteps["Select a Profile"]);
     }
     if (!appName) {
@@ -224,7 +233,7 @@ const SetupDeployment = () => {
         (p) => p.name === currentDeploymentPackage.defaultProfileName,
       );
       if (defaultProfile !== undefined) {
-        setCurrentPackageProfile(() => ({ ...defaultProfile }));
+        dispatch(setCurrentPackageProfile({ ...defaultProfile }));
       }
     }
   }, [currentDeploymentPackage]);
@@ -236,7 +245,7 @@ const SetupDeployment = () => {
         nextJsx = (
           <SelectPackage
             key="selectPackage"
-            onSelect={setCurrentDeploymentPackage}
+            onSelect={(dep) => dispatch(setCurrentDeploymentPackage(dep))}
             selectedPackage={currentDeploymentPackage ?? undefined}
           />
         );
@@ -248,7 +257,9 @@ const SetupDeployment = () => {
               key="selectProfile"
               selectedPackage={currentDeploymentPackage}
               selectedProfile={currentPackageProfile ?? undefined}
-              onProfileSelect={setCurrentPackageProfile}
+              onProfileSelect={(profile) =>
+                dispatch(setCurrentPackageProfile(profile))
+              }
             />
           );
         }
@@ -258,17 +269,6 @@ const SetupDeployment = () => {
           <ChangeProfileValues
             deploymentPackage={currentDeploymentPackage ?? undefined}
             deploymentProfile={currentPackageProfile ?? undefined}
-            overrideValues={profileParameterOverrides}
-            onOverrideValuesUpdate={(updatedOverrideValues, clear) => {
-              if (clear) {
-                setProfileParameterOverrides(updatedOverrideValues);
-              } else {
-                setProfileParameterOverrides((prevOverrideValues) => ({
-                  ...prevOverrideValues,
-                  ...updatedOverrideValues,
-                }));
-              }
-            }}
           />
         );
         break;

@@ -4,11 +4,16 @@
  */
 
 import { catalog } from "@orch-ui/apis";
+import { mergeRecursive } from "@orch-ui/utils";
 import { Combobox, Item, TextField } from "@spark-design/react";
 import { ComboboxSize, ComboboxVariant, TextSize } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../store/hooks";
-import { updateMandatoryParam } from "../../../store/reducers/setupDeployment";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+  profileParameterOverridesSelector,
+  setProfileParameterOverrides,
+  updateMandatoryParam,
+} from "../../../store/reducers/setupDeployment";
 
 /** Converts dot-separated key/value pairs to a JSON format, eg:
  * - "foo = bar" -> {foo: bar}
@@ -76,6 +81,35 @@ export const parseOverrideValue = (
   return "";
 };
 
+export const removeEmptyValues = (values: ParameterOverrideValuePair) => {
+  Object.keys(values).forEach((key) => {
+    if (typeof values[key] === "object") removeEmptyValues(values[key]);
+    if (values[key] === "") delete values[key];
+  });
+};
+
+export const removeEmptyObjects = (
+  values: ParameterOverrideValuePair,
+): ParameterOverrideValuePair => {
+  const objectNonEmptyKeys: ParameterOverrideValuePair = {};
+  const keys = Object.keys(values);
+  if (keys.length === 0) {
+    return {};
+  } else {
+    Object.keys(values).forEach((key) => {
+      if (typeof values[key] === "object") {
+        const partNonEmptyKeys = removeEmptyObjects(values[key]);
+        if (Object.keys(partNonEmptyKeys).length > 0) {
+          objectNonEmptyKeys[key] = partNonEmptyKeys;
+        }
+      } else {
+        objectNonEmptyKeys[key] = values[key];
+      }
+    });
+    return objectNonEmptyKeys;
+  }
+};
+
 /** `OverrideValues.values` type */
 export interface ParameterOverrideValuePair {
   [key: string]: any;
@@ -86,24 +120,51 @@ const dataCy = "applicationProfileOverrideValueComboBoxCell";
 interface ApplicationProfileOverrideValueComboBoxCellProps {
   application: catalog.Application;
   parameter: catalog.ParameterTemplate;
-  overrideValue?: string;
-  onUpdate: (obj: ParameterOverrideValuePair) => void;
 }
 
 const ApplicationProfileOverrideValueComboBoxCell = ({
   application,
   parameter,
-  overrideValue,
-  onUpdate,
 }: ApplicationProfileOverrideValueComboBoxCellProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
+  const overrideValues = useAppSelector(profileParameterOverridesSelector);
+
+  /** stored override values belonging specifically to the application */
+  const overrides = overrideValues[application.name] ?? {
+    appName: application.name,
+  };
+  const selectedValues: ParameterOverrideValuePair = overrides.values ?? {};
+
+  const overrideValue = parseOverrideValue(selectedValues, parameter);
 
   const [valid, setValid] = useState<boolean>(true);
   const [secretValue, setSecretValue] = useState<string>("");
 
   const checkValidation = (value: string) => {
     setValid(value.length === 0 || value.trim().length !== 0);
+  };
+
+  const handleOverride = (value: ParameterOverrideValuePair) => {
+    let updatedParameterOverrides: ParameterOverrideValuePair = mergeRecursive(
+      structuredClone(selectedValues),
+      value,
+    );
+
+    removeEmptyValues(updatedParameterOverrides);
+    updatedParameterOverrides = removeEmptyObjects(updatedParameterOverrides);
+
+    dispatch(
+      setProfileParameterOverrides({
+        profileParameterOverrides: {
+          [application.name]: {
+            appName: overrides.appName,
+            values: { ...updatedParameterOverrides },
+          },
+        },
+        clear: false,
+      }),
+    );
   };
 
   useEffect(() => {
@@ -113,7 +174,7 @@ const ApplicationProfileOverrideValueComboBoxCell = ({
     if (parameter.mandatory && !overrideValue) {
       setValid(false);
     }
-  }, [parameter]);
+  }, [parameter, overrideValue]);
 
   return (
     <div {...cy} className="application-profile-override-value-combox-cell">
@@ -127,7 +188,7 @@ const ApplicationProfileOverrideValueComboBoxCell = ({
             checkValidation(value);
           }}
           onBlur={() => {
-            onUpdate(createOverrideValue(parameter, secretValue));
+            handleOverride(createOverrideValue(parameter, secretValue));
             if (parameter.mandatory) {
               dispatch(
                 updateMandatoryParam({
@@ -151,7 +212,7 @@ const ApplicationProfileOverrideValueComboBoxCell = ({
           defaultInputValue={overrideValue}
           onInputChange={(value: string) => checkValidation(value)}
           onBlur={(e) => {
-            onUpdate(createOverrideValue(parameter, e.target.value));
+            handleOverride(createOverrideValue(parameter, e.target.value));
             if (parameter.mandatory) {
               dispatch(
                 updateMandatoryParam({

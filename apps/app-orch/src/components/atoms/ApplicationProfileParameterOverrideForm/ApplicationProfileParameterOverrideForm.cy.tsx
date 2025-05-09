@@ -8,7 +8,7 @@ import { applicationOne, profileTwo } from "@orch-ui/utils";
 import ApplicationProfileParameterOverrideForm, {
   removeEmptyObjects,
   removeEmptyValues,
-} from "./ApplicationProfileParameterOverrideForm";
+} from "../ApplicationProfileOverrideValueComboBoxCell/ApplicationProfileOverrideValueComboBoxCell";
 import ApplicationProfileParameterOverrideFormPom from "./ApplicationProfileParameterOverrideForm.pom";
 
 const pom = new ApplicationProfileParameterOverrideFormPom();
