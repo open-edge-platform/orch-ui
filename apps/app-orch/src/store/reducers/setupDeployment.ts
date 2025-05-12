@@ -26,7 +26,7 @@ type SetupDeploymentState = {
   currentPackageProfile: catalog.DeploymentProfile | null;
 };
 
-const initialState: SetupDeploymentState = {
+export const initialState: SetupDeploymentState = {
   applications: [],
   mandatoryParams: {},
   editPrevProfileName: "",

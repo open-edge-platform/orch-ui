@@ -5,10 +5,13 @@
 
 import { cyGet } from "@orch-ui/tests";
 import { applicationOne, profileTwo } from "@orch-ui/utils";
-import ApplicationProfileParameterOverrideForm, {
+import { setupStore } from "../../../store";
+import { initialState } from "../../../store/reducers/setupDeployment";
+import {
   removeEmptyObjects,
   removeEmptyValues,
 } from "../ApplicationProfileOverrideValueComboBoxCell/ApplicationProfileOverrideValueComboBoxCell";
+import ApplicationProfileParameterOverrideForm from "./ApplicationProfileParameterOverrideForm";
 import ApplicationProfileParameterOverrideFormPom from "./ApplicationProfileParameterOverrideForm.pom";
 
 const pom = new ApplicationProfileParameterOverrideFormPom();
@@ -22,7 +25,6 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
           ...profileTwo,
           parameterTemplates: [{ name: "profile 1", type: "" }],
         }}
-        parameterOverrides={{ appName: "Application 1" }}
       />,
     );
     pom.tableUtil.getCellBySearchText("profile 1").should("exist");
@@ -39,7 +41,6 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
             { name: "profile 2", type: "", displayName: "Profile 2" },
           ],
         }}
-        parameterOverrides={{ appName: "Application 1" }}
       />,
     );
     pom.root.should("exist");
@@ -58,13 +59,19 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
           name: "profile1",
           parameterTemplates: [],
         }}
-        parameterOverrides={{ appName: "Application 1" }}
       />,
     );
     pom.empty.root.should("exist");
   });
 
-  it("will test onParameterUpdate method", () => {
+  it("should set entered values in redux store", () => {
+    const store = setupStore({
+      setupDeployment: {
+        ...initialState,
+      },
+    });
+    // @ts-ignore
+    window.store = store;
     const expectedValue = {
       appName: "Application 1",
       values: {
@@ -84,20 +91,29 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
             name: "profile1",
             parameterTemplates: profileTwo.parameterTemplates!,
           }}
-          parameterOverrides={{ appName: "Application 1" }}
-          onParameterUpdate={cy.stub().as("onParameterUpdate")}
         />
         <button data-cy="testHelper">test helper</button>
       </>,
+      {
+        reduxStore: store,
+      },
     );
+
     pom.selectParam(0, "value1");
     cyGet("testHelper").click();
-    cy.get("@onParameterUpdate").should("have.been.calledOnce");
-    cy.get("@onParameterUpdate").should("be.calledWith", expectedValue);
+    cy.window()
+      .its("store")
+      .invoke("getState")
+      .then(() => {
+        expect(
+          store.getState().setupDeployment.profileParameterOverrides[
+            applicationOne.name
+          ].values,
+        ).to.deep.equal({ ...expectedValue.values });
+      });
 
     pom.selectParam(1, "12");
     cyGet("testHelper").click();
-    cy.get("@onParameterUpdate").should("have.been.calledTwice");
 
     const expectedValueUpdate = {
       ...expectedValue,
@@ -108,11 +124,36 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
     };
     pom.typeParam(1, "value4");
     cyGet("testHelper").click();
-    cy.get("@onParameterUpdate").should("have.been.calledThrice");
-    cy.get("@onParameterUpdate").should("be.calledWith", expectedValueUpdate);
+    cy.window()
+      .its("store")
+      .invoke("getState")
+      .then(() => {
+        console.log(store.getState().setupDeployment);
+        expect(
+          store.getState().setupDeployment.profileParameterOverrides[
+            applicationOne.name
+          ].values,
+        ).to.deep.equal({ ...expectedValueUpdate.values });
+      });
   });
 
   it("display preselected values", () => {
+    const store = setupStore({
+      setupDeployment: {
+        ...initialState,
+        profileParameterOverrides: {
+          [applicationOne.name]: {
+            appName: applicationOne.name,
+            values: {
+              image: { containerDisk: { pullSecret: "value1" } },
+              version: "12",
+            },
+          },
+        },
+      },
+    });
+    // @ts-ignore
+    window.store = store;
     cy.mount(
       <ApplicationProfileParameterOverrideForm
         application={applicationOne}
@@ -120,16 +161,8 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
           name: "profile1",
           parameterTemplates: profileTwo.parameterTemplates!,
         }}
-        parameterOverrides={{
-          appName: "Application 1",
-          values: {
-            // image.containerDisk.pullSecret="value 1"
-            image: { containerDisk: { pullSecret: "value1" } },
-            version: "12",
-          },
-        }}
-        onParameterUpdate={cy.stub().as("onParameterUpdate")}
       />,
+      { reduxStore: store },
     );
     pom.isSelected(0, "value1");
     pom.isSelected(1, "12");
