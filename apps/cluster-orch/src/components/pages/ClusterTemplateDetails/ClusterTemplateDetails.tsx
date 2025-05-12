@@ -9,7 +9,6 @@ import {
   Flex,
   Popup,
   PopupOption,
-  setActiveNavItem,
   setBreadcrumb,
 } from "@orch-ui/components";
 import { downloadFile, getAuthCfg, SharedStorage } from "@orch-ui/utils";
@@ -20,7 +19,6 @@ import { Provider } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   clusterTemplatesBreadcrumb,
-  clusterTemplatesMenuItem,
   homeBreadcrumb,
 } from "../../../routes/const";
 import { store } from "../../../store";
@@ -73,7 +71,6 @@ export const ClusterTemplateDetails = () => {
 
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(clusterTemplatesMenuItem));
   }, [template, isSuccess]);
 
   if (isLoading) {

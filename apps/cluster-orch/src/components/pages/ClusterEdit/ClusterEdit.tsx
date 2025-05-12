@@ -7,7 +7,6 @@ import { cm, infra, mbApi } from "@orch-ui/apis";
 import {
   BreadcrumbPiece,
   MetadataPair,
-  setActiveNavItem,
   setBreadcrumb as setClusterBreadcrumb,
 } from "@orch-ui/components";
 import {
@@ -25,7 +24,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { clustersMenuItem, homeBreadcrumb } from "../../../routes/const";
+import { homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -260,7 +259,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
     } else {
       dispatch(setClusterBreadcrumb(breadcrumb));
     }
-    dispatch(setActiveNavItem(clustersMenuItem));
   }, [breadcrumb]);
 
   const onReqSuccess = () => {
