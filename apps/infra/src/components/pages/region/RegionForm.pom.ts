@@ -20,7 +20,6 @@ import {
   telemetryProfilesMetricsEndpoints,
 } from "../../../utils/TelemetryApis";
 import RegionsTablePom from "../../organism/region/RegionsTable.pom";
-import SitesTablePom from "../../organism/site/SitesTable.pom";
 
 const metadataRoute = "**/v1/projects/**/metadata";
 
@@ -183,7 +182,6 @@ class RegionFormPom extends CyPom<Selectors, ApiAliases> {
   regionType = new SiComboboxPom("regionType");
   parentRegion = new SiComboboxPom("parentRegion");
   regionTable = new RegionsTablePom();
-  sitesTable = new SitesTablePom();
   confirmationDialog = new ConfirmationDialogPom();
 
   constructor(public rootCy: string = "regionForm") {

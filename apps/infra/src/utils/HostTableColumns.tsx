@@ -5,7 +5,7 @@
 
 import { infra } from "@orch-ui/apis";
 import { aggregateStatuses, TableColumn } from "@orch-ui/components";
-import { hostToStatuses } from "@orch-ui/utils";
+import { getInfraPath, hostDetailsRoute, hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost";
 import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
@@ -13,7 +13,7 @@ import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 import { HostData } from "../store/configureHost";
 
-const _name = (basePath: string = ""): TableColumn<infra.HostRead> => {
+const _name = (): TableColumn<infra.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -27,8 +27,9 @@ const _name = (basePath: string = ""): TableColumn<infra.HostRead> => {
     Cell: (table: { row: { original: infra.HostRead } }) => {
       return (
         <Link
-          to={`${basePath}${table.row.original.resourceId}`}
-          relative="path"
+          to={getInfraPath(hostDetailsRoute, {
+            id: table.row.original?.resourceId ?? "",
+          })}
         >
           {table.row.original.name !== ""
             ? table.row.original.name
@@ -39,10 +40,7 @@ const _name = (basePath: string = ""): TableColumn<infra.HostRead> => {
   };
 };
 
-const name = (
-  basePath: string = "",
-  isRegistered: boolean = false,
-): TableColumn<infra.HostRead> => {
+const name = (): TableColumn<infra.HostRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -54,15 +52,16 @@ const name = (
       }
     },
     Cell: (table: { row: { original: infra.HostRead } }) => {
-      const result = isRegistered
-        ? table.row.original.resourceId
-        : `${table.row.original.site ? "host" : "unconfigured-host"}/${table.row.original.resourceId}`;
-      return (
-        <Link to={`${basePath}${result}`} relative="path">
-          {table.row.original.name !== ""
-            ? table.row.original.name
-            : table.row.original.resourceId}
+      const hostId = table.row.original.resourceId;
+      return hostId ? (
+        <Link
+          to={`${getInfraPath(hostDetailsRoute, { id: hostId })}`}
+          relative="path"
+        >
+          {table.row.original.name !== "" ? table.row.original.name : hostId}
         </Link>
+      ) : (
+        <>{table.row.original.name}</>
       );
     },
   };

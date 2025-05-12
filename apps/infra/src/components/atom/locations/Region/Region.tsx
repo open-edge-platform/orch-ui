@@ -4,8 +4,8 @@
  */
 import { infra } from "@orch-ui/apis";
 import { Popup } from "@orch-ui/components";
+import { regionRoute, useInfraNavigate } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   ROOT_REGIONS,
@@ -46,7 +46,7 @@ export const Region = ({
 }: RegionProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const searchIsPristine = useAppSelector(selectSearchIsPristine);
   const rootSiteCounts = useAppSelector(selectRootSiteCounts);
   const handleDelete = () => {
@@ -102,7 +102,8 @@ export const Region = ({
                     dispatch(setLoadingBranch(ROOT_REGIONS));
                   else
                     dispatch(setLoadingBranch(region.parentRegion.resourceId));
-                  navigate(`../regions/${region.resourceId}`);
+                  if (region.resourceId)
+                    navigate(regionRoute, { regionId: region.resourceId });
                 },
               },
               {

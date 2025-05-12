@@ -32,7 +32,7 @@ describe("<ClusterNameAssociatedToHost/>", () => {
     cy.mount(<ClusterNameAssociatedToHost host={defaultHost} />);
     pom.waitForApis();
     pom.el.clusterLink.click();
-    cy.get("#pathname").contains("/infrastructure/cluster/cluster-1");
+    cy.get("#pathname").contains("/cluster/cluster-1");
   });
 
   it("should render 'Not Assigned' when cluster details are not available", () => {

@@ -36,6 +36,6 @@ describe("<HostRegistrationAndProvisioningCancelDialog/>", () => {
       ],
     });
     cyGet("cancelBtn").click();
-    cy.get("#pathname").invoke("text").should("eq", "pathname: /hosts");
+    pom.getPath().should("contain", "/hosts");
   });
 });

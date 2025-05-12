@@ -5,21 +5,20 @@
 
 import {
   ApiError,
-  BreadcrumbPiece,
   ConfirmationDialog,
   Flex,
   Popup,
   PopupOption,
-  setActiveNavItem,
-  setBreadcrumb,
   TableLoader,
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  locationRoute,
   logError,
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -47,9 +46,9 @@ import {
   RadioButtonSize,
   ToastState,
 } from "@spark-design/tokens";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./RegionForm.scss";
 
 import { infra, mbApi } from "@orch-ui/apis";
@@ -59,20 +58,8 @@ import TelemetryLogsForm, {
 import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
-import {
-  getRegionsByIdBreadcrumb,
-  homeBreadcrumb,
-  locationsBreadcrumb,
-  regionsBreadcrumb,
-  regionsCreateBreadcrumb,
-  regionsMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  selectBranches,
-  setIsEmpty,
-  setTreeBranchNodeCollapse,
-} from "../../../store/locations";
+import { selectBranches, setIsEmpty } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
 
 const baseRegionTypes = ["Country", "State", "County", "Region", "City"];
@@ -96,9 +83,7 @@ const RegionForm: React.FC = () => {
       })
         .unwrap()
         .then(() => {
-          navigate(regionId ? "../../locations" : "../locations", {
-            relative: "path",
-          });
+          navigate(locationRoute);
         })
         .catch((error) => {
           dispatch(
@@ -115,7 +100,7 @@ const RegionForm: React.FC = () => {
     setIsDeleteOpen(false);
   };
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const { regionId } = useParams<{ regionId: string }>();
   const { parentRegionId } = useParams<{ parentRegionId: string }>();
   const { data: { regions } = {} } =
@@ -209,53 +194,8 @@ const RegionForm: React.FC = () => {
       "None (Top level region)"
     );
   };
-
-  const getParents = (
-    currentRegion: infra.RegionRead | undefined,
-    regions: infra.RegionRead[] | undefined,
-    parents: BreadcrumbPiece[] = [],
-  ): BreadcrumbPiece[] => {
-    if (!currentRegion || !regions) return parents;
-    const parent = regions.find(
-      (r) => r.resourceId === currentRegion.parentRegion?.resourceId,
-    );
-    if (parent) {
-      parents.unshift(
-        getRegionsByIdBreadcrumb(parent.resourceId ?? "", parent.name),
-      );
-      return getParents(parent, regions, parents);
-    } else {
-      return parents;
-    }
-  };
   const dispatch = useAppDispatch();
   const branches = useAppSelector(selectBranches);
-  const breadcrumb = useMemo(() => {
-    if (regionId === "new" && parentRegionId) {
-      return [
-        locationsBreadcrumb,
-        regionsBreadcrumb,
-        getRegionsByIdBreadcrumb(
-          parentRegionId,
-          returnRegionName(parentRegionId),
-        ),
-        regionsCreateBreadcrumb,
-      ];
-    }
-    if (regionId === "new") {
-      return [locationsBreadcrumb, regionsCreateBreadcrumb];
-    }
-    const regionsTree = getParents(regionInfo, regions, [
-      getRegionsByIdBreadcrumb(regionId ?? "", returnRegionName(regionId)),
-    ]);
-    return [homeBreadcrumb, regionsBreadcrumb].concat(regionsTree || []);
-  }, [regionInfo, regions]);
-
-  useEffect(() => {
-    //dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setBreadcrumb([]));
-    dispatch(setActiveNavItem(regionsMenuItem));
-  }, [breadcrumb]);
 
   const {
     control,
@@ -359,16 +299,7 @@ const RegionForm: React.FC = () => {
     return <ApiError error={error} />;
   }
 
-  const redirectToLocationsPage = async () => {
-    if (parentRegionId) {
-      navigate("../../../../locations", { relative: "path" });
-      dispatch(setTreeBranchNodeCollapse(parentRegionId));
-    }
-    // jump to region details page from `/regions/{region-id}/new` (or /:regionid)
-    else {
-      navigate("../../locations", { relative: "path" });
-    }
-  };
+  const redirectToLocationsPage = async () => navigate(locationRoute);
 
   const getMetricsGroup = (id: string): infra.TelemetryMetricsGroup => {
     const group = metricsgroup.find((group) => {

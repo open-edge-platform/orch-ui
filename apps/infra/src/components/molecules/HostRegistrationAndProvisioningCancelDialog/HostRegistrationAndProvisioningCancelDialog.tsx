@@ -4,8 +4,8 @@
  */
 
 import { ConfirmationDialog } from "@orch-ui/components";
+import { hostsRoute, useInfraNavigate } from "@orch-ui/utils";
 import { ButtonVariant } from "@spark-design/tokens";
-import { useNavigate } from "react-router-dom";
 import { reset } from "../../../store/configureHost";
 import { useAppDispatch } from "../../../store/hooks";
 const dataCy = "hostRegistrationAndProvisioningCancelDialog";
@@ -18,7 +18,7 @@ const HostRegistrationAndProvisioningCancelDialog = ({
   onClose,
 }: HostRegistrationAndProvisioningCancelDialogProps) => {
   const cy = { "data-cy": dataCy };
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
   return (
     <div {...cy} className="host-registration-and-provisioning-setup-dialog">
@@ -36,7 +36,7 @@ const HostRegistrationAndProvisioningCancelDialog = ({
         cancelCb={() => {
           onClose();
           dispatch(reset());
-          navigate("../hosts");
+          navigate(hostsRoute);
         }}
       />
     </div>
