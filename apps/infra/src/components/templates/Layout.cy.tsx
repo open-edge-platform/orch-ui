@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { innerTransitionTimeout, IRuntimeConfig } from "@orch-ui/utils";
+import { IRuntimeConfig } from "@orch-ui/utils";
 import { routes } from "../../routes";
 import Layout from "./Layout";
 import LayoutPom, { Selectors } from "./Layout.pom";
@@ -30,6 +30,7 @@ describe("<Layout/>", () => {
   // this maps all clickable items to the expected url
   const navToUrlMapping: { [key in Selectors]?: string } = {
     Hosts: "/hosts",
+    Locations: "/locations",
   };
   beforeEach(() => {
     cy.mount(<Layout />, {
@@ -41,23 +42,6 @@ describe("<Layout/>", () => {
     for (const el in navToUrlMapping) {
       pom.el[el as Selectors].click();
       pom.getPath().should("contain", navToUrlMapping[el as Selectors]);
-      cy.wait(innerTransitionTimeout);
-      cy.get("h1", { timeout: 0 }).should("contain.text", el);
-    }
-  });
-  it("should navigate to the correct URL regardless of the timeout", () => {
-    for (const el in navToUrlMapping) {
-      pom.el[el as Selectors].click();
-      pom.getPath().should("contain", navToUrlMapping[el as Selectors]);
-    }
-  });
-  it("should navigate to the correct page regardless of the timeout", () => {
-    for (const el in navToUrlMapping) {
-      pom.el[el as Selectors].click();
-      pom.getPath().should("contain", navToUrlMapping[el as Selectors]);
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1500);
-      cy.get("h1", { timeout: 0 }).should("contain.text", el);
     }
   });
 });

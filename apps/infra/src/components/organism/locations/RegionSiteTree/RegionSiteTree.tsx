@@ -5,10 +5,10 @@
 
 import { infra } from "@orch-ui/apis";
 import { ApiError, SquareSpinner, Tree, TreeNode } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { SharedStorage, useInfraNavigate } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useCallback, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { RegionDynamicProps } from "../../../../components/atom/locations/Region/Region";
 import { SiteDynamicProps } from "../../../../components/atom/locations/Site/Site";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -56,7 +56,7 @@ export const RegionSiteTree = ({
 }: RegionSiteTreeProps) => {
   const cy = { "data-cy": dataCy };
   const className = "region-site-tree";
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const location = useLocation();
 
   const searchTerm = useAppSelector(selectSearchTerm);

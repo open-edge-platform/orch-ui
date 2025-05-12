@@ -4,7 +4,13 @@
  */
 
 import React, { createRef } from "react";
-import { Location, RouteObject } from "react-router-dom";
+import {
+  generatePath,
+  Location,
+  PathParam,
+  RouteObject,
+} from "react-router-dom";
+import { InfraRoute } from "./paths";
 
 export type RouteObjectWithRef = RouteObject & {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -30,3 +36,22 @@ export const mapChildRoutes = (routes: RouteObject[]): RouteObject[] => {
 
 // matches .page $transition-duration in transitions.scss
 export const innerTransitionTimeout = 300;
+
+/**
+ * Generates a complete infrastructure path by combining the infrastructure micro-frontend prefix,
+ * route path with parameters, and query string.
+ *
+ * @template Path - Type extending InfraRoute for type-safe route handling
+ * @param route - The infrastructure route path
+ * @param params - Optional object containing route parameters where keys are path parameters and values are strings or null
+ * @param query - Optional query string to append to the URL (defaults to empty string)
+ * @returns Full infrastructure path string with prefix, generated path, and query
+ */
+export const infraMfePrefix = "/infrastructure/";
+export const getInfraPath = <Path extends InfraRoute>(
+  route: Path,
+  params?: {
+    [key in PathParam<Path>]: string | null;
+  },
+  query: string = "",
+): string => `${infraMfePrefix + generatePath<Path>(route, params) + query}`;

@@ -11,12 +11,16 @@ import {
   MessageBannerAlertState,
   setBreadcrumb,
 } from "@orch-ui/components";
-import { parseError, SharedStorage } from "@orch-ui/utils";
+import {
+  parseError,
+  regionRoute,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { Button, Drawer, Heading, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { DrawerHeader } from "../../../components/molecules/DrawerHeader/DrawerHeader";
 import {
   Search,
@@ -53,7 +57,7 @@ export const DELETE_SITE_DIALOG_TITLE = "Delete Site ?";
 
 export const Locations = () => {
   const cy = { "data-cy": dataCy };
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useDispatch();
   const [deleteRegion] =
     infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
@@ -68,7 +72,6 @@ export const Locations = () => {
   const regionToDeleteHtmlId = "regionToDelete";
   const siteToDeleteHtmlId = "siteToDelete";
   const className: string = "locations";
-  const newRegionUrl: string = "../regions/new";
   const searchTypes: SearchTypeItem[] = Object.keys(SearchTypes).map((key) => ({
     id: key,
     name: `Search ${key}`,
@@ -174,7 +177,7 @@ export const Locations = () => {
               name: "Add Region",
               action: () => {
                 dispatch(setLoadingBranch(ROOT_REGIONS));
-                navigate(newRegionUrl);
+                navigate(regionRoute, { regionId: "new" });
               },
             },
           ]}
@@ -191,7 +194,7 @@ export const Locations = () => {
           <Button
             onPress={() => {
               dispatch(setLoadingBranch(ROOT_REGIONS));
-              navigate(newRegionUrl);
+              navigate(regionRoute, { regionId: "new" });
             }}
             size={ButtonSize.Large}
           >

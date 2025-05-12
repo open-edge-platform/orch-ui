@@ -6,15 +6,7 @@
 import { CyPom } from "@orch-ui/tests";
 import { datacyComponentSelector } from "./Layout";
 
-const dataCySelectors = [
-  "Hosts",
-  "Active",
-  "Configured",
-  "Onboarded",
-  "Deauthorized",
-  "Regions",
-  "Sites",
-] as const;
+const dataCySelectors = ["Hosts", "Locations"] as const;
 export type Selectors = (typeof dataCySelectors)[number];
 
 class LayoutPom extends CyPom<Selectors> {

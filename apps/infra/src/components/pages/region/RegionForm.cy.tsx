@@ -73,7 +73,7 @@ describe("<RegionForm />", () => {
             });
           });
 
-        pom.getPath().should("be.eq", "/locations");
+        pom.getPath().should("contain", "/locations");
       });
 
       it("should update region (creating a new type)", () => {
@@ -104,7 +104,7 @@ describe("<RegionForm />", () => {
             });
           });
 
-        pom.getPath().should("be.eq", "/locations");
+        pom.getPath().should("contain", "/locations");
       });
 
       xit("should delete region", () => {
@@ -352,7 +352,7 @@ describe("<RegionForm />", () => {
           });
         });
 
-      pom.getPath().should("be.eq", "/locations");
+      pom.getPath().should("contain", "/locations");
     });
   });
 

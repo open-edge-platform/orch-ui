@@ -10,8 +10,6 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
-  setActiveNavItem,
-  setBreadcrumb,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -22,7 +20,6 @@ import {
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
-  isHostAssigned,
   isOSUpdateAvailable,
   parseError,
   Role,
@@ -48,15 +45,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./HostDetails.scss";
 
 import { infra } from "@orch-ui/apis";
-import {
-  configuredBreadcrumb,
-  homeBreadcrumb,
-  hostsActiveNavItem,
-  hostsBreadcrumb,
-  hostsConfiguredNavItem,
-  hostsOnboardedNavItem,
-  unconfiguredBreadcrumb,
-} from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import {
   setErrorInfo,
@@ -280,48 +268,6 @@ const HostDetails: React.FC = () => {
       dispatch(showMessageNotification(failMessage));
     }
   };
-
-  const isAssigned = isHostAssigned(host?.instance);
-
-  // These steps will set's the breadcrumb in Host Details page
-  let hostBreadcrumb = { text: "Getting host...", link: "#" };
-  if (host) {
-    hostBreadcrumb = host.site
-      ? isAssigned
-        ? hostsBreadcrumb
-        : configuredBreadcrumb
-      : unconfiguredBreadcrumb;
-  } else if (hostQuery.isError || hostsQuery.isError) {
-    hostBreadcrumb = hostsBreadcrumb;
-  }
-  const breadcrumb = [
-    homeBreadcrumb,
-    hostBreadcrumb,
-    {
-      text: `${id}`,
-      link: `${host && host.site ? "host" : "unconfigured-host"}/${
-        host?.resourceId
-      }`,
-    },
-    {
-      text: "View Details",
-      link: "#",
-    },
-  ];
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-
-    const isAssigned = isHostAssigned(host?.instance);
-
-    if (host && isAssigned !== undefined) {
-      const nextActiveItem = host.site
-        ? isAssigned
-          ? hostsActiveNavItem
-          : hostsConfiguredNavItem
-        : hostsOnboardedNavItem;
-      dispatch(setActiveNavItem(nextActiveItem));
-    }
-  }, [breadcrumb]);
 
   /* Render Host Details by API states */
   if (!host && (hostQuery.isError || hostsQuery.isError)) {

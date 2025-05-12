@@ -20,12 +20,14 @@ import {
   getFilter,
   getOrder,
   Operator,
+  regionRoute,
   SharedStorage,
+  subRegionRoute,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, Heading, Tag, Text, Tooltip } from "@spark-design/react";
 import { ButtonSize, HeaderSize } from "@spark-design/tokens";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { regionsRoute } from "../../../routes/const";
+import { Link, useSearchParams } from "react-router-dom";
 import "./RegionsTable.scss";
 
 interface RegionsTableProps {
@@ -90,7 +92,7 @@ const RegionsTable = ({
     },
     { pollingInterval: API_INTERVAL },
   );
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const columns: TableColumn<infra.RegionRead>[] = [
     {
@@ -233,11 +235,9 @@ const RegionsTable = ({
       size={ButtonSize.Large}
       onPress={() => {
         if (parentRegionId) {
-          navigate(`../../${regionsRoute}/parent/${parentRegionId}/new`, {
-            relative: "path",
-          });
+          navigate(subRegionRoute, { parentRegionId, regionId: "new" });
         } else {
-          navigate(`../${regionsRoute}/new`, { relative: "path" });
+          navigate(regionRoute, { regionId: "new" });
         }
       }}
     >
@@ -255,14 +255,12 @@ const RegionsTable = ({
               name: parentRegionId ? "Add a Subregion" : "Add a Region",
               action: () => {
                 if (parentRegionId) {
-                  navigate(
-                    `../../${regionsRoute}/parent/${parentRegionId}/new`,
-                    {
-                      relative: "path",
-                    },
-                  );
+                  navigate(subRegionRoute, {
+                    parentRegionId,
+                    regionId: "new",
+                  });
                 } else {
-                  navigate(`../${regionsRoute}/new`, { relative: "path" });
+                  navigate(regionRoute, { regionId: "new" });
                 }
               },
               disable: !hasPermission,

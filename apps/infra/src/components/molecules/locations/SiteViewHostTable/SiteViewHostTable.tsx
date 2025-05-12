@@ -22,7 +22,7 @@ export const SiteViewHostTable = ({
   const cy = { "data-cy": dataCy };
 
   const columns: TableColumn<infra.HostRead>[] = [
-    HostTableColumn.name("../"),
+    HostTableColumn.name(),
     HostTableColumn.status,
     HostTableColumn.actions((host: infra.HostRead) => (
       <HostPopup host={host} basePath={basePath} />
