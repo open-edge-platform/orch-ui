@@ -8,9 +8,7 @@ import { MessageBanner, Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import { useAppSelector } from "../../../../store/hooks";
 import { setupDeploymentHasMandatoryParams } from "../../../../store/reducers/setupDeployment";
-import OverrideProfileTable, {
-  OverrideValuesList,
-} from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
+import OverrideProfileTable from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 import "./DeploymentProfileForm.scss";
 
 const dataCy = "DeploymentProfileForm";
@@ -18,18 +16,13 @@ const dataCy = "DeploymentProfileForm";
 export interface DeploymentProfileFormProps {
   selectedPackage?: catalog.DeploymentPackage;
   selectedProfile?: catalog.DeploymentProfile;
-  overrideValues: OverrideValuesList;
-  onOverrideValuesUpdate: (updatedOverrideValues: OverrideValuesList) => void;
 }
 
 const DeploymentProfileForm = ({
   selectedPackage,
   selectedProfile,
-  overrideValues,
-  onOverrideValuesUpdate,
 }: DeploymentProfileFormProps) => {
   const cy = { "data-cy": dataCy };
-
   const hadMandatoryParams = useAppSelector(setupDeploymentHasMandatoryParams);
 
   return (
@@ -62,7 +55,7 @@ const DeploymentProfileForm = ({
       {hadMandatoryParams && (
         <MessageBanner
           messageTitle="Parameter value override required"
-          messageBody="There are applcations with mandatory parameters. Please fill all of them before continuing."
+          messageBody="There are applications with mandatory parameters. Please fill all of them before continuing."
           variant="info"
         />
       )}
@@ -72,8 +65,6 @@ const DeploymentProfileForm = ({
           <OverrideProfileTable
             selectedPackage={selectedPackage}
             selectedProfile={selectedProfile}
-            overrideValues={overrideValues}
-            onOverrideValuesUpdate={onOverrideValuesUpdate}
           />
         ) : (
           <div data-cy="DeploymentProfileFormError">
