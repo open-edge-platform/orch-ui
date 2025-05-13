@@ -128,7 +128,6 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
       .its("store")
       .invoke("getState")
       .then(() => {
-        console.log(store.getState().setupDeployment);
         expect(
           store.getState().setupDeployment.profileParameterOverrides[
             applicationOne.name
