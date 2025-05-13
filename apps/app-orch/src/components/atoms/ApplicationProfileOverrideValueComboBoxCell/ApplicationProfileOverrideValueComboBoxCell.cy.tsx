@@ -4,6 +4,8 @@
  */
 
 import { applicationOne } from "@orch-ui/utils";
+import { setupStore } from "../../../store";
+import { initialState } from "../../../store/reducers/setupDeployment";
 import ApplicationProfileOverrideValueComboBoxCell, {
   createOverrideValue,
   parseOverrideValue,
@@ -71,7 +73,6 @@ describe("<ApplicationProfileOverrideValueComboBoxCell />", () => {
           default: "7B",
           suggestedValues: ["value1", "value2", "value3"],
         }}
-        onUpdate={cy.stub().as("onUpdate")}
       />,
     );
     pom.getComboxOptions().should("have.length", 3);
@@ -93,6 +94,11 @@ describe("<ApplicationProfileOverrideValueComboBoxCell />", () => {
   });
 
   it("calls onUpdate method", () => {
+    const store = setupStore({
+      setupDeployment: { ...initialState },
+    });
+    // @ts-ignore
+    window.store = store;
     cy.mount(
       <ApplicationProfileOverrideValueComboBoxCell
         application={applicationOne}
@@ -102,8 +108,10 @@ describe("<ApplicationProfileOverrideValueComboBoxCell />", () => {
           default: "7B",
           suggestedValues: ["value1", "value2", "value3"],
         }}
-        onUpdate={cy.stub().as("onUpdate")}
       />,
+      {
+        reduxStore: store,
+      },
     );
 
     pom.combobox.select("value1");
@@ -111,8 +119,16 @@ describe("<ApplicationProfileOverrideValueComboBoxCell />", () => {
     const expectedValue = {
       "Model Size": "value1",
     };
-    cy.get("@onUpdate").should("have.been.calledOnce");
-    cy.get("@onUpdate").should("be.calledWith", expectedValue);
+    cy.window()
+      .its("store")
+      .invoke("getState")
+      .then(() => {
+        expect(
+          store.getState().setupDeployment.profileParameterOverrides[
+            applicationOne.name
+          ].values,
+        ).to.deep.equal({ ...expectedValue });
+      });
   });
 
   it("show validation error on empty string", () => {
@@ -125,12 +141,10 @@ describe("<ApplicationProfileOverrideValueComboBoxCell />", () => {
           default: "7B",
           suggestedValues: ["value1", "value2", "value3"],
         }}
-        onUpdate={cy.stub().as("onUpdate")}
       />,
     );
     pom.combobox.type(" ");
     pom.root.click(0, 0);
     pom.combobox.root.should("have.text", " This field cannot be empty.");
-    cy.get("@onUpdate").should("have.been.calledOnce");
   });
 });
