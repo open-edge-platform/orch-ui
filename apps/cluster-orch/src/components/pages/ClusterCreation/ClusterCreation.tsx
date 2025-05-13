@@ -4,12 +4,7 @@
  */
 
 import { cm, mbApi } from "@orch-ui/apis";
-import {
-  Empty,
-  MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb,
-} from "@orch-ui/components";
+import { Empty, MetadataPair, setBreadcrumb } from "@orch-ui/components";
 import { InternalError, SharedStorage } from "@orch-ui/utils";
 import {
   Button,
@@ -30,11 +25,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  clustersBreadcrumb,
-  clustersMenuItem,
-  homeBreadcrumb,
-} from "../../../routes/const";
+import { clustersBreadcrumb, homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -160,7 +151,6 @@ const ClusterCreation = () => {
   // Set breadcrumb
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(clustersMenuItem));
   }, [breadcrumb]);
   // Reset `template version` selection if `template name` selection changes
   useEffect(() => {
