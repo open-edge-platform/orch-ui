@@ -19,7 +19,6 @@ import {
   MetadataDisplay,
   Popup,
   PopupOption,
-  setActiveNavItem,
   setBreadcrumb as setClusterBreadcrumb,
   TrustedCompute,
   TypedMetadata,
@@ -46,7 +45,7 @@ import {
 } from "@spark-design/react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { clustersMenuItem, homeBreadcrumb } from "../../../routes/const";
+import { homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import TableLoader from "../../atom/TableLoader";
 
@@ -200,7 +199,6 @@ function ClusterDetail({
       } else {
         dispatch(setClusterBreadcrumb(breadcrumb));
       }
-      dispatch(setActiveNavItem(clustersMenuItem));
     }
   }, [breadcrumb]);
 
