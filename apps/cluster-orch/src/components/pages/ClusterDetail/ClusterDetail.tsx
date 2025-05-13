@@ -8,7 +8,6 @@ import {
   AggregatedStatuses,
   AggregatedStatusesMap,
   ApiError,
-  BreadcrumbPiece,
   CardBox,
   CardContainer,
   ConfirmationDialog,
@@ -19,7 +18,6 @@ import {
   MetadataDisplay,
   Popup,
   PopupOption,
-  setBreadcrumb as setClusterBreadcrumb,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -45,7 +43,6 @@ import {
 } from "@spark-design/react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import TableLoader from "../../atom/TableLoader";
 
@@ -68,15 +65,9 @@ const dataCy = "clusterDetail";
 export interface ClusterDetailProps {
   hasHeader?: boolean;
   name?: string;
-  /** This is required for cluster plugin to to set breadcrumb from fleet-management UI */
-  setBreadcrumb?: (breadcrumbs: BreadcrumbPiece[]) => void;
 }
 
-function ClusterDetail({
-  hasHeader = true,
-  name,
-  setBreadcrumb,
-}: ClusterDetailProps) {
+function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
   const cy = { "data-cy": dataCy },
     cssSelector = "cluster-detail";
   const { clusterName } = useParams<urlParams>();
@@ -175,32 +166,6 @@ function ClusterDetail({
       },
       { skip: !siteId || !SharedStorage.project?.name },
     ); // Host's Site details
-  // Breadcrumb settings
-  const breadcrumb = useMemo(
-    () => [
-      homeBreadcrumb,
-      {
-        text: "Clusters",
-        link: "../../clusters",
-      },
-      {
-        text: `${clusterDetail?.name}`,
-        link: `../../cluster/${clusterName}`,
-      },
-    ],
-    [clusterDetail],
-  );
-
-  useEffect(() => {
-    if (hasHeader) {
-      // use cluster-native breadcrumb unless specified
-      if (setBreadcrumb) {
-        setBreadcrumb(breadcrumb);
-      } else {
-        dispatch(setClusterBreadcrumb(breadcrumb));
-      }
-    }
-  }, [breadcrumb]);
 
   // we only display metadata that are actually associated with the cluster and are editable by the user
   // If the metadata is also present in site.metadata we mark it as a Site metadata

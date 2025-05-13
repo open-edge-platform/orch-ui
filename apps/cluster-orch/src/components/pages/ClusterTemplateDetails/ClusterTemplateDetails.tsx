@@ -4,23 +4,13 @@
  */
 
 import { cm } from "@orch-ui/apis";
-import {
-  ApiError,
-  Flex,
-  Popup,
-  PopupOption,
-  setBreadcrumb,
-} from "@orch-ui/components";
+import { ApiError, Flex, Popup, PopupOption } from "@orch-ui/components";
 import { downloadFile, getAuthCfg, SharedStorage } from "@orch-ui/utils";
 import { Heading, Icon, Text, ToggleSwitch } from "@spark-design/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AuthProvider } from "react-oidc-context";
 import { Provider } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  clusterTemplatesBreadcrumb,
-  homeBreadcrumb,
-} from "../../../routes/const";
 import { store } from "../../../store";
 import { useAppDispatch } from "../../../store/hooks";
 import CodeSample from "../../atom/CodeSample/CodeSample";
@@ -59,19 +49,6 @@ export const ClusterTemplateDetails = () => {
       skip: !projectName,
     },
   );
-
-  const breadcrumb = [
-    homeBreadcrumb,
-    clusterTemplatesBreadcrumb,
-    {
-      text: templateName ?? "",
-      link: "#",
-    },
-  ];
-
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-  }, [template, isSuccess]);
 
   if (isLoading) {
     return <TableLoader />;

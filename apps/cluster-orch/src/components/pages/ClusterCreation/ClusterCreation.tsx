@@ -4,7 +4,7 @@
  */
 
 import { cm, mbApi } from "@orch-ui/apis";
-import { Empty, MetadataPair, setBreadcrumb } from "@orch-ui/components";
+import { Empty, MetadataPair } from "@orch-ui/components";
 import { InternalError, SharedStorage } from "@orch-ui/utils";
 import {
   Button,
@@ -23,9 +23,8 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clustersBreadcrumb, homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -70,17 +69,7 @@ const ClusterCreation = () => {
       ...props,
       visibility: ToastVisibility.Hide,
     }));
-  const breadcrumb = useMemo(
-    () => [
-      homeBreadcrumb,
-      clustersBreadcrumb,
-      {
-        text: "test",
-        link: "#",
-      },
-    ],
-    [],
-  );
+
   const [steps, setSteps] = useState<StepperStep[]>([
     { text: "Enter Cluster Details" },
     { text: "Select Site" },
@@ -146,12 +135,6 @@ const ClusterCreation = () => {
   const currentMetadata = objectToLabels(currentLabels);
   const accumulatedMeta = inheritedMeta.concat(objectToLabels(currentLabels));
 
-  // Clear form data at begining of the form
-  useEffect(clearData, []);
-  // Set breadcrumb
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-  }, [breadcrumb]);
   // Reset `template version` selection if `template name` selection changes
   useEffect(() => {
     setClusterTemplateVersion("Select Cluster Version");
