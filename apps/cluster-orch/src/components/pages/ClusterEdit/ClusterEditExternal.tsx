@@ -7,12 +7,12 @@ import { getAuthCfg } from "@orch-ui/utils";
 import { AuthProvider } from "react-oidc-context";
 import { Provider } from "react-redux";
 import { store } from "../../../store";
-import ClusterEdit, { ClusterEditProps } from "./ClusterEdit";
+import ClusterEdit from "./ClusterEdit";
 
-const ClusterEditExternal = ({ setBreadcrumb }: ClusterEditProps) => (
+const ClusterEditExternal = () => (
   <Provider store={store}>
     <AuthProvider {...getAuthCfg()}>
-      <ClusterEdit setBreadcrumb={setBreadcrumb} />
+      <ClusterEdit />
     </AuthProvider>
   </Provider>
 );
