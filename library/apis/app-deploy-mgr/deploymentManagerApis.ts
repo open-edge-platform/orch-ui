@@ -130,16 +130,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["DeploymentService"],
       }),
-      deploymentServiceListUiExtensions: build.query<
-        DeploymentServiceListUiExtensionsApiResponse,
-        DeploymentServiceListUiExtensionsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/ui_extensions`,
-          params: { serviceName: queryArg.serviceName },
-        }),
-        providesTags: ["DeploymentService"],
-      }),
     }),
     overrideExisting: false,
   });
@@ -255,14 +245,6 @@ export type DeploymentServiceGetDeploymentsStatusApiResponse =
 export type DeploymentServiceGetDeploymentsStatusApiArg = {
   /** Optional. A string array that filters cluster labels to be displayed ie color=blue,customer=intel-corp. Labels separated by a comma. */
   labels?: string[];
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type DeploymentServiceListUiExtensionsApiResponse =
-  /** status 200 OK */ ListUiExtensionsResponse;
-export type DeploymentServiceListUiExtensionsApiArg = {
-  /** Optional. A string array that filters service names to be displayed. Service names separated by a comma. */
-  serviceName?: string[];
   /** unique projectName for the resource */
   projectName: string;
 };
@@ -385,8 +367,6 @@ export type Deployment = {
   overrideValues?: OverrideValues[];
   /** The selected profile name to be used for the base Helm values of the different applications in the deployment package */
   profileName?: string;
-  /** DEPRECATED - will remove in v2. Publisher of the deployment package. */
-  publisherName?: string;
   serviceExports?: ServiceExport[];
   status?: DeploymentStatus;
   /** Cluster labels on which we want to deploy the application. */
@@ -402,8 +382,6 @@ export type DeploymentRead = {
   apps?: AppRead[];
   /** The creation time of the deployment. */
   createTime?: string;
-  /** DEPRECATED - will remove in v2. Name of the default DeploymentProfile to use when deploying this DeploymentPackage. If no profileName is provided, use defaultProfileName from deployment package. */
-  defaultProfileName?: string;
   /** The id of the deployment. */
   deployId?: string;
   /** The deployment type for the target cluster deployment can be either auto-scaling or targeted. In Auto-scaling type, the application will be automatically deployed on all the clusters which match the Target cluster label. In Targeted type, the user has to select among pre created clusters to deploy the application. */
@@ -418,8 +396,6 @@ export type DeploymentRead = {
   overrideValues?: OverrideValues[];
   /** The selected profile name to be used for the base Helm values of the different applications in the deployment package */
   profileName?: string;
-  /** DEPRECATED - will remove in v2. Publisher of the deployment package. */
-  publisherName?: string;
   serviceExports?: ServiceExport[];
   status?: DeploymentStatusRead;
   /** Cluster labels on which we want to deploy the application. */
@@ -496,24 +472,6 @@ export type GetDeploymentsStatusResponseRead = {
   unknown?: number;
   updating?: number;
 };
-export type UiExtension = {
-  /** The name of the application corresponding to this UI extension. */
-  appName: string;
-  /** Description states the purpose of the dashboard that this UIExtension represents. */
-  description: string;
-  /** The name of the main file to load this specific UI extension. */
-  fileName: string;
-  /** Label represents a dashboard in the main UI. */
-  label: string;
-  /** The application module to be loaded. */
-  moduleName: string;
-  /** The name of the API Extension endpoint. */
-  serviceName: string;
-};
-export type ListUiExtensionsResponse = {
-  /** A list of UIExtensions. */
-  uiExtensions: UiExtension[];
-};
 export const {
   useClusterServiceListClustersQuery,
   useClusterServiceGetClusterQuery,
@@ -525,5 +483,4 @@ export const {
   useDeploymentServiceListDeploymentClustersQuery,
   useDeploymentServiceListDeploymentsPerClusterQuery,
   useDeploymentServiceGetDeploymentsStatusQuery,
-  useDeploymentServiceListUiExtensionsQuery,
 } = injectedRtkApi;

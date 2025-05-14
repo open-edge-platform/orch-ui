@@ -166,7 +166,7 @@ export type ListAppEndpointsResponse = {};
 export type EndpointStatus = {};
 export type EndpointStatusRead = {
   /** Endpoint state, either Ready or NotReady. */
-  state?: "STATE_READY" | "STATE_NOT_READY";
+  state?: "STATE_UNSPECIFIED" | "STATE_READY" | "STATE_NOT_READY";
 };
 export type AppEndpoint = {
   endpointStatus?: EndpointStatus;
@@ -244,6 +244,7 @@ export type ContainerRead = {
 export type PodStatus = {
   /** State information */
   state?:
+    | "STATE_UNSPECIFIED"
     | "STATE_PENDING"
     | "STATE_RUNNING"
     | "STATE_SUCCEEDED"
@@ -261,11 +262,12 @@ export type PodRead = {
 };
 export type AdminStatus = {
   /** State information */
-  state?: "STATE_UP" | "STATE_DOWN";
+  state?: "STATE_UNSPECIFIED" | "STATE_UP" | "STATE_DOWN";
 };
 export type VirtualMachineStatus = {
   /** Virtual machine state */
   state?:
+    | "STATE_UNSPECIFIED"
     | "STATE_STOPPED"
     | "STATE_PROVISIONING"
     | "STATE_STARTING"
@@ -293,7 +295,7 @@ export type AppWorkload = {
   name: string;
   pod?: Pod;
   /** Application workload type, e.g. virtual machine and pod. */
-  type?: "TYPE_VIRTUAL_MACHINE" | "TYPE_POD";
+  type?: "TYPE_UNSPECIFIED" | "TYPE_VIRTUAL_MACHINE" | "TYPE_POD";
   virtualMachine?: VirtualMachine;
 };
 export type AppWorkloadRead = {
@@ -307,7 +309,7 @@ export type AppWorkloadRead = {
   namespace?: string;
   pod?: PodRead;
   /** Application workload type, e.g. virtual machine and pod. */
-  type?: "TYPE_VIRTUAL_MACHINE" | "TYPE_POD";
+  type?: "TYPE_UNSPECIFIED" | "TYPE_VIRTUAL_MACHINE" | "TYPE_POD";
   virtualMachine?: VirtualMachine;
   /** Ready status to determines if a workload is fully functional or not. */
   workloadReady?: boolean;
