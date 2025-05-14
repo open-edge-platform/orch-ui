@@ -43,7 +43,6 @@ import {
 } from "@spark-design/react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch } from "../../../store/hooks";
 import TableLoader from "../../atom/TableLoader";
 
 import {
@@ -74,7 +73,6 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
   const [clusterFirstHostId, setClusterFirstHostId] = useState<string>();
   const [siteId, setSiteId] = useState<string>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // TODO: create global shared/store/notification.ts

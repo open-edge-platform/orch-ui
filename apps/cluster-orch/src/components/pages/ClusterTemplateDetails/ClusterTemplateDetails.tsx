@@ -12,7 +12,6 @@ import { AuthProvider } from "react-oidc-context";
 import { Provider } from "react-redux";
 import { useParams } from "react-router-dom";
 import { store } from "../../../store";
-import { useAppDispatch } from "../../../store/hooks";
 import CodeSample from "../../atom/CodeSample/CodeSample";
 import TableLoader from "../../atom/TableLoader";
 import "./ClusterTemplateDetails.scss";
@@ -31,12 +30,10 @@ export const ClusterTemplateDetails = () => {
   const { templateName, templateVersion } = useParams<UrlParams>();
 
   const [showLineNumbers, setShowLineNumbers] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
 
   const {
     data: template,
     isLoading,
-    isSuccess,
     isError,
     error,
   } = cm.useGetV2ProjectsByProjectNameTemplatesAndNameVersionsVersionQuery(
