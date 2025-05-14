@@ -15,15 +15,10 @@ import "./ClusterDetail/ClusterDetail.scss";
 const ClusterDetailExternal = ({
   hasHeader = true,
   name,
-  setBreadcrumb,
 }: ClusterDetailProps) => (
   <Provider store={store}>
     <AuthProvider {...getAuthCfg()}>
-      <ClusterDetail
-        hasHeader={hasHeader}
-        name={name}
-        setBreadcrumb={setBreadcrumb}
-      />
+      <ClusterDetail hasHeader={hasHeader} name={name} />
     </AuthProvider>
   </Provider>
 );

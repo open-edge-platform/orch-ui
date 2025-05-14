@@ -40,6 +40,23 @@ const menuItems: CollapsableListItem<string>[] = [
   clusterTemplatesMenuItem,
 ];
 
+/**
+ * Determines the active menu item based on the current path.
+ *
+ * @param activePath - The current active path from the router
+ * @returns A CollapsableListItem representing the active menu item
+ *
+ * @remarks
+ * The function first cleans the path by removing '/cluster-orch' occurrences if any.
+ * It then matches the cleaned path against predefined routes to find the corresponding menu item.
+ * If no match is found, it defaults to the cluster templates menu item.
+ *
+ * @example
+ * ```typescript
+ * const activeMenuItem = selectActiveMenu('/cluster-orch/clusters');
+ * // Returns clustersMenuItem
+ * ```
+ */
 const selectActiveMenu = (activePath: string): CollapsableListItem<string> => {
   const cleanPath = activePath.replace(/\/cluster-orch/g, "");
 
