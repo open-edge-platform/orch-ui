@@ -2,6 +2,8 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
+import { cm } from "@orch-ui/apis";
+import Chainable = Cypress.Chainable;
 
 export const deleteClusterViaApi = (project: string, clusterName: string) => {
   return cy
@@ -26,3 +28,30 @@ export function isClusterCreateTestDataPresent(testData) {
     "clusterName" in testData
   );
 }
+
+export const createClusterViaApi = (
+  project: string,
+  clusterPayload: cm.ClusterSpec,
+) => {
+  return cy
+    .authenticatedRequest({
+      method: "POST",
+      url: `/v2/projects/${project}/clusters`,
+      body: clusterPayload,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(201);
+    });
+};
+
+export const getClusterTemplatesViaApi = (project): Chainable => {
+  return cy
+    .authenticatedRequest({
+      method: "GET",
+      url: `/v2/projects/${project}/templates`,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+      return response.body;
+    });
+};
