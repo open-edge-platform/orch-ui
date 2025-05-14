@@ -135,6 +135,9 @@ const ClusterCreation = () => {
   const currentMetadata = objectToLabels(currentLabels);
   const accumulatedMeta = inheritedMeta.concat(objectToLabels(currentLabels));
 
+  // Clear form data at begining of the form
+  useEffect(clearData, []);
+
   // Reset `template version` selection if `template name` selection changes
   useEffect(() => {
     setClusterTemplateVersion("Select Cluster Version");
