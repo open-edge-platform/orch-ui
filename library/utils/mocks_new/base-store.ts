@@ -22,7 +22,7 @@ export abstract class BaseStore<
 > {
   idField: I;
   resources: T[] = [];
-  constructor(idField: I, resources: T[]) {
+  protected constructor(idField: I, resources: T[]) {
     this.resources = resources;
     this.idField = idField;
   }
