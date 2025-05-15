@@ -1,5 +1,5 @@
 {
-  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-infra-core-edge-infrastructure-manager-openapi-all.yaml",
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-infra-core-edge-infrastructure-manager-openapi-all-v2.yaml",
   "apiFile": "./apiSlice.ts",
   "apiImport": "infraApi",
   "outputFile": "./infra.ts",
