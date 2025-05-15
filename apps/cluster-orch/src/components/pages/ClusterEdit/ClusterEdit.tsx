@@ -90,10 +90,10 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
 
   // Used to get site id for drawer
   const { data: firstClusterHost, isSuccess: isHostSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useHostServiceGetHostQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        hostId: firstHostId as string,
+        resourceId: firstHostId as string,
       },
       { skip: !firstHostId || !SharedStorage.project?.name },
     );

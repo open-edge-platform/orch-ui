@@ -121,13 +121,10 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const preselectedSite = firstHost?.site as infra.SiteRead;
 
   // host register - used when coming in from 'autoProvision' flow, host will not exist
-  const [registerHost] =
-    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+  const [registerHost] = infra.registerHost();
   // host update
-  const [patchHost] =
-    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
-  const [postInstance] =
-    infra.usePostV1ProjectsByProjectNameComputeInstancesMutation();
+  const [patchHost] = infra.useHostServicePatchHostMutation();
+  const [postInstance] = infra.useInstanceServiceCreateInstanceMutation();
 
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
     useState<boolean>(false);
@@ -246,7 +243,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   };
 
   const { data: localAccountsList } =
-    infra.useGetV1ProjectsByProjectNameLocalAccountsQuery({
+    infra.useLocalAccountServiceListLocalAccountsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
 
@@ -257,7 +254,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     for (const host of Object.values(hosts)) {
       await patchHost({
         projectName: SharedStorage.project?.name ?? "",
-        hostId: host.resourceId!,
+        resourceId: host.resourceId!,
         body: {
           name: host.name,
           siteId: host.siteId,

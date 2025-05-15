@@ -137,14 +137,13 @@ const SshKeysTable = ({
     getOrder(searchParams.get("column"), sortDirection) ?? "username asc";
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
 
-  const [addSshKey] =
-    infra.usePostV1ProjectsByProjectNameLocalAccountsMutation();
+  const [addSshKey] = infra.useLocalAccountServiceCreateLocalAccountMutation();
   const {
     data: localAccountData,
     isSuccess,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameLocalAccountsQuery(
+  } = infra.useLocalAccountServiceListLocalAccountsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       pageSize,
@@ -202,7 +201,10 @@ const SshKeysTable = ({
     };
 
     if (SharedStorage.project?.name)
-      addSshKey({ localAccount, projectName: SharedStorage.project.name })
+      addSshKey({
+        localAccountResource: localAccount,
+        projectName: SharedStorage.project.name,
+      })
         .unwrap()
         .then(() => {
           dispatch(

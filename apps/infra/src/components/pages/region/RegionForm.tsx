@@ -211,7 +211,7 @@ const RegionForm: React.FC = () => {
     useState<string[]>(baseRegionTypes);
 
   const [hasTelemetry, setHasTelemetry] = useState<boolean>(false);
-  const [createRegion] = infra.usePostV1ProjectsByProjectNameRegionsMutation();
+  const [createRegion] = infra.useRegionServiceCreateRegionMutation();
   const [createMetricProfile] =
     infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
   const [editMetricProfile] =
@@ -368,7 +368,7 @@ const RegionForm: React.FC = () => {
       if (regionId === "new") {
         regionOperation = createRegion({
           projectName: SharedStorage.project?.name ?? "",
-          region: data,
+          regionResource: data,
         }).unwrap();
       } else {
         regionOperation = updateRegion({

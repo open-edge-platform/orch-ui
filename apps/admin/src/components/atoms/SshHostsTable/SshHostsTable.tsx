@@ -69,7 +69,7 @@ const SshHostsTable = ({
     isLoading,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+  } = infra.useInstanceServiceListInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter,

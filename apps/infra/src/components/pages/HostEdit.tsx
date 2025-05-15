@@ -83,10 +83,10 @@ const HostEdit = () => {
     isSuccess,
     isLoading,
     isError,
-  } = infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+  } = infra.useHostServiceGetHostQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      hostId: id,
+      resourceId: id,
     },
     {
       selectFromResult: ({ data, isSuccess, isLoading, isError }) => ({
@@ -132,11 +132,11 @@ const HostEdit = () => {
     isSuccess: isInstanceSuccess,
     isLoading: isInstanceLoading,
     isError: isInstanceError,
-  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+  } = infra.useInstanceServiceListInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      hostId: host?.resourceId,
-      workloadMemberId: "null",
+      // hostId: host?.resourceId,
+      // workloadMemberId: "null", //TODO: hostId, workloadMemberId are removed in API check impact
     },
     { skip: !host?.resourceId },
   );
@@ -192,8 +192,7 @@ const HostEdit = () => {
     (isInstanceSuccess && (instanceList.instances?.length ?? 0) === 0) ||
     isInstanceError;
 
-  const [updateHost] =
-    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
+  const [updateHost] = infra.useHostServiceUpdateHostMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 
@@ -221,14 +220,14 @@ const HostEdit = () => {
       Promise.all([
         updateHost({
           projectName: SharedStorage.project?.name ?? "",
-          hostId: host.resourceId,
-          body: {
+          resourceId: host.resourceId,
+          hostResource: {
             name: host.name ?? "",
             site: undefined,
             siteId: selectedSite?.siteID,
-            currentPowerState: host.currentPowerState,
-            desiredPowerState: host.desiredPowerState,
-            inheritedMetadata: host.inheritedMetadata,
+            // currentPowerState: host.currentPowerState,
+            // desiredPowerState: host.desiredPowerState,
+            // inheritedMetadata: host.inheritedMetadata,
             metadata: metadataPairs,
           },
         }).unwrap(),

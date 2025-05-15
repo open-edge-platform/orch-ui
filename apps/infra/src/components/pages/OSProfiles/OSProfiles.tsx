@@ -35,7 +35,7 @@ const OSProfiles = () => {
     isLoading,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery({
+  } = infra.useOperatingSystemServiceListOperatingSystemsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
@@ -52,7 +52,7 @@ const OSProfiles = () => {
     return (
       <Table
         columns={columns}
-        data={osProfiles?.OperatingSystemResources}
+        data={osProfiles?.operatingSystems}
         canSearch
         isLoading={isLoading}
       />

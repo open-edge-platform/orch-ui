@@ -124,8 +124,7 @@ const HostsTable = ({
   const dispatch = useAppDispatch();
   const navigate = useInfraNavigate();
 
-  const [onboardHost] =
-    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
+  const [onboardHost] = infra.useHostServiceOnboardHostMutation();
 
   // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
@@ -229,7 +228,7 @@ const HostsTable = ({
     for (const host of selectedHosts) {
       await onboardHost({
         projectName: SharedStorage.project?.name ?? "",
-        hostId: host.resourceId!,
+        resourceId: host.resourceId!,
       })
         .unwrap()
         .catch((e) => {

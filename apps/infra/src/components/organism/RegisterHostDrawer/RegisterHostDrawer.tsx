@@ -46,10 +46,8 @@ export const RegisterHostDrawer = ({
   };
   const [hostRegisterInfo, setHostRegisterInfo] =
     useState<infra.HostRegisterInfo>(formDefault);
-  const [registerHost] =
-    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
-  const [updateHost] =
-    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
+  const [registerHost] = infra.useHostServiceRegisterHostMutation();
+  const [updateHost] = infra.useHostServiceRegisterUpdateHostMutation();
   const {
     control: registerHostInfoControl,
     formState: { errors: formErrors },
@@ -66,11 +64,11 @@ export const RegisterHostDrawer = ({
   const onUpdate = () => {
     if (!host?.resourceId) return;
     updateHost({
-      body: {
+      hostRegister: {
         name: hostRegisterInfo.name,
         autoOnboard: hostRegisterInfo.autoOnboard,
       },
-      hostId: host.resourceId,
+      resourceId: host.resourceId,
       projectName: SharedStorage.project?.name ?? "",
     })
       .unwrap()

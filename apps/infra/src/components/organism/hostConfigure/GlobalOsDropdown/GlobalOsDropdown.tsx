@@ -26,12 +26,12 @@ export const GlobalOsDropdown = ({
   const cy = { "data-cy": dataCy };
 
   const {
-    data: { OperatingSystemResources: _osResources } = {},
+    data: { operatingSystems: _osResources } = {},
     isLoading,
     isError,
     isSuccess,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery({
+  } = infra.useOperatingSystemServiceListOperatingSystemsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });

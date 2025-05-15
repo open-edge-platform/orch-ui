@@ -201,7 +201,7 @@ export const ScheduleMaintenanceList = ({
     isLoading,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
+  } = infra.useScheduleServiceListSchedulesQuery(
     {
       projectName,
       ...targetIds,
@@ -215,11 +215,11 @@ export const ScheduleMaintenanceList = ({
     isSuccess
       ? [
           ...removeExpiredSingleSchedules(
-            maintenanceJoin.SingleSchedules.map(
+            maintenanceJoin.singleSchedules.map(
               convertSingleMaintenanceScheduleAPIScheduleMaintenance,
             ),
           ),
-          ...maintenanceJoin.RepeatedSchedules.map(
+          ...maintenanceJoin.repeatedSchedules.map(
             convertRepeatedMaintenanceScheduleAPIScheduleMaintenance,
           ),
         ]
