@@ -26,8 +26,7 @@ import { setErrorInfo, showToast } from "../../../store/notifications";
 export default function Region() {
   const dispatch = useAppDispatch();
   const navigate = useInfraNavigate();
-  const [deleteRegion] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+  const [deleteRegion] = infra.useRegionServiceDeleteRegionMutation();
 
   const [regionToDelete, setRegionToDelete] = useState<infra.RegionRead | null>(
     null,
@@ -40,7 +39,7 @@ export default function Region() {
     try {
       await deleteRegion({
         projectName: SharedStorage.project?.name ?? "",
-        regionId,
+        resourceId: regionId,
       })
         .unwrap()
         .catch((error) => {

@@ -69,8 +69,7 @@ const RegionForm: React.FC = () => {
   const dataCy = "regionForm";
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
-  const [deleteRegion] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+  const [deleteRegion] = infra.useRegionServiceDeleteRegionMutation();
   const [deleteMetricProfile] =
     infra.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const [deleteLogProfile] =
@@ -79,7 +78,7 @@ const RegionForm: React.FC = () => {
     try {
       await deleteRegion({
         projectName: SharedStorage.project?.name ?? "",
-        regionId,
+        resourceId: regionId,
       })
         .unwrap()
         .then(() => {
@@ -114,7 +113,7 @@ const RegionForm: React.FC = () => {
     isError,
     error,
     isFetching,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+  } = infra.useRegionServiceGetRegionQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId as string,
@@ -234,8 +233,7 @@ const RegionForm: React.FC = () => {
   const logsgroup = logsResponse?.TelemetryLogsGroups ?? [];
   const [currentSystemLog, setCurrentSystemLog] =
     useState<SystemLogPair[]>(getLogPairs());
-  const [updateRegion] =
-    infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+  const [updateRegion] = infra.useRegionServiceUpdateRegionMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
   const [parentRegion, setParentRegion] = useState<string | undefined>(

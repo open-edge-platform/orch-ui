@@ -85,14 +85,13 @@ const SiteForm = () => {
     },
   );
 
-  const { data: region } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: regionId ?? "",
-      },
-      { skip: !regionId || !SharedStorage.project?.name },
-    );
+  const { data: region } = infra.useRegionServiceGetRegionQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: regionId ?? "",
+    },
+    { skip: !regionId || !SharedStorage.project?.name },
+  );
 
   const {
     data: profileMetrics,
@@ -166,8 +165,7 @@ const SiteForm = () => {
   const dispatch = useAppDispatch();
 
   const [hasSiteMetadata, setHasSiteMetadata] = useState(false);
-  const [createSite] =
-    infra.usePostV1ProjectsByProjectNameRegionsAndRegionIdSitesMutation();
+  const [createSite] = infra.useSiteServiceCreateSiteMutation();
   const [updateSite] =
     infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
   const [createLogProfile] =
@@ -360,7 +358,7 @@ const SiteForm = () => {
 
       if (siteId === "new") {
         siteOperation = createSite({
-          regionId: site.regionId!,
+          resourceId: site.regionId!,
           projectName: SharedStorage.project?.name ?? "",
           site,
         }).unwrap();

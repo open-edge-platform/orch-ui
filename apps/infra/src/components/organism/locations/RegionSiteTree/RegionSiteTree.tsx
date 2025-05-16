@@ -126,11 +126,11 @@ export const RegionSiteTree = ({
     data: { sites } = {},
     isFetching: isFetchingSites,
     isError: isErrorSites,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+  } = infra.useSiteServiceListSitesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       orderBy: ORDER_BY,
-      regionId: currentRegionId ?? "",
+      resourceId: currentRegionId ?? "",
       filter: `region.resourceId="${currentRegionId}"`,
     },
     {

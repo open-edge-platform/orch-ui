@@ -166,11 +166,11 @@ const HostEdit = () => {
 
   // If Host & Region API data are both loaded
   const { data: siteData, isLoading: isSiteLoading } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    infra.useSiteServiceListSitesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `region.resourceId='${selectedRegion?.resourceId ?? ""}'`,
-        regionId: selectedRegion?.resourceId ?? "",
+        resourceId: selectedRegion?.resourceId ?? "",
       },
       { skip: !host || !selectedRegion?.resourceId },
     );

@@ -106,17 +106,16 @@ const HostDetails: React.FC = () => {
     },
   );
 
-  const sitesQuery =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: "*", // sitesFiltered logic can be updated with host regionId mapping
-        pageSize: 100,
-      },
-      {
-        skip: !SharedStorage.project?.name,
-      },
-    ); // Host's Site details
+  const sitesQuery = infra.useSiteServiceListSitesQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: "*", // sitesFiltered logic can be updated with host regionId mapping
+      pageSize: 100,
+    },
+    {
+      skip: !SharedStorage.project?.name,
+    },
+  ); // Host's Site details
 
   // Below useEffects will set the host/site data to display
   useEffect(() => {
@@ -163,7 +162,7 @@ const HostDetails: React.FC = () => {
   const [deleteMaintenanceSchedule] =
     // For Deactivating Maintenance option within Maintenance message banner or Host-Actions popup.
     // This option is only available within configured host details
-    infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.useScheduleServiceDeleteSingleScheduleMutation();
   const { data: schedules } = infra.useScheduleServiceListSchedulesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
@@ -244,7 +243,7 @@ const HostDetails: React.FC = () => {
       // deactivate maintenance button should only delete first item in maintenance list
       deleteMaintenanceSchedule({
         projectName: SharedStorage.project?.name ?? "",
-        singleScheduleId: filteredMaintenanceToDelete[0].resourceId,
+        resourceId: filteredMaintenanceToDelete[0].resourceId,
       })
         .unwrap()
         .then(() => {

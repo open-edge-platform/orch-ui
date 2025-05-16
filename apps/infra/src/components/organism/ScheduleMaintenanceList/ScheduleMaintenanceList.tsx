@@ -144,9 +144,9 @@ export const ScheduleMaintenanceList = ({
     useState<enhancedInfraSlice.ScheduleMaintenanceRead>();
 
   const [deleteMaintenanceWithoutRepeat] =
-    infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.useScheduleServiceDeleteSingleScheduleMutation();
   const [deleteMaintenanceWithRepeat] =
-    infra.useDeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
+    infra.useScheduleServiceDeleteRepeatedScheduleMutation();
 
   // TODO#2: move this to new maintenance list
   /** Delete a maintenance via INFRA-API */
@@ -158,12 +158,12 @@ export const ScheduleMaintenanceList = ({
       if (isSingleMaintenance(maintenance)) {
         apiCall = deleteMaintenanceWithoutRepeat({
           projectName: SharedStorage.project?.name ?? "",
-          singleScheduleId: maintenance.resourceId,
+          resourceId: maintenance.resourceId,
         });
       } else {
         apiCall = deleteMaintenanceWithRepeat({
           projectName: SharedStorage.project?.name ?? "",
-          repeatedScheduleId: maintenance.resourceId,
+          resourceId: maintenance.resourceId,
         });
       }
     }
