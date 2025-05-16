@@ -26,7 +26,7 @@ export interface MetadataFormProps {
 }
 
 const upperCaseRegex = new RegExp("[A-Z]");
-const k8LabelRegex = new RegExp("^[a-z0-9-_./]*$");
+const k8LabelRegex = new RegExp("^[a-z0-9-./]*$");
 const newEntryPair: MetadataPair = { key: "", value: "" };
 export const MetadataForm = ({
   pairs = [],
@@ -78,7 +78,7 @@ export enum ErrorMessages {
   IsRequired = "Is Required",
   KeyExists = "Key already exists",
   NoUpperCase = "Must be lower case",
-  InvalidK8Label = "Only alphanumeric values and _ . - allowed",
+  InvalidK8Label = "Only alphanumeric values and . - allowed",
   MaxLengthExceeded = "Maximum of 63 characters allowed",
 }
 
