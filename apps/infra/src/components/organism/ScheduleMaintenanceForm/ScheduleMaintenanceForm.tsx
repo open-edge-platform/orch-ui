@@ -158,9 +158,7 @@ export const ScheduleMaintenanceForm = ({
     ) {
       currentMonthApi = submitSingleMaintenance({
         projectName: SharedStorage.project?.name ?? "",
-        ...(isMaintenanceEdit
-          ? { singleScheduleId: maintenance.resourceId }
-          : {}),
+        ...(isMaintenanceEdit ? { resourceId: maintenance.resourceId } : {}),
         singleScheduleResource: {
           name: maintenance.name,
           scheduleStatus: maintenance.scheduleStatus,

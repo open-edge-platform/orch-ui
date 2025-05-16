@@ -34,13 +34,10 @@ export const TelemetryProfileLogs = ({
     isError,
     isLoading,
     error,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
-    args,
-    {
-      skip: Object.keys(args).length === 0,
-    },
-  );
-  const logs = _logs ? _logs.TelemetryLogsProfiles : [];
+  } = infra.useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery(args, {
+    skip: Object.keys(args).length === 0,
+  });
+  const logs = _logs ? _logs.telemetryLogsProfiles : [];
   const className = "telemetry-profile-logs";
 
   const getJSX = () => {

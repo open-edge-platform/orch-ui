@@ -54,7 +54,7 @@ const TelemetryLogsForm = ({
 }: TelemetryLogsFormProps) => {
   const cy = { "data-cy": dataCy };
   const { data: logsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     }); //how to use isLoading and isSuccess in both calls
   const [valid, setValid] = useState<boolean>(true);
@@ -70,7 +70,7 @@ const TelemetryLogsForm = ({
   );
 
   const logTypesCount = logsResponse
-    ? logsResponse.TelemetryLogsGroups.length
+    ? logsResponse.telemetryLogsGroups.length
     : 0;
 
   const { control, getValues, setValue, trigger } = useForm<SystemLogPairs>({
@@ -158,7 +158,7 @@ const TelemetryLogsForm = ({
                       }, 100);
                     }}
                   >
-                    {logsResponse?.TelemetryLogsGroups.map((loggroup) => (
+                    {logsResponse?.telemetryLogsGroups.map((loggroup) => (
                       <Item key={loggroup.telemetryLogsGroupId}>
                         {loggroup.name}
                       </Item>
