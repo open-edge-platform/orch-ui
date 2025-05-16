@@ -34,12 +34,12 @@ const OsProfileDropdown = ({
 }: OsProfileDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
   const {
-    data: { OperatingSystemResources: osResources } = {},
+    data: { operatingSystems: osResources } = {},
     isLoading,
     isError,
     isSuccess,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery(
+  } = infra.useOperatingSystemServiceListOperatingSystemsQuery(
     {
       projectName,
       pageSize,

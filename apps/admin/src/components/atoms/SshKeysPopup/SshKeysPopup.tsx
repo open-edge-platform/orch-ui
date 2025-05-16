@@ -24,7 +24,7 @@ const SshKeysPopup = ({
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   const { data, isSuccess, refetch } =
-    infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+    infra.useInstanceServiceListInstancesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `has(localaccount) AND localaccount.resourceId="${localAccount.resourceId}"`,

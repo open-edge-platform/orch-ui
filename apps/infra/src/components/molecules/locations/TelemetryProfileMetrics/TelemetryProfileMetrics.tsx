@@ -34,13 +34,13 @@ export const TelemetryProfileMetrics = ({
     isError,
     isLoading,
     error,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     args,
     {
       skip: Object.keys(args).length === 0,
     },
   );
-  const metrics = _metrics ? _metrics.TelemetryMetricsProfiles : [];
+  const metrics = _metrics ? _metrics.telemetryMetricsProfiles : [];
   const className = "telemetry-profile-metrics";
 
   const getJSX = () => {

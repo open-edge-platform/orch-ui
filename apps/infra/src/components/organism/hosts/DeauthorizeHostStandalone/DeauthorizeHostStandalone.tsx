@@ -51,8 +51,7 @@ const DeauthorizeHostStandalone = ({
   });
 
   const navigate = useInfraNavigate();
-  const [deauthorizeHost] =
-    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
+  const [deauthorizeHost] = infra.useHostServiceInvalidateHostMutation();
 
   const deauthDialogContent = (
     <div {...cy} className="deauthorize-host-standalone">
@@ -89,8 +88,8 @@ const DeauthorizeHostStandalone = ({
     try {
       deauthorizeHost({
         projectName: SharedStorage.project?.name ?? "",
-        hostId: hostId,
-        hostOperationWithNote: { note: reason },
+        resourceId: hostId,
+        note: reason,
       })
         .unwrap()
         .then(() => {

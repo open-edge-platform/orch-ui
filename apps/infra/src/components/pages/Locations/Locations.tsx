@@ -59,10 +59,8 @@ export const Locations = () => {
   const cy = { "data-cy": dataCy };
   const navigate = useInfraNavigate();
   const dispatch = useDispatch();
-  const [deleteRegion] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
-  const [deleteSite] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+  const [deleteRegion] = infra.useRegionServiceDeleteRegionMutation();
+  const [deleteSite] = infra.useSiteServiceDeleteSiteMutation();
   const region = useAppSelector(selectRegion);
   const regionToDelete = useAppSelector(selectRegionToDelete);
   const siteToDelete = useAppSelector(selectSiteToDelete);
@@ -102,7 +100,7 @@ export const Locations = () => {
   const deleteRegionHandler = (regionId: string) => {
     deleteRegion({
       projectName: SharedStorage.project?.name ?? "",
-      regionId,
+      resourceId: regionId,
     })
       .unwrap()
       .then(() => {
@@ -133,9 +131,9 @@ export const Locations = () => {
 
   const deleteSiteHandler = (siteId: string) => {
     deleteSite({
-      regionId: siteToDelete?.region?.resourceId ?? "",
+      resourceId: siteToDelete?.region?.resourceId ?? "",
       projectName: SharedStorage.project?.name ?? "",
-      siteId,
+      siteId, // TODO: API update is required
     })
       .unwrap()
       .then(() => {

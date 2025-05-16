@@ -76,7 +76,7 @@ export const Search = ({
     searchType === SearchTypes.All || searchType === SearchTypes.Sites;
   const projectName = SharedStorage.project?.name ?? "";
   const { data: searchResults, isFetching } =
-    infra.useGetV1ProjectsByProjectNameLocationsQuery(
+    infra.useLocationServiceListLocationsQuery(
       {
         projectName,
         name: searchTerm,

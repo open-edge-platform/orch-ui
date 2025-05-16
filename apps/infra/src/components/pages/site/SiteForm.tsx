@@ -85,14 +85,13 @@ const SiteForm = () => {
     },
   );
 
-  const { data: region } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: regionId ?? "",
-      },
-      { skip: !regionId || !SharedStorage.project?.name },
-    );
+  const { data: region } = infra.useRegionServiceGetRegionQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: regionId ?? "",
+    },
+    { skip: !regionId || !SharedStorage.project?.name },
+  );
 
   const {
     data: profileMetrics,
@@ -100,9 +99,9 @@ const SiteForm = () => {
     isError: profileMetricIsError,
     isSuccess: profileMetricSuccess,
     isLoading: profileMetricLoading,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     {
-      telemetryMetricsGroupId: "group-id", //TODO: not used in real endpoint
+      resourceId: "group-id", //TODO: check if its right ?
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -117,9 +116,9 @@ const SiteForm = () => {
     isError: profileLogIsError,
     isSuccess: profileLogSuccess,
     isLoading: profileLogLoading,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
+  } = infra.useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery(
     {
-      telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
+      resourceId: "group-id", //TODO: check if its right ?
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -129,7 +128,7 @@ const SiteForm = () => {
   );
 
   const getMetricPairs = () => {
-    const metricProfiles = profileMetrics?.TelemetryMetricsProfiles ?? [];
+    const metricProfiles = profileMetrics?.telemetryMetricsProfiles ?? [];
     const metricPairs: SystemMetricPair[] = [];
     for (const profile of metricProfiles) {
       if (profile.profileId && profile.metricsGroup)
@@ -143,7 +142,7 @@ const SiteForm = () => {
   };
 
   const getLogPairs = () => {
-    const logProfiles = profileLogs?.TelemetryLogsProfiles ?? [];
+    const logProfiles = profileLogs?.telemetryLogsProfiles ?? [];
     const logPairs: SystemLogPair[] = [];
     for (const profile of logProfiles) {
       if (profile.profileId && profile.logsGroup)
@@ -166,28 +165,27 @@ const SiteForm = () => {
   const dispatch = useAppDispatch();
 
   const [hasSiteMetadata, setHasSiteMetadata] = useState(false);
-  const [createSite] =
-    infra.usePostV1ProjectsByProjectNameRegionsAndRegionIdSitesMutation();
+  const [createSite] = infra.useSiteServiceCreateSiteMutation();
   const [updateSite] =
     infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
   const [createLogProfile] =
-    infra.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
+    infra.useTelemetryLogsProfileServiceCreateTelemetryLogsProfileMutation();
   const [editLogProfile] =
     infra.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const { data: logsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
-  const logsgroup = logsResponse?.TelemetryLogsGroups ?? [];
+  const logsgroup = logsResponse?.telemetryLogsGroups ?? [];
   const [createMetricProfile] =
-    infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
+    infra.useTelemetryMetricsProfileServiceCreateTelemetryMetricsProfileMutation();
   const [editMetricProfile] =
     infra.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const { data: metricsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useTelemetryMetricsGroupServiceListTelemetryMetricsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
-  const metricsgroup = metricsResponse?.TelemetryMetricsGroups ?? [];
+  const metricsgroup = metricsResponse?.telemetryMetricsGroups ?? [];
   const [hasTelemetry, setHasTelemetry] = useState<boolean>(false);
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
@@ -207,7 +205,7 @@ const SiteForm = () => {
   useEffect(() => {
     if (
       profileMetricSuccess &&
-      profileMetrics.TelemetryMetricsProfiles.length > 0
+      profileMetrics.telemetryMetricsProfiles.length > 0
     ) {
       setHasTelemetry(true);
       setCurrentSystemMetric(getMetricPairs());
@@ -215,7 +213,7 @@ const SiteForm = () => {
   }, [profileMetricSuccess, profileMetrics]);
 
   useEffect(() => {
-    if (profileLogSuccess && profileLogs.TelemetryLogsProfiles.length > 0) {
+    if (profileLogSuccess && profileLogs.telemetryLogsProfiles.length > 0) {
       setHasTelemetry(true);
       setCurrentSystemLog(getLogPairs());
     }
@@ -360,7 +358,7 @@ const SiteForm = () => {
 
       if (siteId === "new") {
         siteOperation = createSite({
-          regionId: site.regionId!,
+          resourceId: site.regionId!,
           projectName: SharedStorage.project?.name ?? "",
           site,
         }).unwrap();
@@ -396,9 +394,9 @@ const SiteForm = () => {
         } else {
           allPromises.push(
             createMetricProfile({
-              telemetryMetricsGroupId: "group-id", //TODO: evaluate
+              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryMetricsProfile: metricProfile,
+              telemetryMetricsProfileResource: metricProfile,
             }),
           );
         }
@@ -424,9 +422,9 @@ const SiteForm = () => {
         } else {
           allPromises.push(
             createLogProfile({
-              telemetryLogsGroupId: "group-id", //TODO: evaluate
+              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryLogsProfile: logProfile,
+              telemetryLogsProfileResource: logProfile,
             }),
           );
         }

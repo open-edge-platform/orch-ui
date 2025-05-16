@@ -72,7 +72,7 @@ const HostSearchFilters = () => {
 
   // Update OS profiles options by api response
   const { data: osProfiles, isSuccess: isOSSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeOsQuery(
+    infra.useOperatingSystemServiceListOperatingSystemsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
       },
@@ -83,7 +83,7 @@ const HostSearchFilters = () => {
   useEffect(() => {
     if (osProfiles && isOSSuccess) {
       setOsProfileSelection(
-        osProfiles.OperatingSystemResources?.map((os) => ({
+        osProfiles.operatingSystems?.map((os) => ({
           id: os.profileName!,
           name: os.name ?? os.profileName!,
           isSelected:

@@ -29,8 +29,7 @@ const DeleteSSHDialog = ({
 }: DeleteSSHDialogProps) => {
   const cy = { "data-cy": dataCy };
 
-  const [deleteSsh] =
-    infra.useDeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdMutation();
+  const [deleteSsh] = infra.useLocalAccountServiceDeleteLocalAccountMutation();
 
   const onDeleteSsh = () => {
     const sshName = ssh.sshKey;
@@ -39,7 +38,7 @@ const DeleteSSHDialog = ({
     }
     deleteSsh({
       projectName: SharedStorage.project?.name ?? "",
-      localAccountId: ssh.resourceId ?? "",
+      resourceId: ssh.resourceId ?? "",
     })
       .then(() => {
         if (onDelete) onDelete();

@@ -49,7 +49,7 @@ export const updateHostDetails = async (
   let response: HostConfigResponse = undefined;
   await patchHostApi({
     projectName: SharedStorage.project?.name ?? "",
-    hostId: host.resourceId!,
+    resourceId: host.resourceId!, // TODO: verify
     body: {
       name: host.name,
       siteId: host.siteId,
@@ -73,17 +73,18 @@ export const createHostInstance = async (
   postInstanceApi,
 ): Promise<HostConfigResponse> => {
   let response: HostConfigResponse = undefined;
-  await postInstanceApi({
+  const payload: infra.InstanceServiceCreateInstanceApiArg = {
     projectName: SharedStorage.project?.name ?? "",
-    body: {
+    instanceResource: {
       securityFeature: host.instance?.securityFeature,
-      osID: host.instance?.osID,
+      osId: host.instance?.osID,
       kind: "INSTANCE_KIND_METAL",
-      hostID: host.resourceId,
+      hostId: host.resourceId,
       name: `${host.name}-instance`,
-      localAccountID: host.instance?.localAccountID,
+      localAccountId: host.instance?.localAccountID,
     },
-  })
+  };
+  await postInstanceApi(payload)
     .unwrap()
     .then(() => {
       response = host;

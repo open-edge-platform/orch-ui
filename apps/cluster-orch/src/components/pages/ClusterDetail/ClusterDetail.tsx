@@ -138,10 +138,10 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
     }
   }, [clusterDetail]);
   const { data: firstClusterHost, isSuccess: isFirstHostSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useHostServiceGetHostQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        hostId: clusterFirstHostId ?? "",
+        resourceId: clusterFirstHostId ?? "",
       },
       {
         skip: !isSuccess || !clusterFirstHostId || !SharedStorage.project?.name,

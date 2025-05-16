@@ -28,10 +28,10 @@ const RegionCell: React.FC<RegionCellProps> = (props) => {
     data: region,
     isLoading,
     isError,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+  } = infra.useRegionServiceGetRegionQuery(
     {
       projectName: projectName,
-      regionId: regionId!,
+      resourceId: regionId!,
     },
     { skip: !regionId || !projectName },
   );

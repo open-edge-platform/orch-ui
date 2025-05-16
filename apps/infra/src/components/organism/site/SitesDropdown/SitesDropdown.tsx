@@ -30,11 +30,11 @@ const SitesDropdown = ({
     isError,
     isSuccess,
     error,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+  } = infra.useSiteServiceListSitesQuery(
     {
       projectName,
       pageSize,
-      regionId,
+      resourceId: regionId,
     },
     { skip: disable || !projectName }, // Skip call if component is disabled
   );
