@@ -22,12 +22,38 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: (build) => ({
+      hostServiceListHosts: build.query<
+        HostServiceListHostsApiResponse,
+        HostServiceListHostsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts`,
+          params: {
+            orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+          },
+        }),
+        providesTags: ["HostService"],
+      }),
+      hostServiceCreateHost: build.mutation<
+        HostServiceCreateHostApiResponse,
+        HostServiceCreateHostApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts`,
+          method: "POST",
+          body: queryArg.hostResource,
+        }),
+        invalidatesTags: ["HostService"],
+      }),
       hostServiceDeleteHost: build.mutation<
         HostServiceDeleteHostApiResponse,
         HostServiceDeleteHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["HostService"],
@@ -37,7 +63,7 @@ const injectedRtkApi = api
         HostServiceGetHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
         }),
         providesTags: ["HostService"],
       }),
@@ -46,7 +72,7 @@ const injectedRtkApi = api
         HostServicePatchHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.hostResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -58,7 +84,7 @@ const injectedRtkApi = api
         HostServiceUpdateHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.hostResource,
         }),
@@ -69,7 +95,7 @@ const injectedRtkApi = api
         HostServiceInvalidateHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/invalidate`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/invalidate`,
           method: "PUT",
           params: { note: queryArg.note },
         }),
@@ -80,7 +106,7 @@ const injectedRtkApi = api
         HostServiceOnboardHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/onboard`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/onboard`,
           method: "PATCH",
         }),
         invalidatesTags: ["HostService"],
@@ -90,7 +116,7 @@ const injectedRtkApi = api
         HostServiceRegisterUpdateHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/register`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/register`,
           method: "PATCH",
           body: queryArg.hostRegister,
         }),
@@ -101,7 +127,7 @@ const injectedRtkApi = api
         HostServiceRegisterHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/hosts/register`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/register`,
           method: "POST",
           body: queryArg.hostRegister,
           params: { resourceId: queryArg.resourceId },
@@ -113,7 +139,7 @@ const injectedRtkApi = api
         InstanceServiceListInstancesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -128,7 +154,7 @@ const injectedRtkApi = api
         InstanceServiceCreateInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances`,
           method: "POST",
           body: queryArg.instanceResource,
         }),
@@ -139,7 +165,7 @@ const injectedRtkApi = api
         InstanceServiceDeleteInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["InstanceService"],
@@ -149,7 +175,7 @@ const injectedRtkApi = api
         InstanceServiceGetInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
         }),
         providesTags: ["InstanceService"],
       }),
@@ -158,7 +184,7 @@ const injectedRtkApi = api
         InstanceServicePatchInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.instanceResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -170,7 +196,7 @@ const injectedRtkApi = api
         InstanceServiceUpdateInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.instanceResource,
         }),
@@ -181,7 +207,7 @@ const injectedRtkApi = api
         InstanceServiceInvalidateInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}/invalidate`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}/invalidate`,
           method: "PUT",
         }),
         invalidatesTags: ["InstanceService"],
@@ -191,7 +217,7 @@ const injectedRtkApi = api
         OperatingSystemServiceListOperatingSystemsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/os`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -206,7 +232,7 @@ const injectedRtkApi = api
         OperatingSystemServiceCreateOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/os`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os`,
           method: "POST",
           body: queryArg.operatingSystemResource,
         }),
@@ -217,7 +243,7 @@ const injectedRtkApi = api
         OperatingSystemServiceDeleteOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["OperatingSystemService"],
@@ -227,7 +253,7 @@ const injectedRtkApi = api
         OperatingSystemServiceGetOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
         }),
         providesTags: ["OperatingSystemService"],
       }),
@@ -236,7 +262,7 @@ const injectedRtkApi = api
         OperatingSystemServicePatchOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.operatingSystemResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -248,7 +274,7 @@ const injectedRtkApi = api
         OperatingSystemServiceUpdateOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.operatingSystemResource,
         }),
@@ -259,7 +285,7 @@ const injectedRtkApi = api
         ScheduleServiceListSchedulesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/schedules`,
+          url: `/v1/projects/${queryArg.projectName}/compute/schedules`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -276,7 +302,7 @@ const injectedRtkApi = api
         WorkloadServiceListWorkloadsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -291,7 +317,7 @@ const injectedRtkApi = api
         WorkloadServiceCreateWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads`,
           method: "POST",
           body: queryArg.workloadResource,
         }),
@@ -302,7 +328,7 @@ const injectedRtkApi = api
         WorkloadServiceDeleteWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["WorkloadService"],
@@ -312,7 +338,7 @@ const injectedRtkApi = api
         WorkloadServiceGetWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
         }),
         providesTags: ["WorkloadService"],
       }),
@@ -321,7 +347,7 @@ const injectedRtkApi = api
         WorkloadServicePatchWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.workloadResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -333,7 +359,7 @@ const injectedRtkApi = api
         WorkloadServiceUpdateWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.workloadResource,
         }),
@@ -344,7 +370,7 @@ const injectedRtkApi = api
         WorkloadMemberServiceListWorkloadMembersApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -359,7 +385,7 @@ const injectedRtkApi = api
         WorkloadMemberServiceCreateWorkloadMemberApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members`,
           method: "POST",
           body: queryArg.workloadMember,
         }),
@@ -370,7 +396,7 @@ const injectedRtkApi = api
         WorkloadMemberServiceDeleteWorkloadMemberApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadResourceId}/members/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["WorkloadMemberService"],
@@ -380,39 +406,16 @@ const injectedRtkApi = api
         WorkloadMemberServiceGetWorkloadMemberApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadResourceId}/members/${queryArg.resourceId}`,
         }),
         providesTags: ["WorkloadMemberService"],
-      }),
-      workloadMemberServicePatchWorkloadMember: build.mutation<
-        WorkloadMemberServicePatchWorkloadMemberApiResponse,
-        WorkloadMemberServicePatchWorkloadMemberApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members/${queryArg.resourceId}`,
-          method: "PATCH",
-          body: queryArg.workloadMember,
-          params: { fieldMask: queryArg.fieldMask },
-        }),
-        invalidatesTags: ["WorkloadMemberService"],
-      }),
-      workloadMemberServiceUpdateWorkloadMember: build.mutation<
-        WorkloadMemberServiceUpdateWorkloadMemberApiResponse,
-        WorkloadMemberServiceUpdateWorkloadMemberApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members/${queryArg.resourceId}`,
-          method: "PUT",
-          body: queryArg.workloadMember,
-        }),
-        invalidatesTags: ["WorkloadMemberService"],
       }),
       localAccountServiceListLocalAccounts: build.query<
         LocalAccountServiceListLocalAccountsApiResponse,
         LocalAccountServiceListLocalAccountsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/localAccounts`,
+          url: `/v1/projects/${queryArg.projectName}/localAccounts`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -427,7 +430,7 @@ const injectedRtkApi = api
         LocalAccountServiceCreateLocalAccountApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/localAccounts`,
+          url: `/v1/projects/${queryArg.projectName}/localAccounts`,
           method: "POST",
           body: queryArg.localAccountResource,
         }),
@@ -438,7 +441,7 @@ const injectedRtkApi = api
         LocalAccountServiceDeleteLocalAccountApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/localAccounts/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/localAccounts/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["LocalAccountService"],
@@ -448,7 +451,7 @@ const injectedRtkApi = api
         LocalAccountServiceGetLocalAccountApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/localAccounts/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/localAccounts/${queryArg.resourceId}`,
         }),
         providesTags: ["LocalAccountService"],
       }),
@@ -457,7 +460,7 @@ const injectedRtkApi = api
         LocationServiceListLocationsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/locations`,
+          url: `/v1/projects/${queryArg.projectName}/locations`,
           params: {
             name: queryArg.name,
             showSites: queryArg.showSites,
@@ -471,7 +474,7 @@ const injectedRtkApi = api
         ProviderServiceListProvidersApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/providers`,
+          url: `/v1/projects/${queryArg.projectName}/providers`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -486,7 +489,7 @@ const injectedRtkApi = api
         ProviderServiceCreateProviderApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/providers`,
+          url: `/v1/projects/${queryArg.projectName}/providers`,
           method: "POST",
           body: queryArg.providerResource,
         }),
@@ -497,7 +500,7 @@ const injectedRtkApi = api
         ProviderServiceDeleteProviderApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["ProviderService"],
@@ -507,39 +510,16 @@ const injectedRtkApi = api
         ProviderServiceGetProviderApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
         }),
         providesTags: ["ProviderService"],
-      }),
-      providerServicePatchProvider: build.mutation<
-        ProviderServicePatchProviderApiResponse,
-        ProviderServicePatchProviderApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
-          method: "PATCH",
-          body: queryArg.providerResource,
-          params: { fieldMask: queryArg.fieldMask },
-        }),
-        invalidatesTags: ["ProviderService"],
-      }),
-      providerServiceUpdateProvider: build.mutation<
-        ProviderServiceUpdateProviderApiResponse,
-        ProviderServiceUpdateProviderApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
-          method: "PUT",
-          body: queryArg.providerResource,
-        }),
-        invalidatesTags: ["ProviderService"],
       }),
       regionServiceListRegions: build.query<
         RegionServiceListRegionsApiResponse,
         RegionServiceListRegionsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions`,
+          url: `/v1/projects/${queryArg.projectName}/regions`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -555,18 +535,60 @@ const injectedRtkApi = api
         RegionServiceCreateRegionApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions`,
+          url: `/v1/projects/${queryArg.projectName}/regions`,
           method: "POST",
           body: queryArg.regionResource,
         }),
         invalidatesTags: ["RegionService"],
+      }),
+      siteServiceDeleteSite: build.mutation<
+        SiteServiceDeleteSiteApiResponse,
+        SiteServiceDeleteSiteApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["SiteService"],
+      }),
+      siteServiceGetSite: build.query<
+        SiteServiceGetSiteApiResponse,
+        SiteServiceGetSiteApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
+        }),
+        providesTags: ["SiteService"],
+      }),
+      siteServicePatchSite: build.mutation<
+        SiteServicePatchSiteApiResponse,
+        SiteServicePatchSiteApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
+          method: "PATCH",
+          body: queryArg.siteResource,
+          params: { fieldMask: queryArg.fieldMask },
+        }),
+        invalidatesTags: ["SiteService"],
+      }),
+      siteServiceUpdateSite: build.mutation<
+        SiteServiceUpdateSiteApiResponse,
+        SiteServiceUpdateSiteApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
+          method: "PUT",
+          body: queryArg.siteResource,
+        }),
+        invalidatesTags: ["SiteService"],
       }),
       regionServiceDeleteRegion: build.mutation<
         RegionServiceDeleteRegionApiResponse,
         RegionServiceDeleteRegionApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["RegionService"],
@@ -576,7 +598,7 @@ const injectedRtkApi = api
         RegionServiceGetRegionApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
         }),
         providesTags: ["RegionService"],
       }),
@@ -585,7 +607,7 @@ const injectedRtkApi = api
         RegionServicePatchRegionApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.regionResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -597,7 +619,7 @@ const injectedRtkApi = api
         RegionServiceUpdateRegionApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.regionResource,
         }),
@@ -608,7 +630,7 @@ const injectedRtkApi = api
         SiteServiceListSitesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites`,
           params: {
             orderBy: queryArg.orderBy,
             filter: queryArg.filter,
@@ -623,50 +645,8 @@ const injectedRtkApi = api
         SiteServiceCreateSiteApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites`,
           method: "POST",
-          body: queryArg.siteResource,
-        }),
-        invalidatesTags: ["SiteService"],
-      }),
-      siteServiceDeleteSite: build.mutation<
-        SiteServiceDeleteSiteApiResponse,
-        SiteServiceDeleteSiteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites/${queryArg.resourceId}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["SiteService"],
-      }),
-      siteServiceGetSite: build.query<
-        SiteServiceGetSiteApiResponse,
-        SiteServiceGetSiteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites/${queryArg.resourceId}`,
-        }),
-        providesTags: ["SiteService"],
-      }),
-      siteServicePatchSite: build.mutation<
-        SiteServicePatchSiteApiResponse,
-        SiteServicePatchSiteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites/${queryArg.resourceId}`,
-          method: "PATCH",
-          body: queryArg.siteResource,
-          params: { fieldMask: queryArg.fieldMask },
-        }),
-        invalidatesTags: ["SiteService"],
-      }),
-      siteServiceUpdateSite: build.mutation<
-        SiteServiceUpdateSiteApiResponse,
-        SiteServiceUpdateSiteApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites/${queryArg.resourceId}`,
-          method: "PUT",
           body: queryArg.siteResource,
         }),
         invalidatesTags: ["SiteService"],
@@ -676,7 +656,7 @@ const injectedRtkApi = api
         ScheduleServiceListRepeatedSchedulesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/repeated`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -693,7 +673,7 @@ const injectedRtkApi = api
         ScheduleServiceCreateRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/repeated`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated`,
           method: "POST",
           body: queryArg.repeatedScheduleResource,
         }),
@@ -704,7 +684,7 @@ const injectedRtkApi = api
         ScheduleServiceDeleteRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["ScheduleService"],
@@ -714,7 +694,7 @@ const injectedRtkApi = api
         ScheduleServiceGetRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
         }),
         providesTags: ["ScheduleService"],
       }),
@@ -723,7 +703,7 @@ const injectedRtkApi = api
         ScheduleServicePatchRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.repeatedScheduleResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -735,7 +715,7 @@ const injectedRtkApi = api
         ScheduleServiceUpdateRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.repeatedScheduleResource,
         }),
@@ -746,7 +726,7 @@ const injectedRtkApi = api
         ScheduleServiceListSingleSchedulesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/single`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -763,7 +743,7 @@ const injectedRtkApi = api
         ScheduleServiceCreateSingleScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/single`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single`,
           method: "POST",
           body: queryArg.singleScheduleResource,
         }),
@@ -774,7 +754,7 @@ const injectedRtkApi = api
         ScheduleServiceDeleteSingleScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["ScheduleService"],
@@ -784,7 +764,7 @@ const injectedRtkApi = api
         ScheduleServiceGetSingleScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
         }),
         providesTags: ["ScheduleService"],
       }),
@@ -793,7 +773,7 @@ const injectedRtkApi = api
         ScheduleServicePatchSingleScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.singleScheduleResource,
           params: { fieldMask: queryArg.fieldMask },
@@ -805,7 +785,7 @@ const injectedRtkApi = api
         ScheduleServiceUpdateSingleScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
           method: "PUT",
           body: queryArg.singleScheduleResource,
         }),
@@ -816,7 +796,7 @@ const injectedRtkApi = api
         TelemetryLogsGroupServiceListTelemetryLogsGroupsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -830,18 +810,60 @@ const injectedRtkApi = api
         TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups`,
           method: "POST",
           body: queryArg.telemetryLogsGroupResource,
         }),
         invalidatesTags: ["TelemetryLogsGroupService"],
+      }),
+      telemetryLogsProfileServiceDeleteTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServiceGetTelemetryLogsProfile: build.query<
+        TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+        }),
+        providesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServicePatchTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+          method: "PATCH",
+          body: queryArg.telemetryLogsProfileResource,
+          params: { fieldMask: queryArg.fieldMask },
+        }),
+        invalidatesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServiceUpdateTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+          method: "PUT",
+          body: queryArg.telemetryLogsProfileResource,
+        }),
+        invalidatesTags: ["TelemetryLogsProfileService"],
       }),
       telemetryLogsGroupServiceDeleteTelemetryLogsGroup: build.mutation<
         TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiResponse,
         TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["TelemetryLogsGroupService"],
@@ -851,7 +873,7 @@ const injectedRtkApi = api
         TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}`,
         }),
         providesTags: ["TelemetryLogsGroupService"],
       }),
@@ -860,7 +882,7 @@ const injectedRtkApi = api
         TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -878,50 +900,8 @@ const injectedRtkApi = api
         TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles`,
           method: "POST",
-          body: queryArg.telemetryLogsProfileResource,
-        }),
-        invalidatesTags: ["TelemetryLogsProfileService"],
-      }),
-      telemetryLogsProfileServiceDeleteTelemetryLogsProfile: build.mutation<
-        TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse,
-        TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles/${queryArg.resourceId}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["TelemetryLogsProfileService"],
-      }),
-      telemetryLogsProfileServiceGetTelemetryLogsProfile: build.query<
-        TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse,
-        TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles/${queryArg.resourceId}`,
-        }),
-        providesTags: ["TelemetryLogsProfileService"],
-      }),
-      telemetryLogsProfileServicePatchTelemetryLogsProfile: build.mutation<
-        TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse,
-        TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles/${queryArg.resourceId}`,
-          method: "PATCH",
-          body: queryArg.telemetryLogsProfileResource,
-          params: { fieldMask: queryArg.fieldMask },
-        }),
-        invalidatesTags: ["TelemetryLogsProfileService"],
-      }),
-      telemetryLogsProfileServiceUpdateTelemetryLogsProfile: build.mutation<
-        TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse,
-        TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles/${queryArg.resourceId}`,
-          method: "PUT",
           body: queryArg.telemetryLogsProfileResource,
         }),
         invalidatesTags: ["TelemetryLogsProfileService"],
@@ -931,7 +911,7 @@ const injectedRtkApi = api
         TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -945,18 +925,63 @@ const injectedRtkApi = api
         TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups`,
           method: "POST",
           body: queryArg.telemetryMetricsGroupResource,
         }),
         invalidatesTags: ["TelemetryMetricsGroupService"],
       }),
+      telemetryMetricsProfileServiceDeleteTelemetryMetricsProfile:
+        build.mutation<
+          TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg
+        >({
+          query: (queryArg) => ({
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
+            method: "DELETE",
+          }),
+          invalidatesTags: ["TelemetryMetricsProfileService"],
+        }),
+      telemetryMetricsProfileServiceGetTelemetryMetricsProfile: build.query<
+        TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse,
+        TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
+        }),
+        providesTags: ["TelemetryMetricsProfileService"],
+      }),
+      telemetryMetricsProfileServicePatchTelemetryMetricsProfile:
+        build.mutation<
+          TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg
+        >({
+          query: (queryArg) => ({
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
+            method: "PATCH",
+            body: queryArg.telemetryMetricsProfileResource,
+            params: { fieldMask: queryArg.fieldMask },
+          }),
+          invalidatesTags: ["TelemetryMetricsProfileService"],
+        }),
+      telemetryMetricsProfileServiceUpdateTelemetryMetricsProfile:
+        build.mutation<
+          TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg
+        >({
+          query: (queryArg) => ({
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
+            method: "PUT",
+            body: queryArg.telemetryMetricsProfileResource,
+          }),
+          invalidatesTags: ["TelemetryMetricsProfileService"],
+        }),
       telemetryMetricsGroupServiceDeleteTelemetryMetricsGroup: build.mutation<
         TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiResponse,
         TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["TelemetryMetricsGroupService"],
@@ -966,7 +991,7 @@ const injectedRtkApi = api
         TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}`,
         }),
         providesTags: ["TelemetryMetricsGroupService"],
       }),
@@ -975,7 +1000,7 @@ const injectedRtkApi = api
         TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles`,
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles`,
           params: {
             pageSize: queryArg.pageSize,
             offset: queryArg.offset,
@@ -994,53 +1019,8 @@ const injectedRtkApi = api
           TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg
         >({
           query: (queryArg) => ({
-            url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles`,
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles`,
             method: "POST",
-            body: queryArg.telemetryMetricsProfileResource,
-          }),
-          invalidatesTags: ["TelemetryMetricsProfileService"],
-        }),
-      telemetryMetricsProfileServiceDeleteTelemetryMetricsProfile:
-        build.mutation<
-          TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse,
-          TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles/${queryArg.resourceId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["TelemetryMetricsProfileService"],
-        }),
-      telemetryMetricsProfileServiceGetTelemetryMetricsProfile: build.query<
-        TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse,
-        TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles/${queryArg.resourceId}`,
-        }),
-        providesTags: ["TelemetryMetricsProfileService"],
-      }),
-      telemetryMetricsProfileServicePatchTelemetryMetricsProfile:
-        build.mutation<
-          TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse,
-          TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles/${queryArg.resourceId}`,
-            method: "PATCH",
-            body: queryArg.telemetryMetricsProfileResource,
-            params: { fieldMask: queryArg.fieldMask },
-          }),
-          invalidatesTags: ["TelemetryMetricsProfileService"],
-        }),
-      telemetryMetricsProfileServiceUpdateTelemetryMetricsProfile:
-        build.mutation<
-          TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse,
-          TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v2/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles/${queryArg.resourceId}`,
-            method: "PUT",
             body: queryArg.telemetryMetricsProfileResource,
           }),
           invalidatesTags: ["TelemetryMetricsProfileService"],
@@ -1049,6 +1029,27 @@ const injectedRtkApi = api
     overrideExisting: false,
   });
 export { injectedRtkApi as infra };
+export type HostServiceListHostsApiResponse =
+  /** status 200 OK */ ListHostsResponseRead;
+export type HostServiceListHostsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type HostServiceCreateHostApiResponse =
+  /** status 200 OK */ HostResourceRead;
+export type HostServiceCreateHostApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  hostResource: HostResourceWrite;
+};
 export type HostServiceDeleteHostApiResponse =
   /** status 200 OK */ DeleteHostResponse;
 export type HostServiceDeleteHostApiArg = {
@@ -1344,6 +1345,8 @@ export type WorkloadMemberServiceDeleteWorkloadMemberApiArg = {
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** unique workloadResourceId for the resource */
+  workloadResourceId: string;
 };
 export type WorkloadMemberServiceGetWorkloadMemberApiResponse =
   /** status 200 OK */ WorkloadMemberRead;
@@ -1352,26 +1355,8 @@ export type WorkloadMemberServiceGetWorkloadMemberApiArg = {
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
-};
-export type WorkloadMemberServicePatchWorkloadMemberApiResponse =
-  /** status 200 OK */ WorkloadMemberRead;
-export type WorkloadMemberServicePatchWorkloadMemberApiArg = {
-  /** ID of the resource to be updated. */
-  resourceId: string;
-  /** Field mask to be applied on the patch of workload_member. */
-  fieldMask?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  workloadMember: WorkloadMemberWrite;
-};
-export type WorkloadMemberServiceUpdateWorkloadMemberApiResponse =
-  /** status 200 OK */ WorkloadMemberRead;
-export type WorkloadMemberServiceUpdateWorkloadMemberApiArg = {
-  /** Name of the workload_member workload_member to be updated. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  workloadMember: WorkloadMemberWrite;
+  /** unique workloadResourceId for the resource */
+  workloadResourceId: string;
 };
 export type LocalAccountServiceListLocalAccountsApiResponse =
   /** status 200 OK */ ListLocalAccountsResponseRead;
@@ -1459,26 +1444,6 @@ export type ProviderServiceGetProviderApiArg = {
   /** unique projectName for the resource */
   projectName: string;
 };
-export type ProviderServicePatchProviderApiResponse =
-  /** status 200 OK */ ProviderResourceRead;
-export type ProviderServicePatchProviderApiArg = {
-  /** ID of the resource to be updated. */
-  resourceId: string;
-  /** Field mask to be applied on the patch of provider. */
-  fieldMask?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  providerResource: ProviderResource;
-};
-export type ProviderServiceUpdateProviderApiResponse =
-  /** status 200 OK */ ProviderResourceRead;
-export type ProviderServiceUpdateProviderApiArg = {
-  /** Name of the provider provider to be updated. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  providerResource: ProviderResource;
-};
 export type RegionServiceListRegionsApiResponse =
   /** status 200 OK */ ListRegionsResponseRead;
 export type RegionServiceListRegionsApiArg = {
@@ -1501,6 +1466,50 @@ export type RegionServiceCreateRegionApiArg = {
   /** unique projectName for the resource */
   projectName: string;
   regionResource: RegionResourceWrite;
+};
+export type SiteServiceDeleteSiteApiResponse =
+  /** status 200 OK */ DeleteSiteResponse;
+export type SiteServiceDeleteSiteApiArg = {
+  /** Name of the site site to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+};
+export type SiteServiceGetSiteApiResponse =
+  /** status 200 OK */ SiteResourceRead;
+export type SiteServiceGetSiteApiArg = {
+  /** Name of the requested site. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+};
+export type SiteServicePatchSiteApiResponse =
+  /** status 200 OK */ SiteResourceRead;
+export type SiteServicePatchSiteApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** Field mask to be applied on the patch of site. */
+  fieldMask?: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+  siteResource: SiteResourceWrite;
+};
+export type SiteServiceUpdateSiteApiResponse =
+  /** status 200 OK */ SiteResourceRead;
+export type SiteServiceUpdateSiteApiArg = {
+  /** Name of the site site to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+  siteResource: SiteResourceWrite;
 };
 export type RegionServiceDeleteRegionApiResponse =
   /** status 200 OK */ DeleteRegionResponse;
@@ -1561,42 +1570,6 @@ export type SiteServiceCreateSiteApiArg = {
   projectName: string;
   /** unique resourceId for the resource */
   resourceId: string;
-  siteResource: SiteResourceWrite;
-};
-export type SiteServiceDeleteSiteApiResponse =
-  /** status 200 OK */ DeleteSiteResponse;
-export type SiteServiceDeleteSiteApiArg = {
-  /** Name of the site site to be deleted. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type SiteServiceGetSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
-export type SiteServiceGetSiteApiArg = {
-  /** Name of the requested site. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type SiteServicePatchSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
-export type SiteServicePatchSiteApiArg = {
-  /** ID of the resource to be updated. */
-  resourceId: string;
-  /** Field mask to be applied on the patch of site. */
-  fieldMask?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  siteResource: SiteResourceWrite;
-};
-export type SiteServiceUpdateSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
-export type SiteServiceUpdateSiteApiArg = {
-  /** Name of the site site to be updated. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
   siteResource: SiteResourceWrite;
 };
 export type ScheduleServiceListRepeatedSchedulesApiResponse =
@@ -1740,6 +1713,50 @@ export type TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiArg = {
   projectName: string;
   telemetryLogsGroupResource: TelemetryLogsGroupResource;
 };
+export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse =
+  /** status 200 OK */ DeleteTelemetryLogsProfileResponse;
+export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg = {
+  /** Name of the telemetry_logs_profile telemetry_logs_profile to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+};
+export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse =
+  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg = {
+  /** Name of the requested telemetry_logs_profile. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+};
+export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse =
+  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** Field mask to be applied on the patch of telemetry_logs_profile. */
+  fieldMask?: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+  telemetryLogsProfileResource: TelemetryLogsProfileResource;
+};
+export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse =
+  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg = {
+  /** Name of the telemetry_logs_profile telemetry_logs_profile to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+  telemetryLogsProfileResource: TelemetryLogsProfileResource;
+};
 export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiResponse =
   /** status 200 OK */ DeleteTelemetryLogsGroupResponse;
 export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiArg = {
@@ -1787,42 +1804,6 @@ export type TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiArg = {
   resourceId: string;
   telemetryLogsProfileResource: TelemetryLogsProfileResource;
 };
-export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ DeleteTelemetryLogsProfileResponse;
-export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg = {
-  /** Name of the telemetry_logs_profile telemetry_logs_profile to be deleted. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
-export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg = {
-  /** Name of the requested telemetry_logs_profile. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
-export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg = {
-  /** ID of the resource to be updated. */
-  resourceId: string;
-  /** Field mask to be applied on the patch of telemetry_logs_profile. */
-  fieldMask?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  telemetryLogsProfileResource: TelemetryLogsProfileResource;
-};
-export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
-export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg = {
-  /** Name of the telemetry_logs_profile telemetry_logs_profile to be updated. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  telemetryLogsProfileResource: TelemetryLogsProfileResource;
-};
 export type TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse =
   /** status 200 OK */ ListTelemetryMetricsGroupsResponseRead;
 export type TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiArg = {
@@ -1842,6 +1823,52 @@ export type TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiArg = {
   projectName: string;
   telemetryMetricsGroupResource: TelemetryMetricsGroupResource;
 };
+export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse =
+  /** status 200 OK */ DeleteTelemetryMetricsProfileResponse;
+export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg =
+  {
+    /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted. */
+    resourceId: string;
+    /** unique projectName for the resource */
+    projectName: string;
+    /** unique metricgroupResourceId for the resource */
+    metricgroupResourceId: string;
+  };
+export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse =
+  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg = {
+  /** Name of the requested telemetry_metrics_profile. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique metricgroupResourceId for the resource */
+  metricgroupResourceId: string;
+};
+export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse =
+  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** Field mask to be applied on the patch of telemetry_metrics_profile. */
+  fieldMask?: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique metricgroupResourceId for the resource */
+  metricgroupResourceId: string;
+  telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
+};
+export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse =
+  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg =
+  {
+    /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated. */
+    resourceId: string;
+    /** unique projectName for the resource */
+    projectName: string;
+    /** unique metricgroupResourceId for the resource */
+    metricgroupResourceId: string;
+    telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
+  };
 export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiResponse =
   /** status 200 OK */ DeleteTelemetryMetricsGroupResponse;
 export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiArg = {
@@ -1890,57 +1917,12 @@ export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg =
     resourceId: string;
     telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
-export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ DeleteTelemetryMetricsProfileResponse;
-export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg =
-  {
-    /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted. */
-    resourceId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
-export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg = {
-  /** Name of the requested telemetry_metrics_profile. */
-  resourceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
-export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg = {
-  /** ID of the resource to be updated. */
-  resourceId: string;
-  /** Field mask to be applied on the patch of telemetry_metrics_profile. */
-  fieldMask?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
-};
-export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
-export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg =
-  {
-    /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated. */
-    resourceId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
-  };
-export type DeleteHostResponse = object;
-export type GoogleProtobufAny = {
-  /** The type of the serialized message. */
-  "@type"?: string;
-  [key: string]: any;
-};
-export type Status = {
-  /** The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code]. */
-  code?: number;
-  /** A list of messages that carry the error details.  There is a common set of message types for APIs to use. */
-  details?: GoogleProtobufAny[];
-  /** A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
-  message?: string;
+export type Timestamps = {};
+export type TimestampsRead = {
+  /** The time when the resource was created. */
+  createdAt?: string;
+  /** The time when the resource was last updated. */
+  updatedAt?: string;
 };
 export type OperatingSystemResource = {
   /** The OS resource's CPU architecture. */
@@ -1969,14 +1951,13 @@ export type OperatingSystemResource = {
     | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
+  timestamps?: Timestamps;
   /** The list of OS resource update sources. Should be in 'DEB822 Source Format' for Debian style OSs */
   updateSources: string[];
 };
 export type OperatingSystemResourceRead = {
   /** The OS resource's CPU architecture. */
   architecture?: string;
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
   /** The URL repository of the OS image. */
@@ -1989,8 +1970,8 @@ export type OperatingSystemResourceRead = {
   name?: string;
   /** Indicating the provider of OS (e.g., Infra or Lenovo). */
   osProvider?: "OS_PROVIDER_KIND_INFRA" | "OS_PROVIDER_KIND_LENOVO";
-  /** The OS resource's unique identifier. Alias of resourceId. */
-  osResourceId?: string;
+  /** Deprecated, The OS resource's unique identifier. Alias of resourceId. */
+  osResourceID?: string;
   /** Indicating the type of OS (for example, mutable or immutable). */
   osType?: "OS_TYPE_MUTABLE" | "OS_TYPE_IMMUTABLE";
   /** Opaque JSON field storing references to custom installation script(s) that supplements the base OS with additional OS-level dependencies/configurations.  If empty, the default OS installation will be used. */
@@ -2009,26 +1990,25 @@ export type OperatingSystemResourceRead = {
     | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
+  timestamps?: TimestampsRead;
   /** The list of OS resource update sources. Should be in 'DEB822 Source Format' for Debian style OSs */
   updateSources: string[];
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
 };
 export type LocalAccountResource = {
   /** SSH Public Key of EN */
   sshKey: string;
+  timestamps?: Timestamps;
   /** Username provided by admin */
   username: string;
 };
 export type LocalAccountResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
+  /** Deprecated, The local account resource's unique identifier. Alias of resourceId. */
+  localAccountID?: string;
   /** resource identifier */
   resourceId?: string;
   /** SSH Public Key of EN */
   sshKey: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
   /** Username provided by admin */
   username: string;
 };
@@ -2045,24 +2025,24 @@ export type InstanceResource = {
   securityFeature?:
     | "SECURITY_FEATURE_NONE"
     | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  timestamps?: Timestamps;
 };
 export type WorkloadResource = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
   /** Type of workload. */
-  kind: "WORKLOAD_KIND_CLUSTER" | "WORKLOAD_KIND_DHCP";
+  kind: "WORKLOAD_KIND_CLUSTER";
   /** Human-readable name for the workload. */
   name?: string;
   /** Human-readable status of the workload. */
   status?: string;
+  timestamps?: Timestamps;
 };
 export type WorkloadResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
   /** Type of workload. */
-  kind: "WORKLOAD_KIND_CLUSTER" | "WORKLOAD_KIND_DHCP";
+  kind: "WORKLOAD_KIND_CLUSTER";
   /** The members of the workload. */
   members: WorkloadMember[];
   /** Human-readable name for the workload. */
@@ -2071,41 +2051,39 @@ export type WorkloadResourceRead = {
   resourceId?: string;
   /** Human-readable status of the workload. */
   status?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
-  /** The workload unique identifier. Alias of resourceId. */
+  timestamps?: TimestampsRead;
+  /** Deprecated, The workload unique identifier. Alias of resourceId. */
   workloadId?: string;
 };
 export type WorkloadResourceWrite = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
   /** Type of workload. */
-  kind: "WORKLOAD_KIND_CLUSTER" | "WORKLOAD_KIND_DHCP";
+  kind: "WORKLOAD_KIND_CLUSTER";
   /** Human-readable name for the workload. */
   name?: string;
   /** Human-readable status of the workload. */
   status?: string;
+  timestamps?: Timestamps;
 };
 export type WorkloadMember = {
   instance?: InstanceResource;
   /** The kind of the workload member. */
   kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
   member?: InstanceResource;
+  timestamps?: Timestamps;
   workload?: WorkloadResource;
 };
 export type WorkloadMemberRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   instance?: InstanceResourceRead;
   /** The kind of the workload member. */
   kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
   member?: InstanceResourceRead;
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
   workload?: WorkloadResourceRead;
-  /** The workload unique identifier. Alias of resourceId. */
+  /** Deprecated, The workload unique identifier. Alias of resourceId. */
   workloadMemberId?: string;
 };
 export type WorkloadMemberWrite = {
@@ -2115,13 +2093,12 @@ export type WorkloadMemberWrite = {
   /** The kind of the workload member. */
   kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
   member?: InstanceResource;
+  timestamps?: Timestamps;
   workload?: WorkloadResourceWrite;
   /** The workload unique identifier. */
   workloadId: string;
 };
 export type InstanceResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   currentOs?: OperatingSystemResourceRead;
   /** The Instance current state. */
   currentState?:
@@ -2135,8 +2112,8 @@ export type InstanceResourceRead = {
     | "INSTANCE_STATE_DELETED"
     | "INSTANCE_STATE_UNTRUSTED";
   host?: HostResource;
-  /** The instance's unique identifier. Alias of resourceID. */
-  instanceId?: string;
+  /** Deprecated, The instance's unique identifier. Alias of resourceID. */
+  instanceID?: string;
   /** textual message that describes the current instance status. Set by RMs only. */
   instanceStatus?: string;
   /** Indicates interpretation of instance_status. Set by RMs only. */
@@ -2145,7 +2122,7 @@ export type InstanceResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when instance_status was last changed. Set by RMs only. */
-  instanceStatusTimestamp?: string;
+  instanceStatusTimestamp?: number;
   /** Kind of resource. Frequently tied to Provider. */
   kind?: "INSTANCE_KIND_METAL";
   localaccount?: LocalAccountResourceRead;
@@ -2159,13 +2136,14 @@ export type InstanceResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when provisioning_status was last changed. Set by RMs only. */
-  provisioningStatusTimestamp?: string;
+  provisioningStatusTimestamp?: number;
   /** Resource ID, generated on Create. */
   resourceId?: string;
   /** Select to enable security features such as Secure Boot (SB) and Full Disk Encryption (FDE). */
   securityFeature?:
     | "SECURITY_FEATURE_NONE"
     | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  timestamps?: TimestampsRead;
   /** textual message that describes the trusted_attestation status of Instance. Set by RMs only. */
   trustedAttestationStatus?: string;
   /** Indicates interpretation of trusted_attestation_status. Set by RMs only. */
@@ -2174,7 +2152,7 @@ export type InstanceResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when trusted_attestation_status was last changed. Set by RMs only. */
-  trustedAttestationStatusTimestamp?: string;
+  trustedAttestationStatusTimestamp?: number;
   /** textual message that describes the update status of Instance. Set by RMs only. */
   updateStatus?: string;
   /** JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change. */
@@ -2185,9 +2163,7 @@ export type InstanceResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when update_status was last changed. Set by RMs only. */
-  updateStatusTimestamp?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  updateStatusTimestamp?: number;
   /** The workload members associated with the instance. */
   workloadMembers?: WorkloadMemberRead[];
 };
@@ -2196,20 +2172,21 @@ export type InstanceResourceWrite = {
   desiredOs?: OperatingSystemResource;
   host?: HostResource;
   /** The host's unique identifier associated with the instance. */
-  hostId?: string;
+  hostID?: string;
   /** Kind of resource. Frequently tied to Provider. */
   kind?: "INSTANCE_KIND_METAL";
   /** The unique identifier of local account will be associated with the instance. */
-  localAccountId?: string;
+  localAccountID?: string;
   localaccount?: LocalAccountResource;
   /** The instance's human-readable name. */
   name?: string;
   /** The unique identifier of OS resource that must be installed on the instance. */
-  osId?: string;
+  osID?: string;
   /** Select to enable security features such as Secure Boot (SB) and Full Disk Encryption (FDE). */
   securityFeature?:
     | "SECURITY_FEATURE_NONE"
     | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  timestamps?: Timestamps;
 };
 export type MetadataItem = {
   /** The metadata key. */
@@ -2232,6 +2209,7 @@ export type ProviderResource = {
   providerVendor?:
     | "PROVIDER_VENDOR_LENOVO_LXCA"
     | "PROVIDER_VENDOR_LENOVO_LOCA";
+  timestamps?: Timestamps;
 };
 export type ProviderResourceRead = {
   /** The provider resource's list of credentials. */
@@ -2240,12 +2218,10 @@ export type ProviderResourceRead = {
   apiEndpoint: string;
   /** Opaque provider configuration. */
   config?: string;
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The provider resource's name. */
   name: string;
-  /** The provider resource's unique identifier. Alias of resourceId. */
-  providerId?: string;
+  /** Deprecated, The provider resource's unique identifier. Alias of resourceId. */
+  providerID?: string;
   /** The provider kind. */
   providerKind: "PROVIDER_KIND_BAREMETAL";
   /** The provider vendor. */
@@ -2254,8 +2230,7 @@ export type ProviderResourceRead = {
     | "PROVIDER_VENDOR_LENOVO_LOCA";
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type RegionResource = {
   /** The metadata associated to the Region, represented by a list of key:value pairs. */
@@ -2263,10 +2238,9 @@ export type RegionResource = {
   /** The user-provided, human-readable name of region */
   name?: string;
   parentRegion?: RegionResource;
+  timestamps?: Timestamps;
 };
 export type RegionResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The rendered metadata from the Region parent(s) that can be inherited by the Region, represented by a list of key:value pairs. This field can not be used in filter. */
   inheritedMetadata?: MetadataItem[];
   /** The metadata associated to the Region, represented by a list of key:value pairs. */
@@ -2274,14 +2248,13 @@ export type RegionResourceRead = {
   /** The user-provided, human-readable name of region */
   name?: string;
   parentRegion?: RegionResourceRead;
-  /** The Region unique identifier. Alias of resourceId. */
-  regionId?: string;
+  /** Deprecated, The Region unique identifier. Alias of resourceId. */
+  regionID?: string;
   /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
+  timestamps?: TimestampsRead;
   /** The total number of sites in the region. */
   totalSites?: number;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
 };
 export type RegionResourceWrite = {
   /** The metadata associated to the Region, represented by a list of key:value pairs. */
@@ -2291,6 +2264,7 @@ export type RegionResourceWrite = {
   /** The parent Region unique identifier that the region is associated to, when existent. This field can not be used in filter. */
   parentId?: string;
   parentRegion?: RegionResourceWrite;
+  timestamps?: Timestamps;
 };
 export type SiteResource = {
   /** The metadata associated to the Region, represented by a list of key:value pairs. */
@@ -2299,16 +2273,13 @@ export type SiteResource = {
   name?: string;
   provider?: ProviderResource;
   region?: RegionResource;
-  /** The site unique identifier. Alias of resourceId. */
-  siteId?: string;
   /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
   /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
+  timestamps?: Timestamps;
 };
 export type SiteResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The rendered metadata from the Region parent(s) that can be inherited by the Region, represented by a list of key:value pairs. This field can not be used in filter. */
   inheritedMetadata?: MetadataItem[];
   /** The metadata associated to the Region, represented by a list of key:value pairs. */
@@ -2319,14 +2290,13 @@ export type SiteResourceRead = {
   region?: RegionResourceRead;
   /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  /** The site unique identifier. Alias of resourceId. */
-  siteId?: string;
+  /** Deprecated, The site unique identifier. Alias of resourceId. */
+  siteID?: string;
   /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
   /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type SiteResourceWrite = {
   /** The metadata associated to the Region, represented by a list of key:value pairs. */
@@ -2337,54 +2307,27 @@ export type SiteResourceWrite = {
   region?: RegionResourceWrite;
   /** The region's unique identifier that the site is associated to. This field cannot be used in filter. */
   regionId?: string;
-  /** The site unique identifier. Alias of resourceId. */
-  siteId?: string;
   /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
   /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
+  timestamps?: Timestamps;
 };
 export type HostResource = {
-  /** textual message that describes the runtime status of Host. Set by RMs only. */
-  hostStatus?: string;
-  /** Indicates interpretation of host_status. Set by RMs only. */
-  hostStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
-  /** UTC timestamp when host_status was last changed. Set by RMs only. */
-  hostStatusTimestamp?: string;
   instance?: InstanceResource;
   /** The metadata associated with the host, represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The host name. */
   name: string;
-  /** textual message that describes the onboarding status of Host. Set by RMs only. */
-  onboardingStatus?: string;
-  /** Indicates interpretation of onboarding_status. Set by RMs only. */
-  onboardingStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
-  /** UTC timestamp when onboarding_status was last changed. Set by RMs only. */
-  onboardingStatusTimestamp?: string;
-  /** textual message that describes the onboarding status of Host. Set by RMs only. */
-  registrationStatus?: string;
-  /** Indicates interpretation of registration_status. Set by RMs only. */
-  registrationStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
-  /** UTC timestamp when registration_status was last changed. Set by RMs only. */
-  registrationStatusTimestamp?: string;
   site?: SiteResource;
+  timestamps?: Timestamps;
   /** The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
-export type HostgpuResource = {};
+export type HostgpuResource = {
+  timestamps?: Timestamps;
+};
 export type HostgpuResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The human-readable GPU device description. */
   description?: string;
   /** GPU name as reported by OS. */
@@ -2396,21 +2339,46 @@ export type HostgpuResourceRead = {
   /** The GPU device model. */
   product?: string;
   resourceId?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
   /** The GPU device vendor. */
   vendor?: string;
 };
-export type HostnicResource = {};
+export type HostnicResource = {
+  timestamps?: Timestamps;
+};
+export type IpAddressResource = {
+  timestamps?: Timestamps;
+};
+export type IpAddressResourceRead = {
+  /** CIDR representation of the IP address. */
+  address?: string;
+  /** Specifies how the IP address is configured. */
+  configMethod?:
+    | "IP_ADDRESS_CONFIG_METHOD_STATIC"
+    | "IP_ADDRESS_CONFIG_METHOD_DYNAMIC";
+  /** Resource ID, generated by Inventory on Create */
+  resourceId?: string;
+  /** The status of the IP address. */
+  status?:
+    | "IP_ADDRESS_STATUS_ASSIGNMENT_ERROR"
+    | "IP_ADDRESS_STATUS_ASSIGNED"
+    | "IP_ADDRESS_STATUS_CONFIGURATION_ERROR"
+    | "IP_ADDRESS_STATUS_CONFIGURED"
+    | "IP_ADDRESS_STATUS_RELEASED"
+    | "IP_ADDRESS_STATUS_ERROR";
+  /** User-friendly status to provide details about the resource state */
+  statusDetail?: string;
+  timestamps?: TimestampsRead;
+};
 export type HostnicResourceRead = {
   /** Whether this is a bmc interface or not. */
   bmcInterface?: boolean;
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The device name (OS provided, like eth0, enp1s0, etc.). */
   deviceName?: string;
   /** The features of this interface, comma separated. */
   features?: string;
+  /** The interface's IP address list. */
+  ipAddresses?: IpAddressResourceRead[];
   /** Link state of this interface. */
   linkState?:
     | "NETWORK_INTERFACE_LINK_STATE_UP"
@@ -2428,15 +2396,14 @@ export type HostnicResourceRead = {
   sriovVfsNum?: number;
   /** The maximum number of VFs the interface supports, if SR-IOV is supported. */
   sriovVfsTotal?: number;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
-export type HoststorageResource = {};
+export type HoststorageResource = {
+  timestamps?: Timestamps;
+};
 export type HoststorageResourceRead = {
   /** The storage device Capacity (size) in bytes. */
   capacityBytes?: string;
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The storage device device name (OS provided, like sda, sdb, etc.) */
   deviceName?: string;
   /** The storage device model. */
@@ -2444,14 +2411,15 @@ export type HoststorageResourceRead = {
   resourceId?: string;
   /** The storage device unique serial number. */
   serial?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
   /** The Storage device vendor. */
   vendor?: string;
   /** The storage device unique identifier. */
   wwid?: string;
 };
-export type HostusbResource = {};
+export type HostusbResource = {
+  timestamps?: Timestamps;
+};
 export type HostusbResourceRead = {
   /** USB Device number assigned by OS. */
   addr?: number;
@@ -2459,8 +2427,6 @@ export type HostusbResourceRead = {
   bus?: number;
   /** class defined by USB-IF. */
   class?: string;
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** the OS-provided device name. */
   deviceName?: string;
   /** Hexadecimal number representing ID of the USB device product. */
@@ -2470,8 +2436,7 @@ export type HostusbResourceRead = {
   resourceId?: string;
   /** Serial number of device. */
   serial?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type HostResourceRead = {
   /** BIOS Release Date. */
@@ -2502,8 +2467,6 @@ export type HostResourceRead = {
   cpuThreads?: number;
   /** JSON field storing the CPU topology, refer to HDA/HRM docs for the JSON schema. */
   cpuTopology?: string;
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The current state of the Host. */
   currentState?:
     | "HOST_STATE_DELETING"
@@ -2520,8 +2483,6 @@ export type HostResourceRead = {
     | "HOST_STATE_REGISTERED";
   /** Back-reference to attached host GPU resources. */
   hostGpus?: HostgpuResourceRead[];
-  /** Resource ID, generated on Create. */
-  hostId?: string;
   /** Back-reference to attached host NIC resources. */
   hostNics?: HostnicResourceRead[];
   /** textual message that describes the runtime status of Host. Set by RMs only. */
@@ -2532,7 +2493,7 @@ export type HostResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when host_status was last changed. Set by RMs only. */
-  hostStatusTimestamp?: string;
+  hostStatusTimestamp?: number;
   /** Back-reference to attached host storage resources. */
   hostStorages?: HoststorageResourceRead[];
   /** Back-reference to attached host USB resources. */
@@ -2558,7 +2519,7 @@ export type HostResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when onboarding_status was last changed. Set by RMs only. */
-  onboardingStatusTimestamp?: string;
+  onboardingStatusTimestamp?: number;
   /** System Product Name. */
   productName?: string;
   /** textual message that describes the onboarding status of Host. Set by RMs only. */
@@ -2569,56 +2530,67 @@ export type HostResourceRead = {
     | "STATUS_INDICATION_IN_PROGRESS"
     | "STATUS_INDICATION_IDLE";
   /** UTC timestamp when registration_status was last changed. Set by RMs only. */
-  registrationStatusTimestamp?: string;
+  registrationStatusTimestamp?: number;
   /** Resource ID, generated on Create. */
   resourceId?: string;
   /** SMBIOS device serial number. */
   serialNumber?: string;
   site?: SiteResourceRead;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
   /** The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
 export type HostResourceWrite = {
-  /** textual message that describes the runtime status of Host. Set by RMs only. */
-  hostStatus?: string;
-  /** Indicates interpretation of host_status. Set by RMs only. */
-  hostStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
-  /** UTC timestamp when host_status was last changed. Set by RMs only. */
-  hostStatusTimestamp?: string;
   instance?: InstanceResourceWrite;
   /** The metadata associated with the host, represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The host name. */
   name: string;
-  /** textual message that describes the onboarding status of Host. Set by RMs only. */
-  onboardingStatus?: string;
-  /** Indicates interpretation of onboarding_status. Set by RMs only. */
-  onboardingStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
-  /** UTC timestamp when onboarding_status was last changed. Set by RMs only. */
-  onboardingStatusTimestamp?: string;
-  /** textual message that describes the onboarding status of Host. Set by RMs only. */
-  registrationStatus?: string;
-  /** Indicates interpretation of registration_status. Set by RMs only. */
-  registrationStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
-  /** UTC timestamp when registration_status was last changed. Set by RMs only. */
-  registrationStatusTimestamp?: string;
   site?: SiteResourceWrite;
   /** The site where the host is located. */
   siteId?: string;
+  timestamps?: Timestamps;
   /** The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
+export type ListHostsResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of hosts. */
+  hosts: HostResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListHostsResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of hosts. */
+  hosts: HostResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListHostsResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of hosts. */
+  hosts: HostResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type GoogleProtobufAny = {
+  /** The type of the serialized message. */
+  "@type"?: string;
+  [key: string]: any;
+};
+export type Status = {
+  /** The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code]. */
+  code?: number;
+  /** A list of messages that carry the error details.  There is a common set of message types for APIs to use. */
+  details?: GoogleProtobufAny[];
+  /** A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
+  message?: string;
+};
+export type DeleteHostResponse = object;
 export type InvalidateHostResponse = object;
 export type OnboardHostResponse = object;
 export type HostRegister = {
@@ -2658,18 +2630,18 @@ export type ListInstancesResponseWrite = {
 export type DeleteInstanceResponse = object;
 export type InvalidateInstanceResponse = object;
 export type ListOperatingSystemsResponse = {
+  /** Sorted and filtered list of oss. */
+  OperatingSystemResources: OperatingSystemResource[];
   /** Inform if there are more elements */
   hasNext: boolean;
-  /** Sorted and filtered list of oss. */
-  operatingSystems: OperatingSystemResource[];
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
 export type ListOperatingSystemsResponseRead = {
+  /** Sorted and filtered list of oss. */
+  OperatingSystemResources: OperatingSystemResourceRead[];
   /** Inform if there are more elements */
   hasNext: boolean;
-  /** Sorted and filtered list of oss. */
-  operatingSystems: OperatingSystemResourceRead[];
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
@@ -2694,10 +2666,9 @@ export type RepeatedScheduleResource = {
   targetHost?: HostResource;
   targetRegion?: RegionResource;
   targetSite?: SiteResource;
+  timestamps?: Timestamps;
 };
 export type RepeatedScheduleResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** cron style day of month (1-31), it can be empty only when used in a Filter */
   cronDayMonth: string;
   /** cron style day of week (0-6), it can be empty only when used in a Filter */
@@ -2712,8 +2683,8 @@ export type RepeatedScheduleResourceRead = {
   durationSeconds: number;
   /** The schedule's name. */
   name?: string;
-  /** The repeated schedule's unique identifier. Alias of resourceId. */
-  repeatedScheduleId?: string;
+  /** Deprecated, The repeated schedule's unique identifier. Alias of resourceId. */
+  repeatedScheduleID?: string;
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
   /** The schedule status. */
@@ -2721,8 +2692,7 @@ export type RepeatedScheduleResourceRead = {
   targetHost?: HostResourceRead;
   targetRegion?: RegionResourceRead;
   targetSite?: SiteResourceRead;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type RepeatedScheduleResourceWrite = {
   /** cron style day of month (1-31), it can be empty only when used in a Filter */
@@ -2750,6 +2720,7 @@ export type RepeatedScheduleResourceWrite = {
   targetSite?: SiteResourceWrite;
   /** The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
   targetSiteId?: string;
+  timestamps?: Timestamps;
 };
 export type SingleScheduleResource = {
   /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
@@ -2763,10 +2734,9 @@ export type SingleScheduleResource = {
   targetHost?: HostResource;
   targetRegion?: RegionResource;
   targetSite?: SiteResource;
+  timestamps?: Timestamps;
 };
 export type SingleScheduleResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
@@ -2775,15 +2745,14 @@ export type SingleScheduleResourceRead = {
   resourceId?: string;
   /** The schedule status. */
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
-  /** The single schedule resource's unique identifier. Alias of resourceId. */
-  singleScheduleId?: string;
+  /** Deprecated, The single schedule resource's unique identifier. Alias of resourceId. */
+  singleScheduleID?: string;
   /** The start time in seconds, of the single schedule. */
   startSeconds: number;
   targetHost?: HostResourceRead;
   targetRegion?: RegionResourceRead;
   targetSite?: SiteResourceRead;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type SingleScheduleResourceWrite = {
   /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
@@ -2803,6 +2772,7 @@ export type SingleScheduleResourceWrite = {
   targetSite?: SiteResourceWrite;
   /** The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
   targetSiteId?: string;
+  timestamps?: Timestamps;
 };
 export type ListSchedulesResponse = {
   /** Inform if there are more elements */
@@ -2960,6 +2930,7 @@ export type ListRegionsResponseWrite = {
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
+export type DeleteSiteResponse = object;
 export type DeleteRegionResponse = object;
 export type ListSitesResponse = {
   /** Inform if there are more elements */
@@ -2985,7 +2956,6 @@ export type ListSitesResponseWrite = {
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type DeleteSiteResponse = object;
 export type ListRepeatedSchedulesResponse = {
   /** Inform if there are more elements */
   hasNext: boolean;
@@ -3038,27 +3008,29 @@ export type ListSingleSchedulesResponseWrite = {
 export type DeleteSingleScheduleResponse = object;
 export type TelemetryLogsGroupResource = {
   /** The collector kind. */
-  collectorKind: "COLLECTOR_KIND_HOST" | "COLLECTOR_KIND_CLUSTER";
+  collectorKind:
+    | "TELEMETRY_COLLECTOR_KIND_HOST"
+    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
   name: string;
+  timestamps?: Timestamps;
 };
 export type TelemetryLogsGroupResourceRead = {
   /** The collector kind. */
-  collectorKind: "COLLECTOR_KIND_HOST" | "COLLECTOR_KIND_CLUSTER";
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
+  collectorKind:
+    | "TELEMETRY_COLLECTOR_KIND_HOST"
+    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
   name: string;
   /** Unique ID of the telemetry group. */
   resourceId?: string;
-  /** Unique ID of the telemetry group. Alias of resource_id. */
+  /** Deprecated, Unique ID of the telemetry group. Alias of resource_id. */
   telemetryLogsGroupId?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type ListTelemetryLogsGroupsResponse = {
   /** Inform if there are more elements */
@@ -3076,7 +3048,7 @@ export type ListTelemetryLogsGroupsResponseRead = {
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type DeleteTelemetryLogsGroupResponse = object;
+export type DeleteTelemetryLogsProfileResponse = object;
 export type TelemetryLogsProfileResource = {
   /** The log level og the telemetry profile. */
   logLevel:
@@ -3094,10 +3066,9 @@ export type TelemetryLogsProfileResource = {
   targetRegion?: string;
   /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
+  timestamps?: Timestamps;
 };
 export type TelemetryLogsProfileResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   /** The log level og the telemetry profile. */
   logLevel:
     | "SEVERITY_LEVEL_CRITICAL"
@@ -3108,7 +3079,7 @@ export type TelemetryLogsProfileResourceRead = {
   logsGroup?: TelemetryLogsGroupResourceRead;
   /** The unique identifier of the telemetry log group. */
   logsGroupId: string;
-  /** The ID of the telemetry profile. */
+  /** Deprecated, The ID of the telemetry profile. */
   profileId?: string;
   /** The ID of the telemetry profile. */
   resourceId?: string;
@@ -3118,9 +3089,9 @@ export type TelemetryLogsProfileResourceRead = {
   targetRegion?: string;
   /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
+export type DeleteTelemetryLogsGroupResponse = object;
 export type ListTelemetryLogsProfilesResponse = {
   /** Inform if there are more elements */
   hasNext: boolean;
@@ -3137,30 +3108,31 @@ export type ListTelemetryLogsProfilesResponseRead = {
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type DeleteTelemetryLogsProfileResponse = object;
 export type TelemetryMetricsGroupResource = {
   /** The collector kind. */
-  collectorKind: "COLLECTOR_KIND_HOST" | "COLLECTOR_KIND_CLUSTER";
+  collectorKind:
+    | "TELEMETRY_COLLECTOR_KIND_HOST"
+    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
   name: string;
+  timestamps?: Timestamps;
 };
 export type TelemetryMetricsGroupResourceRead = {
   /** The collector kind. */
-  collectorKind: "COLLECTOR_KIND_HOST" | "COLLECTOR_KIND_CLUSTER";
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
+  collectorKind:
+    | "TELEMETRY_COLLECTOR_KIND_HOST"
+    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
   name: string;
   /** Unique ID of the telemetry group. */
   resourceId?: string;
-  /** Unique ID of the telemetry group. Alias of resource_id. */
+  /** Deprecated, Unique ID of the telemetry group. Alias of resource_id. */
   telemetryMetricsGroupId?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
 export type ListTelemetryMetricsGroupsResponse = {
   /** Inform if there are more elements */
@@ -3178,7 +3150,7 @@ export type ListTelemetryMetricsGroupsResponseRead = {
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type DeleteTelemetryMetricsGroupResponse = object;
+export type DeleteTelemetryMetricsProfileResponse = object;
 export type TelemetryMetricsProfileResource = {
   metricsGroup?: TelemetryMetricsGroupResource;
   /** The unique identifier of the telemetry metric group. */
@@ -3191,16 +3163,15 @@ export type TelemetryMetricsProfileResource = {
   targetRegion?: string;
   /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
+  timestamps?: Timestamps;
 };
 export type TelemetryMetricsProfileResourceRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt?: string;
   metricsGroup?: TelemetryMetricsGroupResourceRead;
   /** The unique identifier of the telemetry metric group. */
   metricsGroupId: string;
   /** Metric interval (in seconds) for the telemetry profile. This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
   metricsInterval: number;
-  /** The ID of the telemetry profile. */
+  /** Deprecated, The ID of the telemetry profile. */
   profileId?: string;
   /** The ID of the telemetry profile. */
   resourceId?: string;
@@ -3210,9 +3181,9 @@ export type TelemetryMetricsProfileResourceRead = {
   targetRegion?: string;
   /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+  timestamps?: TimestampsRead;
 };
+export type DeleteTelemetryMetricsGroupResponse = object;
 export type ListTelemetryMetricsProfilesResponse = {
   /** Inform if there are more elements */
   hasNext: boolean;
@@ -3229,8 +3200,9 @@ export type ListTelemetryMetricsProfilesResponseRead = {
   /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type DeleteTelemetryMetricsProfileResponse = object;
 export const {
+  useHostServiceListHostsQuery,
+  useHostServiceCreateHostMutation,
   useHostServiceDeleteHostMutation,
   useHostServiceGetHostQuery,
   useHostServicePatchHostMutation,
@@ -3263,8 +3235,6 @@ export const {
   useWorkloadMemberServiceCreateWorkloadMemberMutation,
   useWorkloadMemberServiceDeleteWorkloadMemberMutation,
   useWorkloadMemberServiceGetWorkloadMemberQuery,
-  useWorkloadMemberServicePatchWorkloadMemberMutation,
-  useWorkloadMemberServiceUpdateWorkloadMemberMutation,
   useLocalAccountServiceListLocalAccountsQuery,
   useLocalAccountServiceCreateLocalAccountMutation,
   useLocalAccountServiceDeleteLocalAccountMutation,
@@ -3274,20 +3244,18 @@ export const {
   useProviderServiceCreateProviderMutation,
   useProviderServiceDeleteProviderMutation,
   useProviderServiceGetProviderQuery,
-  useProviderServicePatchProviderMutation,
-  useProviderServiceUpdateProviderMutation,
   useRegionServiceListRegionsQuery,
   useRegionServiceCreateRegionMutation,
+  useSiteServiceDeleteSiteMutation,
+  useSiteServiceGetSiteQuery,
+  useSiteServicePatchSiteMutation,
+  useSiteServiceUpdateSiteMutation,
   useRegionServiceDeleteRegionMutation,
   useRegionServiceGetRegionQuery,
   useRegionServicePatchRegionMutation,
   useRegionServiceUpdateRegionMutation,
   useSiteServiceListSitesQuery,
   useSiteServiceCreateSiteMutation,
-  useSiteServiceDeleteSiteMutation,
-  useSiteServiceGetSiteQuery,
-  useSiteServicePatchSiteMutation,
-  useSiteServiceUpdateSiteMutation,
   useScheduleServiceListRepeatedSchedulesQuery,
   useScheduleServiceCreateRepeatedScheduleMutation,
   useScheduleServiceDeleteRepeatedScheduleMutation,
@@ -3302,22 +3270,22 @@ export const {
   useScheduleServiceUpdateSingleScheduleMutation,
   useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery,
   useTelemetryLogsGroupServiceCreateTelemetryLogsGroupMutation,
-  useTelemetryLogsGroupServiceDeleteTelemetryLogsGroupMutation,
-  useTelemetryLogsGroupServiceGetTelemetryLogsGroupQuery,
-  useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery,
-  useTelemetryLogsProfileServiceCreateTelemetryLogsProfileMutation,
   useTelemetryLogsProfileServiceDeleteTelemetryLogsProfileMutation,
   useTelemetryLogsProfileServiceGetTelemetryLogsProfileQuery,
   useTelemetryLogsProfileServicePatchTelemetryLogsProfileMutation,
   useTelemetryLogsProfileServiceUpdateTelemetryLogsProfileMutation,
+  useTelemetryLogsGroupServiceDeleteTelemetryLogsGroupMutation,
+  useTelemetryLogsGroupServiceGetTelemetryLogsGroupQuery,
+  useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery,
+  useTelemetryLogsProfileServiceCreateTelemetryLogsProfileMutation,
   useTelemetryMetricsGroupServiceListTelemetryMetricsGroupsQuery,
   useTelemetryMetricsGroupServiceCreateTelemetryMetricsGroupMutation,
-  useTelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupMutation,
-  useTelemetryMetricsGroupServiceGetTelemetryMetricsGroupQuery,
-  useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery,
-  useTelemetryMetricsProfileServiceCreateTelemetryMetricsProfileMutation,
   useTelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileMutation,
   useTelemetryMetricsProfileServiceGetTelemetryMetricsProfileQuery,
   useTelemetryMetricsProfileServicePatchTelemetryMetricsProfileMutation,
   useTelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileMutation,
+  useTelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupMutation,
+  useTelemetryMetricsGroupServiceGetTelemetryMetricsGroupQuery,
+  useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery,
+  useTelemetryMetricsProfileServiceCreateTelemetryMetricsProfileMutation,
 } = injectedRtkApi;
