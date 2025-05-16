@@ -23,11 +23,13 @@ import {
 } from "@orch-ui/components";
 import {
   API_INTERVAL,
+  clusterDetailRoute,
   clusterToStatuses,
   copyToClipboard,
   Direction,
   downloadFile,
   getFilter,
+  getInfraPath,
   getOrder,
   getTrustedComputeCluster,
   Operator,
@@ -214,10 +216,17 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       accessor: (item) => item.name,
       apiName: "name",
       Cell: (table: { row: { original: cm.ClusterInfoRead } }) => {
+        const clusterName = table.row.original.name;
         return (
-          <Link to={`../cluster/${table.row.original.name}`}>
-            {table.row.original.name}
-          </Link>
+          clusterName && (
+            <Link
+              to={getInfraPath(clusterDetailRoute, {
+                clusterName: clusterName,
+              })}
+            >
+              {table.row.original.name}
+            </Link>
+          )
         );
       },
     },
