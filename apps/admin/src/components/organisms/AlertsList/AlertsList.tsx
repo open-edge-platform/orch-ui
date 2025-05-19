@@ -7,7 +7,7 @@
 import { OrchTable } from "@orch-ui/components";
 
 import { omApi } from "@orch-ui/apis";
-import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
+import { SharedStorage } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -31,7 +31,7 @@ const AlertsList = () => {
     error,
   } = omApi.useGetProjectAlertsQuery(
     { projectName: SharedStorage.project?.name ?? "" },
-    { pollingInterval: API_INTERVAL },
+    // { pollingInterval: API_INTERVAL },
   );
   const {
     data: alertDefinitions,
@@ -40,6 +40,8 @@ const AlertsList = () => {
   } = omApi.useGetProjectAlertDefinitionsQuery({
     projectName: SharedStorage.project?.name ?? "",
   });
+
+  console.log({ alerts });
   const columns = [
     {
       Header: "Alert",

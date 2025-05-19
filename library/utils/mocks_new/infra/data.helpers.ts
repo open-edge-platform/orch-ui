@@ -4,6 +4,8 @@
  */
 
 import { infra } from "@orch-ui/apis";
+import { GenericStatus } from "@orch-ui/components";
+import { HostMock } from "../../mocks";
 
 /**
  * Aggregates metadata with inheritedMetadata
@@ -71,3 +73,53 @@ export const generateProvider = (
   providerKind,
   ...rest,
 });
+
+const IS_MOCK_RANDOMIZE_ENABLED = true;
+
+export const randomizeHostList = (hosts: infra.HostRead[]): HostMock[] => {
+  if (IS_MOCK_RANDOMIZE_ENABLED) {
+    const mockHosts: infra.HostRead[] = hosts.map((host, i) => {
+      if (i === 0) {
+        return host;
+      }
+      const status = randomizeHostStatus();
+      return {
+        ...host,
+        ...{
+          hostStatus: status.message,
+          hostStatusIndication: status.indicator,
+          hostStatusTimestamp: status.timestamp,
+        },
+      };
+    });
+    return mockHosts as HostMock[];
+  }
+  return hosts as HostMock[];
+};
+
+const randomizeHostStatus = () => {
+  return hostStatuses[Math.floor(Math.random() * hostStatuses.length)];
+};
+
+const hostStatuses: GenericStatus[] = [
+  {
+    indicator: "STATUS_INDICATION_IDLE",
+    message: "Running",
+    timestamp: 1717761389,
+  },
+  {
+    indicator: "STATUS_INDICATION_ERROR",
+    message: "Error",
+    timestamp: 1717761389,
+  },
+  {
+    indicator: "STATUS_INDICATION_IN_PROGRESS",
+    message: "Currently in progress",
+    timestamp: 1717761389,
+  },
+  {
+    indicator: "STATUS_INDICATION_UNSPECIFIED",
+    message: "Unknown",
+    timestamp: 1717761389,
+  },
+];
