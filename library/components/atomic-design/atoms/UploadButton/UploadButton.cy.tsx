@@ -5,6 +5,7 @@
 import { ButtonVariant } from "@spark-design/tokens";
 import { UploadButton } from "./UploadButton";
 import { UploadButtonPom } from "./UploadButton.pom";
+import { cyGet } from "@orch-ui/tests";
 
 const pom = new UploadButtonPom("uploadButton");
 describe("<UploadButton/> should", () => {
@@ -37,7 +38,7 @@ describe("<UploadButton/> should", () => {
   it("render with custom dataCy", () => {
     const customCy = "myUploadButton";
     cy.mount(<UploadButton onChange={() => {}} dataCy={customCy} />);
-    cy.get(`[data-cy=${customCy}]`).should("exist");
+    cyGet(`${customCy}`).should("exist");
   });
   it("render custom button text", () => {
     cy.mount(<UploadButton onChange={() => {}} text="Upload Documents" />);
@@ -45,7 +46,7 @@ describe("<UploadButton/> should", () => {
   });
   it("add folder-specific attributes for folder input", () => {
     cy.mount(<UploadButton onChange={() => {}} type="folder" />);
-    cy.get('[data-cy="uploadInput"]').should(($input) => {
+    cyGet("uploadInput").should(($input) => {
       expect($input).to.have.attr("webkitdirectory");
       expect($input).to.have.attr("directory");
       expect($input).to.have.attr("mozdirectory");
@@ -55,7 +56,7 @@ describe("<UploadButton/> should", () => {
   });
   it("not add folder attributes if type is file", () => {
     cy.mount(<UploadButton onChange={() => {}} type="file" />);
-    cy.get('[data-cy="uploadInput"]').should(($input) => {
+    cyGet("uploadInput").should(($input) => {
       expect($input).not.to.have.attr("webkitdirectory");
       expect($input).not.to.have.attr("directory");
       expect($input).not.to.have.attr("mozdirectory");

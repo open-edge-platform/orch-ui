@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { cyGet } from "@orch-ui/tests";
 import { AdvancedSettingsToggle } from "./AdvancedSettingsToggle";
 import { AdvancedSettingsTogglePom } from "./AdvancedSettingsToggle.pom";
 
@@ -24,5 +25,34 @@ describe("<AdvancedSettingsToggle/>", () => {
     cy.mount(<AdvancedSettingsToggle onChange={cy.stub()} value={true} />);
     pom.el.advSettingsTrue.should("be.checked");
     pom.el.advSettingsFalse.should("not.be.checked");
+  });
+
+  it("should default to false when no value prop is given", () => {
+    cy.mount(<AdvancedSettingsToggle onChange={cy.stub()} />);
+    pom.el.advSettingsFalse.should("be.checked");
+    pom.el.advSettingsTrue.should("not.be.checked");
+  });
+
+  it("should render with a custom message", () => {
+    const customMessage = "Enable advanced debug options?";
+    cy.mount(<AdvancedSettingsToggle onChange={cy.stub()} message={customMessage} />);
+    cy.contains(customMessage).should("exist");
+  });
+
+  it("should update checked radio after click", () => {
+    cy.mount(<AdvancedSettingsToggle onChange={cy.stub()} />);
+    
+    pom.el.advSettingsTrue.click({ force: true });
+    pom.el.advSettingsTrue.should("be.checked");
+    pom.el.advSettingsFalse.should("not.be.checked");
+  
+    pom.el.advSettingsFalse.click({ force: true });
+    pom.el.advSettingsFalse.should("be.checked");
+    pom.el.advSettingsTrue.should("not.be.checked");
+  });
+
+  it("should default to false when value is undefined", () => {
+    cy.mount(<AdvancedSettingsToggle value={undefined} onChange={cy.stub()} />);
+    pom.el.advSettingsFalse.should("be.checked");
   });
 });

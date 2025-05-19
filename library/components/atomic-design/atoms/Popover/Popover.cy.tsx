@@ -58,4 +58,62 @@ describe("<Popover/>", () => {
       pom.el.popoverContent.should("be.visible");
     });
   });
+  
+  describe("Popover extended functionality", () => {
+    
+    it("should render title when provided", () => {
+      cy.mount(
+        <Popover
+          title="Test Title"
+          children={<button data-cy="button">Click here</button>}
+          content={<div>Popover content</div>}
+        />,
+      );
+
+      cyGet("button").contains("Click here").click();
+      pom.el.popoverContent.should("contain", "Test Title");
+    });
+    
+    it("should apply custom contentRootClassName", () => {
+      cy.mount(
+        <Popover
+          contentRootClassName="custom-class"
+          content={<div>Popover content</div>}
+        >
+          <button data-cy="button">Click here</button>
+        </Popover>
+      );
+    
+      cyGet("button").contains("Click here").click();
+      pom.el.popoverContent.should("have.class", "custom-class");
+    });
+    
+    it("should apply custom popoverArrowClassName", () => {
+      cy.mount(
+        <Popover
+          popoverArrowClassName="custom-arrow"
+          content={<div>Popover content</div>}
+        >
+          <button data-cy="button">Click here</button>
+        </Popover>
+      );
+    
+      cyGet("button").contains("Click here").click();
+      cy.get(".popover-arrow").should("have.class", "custom-arrow");
+    });
+    
+    it("should close popover when clicking the close button", () => {
+      cy.mount(
+        <Popover content={<div>Popover content</div>}>
+          <button data-cy="button">Click here</button>
+        </Popover>
+      );
+    
+      cyGet("button").contains("Click here").click();
+      pom.el.popoverContent.should("be.visible");
+    
+      cyGet("closePopover").click();
+      pom.el.popoverContent.should("not.exist");
+    });
+  });
 });

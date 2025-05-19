@@ -7,6 +7,7 @@ import { MemoryRouter } from "react-router-dom";
 import { HeaderSize } from "../Header/Header";
 import HeaderItem from "./HeaderItem";
 import HeaderItemPom from "./HeaderItem.pom";
+import { cyGet } from "@orch-ui/tests";
 
 const pom = new HeaderItemPom("header-item");
 describe("<HeaderItem/>", () => {
@@ -73,7 +74,7 @@ describe("<HeaderItem/>", () => {
       </HeaderItem>
     );
   
-    cy.get('[data-cy="headerItemLink"]').should("have.css", "padding-bottom", "8px");
+    cyGet("headerItemLink").should("have.css", "padding-bottom", "8px");
   });
   it("should apply custom styles", () => {
     cy.mount(
@@ -94,6 +95,6 @@ describe("<HeaderItem/>", () => {
         <span data-cy="child-element">Icon</span>
       </HeaderItem>
     );
-    cy.get('[data-cy="child-element"]').should("contain.text", "Icon");
+    cyGet("child-element").should("contain.text", "Icon");
   });
 });
