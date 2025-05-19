@@ -6,6 +6,8 @@
 const { merge } = require("webpack-merge");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const commonConfig = require("./webpack.common");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { SubresourceIntegrityPlugin } = require("webpack");
 
 const prodConfig = {
   mode: "production",
@@ -29,6 +31,14 @@ const prodConfig = {
           },
         ],
       },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader, // Replace style-loader
+          "css-loader",
+          "sass-loader",
+        ],
+      },
     ],
   },
   output: {
@@ -44,6 +54,12 @@ const prodConfig = {
         ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
         Admin: "Admin@/mfe/admin/remoteEntry.js",
       },
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
+    }),
+    new SubresourceIntegrityPlugin({
+      hashFuncNames: ["sha256"],
     }),
   ],
 };
