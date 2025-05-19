@@ -10,7 +10,7 @@ import {
   PathParam,
   RouteObject,
 } from "react-router-dom";
-import { InfraRoute } from "./paths";
+import { AdminRoute, AppOrchRoute, InfraRoute } from "./paths";
 
 export type RouteObjectWithRef = RouteObject & {
   nodeRef: React.RefObject<HTMLDivElement>;
@@ -48,6 +48,8 @@ export const innerTransitionTimeout = 300;
  * @returns Full infrastructure path string with prefix, generated path, and query
  */
 export const infraMfePrefix = "/infrastructure/";
+export const adminMfePrefix = "/admin/";
+export const appOrchMfePrefix = "/applications/";
 export const getInfraPath = <Path extends InfraRoute>(
   route: Path,
   params?: {
@@ -55,3 +57,19 @@ export const getInfraPath = <Path extends InfraRoute>(
   },
   query: string = "",
 ): string => `${infraMfePrefix + generatePath<Path>(route, params) + query}`;
+
+export const getAdminPath = <Path extends AdminRoute>(
+  route: Path,
+  params?: {
+    [key in PathParam<Path>]: string | null;
+  },
+  query: string = "",
+): string => `${adminMfePrefix + generatePath<Path>(route, params) + query}`;
+
+export const getAppOrchPath = <Path extends AppOrchRoute>(
+  route: Path,
+  params?: {
+    [key in PathParam<Path>]: string | null;
+  },
+  query: string = "",
+): string => `${appOrchMfePrefix + generatePath<Path>(route, params) + query}`;
