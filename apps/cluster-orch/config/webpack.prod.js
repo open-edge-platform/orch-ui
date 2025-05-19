@@ -11,7 +11,7 @@ const { SubresourceIntegrityPlugin } = require("webpack");
 const mode = "production";
 const prodConfig = {
   mode: mode,
-  devtool: "source-map",
+  devtool: false,
   module: {
     rules: [
       {

@@ -12,7 +12,7 @@ const commonConfig = require("./webpack.common");
 const mode = "production";
 const prodConfig = {
   mode: mode,
-  devtool: "source-map",
+  devtool: false,
   module: {
     rules: [
       {
