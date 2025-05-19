@@ -7,11 +7,13 @@ import { cm } from "@orch-ui/apis";
 import { ConfirmationDialog, PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  clusterTemplateDetailRoute,
   downloadFile,
   getAuthCfg,
   parseError,
   Role,
   SharedStorage,
+  useAdminNavigate,
 } from "@orch-ui/utils";
 import { Heading, Toast, ToastProps } from "@spark-design/react";
 import {
@@ -23,7 +25,6 @@ import {
 import { ChangeEvent, useCallback, useState } from "react";
 import { AuthProvider } from "react-oidc-context";
 import { Provider } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { store } from "../../../store";
 import ClusterTemplatesList from "../../organism/ClusterTemplatesList/ClusterTemplatesList";
 
@@ -32,7 +33,7 @@ const dataCy = "clusterTemplates";
 export const ClusterTemplates = () => {
   const cy = { "data-cy": dataCy };
   const projectName = SharedStorage.project?.name ?? "";
-  const navigate = useNavigate();
+  const navigate = useAdminNavigate();
 
   const [templateToDelete, setTemplateToDelete] = useState<
     cm.TemplateInfo | undefined
@@ -101,7 +102,10 @@ export const ClusterTemplates = () => {
   );
 
   const onViewDetails = (tpl: cm.TemplateInfo) => {
-    navigate(`./${tpl.name}/${tpl.version}/view`);
+    navigate(clusterTemplateDetailRoute, {
+      templateName: tpl.name,
+      templateVersion: tpl.version,
+    });
   };
 
   const onSetDefault = (tpl: cm.TemplateInfo) => {
