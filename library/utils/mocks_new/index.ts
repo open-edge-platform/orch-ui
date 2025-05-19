@@ -4,6 +4,7 @@
  */
 
 // import { hosts } from "../mocks/infra";
+import { handlers as alerts } from "./admin/handlers/alerts";
 import { handlers as hosts } from "./infra/handlers/hosts";
 import { handlers as regions } from "./infra/handlers/regions";
 
@@ -15,6 +16,7 @@ export * from "./infra/data/sites";
 export * from "./infra/store/regions";
 export * from "./infra/store/sites";
 const handlersInfra = [...regions, ...hosts];
+const handlersAdmin = [...alerts];
 
 // mocks expose one collection of all handlers
-export const handlers = [...handlersInfra];
+export const handlers = [...handlersInfra, ...handlersAdmin];

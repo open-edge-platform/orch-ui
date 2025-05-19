@@ -4,6 +4,7 @@
  */
 
 import { omApi } from "@orch-ui/apis";
+import { deploymentOne, deploymentTwo } from "@orch-ui/utils";
 import {
   alertDefinitionEight,
   alertDefinitionFive,
@@ -15,7 +16,7 @@ import {
   alertDefinitionTen,
   alertDefinitionThree,
   alertDefinitionTwo,
-} from "./alertDefinitions";
+} from "./alert-definitions";
 
 export const alertOne: omApi.Alert = {
   alertDefinitionId: alertDefinitionOne.id,
@@ -87,7 +88,7 @@ export const alertFive: omApi.Alert = {
   labels: {
     alert_category: "Deployment",
     alert_context: "deployment",
-    deployment_id: "deploymentA",
+    deployment_id: deploymentOne.deployId as string,
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
@@ -102,7 +103,7 @@ export const alertSix: omApi.Alert = {
   labels: {
     alert_category: "Deployment",
     alert_context: "deployment",
-    deployment_id: "deploymentB",
+    deployment_id: deploymentTwo.deployId as string,
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
@@ -181,31 +182,3 @@ export const alertNoSource: omApi.Alert = {
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
-
-export const multipleAlerts: omApi.Alert[] = [
-  alertOne,
-  alertTwo,
-  alertThree,
-  alertFour,
-  alertFive,
-  alertSix,
-  alertSeven,
-  alertEight,
-  alertNine,
-  alertTen,
-];
-
-export default class AlertStore {
-  alerts: omApi.Alert[];
-  constructor() {
-    this.alerts = multipleAlerts;
-  }
-
-  list(): omApi.Alert[] {
-    return this.alerts;
-  }
-
-  get(id: string): omApi.Alert | undefined {
-    return this.alerts.find((a) => a.alertDefinitionId === id);
-  }
-}
