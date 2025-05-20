@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { cyGet } from "@orch-ui/tests";
 import { getMockAuthProps, RuntimeConfig } from "@orch-ui/utils";
 import { AuthContext } from "react-oidc-context";
 import { AuthWrapper } from "./AuthWrapper";
 import { AuthWrapperPom } from "./AuthWrapper.pom";
-import { cyGet } from "@orch-ui/tests";
 
 const pom = new AuthWrapperPom();
 
@@ -56,7 +56,9 @@ describe("The AuthWrapper component", () => {
             isAuthEnabled={cy
               .stub(RuntimeConfig, "isAuthEnabled")
               .returns(true)}
-          >{nestedContent}</AuthWrapper>
+          >
+            {nestedContent}
+          </AuthWrapper>
         </AuthContext.Provider>,
       );
       cy.get("@signinRedirect").should("have.been.called");
@@ -87,7 +89,9 @@ describe("The AuthWrapper component", () => {
       cy.stub(mockAuth, "signinRedirect").as("signinRedirect").returns(true);
       cy.mount(
         <AuthContext.Provider value={{ ...mockAuth }}>
-          <AuthWrapper isAuthEnabled={cy.stub().returns(true)}>{nestedContent}</AuthWrapper>
+          <AuthWrapper isAuthEnabled={cy.stub().returns(true)}>
+            {nestedContent}
+          </AuthWrapper>
         </AuthContext.Provider>,
       );
       cy.get("@signinRedirect").should("not.have.been.called");
@@ -100,17 +104,17 @@ describe("The AuthWrapper component", () => {
         }),
         activeNavigator: "signinSilent" as const,
       };
-    
+
       cy.stub(RuntimeConfig, "isAuthEnabled").returns(true);
-    
+
       cy.mount(
         <AuthContext.Provider value={mockAuth}>
           <AuthWrapper>
             <p>{nestedContent}</p>
           </AuthWrapper>
-        </AuthContext.Provider>
+        </AuthContext.Provider>,
       );
-    
+
       cy.contains("Signing you in...").should("be.visible");
     });
     it("should display 'Signing you out...' when auth is in signoutRedirect mode", () => {
@@ -121,22 +125,22 @@ describe("The AuthWrapper component", () => {
         }),
         activeNavigator: "signoutRedirect" as const,
       };
-    
+
       cy.stub(RuntimeConfig, "isAuthEnabled").returns(true);
-    
+
       cy.mount(
         <AuthContext.Provider value={mockAuth}>
           <AuthWrapper>
             <p>{nestedContent}</p>
           </AuthWrapper>
-        </AuthContext.Provider>
+        </AuthContext.Provider>,
       );
-    
+
       cy.contains("Signing you out...").should("be.visible");
     });
     it("should call removeUser when auth has an error", () => {
       const removeUser = cy.stub().as("removeUser");
-    
+
       const mockAuth = {
         ...getMockAuthProps({
           loading: false,
@@ -145,17 +149,17 @@ describe("The AuthWrapper component", () => {
         error: new Error("Auth failed"),
         removeUser,
       };
-    
+
       cy.stub(RuntimeConfig, "isAuthEnabled").returns(true);
-    
+
       cy.mount(
         <AuthContext.Provider value={mockAuth}>
           <AuthWrapper>
             <p>{nestedContent}</p>
           </AuthWrapper>
-        </AuthContext.Provider>
+        </AuthContext.Provider>,
       );
-    
+
       cy.get("@removeUser").should("have.been.calledOnce");
     });
   });

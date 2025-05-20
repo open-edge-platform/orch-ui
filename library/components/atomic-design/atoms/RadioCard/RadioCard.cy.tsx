@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { cyGet } from "@orch-ui/tests";
 import { RadioGroup } from "@spark-design/react";
 import { RadioCard } from "./RadioCard";
 import { RadioCardPom } from "./RadioCard.pom";
-import { cyGet } from "@orch-ui/tests";
 
 const pom = new RadioCardPom();
 describe("<RadioCard/>", () => {
@@ -38,19 +38,15 @@ describe("<RadioCard/>", () => {
           description="description of radio button"
           dataCy="customRadioCard"
         />
-      </RadioGroup>
+      </RadioGroup>,
     );
     cyGet("customRadioCard").should("exist");
   });
   it("should assign correct value to the RadioButton", () => {
     cy.mount(
       <RadioGroup onChange={() => {}}>
-        <RadioCard
-          value="expected-value"
-          label="label"
-          description="desc"
-        />
-      </RadioGroup>
+        <RadioCard value="expected-value" label="label" description="desc" />
+      </RadioGroup>,
     );
     cyGet("radioBtn").should("have.attr", "value", "expected-value");
   });

@@ -33,9 +33,7 @@ describe("<DragDrop/> should", () => {
     cy.get("@handleError").should("have.been.called");
   });
   it("be able to use handleSingleFile function", () => {
-    cy.mount(
-      <DragDrop handleSingleFile={cy.stub().as("handleSingleFile")} />
-    );
+    cy.mount(<DragDrop handleSingleFile={cy.stub().as("handleSingleFile")} />);
     pom.dragDropFile("../cypress/fixtures/");
     cy.get("@handleSingleFile").should("have.been.called");
   });

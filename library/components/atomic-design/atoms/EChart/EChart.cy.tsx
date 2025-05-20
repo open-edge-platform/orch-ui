@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { cyGet } from "@orch-ui/tests";
 import { EChartColorSet } from "@orch-ui/utils";
 import { ReactEChart } from "./EChart";
 import { EChartPom } from "./EChart.pom";
-import { cyGet } from "@orch-ui/tests";
 
 describe("Echart basic tests", () => {
   const xValues = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -68,9 +68,7 @@ describe("Echart basic tests", () => {
   });
 
   it("Should apply and match custom className", () => {
-    cyGet("eCharts")
-      .should("have.class", "test-class")
-      .and("exist");
+    cyGet("eCharts").should("have.class", "test-class").and("exist");
   });
 
   it("Should apply custom style", () => {
@@ -96,7 +94,7 @@ describe("Echart basic tests", () => {
 
   it("Should apply settings correctly", () => {
     const settings = { notMerge: true };
-  
+
     cy.mount(
       <ReactEChart
         option={{
@@ -108,7 +106,7 @@ describe("Echart basic tests", () => {
         dataCy="eCharts"
       />,
     );
-  
+
     cyGet("eCharts").should("exist");
   });
 
@@ -137,5 +135,4 @@ describe("Echart basic tests", () => {
     );
     cyGet("eCharts").should("exist");
   });
-
 });

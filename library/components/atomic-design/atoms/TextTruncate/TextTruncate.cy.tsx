@@ -98,6 +98,5 @@ describe("<TextTruncate/>", () => {
       pom.el.label.click();
       pom.el.label.should("have.class", "text-truncate__label-less");
     });
-
   });
 });

@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
+import { cyGet } from "@orch-ui/tests";
 import { ButtonVariant } from "@spark-design/tokens";
 import { UploadButton } from "./UploadButton";
 import { UploadButtonPom } from "./UploadButton.pom";
-import { cyGet } from "@orch-ui/tests";
 
 const pom = new UploadButtonPom("uploadButton");
 describe("<UploadButton/> should", () => {
@@ -31,7 +31,7 @@ describe("<UploadButton/> should", () => {
   });
   it("render with alert variant", () => {
     cy.mount(
-      <UploadButton onChange={() => {}} variant={ButtonVariant.Alert}/>
+      <UploadButton onChange={() => {}} variant={ButtonVariant.Alert} />,
     );
     pom.el.uploadBtn.should("have.class", "spark-button-alert");
   });
@@ -64,5 +64,4 @@ describe("<UploadButton/> should", () => {
       expect($input).not.to.have.attr("odirectory");
     });
   });
-  
 });

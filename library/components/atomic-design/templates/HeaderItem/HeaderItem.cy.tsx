@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MemoryRouter } from "react-router-dom";
+import { cyGet } from "@orch-ui/tests";
 import { HeaderSize } from "../Header/Header";
 import HeaderItem from "./HeaderItem";
 import HeaderItemPom from "./HeaderItem.pom";
-import { cyGet } from "@orch-ui/tests";
 
 const pom = new HeaderItemPom("header-item");
 describe("<HeaderItem/>", () => {
@@ -46,34 +45,24 @@ describe("<HeaderItem/>", () => {
   });
   it("should open link in new tab when blankLink is true", () => {
     cy.mount(
-      <HeaderItem
-        name="header-item"
-        size={HeaderSize.Large}
-        to="/to"
-        blankLink
-      >
+      <HeaderItem name="header-item" size={HeaderSize.Large} to="/to" blankLink>
         Text
-      </HeaderItem>
+      </HeaderItem>,
     );
     pom.el.headerItemLink.should("have.attr", "target", "_blank");
   });
-  
+
   it("should match root path when matchRoot is true and apply correct padding", () => {
     cy.window().then((win) => {
       win.history.pushState({}, "", "/");
     });
-  
+
     cy.mount(
-      <HeaderItem
-        name="header-item"
-        size={HeaderSize.Small}
-        to="/"
-        matchRoot
-      >
+      <HeaderItem name="header-item" size={HeaderSize.Small} to="/" matchRoot>
         Home
-      </HeaderItem>
+      </HeaderItem>,
     );
-  
+
     cyGet("headerItemLink").should("have.css", "padding-bottom", "8px");
   });
   it("should apply custom styles", () => {
@@ -85,7 +74,7 @@ describe("<HeaderItem/>", () => {
         style={{ backgroundColor: "red" }}
       >
         Styled
-      </HeaderItem>
+      </HeaderItem>,
     );
     pom.root.should("have.css", "background-color", "rgb(255, 0, 0)");
   });
@@ -93,7 +82,7 @@ describe("<HeaderItem/>", () => {
     cy.mount(
       <HeaderItem name="header-item" size={HeaderSize.Large} to="/to">
         <span data-cy="child-element">Icon</span>
-      </HeaderItem>
+      </HeaderItem>,
     );
     cyGet("child-element").should("contain.text", "Icon");
   });
