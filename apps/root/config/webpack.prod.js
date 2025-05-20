@@ -7,7 +7,6 @@ const { merge } = require("webpack-merge");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const commonConfig = require("./webpack.common");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { SubresourceIntegrityPlugin } = require("webpack");
 
 const prodConfig = {
   mode: "production",
@@ -57,9 +56,6 @@ const prodConfig = {
     }),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
-    }),
-    new SubresourceIntegrityPlugin({
-      hashFuncNames: ["sha256"],
     }),
   ],
 };

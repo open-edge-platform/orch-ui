@@ -8,7 +8,6 @@ const commonConfig = require("./webpack.common");
 const mode = "production";
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { SubresourceIntegrityPlugin } = require("webpack");
 
 const prodConfig = {
   mode: mode,
@@ -59,9 +58,6 @@ const prodConfig = {
     }),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
-    }),
-    new SubresourceIntegrityPlugin({
-      hashFuncNames: ["sha256"],
     }),
   ],
   resolve: {
