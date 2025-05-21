@@ -392,7 +392,6 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           }
           if (onReqError()) {
             setErrorVisibility(ToastVisibility.Hide);
-            navigate(clusterManagementRoute);
           }
           if (onReqWarning()) {
             setRemoveLast(false);

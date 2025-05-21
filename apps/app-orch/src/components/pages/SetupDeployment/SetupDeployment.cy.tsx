@@ -62,7 +62,7 @@ const deploymentAutomaticSetupMetadataTest = () => {
   pom.metadataPom.metadataFormPom.getNewEntryInput("Value").type("culvers");
   pom.metadataPom.metadataFormPom.el.add.click();
   pom.metadataPom.metadataFormPom.getNewEntryInput("Key").type("region");
-  pom.metadataPom.metadataFormPom.getNewEntryInput("Value").type("new_york");
+  pom.metadataPom.metadataFormPom.getNewEntryInput("Value").type("new-york");
   pom.metadataPom.metadataFormPom.el.add.click();
   pom.el.nextBtn.click();
 };

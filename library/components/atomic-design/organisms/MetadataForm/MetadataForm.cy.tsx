@@ -129,7 +129,13 @@ describe("<MetadataForm/>", () => {
     });
 
     it("not allow invalid K8 labels", () => {
-      const labels = ["invalid ", "invalid!", "invalid|", "invalid&", "valid_"];
+      const labels = [
+        "invalid ",
+        "invalid!",
+        "invalid|",
+        "invalid&",
+        "invalid_",
+      ];
       labels.forEach((label: string) => {
         pom.rhfComboboxKeyPom.getInput().clear();
         pom.rhfComboboxKeyPom.getInput().type(label);
