@@ -34,10 +34,10 @@ Base class for entity `store` class.
 
 Barrel file to export:
 
-* ids
-* generated entities
-* stores
-* handlers (one variable with the collection of all handlers)
+- ids
+- generated entities
+- stores
+- handlers (one variable with the collection of all handlers)
 
 ### mock-utils.ts
 
@@ -59,8 +59,8 @@ Directory for MSW handler files (e.g., hosts, regions) that will contain REST ha
 
 Directory for store implementation files (e.g., hosts, regions). A typical store needs to provide implementation for:
 
-* convert - method to create entity (Read) from the request body (Write),
-* list/get/post/put/delete - optionally provide own implementation if the base one is not relevant.
+- convert - method to create entity (Read) from the request body (Write),
+- list/get/post/put/delete - optionally provide own implementation if the base one is not relevant.
 
 Store files should not contain any data structures.
 
