@@ -22,38 +22,4 @@ export const handlers = [
     console.log("new mocks alerts");
     return res(ctx.status(200), ctx.json({ alerts: as.list() }));
   }),
-  // rest.get(
-  //   `${baseURL}/projects/${projectName}/alerts/definitions`,
-  //   (_, res, ctx) => {
-  //     return res(ctx.status(200), ctx.json({ alertDefinitions: ads.list() }));
-  //   },
-  // ),
-  // rest.get(
-  //   `${baseURL}/projects/${projectName}/alerts/receivers`,
-  //   (_, res, ctx) => {
-  //     return res(ctx.status(200), ctx.json({ receivers: rs.list() }));
-  //   },
-  // ),
-  // rest.get(
-  //   `${baseURL}/projects/${projectName}/alerts/definitions/:alertDefinitionId/template`,
-  //   (req, res, ctx) => {
-  //     const { alertDefinitionId } = req.params;
-  //     return res(
-  //       ctx.status(200),
-  //       ctx.json(adts.get(alertDefinitionId as string)),
-  //     );
-  //   },
-  // ),
-  // rest.patch(
-  //   `${baseURL}/projects/${projectName}/alerts/receivers/:receiverId`,
-  //   (_, res, ctx) => {
-  //     return res(ctx.status(204));
-  //   },
-  // ),
-  // rest.patch(
-  //   `${baseURL}/projects/${projectName}/alerts/definitions/:alertDefinitionId`,
-  //   (_, res, ctx) => {
-  //     return res(ctx.status(503));
-  //   },
-  // ),
 ];
