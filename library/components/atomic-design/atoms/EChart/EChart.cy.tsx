@@ -43,7 +43,6 @@ describe("Echart basic tests", () => {
         className="test-class"
       />,
     );
-    cy.wait(200);
   });
 
   it("Should load graph", () => {

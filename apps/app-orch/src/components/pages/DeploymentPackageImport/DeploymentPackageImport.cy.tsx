@@ -12,8 +12,8 @@ describe("<DeploymentPackageImport />", () => {
   });
   it("should import files correctly", () => {
     pom.uploadButtonEmpty.uploadFile("../cypress/fixtures/");
-    pom.getFileByIndex(0).contains("test.yaml");
-    pom.getFileByIndex(1).contains("example.yaml");
+    pom.getFileByIndex(0).contains("deployment_file_one.yaml");
+    pom.getFileByIndex(1).contains("deployment_file_two.yaml");
   });
 
   it("should delete file correctly", () => {
@@ -25,8 +25,8 @@ describe("<DeploymentPackageImport />", () => {
   it("should drag and drop files correctly", () => {
     pom.uploadButtonEmpty.uploadFile("../cypress/fixtures/");
     pom.uploadButtonList.dragDropFile("../cypress/fixtures/");
-    pom.getFileByIndex(0).contains("test.yaml");
-    pom.getFileByIndex(1).contains("example.yaml");
+    pom.getFileByIndex(0).contains("deployment_file_one.yaml");
+    pom.getFileByIndex(1).contains("deployment_file_two.yaml");
   });
 
   it("should show error message banner when import failed", () => {
