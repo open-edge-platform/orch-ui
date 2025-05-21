@@ -4,12 +4,7 @@
  */
 
 import { cm, infra, mbApi } from "@orch-ui/apis";
-import {
-  BreadcrumbPiece,
-  MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb as setClusterBreadcrumb,
-} from "@orch-ui/components";
+import { MetadataPair } from "@orch-ui/components";
 import {
   ObjectKeyValue,
   objectToMetadataPair,
@@ -23,9 +18,8 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { clustersMenuItem, homeBreadcrumb } from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -44,14 +38,11 @@ type urlParams = {
 };
 
 export interface ClusterEditProps {
-  /** This is required for cluster plugin to to set breadcrumb from fleet-management UI */
-  setBreadcrumb?: (breadcrumbs: BreadcrumbPiece[]) => void;
-
   // This is needed for testing purpose
   HostsTableRemote?: React.LazyExoticComponent<React.ComponentType<any>> | null;
 }
 
-const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
+const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
   const cy = { "data-cy": dataCy };
   const { clusterName } = useParams<urlParams>() as urlParams;
   const navigate = useNavigate();
@@ -233,35 +224,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       firstClusterHost?.site?.resourceId || firstClusterHost?.site?.siteID,
     );
   }, [firstClusterHost, isHostSuccess, currentCluster]);
-
-  // Breadcrumb settings
-  const breadcrumb = useMemo(
-    () => [
-      homeBreadcrumb,
-      {
-        text: "Clusters",
-        link: "../../clusters",
-      },
-      {
-        text: `${clusterDetail?.name}`,
-        link: `../../cluster/${clusterName}`,
-      },
-      {
-        text: "Edit Cluster",
-        link: "#",
-      },
-    ],
-    [clusterDetail],
-  );
-  useEffect(() => {
-    // use cluster-native breadcrumb unless specified
-    if (setBreadcrumb) {
-      setBreadcrumb(breadcrumb);
-    } else {
-      dispatch(setClusterBreadcrumb(breadcrumb));
-    }
-    dispatch(setActiveNavItem(clustersMenuItem));
-  }, [breadcrumb]);
 
   const onReqSuccess = () => {
     if (
