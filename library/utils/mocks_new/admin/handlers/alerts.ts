@@ -10,9 +10,6 @@ import AlertStore from "../store/alerts";
 const baseURL = "/v1";
 
 const as = new AlertStore();
-// const ads = new AlertDefinitionStore();
-// const adts = new AlertDefinitionTemplateStore();
-// const rs = new ReceiversStore();
 
 const projectName = SharedStorage.project?.name;
 
