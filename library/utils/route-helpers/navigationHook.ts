@@ -4,8 +4,8 @@
  */
 
 import { PathParam, useNavigate } from "react-router-dom";
-import { InfraRoute } from "./paths";
-import { getInfraPath } from "./routeHelpers";
+import { AdminRoute, AppOrchRoute, InfraRoute } from "./paths";
+import { getAdminPath, getAppOrchPath, getInfraPath } from "./routeHelpers";
 
 /**
  * Custom hook that provides a strongly typed navigation function for infrastructure routes.
@@ -36,4 +36,25 @@ export const useInfraNavigate = () => {
     },
     query?: string,
   ) => navigate(getInfraPath(route, params, query));
+};
+export const useAdminNavigate = () => {
+  const navigate = useNavigate();
+  return <AdminPath extends AdminRoute>(
+    route: AdminPath,
+    params?: {
+      [key in PathParam<AdminPath>]: string | null;
+    },
+    query?: string,
+  ) => navigate(getAdminPath(route, params, query));
+};
+
+export const useAppOrchNavigate = () => {
+  const navigate = useNavigate();
+  return <AppOrchPath extends AppOrchRoute>(
+    route: AppOrchPath,
+    params?: {
+      [key in PathParam<AppOrchPath>]: string | null;
+    },
+    query?: string,
+  ) => navigate(getAppOrchPath(route, params, query));
 };
