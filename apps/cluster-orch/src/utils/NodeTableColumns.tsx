@@ -5,7 +5,12 @@
 
 import { cm } from "@orch-ui/apis";
 import { StatusIcon, TableColumn } from "@orch-ui/components";
-import { nodeStatusToIconStatus, nodeStatusToText } from "@orch-ui/utils";
+import {
+  getInfraPath,
+  hostDetailsRoute,
+  nodeStatusToIconStatus,
+  nodeStatusToText,
+} from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 
 const name: TableColumn<cm.NodeInfo> = {
@@ -17,13 +22,21 @@ const name: TableColumn<cm.NodeInfo> = {
       return node.id;
     }
   },
-  Cell: (table: { row: { original: cm.NodeInfo } }) => (
-    <Link to={`/infrastructure/host/${table.row.original.id}`}>
-      {table.row.original.name !== ""
-        ? table.row.original.name
-        : table.row.original.id}
-    </Link>
-  ),
+  Cell: (table: { row: { original: cm.NodeInfo } }) => {
+    return table.row.original.id ? (
+      <Link
+        to={getInfraPath(hostDetailsRoute, {
+          id: table.row.original.id,
+        })}
+      >
+        {table.row.original.name !== ""
+          ? table.row.original.name
+          : table.row.original.id}
+      </Link>
+    ) : (
+      table.row.original.name
+    );
+  },
 };
 
 const nameWithoutLink: TableColumn<cm.NodeInfo> = {
