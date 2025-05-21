@@ -5,10 +5,10 @@
 
 import { omApi } from "@orch-ui/apis";
 import {
-  assignedWorkloadHostOne,
   deploymentOne,
   deploymentTwo,
-} from "@orch-ui/utils";
+} from "../../../mocks/app-orch/adm/deployments";
+import { assignedWorkloadHostOne } from "../../../mocks/infra/store/hosts";
 import {
   alertDefinitionEight,
   alertDefinitionFive,
