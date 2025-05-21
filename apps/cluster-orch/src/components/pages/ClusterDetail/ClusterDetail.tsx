@@ -24,6 +24,8 @@ import {
 import {
   API_INTERVAL,
   checkAuthAndRole,
+  clusterEditRoute,
+  clusterManagementRoute,
   clusterToStatuses,
   copyToClipboard,
   downloadFile,
@@ -31,6 +33,7 @@ import {
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Heading,
@@ -42,7 +45,7 @@ import {
   ToastProps,
 } from "@spark-design/react";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TableLoader from "../../atom/TableLoader";
 
 import {
@@ -73,7 +76,7 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
   const [clusterFirstHostId, setClusterFirstHostId] = useState<string>();
   const [siteId, setSiteId] = useState<string>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   // TODO: create global shared/store/notification.ts
   const [toast, setToast] = useState<ToastProps>({
@@ -207,7 +210,8 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
       displayText: "Edit",
       disable: !checkAuthAndRole([Role.CLUSTERS_WRITE]),
       onSelect: () => {
-        navigate(`../cluster/${clusterDetail.name}/edit`);
+        if (clusterDetail.name)
+          navigate(clusterEditRoute, { clusterName: clusterDetail.name });
       },
     },
     {
@@ -280,7 +284,7 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
           state: ToastState.Success,
           visibility: ToastVisibility.Show,
         }));
-        navigate("/infrastructure/clusters");
+        navigate(clusterManagementRoute);
       })
       .catch((e) => {
         setToast((p) => ({

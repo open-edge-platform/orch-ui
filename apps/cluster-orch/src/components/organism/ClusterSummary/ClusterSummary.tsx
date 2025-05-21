@@ -5,7 +5,12 @@
 
 import { cm } from "@orch-ui/apis";
 import { Flex, SquareSpinner, StatusIcon } from "@orch-ui/components";
-import { clusterStatusToIconStatus, SharedStorage } from "@orch-ui/utils";
+import {
+  clusterDetailRoute,
+  clusterStatusToIconStatus,
+  getInfraPath,
+  SharedStorage,
+} from "@orch-ui/utils";
 import { Icon, MessageBanner } from "@spark-design/react";
 import { MessageBannerAlertState } from "@spark-design/tokens";
 import { Link } from "react-router-dom";
@@ -56,9 +61,16 @@ const ClusterSummary = ({ nodeId, site }: ClusterSummaryProps) => {
         <div data-cy="site">{site}</div>
         <b>Action</b>
         <div>
-          <Link data-cy="link" to={`/infrastructure/cluster/${data.name}`}>
-            <Icon icon="clipboard-forward" /> View Cluster Details
-          </Link>
+          {data.name && (
+            <Link
+              data-cy="link"
+              to={getInfraPath(clusterDetailRoute, {
+                clusterName: data.name,
+              })}
+            >
+              <Icon icon="clipboard-forward" /> View Cluster Details
+            </Link>
+          )}
         </div>
       </Flex>
     </div>

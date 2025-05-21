@@ -6,9 +6,11 @@
 import { cm, infra, mbApi } from "@orch-ui/apis";
 import { MetadataPair } from "@orch-ui/components";
 import {
+  clusterManagementRoute,
   ObjectKeyValue,
   objectToMetadataPair,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, ButtonGroup, Heading, Toast } from "@spark-design/react";
 import {
@@ -19,7 +21,7 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -45,7 +47,7 @@ export interface ClusterEditProps {
 const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
   const cy = { "data-cy": dataCy };
   const { clusterName } = useParams<urlParams>() as urlParams;
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   //initial nodes
@@ -340,7 +342,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           variant={ButtonVariant.Secondary}
           onPress={() => {
             dispatch(clearCluster());
-            navigate("/infrastructure/clusters");
+            navigate(clusterManagementRoute);
           }}
         >
           Cancel
@@ -386,11 +388,11 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
         onHide={() => {
           if (onReqSuccess()) {
             setSuccessVisibility(ToastVisibility.Hide);
-            navigate("../clusters");
+            navigate(clusterManagementRoute);
           }
           if (onReqError()) {
             setErrorVisibility(ToastVisibility.Hide);
-            navigate("../clusters");
+            navigate(clusterManagementRoute);
           }
           if (onReqWarning()) {
             setRemoveLast(false);

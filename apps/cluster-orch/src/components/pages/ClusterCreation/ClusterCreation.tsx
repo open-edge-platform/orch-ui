@@ -5,7 +5,12 @@
 
 import { cm, mbApi } from "@orch-ui/apis";
 import { Empty, MetadataPair } from "@orch-ui/components";
-import { InternalError, SharedStorage } from "@orch-ui/utils";
+import {
+  clusterManagementRoute,
+  InternalError,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import {
   Button,
   ButtonGroup,
@@ -24,7 +29,6 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -51,7 +55,7 @@ const ClusterCreation = () => {
   const topRef = useRef<HTMLDivElement | null>(null);
   const projectName = SharedStorage.project?.name ?? "";
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   // TODO: reduce below redux states to single redux state
@@ -80,7 +84,7 @@ const ClusterCreation = () => {
   const [step, setStep] = useState<number>(0);
   useEffect(() => {
     if (step === 0 && !window.location.search) {
-      navigate("?offset=0");
+      navigate(clusterManagementRoute, undefined, "?offset=0");
     }
   }, [step]);
 
@@ -227,7 +231,7 @@ const ClusterCreation = () => {
       clearData();
       topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       const timeoutId = setTimeout(() => {
-        navigate("../clusters");
+        navigate(clusterManagementRoute);
         clearInterval(timeoutId);
       }, 3000);
     };
@@ -260,7 +264,7 @@ const ClusterCreation = () => {
         clearData();
         // If metadata failed then move to cluster page as cluster is created
         const timeoutId = setTimeout(() => {
-          navigate("../clusters");
+          navigate(clusterManagementRoute);
           clearInterval(timeoutId);
         }, 3000);
       }
@@ -378,7 +382,7 @@ const ClusterCreation = () => {
           variant={ButtonVariant.Secondary}
           onPress={() => {
             clearData();
-            navigate("../clusters");
+            navigate(clusterManagementRoute);
           }}
         >
           Cancel
