@@ -14,9 +14,12 @@ export class DragDropPom extends CyPom<Selectors> {
   }
 
   public dragDropFile(path: string) {
-    this.root.selectFile([`${path}deployment_file_one.yaml`, `${path}deployment_file_two.yaml`], {
-      force: true,
-      action: "drag-drop",
-    });
+    this.root.selectFile(
+      [`${path}deployment_file_one.yaml`, `${path}deployment_file_two.yaml`],
+      {
+        force: true,
+        action: "drag-drop",
+      },
+    );
   }
 }
