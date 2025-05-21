@@ -363,7 +363,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           onReqSuccess()
             ? "Cluster updated, redirecting you back to the Clusters page..."
             : onReqError()
-              ? "Failed to edit cluster try again later, redirecting you back to Clusters page..."
+              ? "Failed to edit cluster. Please try again later."
               : onReqWarning()
                 ? `This is the only host in ${clusterName}. Delete the cluster to remove host and return to an unassinged state`
                 : ""
@@ -392,7 +392,6 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           }
           if (onReqError()) {
             setErrorVisibility(ToastVisibility.Hide);
-            navigate(clusterManagementRoute);
           }
           if (onReqWarning()) {
             setRemoveLast(false);
