@@ -5,7 +5,8 @@
 
 import { ApiErrorPom } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
-import { packageWithParameterTemplates } from "@orch-ui/utils";
+import { packageOne, packageWithParameterTemplates } from "@orch-ui/utils";
+import { setupStore } from "../../../../store";
 import OverrideProfileTable, {
   OverrideProfileTableProps,
 } from "./OverrideProfileTable";
@@ -17,13 +18,15 @@ describe("<OverrideProfileTable />", () => {
   const props: OverrideProfileTableProps = {
     selectedPackage: packageWithParameterTemplates,
     selectedProfile: packageWithParameterTemplates.profiles![0],
-    overrideValues: {},
-    onOverrideValuesUpdate: () => {},
   };
 
   it("should handle loading", () => {
     pom.interceptApis([pom.api.appSingleDelayed]);
-    cy.mount(<OverrideProfileTable {...props} />);
+    cy.mount(<OverrideProfileTable {...props} />, {
+      reduxStore: setupStore({
+        deploymentPackage: packageOne,
+      }),
+    });
     cy.get(".spark-shimmer").should("be.visible");
     pom.waitForApis();
     cy.get(".spark-shimmer").should("not.exist");

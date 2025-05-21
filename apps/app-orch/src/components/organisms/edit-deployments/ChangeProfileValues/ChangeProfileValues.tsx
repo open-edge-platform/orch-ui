@@ -9,8 +9,11 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   clearMandatoryParams,
   editDeploymentPrevProfileName,
+  profileParameterOverridesSelector,
   setEditPrevProfileName,
+  setProfileParameterOverrides,
 } from "../../../../store/reducers/setupDeployment";
+
 import DeploymentProfileForm from "../../profiles/DeploymentProfileForm/DeploymentProfileForm";
 import { OverrideValuesList } from "../../setup-deployments/OverrideProfileValues/OverrideProfileTable";
 
@@ -20,24 +23,18 @@ interface ChangeProfileValuesProps {
   deployment?: adm.DeploymentRead;
   deploymentPackage?: catalog.DeploymentPackage;
   deploymentProfile?: catalog.DeploymentProfile;
-  overrideValues: OverrideValuesList;
-  onOverrideValuesUpdate: (
-    updatedOverrideValues: OverrideValuesList,
-    clear: boolean,
-  ) => void;
 }
 
 const ChangeProfileValues = ({
   deployment,
   deploymentPackage,
   deploymentProfile,
-  overrideValues,
-  onOverrideValuesUpdate,
 }: ChangeProfileValuesProps) => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
   const prevProfileName = useAppSelector(editDeploymentPrevProfileName);
+  const overrideValues = useAppSelector(profileParameterOverridesSelector);
 
   useEffect(() => {
     if (!deployment || deployment.profileName !== deploymentProfile?.name) {
@@ -46,7 +43,12 @@ const ChangeProfileValues = ({
         prevProfileName !== deploymentProfile?.name
       ) {
         dispatch(clearMandatoryParams());
-        onOverrideValuesUpdate({}, true);
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: {},
+            clear: true,
+          }),
+        );
       }
     } else {
       const valuesList: OverrideValuesList = {};
@@ -58,11 +60,22 @@ const ChangeProfileValues = ({
           valuesList[ov.appName] = structuredClone(ov);
         });
         dispatch(clearMandatoryParams());
-        onOverrideValuesUpdate(valuesList, true);
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: valuesList,
+            clear: true,
+          }),
+        );
       } else {
-        onOverrideValuesUpdate(overrideValues, true);
+        dispatch(
+          setProfileParameterOverrides({
+            profileParameterOverrides: overrideValues,
+            clear: true,
+          }),
+        );
       }
     }
+
     dispatch(setEditPrevProfileName(deploymentProfile?.name ?? ""));
   }, [deploymentProfile]);
 
@@ -71,10 +84,6 @@ const ChangeProfileValues = ({
       <DeploymentProfileForm
         selectedPackage={deploymentPackage ?? undefined}
         selectedProfile={deploymentProfile ?? undefined}
-        onOverrideValuesUpdate={(updatedOverrideValues) =>
-          onOverrideValuesUpdate(updatedOverrideValues, false)
-        }
-        overrideValues={overrideValues}
       />
     </div>
   );
