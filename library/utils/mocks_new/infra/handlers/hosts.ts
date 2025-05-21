@@ -5,22 +5,20 @@
 
 import { infra } from "@orch-ui/apis";
 import { rest } from "msw";
+import { HostStore } from "../../../mocks/infra/store/hosts";
 import { baseURL } from "../base-url";
 import { randomizeHostList } from "../data.helpers";
 import { RegionStore } from "../store/regions";
 import { SiteStore } from "../store/sites";
-// import { HostStore } from "library/utils/mocks/infra/store/hosts";
-import { HostStore } from "../../../mocks/infra/store/hosts";
 
 export const regionStore = new RegionStore();
 export const siteStore = new SiteStore();
-export const hostStore = new HostStore();
+export const hostStore = new HostStore(); // using the old store for now
 
 const delay = 1 * 1000;
 
 export const handlers = [
   rest.get(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
-    console.log("GET /compute/hosts");
     const siteID = req.url.searchParams.get("siteID");
     const deviceUuid = req.url.searchParams.get("uuid");
     const metadataString = req.url.searchParams.get("metadata");

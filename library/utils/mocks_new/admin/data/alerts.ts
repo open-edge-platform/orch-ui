@@ -4,7 +4,11 @@
  */
 
 import { omApi } from "@orch-ui/apis";
-import { deploymentOne, deploymentTwo } from "@orch-ui/utils";
+import {
+  assignedWorkloadHostOne,
+  deploymentOne,
+  deploymentTwo,
+} from "@orch-ui/utils";
 import {
   alertDefinitionEight,
   alertDefinitionFive,
@@ -28,7 +32,7 @@ export const alertOne: omApi.Alert = {
   labels: {
     alert_category: "Health",
     alert_context: "host",
-    host_uuid: "4c4c4544-0035-3010-8030-c4c04f4a4633",
+    host_uuid: assignedWorkloadHostOne.uuid as string,
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
