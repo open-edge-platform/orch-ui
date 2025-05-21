@@ -1,0 +1,18 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { handlers as regions } from "./infra/handlers/regions";
+
+// infra
+export * from "./infra/data/ids/regions";
+export * from "./infra/data/ids/sites";
+export * from "./infra/data/regions";
+export * from "./infra/data/sites";
+export * from "./infra/store/regions";
+export * from "./infra/store/sites";
+const handlersInfra = [...regions];
+
+// mocks expose one collection of all handlers
+export const handlers = [...handlersInfra];
