@@ -15,8 +15,8 @@ export const createOsResource = (
   kernelCommand: string,
   updateResources: string[],
   profileName: string,
-  securityFeature: infra.SecurityFeature,
-  osType: infra.OperatingSystemType,
+  securityFeature: infra.InstanceResourceRead["securityFeature"],
+  osType: infra.OperatingSystemResourceRead["osType"],
 ): infra.OperatingSystemResourceRead => {
   return {
     resourceId: id,
@@ -43,7 +43,7 @@ export const osTb = createOsResource(
   ["deb https://files.edgeorch.net orchui release"],
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
-  "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+  "OS_TYPE_IMMUTABLE",
 );
 
 export const osTbUpdate = createOsResource(
@@ -55,7 +55,7 @@ export const osTbUpdate = createOsResource(
   ["deb https://files.edgeorch.net orchui release"],
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
-  "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+  "OS_TYPE_IMMUTABLE",
 );
 
 export const osUbuntu = createOsResource(
@@ -67,7 +67,7 @@ export const osUbuntu = createOsResource(
   ["deb https://files.edgeorch.net orchui release"],
   "Ubuntu-x86_profile",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
-  "OPERATING_SYSTEM_TYPE_MUTABLE",
+  "OS_TYPE_IMMUTABLE",
 );
 
 export const osRedHat = createOsResource(
@@ -79,7 +79,7 @@ export const osRedHat = createOsResource(
   ["deb https://files.edgeorch.net orchui release"],
   "Redhat-x86_profile",
   "SECURITY_FEATURE_NONE",
-  "OPERATING_SYSTEM_TYPE_MUTABLE",
+  "OS_TYPE_IMMUTABLE",
 );
 
 export class OsResourceStore extends BaseStore<
