@@ -7,10 +7,16 @@ import {
   PageNotFound,
   PermissionDenied,
   RBACWrapper,
-  SquareSpinner,
 } from "@orch-ui/components";
-import { Role, RuntimeConfig } from "@orch-ui/utils";
-import React, { Suspense } from "react";
+import {
+  clusterCreateRoute,
+  clusterDetailRoute,
+  clusterEditRoute,
+  clusterManagementRoute,
+  clusterTemplateDetailRoute,
+  clusterTemplateRoute,
+  Role,
+} from "@orch-ui/utils";
 import { RouteObject } from "react-router-dom";
 import ClusterCreation from "../components/pages/ClusterCreation/ClusterCreation";
 import ClusterDetail from "../components/pages/ClusterDetail/ClusterDetail";
@@ -18,10 +24,6 @@ import ClusterEdit from "../components/pages/ClusterEdit/ClusterEdit";
 import ClusterManagement from "../components/pages/ClusterManagement";
 import ClusterTemplateDetails from "../components/pages/ClusterTemplateDetails/ClusterTemplateDetails";
 import ClusterTemplates from "../components/pages/ClusterTemplates/ClusterTemplates";
-
-const Admin = RuntimeConfig.isEnabled("ADMIN")
-  ? React.lazy(async () => await import("Admin/App"))
-  : null;
 
 export const childRoutes: RouteObject[] = [
   {
@@ -36,7 +38,7 @@ export const childRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "cluster-templates",
+    path: clusterTemplateRoute,
     element: (
       <RBACWrapper
         showTo={[Role.CLUSTER_TEMPLATES_READ, Role.CLUSTER_TEMPLATES_WRITE]}
@@ -47,7 +49,7 @@ export const childRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "cluster-templates/:templateName/:templateVersion/view",
+    path: clusterTemplateDetailRoute,
     element: (
       <RBACWrapper
         showTo={[Role.CLUSTER_TEMPLATES_READ, Role.CLUSTER_TEMPLATES_WRITE]}
@@ -58,7 +60,7 @@ export const childRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "clusters",
+    path: clusterManagementRoute,
     element: (
       <RBACWrapper
         showTo={[Role.CLUSTERS_WRITE, Role.CLUSTER_TEMPLATES_READ]}
@@ -68,23 +70,14 @@ export const childRoutes: RouteObject[] = [
       </RBACWrapper>
     ),
   },
-  { path: "cluster/:clusterName", element: <ClusterDetail /> },
-  { path: "cluster/:clusterName/edit", element: <ClusterEdit /> },
-
+  { path: clusterDetailRoute, element: <ClusterDetail /> },
+  { path: clusterEditRoute, element: <ClusterEdit /> },
   {
-    path: "*",
-    element: <PageNotFound />,
-  },
-  {
-    path: "clusters/create",
+    path: clusterCreateRoute,
     element: <ClusterCreation />,
   },
   {
-    path: "admin/*",
-    element: (
-      <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        {Admin !== null ? <Admin /> : "Administration disabled"}
-      </Suspense>
-    ),
+    path: "*",
+    element: <PageNotFound />,
   },
 ];
