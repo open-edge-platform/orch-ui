@@ -23,16 +23,22 @@ import {
 } from "@orch-ui/components";
 import {
   API_INTERVAL,
+  clusterCreateRoute,
+  clusterDetailRoute,
+  clusterEditRoute,
+  clusterManagementRoute,
   clusterToStatuses,
   copyToClipboard,
   Direction,
   downloadFile,
   getFilter,
+  getInfraPath,
   getOrder,
   getTrustedComputeCluster,
   Operator,
   parseError,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Icon, Toast, ToastProps } from "@spark-design/react";
 import {
@@ -43,7 +49,7 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "./ClusterList.scss";
 import ClusterNodesWrapper from "./ClusterNodesWrapper/ClusterNodesWrapper";
 
@@ -51,7 +57,7 @@ interface ClusterListProps {
   hasPermission?: boolean;
 }
 export default function ClusterList({ hasPermission }: ClusterListProps) {
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
   const [clusterToDelete, setClusterToDelete] = useState<string>();
@@ -150,14 +156,16 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       {
         displayText: "View Details",
         onSelect: () => {
-          navigate(`../cluster/${cluster.name}`);
+          if (cluster.name)
+            navigate(clusterDetailRoute, { clusterName: cluster.name });
         },
       },
       {
         displayText: "Edit",
         disable: !hasPermission,
         onSelect: () => {
-          navigate(`../cluster/${cluster.name}/edit`);
+          if (cluster.name)
+            navigate(clusterEditRoute, { clusterName: cluster.name });
         },
       },
       {
@@ -195,7 +203,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
           state: ToastState.Success,
           visibility: ToastVisibility.Show,
         }));
-        navigate("/infrastructure/clusters");
+        navigate(clusterManagementRoute);
       })
       .catch((e) => {
         setToast((p) => ({
@@ -214,10 +222,17 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       accessor: (item) => item.name,
       apiName: "name",
       Cell: (table: { row: { original: cm.ClusterInfoRead } }) => {
+        const clusterName = table.row.original.name;
         return (
-          <Link to={`../cluster/${table.row.original.name}`}>
-            {table.row.original.name}
-          </Link>
+          clusterName && (
+            <Link
+              to={getInfraPath(clusterDetailRoute, {
+                clusterName: clusterName,
+              })}
+            >
+              {table.row.original.name}
+            </Link>
+          )
         );
       },
     },
@@ -295,7 +310,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
           title="Create a cluster using one or more configured hosts."
           actions={[
             {
-              action: () => navigate("create"),
+              action: () => navigate(clusterCreateRoute),
               name: "Create Cluster",
               disable: !hasPermission,
             },
@@ -372,7 +387,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
             text="Create Cluster"
             disabled={!hasPermission}
             onPress={() => {
-              navigate("/infrastructure/clusters/create");
+              navigate(clusterCreateRoute);
             }}
             tooltip={
               hasPermission
