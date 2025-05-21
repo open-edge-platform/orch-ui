@@ -187,7 +187,7 @@ describe("<SetupDeployment>", () => {
             pom.reviewPom.el.profile.should("contain.text", "low-perf");
             [
               ["customer", "culvers"],
-              ["region", "new_york"],
+              ["region", "new-york"],
             ].map(([key, value], index) => {
               const row = pom.reviewPom.table.root.find(`tr:eq(${index + 1})`);
               row
@@ -342,7 +342,7 @@ describe("<SetupDeployment>", () => {
             pom.reviewPom.el.profile.should("contain.text", "high-perf");
             [
               ["customer", "culvers"],
-              ["region", "new_york"],
+              ["region", "new-york"],
             ].map(([key, value], index) => {
               const row = pom.reviewPom.table.root.find(`tr:eq(${index + 1})`);
               row
@@ -369,7 +369,7 @@ describe("<SetupDeployment>", () => {
                     appName: "llama2",
                     labels: {
                       customer: "culvers",
-                      region: "new_york",
+                      region: "new-york",
                     },
                   },
                 ],
