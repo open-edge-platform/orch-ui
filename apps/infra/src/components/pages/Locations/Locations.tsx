@@ -61,8 +61,7 @@ export const Locations = () => {
   const dispatch = useDispatch();
   const [deleteRegion] =
     infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
-  const [deleteSite] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+  const [deleteSite] = infra.useSiteServiceDeleteSiteMutation();
   const region = useAppSelector(selectRegion);
   const regionToDelete = useAppSelector(selectRegionToDelete);
   const siteToDelete = useAppSelector(selectSiteToDelete);
@@ -133,9 +132,9 @@ export const Locations = () => {
 
   const deleteSiteHandler = (siteId: string) => {
     deleteSite({
-      regionId: siteToDelete?.region?.resourceId ?? "",
+      regionResourceId: siteToDelete?.region?.resourceId ?? "",
       projectName: SharedStorage.project?.name ?? "",
-      siteId,
+      resourceId: siteId,
     })
       .unwrap()
       .then(() => {

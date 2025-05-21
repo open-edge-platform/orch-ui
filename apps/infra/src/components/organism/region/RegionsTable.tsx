@@ -65,10 +65,10 @@ const RegionsTable = ({
     isError,
     error,
     isLoading,
-  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
+  } = infra.useRegionServiceListRegionsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      parent: parentRegionId,
+      parent: parentRegionId, //TODO: should go in filter
       pageSize: searchParams.get("pageSize")
         ? parseInt(searchParams.get("pageSize")!)
         : 10,
