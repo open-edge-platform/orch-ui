@@ -63,6 +63,11 @@ describe("<ClusterDetail />", () => {
       );
     });
 
+    it("should render 'Last Change' column when showTimestamp is true", () => {
+      cy.get('[data-cy="last-change"]').should("exist");
+      cy.get('[data-cy="last-change"]').contains("Last Change");
+    });
+
     it("should delete a cluster", () => {
       pom.el.clusterDetailPopup.click().as("popup");
       cy.get("@popup").contains("Delete").click();
