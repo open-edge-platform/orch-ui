@@ -28,10 +28,10 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
 
   const [host, setHost] = useState<infra.HostRead>();
 
-  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      uuid: uuid,
+      uuid: uuid, // TODO: needs to go in filter
       detail: true,
     },
     {

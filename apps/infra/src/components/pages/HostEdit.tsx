@@ -110,21 +110,20 @@ const HostEdit = () => {
 
   // Then, Get site data mentioned by host(.template.site) to get the region & site selected by default
   const isRegionNotSelected = !selectedRegion; // This is required to convert to boolean as Region is object not boolean
-  const { data: hostSiteData } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        // IMPORTANT: we used the "rid" fallback to pass anything else than empty string
-        // for 24.11 api requires any non-empty value to return the site data
-        // currently the host object does not contain the data about region
-        regionId: host?.site?.region?.resourceId ?? "rid",
-        projectName: SharedStorage.project?.name ?? "",
-        siteId: host?.site?.siteID ?? "",
-      },
-      {
-        // Skip this API if selection is made or host or host site value not exist
-        skip: !isRegionNotSelected || !host || (host && !host.site),
-      },
-    );
+  const { data: hostSiteData } = infra.useSiteServiceGetSiteQuery(
+    {
+      // IMPORTANT: we used the "rid" fallback to pass anything else than empty string
+      // for 24.11 api requires any non-empty value to return the site data
+      // currently the host object does not contain the data about region
+      regionResourceId: host?.site?.region?.resourceId ?? "rid",
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host?.site?.siteID ?? "",
+    },
+    {
+      // Skip this API if selection is made or host or host site value not exist
+      skip: !isRegionNotSelected || !host || (host && !host.site),
+    },
+  );
 
   // Seeing if a hostID is unassigned by seeing its instance workloadMemberID is a null
   const {
@@ -142,7 +141,7 @@ const HostEdit = () => {
   );
 
   const { data: regionData, isLoading: isRegionLoading } =
-    infra.useGetV1ProjectsByProjectNameRegionsQuery(
+    infra.useRegionServiceListRegionsQuery(
       { projectName: SharedStorage.project?.name ?? "" },
       { skip: !host || !isRegionNotSelected },
     );

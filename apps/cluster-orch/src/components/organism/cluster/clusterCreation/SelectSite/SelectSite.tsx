@@ -54,15 +54,14 @@ const SelectSite = ({
   const preSiteId = query.get("siteId");
   const preSiteName = query.get("siteName");
 
-  const { data: preSelectedSite, isLoading } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: preRegionId ?? "*",
-        siteId: preSiteId ?? "",
-      },
-      { skip: !preSiteId || !SharedStorage.project?.name },
-    );
+  const { data: preSelectedSite, isLoading } = infra.useSiteServiceGetSiteQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      regionResourceId: preRegionId ?? "*",
+      resourceId: preSiteId ?? "",
+    },
+    { skip: !preSiteId || !SharedStorage.project?.name },
+  );
 
   useEffect(() => {
     if (

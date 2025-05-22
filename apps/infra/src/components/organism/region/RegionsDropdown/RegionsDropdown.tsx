@@ -28,10 +28,10 @@ const RegionsDropdown = ({
     isSuccess,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
+  } = infra.useRegionServiceListRegionsQuery(
     {
       projectName,
-      parent: parentRegionId,
+      parent: parentRegionId, //TODO: should go in filter
       pageSize: pageSize,
     },
     {

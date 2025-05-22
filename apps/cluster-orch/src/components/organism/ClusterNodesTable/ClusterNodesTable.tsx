@@ -58,7 +58,7 @@ const ClusterNodesTable = ({
     isSuccess,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  } = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter: hostsFilter,
