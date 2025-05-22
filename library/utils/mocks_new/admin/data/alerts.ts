@@ -5,6 +5,11 @@
 
 import { omApi } from "@orch-ui/apis";
 import {
+  deploymentOne,
+  deploymentTwo,
+} from "../../../mocks/app-orch/adm/deployments";
+import { assignedWorkloadHostOne } from "../../../mocks/infra/store/hosts";
+import {
   alertDefinitionEight,
   alertDefinitionFive,
   alertDefinitionFour,
@@ -15,7 +20,7 @@ import {
   alertDefinitionTen,
   alertDefinitionThree,
   alertDefinitionTwo,
-} from "./alertDefinitions";
+} from "./alert-definitions";
 
 export const alertOne: omApi.Alert = {
   alertDefinitionId: alertDefinitionOne.id,
@@ -27,7 +32,7 @@ export const alertOne: omApi.Alert = {
   labels: {
     alert_category: "Health",
     alert_context: "host",
-    host_uuid: "4c4c4544-0035-3010-8030-c4c04f4a4633",
+    host_uuid: assignedWorkloadHostOne.uuid as string,
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
@@ -87,7 +92,7 @@ export const alertFive: omApi.Alert = {
   labels: {
     alert_category: "Deployment",
     alert_context: "deployment",
-    deployment_id: "deploymentA",
+    deployment_id: deploymentOne.deployId as string,
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
@@ -102,7 +107,7 @@ export const alertSix: omApi.Alert = {
   labels: {
     alert_category: "Deployment",
     alert_context: "deployment",
-    deployment_id: "deploymentB",
+    deployment_id: deploymentTwo.deployId as string,
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
@@ -181,31 +186,3 @@ export const alertNoSource: omApi.Alert = {
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
-
-export const multipleAlerts: omApi.Alert[] = [
-  alertOne,
-  alertTwo,
-  alertThree,
-  alertFour,
-  alertFive,
-  alertSix,
-  alertSeven,
-  alertEight,
-  alertNine,
-  alertTen,
-];
-
-export default class AlertStore {
-  alerts: omApi.Alert[];
-  constructor() {
-    this.alerts = multipleAlerts;
-  }
-
-  list(): omApi.Alert[] {
-    return this.alerts;
-  }
-
-  get(id: string): omApi.Alert | undefined {
-    return this.alerts.find((a) => a.alertDefinitionId === id);
-  }
-}
