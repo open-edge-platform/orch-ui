@@ -134,6 +134,16 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["HostService"],
       }),
+      hostServiceGetHostsSummary: build.query<
+        HostServiceGetHostsSummaryApiResponse,
+        HostServiceGetHostsSummaryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/summary`,
+          params: { filter: queryArg.filter },
+        }),
+        providesTags: ["HostService"],
+      }),
       instanceServiceListInstances: build.query<
         InstanceServiceListInstancesApiResponse,
         InstanceServiceListInstancesApiArg
@@ -1116,6 +1126,14 @@ export type HostServiceRegisterHostApiArg = {
   /** unique projectName for the resource */
   projectName: string;
   hostRegister: HostRegister;
+};
+export type HostServiceGetHostsSummaryApiResponse =
+  /** status 200 OK */ GetHostSummaryResponseRead;
+export type HostServiceGetHostsSummaryApiArg = {
+  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** unique projectName for the resource */
+  projectName: string;
 };
 export type InstanceServiceListInstancesApiResponse =
   /** status 200 OK */ ListInstancesResponseRead;
@@ -2603,6 +2621,17 @@ export type HostRegister = {
   /** The host UUID. */
   uuid?: string;
 };
+export type GetHostSummaryResponse = {};
+export type GetHostSummaryResponseRead = {
+  /** The total number of hosts presenting an Error. */
+  error?: number;
+  /** The total number of hosts in Running state. */
+  running?: number;
+  /** The total number of hosts. */
+  total?: number;
+  /** The total number of hosts without a site. */
+  unallocated?: number;
+};
 export type ListInstancesResponse = {
   /** Inform if there are more elements */
   hasNext: boolean;
@@ -3211,6 +3240,7 @@ export const {
   useHostServiceOnboardHostMutation,
   useHostServiceRegisterUpdateHostMutation,
   useHostServiceRegisterHostMutation,
+  useHostServiceGetHostsSummaryQuery,
   useInstanceServiceListInstancesQuery,
   useInstanceServiceCreateInstanceMutation,
   useInstanceServiceDeleteInstanceMutation,
