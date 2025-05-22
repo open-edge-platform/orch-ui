@@ -82,10 +82,10 @@ const HostDetails: React.FC = () => {
   const [resourceTitle, setResourceTitle] = useState<ResourceTypeTitle>();
   const [resourceData, setResourceData] = useState<ResourceType | null>(null);
   // Calling Host-related APIs
-  const hostsQuery = infra.useHostServiceListHostsQuery(
+  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      uuid: uuid, // TODO: needs to go in filter
+      uuid: uuid,
       detail: true,
     },
     {

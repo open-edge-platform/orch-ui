@@ -31,7 +31,7 @@ export const SiteViewHostTable = ({
 
   const projectName = SharedStorage.project?.name ?? "";
   const { data, isSuccess, isError, isLoading, error } =
-    infra.useHostServiceListHostsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName,
         pageSize: 10,

@@ -24,7 +24,7 @@ const DashboardUnallocatedHostsWheel = ({
   metadata?: MetadataPairs;
 }) => {
   const { data, isSuccess, isLoading, isError } =
-    infra.useHostServiceListHostsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         // If metadata exists then add call `host API` with optional metadata filter
