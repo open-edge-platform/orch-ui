@@ -16,7 +16,6 @@ const projectName = SharedStorage.project?.name;
 // alerts
 export const handlers = [
   rest.get(`${baseURL}/projects/${projectName}/alerts`, (_, res, ctx) => {
-    console.log("new mocks alerts");
     return res(ctx.status(200), ctx.json({ alerts: as.list() }));
   }),
 ];
