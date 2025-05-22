@@ -74,11 +74,11 @@ const SiteForm = () => {
     isError,
     isFetching,
     error,
-  } = infra.useSiteServiceGetSiteQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
     {
-      regionResourceId: regionId ?? "",
+      regionId: regionId ?? "", //TODO: not used in EIM endpoint
       projectName: SharedStorage.project?.name ?? "",
-      resourceId: siteId,
+      siteId: siteId,
     },
     {
       skip: siteId === "new" || !regionId || !SharedStorage.project?.name,
@@ -156,7 +156,7 @@ const SiteForm = () => {
     return logPairs;
   };
 
-  const regionsQuery = infra.useRegionServiceListRegionsQuery({
+  const regionsQuery = infra.useGetV1ProjectsByProjectNameRegionsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
@@ -173,7 +173,7 @@ const SiteForm = () => {
   const [createLogProfile] =
     infra.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
   const [editLogProfile] =
-    infra.useTelemetryLogsProfileServiceUpdateTelemetryLogsProfileMutation();
+    infra.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const { data: logsResponse } =
     infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
@@ -182,7 +182,7 @@ const SiteForm = () => {
   const [createMetricProfile] =
     infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
   const [editMetricProfile] =
-    infra.useTelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileMutation();
+    infra.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const { data: metricsResponse } =
     infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
@@ -197,9 +197,9 @@ const SiteForm = () => {
   const [currentSystemLog, setCurrentSystemLog] =
     useState<SystemLogPair[]>(getLogPairs());
   const [deleteMetricProfile] =
-    infra.useTelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileMutation();
+    infra.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const [deleteLogProfile] =
-    infra.useTelemetryLogsProfileServiceDeleteTelemetryLogsProfileMutation();
+    infra.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const [inheritedMetadata, setInheritedMetadata] = useState<MetadataPair[]>(
     [],
   );
@@ -387,10 +387,10 @@ const SiteForm = () => {
         if (metricPair.profileId != "") {
           allPromises.push(
             editMetricProfile({
-              metricgroupResourceId: "group-id", //TODO: not used in real endpoint,
+              telemetryMetricsGroupId: "group-id", //TODO: not used in real endpoint,
               projectName: SharedStorage.project?.name ?? "",
-              resourceId: metricPair.profileId,
-              telemetryMetricsProfileResource: metricProfile,
+              telemetryMetricsProfileId: metricPair.profileId,
+              telemetryMetricsProfile: metricProfile,
             }),
           );
         } else {
@@ -415,10 +415,10 @@ const SiteForm = () => {
         if (logPair.profileId != "") {
           allPromises.push(
             editLogProfile({
-              loggroupResourceId: "group-id", //TODO: not used in real endpoint
+              telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
               projectName: SharedStorage.project?.name ?? "",
-              resourceId: logPair.profileId,
-              telemetryLogsProfileResource: logProfile,
+              telemetryLogsProfileId: logPair.profileId,
+              telemetryLogsProfile: logProfile,
             }),
           );
         } else {
@@ -444,9 +444,9 @@ const SiteForm = () => {
           ) {
             allPromises.push(
               deleteMetricProfile({
-                metricgroupResourceId: "group-id", //TODO: evaluate
+                telemetryMetricsGroupId: "group-id", //TODO: evaluate
                 projectName: SharedStorage.project?.name ?? "",
-                resourceId: responsePair.profileId,
+                telemetryMetricsProfileId: responsePair.profileId,
               }),
             );
           }
@@ -459,9 +459,9 @@ const SiteForm = () => {
             )
           ) {
             deleteLogProfile({
-              loggroupResourceId: "group-id", //TODO: evaluate
+              telemetryLogsGroupId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              resourceId: responsePair.profileId,
+              telemetryLogsProfileId: responsePair.profileId,
             });
           }
         }

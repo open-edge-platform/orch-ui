@@ -83,7 +83,7 @@ export const RegionSiteTree = ({
     isError: isErrorRegions,
     refetch,
     isUninitialized, // If query is not fetched before
-  } = infra.useRegionServiceListRegionsQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       // TODO: use `parent` param here rather than `filter`
