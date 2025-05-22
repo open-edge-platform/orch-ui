@@ -10,7 +10,7 @@ const commonConfig = require("./webpack.common");
 const mode = "production";
 const prodConfig = {
   mode: mode,
-  devtool: false,
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -43,9 +43,9 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        AppOrchUI: `AppOrchUI@http://localhost:8081/remoteEntry.js`,
-        ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
-        EimUI: `EimUI@/mfe/infrastructure/remoteEntry.js`,
+        AppOrchUI: "AppOrchUI@http://localhost:8081/remoteEntry.js",
+        ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
+        EimUI: "EimUI@/mfe/infrastructure/remoteEntry.js",
       },
     }),
   ],

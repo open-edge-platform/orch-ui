@@ -8,7 +8,7 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const mode = "production";
 const prodConfig = {
   mode: mode,
-  devtool: false,
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -41,9 +41,9 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
-        EimUI: `EimUI@/mfe/infrastructure/remoteEntry.js`,
-        Admin: `Admin@/mfe/admin/remoteEntry.js`,
+        ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
+        EimUI: "EimUI@/mfe/infrastructure/remoteEntry.js",
+        Admin: "Admin@/mfe/admin/remoteEntry.js",
       },
     }),
   ],

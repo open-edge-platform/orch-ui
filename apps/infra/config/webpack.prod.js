@@ -10,7 +10,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 const prodConfig = {
   mode: mode,
-  devtool: false,
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -43,8 +43,8 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
-        Admin: `Admin@/mfe/admin/remoteEntry.js`,
+        ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
+        Admin: "Admin@/mfe/admin/remoteEntry.js",
       },
     }),
   ],
