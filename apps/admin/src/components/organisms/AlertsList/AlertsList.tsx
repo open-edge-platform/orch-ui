@@ -40,7 +40,6 @@ const AlertsList = () => {
   } = omApi.useGetProjectAlertDefinitionsQuery({
     projectName: SharedStorage.project?.name ?? "",
   });
-
   const columns = [
     {
       Header: "Alert",
