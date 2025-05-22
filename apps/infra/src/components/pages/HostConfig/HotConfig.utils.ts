@@ -7,14 +7,14 @@ import { infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { HostData } from "../../../store/configureHost";
 
-export const isHostRead = (object: any): object is infra.HostRead => {
+export const isHostRead = (object: any): object is infra.HostResourceRead => {
   return typeof object === "object" && object !== null && object.resourceId;
 };
 
-// infra.HostRead successfull API call that returns updated values
+// infra.HostResourceRead successfull API call that returns updated values
 // string = error message from API failure
 // undefined = no API call made
-export type HostConfigResponse = infra.HostRead | string | undefined;
+export type HostConfigResponse = infra.HostResourceRead | string | undefined;
 
 export const createRegisteredHost = async (
   host: HostData,

@@ -20,7 +20,7 @@ const WorkloadTag = "Workload";
 const WorkloadListTag = "WorkloadList";
 const InstanceListTag = "InstanceList";
 
-export interface InstanceReadModified extends infra.InstanceRead {
+export interface InstanceReadModified extends infra.InstanceResourceRead {
   host?: infra.HostRead;
 }
 

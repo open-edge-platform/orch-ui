@@ -118,10 +118,10 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const containsHosts = useAppSelector(selectContainsHosts);
   const firstHost =
     Object.keys(hosts).length > 0 ? useAppSelector(selectFirstHost) : undefined;
-  const preselectedSite = firstHost?.site as infra.SiteRead;
+  const preselectedSite = firstHost?.site as infra.SiteResourceRead;
 
   // host register - used when coming in from 'autoProvision' flow, host will not exist
-  const [registerHost] = infra.registerHost();
+  const [registerHost] = infra.useHostServiceRegisterHostMutation();
   // host update
   const [patchHost] = infra.useHostServicePatchHostMutation();
   const [postInstance] = infra.useInstanceServiceCreateInstanceMutation();
@@ -255,7 +255,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
       await patchHost({
         projectName: SharedStorage.project?.name ?? "",
         resourceId: host.resourceId!,
-        body: {
+        hostResource: {
           name: host.name,
           siteId: host.siteId,
           metadata: host.metadata,
@@ -270,23 +270,22 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         });
 
       if (!host.originalOs && !createdInstances.has(host.resourceId!)) {
-        const postInstancePayload: infra.PostV1ProjectsByProjectNameComputeInstancesApiArg =
-          {
-            projectName: SharedStorage.project?.name ?? "",
-            body: {
-              securityFeature: host.instance?.securityFeature,
-              osID: host.instance?.osID,
-              kind: "INSTANCE_KIND_METAL",
-              hostID: host.resourceId,
-              name: `${host.name}-instance`,
-            },
-          };
+        const postInstancePayload: infra.InstanceServiceCreateInstanceApiArg = {
+          projectName: SharedStorage.project?.name ?? "",
+          instanceResource: {
+            securityFeature: host.instance?.securityFeature,
+            osID: host.instance?.osID,
+            kind: "INSTANCE_KIND_METAL",
+            hostID: host.resourceId,
+            name: `${host.name}-instance`,
+          },
+        };
         /*
           instance is associated with localAccount selected by user
           in "SSH key" step.
         */
         if (host.instance?.localAccountID) {
-          postInstancePayload.body.localAccountID =
+          postInstancePayload.instanceResource.localAccountID =
             host.instance?.localAccountID;
         }
         await postInstance(postInstancePayload)

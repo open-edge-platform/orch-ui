@@ -18,6 +18,7 @@ import {
   parseError,
   Role,
   SharedStorage,
+  TelemetryLogLevel,
   useInfraNavigate,
 } from "@orch-ui/utils";
 import {
@@ -130,7 +131,7 @@ const RegionForm: React.FC = () => {
     isLoading: profileMetricLoading,
   } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     {
-      telemetryMetricsGroupId: "group-id", //TODO: evaluate
+      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId,
     },
@@ -200,7 +201,7 @@ const RegionForm: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<infra.RegionRead>({
+  } = useForm<infra.RegionResourceRead>({
     mode: "all",
   });
 
@@ -298,7 +299,7 @@ const RegionForm: React.FC = () => {
 
   const redirectToLocationsPage = async () => navigate(locationRoute);
 
-  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroup => {
+  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroupResource => {
     const group = metricsgroup.find((group) => {
       return group.telemetryMetricsGroupId === id;
     });
@@ -311,7 +312,7 @@ const RegionForm: React.FC = () => {
     };
   };
 
-  const getLogsGroup = (id: string): infra.TelemetryLogsGroup => {
+  const getLogsGroup = (id: string): infra.TelemetryMetricsGroupResource => {
     const group = logsgroup.find((group) => {
       return group.telemetryLogsGroupId === id;
     });
@@ -324,7 +325,7 @@ const RegionForm: React.FC = () => {
     };
   };
 
-  const save: SubmitHandler<infra.RegionWrite> = async (data) => {
+  const save: SubmitHandler<infra.RegionResourceWrite> = async (data) => {
     // handle metadata generation
     if (!data.metadata) {
       data.metadata = [];
@@ -360,7 +361,7 @@ const RegionForm: React.FC = () => {
     }
 
     try {
-      let regionOperation: Promise<infra.PostV1ProjectsByProjectNameRegionsApiResponse>;
+      let regionOperation: Promise<infra.RegionServiceCreateRegionApiResponse>;
 
       if (regionId === "new") {
         regionOperation = createRegion({
@@ -381,7 +382,7 @@ const RegionForm: React.FC = () => {
 
       // handle metric profiles
       for (const metricPair of currentSystemMetric) {
-        const metricProfile: infra.TelemetryMetricsProfile = {
+        const metricProfile: infra.TelemetryMetricsProfileResource = {
           targetRegion: response.regionID,
           metricsInterval: parseInt(metricPair.interval),
           metricsGroupId: metricPair.metricType,
@@ -410,9 +411,9 @@ const RegionForm: React.FC = () => {
 
       // handle log profiles
       for (const logPair of currentSystemLog) {
-        const logProfile: infra.TelemetryLogsProfile = {
+        const logProfile: infra.TelemetryLogsProfileResource = {
           targetRegion: response.regionID,
-          logLevel: logPair.logLevel as infra.TelemetrySeverityLevel,
+          logLevel: logPair.logLevel as TelemetryLogLevel,
           logsGroupId: logPair.logSource,
           logsGroup: getLogsGroup(logPair.logSource),
         };
@@ -492,7 +493,7 @@ const RegionForm: React.FC = () => {
     }
   };
 
-  const checkAndUpdateMetadata = async (data: infra.RegionWrite) => {
+  const checkAndUpdateMetadata = async (data: infra.RegionResourceWrite) => {
     if (data.metadata && data.metadata.length >= 0)
       await updateMetadata({
         projectName: SharedStorage.project?.name ?? "",

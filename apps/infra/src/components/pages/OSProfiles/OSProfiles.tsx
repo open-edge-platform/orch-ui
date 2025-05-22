@@ -52,7 +52,7 @@ const OSProfiles = () => {
     return (
       <Table
         columns={columns}
-        data={osProfiles?.operatingSystems}
+        data={osProfiles?.OperatingSystemResources}
         canSearch
         isLoading={isLoading}
       />

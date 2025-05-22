@@ -70,9 +70,10 @@ const HostEdit = () => {
   });
 
   /* Host Edit states */
-  const [host, setHost] = useState<infra.HostRead>();
-  const [selectedSite, setSelectedSite] = useState<infra.SiteRead>();
-  const [selectedRegion, setSelectedRegion] = useState<infra.RegionRead>();
+  const [host, setHost] = useState<infra.HostResourceRead>();
+  const [selectedSite, setSelectedSite] = useState<infra.SiteResourceRead>();
+  const [selectedRegion, setSelectedRegion] =
+    useState<infra.RegionResourceRead>();
   const [metadataPairs, setMetadataPairs] = useState<MetadataPair[]>([]);
   const [hasMetadataError, setHasMetadataError] = useState<boolean>(false);
 

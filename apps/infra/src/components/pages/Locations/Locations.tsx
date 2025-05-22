@@ -276,14 +276,18 @@ export const Locations = () => {
                 maintenanceEntity.targetEntityType === "site"
               ) {
                 dispatch(
-                  setSite(maintenanceEntity.targetEntity as infra.SiteRead),
+                  setSite(
+                    maintenanceEntity.targetEntity as infra.SiteResourceRead,
+                  ),
                 );
               } else if (
                 maintenanceEntity.showBack &&
                 maintenanceEntity.targetEntityType === "region"
               ) {
                 dispatch(
-                  setRegion(maintenanceEntity.targetEntity as infra.RegionRead),
+                  setRegion(
+                    maintenanceEntity.targetEntity as infra.RegionResourceRead,
+                  ),
                 );
               }
               dispatch(setMaintenanceEntity(undefined));

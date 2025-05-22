@@ -119,7 +119,7 @@ const showMessageBanner = (
 export const deleteHostInstanceFn = (
   dispatch: AppDispatch,
   host: infra.HostRead,
-  instance?: infra.InstanceRead,
+  instance?: infra.InstanceResourceRead,
 ): Promise<ApiPromiseType> => {
   let promise = new Promise<ApiPromiseType>(() => {});
   const deleteHostFn = () => {

@@ -26,7 +26,7 @@ export const GlobalOsDropdown = ({
   const cy = { "data-cy": dataCy };
 
   const {
-    data: { operatingSystems: _osResources } = {},
+    data: { OperatingSystemResources: _osResources } = {},
     isLoading,
     isError,
     isSuccess,

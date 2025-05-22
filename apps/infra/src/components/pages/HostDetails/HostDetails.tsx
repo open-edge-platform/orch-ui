@@ -76,7 +76,7 @@ const HostDetails: React.FC = () => {
   const { id, uuid } = useParams<urlParams>() as urlParams;
 
   /* Managing Host/Host-Resource details with api-hooks & states */
-  const [host, setHost] = useState<infra.HostRead>();
+  const [host, setHost] = useState<infra.HostResourceRead>();
   const [showResourceDetails, setShowResourceDetails] =
     useState<boolean>(false);
   const [resourceTitle, setResourceTitle] = useState<ResourceTypeTitle>();
@@ -85,8 +85,7 @@ const HostDetails: React.FC = () => {
   const hostsQuery = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      uuid: uuid, //TODO: check if should go in filter ?
-      detail: true, //TODO: check if should go in filter ?
+      filter: `uuid=${uuid} AND detail=true`,
     },
     {
       skip: !uuid || !SharedStorage.project?.name,
@@ -212,7 +211,7 @@ const HostDetails: React.FC = () => {
       // OR Filtered host has atleast one periodically repeated active maintenance schedule
       (schedules.repeatedSchedules && schedules.repeatedSchedules.length > 0));
   /** This will trigger an API call to Deactivate Maintenance: if host & the maintenance for that host exist */
-  const deactivateMaintenance = (host: infra.HostRead) => {
+  const deactivateMaintenance = (host: infra.HostResourceRead) => {
     if (filteredMaintenance.length !== 0) {
       dispatch(
         showMessageNotification({
