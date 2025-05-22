@@ -10,7 +10,7 @@ import ClusterNodesTablePom from "./ClusterNodesTable.pom";
 const nodes: cm.NodeInfo[] = [
   {
     id: "hostId",
-    status: { condition: "STATUS_CONDITION_READY" },
+    status: { condition: "STATUS_CONDITION_READY" , reason: "Running"},
   },
 ];
 
@@ -35,7 +35,7 @@ describe("<ClusterNodesTable/> should", () => {
   it("load data", () => {
     pom.root.should("contain", "Node 1");
     pom.root.should("contain", "linux");
-    pom.root.should("contain", "CONDITION READY");
+    pom.root.should("contain", "Running");
   });
 
   it("display 'Not compatible' when trusted compute is not enabled", () => {
