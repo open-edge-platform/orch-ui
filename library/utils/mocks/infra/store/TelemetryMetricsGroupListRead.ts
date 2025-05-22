@@ -8,31 +8,32 @@ import {
   telemetryMetricsGroup1,
   telemetryMetricsGroup2,
   telemetryMetricsGroup3,
-} from "../data/telemetryMetrics";
+} from "../data";
 import { BaseStore } from "./baseStore";
 
-const TelemetryMetricsGroups: infra.TelemetryMetricsGroupRead[] = [
+const telemetryMetricsGroups: infra.TelemetryMetricsGroupResourceRead[] = [
   telemetryMetricsGroup1,
   telemetryMetricsGroup2,
   telemetryMetricsGroup3,
 ];
 
-export const telemetryMetricsGroupList: infra.TelemetryMetricsGroupListRead = {
-  TelemetryMetricsGroups,
-  hasNext: true,
-  totalElements: TelemetryMetricsGroups.length,
-};
+export const telemetryMetricsGroupList: infra.ListTelemetryMetricsGroupsResponse =
+  {
+    telemetryMetricsGroups,
+    hasNext: true,
+    totalElements: telemetryMetricsGroups.length,
+  };
 
 export class TelemetryMetricsGroupListStore extends BaseStore<
   "telemetryMetricsGroupId",
-  infra.TelemetryMetricsGroupRead
+  infra.TelemetryMetricsGroupResourceRead
 > {
   constructor() {
-    super("telemetryMetricsGroupId", TelemetryMetricsGroups);
+    super("telemetryMetricsGroupId", telemetryMetricsGroups);
   }
   convert(
-    body: infra.TelemetryMetricsGroupRead,
-  ): infra.TelemetryMetricsGroupRead {
+    body: infra.TelemetryMetricsGroupResourceRead,
+  ): infra.TelemetryMetricsGroupResourceRead {
     return body;
   }
 }

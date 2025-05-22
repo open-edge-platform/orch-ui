@@ -7,20 +7,20 @@ import { infra } from "@orch-ui/apis";
 import { telemetryLogsGroup1 } from "../data";
 import { BaseStore } from "./baseStore";
 
-export const TelemetryLogsProfile1: infra.TelemetryLogsProfileRead = {
+export const TelemetryLogsProfile1: infra.TelemetryLogsProfileResourceRead = {
   profileId: "tmprofile1",
   targetInstance: "tinstance",
   targetSite: "tsite",
   targetRegion: "tregion",
-  logLevel: "TELEMETRY_SEVERITY_LEVEL_DEBUG",
+  logLevel: "SEVERITY_LEVEL_DEBUG",
   logsGroupId: "telemetryloggroup1",
   logsGroup: telemetryLogsGroup1,
 };
 
 export class TelemetryLogsProfilesStore extends BaseStore<
   "profileId",
-  infra.TelemetryLogsProfileRead,
-  infra.TelemetryLogsProfile
+  infra.TelemetryLogsProfileResourceRead,
+  infra.TelemetryLogsProfileResource
 > {
   index = 0;
 
@@ -29,15 +29,15 @@ export class TelemetryLogsProfilesStore extends BaseStore<
   }
 
   convert(
-    body: infra.TelemetryLogsProfile,
+    body: infra.TelemetryLogsProfileResource,
     id?: string | undefined,
-  ): infra.TelemetryLogsProfileRead {
+  ): infra.TelemetryLogsProfileResourceRead {
     const currentTime = new Date().toISOString();
     return {
       ...body,
       profileId: id,
       logsGroup: {
-        collectorKind: "TELEMETRY_COLLECTOR_KIND_UNSPECIFIED",
+        collectorKind: "TELEMETRY_COLLECTOR_KIND_CLUSTER",
         groups: [],
         name: `loggroup-${id}`,
       },
@@ -48,7 +48,9 @@ export class TelemetryLogsProfilesStore extends BaseStore<
     };
   }
 
-  create(body: infra.TelemetryLogsProfile): infra.TelemetryLogsProfileRead {
+  create(
+    body: infra.TelemetryLogsProfileResource,
+  ): infra.TelemetryLogsProfileResourceRead {
     const id = this.index++;
     const pid = `profile-${id}`;
     const data = this.convert(body, pid);

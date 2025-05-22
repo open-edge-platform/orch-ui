@@ -7,31 +7,32 @@ import { infra } from "@orch-ui/apis";
 import { telemetryMetricsGroup1 } from "../data";
 import { BaseStore } from "./baseStore";
 
-export const TelemetryMetricsProfile1: infra.TelemetryMetricsProfileRead = {
-  profileId: "tmprofile1",
-  targetInstance: "tinstance",
-  targetSite: "tsite",
-  targetRegion: "tregion",
-  metricsInterval: 30,
-  metricsGroupId: "telemetrymetricgroup1",
-  metricsGroup: telemetryMetricsGroup1,
-};
+export const TelemetryMetricsProfile1: infra.TelemetryMetricsProfileResourceRead =
+  {
+    profileId: "tmprofile1",
+    targetInstance: "tinstance",
+    targetSite: "tsite",
+    targetRegion: "tregion",
+    metricsInterval: 30,
+    metricsGroupId: "telemetrymetricgroup1",
+    metricsGroup: telemetryMetricsGroup1,
+  };
 
 let index = 0;
 export class TelemetryMetricsProfilesStore extends BaseStore<
   "profileId",
-  infra.TelemetryMetricsProfileRead,
-  infra.TelemetryMetricsProfile
+  infra.TelemetryMetricsProfileResourceRead,
+  infra.TelemetryMetricsProfileResource
 > {
   convert(
-    body: infra.TelemetryMetricsProfile,
+    body: infra.TelemetryMetricsProfileResource,
     id?: string | undefined,
-  ): infra.TelemetryMetricsProfileRead {
+  ): infra.TelemetryMetricsProfileResourceRead {
     return {
       ...body,
       profileId: id,
       metricsGroup: {
-        collectorKind: "TELEMETRY_COLLECTOR_KIND_UNSPECIFIED",
+        collectorKind: "TELEMETRY_COLLECTOR_KIND_CLUSTER",
         groups: [],
         name: `metricgroup-${id}`,
       },
@@ -46,8 +47,8 @@ export class TelemetryMetricsProfilesStore extends BaseStore<
   }
 
   create(
-    body: infra.TelemetryMetricsProfile,
-  ): infra.TelemetryMetricsProfileRead {
+    body: infra.TelemetryMetricsProfileResource,
+  ): infra.TelemetryMetricsProfileResourceRead {
     const id = index++;
     const pid = `profile-${id}`;
     const data = this.convert(body, pid);

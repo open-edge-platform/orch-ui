@@ -26,12 +26,14 @@ import { StoreUtils } from "./utils";
 /**
  * Aggregates infra.Metadata from the current region and the inherited ones
  */
-export const combineMetadata = (r?: infra.RegionRead): infra.Metadata => {
+export const combineMetadata = (
+  r?: infra.RegionResourceRead,
+): infra.MetadataItem[] => {
   if (!r) {
     return [];
   }
 
-  const m: infra.Metadata = [];
+  const m: infra.MetadataItem[] = [];
   if (r.metadata) {
     m.concat(...r.metadata);
   }
@@ -48,8 +50,8 @@ export const createRegion = (
   id: string,
   type: string,
   name: string,
-  parent?: infra.RegionRead,
-): infra.RegionRead => {
+  parent?: infra.RegionResourceRead,
+): infra.RegionResourceRead => {
   return {
     regionID: id,
     resourceId: id,
@@ -62,94 +64,94 @@ export const createRegion = (
 
 /* Region order is west to east chronology  */
 
-export const regionUsWest: infra.RegionRead = createRegion(
+export const regionUsWest: infra.RegionResourceRead = createRegion(
   regionUsWestId,
   "Area",
   "Us-West",
 );
 
-export const regionSalem: infra.RegionRead = createRegion(
+export const regionSalem: infra.RegionResourceRead = createRegion(
   regionSalemId,
   "City",
   "Salem",
   regionUsWest,
 );
 
-export const regionPortland: infra.RegionRead = createRegion(
+export const regionPortland: infra.RegionResourceRead = createRegion(
   regionPortlandId,
   "City",
   "Portland",
   regionUsWest,
 );
 
-export const regionAshland: infra.RegionRead = createRegion(
+export const regionAshland: infra.RegionResourceRead = createRegion(
   regionAshlandId,
   "City",
   "Ashland",
   regionUsWest,
 );
 
-export const regionCalifornia: infra.RegionRead = createRegion(
+export const regionCalifornia: infra.RegionResourceRead = createRegion(
   regionCaliforniaId,
   "State",
   "California",
   regionUsWest,
 );
 
-export const regionUsMidwest: infra.RegionRead = createRegion(
+export const regionUsMidwest: infra.RegionResourceRead = createRegion(
   regionUsMidwestId,
   "Area",
   "US Midwest",
 );
 
-export const regionChicago: infra.RegionRead = createRegion(
+export const regionChicago: infra.RegionResourceRead = createRegion(
   regionChicagoId,
   "City",
   "Chicago",
   regionUsMidwest,
 );
 
-export const regionUsEast: infra.RegionRead = createRegion(
+export const regionUsEast: infra.RegionResourceRead = createRegion(
   regionUsEastId,
   "Area",
   "Us East",
 );
 
-export const regionDayton: infra.RegionRead = createRegion(
+export const regionDayton: infra.RegionResourceRead = createRegion(
   regionDaytonId,
   "City",
   "Dayton",
   regionUsEast,
 );
 
-export const regionColumbus: infra.RegionRead = createRegion(
+export const regionColumbus: infra.RegionResourceRead = createRegion(
   regionColumbusId,
   "City",
   "Columbus",
   regionUsEast,
 );
 
-export const regionEu: infra.RegionRead = createRegion(
+export const regionEu: infra.RegionResourceRead = createRegion(
   regionEuId,
   "Continent",
   "Europe",
 );
 
-export const regionEuSouth: infra.RegionRead = createRegion(
+export const regionEuSouth: infra.RegionResourceRead = createRegion(
   regionEuSouthId,
   "Area",
   "Southern Europe",
   regionEu,
 );
 
-export const regionEuIta: infra.RegionRead = createRegion(
+export const regionEuIta: infra.RegionResourceRead = createRegion(
   regionEuItaId,
   "Country",
   "Italy",
   regionEuSouth,
 );
 
-export const regions: infra.GetV1ProjectsByProjectNameRegionsApiResponse = {
+export const regions: infra.RegionServiceListRegionsApiResponse = {
   hasNext: false,
   regions: [
     regionUsWest,
@@ -164,8 +166,8 @@ export const regions: infra.GetV1ProjectsByProjectNameRegionsApiResponse = {
 
 export class RegionStore extends BaseStore<
   "resourceId",
-  infra.RegionRead,
-  infra.Region
+  infra.RegionResourceRead,
+  infra.RegionResourceWrite
 > {
   constructor() {
     super("resourceId", [
@@ -184,7 +186,7 @@ export class RegionStore extends BaseStore<
     ]);
   }
 
-  list(parent?: string | null): infra.RegionRead[] {
+  list(parent?: string | null): infra.RegionResourceRead[] {
     if (parent === "null") {
       return this.resources.filter((r) => r.parentRegion === undefined);
     }
@@ -197,7 +199,7 @@ export class RegionStore extends BaseStore<
     return this.resources;
   }
 
-  getTotalSiteInRegion(region: infra.RegionRead, siteStore: SiteStore) {
+  getTotalSiteInRegion(region: infra.RegionResourceRead, siteStore: SiteStore) {
     if (region.resourceId) {
       let siteList = siteStore.list({ regionId: region.resourceId }).length;
       this.list(region.resourceId).forEach((subRegion) => {
@@ -208,7 +210,10 @@ export class RegionStore extends BaseStore<
     return 0;
   }
 
-  convert(body: infra.Region, id?: string): infra.RegionRead {
+  convert(
+    body: infra.RegionResourceWrite,
+    id?: string,
+  ): infra.RegionResourceRead {
     const randomString = StoreUtils.randomString();
     const currentTime = new Date().toISOString();
     return {
@@ -219,7 +224,7 @@ export class RegionStore extends BaseStore<
         createdAt: currentTime,
         updatedAt: currentTime,
       },
-      parentRegion: body.parentRegion as infra.RegionRead,
+      parentRegion: body.parentRegion as infra.RegionResourceRead,
     };
   }
 }

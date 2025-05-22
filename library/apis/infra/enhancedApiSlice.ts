@@ -26,8 +26,8 @@ const InstanceListTag = "InstanceList";
 const LocalAccountListTag = "LocalAccountList";
 const LocalAccountTag: (typeof addTagTypes)[number] = "LocalAccount";
 
-export interface InstanceReadModified extends infra.InstanceRead {
-  host?: infra.HostRead;
+export interface InstanceReadModified extends infra.InstanceResourceRead {
+  host?: infra.HostResourceRead;
 }
 
 export type ScheduleMaintenanceTargetEntity =

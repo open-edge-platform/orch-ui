@@ -12,7 +12,7 @@ import {
 } from "./hosts";
 
 // assignedWorkloadHostOne of type SCHEDULE_STATUS_MAINTENANCE (Active: Indefinitely)
-const scheduleOne: infra.SingleScheduleRead2 = {
+const scheduleOne: infra.SingleScheduleResourceRead = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule1",
   startSeconds: 1688148856,
@@ -23,7 +23,7 @@ const scheduleOne: infra.SingleScheduleRead2 = {
 };
 
 // assignedWorkloadHostOne: not of type SCHEDULE_STATUS_MAINTENANCE (Active: Indefinitely)
-const scheduleTwo: infra.SingleScheduleRead2 = {
+const scheduleTwo: infra.SingleScheduleResourceRead = {
   scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
   name: "schedule2",
   startSeconds: 1688148956,
@@ -34,7 +34,7 @@ const scheduleTwo: infra.SingleScheduleRead2 = {
 };
 
 // assignedWorkloadHostTwo: not of type SCHEDULE_STATUS_MAINTENANCE (Active: but expires after 2067-11-10T12:19:19.000Z)
-const scheduleThree: infra.SingleScheduleRead2 = {
+const scheduleThree: infra.SingleScheduleResourceRead = {
   scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
   name: "schedule3",
   startSeconds: 1688148906,
@@ -45,7 +45,7 @@ const scheduleThree: infra.SingleScheduleRead2 = {
 };
 
 // assignedWorkloadHostFour (Active: Indefinitely)
-export const scheduleFour: infra.SingleScheduleRead2 = {
+export const scheduleFour: infra.SingleScheduleResourceRead = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule4",
   startSeconds: 1688148956,
@@ -56,7 +56,7 @@ export const scheduleFour: infra.SingleScheduleRead2 = {
 };
 
 // assignedWorkloadHostFour (Expired)
-const scheduleFive: infra.SingleScheduleRead2 = {
+const scheduleFive: infra.SingleScheduleResourceRead = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule5",
   startSeconds: 1688153159,
@@ -93,8 +93,8 @@ export const noRepeatOpenEndedMaintenance: enhancedInfraSlice.ScheduleMaintenanc
 
 export class SingleSchedule2Store extends BaseStore<
   "resourceId",
-  infra.SingleScheduleRead2,
-  infra.SingleSchedule2
+  infra.SingleScheduleResourceRead,
+  infra.SingleScheduleResourceWrite
 > {
   singleScheduleIndex = 0;
   constructor() {
@@ -108,12 +108,12 @@ export class SingleSchedule2Store extends BaseStore<
   }
 
   convert(
-    singleSchedule: infra.SingleSchedule2,
+    singleSchedule: infra.SingleScheduleResourceWrite,
     id?: string,
-    targetRegion?: infra.RegionRead,
-    targetSite?: infra.SiteRead,
-    targetHost?: infra.HostRead,
-  ): infra.SingleScheduleRead2 {
+    targetRegion?: infra.RegionResourceRead,
+    targetSite?: infra.SiteResourceRead,
+    targetHost?: infra.HostResourceRead,
+  ): infra.SingleScheduleResourceRead {
     const currentTimeStr = new Date().toISOString();
     return {
       ...singleSchedule,
@@ -131,11 +131,11 @@ export class SingleSchedule2Store extends BaseStore<
   }
 
   post(
-    singleSchedule: infra.SingleScheduleWrite2,
-    targetRegion?: infra.RegionRead,
-    targetSite?: infra.SiteRead,
-    targetHost?: infra.HostRead,
-  ): infra.SingleScheduleRead2 {
+    singleSchedule: infra.SingleScheduleResourceWrite,
+    targetRegion?: infra.RegionResourceRead,
+    targetSite?: infra.SiteResourceRead,
+    targetHost?: infra.HostResourceRead,
+  ): infra.SingleScheduleResourceRead {
     const newSchedule = this.convert(
       singleSchedule,
       undefined,
@@ -147,7 +147,9 @@ export class SingleSchedule2Store extends BaseStore<
     return newSchedule;
   }
 
-  list(host?: infra.HostRead | null): infra.SingleScheduleRead2[] {
+  list(
+    host?: infra.HostResourceRead | null,
+  ): infra.SingleScheduleResourceRead[] {
     if (host) {
       return this.resources.filter((h) => h.targetHost === host);
     }

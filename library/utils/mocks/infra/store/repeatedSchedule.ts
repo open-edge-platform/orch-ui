@@ -10,7 +10,7 @@ import { regionUsWest } from "./regions";
 import { siteBoston } from "./sites";
 
 // Day of month example
-export const repeatedScheduleOne: infra.SingleScheduleRead = {
+export const repeatedScheduleOne: infra.RepeatedScheduleResourceRead = {
   repeatedScheduleID: "repeated-schedule1",
   name: "r-schedule1",
   scheduleStatus: "SCHEDULE_STATUS_OS_UPDATE",
@@ -93,7 +93,7 @@ export const maintenanceRepeatDaysFor11AMUTC: enhancedInfraSlice.ScheduleMainten
 /* End of schedule maintenance data for repeat type*/
 
 // Day of week example
-const repeatedScheduleTwo: infra.SingleScheduleRead = {
+const repeatedScheduleTwo: infra.RepeatedScheduleResourceRead = {
   repeatedScheduleID: "repeated-schedule2",
   name: "r-schedule2",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -107,7 +107,7 @@ const repeatedScheduleTwo: infra.SingleScheduleRead = {
 };
 
 // Maintenance all days (user may have set this by repeat - days of month's or day of week's select all)
-const repeatedScheduleThree: infra.SingleScheduleRead = {
+const repeatedScheduleThree: infra.RepeatedScheduleResourceRead = {
   repeatedScheduleID: "repeated-schedule3",
   name: "r-schedule3",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -120,7 +120,7 @@ const repeatedScheduleThree: infra.SingleScheduleRead = {
   durationSeconds: 1800,
 };
 
-export const repeatedScheduleOnSite: infra.SingleScheduleRead = {
+export const repeatedScheduleOnSite: infra.RepeatedScheduleResourceRead = {
   repeatedScheduleID: "repeated-schedule-site",
   name: "r-schedule-site",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -132,7 +132,7 @@ export const repeatedScheduleOnSite: infra.SingleScheduleRead = {
   cronMonth: "*",
   durationSeconds: 1800,
 };
-export const repeatedScheduleOnRegion: infra.SingleScheduleRead = {
+export const repeatedScheduleOnRegion: infra.RepeatedScheduleResourceRead = {
   repeatedScheduleID: "repeated-schedule-region",
   name: "r-schedule-region",
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
@@ -146,13 +146,13 @@ export const repeatedScheduleOnRegion: infra.SingleScheduleRead = {
 };
 
 export class RepeatedScheduleStore extends BaseStore<
-  "repeatedScheduleID",
-  infra.SingleScheduleRead,
-  infra.SingleSchedule
+  "resourceId",
+  infra.RepeatedScheduleResourceRead,
+  infra.RepeatedScheduleResourceWrite
 > {
   repeatedScheduleIndex = 0;
   constructor() {
-    super("repeatedScheduleID", [
+    super("resourceId", [
       repeatedScheduleOne,
       repeatedScheduleTwo,
       repeatedScheduleThree,
@@ -162,12 +162,12 @@ export class RepeatedScheduleStore extends BaseStore<
   }
 
   convert(
-    repeatedSchedule: infra.SingleSchedule,
+    repeatedSchedule: infra.RepeatedScheduleResourceWrite,
     id?: string,
-    targetRegion?: infra.RegionRead,
-    targetSite?: infra.SiteRead,
-    targetHost?: infra.HostRead,
-  ): infra.SingleScheduleRead {
+    targetRegion?: infra.RegionResourceRead,
+    targetSite?: infra.SiteResourceRead,
+    targetHost?: infra.HostResourceRead,
+  ): infra.RepeatedScheduleResourceRead {
     const currentTimeStr = new Date().toISOString();
     return {
       ...repeatedSchedule,
@@ -184,11 +184,11 @@ export class RepeatedScheduleStore extends BaseStore<
   }
 
   post(
-    repeatedSchedule: infra.SingleScheduleWrite,
-    targetRegion?: infra.RegionRead,
-    targetSite?: infra.SiteRead,
-    targetHost?: infra.HostRead,
-  ): infra.SingleScheduleRead {
+    repeatedSchedule: infra.RepeatedScheduleResourceWrite,
+    targetRegion?: infra.RegionResourceRead,
+    targetSite?: infra.SiteResourceRead,
+    targetHost?: infra.HostResourceRead,
+  ): infra.RepeatedScheduleResourceRead {
     const newSchedule = this.convert(
       repeatedSchedule,
       undefined,
@@ -200,7 +200,9 @@ export class RepeatedScheduleStore extends BaseStore<
     return newSchedule;
   }
 
-  list(host?: infra.HostRead | null): infra.SingleScheduleRead[] {
+  list(
+    host?: infra.HostResourceRead | null,
+  ): infra.RepeatedScheduleResourceRead[] {
     if (host) {
       return this.resources.filter((h) => h.targetHost === host);
     }

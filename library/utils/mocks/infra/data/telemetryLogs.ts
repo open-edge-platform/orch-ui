@@ -5,21 +5,21 @@
 
 import { infra } from "@orch-ui/apis";
 
-export const telemetryLogsGroup1: infra.TelemetryLogsGroupRead = {
+export const telemetryLogsGroup1: infra.TelemetryLogsGroupResourceRead = {
   telemetryLogsGroupId: "telemetryLogGroup1",
   name: "Fleet Agent",
   collectorKind: "TELEMETRY_COLLECTOR_KIND_CLUSTER",
   groups: ["lpke", "HW agent", "Cluster agent"],
 };
 
-export const telemetryLogsGroup2: infra.TelemetryLogsGroupRead = {
+export const telemetryLogsGroup2: infra.TelemetryLogsGroupResourceRead = {
   telemetryLogsGroupId: "telemetryLogGroup2",
   name: "Security",
   collectorKind: "TELEMETRY_COLLECTOR_KIND_HOST",
   groups: ["agent-status", "vault-status"],
 };
 
-export const telemetryLogsGroup3: infra.TelemetryLogsGroupRead = {
+export const telemetryLogsGroup3: infra.TelemetryLogsGroupResourceRead = {
   telemetryLogsGroupId: "telemetryLogGroup3",
   name: "RKE",
   collectorKind: "TELEMETRY_COLLECTOR_KIND_HOST",
