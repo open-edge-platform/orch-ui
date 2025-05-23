@@ -6,12 +6,15 @@
 import { infra } from "@orch-ui/apis";
 import {
   Button,
+  ButtonGroup,
   Divider,
   Drawer,
   Heading,
   ToggleSwitch,
 } from "@spark-design/react";
 import {
+  ButtonGroupAlignment,
+  ButtonSize,
   ButtonVariant,
   DrawerSize,
   ToggleSwitchSize,
@@ -21,48 +24,39 @@ import OsProfileDropdown from "../../organism/OsProfileDropdown/OsProfileDropdow
 import "./EditHostDrawer.scss";
 
 export interface EditHostDrawerProps {
+  host: infra.HostRead;
   isOpen: boolean;
   onHide: () => void;
-  selectedHosts: infra.HostRead[];
-  onApply?: (
-    osProfile: infra.OperatingSystemResourceRead,
-    hosts: infra.HostRead[],
-  ) => void;
+  onSave?: (host: infra.HostRead) => void;
 }
 
 const dataCy = "editHostDrawer";
 
 const EditHostDrawer = ({
+  host,
   isOpen,
   onHide,
-  selectedHosts,
-  onApply,
+  onSave,
 }: EditHostDrawerProps) => {
   const [selectedOsProfile, setSelectedOsProfile] =
     useState<infra.OperatingSystemResourceRead>();
   const [vproEnabled, setVproEnabled] = useState(false);
   const [secureBootEnabled, setSecureBootEnabled] = useState(false);
 
-  const handleApply = () => {
-    if (selectedOsProfile && selectedHosts.length > 0) {
-      // Here you would make API calls to apply the OS profile and security settings
-      console.log(
-        "Applying OS profile:",
-        selectedOsProfile.name,
-        "to hosts:",
-        selectedHosts.map((h) => h.name),
-        "with security settings - vPro:",
-        vproEnabled,
-        "Secure Boot:",
-        secureBootEnabled,
-      );
+  const handleSave = () => {
+    console.log({
+      osProfile: selectedOsProfile?.name,
+      securitySettings: {
+        vPro: vproEnabled,
+        secureBoot: secureBootEnabled,
+      },
+    });
 
-      if (onApply) {
-        onApply(selectedOsProfile, selectedHosts);
-      }
-
-      onHide();
+    if (onSave) {
+      onSave(host);
     }
+
+    onHide();
   };
 
   return (
@@ -79,13 +73,11 @@ const EditHostDrawer = ({
       bodyContent={
         <div data-cy={`${dataCy}Content`}>
           <Heading semanticLevel={6}>Operating System</Heading>
-          {/* <div className="edit-host-os-dropdown"> */}
           <OsProfileDropdown
             onSelectionChange={(os) => {
               setSelectedOsProfile(os);
             }}
           />
-          {/* </div> */}
           <Divider />
           <Heading semanticLevel={6}>Security Options</Heading>
           <div className="security-options-container">
@@ -112,22 +104,31 @@ const EditHostDrawer = ({
               </ToggleSwitch>
             </div>
           </div>
+          <p>SSH Key Name</p>
+          <p className="spark-font-75">
+            Select an SSH Key name to enable local user access to hosts.
+          </p>
         </div>
       }
       footerContent={
-        <div
-          style={{ display: "flex", justifyContent: "flex-end", gap: "12px" }}
-        >
-          <Button onPress={onHide} variant={ButtonVariant.Secondary}>
+        <ButtonGroup align={ButtonGroupAlignment.End}>
+          <Button
+            data-cy="cancelFooterBtn"
+            size={ButtonSize.Medium}
+            onPress={onHide}
+            variant={ButtonVariant.Secondary}
+          >
             Cancel
           </Button>
           <Button
-            onPress={handleApply}
-            isDisabled={!selectedOsProfile || selectedHosts.length === 0}
+            data-cy="saveFooterBtn"
+            size={ButtonSize.Medium}
+            onPress={handleSave}
+            variant={ButtonVariant.Action}
           >
-            Apply
+            Save
           </Button>
-        </div>
+        </ButtonGroup>
       }
     />
   );

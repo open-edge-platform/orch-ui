@@ -6,6 +6,7 @@
 import { infra } from "@orch-ui/apis";
 import { ContextSwitcher } from "@orch-ui/components";
 import {
+  assignedWorkloadHostOne,
   checkAuthAndRole,
   hostRegisterRoute,
   Role,
@@ -121,12 +122,11 @@ const Hosts = () => {
 
       {showEditHostDrawer && (
         <EditHostDrawer
+          host={assignedWorkloadHostOne}
           isOpen={showEditHostDrawer}
           onHide={() => setShowEditHostDrawer(false)}
-          selectedHosts={selectedHosts}
-          onApply={(osProfile, hosts) => {
-            console.log(`Applied ${osProfile.name} to ${hosts.length} hosts`);
-            // Add any additional logic for handling the apply action
+          onSave={(host) => {
+            console.log("Updated host");
           }}
         />
       )}
