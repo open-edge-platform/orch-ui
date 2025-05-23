@@ -30,3 +30,16 @@
     }
   }
 }
+
+.ssh-key-dropdown-container {
+  display: flex;
+  width: 50%;
+
+  .spark-dropdown button[aria-haspopup="listbox"] {
+    min-height: 2rem;
+  }
+
+  .public-ssh-key-dropdown {
+    width: 100%;
+  }
+}

@@ -4,6 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
+import { SharedStorage } from "@orch-ui/utils";
 import {
   Button,
   ButtonGroup,
@@ -19,7 +20,8 @@ import {
   DrawerSize,
   ToggleSwitchSize,
 } from "@spark-design/tokens";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PublicSshKeyDropdown } from "../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
 import OsProfileDropdown from "../../organism/OsProfileDropdown/OsProfileDropdown";
 import "./EditHostDrawer.scss";
 
@@ -42,6 +44,33 @@ const EditHostDrawer = ({
     useState<infra.OperatingSystemResourceRead>();
   const [vproEnabled, setVproEnabled] = useState(false);
   const [secureBootEnabled, setSecureBootEnabled] = useState(false);
+  const [selectedSshKey, setSelectedSshKey] =
+    useState<infra.LocalAccountRead>();
+  const [sshKeys, setSshKeys] = useState<infra.LocalAccountRead[]>([]);
+
+  // Fetch SSH keys when the drawer opens
+  const { data: localAccountsData } =
+    infra.useGetV1ProjectsByProjectNameLocalAccountsQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+      },
+      {
+        skip: !isOpen || !SharedStorage.project?.name,
+      },
+    );
+
+  useEffect(() => {
+    if (localAccountsData?.localAccounts) {
+      setSshKeys(localAccountsData.localAccounts);
+    }
+  }, [localAccountsData]);
+
+  const handleSshKeySelection = (
+    hostId: string,
+    sshKey: infra.LocalAccount,
+  ) => {
+    setSelectedSshKey(sshKey as infra.LocalAccountRead);
+  };
 
   const handleSave = () => {
     console.log({
@@ -50,6 +79,7 @@ const EditHostDrawer = ({
         vPro: vproEnabled,
         secureBoot: secureBootEnabled,
       },
+      sshKey: selectedSshKey?.username,
     });
 
     if (onSave) {
@@ -104,10 +134,23 @@ const EditHostDrawer = ({
               </ToggleSwitch>
             </div>
           </div>
-          <p>SSH Key Name</p>
+          <Divider />
+          <Heading semanticLevel={6}>SSH Key</Heading>
           <p className="spark-font-75">
-            Select an SSH Key name to enable local user access to hosts.
+            Select an SSH key to enable local user access to this host.
           </p>
+          <div className="ssh-key-dropdown-container">
+            {host && (
+              <PublicSshKeyDropdown
+                hostId={host.resourceId || ""}
+                host={host}
+                localAccounts={sshKeys}
+                onPublicKeySelect={handleSshKeySelection}
+              />
+            )}
+          </div>
+          <Divider />
+          <Heading semanticLevel={6}>Network </Heading>
         </div>
       }
       footerContent={
