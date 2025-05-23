@@ -134,14 +134,14 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       for (let i = 0; i < testProvisionHostData.hosts.length; i++) {
         cy.wait("@registerHost").then((interception) => {
-          expect(interception.response?.statusCode).to.equal(201);
+          expect(interception.response?.statusCode).to.equal(200);
           provisionedHosts.push(interception.response?.body.resourceId);
         });
 
         cy.wait("@updateHost");
 
         cy.wait("@createInstance").then((interception) => {
-          expect(interception.response?.statusCode).to.equal(201);
+          expect(interception.response?.statusCode).to.equal(200);
           instanceHosts.push(interception.response?.body.resourceId);
         });
       }
