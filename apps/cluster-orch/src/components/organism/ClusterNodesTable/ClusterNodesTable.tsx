@@ -106,12 +106,8 @@ const ClusterNodesTable = ({
     accessor: (node) => nodeStatusToText(node.status),
     Cell: (table: { row: { original: ClusterNode } }) => {
       const row = table.row.original;
-      return (
-        <StatusIcon
-          status={nodeStatusToIconStatus(row.status)}
-          text={nodeStatusToText(row.status)}
-        />
-      );
+      const text = nodeStatusToText(row.status);
+      return <StatusIcon status={nodeStatusToIconStatus(row.status)} text={text} />;
     },
   };
 

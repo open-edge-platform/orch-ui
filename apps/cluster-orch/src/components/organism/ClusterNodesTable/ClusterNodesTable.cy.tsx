@@ -10,7 +10,7 @@ import ClusterNodesTablePom from "./ClusterNodesTable.pom";
 const nodes: cm.NodeInfo[] = [
   {
     id: "hostId",
-    status: { condition: "STATUS_CONDITION_READY" },
+    status: { condition: "STATUS_CONDITION_READY" , reason: "Running"},
   },
 ];
 
@@ -35,7 +35,7 @@ describe("<ClusterNodesTable/> should", () => {
   it("load data", () => {
     pom.root.should("contain", "Node 1");
     pom.root.should("contain", "linux");
-    pom.root.should("contain", "CONDITION READY");
+    pom.root.should("contain", "Running");
   });
 
   it("display 'Not compatible' when trusted compute is not enabled", () => {
@@ -86,5 +86,68 @@ describe("<ClusterNodesTable/> status should", () => {
       />,
     );
     pom.root.should("contain", "No information to display");
+  });
+});
+
+describe("<ClusterNodesTable/> with different status fields should", () => {
+  it("load only condition", () => {
+    const nodes: cm.NodeInfo[] = [
+      {
+        id: "hostId",
+        status: { condition: "STATUS_CONDITION_READY" },
+      },
+    ];
+    pom.interceptApis([pom.api.getHosts]);
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodes}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
+    pom.waitForApis();
+
+    pom.root.should("contain", "STATUS_CONDITION_READY");
+  });
+
+  it("load only reason", () => {
+    const nodes: cm.NodeInfo[] = [
+      {
+        id: "hostId",
+        status: { reason: "Running" },
+      },
+    ];
+    pom.interceptApis([pom.api.getHosts]);
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodes}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
+    pom.waitForApis();
+
+    pom.root.should("contain", "Running");
+  });
+
+  it("load condition and reason", () => {
+    const nodes: cm.NodeInfo[] = [
+      {
+        id: "hostId",
+        status: { condition: "STATUS_CONDITION_READY", reason: "Running" },
+      },
+    ];
+    pom.interceptApis([pom.api.getHosts]);
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodes}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
+    pom.waitForApis();
+
+    pom.root.should("contain", "STATUS_CONDITION_READY");
+    pom.root.should("contain", "Running");
   });
 });
