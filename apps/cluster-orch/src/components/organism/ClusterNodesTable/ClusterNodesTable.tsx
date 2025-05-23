@@ -103,10 +103,10 @@ const ClusterNodesTable = ({
 
   const statusCluster: TableColumn<ClusterNode> = {
     Header: "Readiness",
-    accessor: (node) => node.status?.reason || nodeStatusToText(node.status),
+    accessor: (node) => nodeStatusToText(node.status),
     Cell: (table: { row: { original: ClusterNode } }) => {
       const row = table.row.original;
-      const text = row.status?.reason || nodeStatusToText(row.status);  
+      const text = nodeStatusToText(row.status);
       return <StatusIcon status={nodeStatusToIconStatus(row.status)} text={text} />;
     },
   };
