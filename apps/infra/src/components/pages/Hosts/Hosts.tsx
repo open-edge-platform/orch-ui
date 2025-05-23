@@ -25,6 +25,7 @@ import {
 import HostSearchFilters from "../../organism/HostSearchFilters/HostSearchFilters";
 import HostsTable from "../../organism/HostsTable/HostsTable";
 import { RegisterHostDrawer } from "../../organism/RegisterHostDrawer/RegisterHostDrawer";
+import EditHostDrawer from "./EditHostDrawer";
 import "./Hosts.scss";
 
 const dataCy = "hosts";
@@ -39,6 +40,7 @@ const Hosts = () => {
   const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
   const [showRegisterDrawer, setShowRegisterDrawer] = useState<boolean>(false);
+  const [showEditHostDrawer, setShowEditHostDrawer] = useState<boolean>(false);
 
   //Triggers the initial query of the Hosts table
   useEffect(() => {
@@ -78,6 +80,10 @@ const Hosts = () => {
         ]}
         defaultName={hostFilterState.lifeCycleState}
         onSelectChange={(selection) => {
+          if (selection === LifeCycleState.Onboarded) {
+            console.log({ selection });
+            setShowEditHostDrawer(true);
+          }
           dispatch(setLifeCycleState(selection as LifeCycleState));
         }}
       />
@@ -109,6 +115,18 @@ const Hosts = () => {
           isOpen={showRegisterDrawer}
           onHide={() => {
             setShowRegisterDrawer(false);
+          }}
+        />
+      )}
+
+      {showEditHostDrawer && (
+        <EditHostDrawer
+          isOpen={showEditHostDrawer}
+          onHide={() => setShowEditHostDrawer(false)}
+          selectedHosts={selectedHosts}
+          onApply={(osProfile, hosts) => {
+            console.log(`Applied ${osProfile.name} to ${hosts.length} hosts`);
+            // Add any additional logic for handling the apply action
           }}
         />
       )}

@@ -1,0 +1,32 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.os-profile-dropdown {
+  display: flex;
+  width: 50%;
+
+  .spark-dropdown button[aria-haspopup="listbox"] {
+    min-height: 2rem;
+  }
+}
+
+.security-options-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+
+  .security-option {
+    flex: 1;
+    padding: 0rem 1rem 1rem 1rem;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+
+    .security-description {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+  }
+}
