@@ -27,8 +27,8 @@ import "./RegisterHostDrawer.scss";
 const dataCy = "registerHostDrawer";
 export interface RegisterHostDrawerProps {
   isOpen: boolean;
-  onHide: (registerHost: infra.HostRegisterInfo) => void;
-  host?: infra.HostRead;
+  onHide: (registerHost: infra.HostRegister) => void;
+  host?: infra.HostResourceRead;
 }
 
 export const RegisterHostDrawer = ({
@@ -38,20 +38,20 @@ export const RegisterHostDrawer = ({
 }: RegisterHostDrawerProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
-  const formDefault: infra.HostRegisterInfo = {
+  const formDefault: infra.HostRegister = {
     name: host?.name ?? "",
     serialNumber: host?.serialNumber ?? "",
     uuid: host?.uuid,
     autoOnboard: host?.desiredState === "HOST_STATE_ONBOARDED",
   };
   const [hostRegisterInfo, setHostRegisterInfo] =
-    useState<infra.HostRegisterInfo>(formDefault);
+    useState<infra.HostRegister>(formDefault);
   const [registerHost] = infra.useHostServiceRegisterHostMutation();
   const [updateHost] = infra.useHostServiceRegisterUpdateHostMutation();
   const {
     control: registerHostInfoControl,
     formState: { errors: formErrors },
-  } = useForm<infra.HostRegisterInfo>({
+  } = useForm<infra.HostRegister>({
     mode: "all",
     defaultValues: hostRegisterInfo,
     values: hostRegisterInfo,
@@ -86,7 +86,7 @@ export const RegisterHostDrawer = ({
   const onRegister = () => {
     const payload = {
       projectName: SharedStorage.project?.name ?? "",
-      hostRegisterInfo: {
+      hostRegister: {
         ...hostRegisterInfo,
         uuid: hostRegisterInfo.uuid === "" ? undefined : hostRegisterInfo.uuid,
       },

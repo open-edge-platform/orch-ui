@@ -34,7 +34,7 @@ const OsProfileDropdown = ({
 }: OsProfileDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
   const {
-    data: { operatingSystems: osResources } = {},
+    data: { OperatingSystemResources: osResources } = {},
     isLoading,
     isError,
     isSuccess,

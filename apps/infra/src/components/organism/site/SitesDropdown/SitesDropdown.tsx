@@ -13,7 +13,7 @@ interface SitesDropdownProps {
   regionId: string;
   value?: string;
   pageSize?: number;
-  onSelectionChange?: (value: infra.SiteRead) => void;
+  onSelectionChange?: (value: infra.SiteResourceRead) => void;
   disable?: boolean;
 }
 const SitesDropdown = ({

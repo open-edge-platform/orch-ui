@@ -106,7 +106,7 @@ export const RegionSiteTree = ({
 
   const getSiteCount = async (id: string) => {
     const apiCallRegion =
-      infra.infra.endpoints.getV1ProjectsByProjectNameRegions.initiate(
+      infra.infra.endpoints.regionServiceListRegions.initiate(
         {
           projectName: SharedStorage.project?.name ?? "",
           filter: `resourceId="${id}"`,
@@ -143,30 +143,35 @@ export const RegionSiteTree = ({
   const hasSiteResults = !isFetchingSites && sites;
 
   const viewRegionAction = useCallback(
-    (region: infra.RegionRead) => handleViewRegionAction(dispatch, region),
+    (region: infra.RegionResourceRead) =>
+      handleViewRegionAction(dispatch, region),
     [],
   );
   const viewSiteAction = useCallback(
-    (site: infra.SiteRead) => handleSiteViewAction(dispatch, site),
+    (site: infra.SiteResourceRead) => handleSiteViewAction(dispatch, site),
     [],
   );
   const addSiteAction = useCallback(
-    (region: infra.RegionRead) => handleAddSiteAction(navigate, region),
+    (region: infra.RegionResourceRead) => handleAddSiteAction(navigate, region),
     [],
   );
   const subRegionAction = useCallback(
-    (region: infra.RegionRead) => handleSubRegionAction(navigate, region),
+    (region: infra.RegionResourceRead) =>
+      handleSubRegionAction(navigate, region),
     [],
   );
-  const scheduleMaintenanceAction = useCallback((region: infra.RegionRead) => {
-    dispatch(
-      setMaintenanceEntity({
-        targetEntity: region,
-        targetEntityType: "region",
-        showBack: false,
-      }),
-    );
-  }, []);
+  const scheduleMaintenanceAction = useCallback(
+    (region: infra.RegionResourceRead) => {
+      dispatch(
+        setMaintenanceEntity({
+          targetEntity: region,
+          targetEntityType: "region",
+          showBack: false,
+        }),
+      );
+    },
+    [],
+  );
 
   const onExpand = useCallback(({ id }: TreeNode) => {
     dispatch(setLoadingBranch(id));
@@ -182,7 +187,7 @@ export const RegionSiteTree = ({
       localStorage.getItem(clearTree) === "true"
     ) {
       localStorage.removeItem(clearTree);
-      dispatch(infra.infra.util.invalidateTags([{ type: "Region" }]));
+      dispatch(infra.infra.util.invalidateTags([{ type: "RegionService" }]));
       dispatch(resetTree(location.pathname + location.search));
       return;
     }
@@ -215,12 +220,12 @@ export const RegionSiteTree = ({
     if (!showSingleSelection || !selectedSite || !selectedSite.name) {
       return;
     }
-    dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
+    dispatch(infra.infra.util.invalidateTags([{ type: "LocationService" }]));
     dispatch(setSearchTerm(selectedSite.name));
   }, [showSingleSelection, selectedSite]);
 
   const createSingleSelectionTree = (): TreeBranchState<
-    infra.SiteRead | infra.RegionRead
+    infra.SiteResourceRead | infra.RegionResourceRead
   >[] => {
     if (!selectedSite || !selectedSite.resourceId)
       throw new Error("Selected site is missing resourceId");

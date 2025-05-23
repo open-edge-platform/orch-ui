@@ -158,7 +158,9 @@ export const ScheduleMaintenanceForm = ({
     ) {
       currentMonthApi = submitSingleMaintenance({
         projectName: SharedStorage.project?.name ?? "",
-        ...(isMaintenanceEdit ? { resourceId: maintenance.resourceId } : {}),
+        ...(isMaintenanceEdit && maintenance.resourceId
+          ? { resourceId: maintenance.resourceId }
+          : {}),
         singleScheduleResource: {
           name: maintenance.name,
           scheduleStatus: maintenance.scheduleStatus,
@@ -368,7 +370,9 @@ export const ScheduleMaintenanceForm = ({
               label="Maintenance Type*"
               placeholder="Select type"
               selectedKey={maintenance?.scheduleStatus}
-              onSelectionChange={(selectedKey: infra.ScheduleStatus) => {
+              onSelectionChange={(
+                selectedKey: infra.SingleScheduleResource["scheduleStatus"],
+              ) => {
                 onUpdate({ ...maintenance, scheduleStatus: selectedKey });
               }}
               size={DropdownSize.Large}

@@ -83,7 +83,7 @@ const HostSearchFilters = () => {
   useEffect(() => {
     if (osProfiles && isOSSuccess) {
       setOsProfileSelection(
-        osProfiles.operatingSystems?.map((os) => ({
+        osProfiles.OperatingSystemResources?.map((os) => ({
           id: os.profileName!,
           name: os.name ?? os.profileName!,
           isSelected:

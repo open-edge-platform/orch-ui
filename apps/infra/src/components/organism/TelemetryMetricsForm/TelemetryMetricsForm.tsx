@@ -24,7 +24,7 @@ export type TelemetryMetricsProfile = {
   targetRegion?: string;
   metricsInterval: number;
   metricsGroupId: string;
-  metricsGroup?: infra.TelemetryMetricsGroup;
+  metricsGroup?: infra.TelemetryMetricsGroupResource;
 };
 
 export type SystemMetricPair = {

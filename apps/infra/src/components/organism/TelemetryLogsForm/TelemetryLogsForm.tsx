@@ -14,7 +14,7 @@ import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
-import { SharedStorage } from "@orch-ui/utils";
+import { SharedStorage, TelemetryLogLevel } from "@orch-ui/utils";
 import "./TelemetryLogsForm.scss";
 const dataCy = "telemetryLogsForm";
 
@@ -22,9 +22,9 @@ export type TelemetryLogsProfile = {
   targetInstance?: string;
   targetSite?: string;
   targetRegion?: string;
-  logLevel: infra.TelemetrySeverityLevel;
+  logLevel: TelemetryLogLevel;
   logsGroupId: string;
-  logsGroup?: infra.TelemetryLogsGroup;
+  logsGroup?: infra.TelemetryMetricsGroupResourceRead;
 };
 
 export type SystemLogPair = {
@@ -65,8 +65,8 @@ const TelemetryLogsForm = ({
     logSource: "",
     logLevel: "",
   };
-  const [, setSelectedLogLevel] = useState<infra.TelemetrySeverityLevel>(
-    "" as infra.TelemetrySeverityLevel,
+  const [, setSelectedLogLevel] = useState<TelemetryLogLevel>(
+    "" as TelemetryLogLevel,
   );
 
   const logTypesCount = logsResponse
@@ -191,9 +191,7 @@ const TelemetryLogsForm = ({
                       `systemLogPairs.${index}.logLevel`,
                       key.toString(),
                     );
-                    setSelectedLogLevel(
-                      key.toString() as infra.TelemetrySeverityLevel,
-                    );
+                    setSelectedLogLevel(key.toString() as TelemetryLogLevel);
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);
                     setSourceExists(false);

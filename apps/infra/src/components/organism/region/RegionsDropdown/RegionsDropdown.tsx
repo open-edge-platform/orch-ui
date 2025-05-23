@@ -13,7 +13,7 @@ interface RegionsDropdownProps {
   value?: string;
   parentRegionId?: string;
   pageSize?: number;
-  onSelectionChange?: (value: infra.RegionRead) => void;
+  onSelectionChange?: (value: infra.RegionResourceRead) => void;
 }
 const RegionsDropdown = ({
   value,
@@ -31,8 +31,8 @@ const RegionsDropdown = ({
   } = infra.useRegionServiceListRegionsQuery(
     {
       projectName,
-      parent: parentRegionId, //TODO: should go in filter
       pageSize: pageSize,
+      filter: `parentRegion.resourceId=${parentRegionId}`,
     },
     {
       skip: !projectName,

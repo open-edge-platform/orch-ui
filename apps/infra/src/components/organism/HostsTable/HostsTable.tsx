@@ -50,11 +50,11 @@ import "./HostsTable.scss";
 export const dataCy = "hostsTable";
 export interface HostsTableProps {
   /** columns to show from Host object */
-  columns?: TableColumn<infra.HostRead>[];
+  columns?: TableColumn<infra.HostResourceRead>[];
   /** Lifecycle category */
   category?: LifeCycleState;
   /** API filters */
-  filters?: infra.GetV1ProjectsByProjectNameComputeHostsApiArg & {
+  filters?: infra.HostServiceGetHostApiArg & {
     workloadMemberId?: string | undefined;
   };
   hasWorkload?: boolean;
@@ -74,29 +74,32 @@ export interface HostsTableProps {
   /** enable checkbox select feature on this table component */
   selectable?: boolean;
   /** initial selected rows */
-  selectedHosts?: infra.HostRead[];
+  selectedHosts?: infra.HostResourceRead[];
   /** manually skip polling */
   poll?: boolean;
   emptyActionProps?: EmptyActionProps[];
   hideSelectedItemBanner?: boolean;
   /** Invoked when a Host is selected */
-  onHostSelect?: (selectedHost: infra.HostRead, isSelected: boolean) => void;
+  onHostSelect?: (
+    selectedHost: infra.HostResourceRead,
+    isSelected: boolean,
+  ) => void;
   /** Invoked when data is loaded */
-  onDataLoad?: (data: infra.HostRead[]) => void;
+  onDataLoad?: (data: infra.HostResourceRead[]) => void;
   unsetSelectedHosts?: () => void;
   provisionHosts?: () => void;
   /** This will decide on what HostRead info basis is host is selected  */
-  getSelectionId?: (row: infra.HostRead) => string;
+  getSelectionId?: (row: infra.HostResourceRead) => string;
 }
 
-const hostColumns: TableColumn<infra.HostRead>[] = [
+const hostColumns: TableColumn<infra.HostResourceRead>[] = [
   HostTableColumn.name(),
   HostTableColumn.status,
   HostTableColumn.serialNumber,
   HostTableColumn.os,
   HostTableColumn.siteWithCustomBasePath("../"),
   HostTableColumn.workload,
-  HostTableColumn.actions((host: infra.HostRead) => (
+  HostTableColumn.actions((host: infra.HostResourceRead) => (
     <HostDetailsActions host={host} />
   )),
 ];

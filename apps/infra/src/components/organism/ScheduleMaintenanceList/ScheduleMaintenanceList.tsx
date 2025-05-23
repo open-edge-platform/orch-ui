@@ -66,7 +66,7 @@ const removeExpiredSingleSchedules = (
 
 /** Convert RepeatedSchedule API response object to ScheduleMaintenance */
 const convertRepeatedMaintenanceScheduleAPIScheduleMaintenance = (
-  repeatedScheduleMaintenance: infra.SingleScheduleRead,
+  repeatedScheduleMaintenance /* : infra.SingleScheduleRead, */,
 ): enhancedInfraSlice.ScheduleMaintenanceRead => ({
   resourceId: repeatedScheduleMaintenance.repeatedScheduleID,
   name:
@@ -93,7 +93,7 @@ const convertRepeatedMaintenanceScheduleAPIScheduleMaintenance = (
 
 /** Convert SingleSchedule2 API response object to ScheduleMaintenance */
 const convertSingleMaintenanceScheduleAPIScheduleMaintenance = (
-  singleScheduleMaintenance: infra.SingleScheduleRead2,
+  singleScheduleMaintenance: infra.SingleScheduleResourceRead,
 ): enhancedInfraSlice.ScheduleMaintenanceRead => ({
   resourceId: singleScheduleMaintenance.resourceId,
   name:
