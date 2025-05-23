@@ -28,7 +28,7 @@ const SshKeyInUseByHostsCell = ({
     data: instanceList,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery({
+  } = infra.useInstanceServiceListInstancesQuery({
     projectName: SharedStorage.project?.name ?? "",
     filter: `has(localaccount) AND localaccount.resourceId="${localAccount.resourceId}"`,
   });

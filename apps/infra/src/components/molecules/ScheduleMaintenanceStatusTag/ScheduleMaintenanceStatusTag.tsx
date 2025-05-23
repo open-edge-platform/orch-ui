@@ -42,12 +42,12 @@ export const ScheduleMaintenanceStatusTag = ({
   }
 
   const { data: schedules, isSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(apiFilter, {
+    infra.useScheduleServiceListSchedulesQuery(apiFilter, {
       skip: !apiFilter.hostId && !apiFilter.siteId && !apiFilter.regionId,
       ...(poll ? { pollingInterval: API_INTERVAL } : {}),
     });
 
-  const filteredMaintenance = schedules?.SingleSchedules.filter(
+  const filteredMaintenance = schedules?.singleSchedules.filter(
     (schedule) =>
       // filter schedules based on shipping and maintenance
       schedule.scheduleStatus === "SCHEDULE_STATUS_MAINTENANCE",
@@ -58,7 +58,7 @@ export const ScheduleMaintenanceStatusTag = ({
     (filteredMaintenance && filteredMaintenance.length > 0) || false;
   // If a new repeated schedule exists
   const newRepeatedScheduleExists =
-    (schedules?.RepeatedSchedules && schedules.RepeatedSchedules.length > 0) ||
+    (schedules?.repeatedSchedules && schedules.repeatedSchedules.length > 0) ||
     false;
 
   useEffect(() => {

@@ -11,10 +11,13 @@ import "./OSProfileDetails.scss";
 
 const dataCy = "osProfileDetails";
 
+// NonNullable is used since if securityFeature is not selected it will correspond to NONE
 export const OSProfileSecurityFeatures: {
-  [key in infra.SecurityFeature]: string;
+  [key in NonNullable<
+    infra.OperatingSystemResource["securityFeature"]
+  >]: string;
 } = {
-  SECURITY_FEATURE_UNSPECIFIED: "Unspecified",
+  // SECURITY_FEATURE_UNSPECIFIED: "Unspecified",
   SECURITY_FEATURE_NONE: "None",
   SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION: "Secure Boot / FDE",
 };

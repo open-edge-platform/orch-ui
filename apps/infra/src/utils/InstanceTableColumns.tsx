@@ -48,7 +48,7 @@ const status: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
     <AggregatedStatuses<HostGenericStatuses>
       defaultStatusName="hostStatus"
       statuses={hostToStatuses(
-        table.row.original.host! as infra.HostRead,
+        table.row.original.host! as infra.HostResourceRead,
         table.row.original.host?.instance,
       )}
     />

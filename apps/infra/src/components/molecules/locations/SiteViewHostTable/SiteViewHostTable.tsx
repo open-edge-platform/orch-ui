@@ -31,12 +31,12 @@ export const SiteViewHostTable = ({
 
   const projectName = SharedStorage.project?.name ?? "";
   const { data, isSuccess, isError, isLoading, error } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+    infra.useHostServiceListHostsQuery(
       {
         projectName,
         pageSize: 10,
         orderBy: "name",
-        siteId: site?.resourceId,
+        siteId: site?.resourceId, //TODO: should go in filter
       },
       {
         skip: !site?.resourceId || !projectName,

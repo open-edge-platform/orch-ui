@@ -11,8 +11,8 @@ import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 const dataCy = "gpu";
 const Gpu = ({
   data,
-}: ResourceDetailsDisplayProps<infra.HostResourcesGpuRead[]>) => {
-  const columns: TableColumn<infra.HostResourcesGpuRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HostgpuResourceRead[]>) => {
+  const columns: TableColumn<infra.HostgpuResourceRead>[] = [
     { Header: "Model", accessor: "deviceName" },
     { Header: "Vendor", accessor: "vendor" },
     {

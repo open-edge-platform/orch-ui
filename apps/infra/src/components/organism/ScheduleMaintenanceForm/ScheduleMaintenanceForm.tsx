@@ -131,13 +131,13 @@ export const ScheduleMaintenanceForm = ({
 
   /* APIs */
   const [postSingleMaintenance] =
-    infra.usePostV1ProjectsByProjectNameSchedulesSingleMutation();
+    infra.useScheduleServiceCreateSingleScheduleMutation();
   const [postRepeatedMaintenance] =
-    infra.usePostV1ProjectsByProjectNameSchedulesRepeatedMutation();
+    infra.useScheduleServiceCreateRepeatedScheduleMutation();
   const [editSingleMaintenance] =
-    infra.usePutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.useScheduleServiceUpdateSingleScheduleMutation();
   const [editRepeatedMaintenance] =
-    infra.usePutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation();
+    infra.useScheduleServiceUpdateRepeatedScheduleMutation();
 
   /** Add new maintenance via INFRA-API */
   const submitMaintenance = () => {
@@ -158,10 +158,10 @@ export const ScheduleMaintenanceForm = ({
     ) {
       currentMonthApi = submitSingleMaintenance({
         projectName: SharedStorage.project?.name ?? "",
-        ...(isMaintenanceEdit
-          ? { singleScheduleId: maintenance.resourceId }
+        ...(isMaintenanceEdit && maintenance.resourceId
+          ? { resourceId: maintenance.resourceId }
           : {}),
-        singleSchedule: {
+        singleScheduleResource: {
           name: maintenance.name,
           scheduleStatus: maintenance.scheduleStatus,
           ...targetData,
@@ -228,7 +228,7 @@ export const ScheduleMaintenanceForm = ({
         // Considering rest of the dates
         monthChangeApi = postRepeatedMaintenance({
           projectName: SharedStorage.project?.name ?? "",
-          repeatedSchedule: {
+          repeatedScheduleResource: {
             ...repeatedMaintenancePostParam,
             cronMonth: cronMonthOnGMTChange,
             cronDayMonth: (isPrevMonth && "31") || (isNextMonth && "1") || "*",
@@ -242,7 +242,7 @@ export const ScheduleMaintenanceForm = ({
           ...(isMaintenanceEdit
             ? { repeatedScheduleId: maintenance.resourceId }
             : {}),
-          repeatedSchedule: repeatedMaintenancePostParam,
+          repeatedScheduleResource: repeatedMaintenancePostParam,
         });
       }
     }
@@ -370,7 +370,9 @@ export const ScheduleMaintenanceForm = ({
               label="Maintenance Type*"
               placeholder="Select type"
               selectedKey={maintenance?.scheduleStatus}
-              onSelectionChange={(selectedKey: infra.ScheduleStatus) => {
+              onSelectionChange={(
+                selectedKey: infra.SingleScheduleResource["scheduleStatus"],
+              ) => {
                 onUpdate({ ...maintenance, scheduleStatus: selectedKey });
               }}
               size={DropdownSize.Large}

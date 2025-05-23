@@ -36,7 +36,9 @@ const Hosts = () => {
   const location = useLocation();
   const className = "hosts";
   const navigate = useInfraNavigate();
-  const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
+  const [selectedHosts, setSelectedHosts] = useState<infra.HostResourceRead[]>(
+    [],
+  );
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
   const [showRegisterDrawer, setShowRegisterDrawer] = useState<boolean>(false);
 
@@ -89,7 +91,7 @@ const Hosts = () => {
         }
         selectedHosts={selectedHosts}
         unsetSelectedHosts={() => setSelectedHosts([])}
-        onHostSelect={(row: infra.HostRead, isSelected: boolean) => {
+        onHostSelect={(row: infra.HostResourceRead, isSelected: boolean) => {
           setSelectedHosts((prev) => {
             if (isSelected) {
               return prev.concat(row);

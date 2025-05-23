@@ -14,7 +14,7 @@ import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
-import { SharedStorage } from "@orch-ui/utils";
+import { SharedStorage, TelemetryLogLevel } from "@orch-ui/utils";
 import "./TelemetryLogsForm.scss";
 const dataCy = "telemetryLogsForm";
 
@@ -22,9 +22,9 @@ export type TelemetryLogsProfile = {
   targetInstance?: string;
   targetSite?: string;
   targetRegion?: string;
-  logLevel: infra.TelemetrySeverityLevel;
+  logLevel: TelemetryLogLevel;
   logsGroupId: string;
-  logsGroup?: infra.TelemetryLogsGroup;
+  logsGroup?: infra.TelemetryMetricsGroupResourceRead;
 };
 
 export type SystemLogPair = {
@@ -54,7 +54,7 @@ const TelemetryLogsForm = ({
 }: TelemetryLogsFormProps) => {
   const cy = { "data-cy": dataCy };
   const { data: logsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     }); //how to use isLoading and isSuccess in both calls
   const [valid, setValid] = useState<boolean>(true);
@@ -65,12 +65,12 @@ const TelemetryLogsForm = ({
     logSource: "",
     logLevel: "",
   };
-  const [, setSelectedLogLevel] = useState<infra.TelemetrySeverityLevel>(
-    "" as infra.TelemetrySeverityLevel,
+  const [, setSelectedLogLevel] = useState<TelemetryLogLevel>(
+    "" as TelemetryLogLevel,
   );
 
   const logTypesCount = logsResponse
-    ? logsResponse.TelemetryLogsGroups.length
+    ? logsResponse.telemetryLogsGroups.length
     : 0;
 
   const { control, getValues, setValue, trigger } = useForm<SystemLogPairs>({
@@ -158,7 +158,7 @@ const TelemetryLogsForm = ({
                       }, 100);
                     }}
                   >
-                    {logsResponse?.TelemetryLogsGroups.map((loggroup) => (
+                    {logsResponse?.telemetryLogsGroups.map((loggroup) => (
                       <Item key={loggroup.telemetryLogsGroupId}>
                         {loggroup.name}
                       </Item>
@@ -191,9 +191,7 @@ const TelemetryLogsForm = ({
                       `systemLogPairs.${index}.logLevel`,
                       key.toString(),
                     );
-                    setSelectedLogLevel(
-                      key.toString() as infra.TelemetrySeverityLevel,
-                    );
+                    setSelectedLogLevel(key.toString() as TelemetryLogLevel);
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);
                     setSourceExists(false);

@@ -11,7 +11,7 @@ import InterfaceDetails from "./InterfaceDetails";
 import "./Interfaces.scss";
 
 interface InterfaceProps {
-  intf: infra.HostResourcesInterfaceRead;
+  intf: infra.HostnicResourceRead;
 }
 
 const Interface = ({ intf }: InterfaceProps) => {
@@ -35,7 +35,7 @@ const Interface = ({ intf }: InterfaceProps) => {
 
 const Interfaces = ({
   data,
-}: ResourceDetailsDisplayProps<infra.HostResourcesInterfaceRead[]>) => (
+}: ResourceDetailsDisplayProps<infra.HostnicResourceRead[]>) => (
   <div data-cy="interface">
     {data && data.map((i) => <Interface intf={i} />)}
   </div>

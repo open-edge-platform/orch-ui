@@ -56,11 +56,11 @@ export const ScheduleMaintenanceDrawer = ({
 
   // Note: target can be host or site. If targetSite is set then targetHost is undefined (not-set).
   if (targetEntityType === "region") {
-    resetMaintenance.targetRegion = targetEntity as infra.RegionRead;
+    resetMaintenance.targetRegion = targetEntity as infra.RegionResourceRead;
   } else if (targetEntityType === "site") {
-    resetMaintenance.targetSite = targetEntity as infra.SiteRead;
+    resetMaintenance.targetSite = targetEntity as infra.SiteResourceRead;
   } else {
-    resetMaintenance.targetHost = targetEntity as infra.HostRead;
+    resetMaintenance.targetHost = targetEntity as infra.HostResourceRead;
   }
 
   const [maintenance, setMaintenance] =
@@ -121,17 +121,18 @@ export const ScheduleMaintenanceDrawer = ({
             maintenanceEdit.targetHost &&
             !maintenanceEdit.targetHost.resourceId
           ) {
-            maintenanceEdit.targetHost = targetEntity as infra.HostRead;
+            maintenanceEdit.targetHost = targetEntity as infra.HostResourceRead;
           } else if (
             maintenanceEdit.targetSite &&
             !maintenanceEdit.targetSite.resourceId
           ) {
-            maintenanceEdit.targetSite = targetEntity as infra.SiteRead;
+            maintenanceEdit.targetSite = targetEntity as infra.SiteResourceRead;
           } else if (
             maintenanceEdit.targetRegion &&
             !maintenanceEdit.targetRegion.resourceId
           ) {
-            maintenanceEdit.targetRegion = targetEntity as infra.RegionRead;
+            maintenanceEdit.targetRegion =
+              targetEntity as infra.RegionResourceRead;
           }
 
           setMaintenance(maintenanceEdit);

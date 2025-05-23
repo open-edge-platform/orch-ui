@@ -37,16 +37,15 @@ export const RegionView = () => {
   //because of the lightweight nature of the search results. Will need
   //to retrieve the remaining information
   const { resourceId = undefined } = region ?? {};
-  const { data: _region } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: resourceId ?? "",
-      },
-      {
-        skip: !region || (region && region.metadata !== undefined),
-      },
-    );
+  const { data: _region } = infra.useRegionServiceGetRegionQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: resourceId ?? "",
+    },
+    {
+      skip: !region || (region && region.metadata !== undefined),
+    },
+  );
 
   if (!region || !region?.resourceId === null) return null;
 

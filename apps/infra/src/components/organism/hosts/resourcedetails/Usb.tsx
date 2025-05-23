@@ -10,11 +10,11 @@ import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 
 const Usb = ({
   data,
-}: ResourceDetailsDisplayProps<infra.HostResourcesUsbRead>) => {
-  const columns: TableColumn<infra.HostResourcesUsbRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HostusbResourceRead>) => {
+  const columns: TableColumn<infra.HostusbResourceRead>[] = [
     { Header: "Class", accessor: "class" },
     { Header: "Serial", accessor: "serial" },
-    { Header: "Vendor Id", accessor: "idVendor" },
+    { Header: "Vendor Id", accessor: "idVendor" }, //TODO: may be  as per api idvendor should be camelcased
     { Header: "Product Id", accessor: "idProduct" },
     { Header: "Bus", accessor: "bus" },
     { Header: "Address", accessor: "addr" },

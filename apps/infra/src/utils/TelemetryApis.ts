@@ -12,12 +12,12 @@ const baseRoute = `**/v1/projects/${defaultActiveProject.name}/telemetry/`;
 export type TelemetryProfilesMetricsApis = "getTelemetryProfilesMetricsMocked";
 export const telemetryProfilesMetricsEndpoints: CyApiDetails<
   TelemetryProfilesMetricsApis,
-  infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse
+  infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse
 > = {
   getTelemetryProfilesMetricsMocked: {
     route: `${baseRoute}metricgroups/**/metricprofiles?*`,
     response: {
-      TelemetryMetricsProfiles: [],
+      telemetryMetricsProfiles: [],
       totalElements: 0,
       hasNext: false,
     },
@@ -27,23 +27,23 @@ export const telemetryProfilesMetricsEndpoints: CyApiDetails<
 export type TelemetryProfilesLogsApis = "getTelemetryProfilesLogsMocked";
 export const telemetryProfilesLogsEndpoints: CyApiDetails<
   TelemetryProfilesLogsApis,
-  infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse
+  infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse
 > = {
   getTelemetryProfilesLogsMocked: {
     route: `${baseRoute}loggroups/**/logprofiles?*`,
-    response: { TelemetryLogsProfiles: [], totalElements: 0, hasNext: false },
+    response: { telemetryLogsProfiles: [], totalElements: 0, hasNext: false },
   },
 };
 
 export type TelemetryGroupsMetricsApis = "getTelemetryGroupsMetricsMocked";
 export const telemetryGroupsMetricsEndpoints: CyApiDetails<
   TelemetryGroupsMetricsApis,
-  infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse
+  infra.TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse
 > = {
   getTelemetryGroupsMetricsMocked: {
     route: `${baseRoute}metricgroups?*`,
     response: {
-      TelemetryMetricsGroups: [],
+      telemetryMetricsGroups: [],
       totalElements: 0,
       hasNext: false,
     },
@@ -53,10 +53,10 @@ export const telemetryGroupsMetricsEndpoints: CyApiDetails<
 export type TelemetryGroupsLogsApis = "getTelemetryGroupsLogsMocked";
 export const telemetryGroupsLogsEndpoints: CyApiDetails<
   TelemetryGroupsLogsApis,
-  infra.GetV1ProjectsByProjectNameTelemetryLoggroupsApiResponse
+  infra.TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse
 > = {
   getTelemetryGroupsLogsMocked: {
     route: `${baseRoute}loggroups?*`,
-    response: { TelemetryLogsGroups: [], totalElements: 0, hasNext: false },
+    response: { telemetryLogsGroups: [], totalElements: 0, hasNext: false },
   },
 };

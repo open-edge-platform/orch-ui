@@ -11,7 +11,7 @@ import { store } from "../../../store/store";
 
 interface AggregateHostStatusProps {
   host: infra.HostRead;
-  instance: infra.InstanceRead;
+  instance: infra.InstanceResourceRead;
 }
 
 const AggregateHostStatusRemote = (props: AggregateHostStatusProps) => (

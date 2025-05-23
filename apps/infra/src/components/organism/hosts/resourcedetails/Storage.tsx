@@ -12,12 +12,12 @@ import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 
 const Storage = ({
   data,
-}: ResourceDetailsDisplayProps<infra.HostResourcesStorageRead[]>) => {
-  const columns: TableColumn<infra.HostResourcesStorageRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HoststorageResourceRead[]>) => {
+  const columns: TableColumn<infra.HoststorageResourceRead>[] = [
     { Header: "WWID", accessor: "wwid" },
     {
       Header: "Capacity",
-      accessor: (data: infra.HostResourcesStorageRead) => {
+      accessor: (data: infra.HoststorageResourceRead) => {
         const formatData = humanFileSize(parseInt(data.capacityBytes ?? "0"));
         if (!formatData) return null;
         return `${formatData.value} ${formatData.units}`;

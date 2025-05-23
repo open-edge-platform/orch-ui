@@ -7,17 +7,17 @@ import { infra } from "@orch-ui/apis";
 import { Status, StatusIcon } from "@orch-ui/components";
 
 interface LinkStatusProps {
-  status: infra.LinkStateRead["type"];
+  status: infra.HostnicResourceRead["linkState"];
 }
 
 const LinkStatus = ({ status }: LinkStatusProps) => {
   let s: Status;
   switch (status) {
-    case "LINK_STATE_UP":
+    case "NETWORK_INTERFACE_LINK_STATE_UP":
       s = Status.Ready;
       break;
 
-    case "LINK_STATE_DOWN":
+    case "NETWORK_INTERFACE_LINK_STATE_DOWN":
       s = Status.Error;
       break;
 
@@ -27,7 +27,13 @@ const LinkStatus = ({ status }: LinkStatusProps) => {
   return (
     <StatusIcon
       status={s}
-      text={status.replace("LINK_STATE_", "").replaceAll("_", " ")}
+      text={
+        status
+          ? status
+              .replace("NETWORK_INTERFACE_LINK_STATE_", "")
+              .replaceAll("_", " ")
+          : "Unknown"
+      }
     />
   );
 };

@@ -27,7 +27,7 @@ import ResourceIndicator from "../ResourceIndicator";
 import "./HostDetailsTab.scss";
 
 interface HostDetailsTabProps {
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   onShowCategoryDetails: (title: ResourceTypeTitle, data: ResourceType) => void;
 }
 
