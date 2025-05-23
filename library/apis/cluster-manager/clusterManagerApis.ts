@@ -210,23 +210,9 @@ export type GetV2ProjectsByProjectNameClustersApiArg = {
   pageSize?: number;
   /** Index of the first item to return. It is almost always used in conjunction with the 'pageSize' query. */
   offset?: number;
-  /** The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
-    
-    Supported fields:
-    - name
-    - kubernetesVersion
-    - providerStatus
-    - lifecyclePhase
-     */
+  /** The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used. */
   orderBy?: string;
-  /** Filters the entries based on the filter provided.
-    
-    Supported fields:
-    - name
-    - kubernetesVersion
-    - providerStatus
-    - lifecyclePhase
-     */
+  /** Filters the entries based on the filter provided. */
   filter?: string;
 };
 export type PostV2ProjectsByProjectNameClustersApiResponse =
@@ -412,7 +398,7 @@ export type ProblemDetails = {
   message?: string;
 };
 export type NodeSpec = {
-  /** UUID of the host. */
+  /** The unique identifier of this host. */
   id: string;
   role: "all" | "controlplane" | "worker";
 };
@@ -436,7 +422,7 @@ export type StatusInfo = {
   timestamp?: string;
 };
 export type NodeInfo = {
-  /** Host resource id */
+  /** The unique identifier of this host. */
   id?: string;
   role?: string;
   status?: StatusInfo;
