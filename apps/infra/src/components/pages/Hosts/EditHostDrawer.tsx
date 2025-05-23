@@ -11,6 +11,7 @@ import {
   Divider,
   Drawer,
   Heading,
+  TextField,
   ToggleSwitch,
 } from "@spark-design/react";
 import {
@@ -18,6 +19,7 @@ import {
   ButtonSize,
   ButtonVariant,
   DrawerSize,
+  InputSize,
   ToggleSwitchSize,
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
@@ -47,6 +49,7 @@ const EditHostDrawer = ({
   const [selectedSshKey, setSelectedSshKey] =
     useState<infra.LocalAccountRead>();
   const [sshKeys, setSshKeys] = useState<infra.LocalAccountRead[]>([]);
+  const [staticIp, setStaticIp] = useState<string>("");
 
   // Fetch SSH keys when the drawer opens
   const { data: localAccountsData } =
@@ -80,6 +83,9 @@ const EditHostDrawer = ({
         secureBoot: secureBootEnabled,
       },
       sshKey: selectedSshKey?.username,
+      networkSettings: {
+        staticIp,
+      },
     });
 
     if (onSave) {
@@ -134,8 +140,7 @@ const EditHostDrawer = ({
               </ToggleSwitch>
             </div>
           </div>
-          <Divider />
-          <Heading semanticLevel={6}>SSH Key</Heading>
+          <Heading semanticLevel={6}>SSH Key Name</Heading>
           <p className="spark-font-75">
             Select an SSH key to enable local user access to this host.
           </p>
@@ -150,7 +155,19 @@ const EditHostDrawer = ({
             )}
           </div>
           <Divider />
-          <Heading semanticLevel={6}>Network </Heading>
+          <Heading semanticLevel={6}>Network</Heading>
+          <div className="network-container">
+            <TextField
+              data-cy="staticIpField"
+              className="static-ip-field"
+              label="Static IP"
+              placeholder="Enter Static IP"
+              size={InputSize.Medium}
+              value={staticIp}
+              onChange={(e) => setStaticIp(e.target.value)}
+            />
+          </div>
+          <Divider />
         </div>
       }
       footerContent={
