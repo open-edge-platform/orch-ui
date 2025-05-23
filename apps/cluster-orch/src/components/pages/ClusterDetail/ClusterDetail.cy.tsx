@@ -11,6 +11,8 @@ import {
 } from "@orch-ui/utils";
 import ClusterDetail from "./ClusterDetail";
 import { ClusterDetailPom } from "./ClusterDetail.pom";
+import { cyGet } from "@orch-ui/tests";
+import moment from "moment";
 
 const pom = new ClusterDetailPom();
 const apiErrorPom = new ApiErrorPom();
@@ -64,8 +66,12 @@ describe("<ClusterDetail />", () => {
     });
 
     it("should render 'Last Change' column when showTimestamp is true", () => {
-      cy.get('[data-cy="last-change"]').should("exist");
-      cy.get('[data-cy="last-change"]').contains("Last Change");
+      const timestamp = pom.testCluster.providerStatus?.timestamp!;
+      const expectedDate = moment(new Date(timestamp * 1000)).format("MMM DD, YYYY");
+      cyGet("timestamp-lifecyclePhase").should("contain", expectedDate);
+      cyGet("timestamp-lifecyclePhase").should("exist");
+      cyGet("last-change").should("exist");
+      cyGet("last-change").contains("Last Change");
     });
 
     it("should delete a cluster", () => {
