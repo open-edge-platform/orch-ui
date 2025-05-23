@@ -227,7 +227,6 @@ export type AlertDefinition = {
   id?: string;
   name?: string;
   state?: StateDefinition;
-  template?: string;
   values?: {
     [key: string]: string;
   };
