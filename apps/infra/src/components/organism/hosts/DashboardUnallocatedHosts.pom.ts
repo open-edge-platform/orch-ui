@@ -27,7 +27,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
     statusCode: 200,
     response: {
       hosts: [onboardedHostOne, onboardedHostTwo],
-    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.HostServiceListHostsApiResponse,
   },
   hostsListError400: {
     route,
