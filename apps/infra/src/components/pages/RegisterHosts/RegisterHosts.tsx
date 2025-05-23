@@ -26,6 +26,7 @@ import {
   selectUnregisteredHosts,
   setAutoOnboardValue,
   setAutoProvisionValue,
+  setCreateClusterValue,
 } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setMessageBanner } from "../../../store/notifications";
@@ -33,6 +34,7 @@ import AutoPropertiesMessageBanner from "../../molecules/AutoPropertiesMessageBa
 import AddHostsForm from "../../organism/AddHostsForm/AddHostsForm";
 import "./RegisterHosts.scss";
 import { registerHostPost } from "./RegisterHosts.utils";
+
 const dataCy = "registerHosts";
 
 const RegisterHosts = () => {
@@ -40,8 +42,13 @@ const RegisterHosts = () => {
   const className = "register-hosts";
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
-  const { autoOnboard, autoProvision, hosts, hasMultiHostValidationError } =
-    useAppSelector((state) => state.configureHost);
+  const {
+    autoOnboard,
+    autoProvision,
+    createCluster,
+    hosts,
+    hasMultiHostValidationError,
+  } = useAppSelector((state) => state.configureHost);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] =
@@ -55,7 +62,7 @@ const RegisterHosts = () => {
         each host in the respective fields
       </p>
       <AddHostsForm />
-      <Flex cols={[6]}>
+      <Flex cols={[4]} align="start">
         <div className={`${className}__auto-onboard`}>
           <Heading semanticLevel={6}>Onboard Automatically</Heading>
           <p>Hosts will be onboarded once they connect</p>
@@ -86,7 +93,23 @@ const RegisterHosts = () => {
             <label>Provision Automatically</label>
           </ToggleSwitch>
         </div>
+        <div className={`${className}__create-cluster`}>
+          <Heading semanticLevel={6}>Create Single-host Clusters</Heading>
+          <p>Each host will be assigned to a new cluster.</p>
+          <ToggleSwitch
+            data-cy="createCluster"
+            isSelected={createCluster}
+            onChange={(value) => {
+              dispatch(setCreateClusterValue(value));
+            }}
+            isDisabled={!autoOnboard || !autoProvision}
+            className={`${className}__auto-provision-switch`}
+          >
+            <label>Create Single-host Clusters</label>
+          </ToggleSwitch>
+        </div>
       </Flex>
+
       <AutoPropertiesMessageBanner />
       <ButtonGroup
         align={ButtonGroupAlignment.End}

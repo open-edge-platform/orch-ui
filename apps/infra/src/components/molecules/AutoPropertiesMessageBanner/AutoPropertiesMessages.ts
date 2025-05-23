@@ -8,4 +8,5 @@ export enum AutoPropertiesMessages {
   BothSelected = "You'll only be able to assign one site to all hosts in the following steps.  Once connected, the hosts will automatically be onboarded and provisioned, and will be ready to receive a workload",
   OnboardOnly = "Hosts will onboard automatically.  You will need to provision them manually to receive a workload",
   ProvisionOnly = "You'll only be able to assign one site to all hosts in the following steps.  Once connected, the hosts will need to be manually onboarded. After onboarding, they will be automatically provisioned",
+  CreateCluster = "Each host will be automatically provisioned and assigned to a single-host cluster.",
 }
