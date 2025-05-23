@@ -78,6 +78,8 @@ module.exports = {
           "./src/components/pages/ClusterTemplates/ClusterTemplates",
         "./ClusterTemplateDetails":
           "./src/components/pages/ClusterTemplateDetails/ClusterTemplateDetails",
+        "./ClusterTemplatesDropdown":
+          "./src/components/atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown",
       },
       shared: {
         "@spark-design/css": dependencies["@spark-design/css"],

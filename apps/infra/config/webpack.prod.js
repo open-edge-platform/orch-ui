@@ -43,8 +43,8 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
-        Admin: `Admin@/mfe/admin/remoteEntry.js`,
+        ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
+        Admin: "Admin@/mfe/admin/remoteEntry.js",
       },
     }),
   ],

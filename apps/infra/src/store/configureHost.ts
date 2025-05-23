@@ -40,6 +40,7 @@ export interface HostConfigForm {
   hosts: { [id: string]: HostData };
   autoOnboard: boolean;
   autoProvision: boolean;
+  createCluster: boolean;
   hasMultiHostValidationError;
 }
 
@@ -57,6 +58,7 @@ export const initialState: HostConfigForm = {
   hosts: {},
   autoOnboard: true,
   autoProvision: false,
+  createCluster: true,
 };
 
 const containsHosts = (state: HostConfigForm) => {
@@ -147,6 +149,7 @@ export const configureHost = createSlice({
     resetMultiHostForm(state) {
       state.autoOnboard = false;
       state.autoProvision = false;
+      state.createCluster = false;
       state.formStatus = {
         currentStep: HostConfigSteps["Select Site"],
         enableNextBtn: false,
@@ -332,6 +335,9 @@ export const configureHost = createSlice({
     setAutoProvisionValue(state, action: PayloadAction<boolean>) {
       state.autoProvision = action.payload;
     },
+    setCreateClusterValue(state, action: PayloadAction<boolean>) {
+      state.createCluster = action.payload;
+    },
     setPublicSshKey(
       state,
       action: PayloadAction<{ hostId: string; value: infra.LocalAccountRead }>,
@@ -381,6 +387,7 @@ export const {
   setMultiHostValidationError,
   setAutoOnboardValue,
   setAutoProvisionValue,
+  setCreateClusterValue,
   setPublicSshKey,
   unSetPublicSshKey,
 } = configureHost.actions;
