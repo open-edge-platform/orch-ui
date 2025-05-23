@@ -77,11 +77,11 @@ export const createHostInstance = async (
     projectName: SharedStorage.project?.name ?? "",
     instanceResource: {
       securityFeature: host.instance?.securityFeature,
-      osId: host.instance?.osID,
+      osID: host.instance?.osID,
       kind: "INSTANCE_KIND_METAL",
-      hostId: host.resourceId,
+      hostID: host.resourceId,
       name: `${host.name}-instance`,
-      localAccountId: host.instance?.localAccountID,
+      localAccountID: host.instance?.localAccountID,
     },
   };
   await postInstanceApi(payload)

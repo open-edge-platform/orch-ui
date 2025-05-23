@@ -30,8 +30,12 @@ export type HostGenericStatuses = {
   trustedAttestationStatus?: GenericStatus;
 };
 
+// somewhere in your types file or above
+export type TelemetryLogLevel =
+  infra.TelemetryLogsProfileResourceRead["logLevel"];
+
 export const hostStatusIndicatorToIconStatus = (
-  host: infra.HostRead,
+  host: infra.HostResourceRead,
 ): IconStatus => {
   switch (host.hostStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
@@ -52,8 +56,8 @@ const statusWithDetails = (status: string, details?: string) => {
 };
 
 export const hostToStatuses = (
-  host: infra.HostRead,
-  instance?: infra.InstanceRead, // TODO we should be able to use host.instance
+  host: infra.HostResourceRead,
+  instance?: infra.InstanceResourceRead,
 ): HostGenericStatuses => {
   const hgs: HostGenericStatuses = {};
   if (host.hostStatusIndicator) {
@@ -88,7 +92,7 @@ export const hostToStatuses = (
           instance.instanceStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
         message: statusWithDetails(
           instance.instanceStatus ?? "",
-          instance.instanceStatusDetail,
+          // instance.instanceStatusDetail,
         ),
         timestamp: instance.instanceStatusTimestamp,
       };
@@ -135,7 +139,9 @@ export const generateClusterName = (siteName: string, hostName: string) =>
   `${siteName}-${hostName}`.replaceAll(" ", "-");
 
 /** Returns `true` if Host is assigned to a cluster. Else returns `false`. */
-export const isHostAssigned = (instance?: infra.InstanceRead): boolean => {
+export const isHostAssigned = (
+  instance?: infra.InstanceResourceRead,
+): boolean => {
   return instance && instance.workloadMembers
     ? instance.workloadMembers.some(
         (workloadMember: infra.WorkloadMemberRead) =>
@@ -165,7 +171,9 @@ export const inheritedScheduleToString = (
 };
 
 /** Decide the text to display for schedule maintenance status */
-export const scheduleStatusToString = (status?: infra.ScheduleStatus) => {
+export const scheduleStatusToString = (
+  status?: infra.SingleScheduleResource["scheduleStatus"],
+) => {
   if (!status) {
     return "Unspecified";
   }
@@ -204,7 +212,7 @@ export const hostStatusFields: FieldLabels<HostGenericStatuses> = {
 };
 
 export const statusIndicatorToIconStatus = (
-  statusIndicator: infra.StatusIndicator,
+  statusIndicator: infra.HostResourceRead["hostStatusIndicator"],
 ): IconStatus => {
   switch (statusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
@@ -221,7 +229,7 @@ export const statusIndicatorToIconStatus = (
 };
 
 export const isOSUpdateAvailable = (
-  instance: infra.InstanceRead | undefined,
+  instance: infra.InstanceResourceRead | undefined,
 ) => {
   const desiredOsId = instance?.desiredOs?.resourceId;
   const currentOs = instance?.currentOs;
@@ -233,7 +241,7 @@ export const isOSUpdateAvailable = (
 
 const getHostProvisionTitles = (
   hostName: string,
-  provisioningStatusIndicator?: infra.StatusIndicatorRead,
+  provisioningStatusIndicator?: infra.HostResourceRead["hostStatusIndicator"],
 ) => {
   switch (provisioningStatusIndicator) {
     case "STATUS_INDICATION_IN_PROGRESS":
@@ -255,7 +263,7 @@ const getHostProvisionTitles = (
 
 const getHostOnboardingTitles = (
   hostName: string,
-  onboardingStatusIndicator?: infra.StatusIndicatorRead,
+  onboardingStatusIndicator?: infra.HostResourceRead["hostStatusIndicator"],
 ) => {
   const onboardingMsg = {
     title: `${hostName} is onboarded`,
@@ -280,7 +288,7 @@ const getHostOnboardingTitles = (
 
 const getHostRegistrationTitles = (
   hostName: string,
-  registrationStatusIndicator?: infra.StatusIndicatorRead,
+  registrationStatusIndicator?: infra.HostResourceRead["hostStatusIndicator"],
 ) => {
   const registrationMsg = {
     title: `${hostName} is registered`,
@@ -304,7 +312,7 @@ const getHostRegistrationTitles = (
 
 const getHostCurrentStateTitles = (
   hostName: string,
-  currenState?: infra.HostState,
+  currenState?: infra.HostResourceRead["currentState"],
 ) => {
   switch (currenState) {
     case "HOST_STATE_UNTRUSTED":
@@ -329,7 +337,7 @@ const getHostCurrentStateTitles = (
 
 /* Titles to be displayed in Host Status popover */
 export const getPopOverTitles = (
-  host: infra.HostRead,
+  host: infra.HostResourceRead,
 ): {
   title?: string;
   subTitle?: string;
@@ -379,7 +387,9 @@ export const getPopOverTitles = (
 // --------------------------------------
 
 /** @deprecated  */
-export const hostStatusToString = (status?: infra.StatusIndicatorRead) => {
+export const hostStatusToString = (
+  status?: infra.HostResourceRead["hostStatusIndicator"],
+) => {
   if (!status) {
     return "Unspecified";
   }
@@ -388,7 +398,9 @@ export const hostStatusToString = (status?: infra.StatusIndicatorRead) => {
 
 /** Decide the text to display for aggregated host status (actual host status, host in maintenance) */
 /** @deprecated  */
-export const hostProviderStatusToString = (host?: infra.HostRead): string => {
+export const hostProviderStatusToString = (
+  host?: infra.HostResourceRead,
+): string => {
   if (!host) {
     return "Unspecified";
   }
@@ -409,7 +421,7 @@ export const hostProviderStatusToString = (host?: infra.HostRead): string => {
 
 // currentState mapping for host to messages
 export const hostStateMapping: Record<
-  infra.HostState,
+  infra.HostResourceRead["currentState"],
   { status: IconStatus; message: string }
 > = {
   HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
@@ -423,7 +435,7 @@ export const hostStateMapping: Record<
 
 // Host status and messages when all modern statuses are in idle status
 export const getCustomStatusOnIdleAggregation = (
-  host: infra.HostRead,
+  host: infra.HostResourceRead,
 ): AggregatedStatus => {
   if (!host.currentState || host.currentState === "HOST_STATE_UNSPECIFIED")
     return { status: IconStatus.Unknown, message: "Unknown" };
@@ -458,7 +470,7 @@ export const getCustomStatusOnIdleAggregation = (
  * Otherwise, it returns an object with text "Not compatible" and a corresponding tooltip.
  */
 export const getTrustedComputeCompatibility = (
-  host: infra.HostWrite,
+  host: infra.HostResourceWrite,
 ): TrustedComputeCompatibility => {
   if (
     host?.instance?.securityFeature ===
