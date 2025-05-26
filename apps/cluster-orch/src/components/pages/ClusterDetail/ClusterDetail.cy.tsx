@@ -66,7 +66,7 @@ describe("<ClusterDetail />", () => {
     });
 
     it("should render 'Last Change' column when showTimestamp is true", () => {
-      const timestamp = pom.testCluster.providerStatus?.timestamp!;
+      const timestamp = pom.testCluster.providerStatus?.timestamp as number;
       const expectedDate = moment(new Date(timestamp * 1000)).format(
         "MMM DD, YYYY",
       );
