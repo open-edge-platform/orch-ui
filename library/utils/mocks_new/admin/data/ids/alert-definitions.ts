@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const AlertDefinitions = {
+export const AlertDefinitionIds = {
   // Host alerts
   HOST_CONNECTION_LOST: "Host-ConnectionLost-ID",
   HOST_ERROR: "Host-Error-ID",
@@ -21,5 +21,5 @@ export const AlertDefinitions = {
   CLUSTER_RAM_USAGE: "Cluster-RAM-Usage-ID",
 } as const;
 
-export type AlertDefinition =
-  (typeof AlertDefinitions)[keyof typeof AlertDefinitions];
+export type AlertDefinitionId =
+  (typeof AlertDefinitionIds)[keyof typeof AlertDefinitionIds];

@@ -4,7 +4,7 @@
  */
 
 import { omApi } from "@orch-ui/apis";
-import { AlertDefinition } from "./data/ids/alert-definitions";
+import { AlertDefinitionId } from "./data/ids/alert-definitions";
 
 /**
  * Generates a mock alert definition object for testing purposes
@@ -16,7 +16,7 @@ import { AlertDefinition } from "./data/ids/alert-definitions";
  * @returns An object conforming to the omApi.AlertDefinition interface
  */
 export const generateAlertDefinition = (
-  id: AlertDefinition,
+  id: AlertDefinitionId,
   name: string,
   state: omApi.StateDefinition = "applied",
   values: Record<string, string> = { threshold: "30", duration: "30s" },
