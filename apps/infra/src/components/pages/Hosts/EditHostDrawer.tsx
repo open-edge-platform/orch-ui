@@ -164,7 +164,7 @@ const EditHostDrawer = ({
               placeholder="Enter Static IP"
               size={InputSize.Medium}
               value={staticIp}
-              onChange={(e) => setStaticIp(e.target.value)}
+              onChange={(e) => setStaticIp(e)}
             />
           </div>
           <Divider />
