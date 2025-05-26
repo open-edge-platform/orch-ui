@@ -71,10 +71,6 @@ export const nodeStatusToText = (status?: cm.StatusInfo): string => {
     return status.reason;
   }
 
-  if (status.condition) {
-    return status.condition.replace("STATUS_", "").replaceAll("_", " ");
-  }
-
   return "unknown";
 };
 
