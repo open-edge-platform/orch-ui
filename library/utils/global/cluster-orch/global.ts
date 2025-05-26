@@ -63,15 +63,11 @@ export const clusterStatusToIconStatus = (
 };
 
 export const nodeStatusToText = (status?: cm.StatusInfo): string => {
-  if (!status) {
+  if (!status || !status.reason) {
     return "unknown";
   }
 
-  if (status.reason) {
-    return status.reason;
-  }
-
-  return "unknown";
+  return status.reason;
 };
 
 export type ClusterGenericStatuses = {
