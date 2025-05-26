@@ -31,7 +31,7 @@ import { setupWorker } from "msw";
 async function prepare() {
   /* devblock:start */
   if (process.env.REACT_MOCK_API === "true") {
-    const { handlers: newAdminHandlers } = await import(
+    const { handlers: newHandlers } = await import(
       "../../../library/utils/mocks_new"
     );
     const { handlers: eim_handlers } = await import(
@@ -57,7 +57,7 @@ async function prepare() {
     );
 
     const worker = setupWorker(
-      ...newAdminHandlers,
+      ...newHandlers,
       ...eim_handlers,
       ...applicationCatalogHandlers,
       ...deploymentManagerHandlers,

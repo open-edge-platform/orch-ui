@@ -4,70 +4,59 @@
  */
 
 import { generateAlertDefinition } from "../data.helpers";
-import {
-  ALERT_DEFINITION_EIGHT_ID,
-  ALERT_DEFINITION_FIVE_ID,
-  ALERT_DEFINITION_FOUR_ID,
-  ALERT_DEFINITION_NINE_ID,
-  ALERT_DEFINITION_ONE_ID,
-  ALERT_DEFINITION_SEVEN_ID,
-  ALERT_DEFINITION_SIX_ID,
-  ALERT_DEFINITION_TEN_ID,
-  ALERT_DEFINITION_THREE_ID,
-  ALERT_DEFINITION_TWO_ID,
-} from "./ids/alert-definitions";
+import { AlertDefinitions } from "./ids/alert-definitions";
 
 // Generate alert definitions using the helper function
 export const alertDefinitionOne = generateAlertDefinition(
-  ALERT_DEFINITION_ONE_ID,
+  AlertDefinitions.HOST_CONNECTION_LOST,
   "HostConnectionLost",
 );
 
 export const alertDefinitionTwo = generateAlertDefinition(
-  ALERT_DEFINITION_TWO_ID,
+  AlertDefinitions.HOST_ERROR,
   "HostError",
 );
 
 export const alertDefinitionThree = generateAlertDefinition(
-  ALERT_DEFINITION_THREE_ID,
+  AlertDefinitions.HOST_CPU_USAGE,
   "HostCPUUsage",
 );
 
 export const alertDefinitionFour = generateAlertDefinition(
-  ALERT_DEFINITION_FOUR_ID,
+  AlertDefinitions.HOST_RAM_USAGE,
   "HostRAMUsage",
   "new",
 );
 
 export const alertDefinitionFive = generateAlertDefinition(
-  ALERT_DEFINITION_FIVE_ID,
+  AlertDefinitions.DEPLOYMENT_DOWN,
   "DeploymentDown",
 );
 
 export const alertDefinitionSix = generateAlertDefinition(
-  ALERT_DEFINITION_SIX_ID,
+  AlertDefinitions.DEPLOYMENT_ERROR,
   "DeploymentError",
 );
 
 export const alertDefinitionSeven = generateAlertDefinition(
-  ALERT_DEFINITION_SEVEN_ID,
+  AlertDefinitions.CLUSTER_DOWN,
   "ClusterDown",
   "new",
 );
 
 export const alertDefinitionEight = generateAlertDefinition(
-  ALERT_DEFINITION_EIGHT_ID,
+  AlertDefinitions.CLUSTER_ERROR,
   "ClusterError",
 );
 
 export const alertDefinitionNine = generateAlertDefinition(
-  ALERT_DEFINITION_NINE_ID,
+  AlertDefinitions.CLUSTER_CPU_USAGE,
   "ClusterCPUUsage",
   "applied",
   { threshold: "30", duration: "5m" },
 );
 
 export const alertDefinitionTen = generateAlertDefinition(
-  ALERT_DEFINITION_TEN_ID,
+  AlertDefinitions.CLUSTER_RAM_USAGE,
   "ClusterRAMUsage",
 );

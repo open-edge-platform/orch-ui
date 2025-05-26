@@ -3,13 +3,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const ALERT_DEFINITION_ONE_ID = "Host-ConnectionLostID";
-export const ALERT_DEFINITION_TWO_ID = "Host-Error-ID";
-export const ALERT_DEFINITION_THREE_ID = "Host-CPUUsageID";
-export const ALERT_DEFINITION_FOUR_ID = "Host-RAM-Usage-ID";
-export const ALERT_DEFINITION_FIVE_ID = "Deployment-Down-ID";
-export const ALERT_DEFINITION_SIX_ID = "Deployment-Error-ID";
-export const ALERT_DEFINITION_SEVEN_ID = "Cluster-Down-ID";
-export const ALERT_DEFINITION_EIGHT_ID = "Cluster-Error-ID";
-export const ALERT_DEFINITION_NINE_ID = "Cluster-CPU-Usage-ID";
-export const ALERT_DEFINITION_TEN_ID = "Cluster-RAM-Usage-ID";
+export const AlertDefinitions = {
+  // Host alerts
+  HOST_CONNECTION_LOST: "Host-ConnectionLost-ID",
+  HOST_ERROR: "Host-Error-ID",
+  HOST_CPU_USAGE: "Host-CPU-Usage-ID",
+  HOST_RAM_USAGE: "Host-RAM-Usage-ID",
+
+  // Deployment alerts
+  DEPLOYMENT_DOWN: "Deployment-Down-ID",
+  DEPLOYMENT_ERROR: "Deployment-Error-ID",
+
+  // Cluster alerts
+  CLUSTER_DOWN: "Cluster-Down-ID",
+  CLUSTER_ERROR: "Cluster-Error-ID",
+  CLUSTER_CPU_USAGE: "Cluster-CPU-Usage-ID",
+  CLUSTER_RAM_USAGE: "Cluster-RAM-Usage-ID",
+} as const;
+
+export type AlertDefinition =
+  (typeof AlertDefinitions)[keyof typeof AlertDefinitions];
