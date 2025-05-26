@@ -5,29 +5,29 @@
 
 import { omApi } from "@orch-ui/apis";
 import {
-  alertEight,
-  alertFive,
-  alertFour,
-  alertNine,
-  alertOne,
-  alertSeven,
-  alertSix,
-  alertTen,
-  alertThree,
-  alertTwo,
+  clusterCpuUsageAlert,
+  clusterDownAlert,
+  clusterErrorAlert,
+  clusterRamUsageAlert,
+  deploymentDownAlert,
+  deploymentErrorAlert,
+  hostConnectionLostAlert,
+  hostCpuUsageAlert,
+  hostErrorAlert,
+  hostRamUsageAlert,
 } from "../data/alerts";
 
 const multipleAlerts: omApi.Alert[] = [
-  alertOne,
-  alertTwo,
-  alertThree,
-  alertFour,
-  alertFive,
-  alertSix,
-  alertSeven,
-  alertEight,
-  alertNine,
-  alertTen,
+  hostConnectionLostAlert,
+  hostErrorAlert,
+  hostCpuUsageAlert,
+  hostRamUsageAlert,
+  deploymentDownAlert,
+  deploymentErrorAlert,
+  clusterDownAlert,
+  clusterErrorAlert,
+  clusterCpuUsageAlert,
+  clusterRamUsageAlert,
 ];
 
 export default class AlertStore {

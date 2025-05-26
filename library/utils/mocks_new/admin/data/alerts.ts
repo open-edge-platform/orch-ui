@@ -10,20 +10,20 @@ import {
 } from "../../../mocks/app-orch/adm/deployments";
 import { assignedWorkloadHostOne } from "../../../mocks/infra/store/hosts";
 import {
-  alertDefinitionEight,
-  alertDefinitionFive,
-  alertDefinitionFour,
-  alertDefinitionNine,
-  alertDefinitionOne,
-  alertDefinitionSeven,
-  alertDefinitionSix,
-  alertDefinitionTen,
-  alertDefinitionThree,
-  alertDefinitionTwo,
+  clusterCpuUsageAlertDefinition,
+  clusterDownAlertDefinition,
+  clusterErrorAlertDefinition,
+  clusterRamUsageAlertDefinition,
+  deploymentDownAlertDefinition,
+  deploymentErrorAlertDefinition,
+  hostConnectionLostAlertDefinition,
+  hostCpuUsageAlertDefinition,
+  hostErrorAlertDefinition,
+  hostRamUsageAlertDefinition,
 } from "./alert-definitions";
 
-export const alertOne: omApi.Alert = {
-  alertDefinitionId: alertDefinitionOne.id,
+export const hostConnectionLostAlert: omApi.Alert = {
+  alertDefinitionId: hostConnectionLostAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -37,8 +37,8 @@ export const alertOne: omApi.Alert = {
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertTwo: omApi.Alert = {
-  alertDefinitionId: alertDefinitionTwo.id,
+export const hostErrorAlert: omApi.Alert = {
+  alertDefinitionId: hostErrorAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -52,8 +52,8 @@ export const alertTwo: omApi.Alert = {
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertThree: omApi.Alert = {
-  alertDefinitionId: alertDefinitionThree.id,
+export const hostCpuUsageAlert: omApi.Alert = {
+  alertDefinitionId: hostCpuUsageAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -67,8 +67,8 @@ export const alertThree: omApi.Alert = {
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertFour: omApi.Alert = {
-  alertDefinitionId: alertDefinitionFour.id,
+export const hostRamUsageAlert: omApi.Alert = {
+  alertDefinitionId: hostRamUsageAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -82,8 +82,8 @@ export const alertFour: omApi.Alert = {
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertFive: omApi.Alert = {
-  alertDefinitionId: alertDefinitionFive.id,
+export const deploymentDownAlert: omApi.Alert = {
+  alertDefinitionId: deploymentDownAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -97,8 +97,8 @@ export const alertFive: omApi.Alert = {
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertSix: omApi.Alert = {
-  alertDefinitionId: alertDefinitionSix.id,
+export const deploymentErrorAlert: omApi.Alert = {
+  alertDefinitionId: deploymentErrorAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -112,8 +112,8 @@ export const alertSix: omApi.Alert = {
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertSeven: omApi.Alert = {
-  alertDefinitionId: alertDefinitionSeven.id,
+export const clusterDownAlert: omApi.Alert = {
+  alertDefinitionId: clusterDownAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -129,8 +129,8 @@ export const alertSeven: omApi.Alert = {
   },
 };
 
-export const alertEight: omApi.Alert = {
-  alertDefinitionId: alertDefinitionEight.id,
+export const clusterErrorAlert: omApi.Alert = {
+  alertDefinitionId: clusterErrorAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -138,14 +138,14 @@ export const alertEight: omApi.Alert = {
   fingerprint: "fingerprint",
   labels: {
     alert_category: "Health",
-    alert_context: "host",
-    host_uuid: "4c4d4544-004e-4488-1050-c7c04f4d4533",
+    alert_context: "cluster",
+    cluster_name: "clusterB",
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertNine: omApi.Alert = {
-  alertDefinitionId: alertDefinitionNine.id,
+export const clusterCpuUsageAlert: omApi.Alert = {
+  alertDefinitionId: clusterCpuUsageAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -153,14 +153,14 @@ export const alertNine: omApi.Alert = {
   fingerprint: "fingerprint",
   labels: {
     alert_category: "Health",
-    alert_context: "host",
-    host_uuid: "4c4c4544-0035-3070-8030-c4c04f4a4636",
+    alert_context: "cluster",
+    cluster_name: "clusterC",
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertTen: omApi.Alert = {
-  alertDefinitionId: alertDefinitionTen.id,
+export const clusterRamUsageAlert: omApi.Alert = {
+  alertDefinitionId: clusterRamUsageAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -168,14 +168,14 @@ export const alertTen: omApi.Alert = {
   fingerprint: "fingerprint",
   labels: {
     alert_category: "Health",
-    alert_context: "host",
-    host_uuid: "4c4c4544-0035-3070-8030-c4c04f4a4638",
+    alert_context: "cluster",
+    cluster_name: "clusterD",
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
 
-export const alertNoSource: omApi.Alert = {
-  alertDefinitionId: alertDefinitionTen.id,
+export const clusterRamUsageAlertNoSource: omApi.Alert = {
+  alertDefinitionId: clusterRamUsageAlertDefinition.id,
   startsAt: "2023-07-08 11:30",
   updatedAt: "2023-07-08 12:30",
   endsAt: "2023-07-08 13:30",
@@ -183,6 +183,8 @@ export const alertNoSource: omApi.Alert = {
   fingerprint: "fingerprint",
   labels: {
     alert_category: "Health",
+    alert_context: "cluster",
+    cluster_name: "clusterE",
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };

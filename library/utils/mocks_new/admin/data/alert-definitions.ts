@@ -6,57 +6,56 @@
 import { generateAlertDefinition } from "../data.helpers";
 import { AlertDefinitionIds } from "./ids/alert-definitions";
 
-// Generate alert definitions using the helper function
-export const alertDefinitionOne = generateAlertDefinition(
+export const hostConnectionLostAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.HOST_CONNECTION_LOST,
   "HostConnectionLost",
 );
 
-export const alertDefinitionTwo = generateAlertDefinition(
+export const hostErrorAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.HOST_ERROR,
   "HostError",
 );
 
-export const alertDefinitionThree = generateAlertDefinition(
+export const hostCpuUsageAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.HOST_CPU_USAGE,
   "HostCPUUsage",
 );
 
-export const alertDefinitionFour = generateAlertDefinition(
+export const hostRamUsageAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.HOST_RAM_USAGE,
   "HostRAMUsage",
   "new",
 );
 
-export const alertDefinitionFive = generateAlertDefinition(
+export const deploymentDownAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.DEPLOYMENT_DOWN,
   "DeploymentDown",
 );
 
-export const alertDefinitionSix = generateAlertDefinition(
+export const deploymentErrorAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.DEPLOYMENT_ERROR,
   "DeploymentError",
 );
 
-export const alertDefinitionSeven = generateAlertDefinition(
+export const clusterDownAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.CLUSTER_DOWN,
   "ClusterDown",
   "new",
 );
 
-export const alertDefinitionEight = generateAlertDefinition(
+export const clusterErrorAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.CLUSTER_ERROR,
   "ClusterError",
 );
 
-export const alertDefinitionNine = generateAlertDefinition(
+export const clusterCpuUsageAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.CLUSTER_CPU_USAGE,
   "ClusterCPUUsage",
   "applied",
   { threshold: "30", duration: "5m" },
 );
 
-export const alertDefinitionTen = generateAlertDefinition(
+export const clusterRamUsageAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.CLUSTER_RAM_USAGE,
   "ClusterRAMUsage",
 );
