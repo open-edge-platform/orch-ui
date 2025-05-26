@@ -10,7 +10,7 @@ import ClusterNodesTablePom from "./ClusterNodesTable.pom";
 const nodes: cm.NodeInfo[] = [
   {
     id: "hostId",
-    status: { condition: "STATUS_CONDITION_READY" , reason: "Running"},
+    status: { condition: "STATUS_CONDITION_READY", reason: "Running" },
   },
 ];
 
