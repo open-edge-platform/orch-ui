@@ -9,6 +9,7 @@ const dataCySelectors = [
   "nextButton",
   "isAutoOnboarded",
   "isAutoProvisioned",
+  "createCluster",
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
