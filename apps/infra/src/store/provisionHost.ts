@@ -73,14 +73,6 @@ const isSet = (value: string | undefined) => {
   return value.trim().length > 0;
 };
 
-const everyHost = (
-  state: HostProvisionState,
-  predicate: (hostData: HostData) => void,
-) => {
-  const { hosts } = state;
-  return Object.values(hosts).every(predicate);
-};
-
 const validateStep = (state: HostProvisionState) => {
   const {
     formStatus: { currentStep },

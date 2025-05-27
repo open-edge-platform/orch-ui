@@ -49,7 +49,6 @@ const HostProvision = () => {
     });
 
   const {
-    hosts,
     autoProvision,
     formStatus: { currentStep, enableNextBtn },
   } = useAppSelector(selectHostProvisionState);
