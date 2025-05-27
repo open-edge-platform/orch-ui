@@ -11,9 +11,9 @@ import { AlertDefinitionId } from "./data/ids/alert-definitions";
  *
  * @param id - Unique identifier for the alert definition
  * @param name - Display name of the alert definition
- * @param state - Current state of the alert definition (defaults to "applied")
- * @param values - Configuration values for the alert definition, including threshold and duration (defaults to {threshold: "30", duration: "30s"})
- * @param rest - Additional properties to include in the alert definition (optional)
+ * @param state - Current state of the alert definition
+ * @param values - Configuration values for the alert definition, including threshold and duration
+ * @param rest - Additional optional properties to include in the alert definition
  * @returns An object conforming to the omApi.AlertDefinition interface
  */
 export const generateAlertDefinition = (
@@ -36,18 +36,18 @@ export const generateAlertDefinition = (
  * Generates a mock alert object for testing purposes
  *
  * @param alertDefinitionId - ID of the alert definition this alert is based on
- * @param status - Current status of the alert (defaults to { state: "active" })
  * @param labels - Labels associated with the alert providing context information
- * @param timeInfo - Object containing timing information
- * @param annotations - Additional annotations for the alert (defaults to { description: "accumsan ante sagittis ege" })
- * @param fingerprint - Unique fingerprint for the alert (defaults to "fingerprint")
- * @param rest - Additional properties to include in the alert (optional)
+ * @param status - Current status of the alert
+ * @param timeInfo - Object containing timing information for the alert
+ * @param annotations - Additional annotations for the alert
+ * @param fingerprint - Unique fingerprint for the alert
+ * @param rest - Additional optional properties to include in the alert
  * @returns An object conforming to the omApi.Alert interface
  */
 export const generateAlert = (
   alertDefinitionId: string,
-  status: omApi.Alert["status"] = { state: "active" },
   labels: Record<string, string>,
+  status: omApi.Alert["status"] = { state: "active" },
   timeInfo: {
     startsAt?: string;
     updatedAt?: string;
