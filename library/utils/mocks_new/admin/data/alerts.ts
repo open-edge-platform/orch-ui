@@ -9,21 +9,10 @@ import {
 } from "../../../mocks/app-orch/adm/deployments";
 import { assignedWorkloadHostOne } from "../../../mocks/infra/store/hosts";
 import { generateAlert } from "../data.helpers";
-import {
-  clusterCpuUsageAlertDefinition,
-  clusterDownAlertDefinition,
-  clusterErrorAlertDefinition,
-  clusterRamUsageAlertDefinition,
-  deploymentDownAlertDefinition,
-  deploymentErrorAlertDefinition,
-  hostConnectionLostAlertDefinition,
-  hostCpuUsageAlertDefinition,
-  hostErrorAlertDefinition,
-  hostRamUsageAlertDefinition,
-} from "./alert-definitions";
+import { alertDefinitionMocks } from "./alert-definitions";
 
-export const hostConnectionLostAlert = generateAlert(
-  hostConnectionLostAlertDefinition.id as string,
+const hostConnectionLostAlert = generateAlert(
+  alertDefinitionMocks.hostConnectionLostAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "host",
@@ -31,8 +20,8 @@ export const hostConnectionLostAlert = generateAlert(
   },
 );
 
-export const hostErrorAlert = generateAlert(
-  hostErrorAlertDefinition.id as string,
+const hostErrorAlert = generateAlert(
+  alertDefinitionMocks.hostErrorAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "host",
@@ -40,8 +29,8 @@ export const hostErrorAlert = generateAlert(
   },
 );
 
-export const hostCpuUsageAlert = generateAlert(
-  hostCpuUsageAlertDefinition.id as string,
+const hostCpuUsageAlert = generateAlert(
+  alertDefinitionMocks.hostCpuUsageAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "host",
@@ -49,8 +38,8 @@ export const hostCpuUsageAlert = generateAlert(
   },
 );
 
-export const hostRamUsageAlert = generateAlert(
-  hostRamUsageAlertDefinition.id as string,
+const hostRamUsageAlert = generateAlert(
+  alertDefinitionMocks.hostRamUsageAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "host",
@@ -58,8 +47,8 @@ export const hostRamUsageAlert = generateAlert(
   },
 );
 
-export const deploymentDownAlert = generateAlert(
-  deploymentDownAlertDefinition.id as string,
+const deploymentDownAlert = generateAlert(
+  alertDefinitionMocks.deploymentDownAlertDefinition.id as string,
   {
     alert_category: "Deployment",
     alert_context: "deployment",
@@ -67,8 +56,8 @@ export const deploymentDownAlert = generateAlert(
   },
 );
 
-export const deploymentErrorAlert = generateAlert(
-  deploymentErrorAlertDefinition.id as string,
+const deploymentErrorAlert = generateAlert(
+  alertDefinitionMocks.deploymentErrorAlertDefinition.id as string,
   {
     alert_category: "Deployment",
     alert_context: "deployment",
@@ -76,8 +65,8 @@ export const deploymentErrorAlert = generateAlert(
   },
 );
 
-export const clusterDownAlert = generateAlert(
-  clusterDownAlertDefinition.id as string,
+const clusterDownAlert = generateAlert(
+  alertDefinitionMocks.clusterDownAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "cluster",
@@ -85,8 +74,8 @@ export const clusterDownAlert = generateAlert(
   },
 );
 
-export const clusterErrorAlert = generateAlert(
-  clusterErrorAlertDefinition.id as string,
+const clusterErrorAlert = generateAlert(
+  alertDefinitionMocks.clusterErrorAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "cluster",
@@ -94,8 +83,8 @@ export const clusterErrorAlert = generateAlert(
   },
 );
 
-export const clusterCpuUsageAlert = generateAlert(
-  clusterCpuUsageAlertDefinition.id as string,
+const clusterCpuUsageAlert = generateAlert(
+  alertDefinitionMocks.clusterCpuUsageAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "cluster",
@@ -103,8 +92,8 @@ export const clusterCpuUsageAlert = generateAlert(
   },
 );
 
-export const clusterRamUsageAlert = generateAlert(
-  clusterRamUsageAlertDefinition.id as string,
+const clusterRamUsageAlert = generateAlert(
+  alertDefinitionMocks.clusterRamUsageAlertDefinition.id as string,
   {
     alert_category: "Health",
     alert_context: "cluster",
@@ -112,9 +101,23 @@ export const clusterRamUsageAlert = generateAlert(
   },
 );
 
-export const clusterRamUsageAlertNoSource = generateAlert(
-  clusterRamUsageAlertDefinition.id as string,
+const clusterRamUsageAlertNoSource = generateAlert(
+  alertDefinitionMocks.clusterRamUsageAlertDefinition.id as string,
   {
     alert_category: "Health",
   },
 );
+
+export const alertMocks = {
+  hostConnectionLostAlert,
+  hostErrorAlert,
+  hostCpuUsageAlert,
+  hostRamUsageAlert,
+  deploymentDownAlert,
+  deploymentErrorAlert,
+  clusterDownAlert,
+  clusterErrorAlert,
+  clusterCpuUsageAlert,
+  clusterRamUsageAlert,
+  clusterRamUsageAlertNoSource,
+};

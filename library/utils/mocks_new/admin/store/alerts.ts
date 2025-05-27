@@ -4,30 +4,20 @@
  */
 
 import { omApi } from "@orch-ui/apis";
-import {
-  clusterCpuUsageAlert,
-  clusterDownAlert,
-  clusterErrorAlert,
-  clusterRamUsageAlert,
-  deploymentDownAlert,
-  deploymentErrorAlert,
-  hostConnectionLostAlert,
-  hostCpuUsageAlert,
-  hostErrorAlert,
-  hostRamUsageAlert,
-} from "../data/alerts";
+import { alertMocks } from "../data/alerts";
 
 const multipleAlerts: omApi.Alert[] = [
-  hostConnectionLostAlert,
-  hostErrorAlert,
-  hostCpuUsageAlert,
-  hostRamUsageAlert,
-  deploymentDownAlert,
-  deploymentErrorAlert,
-  clusterDownAlert,
-  clusterErrorAlert,
-  clusterCpuUsageAlert,
-  clusterRamUsageAlert,
+  alertMocks.hostConnectionLostAlert,
+  alertMocks.hostErrorAlert,
+  alertMocks.hostCpuUsageAlert,
+  alertMocks.hostRamUsageAlert,
+  alertMocks.deploymentDownAlert,
+  alertMocks.deploymentErrorAlert,
+  alertMocks.clusterDownAlert,
+  alertMocks.clusterErrorAlert,
+  alertMocks.clusterCpuUsageAlert,
+  alertMocks.clusterRamUsageAlert,
+  alertMocks.clusterRamUsageAlertNoSource, // Added the missing alert
 ];
 
 export default class AlertStore {
