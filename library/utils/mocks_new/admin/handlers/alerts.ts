@@ -7,10 +7,10 @@ import { rest } from "msw";
 import { baseURL } from "../base-url";
 import AlertStore from "../store/alerts";
 
-const as = new AlertStore();
+const alertStore = new AlertStore();
 
 export const handlers = [
   rest.get(`${baseURL}/alerts`, (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ alerts: as.list() }));
+    return res(ctx.status(200), ctx.json({ alerts: alertStore.list() }));
   }),
 ];

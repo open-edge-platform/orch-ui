@@ -16,8 +16,6 @@ describe("<AlertsList/>", () => {
     cy.mount(<AlertsList />);
     pom.waitForApis();
     pom.root.should("exist");
-    console.log("pomtable", pom.table.getRows());
-    console.log("alertStore", alertStore.list());
     pom.table.getRows().should("have.length", alertStore.list().length);
   });
   it("should open drawer", () => {
