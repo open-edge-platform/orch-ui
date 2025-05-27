@@ -10,15 +10,15 @@ import { Text } from "@spark-design/react";
 import "./TelemetryProfileLogs.scss";
 const dataCy = "telemetryProfileLogs";
 export interface TelemetryProfileProps {
-  region?: infra.RegionRead;
-  site?: infra.SiteRead;
+  region?: infra.RegionResourceRead;
+  site?: infra.SiteResourceRead;
 }
 export const TelemetryProfileLogs = ({
   region,
   site,
 }: TelemetryProfileProps) => {
   const cy = { "data-cy": dataCy };
-  const args: infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiArg =
+  const args: infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg =
     {
       telemetryLogsGroupId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",

@@ -239,9 +239,7 @@ export const ScheduleMaintenanceForm = ({
       if (maintenance.repeated.cronDayMonth !== "") {
         currentMonthApi = submitRepeatedMaintenance({
           projectName: SharedStorage.project?.name ?? "",
-          ...(isMaintenanceEdit
-            ? { repeatedScheduleId: maintenance.resourceId }
-            : {}),
+          ...(isMaintenanceEdit ? { resourceId: maintenance.resourceId } : {}),
           repeatedScheduleResource: repeatedMaintenancePostParam,
         });
       }

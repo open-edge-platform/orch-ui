@@ -55,7 +55,7 @@ const SshHostsTable = ({
           {AggregateHostStatusRemote !== null ? (
             <AggregateHostStatusRemote
               instance={table.row.original}
-              host={table.row.original.host as infra.HostRead}
+              host={table.row.original.host as infra.HostResourceRead}
             />
           ) : (
             "Remote Error"

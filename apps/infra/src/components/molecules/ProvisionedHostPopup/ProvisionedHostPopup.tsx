@@ -32,9 +32,9 @@ export type ProvisionedHostPopupProps = Omit<
    *
    * Note: If instance is assigned make sure instance shows workloadMember before passing to this field.
    **/
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   onDeauthorizeHostWithoutWorkload?: (hostId: string) => void;
-  onScheduleMaintenance?: (targetEntity: infra.HostRead) => void;
+  onScheduleMaintenance?: (targetEntity: infra.HostResourceRead) => void;
 };
 
 /** This will show all available host actions within popup menu (active/configured, i.e, assigned/unassigned host only) */

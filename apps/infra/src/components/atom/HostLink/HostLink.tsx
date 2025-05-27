@@ -26,7 +26,7 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
-  const [host, setHost] = useState<infra.HostRead>();
+  const [host, setHost] = useState<infra.HostResourceRead>();
 
   const hostsQuery = infra.useHostServiceListHostsQuery(
     {

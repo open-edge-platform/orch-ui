@@ -61,7 +61,7 @@ interface _ScheduleMaintenance {
   > & { isOpenEnded?: boolean };
   repeated?: Partial<
     Omit<
-      infra.SingleScheduleResource,
+      infra.RepeatedScheduleResource,
       commonMaintenanceFields | commonMaintenanceTargets
     >
   > & {
@@ -85,7 +85,7 @@ export type RepeatedMaintenance = Pick<
   commonScheduleTypeFields
 > & {
   repeated: Omit<
-    infra.SingleScheduleResource,
+    infra.RepeatedScheduleResource,
     commonMaintenanceFields | commonMaintenanceTargets
   > & {
     countPrevMonthOnTzGMT?: boolean;

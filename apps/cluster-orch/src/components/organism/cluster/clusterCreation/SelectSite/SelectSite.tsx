@@ -32,7 +32,7 @@ export interface SearchTypeItem {
   name: string;
 }
 interface SelectSiteForClusterProps {
-  selectedSite?: infra.SiteRead;
+  selectedSite?: infra.SiteResourceRead;
   selectedRegion?: infra.Region;
   onSelectedInheritedMeta: (value: TypedMetadata[]) => void;
 }
@@ -104,7 +104,7 @@ const SelectSite = ({
     onSelectedInheritedMeta([...regionMetadata, ...siteMetadata]);
   }, [selectedSite, currentLocations]);
 
-  const handleOnSiteSelected = (site: infra.SiteRead) => {
+  const handleOnSiteSelected = (site: infra.SiteResourceRead) => {
     dispatch(updateRegionName(site.region?.name ?? ""));
     dispatch(updateRegionId(site.region?.resourceId ?? ""));
     dispatch(updateSiteId(site.resourceId ?? ""));

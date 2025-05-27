@@ -381,7 +381,7 @@ const HostsTable = ({
         getRowId={getSelectionId}
         selectedIds={selectedIds}
         canExpandRows={expandable}
-        subRow={(row: { original: infra.HostRead }) => {
+        subRow={(row: { original: infra.HostResourceRead }) => {
           const host = row.original;
           return <HostsTableRowExpansionDetail host={host} />;
         }}

@@ -13,7 +13,7 @@ import {
 } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 interface ClusterNameAssociatedToHostProps {
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
 }
 const dataCy = "clusterNameAssociatedToHost";
 const ClusterNameAssociatedToHost = ({

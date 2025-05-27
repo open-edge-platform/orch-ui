@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import { store } from "../../../store/store";
 
 interface AggregateHostStatusProps {
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   instance: infra.InstanceResourceRead;
 }
 

@@ -130,7 +130,7 @@ export const getHostStatus = async (
 export const getHosts = async (
   dispatch: AppDispatch,
   hostIds: string[],
-): Promise<infra.HostRead[]> => {
+): Promise<infra.HostResourceRead[]> => {
   // fetch details from all hosts at the same time
   const hostsQueries = hostIds.map((resourceId) => {
     return dispatch(
@@ -144,7 +144,7 @@ export const getHosts = async (
   // wait for all requests to come back
   const hostsDetail = await Promise.all(hostsQueries);
 
-  const hosts: infra.HostRead[] = [];
+  const hosts: infra.HostResourceRead[] = [];
   hostsDetail.forEach(({ data: _hosts, isSuccess, error }) => {
     if (isSuccess) {
       if (_hosts.hosts && _hosts.hosts[0]) {
