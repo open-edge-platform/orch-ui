@@ -3,13 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ContextSwitcher } from "@orch-ui/components";
-import { checkAuthAndRole, Role } from "@orch-ui/utils";
+import {
+  checkAuthAndRole,
+  hostRegisterRoute,
+  Role,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { reset } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -28,11 +33,10 @@ const Hosts = () => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const className = "hosts";
-
-  const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
+  const navigate = useInfraNavigate();
+  const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
   const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
   const [showRegisterDrawer, setShowRegisterDrawer] = useState<boolean>(false);
 
@@ -51,7 +55,7 @@ const Hosts = () => {
         data-cy="registerHosts"
         variant={ButtonVariant.Action}
         onPress={() => {
-          navigate("../register-hosts");
+          navigate(hostRegisterRoute);
         }}
         isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
       >
@@ -85,7 +89,7 @@ const Hosts = () => {
         }
         selectedHosts={selectedHosts}
         unsetSelectedHosts={() => setSelectedHosts([])}
-        onHostSelect={(row: eim.HostRead, isSelected: boolean) => {
+        onHostSelect={(row: infra.HostRead, isSelected: boolean) => {
           setSelectedHosts((prev) => {
             if (isSelected) {
               return prev.concat(row);

@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { getTrustedComputeCompatibility } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
@@ -32,7 +32,7 @@ interface IProcessStat {
 }
 export interface HostConfigReviewProps {
   hostResults: Map<string, string | true>;
-  localAccounts: eim.LocalAccountRead[] | undefined;
+  localAccounts: infra.LocalAccountRead[] | undefined;
 }
 export const HostConfigReview = ({
   hostResults,
@@ -51,7 +51,7 @@ export const HostConfigReview = ({
   };
 
   const sbFdeValue = (host: HostData, sbFdeEnabled: boolean) => {
-    const notSupported: eim.SecurityFeature[] = [
+    const notSupported: infra.SecurityFeature[] = [
       "SECURITY_FEATURE_UNSPECIFIED",
       "SECURITY_FEATURE_NONE",
     ];

@@ -3,8 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
-import { NavigateFunction } from "react-router-dom";
+import { infra } from "@orch-ui/apis";
+import {
+  InfraNavigateFunction,
+  regionSiteRoute,
+  subRegionRoute,
+} from "@orch-ui/utils";
 import {
   setLoadingBranch,
   setRegion,
@@ -12,40 +16,43 @@ import {
 } from "../../../../store/locations";
 import { AppDispatch } from "../../../../store/store";
 
-const sitesRoute = "sites";
-const regionsRoute = "regions";
-
 export const handleViewRegionAction = (
   dispatch: AppDispatch,
-  region: eim.RegionRead,
+  region: infra.RegionRead,
 ) => {
   if (!region.resourceId) return;
   dispatch(setRegion(region));
 };
 
 export const handleAddSiteAction = (
-  navigate: NavigateFunction,
-  region: eim.RegionRead,
+  navigate: InfraNavigateFunction,
+  region: infra.RegionRead,
 ) => {
   if (!region.resourceId) return;
-  navigate(`../regions/${region.resourceId}/${sitesRoute}/new?source=region`, {
-    relative: "path",
-  });
+  navigate(
+    regionSiteRoute,
+    {
+      regionId: region.resourceId,
+      siteId: "new",
+    },
+    "?source=region",
+  );
 };
 
 export const handleSubRegionAction = (
-  navigate: NavigateFunction,
-  region: eim.RegionRead,
+  navigate: InfraNavigateFunction,
+  region: infra.RegionRead,
 ) => {
   if (!region || !region.resourceId) return;
-  navigate(`../${regionsRoute}/parent/${region.resourceId}/new`, {
-    relative: "path",
+  navigate(subRegionRoute, {
+    parentRegionId: region.resourceId,
+    regionId: "new",
   });
 };
 
 export const handleSiteViewAction = (
   dispatch: AppDispatch,
-  site: eim.SiteRead,
+  site: infra.SiteRead,
 ) => {
   if (!site.resourceId || !site.region || !site.region.resourceId) return;
   dispatch(setLoadingBranch(site.region.resourceId));

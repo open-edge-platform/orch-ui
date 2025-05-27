@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { MessageBanner } from "@spark-design/react";
 import { useEffect } from "react";
@@ -48,14 +48,14 @@ export const HostsDetails = () => {
       Object.values(hosts)
         .filter((host) => !host.originalOs)
         .every((host, i, arr) => {
-          const os1 = host.instance?.os as eim.OperatingSystemResourceRead;
-          const os2 = arr[0].instance?.os as eim.OperatingSystemResourceRead;
+          const os1 = host.instance?.os as infra.OperatingSystemResourceRead;
+          const os2 = arr[0].instance?.os as infra.OperatingSystemResourceRead;
           return os1?.resourceId === os2?.resourceId;
         })
     ) {
       const value = (
         Object.values(hosts).filter((host) => !host.originalOs)[0]?.instance
-          ?.os as eim.OperatingSystemResourceRead
+          ?.os as infra.OperatingSystemResourceRead
       )?.resourceId;
       if (value) {
         dispatch(setGlobalOsValue(value));

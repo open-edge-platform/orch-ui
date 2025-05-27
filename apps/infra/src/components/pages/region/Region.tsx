@@ -3,51 +3,37 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  ConfirmationDialog,
-  Popup,
-  setActiveNavItem,
-  setBreadcrumb,
-  TableColumn,
-} from "@orch-ui/components";
+import { ConfirmationDialog, Popup, TableColumn } from "@orch-ui/components";
 import {
   checkAuthAndRole,
   parseError,
+  regionRoute,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Heading, Icon } from "@spark-design/react";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import RegionsTable from "../../organism/region/RegionsTable";
 import "./Region.scss";
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ButtonVariant, ToastState } from "@spark-design/tokens";
 import { ScheduleMaintenanceDrawer } from "../../../components/organism/ScheduleMaintenanceDrawer/ScheduleMaintenanceDrawer";
-import {
-  homeBreadcrumb,
-  regionsBreadcrumb,
-  regionsMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setErrorInfo, showToast } from "../../../store/notifications";
 
 export default function Region() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const [deleteRegion] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
-  const breadcrumb = useMemo(() => [homeBreadcrumb, regionsBreadcrumb], []);
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(regionsMenuItem));
-  }, []);
-  const [regionToDelete, setRegionToDelete] = useState<eim.RegionRead | null>(
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+
+  const [regionToDelete, setRegionToDelete] = useState<infra.RegionRead | null>(
     null,
   );
   const [scheduleMaintenanceRegion, setScheduleMaintenanceRegion] = useState<
-    eim.RegionRead | undefined
+    infra.RegionRead | undefined
   >();
 
   const deleteRegionFn = async (regionId: string) => {
@@ -72,7 +58,7 @@ export default function Region() {
     setRegionToDelete(null);
   };
 
-  const actions: TableColumn<eim.RegionRead> = {
+  const actions: TableColumn<infra.RegionRead> = {
     Header: "Action",
     textAlign: "center",
     padding: "0",
@@ -86,8 +72,8 @@ export default function Region() {
               {
                 displayText: "View Details",
                 onSelect: () => {
-                  navigate(`../regions/${region.resourceId}`, {
-                    relative: "path",
+                  navigate(regionRoute, {
+                    regionId: region.resourceId ?? "",
                   });
                 },
               },

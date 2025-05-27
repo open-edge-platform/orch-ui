@@ -10,8 +10,6 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
-  setActiveNavItem,
-  setBreadcrumb,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -22,7 +20,6 @@ import {
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
-  isHostAssigned,
   isOSUpdateAvailable,
   parseError,
   Role,
@@ -47,16 +44,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import "./HostDetails.scss";
 
-import { eim } from "@orch-ui/apis";
-import {
-  configuredBreadcrumb,
-  homeBreadcrumb,
-  hostsActiveNavItem,
-  hostsBreadcrumb,
-  hostsConfiguredNavItem,
-  hostsOnboardedNavItem,
-  unconfiguredBreadcrumb,
-} from "../../../routes/const";
+import { infra } from "@orch-ui/apis";
 import { useAppDispatch } from "../../../store/hooks";
 import {
   setErrorInfo,
@@ -88,13 +76,13 @@ const HostDetails: React.FC = () => {
   const { id, uuid } = useParams<urlParams>() as urlParams;
 
   /* Managing Host/Host-Resource details with api-hooks & states */
-  const [host, setHost] = useState<eim.HostRead>();
+  const [host, setHost] = useState<infra.HostRead>();
   const [showResourceDetails, setShowResourceDetails] =
     useState<boolean>(false);
   const [resourceTitle, setResourceTitle] = useState<ResourceTypeTitle>();
   const [resourceData, setResourceData] = useState<ResourceType | null>(null);
   // Calling Host-related APIs
-  const hostsQuery = eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       uuid: uuid,
@@ -106,20 +94,21 @@ const HostDetails: React.FC = () => {
     },
   );
 
-  const hostQuery = eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      hostId: id,
-    },
-    {
-      skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
-      refetchOnMountOrArgChange: true,
-      pollingInterval: API_INTERVAL,
-    },
-  );
+  const hostQuery =
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        hostId: id,
+      },
+      {
+        skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
+        refetchOnMountOrArgChange: true,
+        pollingInterval: API_INTERVAL,
+      },
+    );
 
   const sitesQuery =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: "*", // sitesFiltered logic can be updated with host regionId mapping
@@ -175,9 +164,9 @@ const HostDetails: React.FC = () => {
   const [deleteMaintenanceSchedule] =
     // For Deactivating Maintenance option within Maintenance message banner or Host-Actions popup.
     // This option is only available within configured host details
-    eim.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
   const { data: schedules } =
-    eim.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
+    infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: id,
@@ -226,7 +215,7 @@ const HostDetails: React.FC = () => {
       // OR Filtered host has atleast one periodically repeated active maintenance schedule
       (schedules.RepeatedSchedules && schedules.RepeatedSchedules.length > 0));
   /** This will trigger an API call to Deactivate Maintenance: if host & the maintenance for that host exist */
-  const deactivateMaintenance = (host: eim.HostRead) => {
+  const deactivateMaintenance = (host: infra.HostRead) => {
     if (filteredMaintenance.length !== 0) {
       dispatch(
         showMessageNotification({
@@ -279,48 +268,6 @@ const HostDetails: React.FC = () => {
       dispatch(showMessageNotification(failMessage));
     }
   };
-
-  const isAssigned = isHostAssigned(host?.instance);
-
-  // These steps will set's the breadcrumb in Host Details page
-  let hostBreadcrumb = { text: "Getting host...", link: "#" };
-  if (host) {
-    hostBreadcrumb = host.site
-      ? isAssigned
-        ? hostsBreadcrumb
-        : configuredBreadcrumb
-      : unconfiguredBreadcrumb;
-  } else if (hostQuery.isError || hostsQuery.isError) {
-    hostBreadcrumb = hostsBreadcrumb;
-  }
-  const breadcrumb = [
-    homeBreadcrumb,
-    hostBreadcrumb,
-    {
-      text: `${id}`,
-      link: `${host && host.site ? "host" : "unconfigured-host"}/${
-        host?.resourceId
-      }`,
-    },
-    {
-      text: "View Details",
-      link: "#",
-    },
-  ];
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-
-    const isAssigned = isHostAssigned(host?.instance);
-
-    if (host && isAssigned !== undefined) {
-      const nextActiveItem = host.site
-        ? isAssigned
-          ? hostsActiveNavItem
-          : hostsConfiguredNavItem
-        : hostsOnboardedNavItem;
-      dispatch(setActiveNavItem(nextActiveItem));
-    }
-  }, [breadcrumb]);
 
   /* Render Host Details by API states */
   if (!host && (hostQuery.isError || hostsQuery.isError)) {

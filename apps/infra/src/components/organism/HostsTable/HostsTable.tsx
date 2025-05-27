@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   columnDisplayNameToApiName,
@@ -15,15 +15,17 @@ import {
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import {
   API_INTERVAL,
   checkAuthAndRole,
   Direction,
   getOrder,
+  hostProvisioningRoute,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { useEffect } from "react";
@@ -48,11 +50,11 @@ import "./HostsTable.scss";
 export const dataCy = "hostsTable";
 export interface HostsTableProps {
   /** columns to show from Host object */
-  columns?: TableColumn<eim.HostRead>[];
+  columns?: TableColumn<infra.HostRead>[];
   /** Lifecycle category */
   category?: LifeCycleState;
   /** API filters */
-  filters?: eim.GetV1ProjectsByProjectNameComputeHostsApiArg & {
+  filters?: infra.GetV1ProjectsByProjectNameComputeHostsApiArg & {
     workloadMemberId?: string | undefined;
   };
   hasWorkload?: boolean;
@@ -72,29 +74,29 @@ export interface HostsTableProps {
   /** enable checkbox select feature on this table component */
   selectable?: boolean;
   /** initial selected rows */
-  selectedHosts?: eim.HostRead[];
+  selectedHosts?: infra.HostRead[];
   /** manually skip polling */
   poll?: boolean;
   emptyActionProps?: EmptyActionProps[];
   hideSelectedItemBanner?: boolean;
   /** Invoked when a Host is selected */
-  onHostSelect?: (selectedHost: eim.HostRead, isSelected: boolean) => void;
+  onHostSelect?: (selectedHost: infra.HostRead, isSelected: boolean) => void;
   /** Invoked when data is loaded */
-  onDataLoad?: (data: eim.HostRead[]) => void;
+  onDataLoad?: (data: infra.HostRead[]) => void;
   unsetSelectedHosts?: () => void;
   provisionHosts?: () => void;
   /** This will decide on what HostRead info basis is host is selected  */
-  getSelectionId?: (row: eim.HostRead) => string;
+  getSelectionId?: (row: infra.HostRead) => string;
 }
 
-const hostColumns: TableColumn<eim.HostRead>[] = [
-  HostTableColumn.name("../"),
+const hostColumns: TableColumn<infra.HostRead>[] = [
+  HostTableColumn.name(),
   HostTableColumn.status,
   HostTableColumn.serialNumber,
   HostTableColumn.os,
   HostTableColumn.siteWithCustomBasePath("../"),
   HostTableColumn.workload,
-  HostTableColumn.actions((host: eim.HostRead) => (
+  HostTableColumn.actions((host: infra.HostRead) => (
     <HostDetailsActions host={host} />
   )),
 ];
@@ -120,10 +122,10 @@ const HostsTable = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const [onboardHost] =
-    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
+    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
 
   // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
@@ -158,7 +160,7 @@ const HostsTable = ({
   }, [filter]);
 
   const { data, isSuccess, isError, isLoading, error } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         offset,
@@ -216,10 +218,7 @@ const HostsTable = ({
       dispatch(reset());
       // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
-      const path = "../hosts/set-up-provisioning";
-      navigate(path, {
-        relative: "path",
-      });
+      navigate(hostProvisioningRoute);
     }
   };
 
@@ -380,7 +379,7 @@ const HostsTable = ({
         getRowId={getSelectionId}
         selectedIds={selectedIds}
         canExpandRows={expandable}
-        subRow={(row: { original: eim.HostRead }) => {
+        subRow={(row: { original: infra.HostRead }) => {
           const host = row.original;
           return <HostsTableRowExpansionDetail host={host} />;
         }}

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedEimSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Button, Heading, Icon, IconVariant } from "@spark-design/react";
 import { ScheduleMaintenanceStatusTag } from "../../../components/molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
@@ -11,8 +11,8 @@ import "./DrawerHeader.scss";
 
 const dataCy = "drawerHeader";
 export interface DrawerHeaderProps {
-  targetEntity: enhancedEimSlice.ScheduleMaintenanceTargetEntity;
-  targetEntityType: enhancedEimSlice.ScheduleMaintenanceTargetEntityType;
+  targetEntity: enhancedInfraSlice.ScheduleMaintenanceTargetEntity;
+  targetEntityType: enhancedInfraSlice.ScheduleMaintenanceTargetEntityType;
   prefixButtonShown?: boolean;
   prefixButtonIcon?: IconVariant;
   hideMaintenanceTag?: boolean;

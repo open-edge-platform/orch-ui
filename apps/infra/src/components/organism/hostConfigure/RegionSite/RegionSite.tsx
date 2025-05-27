@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   selectFirstHost,
   setRegion,
@@ -20,9 +20,9 @@ export const RegionSite = () => {
   const dispatch = useAppDispatch();
   const { site: selectedSite } = useAppSelector(selectFirstHost);
 
-  const handleOnSiteSelected = (site: eim.SiteRead) => {
+  const handleOnSiteSelected = (site: infra.SiteRead) => {
     // Dispatches to configureHost reducer
-    dispatch(setRegion({ region: site.region as eim.RegionRead }));
+    dispatch(setRegion({ region: site.region as infra.RegionRead }));
     dispatch(setSite({ site: site }));
   };
 
@@ -30,9 +30,9 @@ export const RegionSite = () => {
     <div {...cy}>
       <RegionSiteSelectTree
         // The selected site is stored as SiteWrite within redux of HostConfigure having HostWrite.
-        // The eim.ts enforces HostWrite to have RegionWrite or SiteWrite.
+        // The infra.ts enforces HostWrite to have RegionWrite or SiteWrite.
         // removing below line would cause error in eslint.
-        selectedSite={selectedSite as eim.SiteRead}
+        selectedSite={selectedSite as infra.SiteRead}
         handleOnSiteSelected={handleOnSiteSelected}
       />
     </div>

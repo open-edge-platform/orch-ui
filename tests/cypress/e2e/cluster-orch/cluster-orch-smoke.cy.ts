@@ -8,7 +8,6 @@ import { NetworkLog } from "../../support/network-logs";
 import InfraPom from "../infra/infraPom";
 import ClusterOrchPom from "./cluster-orch.pom";
 
-import { eim } from "@orch-ui/apis";
 import {
   configureHostViaAPI,
   createRegionViaAPi,
@@ -43,7 +42,7 @@ describe("Cluster orch Smoke test:", () => {
     clusterName: "",
   };
   let regionId: string, siteId: string, hostId: string;
-  let currentHost: eim.HostRead;
+  let currentHost: infra.HostRead;
   const uuid = Cypress.env("EN_UUID");
 
   before(() => {

@@ -5,21 +5,20 @@
 
 import {
   ApiError,
-  BreadcrumbPiece,
   ConfirmationDialog,
   Flex,
   Popup,
   PopupOption,
-  setActiveNavItem,
-  setBreadcrumb,
   TableLoader,
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  locationRoute,
   logError,
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -47,32 +46,20 @@ import {
   RadioButtonSize,
   ToastState,
 } from "@spark-design/tokens";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./RegionForm.scss";
 
-import { eim, mbApi } from "@orch-ui/apis";
+import { infra, mbApi } from "@orch-ui/apis";
 import TelemetryLogsForm, {
   SystemLogPair,
 } from "../../../components/organism/TelemetryLogsForm/TelemetryLogsForm";
 import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
-import {
-  getRegionsByIdBreadcrumb,
-  homeBreadcrumb,
-  locationsBreadcrumb,
-  regionsBreadcrumb,
-  regionsCreateBreadcrumb,
-  regionsMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  selectBranches,
-  setIsEmpty,
-  setTreeBranchNodeCollapse,
-} from "../../../store/locations";
+import { selectBranches, setIsEmpty } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
 
 const baseRegionTypes = ["Country", "State", "County", "Region", "City"];
@@ -83,11 +70,11 @@ const RegionForm: React.FC = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
   const [deleteRegion] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
   const [deleteMetricProfile] =
-    eim.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const [deleteLogProfile] =
-    eim.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const deleteRegionFn = async (regionId: string) => {
     try {
       await deleteRegion({
@@ -96,9 +83,7 @@ const RegionForm: React.FC = () => {
       })
         .unwrap()
         .then(() => {
-          navigate(regionId ? "../../locations" : "../locations", {
-            relative: "path",
-          });
+          navigate(locationRoute);
         })
         .catch((error) => {
           dispatch(
@@ -115,11 +100,11 @@ const RegionForm: React.FC = () => {
     setIsDeleteOpen(false);
   };
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const { regionId } = useParams<{ regionId: string }>();
   const { parentRegionId } = useParams<{ parentRegionId: string }>();
   const { data: { regions } = {} } =
-    eim.useGetV1ProjectsByProjectNameRegionsQuery({
+    infra.useGetV1ProjectsByProjectNameRegionsQuery({
       projectName: SharedStorage.project?.name ?? "",
       pageSize: 100,
     });
@@ -129,7 +114,7 @@ const RegionForm: React.FC = () => {
     isError,
     error,
     isFetching,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId as string,
@@ -145,7 +130,7 @@ const RegionForm: React.FC = () => {
     isError: profileMetricIsError,
     isSuccess: profileMetricSuccess,
     isLoading: profileMetricLoading,
-  } = eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
     {
       telemetryMetricsGroupId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
@@ -162,7 +147,7 @@ const RegionForm: React.FC = () => {
     isError: profileLogIsError,
     isSuccess: profileLogSuccess,
     isLoading: profileLogLoading,
-  } = eim.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
+  } = infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
     {
       telemetryLogsGroupId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
@@ -209,60 +194,15 @@ const RegionForm: React.FC = () => {
       "None (Top level region)"
     );
   };
-
-  const getParents = (
-    currentRegion: eim.RegionRead | undefined,
-    regions: eim.RegionRead[] | undefined,
-    parents: BreadcrumbPiece[] = [],
-  ): BreadcrumbPiece[] => {
-    if (!currentRegion || !regions) return parents;
-    const parent = regions.find(
-      (r) => r.resourceId === currentRegion.parentRegion?.resourceId,
-    );
-    if (parent) {
-      parents.unshift(
-        getRegionsByIdBreadcrumb(parent.resourceId ?? "", parent.name),
-      );
-      return getParents(parent, regions, parents);
-    } else {
-      return parents;
-    }
-  };
   const dispatch = useAppDispatch();
   const branches = useAppSelector(selectBranches);
-  const breadcrumb = useMemo(() => {
-    if (regionId === "new" && parentRegionId) {
-      return [
-        locationsBreadcrumb,
-        regionsBreadcrumb,
-        getRegionsByIdBreadcrumb(
-          parentRegionId,
-          returnRegionName(parentRegionId),
-        ),
-        regionsCreateBreadcrumb,
-      ];
-    }
-    if (regionId === "new") {
-      return [locationsBreadcrumb, regionsCreateBreadcrumb];
-    }
-    const regionsTree = getParents(regionInfo, regions, [
-      getRegionsByIdBreadcrumb(regionId ?? "", returnRegionName(regionId)),
-    ]);
-    return [homeBreadcrumb, regionsBreadcrumb].concat(regionsTree || []);
-  }, [regionInfo, regions]);
-
-  useEffect(() => {
-    //dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setBreadcrumb([]));
-    dispatch(setActiveNavItem(regionsMenuItem));
-  }, [breadcrumb]);
 
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<eim.RegionRead>({
+  } = useForm<infra.RegionRead>({
     mode: "all",
   });
 
@@ -271,31 +211,31 @@ const RegionForm: React.FC = () => {
     useState<string[]>(baseRegionTypes);
 
   const [hasTelemetry, setHasTelemetry] = useState<boolean>(false);
-  const [createRegion] = eim.usePostV1ProjectsByProjectNameRegionsMutation();
+  const [createRegion] = infra.usePostV1ProjectsByProjectNameRegionsMutation();
   const [createMetricProfile] =
-    eim.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
+    infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
   const [editMetricProfile] =
-    eim.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
   const { data: metricsResponse } =
-    eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
   const metricsgroup = metricsResponse?.TelemetryMetricsGroups ?? [];
   const [currentSystemMetric, setCurrentSystemMetric] =
     useState<SystemMetricPair[]>(getMetricPairs());
   const [createLogProfile] =
-    eim.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
+    infra.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
   const [editLogProfile] =
-    eim.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
   const { data: logsResponse } =
-    eim.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
   const logsgroup = logsResponse?.TelemetryLogsGroups ?? [];
   const [currentSystemLog, setCurrentSystemLog] =
     useState<SystemLogPair[]>(getLogPairs());
   const [updateRegion] =
-    eim.usePutV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+    infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
   const [parentRegion, setParentRegion] = useState<string | undefined>(
@@ -359,18 +299,9 @@ const RegionForm: React.FC = () => {
     return <ApiError error={error} />;
   }
 
-  const redirectToLocationsPage = async () => {
-    if (parentRegionId) {
-      navigate("../../../../locations", { relative: "path" });
-      dispatch(setTreeBranchNodeCollapse(parentRegionId));
-    }
-    // jump to region details page from `/regions/{region-id}/new` (or /:regionid)
-    else {
-      navigate("../../locations", { relative: "path" });
-    }
-  };
+  const redirectToLocationsPage = async () => navigate(locationRoute);
 
-  const getMetricsGroup = (id: string): eim.TelemetryMetricsGroup => {
+  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroup => {
     const group = metricsgroup.find((group) => {
       return group.telemetryMetricsGroupId === id;
     });
@@ -383,7 +314,7 @@ const RegionForm: React.FC = () => {
     };
   };
 
-  const getLogsGroup = (id: string): eim.TelemetryLogsGroup => {
+  const getLogsGroup = (id: string): infra.TelemetryLogsGroup => {
     const group = logsgroup.find((group) => {
       return group.telemetryLogsGroupId === id;
     });
@@ -396,7 +327,7 @@ const RegionForm: React.FC = () => {
     };
   };
 
-  const save: SubmitHandler<eim.RegionWrite> = async (data) => {
+  const save: SubmitHandler<infra.RegionWrite> = async (data) => {
     // handle metadata generation
     if (!data.metadata) {
       data.metadata = [];
@@ -432,7 +363,7 @@ const RegionForm: React.FC = () => {
     }
 
     try {
-      let regionOperation: Promise<eim.PostV1ProjectsByProjectNameRegionsApiResponse>;
+      let regionOperation: Promise<infra.PostV1ProjectsByProjectNameRegionsApiResponse>;
 
       if (regionId === "new") {
         regionOperation = createRegion({
@@ -453,7 +384,7 @@ const RegionForm: React.FC = () => {
 
       // handle metric profiles
       for (const metricPair of currentSystemMetric) {
-        const metricProfile: eim.TelemetryMetricsProfile = {
+        const metricProfile: infra.TelemetryMetricsProfile = {
           targetRegion: response.regionID,
           metricsInterval: parseInt(metricPair.interval),
           metricsGroupId: metricPair.metricType,
@@ -482,9 +413,9 @@ const RegionForm: React.FC = () => {
 
       // handle log profiles
       for (const logPair of currentSystemLog) {
-        const logProfile: eim.TelemetryLogsProfile = {
+        const logProfile: infra.TelemetryLogsProfile = {
           targetRegion: response.regionID,
-          logLevel: logPair.logLevel as eim.TelemetrySeverityLevel,
+          logLevel: logPair.logLevel as infra.TelemetrySeverityLevel,
           logsGroupId: logPair.logSource,
           logsGroup: getLogsGroup(logPair.logSource),
         };
@@ -564,7 +495,7 @@ const RegionForm: React.FC = () => {
     }
   };
 
-  const checkAndUpdateMetadata = async (data: eim.RegionWrite) => {
+  const checkAndUpdateMetadata = async (data: infra.RegionWrite) => {
     if (data.metadata && data.metadata.length >= 0)
       await updateMetadata({
         projectName: SharedStorage.project?.name ?? "",

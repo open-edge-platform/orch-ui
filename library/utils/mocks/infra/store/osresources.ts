@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { osRedHatId, osTbId, osTbUpdateId, osUbuntuId } from "../data";
 import { BaseStore } from "./baseStore";
 
@@ -15,9 +15,9 @@ export const createOsResource = (
   kernelCommand: string,
   updateResources: string[],
   profileName: string,
-  securityFeature: eim.SecurityFeature,
-  osType: eim.OperatingSystemType,
-): eim.OperatingSystemResourceRead => {
+  securityFeature: infra.SecurityFeature,
+  osType: infra.OperatingSystemType,
+): infra.OperatingSystemResourceRead => {
   return {
     resourceId: id,
     architecture,
@@ -84,17 +84,17 @@ export const osRedHat = createOsResource(
 
 export class OsResourceStore extends BaseStore<
   "resourceId",
-  eim.OperatingSystemResourceRead,
-  eim.OperatingSystemResource
+  infra.OperatingSystemResourceRead,
+  infra.OperatingSystemResource
 > {
   constructor() {
     super("resourceId", [osUbuntu, osRedHat]);
   }
 
   convert(
-    body: eim.OperatingSystemResource,
+    body: infra.OperatingSystemResource,
     //id: string | undefined
-  ): eim.OperatingSystemResourceRead {
+  ): infra.OperatingSystemResourceRead {
     const currentTime = new Date().toISOString();
     return {
       ...body,

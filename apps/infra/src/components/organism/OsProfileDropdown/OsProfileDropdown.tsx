@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiError, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item, MessageBanner, TextField } from "@spark-design/react";
@@ -15,11 +15,11 @@ import "./OsProfileDropdown.scss";
 
 interface OsProfileDropdownProps {
   // the OS assigned to the Host, if any
-  hostOs?: eim.OperatingSystemResourceRead;
+  hostOs?: infra.OperatingSystemResourceRead;
   value?: string;
   pageSize?: number;
   onSelectionChange?: (
-    os: eim.OperatingSystemResourceRead | undefined,
+    os: infra.OperatingSystemResourceRead | undefined,
     effect: boolean,
   ) => void;
   hideLabel?: boolean;
@@ -39,7 +39,7 @@ const OsProfileDropdown = ({
     isError,
     isSuccess,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeOsQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery(
     {
       projectName,
       pageSize,

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ApiError, Empty, Table, TableColumn } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { HostTableColumn } from "../../../../utils/HostTableColumns";
@@ -12,7 +12,7 @@ import "./SiteViewHostTable.scss";
 
 const dataCy = "siteViewHostTable";
 export interface SiteViewHostTableProps {
-  site?: eim.SiteRead;
+  site?: infra.SiteRead;
   basePath?: string;
 }
 export const SiteViewHostTable = ({
@@ -21,17 +21,17 @@ export const SiteViewHostTable = ({
 }: SiteViewHostTableProps) => {
   const cy = { "data-cy": dataCy };
 
-  const columns: TableColumn<eim.HostRead>[] = [
-    HostTableColumn.name("../"),
+  const columns: TableColumn<infra.HostRead>[] = [
+    HostTableColumn.name(),
     HostTableColumn.status,
-    HostTableColumn.actions((host: eim.HostRead) => (
+    HostTableColumn.actions((host: infra.HostRead) => (
       <HostPopup host={host} basePath={basePath} />
     )),
   ];
 
   const projectName = SharedStorage.project?.name ?? "";
   const { data, isSuccess, isError, isLoading, error } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName,
         pageSize: 10,

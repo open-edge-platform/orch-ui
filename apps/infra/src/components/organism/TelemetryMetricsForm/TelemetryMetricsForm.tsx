@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Button, Dropdown, Icon, Item, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
@@ -24,7 +24,7 @@ export type TelemetryMetricsProfile = {
   targetRegion?: string;
   metricsInterval: number;
   metricsGroupId: string;
-  metricsGroup?: eim.TelemetryMetricsGroup;
+  metricsGroup?: infra.TelemetryMetricsGroup;
 };
 
 export type SystemMetricPair = {
@@ -54,7 +54,7 @@ const TelemetryMetricsForm = ({
 }: TelemetryMetricsFormProps) => {
   const cy = { "data-cy": dataCy };
   const { data: metricsResponse } =
-    eim.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     }); //how to use isLoading and isSuccess in both calls
   //const [, setMetricExists] = useState<boolean>(false);

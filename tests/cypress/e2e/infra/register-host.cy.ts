@@ -10,7 +10,6 @@ import {
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
 import { NetworkLog } from "../../support/network-logs";
-import { EIM_USER } from "../../support/utilities";
 import { deleteHostViaApi } from "../helpers";
 import {
   isTestRegisterHostData,

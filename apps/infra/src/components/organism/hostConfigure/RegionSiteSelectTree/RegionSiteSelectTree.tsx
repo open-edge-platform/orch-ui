@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Flex } from "@orch-ui/components";
 import { Drawer } from "@spark-design/react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -25,8 +25,8 @@ import "./RegionSiteSelectTree.scss";
 const dataCy = "stepTwoRegionAndSite";
 
 interface SiteSelectProps {
-  handleOnSiteSelected: (value: eim.SiteRead) => void;
-  selectedSite?: eim.SiteRead;
+  handleOnSiteSelected: (value: infra.SiteRead) => void;
+  selectedSite?: infra.SiteRead;
   showSingleSelection?: boolean;
 }
 

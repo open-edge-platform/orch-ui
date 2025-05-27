@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import {
   AggregatedStatuses,
   AggregatedStatusesMap,
   ApiError,
-  BreadcrumbPiece,
   CardBox,
   CardContainer,
   ConfirmationDialog,
@@ -19,14 +18,14 @@ import {
   MetadataDisplay,
   Popup,
   PopupOption,
-  setActiveNavItem,
-  setBreadcrumb as setClusterBreadcrumb,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
 import {
   API_INTERVAL,
   checkAuthAndRole,
+  clusterEditRoute,
+  clusterManagementRoute,
   clusterToStatuses,
   copyToClipboard,
   downloadFile,
@@ -34,6 +33,7 @@ import {
   parseError,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Heading,
@@ -45,9 +45,7 @@ import {
   ToastProps,
 } from "@spark-design/react";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { clustersMenuItem, homeBreadcrumb } from "../../../routes/const";
-import { useAppDispatch } from "../../../store/hooks";
+import { useParams } from "react-router-dom";
 import TableLoader from "../../atom/TableLoader";
 
 import {
@@ -69,23 +67,16 @@ const dataCy = "clusterDetail";
 export interface ClusterDetailProps {
   hasHeader?: boolean;
   name?: string;
-  /** This is required for cluster plugin to to set breadcrumb from fleet-management UI */
-  setBreadcrumb?: (breadcrumbs: BreadcrumbPiece[]) => void;
 }
 
-function ClusterDetail({
-  hasHeader = true,
-  name,
-  setBreadcrumb,
-}: ClusterDetailProps) {
+function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
   const cy = { "data-cy": dataCy },
     cssSelector = "cluster-detail";
   const { clusterName } = useParams<urlParams>();
   const [clusterFirstHostId, setClusterFirstHostId] = useState<string>();
   const [siteId, setSiteId] = useState<string>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   // TODO: create global shared/store/notification.ts
   const [toast, setToast] = useState<ToastProps>({
@@ -150,7 +141,7 @@ function ClusterDetail({
     }
   }, [clusterDetail]);
   const { data: firstClusterHost, isSuccess: isFirstHostSuccess } =
-    eim.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         hostId: clusterFirstHostId ?? "",
@@ -168,7 +159,7 @@ function ClusterDetail({
   }, [firstClusterHost]);
 
   const { data: siteData } =
-    eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         regionId: "*", // Cluster or associated host have no region information
@@ -176,33 +167,6 @@ function ClusterDetail({
       },
       { skip: !siteId || !SharedStorage.project?.name },
     ); // Host's Site details
-  // Breadcrumb settings
-  const breadcrumb = useMemo(
-    () => [
-      homeBreadcrumb,
-      {
-        text: "Clusters",
-        link: "../../clusters",
-      },
-      {
-        text: `${clusterDetail?.name}`,
-        link: `../../cluster/${clusterName}`,
-      },
-    ],
-    [clusterDetail],
-  );
-
-  useEffect(() => {
-    if (hasHeader) {
-      // use cluster-native breadcrumb unless specified
-      if (setBreadcrumb) {
-        setBreadcrumb(breadcrumb);
-      } else {
-        dispatch(setClusterBreadcrumb(breadcrumb));
-      }
-      dispatch(setActiveNavItem(clustersMenuItem));
-    }
-  }, [breadcrumb]);
 
   // we only display metadata that are actually associated with the cluster and are editable by the user
   // If the metadata is also present in site.metadata we mark it as a Site metadata
@@ -246,7 +210,8 @@ function ClusterDetail({
       displayText: "Edit",
       disable: !checkAuthAndRole([Role.CLUSTERS_WRITE]),
       onSelect: () => {
-        navigate(`../cluster/${clusterDetail.name}/edit`);
+        if (clusterDetail.name)
+          navigate(clusterEditRoute, { clusterName: clusterDetail.name });
       },
     },
     {
@@ -319,7 +284,7 @@ function ClusterDetail({
           state: ToastState.Success,
           visibility: ToastVisibility.Show,
         }));
-        navigate("/infrastructure/clusters");
+        navigate(clusterManagementRoute);
       })
       .catch((e) => {
         setToast((p) => ({
@@ -481,6 +446,7 @@ function ClusterDetail({
             <DetailedStatuses
               data={clusterToStatuses(clusterDetail)}
               statusFields={clusterStatusFields}
+              showTimestamp
             />
           </Item>
           <Item title={<Text>Hosts</Text>}>

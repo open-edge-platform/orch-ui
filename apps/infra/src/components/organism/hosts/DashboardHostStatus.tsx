@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { DashboardStatus, MetadataPairs } from "@orch-ui/components";
 import { API_INTERVAL, Operator, SharedStorage } from "@orch-ui/utils";
 import {
@@ -35,7 +35,7 @@ const DashboardHostsStatus = ({
     isError,
     error,
     isLoading,
-  } = eim.useGetV1ProjectsByProjectNameComputeHostsSummaryQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeHostsSummaryQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter: `${filterQueries.join(` ${Operator.AND} `)}`,

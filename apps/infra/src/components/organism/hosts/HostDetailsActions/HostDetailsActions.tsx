@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { hostsRoute, SharedStorage, useInfraNavigate } from "@orch-ui/utils";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { useAppDispatch } from "../../../../store/hooks";
@@ -35,6 +35,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const { host, basePath } = props;
 
   const dispatch = useAppDispatch();
+  const navigate = useInfraNavigate();
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
     useState<boolean>(false);
@@ -46,7 +47,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
     useState<boolean>(false);
 
   const [onboardHost] =
-    eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
+    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
 
   const onDelete = () => {
     setDeleteConfirmationOpen(true);
@@ -75,7 +76,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   // Note: By default upon GET `compute/hosts` doesnot specify existance of workloadMember within `host.instance`.
   // We need to make seperate instance call to fetch complete instance data by `host.instance.resourceId`.
   const { data: instanceRef } =
-    eim.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
+    infra.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         instanceId: host.instance?.resourceId ?? "",
@@ -138,6 +139,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
           buttonPlacement="left-reverse"
           confirmCb={() => {
             deleteHostInstanceFn(dispatch, host);
+            if (basePath) navigate(hostsRoute);
             setDeleteConfirmationOpen(false);
           }}
           confirmBtnText="Delete"

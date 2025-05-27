@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ConfirmationDialog,
   Empty,
@@ -11,12 +11,16 @@ import {
   MessageBannerAlertState,
   setBreadcrumb,
 } from "@orch-ui/components";
-import { parseError, SharedStorage } from "@orch-ui/utils";
+import {
+  parseError,
+  regionRoute,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { Button, Drawer, Heading, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { DrawerHeader } from "../../../components/molecules/DrawerHeader/DrawerHeader";
 import {
   Search,
@@ -53,12 +57,12 @@ export const DELETE_SITE_DIALOG_TITLE = "Delete Site ?";
 
 export const Locations = () => {
   const cy = { "data-cy": dataCy };
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useDispatch();
   const [deleteRegion] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
   const [deleteSite] =
-    eim.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
   const region = useAppSelector(selectRegion);
   const regionToDelete = useAppSelector(selectRegionToDelete);
   const siteToDelete = useAppSelector(selectSiteToDelete);
@@ -68,7 +72,6 @@ export const Locations = () => {
   const regionToDeleteHtmlId = "regionToDelete";
   const siteToDeleteHtmlId = "siteToDelete";
   const className: string = "locations";
-  const newRegionUrl: string = "../regions/new";
   const searchTypes: SearchTypeItem[] = Object.keys(SearchTypes).map((key) => ({
     id: key,
     name: `Search ${key}`,
@@ -174,7 +177,7 @@ export const Locations = () => {
               name: "Add Region",
               action: () => {
                 dispatch(setLoadingBranch(ROOT_REGIONS));
-                navigate(newRegionUrl);
+                navigate(regionRoute, { regionId: "new" });
               },
             },
           ]}
@@ -191,7 +194,7 @@ export const Locations = () => {
           <Button
             onPress={() => {
               dispatch(setLoadingBranch(ROOT_REGIONS));
-              navigate(newRegionUrl);
+              navigate(regionRoute, { regionId: "new" });
             }}
             size={ButtonSize.Large}
           >
@@ -275,14 +278,14 @@ export const Locations = () => {
                 maintenanceEntity.targetEntityType === "site"
               ) {
                 dispatch(
-                  setSite(maintenanceEntity.targetEntity as eim.SiteRead),
+                  setSite(maintenanceEntity.targetEntity as infra.SiteRead),
                 );
               } else if (
                 maintenanceEntity.showBack &&
                 maintenanceEntity.targetEntityType === "region"
               ) {
                 dispatch(
-                  setRegion(maintenanceEntity.targetEntity as eim.RegionRead),
+                  setRegion(maintenanceEntity.targetEntity as infra.RegionRead),
                 );
               }
               dispatch(setMaintenanceEntity(undefined));

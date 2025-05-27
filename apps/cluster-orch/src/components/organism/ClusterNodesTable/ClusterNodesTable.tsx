@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import {
   ApiError,
   SquareSpinner,
@@ -12,7 +12,9 @@ import {
   TableColumn,
 } from "@orch-ui/components";
 import {
+  getInfraPath,
   getTrustedComputeCompatibility,
+  hostDetailsRoute,
   hostProviderStatusToString,
   nodeStatusToIconStatus,
   nodeStatusToText,
@@ -29,7 +31,7 @@ const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 
-type ClusterNode = eim.HostRead & cm.NodeInfo;
+type ClusterNode = infra.HostRead & cm.NodeInfo;
 
 interface ClusterNodesTableProps {
   nodes?: cm.NodeInfo[];
@@ -38,7 +40,7 @@ interface ClusterNodesTableProps {
   // as a result we need to filter on the former in the review page or the latter in the cluster list expansion
   filterOn: "resourceId" | "uuid";
   /** Invoked when data is loaded */
-  onDataLoad?: (data: eim.HostRead[]) => void;
+  onDataLoad?: (data: infra.HostRead[]) => void;
 }
 const ClusterNodesTable = ({
   nodes,
@@ -58,7 +60,7 @@ const ClusterNodesTable = ({
     isSuccess,
     isError,
     error,
-  } = eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  } = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter: hostsFilter,
@@ -85,7 +87,7 @@ const ClusterNodesTable = ({
   const statusHost: TableColumn<ClusterNode> = {
     Header: "Readiness",
     accessor: (item) => hostProviderStatusToString(item),
-    Cell: (table: { row: { original: eim.HostRead } }) => (
+    Cell: (table: { row: { original: infra.HostRead } }) => (
       <Suspense fallback={<SquareSpinner />}>
         {AggregateHostStatus !== null ? (
           <AggregateHostStatus
@@ -131,11 +133,19 @@ const ClusterNodesTable = ({
       Header: "Actions",
       textAlign: "center",
       padding: "0",
-      accessor: (node) => (
-        <Link to={`/infrastructure/host/${node.resourceId}`}>
-          <Icon icon="clipboard-forward" /> View Host Details
-        </Link>
-      ),
+      accessor: (node: ClusterNode) => {
+        return (
+          node.resourceId && (
+            <Link
+              to={getInfraPath(hostDetailsRoute, {
+                id: node.resourceId,
+              })}
+            >
+              <Icon icon="clipboard-forward" /> View Host Details
+            </Link>
+          )
+        );
+      },
     },
   ];
 

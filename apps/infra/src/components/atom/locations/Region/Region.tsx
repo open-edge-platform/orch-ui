@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Popup } from "@orch-ui/components";
+import { regionRoute, useInfraNavigate } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   ROOT_REGIONS,
@@ -20,15 +20,15 @@ const dataCy = "region";
 
 export interface RegionDynamicProps {
   showActionsMenu?: boolean;
-  viewHandler?: (region: eim.RegionRead) => void;
-  addSiteHandler?: (region: eim.RegionRead) => void;
-  addSubRegionHandler?: (region: eim.RegionRead) => void;
-  deleteHandler?: (region: eim.RegionRead) => void;
-  scheduleMaintenanceHandler?: (region: eim.RegionRead) => void;
+  viewHandler?: (region: infra.RegionRead) => void;
+  addSiteHandler?: (region: infra.RegionRead) => void;
+  addSubRegionHandler?: (region: infra.RegionRead) => void;
+  deleteHandler?: (region: infra.RegionRead) => void;
+  scheduleMaintenanceHandler?: (region: infra.RegionRead) => void;
 }
 
 export interface RegionProps extends RegionDynamicProps {
-  region: eim.RegionRead;
+  region: infra.RegionRead;
   sitesCount?: number;
   showSitesCount?: boolean;
 }
@@ -46,7 +46,7 @@ export const Region = ({
 }: RegionProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const searchIsPristine = useAppSelector(selectSearchIsPristine);
   const rootSiteCounts = useAppSelector(selectRootSiteCounts);
   const handleDelete = () => {
@@ -102,7 +102,8 @@ export const Region = ({
                     dispatch(setLoadingBranch(ROOT_REGIONS));
                   else
                     dispatch(setLoadingBranch(region.parentRegion.resourceId));
-                  navigate(`../regions/${region.resourceId}`);
+                  if (region.resourceId)
+                    navigate(regionRoute, { regionId: region.resourceId });
                 },
               },
               {

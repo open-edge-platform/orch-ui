@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { getInfraPath, regionRoute, SharedStorage } from "@orch-ui/utils";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -28,7 +28,7 @@ const RegionCell: React.FC<RegionCellProps> = (props) => {
     data: region,
     isLoading,
     isError,
-  } = eim.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
     {
       projectName: projectName,
       regionId: regionId!,
@@ -46,14 +46,14 @@ const RegionCell: React.FC<RegionCellProps> = (props) => {
 
   if (isError || !region) {
     return (
-      <Link {...cy} to={`../regions/${regionId}`} relative="path">
+      <Link {...cy} to={getInfraPath(regionRoute, { regionId: regionId })}>
         {regionId}
       </Link>
     );
   }
 
   return (
-    <Link {...cy} to={`../regions/${regionId}`} relative="path">
+    <Link {...cy} to={getInfraPath(regionRoute, { regionId: regionId })}>
       {region.name}
     </Link>
   );

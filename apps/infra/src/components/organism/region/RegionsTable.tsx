@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   columnApiNameToDisplayName,
@@ -20,23 +20,25 @@ import {
   getFilter,
   getOrder,
   Operator,
+  regionRoute,
   SharedStorage,
+  subRegionRoute,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, Heading, Tag, Text, Tooltip } from "@spark-design/react";
 import { ButtonSize, HeaderSize } from "@spark-design/tokens";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { regionsRoute } from "../../../routes/const";
+import { Link, useSearchParams } from "react-router-dom";
 import "./RegionsTable.scss";
 
 interface RegionsTableProps {
   parentRegionId?: string;
-  actions?: TableColumn<eim.RegionRead>;
-  radioSelect?: TableColumn<eim.RegionRead>;
+  actions?: TableColumn<infra.RegionRead>;
+  radioSelect?: TableColumn<infra.RegionRead>;
   hiddenColumns?: string[];
   hasPermission?: boolean;
   sort?: number[];
   isAllocated?: boolean;
-  tableTextSelect?: (item: eim.RegionRead) => void;
+  tableTextSelect?: (item: infra.RegionRead) => void;
   basePath?: string;
   subtitle?: string;
   showSearch?: boolean;
@@ -63,7 +65,7 @@ const RegionsTable = ({
     isError,
     error,
     isLoading,
-  } = eim.useGetV1ProjectsByProjectNameRegionsQuery(
+  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       parent: parentRegionId,
@@ -74,8 +76,8 @@ const RegionsTable = ({
         ? parseInt(searchParams.get("offset")!)
         : 0,
       filter: getFilter<
-        Omit<eim.RegionRead, "parentRegion"> & {
-          parentRegion: Omit<eim.RegionRead, "parentRegion">;
+        Omit<infra.RegionRead, "parentRegion"> & {
+          parentRegion: Omit<infra.RegionRead, "parentRegion">;
         }
       >(
         searchParams.get("searchTerm") ?? "",
@@ -90,13 +92,13 @@ const RegionsTable = ({
     },
     { pollingInterval: API_INTERVAL },
   );
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
-  const columns: TableColumn<eim.RegionRead>[] = [
+  const columns: TableColumn<infra.RegionRead>[] = [
     {
       Header: "Name",
       accessor: "name",
-      Cell: (table: { row: { original: eim.RegionRead } }) => {
+      Cell: (table: { row: { original: infra.RegionRead } }) => {
         if (!isAllocated) {
           return (
             <Link
@@ -133,7 +135,7 @@ const RegionsTable = ({
           return "item";
         }
       },
-      Cell: (table: { row: { original: eim.RegionRead } }) => {
+      Cell: (table: { row: { original: infra.RegionRead } }) => {
         const metadataPairs = table.row.original.metadata ?? [];
         const tags =
           metadataPairs.length > 2 ? (
@@ -233,11 +235,9 @@ const RegionsTable = ({
       size={ButtonSize.Large}
       onPress={() => {
         if (parentRegionId) {
-          navigate(`../../${regionsRoute}/parent/${parentRegionId}/new`, {
-            relative: "path",
-          });
+          navigate(subRegionRoute, { parentRegionId, regionId: "new" });
         } else {
-          navigate(`../${regionsRoute}/new`, { relative: "path" });
+          navigate(regionRoute, { regionId: "new" });
         }
       }}
     >
@@ -255,14 +255,12 @@ const RegionsTable = ({
               name: parentRegionId ? "Add a Subregion" : "Add a Region",
               action: () => {
                 if (parentRegionId) {
-                  navigate(
-                    `../../${regionsRoute}/parent/${parentRegionId}/new`,
-                    {
-                      relative: "path",
-                    },
-                  );
+                  navigate(subRegionRoute, {
+                    parentRegionId,
+                    regionId: "new",
+                  });
                 } else {
-                  navigate(`../${regionsRoute}/new`, { relative: "path" });
+                  navigate(regionRoute, { regionId: "new" });
                 }
               },
               disable: !hasPermission,

@@ -5,12 +5,16 @@
 
 import { cm } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { InternalError, SharedStorage } from "@orch-ui/utils";
+import {
+  hostsRoute,
+  InternalError,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { TextField } from "@spark-design/react";
 import { ButtonVariant, InputSize, ModalSize } from "@spark-design/tokens";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import "./DeauthorizeNodeConfirmationDialog.scss";
 
 const dataCy = "deauthorizeNodeConfirmationDialog";
@@ -51,7 +55,7 @@ const DeauthorizeNodeConfirmationDialog = ({
 }: DeauthorizeNodeConfirmationDialogProps) => {
   const cy = { "data-cy": dataCy };
   const projectName = SharedStorage.project?.name ?? "";
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   const [removeHostNodeFromCluster] =
     cm.usePutV2ProjectsByProjectNameClustersAndNameNodesMutation();
@@ -93,7 +97,7 @@ const DeauthorizeNodeConfirmationDialog = ({
         })
         .then(() => {
           setErrorInfo();
-          navigate("/infrastructure/hosts", { relative: "path" });
+          navigate(hostsRoute);
         });
     } catch (e) {
       setErrorInfo(e);

@@ -37,7 +37,7 @@ export interface InternalError {
   data: string;
 }
 
-export interface EimUIMessageError {
+export interface InfraUIMessageError {
   message: string;
 }
 
@@ -142,7 +142,7 @@ function isEimUIError(error: unknown): error is EimUIError {
   );
 }
 
-function isEimUIMessageError(error: unknown): error is EimUIMessageError {
+function isEimUIMessageError(error: unknown): error is InfraUIMessageError {
   return typeof error === "object" && error != null && "message" in error;
 }
 
