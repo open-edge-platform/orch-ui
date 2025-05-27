@@ -5,29 +5,29 @@
 
 import { omApi } from "@orch-ui/apis";
 import {
-  alertDefinitionEight,
-  alertDefinitionFive,
-  alertDefinitionFour,
-  alertDefinitionNine,
-  alertDefinitionOne,
-  alertDefinitionSeven,
-  alertDefinitionSix,
-  alertDefinitionTen,
-  alertDefinitionThree,
-  alertDefinitionTwo,
+  clusterCpuUsageAlertDefinition,
+  clusterDownAlertDefinition,
+  clusterErrorAlertDefinition,
+  clusterRamUsageAlertDefinition,
+  deploymentDownAlertDefinition,
+  deploymentErrorAlertDefinition,
+  hostConnectionLostAlertDefinition,
+  hostCpuUsageAlertDefinition,
+  hostErrorAlertDefinition,
+  hostRamUsageAlertDefinition,
 } from "../data/alert-definitions";
 
 const multipleAlertDefinitions: omApi.AlertDefinition[] = [
-  alertDefinitionOne,
-  alertDefinitionTwo,
-  alertDefinitionThree,
-  alertDefinitionFour,
-  alertDefinitionFive,
-  alertDefinitionSix,
-  alertDefinitionSeven,
-  alertDefinitionEight,
-  alertDefinitionNine,
-  alertDefinitionTen,
+  hostConnectionLostAlertDefinition,
+  hostErrorAlertDefinition,
+  hostCpuUsageAlertDefinition,
+  hostRamUsageAlertDefinition,
+  deploymentDownAlertDefinition,
+  deploymentErrorAlertDefinition,
+  clusterDownAlertDefinition,
+  clusterErrorAlertDefinition,
+  clusterCpuUsageAlertDefinition,
+  clusterRamUsageAlertDefinition,
 ];
 
 export default class AlertDefinitionStore {

@@ -116,7 +116,5 @@ export const clusterRamUsageAlertNoSource = generateAlert(
   clusterRamUsageAlertDefinition.id as string,
   {
     alert_category: "Health",
-    alert_context: "cluster",
-    cluster_name: "clusterE",
   },
 );
