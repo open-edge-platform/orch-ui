@@ -67,8 +67,7 @@ const locationsNavItem: CollapsableListItem<string> = {
 const createMenuItems = () => {
   const items: CollapsableListItem<string>[] = [];
   if (
-    RuntimeConfig.isEnabled("CLUSTER_ORCH") &&
-    hasRole([Role.CLUSTERS_READ, Role.CLUSTERS_WRITE])
+    RuntimeConfig.isEnabled("CLUSTER_ORCH")
   ) {
     items.push(clusterNavItem);
   }

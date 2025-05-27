@@ -7,6 +7,7 @@ import { infra } from "@orch-ui/apis";
 import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
   hostProvisioningRoute,
+  hostProvisionRoute,
   hostsRoute,
   useInfraNavigate,
 } from "@orch-ui/utils";
@@ -22,14 +23,20 @@ import {
   ButtonVariant,
 } from "@spark-design/tokens";
 import {
+  setAutoOnboardValue as setAutoOnboardValueHost,
+  setAutoProvisionValue as setAutoProvisionValueHost,
+  setCreateClusterValue as setCreateClusterValueHost,
+} from "../../../store/configureHost";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { setMessageBanner } from "../../../store/notifications";
+import {
   reset,
+  selectHostProvisionState,
   selectUnregisteredHosts,
   setAutoOnboardValue,
   setAutoProvisionValue,
   setCreateClusterValue,
-} from "../../../store/configureHost";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setMessageBanner } from "../../../store/notifications";
+} from "../../../store/provisionHost";
 import AutoPropertiesMessageBanner from "../../molecules/AutoPropertiesMessageBanner/AutoPropertiesMessageBanner";
 import AddHostsForm from "../../organism/AddHostsForm/AddHostsForm";
 import "./RegisterHosts.scss";
@@ -42,13 +49,11 @@ const RegisterHosts = () => {
   const className = "register-hosts";
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
-  const {
-    autoOnboard,
-    autoProvision,
-    createCluster,
-    hosts,
-    hasMultiHostValidationError,
-  } = useAppSelector((state) => state.configureHost);
+  const { hosts, hasMultiHostValidationError } = useAppSelector(
+    (state) => state.configureHost,
+  );
+  const { hasHostDefinitionError, autoOnboard, autoProvision, createCluster } =
+    useAppSelector(selectHostProvisionState);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] =
@@ -70,6 +75,8 @@ const RegisterHosts = () => {
             data-cy="isAutoOnboarded"
             isSelected={autoOnboard}
             onChange={(value) => {
+              // TODO: remove
+              dispatch(setAutoOnboardValueHost(value));
               dispatch(setAutoOnboardValue(value));
             }}
             className={`${className}__auto-onboard-switch`}
@@ -86,6 +93,8 @@ const RegisterHosts = () => {
             data-cy="isAutoProvisioned"
             isSelected={autoProvision}
             onChange={(value) => {
+              // TODO: remove
+              dispatch(setAutoProvisionValueHost(value));
               dispatch(setAutoProvisionValue(value));
             }}
             className={`${className}__auto-provision-switch`}
@@ -100,6 +109,8 @@ const RegisterHosts = () => {
             data-cy="createCluster"
             isSelected={createCluster}
             onChange={(value) => {
+              // TODO: remove
+              dispatch(setCreateClusterValueHost(value));
               dispatch(setCreateClusterValue(value));
             }}
             isDisabled={!autoOnboard || !autoProvision}
@@ -146,8 +157,8 @@ const RegisterHosts = () => {
                   setMessageBanner({
                     icon: "check-circle",
                     text: allSucceeded
-                      ? "All hosts registered sucessfully."
-                      : `Sucessfully registered ${successCount} out of ${totalCount} host(s)`,
+                      ? "All hosts registered successfully."
+                      : `Successfully registered ${successCount} out of ${totalCount} host(s)`,
                     title: "Hosts Registered",
                     variant: MessageBannerAlertState.Success,
                   }),
@@ -162,10 +173,21 @@ const RegisterHosts = () => {
             }
           }}
           isDisabled={
-            hasMultiHostValidationError || Object.keys(hosts).length === 0
+            // TODO: remove hasMultiHostValidationError
+            hasHostDefinitionError ||
+            hasMultiHostValidationError ||
+            Object.keys(hosts).length === 0
           }
         >
           {autoProvision ? "Continue" : "Register Hosts"}
+        </Button>
+
+        <Button
+          onPress={() => {
+            navigate(hostProvisionRoute);
+          }}
+        >
+          new provision
         </Button>
       </ButtonGroup>
     </div>

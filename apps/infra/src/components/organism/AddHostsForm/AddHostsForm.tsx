@@ -13,6 +13,10 @@ import {
   setNewRegisteredHosts,
 } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+  setHostDefinitionError,
+  setHostsBasicData,
+} from "../../../store/provisionHost";
 import "./AddHostsForm.scss";
 
 export type AddHostsFormItem = {
@@ -63,8 +67,14 @@ const AddHostsForm = () => {
 
   const dispatchNewHosts = () => {
     const { hosts } = getValues();
+    // TODO: remove
     dispatch(
       setNewRegisteredHosts({
+        hosts: hosts.filter((host) => host.name !== ""),
+      }),
+    );
+    dispatch(
+      setHostsBasicData({
         hosts: hosts.filter((host) => host.name !== ""),
       }),
     );
@@ -80,7 +90,9 @@ const AddHostsForm = () => {
   const hasErrors = Object.keys(errors).length > 0;
   //Need to constantly check this to alert outside world (
   useEffect(() => {
+    // TODO: remove
     dispatch(setMultiHostValidationError(hasErrors));
+    dispatch(setHostDefinitionError(hasErrors));
   }, [hasErrors]);
 
   useEffect(() => {
@@ -117,7 +129,9 @@ const AddHostsForm = () => {
     ]).then(() => {
       const hasErrors = Object.keys(errors).length > 0;
       if (hasErrors) {
+        // TODO: remove
         dispatch(setMultiHostValidationError(true));
+        dispatch(setHostDefinitionError(true));
         return;
       }
       append(defaultHostFormItem);

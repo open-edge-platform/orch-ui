@@ -11,4 +11,5 @@ declare module "ClusterOrchUI/ClusterSummary";
 declare module "ClusterOrchUI/DeauthorizeNodeConfirmationDialog";
 declare module "ClusterOrchUI/AddToClusterDrawer";
 declare module "ClusterOrchUI/ClusterTemplatesDropdown";
+declare module "ClusterOrchUI/ClusterTemplateVersionsDropdown";
 declare module "Admin/App";
