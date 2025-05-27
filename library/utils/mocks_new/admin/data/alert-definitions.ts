@@ -24,7 +24,7 @@ const hostCpuUsageAlertDefinition = generateAlertDefinition(
 const hostRamUsageAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.HOST_RAM_USAGE,
   "HostRAMUsage",
-  "new",
+  { state: "new" },
 );
 
 const deploymentDownAlertDefinition = generateAlertDefinition(
@@ -40,7 +40,7 @@ const deploymentErrorAlertDefinition = generateAlertDefinition(
 const clusterDownAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.CLUSTER_DOWN,
   "ClusterDown",
-  "new",
+  { state: "new" },
 );
 
 const clusterErrorAlertDefinition = generateAlertDefinition(
@@ -51,8 +51,7 @@ const clusterErrorAlertDefinition = generateAlertDefinition(
 const clusterCpuUsageAlertDefinition = generateAlertDefinition(
   AlertDefinitionIds.CLUSTER_CPU_USAGE,
   "ClusterCPUUsage",
-  "applied",
-  { threshold: "30", duration: "5m" },
+  { values: { threshold: "30", duration: "5m" } },
 );
 
 const clusterRamUsageAlertDefinition = generateAlertDefinition(
