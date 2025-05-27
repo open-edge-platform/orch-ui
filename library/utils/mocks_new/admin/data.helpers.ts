@@ -19,16 +19,16 @@ import { AlertDefinitionId } from "./data/ids/alert-definitions";
 export const generateAlertDefinition = (
   id: AlertDefinitionId,
   name: string,
-  state: omApi.StateDefinition = "applied",
-  values: Record<string, string> = { threshold: "30", duration: "30s" },
+  state?: omApi.StateDefinition,
+  values?: Record<string, string>,
   rest?: Partial<
     Omit<omApi.AlertDefinition, "id" | "name" | "state" | "values">
   >,
 ): omApi.AlertDefinition => ({
   id,
   name,
-  state,
-  values,
+  state: state ?? "applied",
+  values: values ?? { threshold: "30", duration: "30s" },
   ...rest,
 });
 
@@ -47,20 +47,14 @@ export const generateAlertDefinition = (
 export const generateAlert = (
   alertDefinitionId: string,
   labels: Record<string, string>,
-  status: omApi.Alert["status"] = { state: "active" },
-  timeInfo: {
+  status?: omApi.Alert["status"],
+  timeInfo?: {
     startsAt?: string;
     updatedAt?: string;
     endsAt?: string;
-  } = {
-    startsAt: "2023-07-08 11:30",
-    updatedAt: "2023-07-08 12:30",
-    endsAt: "2023-07-08 13:30",
   },
-  annotations: Record<string, string> = {
-    description: "accumsan ante sagittis ege",
-  },
-  fingerprint: string = "fingerprint",
+  annotations?: Record<string, string>,
+  fingerprint?: string,
   rest?: Partial<
     Omit<
       omApi.Alert,
@@ -76,12 +70,12 @@ export const generateAlert = (
   >,
 ): omApi.Alert => ({
   alertDefinitionId,
-  startsAt: timeInfo.startsAt,
-  updatedAt: timeInfo.updatedAt,
-  endsAt: timeInfo.endsAt,
-  status,
-  fingerprint,
   labels,
-  annotations,
+  status: status ?? { state: "active" },
+  startsAt: timeInfo?.startsAt ?? "2023-07-08 11:30",
+  updatedAt: timeInfo?.updatedAt ?? "2023-07-08 12:30",
+  endsAt: timeInfo?.endsAt ?? "2023-07-08 13:30",
+  annotations: annotations ?? { description: "accumsan ante sagittis ege" },
+  fingerprint: fingerprint ?? "fingerprint",
   ...rest,
 });
