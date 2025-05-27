@@ -459,7 +459,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           <AddHostLabels />
         )}
         {currentStep === HostConfigSteps["Enable Local Access"] && (
-          <AddSshPublicKey localAccounts={localAccountsList?.localAccounts} />
+          <AddSshPublicKey />
         )}
         {currentStep === HostConfigSteps["Complete Setup"] && (
           <HostConfigReview

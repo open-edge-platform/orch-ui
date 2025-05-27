@@ -13,11 +13,15 @@ export enum HostProvisionSteps {
 }
 const totalSteps = Object.keys(HostProvisionSteps).length / 2;
 
-export type HostData = infra.HostWrite & { region?: infra.RegionRead } & {
+export type HostData = infra.HostWrite & {
+  region?: infra.RegionRead;
   serialNumber?: string;
-} & { resourceId?: string } & {
+  resourceId?: string;
   os?: infra.OperatingSystemResourceRead;
-} & { templateName?: string; templateVersion?: string } & { error?: string };
+  templateName?: string;
+  templateVersion?: string;
+  error?: string;
+};
 
 export interface HostProvisionFormState {
   currentStep: HostProvisionSteps;
@@ -31,6 +35,9 @@ export interface HostProvisionState {
   commonHostData: Omit<HostData, "name"> & {
     clusterTemplateName?: string;
     clusterTemplateVersion?: string;
+    securityFeature?: boolean;
+    publicSshKey?: infra.LocalAccountRead;
+    metadata?: infra.Metadata;
   };
   autoOnboard: boolean;
   autoProvision: boolean;
@@ -45,7 +52,9 @@ export const initialState: HostProvisionState = {
     hasValidationError: false,
   },
   hosts: {},
-  commonHostData: {},
+  commonHostData: {
+    securityFeature: true,
+  },
   autoOnboard: true,
   autoProvision: false,
   createCluster: true,
@@ -183,6 +192,12 @@ export const provisionHost = createSlice({
         host.instance.osID = state.commonHostData.os?.resourceId;
         host.templateName = state.commonHostData.clusterTemplateName;
         host.templateVersion = state.commonHostData.clusterTemplateVersion;
+        host.instance.securityFeature = state.commonHostData.securityFeature
+          ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
+          : "SECURITY_FEATURE_NONE";
+        host.instance.localAccountID =
+          state.commonHostData.publicSshKey?.resourceId;
+        host.metadata = state.commonHostData.metadata;
         // continue with other properties
       });
     },
@@ -205,6 +220,18 @@ export const provisionHost = createSlice({
       state.commonHostData.clusterTemplateVersion = action.payload;
       provisionHost.caseReducers.validateStep(state);
     },
+    setCommonSecurityFeature(state, action: PayloadAction<boolean>) {
+      state.commonHostData.securityFeature = action.payload;
+    },
+    setCommonPublicSshKey(
+      state,
+      action: PayloadAction<infra.LocalAccountRead | undefined>,
+    ) {
+      state.commonHostData.publicSshKey = action.payload;
+    },
+    setCommonMetadata(state, action: PayloadAction<infra.Metadata>) {
+      state.commonHostData.metadata = action.payload;
+    },
   },
 });
 
@@ -224,6 +251,9 @@ export const {
   setCommonOsProfile,
   setCommonClusterTemplateName,
   setCommonClusterTemplateVersion,
+  setCommonSecurityFeature,
+  setCommonPublicSshKey,
+  setCommonMetadata,
 } = provisionHost.actions;
 
 // selectors
