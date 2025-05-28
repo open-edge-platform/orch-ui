@@ -14,7 +14,7 @@ const Usb = ({
   const columns: TableColumn<infra.HostusbResourceRead>[] = [
     { Header: "Class", accessor: "class" },
     { Header: "Serial", accessor: "serial" },
-    { Header: "Vendor Id", accessor: "idVendor" }, //TODO: may be  as per api idvendor should be camelcased
+    { Header: "Vendor Id", accessor: "idVendor" },
     { Header: "Product Id", accessor: "idProduct" },
     { Header: "Bus", accessor: "bus" },
     { Header: "Address", accessor: "addr" },

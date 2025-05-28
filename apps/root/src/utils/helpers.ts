@@ -79,7 +79,7 @@ export const getHostStatus = async (
   // fetch details from all hosts at the same time
   const hosts = uniqueHosts.map((hostId: string) => {
     return dispatch(
-      infra.infra.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
+      infra.infra.endpoints.hostServiceListHosts.initiate({
         filter: `resourceId='${hostId}'`,
         projectName: SharedStorage.project?.name ?? "",
       }),
@@ -134,7 +134,7 @@ export const getHosts = async (
   // fetch details from all hosts at the same time
   const hostsQueries = hostIds.map((resourceId) => {
     return dispatch(
-      infra.infra.endpoints.getV1ProjectsByProjectNameComputeHosts.initiate({
+      infra.infra.endpoints.hostServiceListHosts.initiate({
         projectName: SharedStorage.project?.name ?? "",
         filter: `resourceId='${resourceId}'`,
       }),
@@ -171,19 +171,17 @@ export const getHosts = async (
 export const getSite = async (
   dispatch: AppDispatch,
   siteId: string,
-): Promise<infra.Site> => {
+): Promise<infra.SiteResource> => {
   const {
     data: site,
     isError,
     error,
   } = await dispatch(
-    infra.infra.endpoints.getV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId.initiate(
-      {
-        siteId: siteId,
-        regionId: "*", // host have no region information
-        projectName: SharedStorage.project?.name ?? "",
-      },
-    ),
+    infra.infra.endpoints.siteServiceGetSite.initiate({
+      resourceId: siteId,
+      regionResourceId: "*", // host have no region information
+      projectName: SharedStorage.project?.name ?? "",
+    }),
   );
   if (isError) {
     throw error;

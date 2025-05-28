@@ -7,7 +7,7 @@ import { infra } from "@orch-ui/apis";
 import { Status, StatusIcon } from "@orch-ui/components";
 
 interface LinkStatusProps {
-  status: infra.HostnicResourceRead["linkState"];
+  status: infra.NetworkInterfaceLinkStateRead["type"];
 }
 
 const LinkStatus = ({ status }: LinkStatusProps) => {

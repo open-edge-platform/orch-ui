@@ -133,7 +133,7 @@ export const Locations = () => {
     deleteSite({
       regionResourceId: siteToDelete?.region?.resourceId ?? "",
       projectName: SharedStorage.project?.name ?? "",
-      resourceId: siteId, // TODO: API update is required
+      resourceId: siteId,
     })
       .unwrap()
       .then(() => {

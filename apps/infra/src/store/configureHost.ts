@@ -30,7 +30,9 @@ export interface HostConfigFormStatus {
   hasValidationError: boolean;
 }
 
-export type HostData = infra.HostWrite & { region?: infra.RegionRead } & {
+export type HostData = infra.HostResourceWrite & {
+  region?: infra.RegionResourceRead;
+} & {
   serialNumber?: string;
 } & { resourceId?: string } & {
   originalOs?: infra.OperatingSystemResourceRead;

@@ -49,7 +49,7 @@ export const updateHostDetails = async (
   let response: HostConfigResponse = undefined;
   await patchHostApi({
     projectName: SharedStorage.project?.name ?? "",
-    resourceId: host.resourceId!, // TODO: verify
+    resourceId: host.resourceId!,
     body: {
       name: host.name,
       siteId: host.siteId,

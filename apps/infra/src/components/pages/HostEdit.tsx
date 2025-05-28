@@ -226,7 +226,7 @@ const HostEdit = () => {
             site: undefined,
             siteId: selectedSite?.siteID,
             // currentPowerState: host.currentPowerState,
-            // desiredPowerState: host.desiredPowerState,
+            desiredPowerState: host.desiredPowerState,
             // inheritedMetadata: host.inheritedMetadata,
             metadata: metadataPairs,
           },

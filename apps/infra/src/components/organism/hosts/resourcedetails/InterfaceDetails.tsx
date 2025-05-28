@@ -16,11 +16,11 @@ interface InterfaceDetailsProps {
 function InterfaceDetails({ intf }: InterfaceDetailsProps) {
   const isEnabledValue = (value: boolean) => (value ? "Enabled" : "Disabled");
   const isTrueValue = (value: boolean) => (value ? "Yes" : "No");
-  const staticIps = intf.ipAddresses?.filter(
+  const staticIps = intf.ipaddresses?.filter(
     (ip) => ip.configMethod === "IP_ADDRESS_CONFIG_METHOD_STATIC",
   );
   const hasStaticIp = staticIps && staticIps.length > 0;
-  const dynamicIps = intf.ipAddresses?.filter(
+  const dynamicIps = intf.ipaddresses?.filter(
     (ip) => ip.configMethod === "IP_ADDRESS_CONFIG_METHOD_DYNAMIC",
   );
   const hasDynamicIp = dynamicIps && dynamicIps.length > 0;

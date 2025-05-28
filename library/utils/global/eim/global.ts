@@ -232,7 +232,6 @@ export const statusIndicatorToIconStatus = (
       return IconStatus.Ready;
     case "STATUS_INDICATION_ERROR":
       return IconStatus.Error;
-    // @ts-ignore STATUS_INDICATION_UNSPECIFIED is still valid
     case "STATUS_INDICATION_UNSPECIFIED":
       return IconStatus.Unknown;
     default:
@@ -331,7 +330,6 @@ const getHostCurrentStateTitles = (
       return {
         title: `${hostName} is deauthorized`,
       };
-    // @ts-ignore STATUS_INDICATION_UNSPECIFIED is still valid
     case "HOST_STATE_ERROR":
       return {
         title: `${hostName} has error`,
@@ -421,7 +419,6 @@ export const hostProviderStatusToString = (
   // If License is IDLE (or good or active),
   // Priority 2: Show Maintenance if activated (Note: This case is handled as a seperate Logic with the use of `/schedules` apis, single or repeated).
   // Priority 3: Display providerStatusDetails, if present.
-  // @ts-ignore STATUS_INDICATION_UNSPECIFIED is still valid
   else if (host.hostStatusIndicator === "STATUS_INDICATION_UNSPECIFIED") {
     return "Unspecified";
   } else if (
@@ -435,10 +432,9 @@ export const hostProviderStatusToString = (
 
 // currentState mapping for host to messages
 export const hostStateMapping: Record<
-  infra.HostResourceRead["currentState"],
+  NonNullable<infra.HostResourceRead["currentState"]>,
   { status: IconStatus; message: string }
 > = {
-  // @ts-ignore STATUS_INDICATION_UNSPECIFIED is still valid
   HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
   HOST_STATE_DELETING: { status: IconStatus.NotReady, message: "Deleting" },
   HOST_STATE_DELETED: { status: IconStatus.Error, message: "Deleted" },
@@ -452,7 +448,6 @@ export const hostStateMapping: Record<
 export const getCustomStatusOnIdleAggregation = (
   host: infra.HostResourceRead,
 ): AggregatedStatus => {
-  // @ts-ignore STATUS_INDICATION_UNSPECIFIED is still valid
   if (!host.currentState || host.currentState === "HOST_STATE_UNSPECIFIED")
     return { status: IconStatus.Unknown, message: "Unknown" };
 
