@@ -4,30 +4,19 @@
  */
 
 import { omApi } from "@orch-ui/apis";
-import {
-  clusterCpuUsageAlertDefinition,
-  clusterDownAlertDefinition,
-  clusterErrorAlertDefinition,
-  clusterRamUsageAlertDefinition,
-  deploymentDownAlertDefinition,
-  deploymentErrorAlertDefinition,
-  hostConnectionLostAlertDefinition,
-  hostCpuUsageAlertDefinition,
-  hostErrorAlertDefinition,
-  hostRamUsageAlertDefinition,
-} from "../data/alert-definitions";
+import { alertDefinitionMocks } from "../data/alert-definitions";
 
 const multipleAlertDefinitions: omApi.AlertDefinition[] = [
-  hostConnectionLostAlertDefinition,
-  hostErrorAlertDefinition,
-  hostCpuUsageAlertDefinition,
-  hostRamUsageAlertDefinition,
-  deploymentDownAlertDefinition,
-  deploymentErrorAlertDefinition,
-  clusterDownAlertDefinition,
-  clusterErrorAlertDefinition,
-  clusterCpuUsageAlertDefinition,
-  clusterRamUsageAlertDefinition,
+  alertDefinitionMocks.hostConnectionLostAlertDefinition,
+  alertDefinitionMocks.hostErrorAlertDefinition,
+  alertDefinitionMocks.hostCpuUsageAlertDefinition,
+  alertDefinitionMocks.hostRamUsageAlertDefinition,
+  alertDefinitionMocks.deploymentDownAlertDefinition,
+  alertDefinitionMocks.deploymentErrorAlertDefinition,
+  alertDefinitionMocks.clusterDownAlertDefinition,
+  alertDefinitionMocks.clusterErrorAlertDefinition,
+  alertDefinitionMocks.clusterCpuUsageAlertDefinition,
+  alertDefinitionMocks.clusterRamUsageAlertDefinition,
 ];
 
 export default class AlertDefinitionStore {

@@ -45,11 +45,11 @@ Class containing static helper methods for general use in mocks.
 
 ### api/data/ids
 
-Directory for files (e.g., hosts, regions) that will contain a collection of `id` values of pre-generated entities (usually `resourceId`).
+Directory for files (e.g., hosts, regions) that will export ab object of `id` values of pre-generated entities (usually `resourceId`).
 
 ### api/data
 
-Directory for entity files (e.g., hosts, regions) that will contain pre-generated entities.
+Directory for entity files (e.g., hosts, regions) that contain pre-generated mock entities. These entities are generated using helper functions from `data.helpers.ts` and exported as named constants. Example - `library\utils\mocks_new\admin\data\alert-definitions.ts`
 
 ### api/handlers
 
