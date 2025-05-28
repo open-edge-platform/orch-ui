@@ -2,7 +2,8 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { hostConnectionLostAlertDefinition } from "library/utils/mocks_new/admin/data/alert-definitions";
+
+import { alertDefinitionMocks } from "library/utils/mocks_new/admin/data/alert-definitions";
 import AlertStore from "library/utils/mocks_new/admin/store/alerts";
 import AlertsList from "./AlertsList";
 import AlertsListPom from "./AlertsList.pom";
@@ -24,7 +25,9 @@ describe("<AlertsList/>", () => {
     pom.waitForApis();
     pom.table
       .getCell(1, 1)
-      .contains(hostConnectionLostAlertDefinition.name ?? "")
+      .contains(
+        alertDefinitionMocks.hostConnectionLostAlertDefinition.name ?? "",
+      )
       .click();
     pom.drawer.el.alertDrawerBody.should("be.visible");
   });
