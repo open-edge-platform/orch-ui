@@ -3,33 +3,42 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  generateSshMocks,
-  instanceOne,
-  onboardedHostOne,
-} from "@orch-ui/utils";
 import { PublicSshKeyDropdown } from "./PublicSshKeyDropdown";
-import { PublicSshKeyDropdownPom } from "./PublicSshKeyDropdown.pom";
+import {
+  localAccountMocks,
+  PublicSshKeyDropdownPom,
+} from "./PublicSshKeyDropdown.pom";
 
 const pom = new PublicSshKeyDropdownPom();
-const sampleLocalAccount = generateSshMocks(1, 0);
+
 describe("<PublicSshKeyDropdown/>", () => {
-  it("should render component", () => {
+  beforeEach(() => {
+    pom.interceptApis([pom.api.getLocalAccounts]);
     cy.mount(
       <PublicSshKeyDropdown
-        hostId={onboardedHostOne.resourceId!}
-        host={{ ...onboardedHostOne, instance: instanceOne }}
         onPublicKeySelect={cy.stub().as("onPublicKeySelect")}
-        localAccounts={sampleLocalAccount}
+        onPublicKeyRemove={cy.stub().as("onPublicKeyRemove")}
       />,
     );
+    pom.waitForApis();
+  });
+
+  it("should render component", () => {
     pom.root.should("exist");
-    pom.sshKeyDrpopdown.openDropdown(pom.root);
-    pom.sshKeyDrpopdown.selectNthListItemValue(2); // Select the second item
+  });
+
+  it("should react to key select", () => {
+    pom.sshKeyDropdown.openDropdown(pom.root);
+    pom.sshKeyDropdown.selectNthListItemValue(2);
     cy.get("@onPublicKeySelect").should(
       "have.been.calledWith",
-      onboardedHostOne.resourceId,
-      sampleLocalAccount[0],
+      localAccountMocks[0],
     );
+  });
+
+  it("should react to key unselect", () => {
+    pom.sshKeyDropdown.openDropdown(pom.root);
+    pom.sshKeyDropdown.selectNthListItemValue(1);
+    cy.get("@onPublicKeyRemove").should("have.been.called");
   });
 });
