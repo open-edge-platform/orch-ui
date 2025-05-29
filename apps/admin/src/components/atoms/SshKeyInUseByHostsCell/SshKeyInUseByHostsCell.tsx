@@ -15,7 +15,7 @@ import "./SshKeyInUseByHostsCell.scss";
 const dataCy = "sshKeyInUseByHostsCell";
 
 interface SshKeyInUseByHostsCellProps {
-  localAccount: infra.LocalAccountRead;
+  localAccount: infra.LocalAccountResourceRead;
 }
 
 const SshKeyInUseByHostsCell = ({

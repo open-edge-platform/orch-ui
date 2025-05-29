@@ -36,7 +36,7 @@ export const SiteViewHostTable = ({
         projectName,
         pageSize: 10,
         orderBy: "name",
-        siteId: site?.resourceId, //TODO: should go in filter
+        filter: `site.resourceId="${site?.resourceId}"`,
       },
       {
         skip: !site?.resourceId || !projectName,

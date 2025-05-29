@@ -50,7 +50,7 @@ const dataCy = "sshKeysTable";
 
 interface SshDrawerControl {
   isOpen: boolean;
-  localAccount?: infra.LocalAccountRead;
+  localAccount?: infra.LocalAccountResourceRead;
 }
 
 interface SshKeysTableProps {
@@ -67,23 +67,23 @@ const SshKeysTable = ({
     isOpen: false,
   });
   const [selectedSshToDelete, setSelectedSshToDelete] = useState<
-    infra.LocalAccountRead | undefined
+    infra.LocalAccountResourceRead | undefined
   >();
   const dispatch = useAppDispatch();
 
-  const openViewDrawer = (localAccount: infra.LocalAccountRead) => {
+  const openViewDrawer = (localAccount: infra.LocalAccountResourceRead) => {
     setIsViewDrawerOpen({
       isOpen: true,
       localAccount: localAccount,
     });
   };
 
-  const columns: TableColumn<infra.LocalAccountRead>[] = [
+  const columns: TableColumn<infra.LocalAccountResourceRead>[] = [
     {
       Header: "Key Name",
       apiName: "username",
       accessor: (ssh) => ssh.username,
-      Cell: (table: { row: { original: infra.LocalAccountRead } }) => (
+      Cell: (table: { row: { original: infra.LocalAccountResourceRead } }) => (
         <Link
           data-cy={`${table.row.original.username}SshLink`}
           to=""
@@ -97,7 +97,7 @@ const SshKeysTable = ({
       Header: "Key",
       apiName: "sshKey",
       accessor: (ssh) => ssh.sshKey,
-      Cell: (table: { row: { original: infra.LocalAccountRead } }) => (
+      Cell: (table: { row: { original: infra.LocalAccountResourceRead } }) => (
         <TextTruncate
           maxLength={50}
           text={table.row.original.sshKey}
@@ -108,13 +108,13 @@ const SshKeysTable = ({
     },
     {
       Header: "In Use",
-      Cell: (table: { row: { original: infra.LocalAccountRead } }) => (
+      Cell: (table: { row: { original: infra.LocalAccountResourceRead } }) => (
         <SshKeyInUseByHostsCell localAccount={table.row.original} />
       ),
     },
     {
       Header: "Action",
-      Cell: (table: { row: { original: infra.LocalAccountRead } }) => {
+      Cell: (table: { row: { original: infra.LocalAccountResourceRead } }) => {
         const localAccount = table.row.original;
         return (
           <SshKeysPopup
@@ -149,7 +149,7 @@ const SshKeysTable = ({
       pageSize,
       offset,
       orderBy,
-      filter: getFilter<infra.LocalAccount>(
+      filter: getFilter<infra.LocalAccountResource>(
         searchParams.get("searchTerm") ?? "",
         ["username"],
         Operator.OR,
@@ -190,7 +190,7 @@ const SshKeysTable = ({
     />
   );
 
-  const onSshAdd = (localAccount: infra.LocalAccount) => {
+  const onSshAdd = (localAccount: infra.LocalAccountResource) => {
     const showError = (err?: any) => {
       dispatch(
         showToast({

@@ -135,8 +135,7 @@ const HostEdit = () => {
   } = infra.useInstanceServiceListInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      // hostId: host?.resourceId,
-      // workloadMemberId: "null", //TODO: hostId, workloadMemberId are removed in API check impact
+      filter: `host.resourceId="${host?.resourceId}"`,
     },
     { skip: !host?.resourceId },
   );

@@ -208,7 +208,6 @@ export const configureHost = createSlice({
           site: host.site,
           metadata: host.metadata,
           uuid: host.uuid,
-          inheritedMetadata: host.inheritedMetadata,
           instance: host.instance,
           serialNumber: host.serialNumber,
           resourceId: host.resourceId,

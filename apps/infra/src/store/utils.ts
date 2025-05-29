@@ -124,31 +124,28 @@ export const deleteHostInstanceFn = (
   let promise = new Promise<ApiPromiseType>(() => {});
   const deleteHostFn = () => {
     return dispatch(
-      infra.infra.endpoints.deleteV1ProjectsByProjectNameComputeHostsAndHostId.initiate(
-        {
-          projectName: SharedStorage.project?.name ?? "",
-          hostId: host.resourceId ?? "",
-          hostOperationWithNote: {
-            note: host.note ?? "",
-          },
-        },
-      ),
+      infra.infra.endpoints.hostServiceDeleteHost.initiate({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: host.resourceId ?? "",
+        // hostOperationWithNote: { //TODO: required? no note is accepted from UI
+        //   note: host.note ?? "",
+        // },
+      }),
     );
   };
 
   const deleteInstanceFn = () => {
     return dispatch(
-      infra.infra.endpoints.deleteV1ProjectsByProjectNameComputeInstancesAndInstanceId.initiate(
-        {
-          projectName: SharedStorage.project?.name ?? "",
-          instanceId: instance?.instanceID ?? host.instance?.instanceID ?? "",
-        },
-      ),
+      infra.infra.endpoints.instanceServiceDeleteInstance.initiate({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: instance?.instanceID ?? host.instance?.instanceID ?? "",
+      }),
     );
   };
 
   try {
     if (host.instance) {
+      // @ts-ignore
       promise = deleteInstanceFn()
         .unwrap()
         .then(deleteHostFn)
@@ -163,6 +160,7 @@ export const deleteHostInstanceFn = (
           );
         });
     } else {
+      // @ts-ignore
       promise = deleteHostFn().unwrap();
     }
     setErrorInfo();

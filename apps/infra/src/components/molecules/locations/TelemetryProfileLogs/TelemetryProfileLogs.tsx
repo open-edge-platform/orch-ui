@@ -20,7 +20,7 @@ export const TelemetryProfileLogs = ({
   const cy = { "data-cy": dataCy };
   const args: infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg =
     {
-      telemetryLogsGroupId: "group-id", //TODO: evaluate
+      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       ...(region
         ? { regionId: region.resourceId }

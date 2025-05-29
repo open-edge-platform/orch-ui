@@ -296,7 +296,7 @@ const HostDetails: React.FC = () => {
       return { ...metadata, type: "site" };
     }) ?? []),
     //TODO: check if this is required
-    ...(site?.inheritedMetadata?.location?.map((metadata) => {
+    ...(site?.inheritedMetadata?.map((metadata) => {
       return { ...metadata, type: "region" };
     }) ?? []),
   ];

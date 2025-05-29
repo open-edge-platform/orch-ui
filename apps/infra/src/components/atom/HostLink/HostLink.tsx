@@ -31,8 +31,7 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
   const hostsQuery = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      uuid: uuid, // TODO: needs to go in filter
-      detail: true,
+      filter: `uuid="${uuid}"`,
     },
     {
       skip: !uuid, // Skip call if url does not include uuid

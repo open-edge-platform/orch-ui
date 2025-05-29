@@ -12,7 +12,7 @@ import "./DeleteSSHDialog.scss";
 const dataCy = "deleteSSHDialog";
 
 interface DeleteSSHDialogProps {
-  ssh: infra.LocalAccountRead;
+  ssh: infra.LocalAccountResourceRead;
   onCancel: () => void;
   onDelete?: () => void;
   onError?: (err: string) => void;

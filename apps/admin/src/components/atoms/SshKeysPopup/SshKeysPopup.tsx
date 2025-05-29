@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 
 const dataCy = "sshKeysPopup";
 interface SshKeysPopupProps {
-  localAccount: infra.LocalAccountRead;
+  localAccount: infra.LocalAccountResourceRead;
   onViewDetails?: () => void;
   onDelete?: () => void;
 }
