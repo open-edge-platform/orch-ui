@@ -27,8 +27,8 @@ NC='\033[0m' # No Color
 
 echo -e "${CYAN}Generate RTK endpoints APIs${NC}"
 
-#echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
-#npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
+echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
 
 echo -e "${CYAN}Generate EDGE_INFRA_MANAGER RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}infra/infraApis.config.json
@@ -53,5 +53,8 @@ npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
 
 echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json
+
+echo -e "${CYAN}Generate REMOTE_PROVISIONING_SERVER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}remote-provisioning/remoteProvisioning.config.json
 
 npm run library:fix

@@ -27,5 +27,8 @@ export { metadataBrokerApi as mbSlice } from "./metadata-broker/apiSlice";
 export * as mbApi from "./metadata-broker/generated";
 export { observabilityMonitorApi as omSlice } from "./observabilityMonitor/apiSlice";
 export * as omApi from "./observabilityMonitor/observabilityMonitorApi";
+//vPRO remote provisioning
+export { rpsApi as rpsSlice } from "./remote-provisioning/apiSlice";
+export * as rps from "./remote-provisioning/remoteProvisioningApis";
 export { tdmApi as tmSlice } from "./tenancy/apiSlice";
 export * as tm from "./tenancy/tenancyDataModelApi";
