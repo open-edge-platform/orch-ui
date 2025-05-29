@@ -5,23 +5,14 @@
 
 import { Combobox, Item, Text } from "@spark-design/react";
 import { useMemo, useState } from "react";
+import { AutocompleteNode } from "./hierarchical-autocomplete.utils";
 import "./HierarchicalAutocomplete.scss";
 
-export interface Node {
-  name: string;
-  parentId: string;
-  resourceId: string;
-  type: string;
-  children?: Node[];
-  path?: string[];
-}
-
 interface HierarchicalAutocompleteProps {
-  nodes: Node[];
-  onNodeSelect?: (selectedNode: Node | null) => void;
+  nodes: AutocompleteNode[];
+  onNodeSelect?: (selectedNode: AutocompleteNode | null) => void;
   placeholder?: string;
   label?: string;
-  dataCy?: string;
   isRequired?: boolean;
 }
 
@@ -35,10 +26,9 @@ export const HierarchicalAutocomplete = ({
   isRequired = false,
 }: HierarchicalAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
   const nodeMap = useMemo(() => {
-    const map = new Map<string, Node>();
+    const map = new Map<string, AutocompleteNode>();
     nodes.forEach((node) => {
       map.set(node.resourceId, node);
     });
@@ -58,16 +48,15 @@ export const HierarchicalAutocomplete = ({
   }, [inputValue, nodes]);
 
   const handleSelectionChange = (resourceId: string | null) => {
-    let node: Node | undefined;
+    let node: AutocompleteNode | undefined;
 
     if (resourceId && nodeMap.has(resourceId)) {
       node = nodeMap.get(resourceId);
       if (node) {
-        setSelectedNode(node);
         setInputValue(node.path?.join(" | ") || node.name);
       }
     } else {
-      setSelectedNode(null);
+      setInputValue("");
     }
 
     if (onNodeSelect) {

@@ -78,6 +78,7 @@ const ConfigureAllHosts = () => {
     (node) => node.path && node.type === "RESOURCE_KIND_SITE",
   );
 
+  console.log({ commonHostData });
   return (
     <div {...cy} className="configure-all-hosts">
       <HierarchicalAutocomplete
