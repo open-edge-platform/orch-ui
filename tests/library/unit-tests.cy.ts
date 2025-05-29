@@ -16,6 +16,7 @@ import "../../library/components/atomic-design/atoms/ContextSwitcher/ContextSwit
 import "../../library/components/atomic-design/atoms/DetailedStatuses/DetailedStatuses.cy.tsx";
 import "../../library/components/atomic-design/atoms/DownloadButton/DownloadButton.cy.tsx";
 import "../../library/components/atomic-design/atoms/EChart/EChart.cy.tsx";
+import "../../library/components/atomic-design/atoms/ExpansionPanel/ExpansionPanel.cy.tsx";
 import "../../library/components/atomic-design/atoms/Modal/Modal.cy.tsx";
 import "../../library/components/atomic-design/atoms/PermissionDenied/PermissionDenied.cy.tsx";
 import "../../library/components/atomic-design/atoms/Popup/Popup.cy.tsx";

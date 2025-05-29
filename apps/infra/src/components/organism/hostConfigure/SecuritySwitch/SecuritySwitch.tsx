@@ -5,7 +5,6 @@
 
 import { ToggleSwitch } from "@spark-design/react";
 import { ToggleSwitchSize } from "@spark-design/tokens";
-import "./SecuritySwitch.scss";
 
 const dataCy = "securitySwitch";
 
@@ -13,6 +12,7 @@ export interface SecuritySwitchProps {
   value?: boolean;
   onChange?: (sbFdeEnabled: boolean) => void;
 }
+//TODO: remove this component
 export const SecuritySwitch = ({ value, onChange }: SecuritySwitchProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -23,7 +23,7 @@ export const SecuritySwitch = ({ value, onChange }: SecuritySwitchProps) => {
         data-cy="securitySwitchToggle"
         isSelected={value}
         onChange={onChange}
-        size={ToggleSwitchSize.Medium}
+        size={ToggleSwitchSize.Large}
       >
         {value ? "Enabled" : "Disabled"}
       </ToggleSwitch>

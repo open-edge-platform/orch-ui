@@ -21,7 +21,7 @@ $sizes: (
 @mixin medias($map, $size: "") {
   @each $key, $value in $map {
     &--col#{$size}-#{$key} {
-      width: $value;
+      width: calc(#{$value} - var(--flex-gap, 0rem));
     }
   }
 }
