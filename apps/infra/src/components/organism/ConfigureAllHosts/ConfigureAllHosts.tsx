@@ -5,8 +5,13 @@
 
 import { MetadataForm, MetadataPair } from "@orch-ui/components";
 import { RuntimeConfig } from "@orch-ui/utils";
-import { TextField } from "@spark-design/react";
 import React, { ComponentType, LazyExoticComponent, useMemo } from "react";
+import {
+  AutocompleteNode,
+  buildNodeTree,
+  NODES_MOCK,
+} from "src/components/molecules/HierarchicalAutocomplete/hierarchical-autocomplete.utils";
+import HierarchicalAutocomplete from "src/components/molecules/HierarchicalAutocomplete/HierarchicalAutocomplete";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   selectHostProvisionState,
@@ -61,14 +66,26 @@ const ConfigureAllHosts = () => {
     [commonHostData.metadata],
   );
 
+  const nodeTree = buildNodeTree(NODES_MOCK);
+
+  const handleSiteChange = (node: AutocompleteNode | null) => {
+    if (node) {
+      dispatch(setCommonSite({ name: node.name, siteID: node.resourceId }));
+    }
+  };
+
+  const nodes = Array.from(nodeTree.values()).filter(
+    (node) => node.path && node.type === "RESOURCE_KIND_SITE",
+  );
+
   return (
     <div {...cy} className="configure-all-hosts">
-      Site:{" "}
-      <TextField
-        value={commonHostData?.site?.name}
-        onChange={(value: string) => {
-          dispatch(setCommonSite({ name: value, siteID: value }));
-        }}
+      <HierarchicalAutocomplete
+        nodes={nodes}
+        onNodeSelect={handleSiteChange}
+        placeholder="Start typing..."
+        label="Site"
+        isRequired
       />
       <OsProfileDropdown
         value={commonHostData?.os?.resourceId}
