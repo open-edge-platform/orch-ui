@@ -6,12 +6,6 @@
 import { MetadataForm, MetadataPair } from "@orch-ui/components";
 import { RuntimeConfig } from "@orch-ui/utils";
 import React, { ComponentType, LazyExoticComponent, useMemo } from "react";
-import {
-  AutocompleteNode,
-  buildNodeTree,
-  NODES_MOCK,
-} from "src/components/molecules/HierarchicalAutocomplete/hierarchical-autocomplete.utils";
-import HierarchicalAutocomplete from "src/components/molecules/HierarchicalAutocomplete/HierarchicalAutocomplete";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   selectHostProvisionState,
@@ -25,6 +19,12 @@ import {
   setValidationError,
 } from "../../../store/provisionHost";
 import { PublicSshKeyDropdown } from "../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
+import {
+  AutocompleteNode,
+  buildNodeTree,
+  NODES_MOCK,
+} from "../../molecules/HierarchicalAutocomplete/hierarchical-autocomplete.utils";
+import HierarchicalAutocomplete from "../../molecules/HierarchicalAutocomplete/HierarchicalAutocomplete";
 import { SecuritySwitch } from "../hostConfigure/SecuritySwitch/SecuritySwitch";
 import OsProfileDropdown from "../OsProfileDropdown/OsProfileDropdown";
 import "./ConfigureAllHosts.scss";
