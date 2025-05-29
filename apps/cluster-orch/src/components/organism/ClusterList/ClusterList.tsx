@@ -63,7 +63,7 @@ const ClusterList = ({
           clusterToStatuses(item as cm.ClusterInfoRead),
           "lifecyclePhase",
         ).message,
-      apiName: "providerStatus",
+      apiName: "lifecyclePhase",
       Cell: (table) => (
         <AggregatedStatuses<AggregatedStatusesMap>
           statuses={clusterToStatuses(table.row.original)}
