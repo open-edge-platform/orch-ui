@@ -6,13 +6,17 @@
 import { omApi } from "@orch-ui/apis";
 import { SiTablePom } from "@orch-ui/poms";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
-import { multipleAlertDefinitions, multipleAlerts } from "@orch-ui/utils";
+import AlertDefinitionStore from "library/utils/mocks_new/admin/store/alert-definitions";
+import AlertStore from "library/utils/mocks_new/admin/store/alerts";
 import AlertDrawerPom from "../AlertDrawer/AlertDrawer.pom";
 
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "alertList" | "alertDefinitionList";
+
+const alertStore = new AlertStore();
+const alertDefinitionStore = new AlertDefinitionStore();
 
 const endpoints: CyApiDetails<
   ApiAliases,
@@ -21,12 +25,12 @@ const endpoints: CyApiDetails<
 > = {
   alertList: {
     route: "**/alerts*",
-    response: { alerts: multipleAlerts },
+    response: { alerts: alertStore.list() },
   },
   alertDefinitionList: {
     route: "**/alerts/definitions*",
     response: {
-      alertDefinitions: multipleAlertDefinitions,
+      alertDefinitions: alertDefinitionStore.list(),
     },
   },
 };
