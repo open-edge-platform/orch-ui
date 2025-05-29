@@ -4,9 +4,6 @@
  */
 
 .section {
-  padding-bottom: 1.75rem;
-  border-bottom: 0.1rem solid var(--spark-color-theme-light-gray300);
-
   .flex {
     margin-bottom: 1rem;
 
@@ -15,8 +12,12 @@
     }
   }
 
+  .spark-divider {
+    margin-top: 1.75rem;
+  }
+
   &.last {
-    border-bottom: none;
+    padding-bottom: 1.75rem;
   }
 
   h2 {
