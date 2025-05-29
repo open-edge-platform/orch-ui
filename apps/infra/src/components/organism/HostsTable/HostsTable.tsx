@@ -160,7 +160,7 @@ const HostsTable = ({
   }, [filter]);
 
   const { data, isSuccess, isError, isLoading, error } =
-    infra.useHostServiceListHostsQuery(
+    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         offset,
