@@ -8,8 +8,27 @@ import { useAppSelector } from "../../../store/hooks";
 import { AutoPropertiesMessages } from "./AutoPropertiesMessages";
 const dataCy = "autoPropertiesMessageBanner";
 
+const getMessage = (
+  autoOnboard: boolean,
+  autoProvision: boolean,
+  createCluster: boolean,
+) => {
+  if (autoOnboard && autoProvision && createCluster) {
+    return AutoPropertiesMessages.CreateCluster;
+  } else if (autoOnboard && autoProvision) {
+    return AutoPropertiesMessages.BothSelected;
+  } else if (autoOnboard && !autoProvision) {
+    return AutoPropertiesMessages.OnboardOnly;
+  } else if (!autoOnboard && autoProvision) {
+    return AutoPropertiesMessages.ProvisionOnly;
+  } else {
+    return AutoPropertiesMessages.NoneSelected;
+  }
+};
+
 const AutoPropertiesMessageBanner = () => {
   const cy = { "data-cy": dataCy };
+
   const { autoOnboard, autoProvision, createCluster } = useAppSelector(
     (state) => state.configureHost,
   );
@@ -18,19 +37,7 @@ const AutoPropertiesMessageBanner = () => {
     <div {...cy} className="auto-properties-message-banner">
       <MessageBanner
         variant="info"
-        messageBody={(() => {
-          if (autoOnboard && autoProvision && createCluster) {
-            return AutoPropertiesMessages.CreateCluster;
-          } else if (autoOnboard && autoProvision) {
-            return AutoPropertiesMessages.BothSelected;
-          } else if (autoOnboard && !autoProvision) {
-            return AutoPropertiesMessages.OnboardOnly;
-          } else if (!autoOnboard && autoProvision) {
-            return AutoPropertiesMessages.ProvisionOnly;
-          } else {
-            return AutoPropertiesMessages.NoneSelected;
-          }
-        })()}
+        messageBody={getMessage(autoOnboard, autoProvision, createCluster)}
         messageTitle=""
         size="s"
         showIcon

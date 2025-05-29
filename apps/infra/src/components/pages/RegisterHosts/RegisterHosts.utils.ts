@@ -10,6 +10,7 @@ import {
   setHostErrorMessage,
   updateNewRegisteredHost,
 } from "../../../store/configureHost";
+import { updateRegisteredHost } from "../../../store/provisionHost";
 
 export const registerHostPost = async (
   dispatch,
@@ -46,7 +47,9 @@ export const registerHostPost = async (
             }),
           );
         } else {
+          // TODO: remove
           await dispatch(updateNewRegisteredHost({ host: response.value }));
+          dispatch(updateRegisteredHost({ host: response.value }));
           registeredCount++;
         }
       });

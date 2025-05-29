@@ -5,7 +5,7 @@
 
 import { ApiErrorPom } from "@orch-ui/components";
 import { clusterTemplateOneV1Info } from "@orch-ui/utils";
-import ClusterTemplateVersionsDropdown from "./ClusterTemplateVersionsDropdown";
+import { ClusterTemplateVersionsDropdown } from "./ClusterTemplateVersionsDropdown";
 import ClusterTemplateVersionsDropdownPom from "./ClusterTemplateVersionsDropdown.pom";
 
 const pom = new ClusterTemplateVersionsDropdownPom();

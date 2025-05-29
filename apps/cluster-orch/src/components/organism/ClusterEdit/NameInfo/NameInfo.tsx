@@ -6,8 +6,8 @@
 import { Heading, TextField } from "@spark-design/react";
 import { useAppDispatch } from "../../../../store/hooks";
 import { updateClusterTemplate } from "../../../../store/reducers/cluster";
-import ClusterTemplatesDropdown from "../../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown";
-import ClusterTemplateVersionsDropdown from "../../../atom/ClusterTemplateVersionsDropdown/ClusterTemplateVersionsDropdown";
+import { ClusterTemplatesDropdown } from "../../../atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown";
+import { ClusterTemplateVersionsDropdown } from "../../../atom/ClusterTemplateVersionsDropdown/ClusterTemplateVersionsDropdown";
 
 const dataCy = "nameInfo";
 

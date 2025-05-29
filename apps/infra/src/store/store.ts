@@ -17,11 +17,13 @@ import hostFilterBuilderReducer from "./hostFilterBuilder";
 import hostStatusReducer from "./hostStatus";
 import locationsReducer from "./locations";
 import notificationStatusReducer from "./notifications";
+import provisionHostReducer from "./provisionHost";
 
 const rootReducer = combineReducers({
   notificationStatusList: notificationStatusReducer,
   hostStatusList: hostStatusReducer,
-  configureHost: configureHostReducer,
+  configureHost: configureHostReducer, // TODO: remove
+  provisionHost: provisionHostReducer,
   locations: locationsReducer,
   hostFilterBuilder: hostFilterBuilderReducer,
   [enhancedInfraSlice.miEnhancedApi.reducerPath]:

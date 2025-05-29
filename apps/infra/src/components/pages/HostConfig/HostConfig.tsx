@@ -45,6 +45,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { resetTree } from "../../../store/locations";
 import { setMessageBanner } from "../../../store/notifications";
+import { updateRegisteredHost } from "../../../store/provisionHost";
 import { HostConfigReview } from "../../atom/HostConfigReview/HostConfigReview";
 import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import { AddHostLabels } from "../../organism/hostConfigure/AddHostLabels/AddHostLabels";
@@ -149,7 +150,9 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         registerHost,
       );
       if (isHostRead(result)) {
-        await dispatch(updateNewRegisteredHost({ host: result })); //updating the redux store content
+        // TODO: remove
+        dispatch(updateNewRegisteredHost({ host: result })); //updating the redux store content
+        dispatch(updateRegisteredHost({ host: result }));
       } else {
         setHostResults(
           (previous) =>
@@ -456,7 +459,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           <AddHostLabels />
         )}
         {currentStep === HostConfigSteps["Enable Local Access"] && (
-          <AddSshPublicKey localAccounts={localAccountsList?.localAccounts} />
+          <AddSshPublicKey />
         )}
         {currentStep === HostConfigSteps["Complete Setup"] && (
           <HostConfigReview
