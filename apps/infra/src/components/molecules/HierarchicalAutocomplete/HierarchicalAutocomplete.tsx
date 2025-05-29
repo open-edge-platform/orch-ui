@@ -77,15 +77,12 @@ export const HierarchicalAutocomplete = ({
       >
         {filteredNodes.length > 0 ? (
           filteredNodes.map((node) => (
-            <Item
-              key={node.resourceId}
-              textValue={node.path?.join(" | ") || node.name}
-            >
+            <Item key={node.resourceId}>
               {node.path?.join(" | ") || node.name}
             </Item>
           ))
         ) : (
-          <Item key="no-results" textValue="No locations found">
+          <Item key="no-results">
             <Text>No locations found</Text>
           </Item>
         )}
