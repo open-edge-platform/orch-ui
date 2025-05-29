@@ -27,6 +27,7 @@ export interface HostProvisionFormState {
   currentStep: HostProvisionSteps;
   enableNextBtn: boolean;
   hasValidationError: boolean;
+  showAdvancedOptions: boolean;
 }
 
 export interface HostProvisionState {
@@ -35,6 +36,7 @@ export interface HostProvisionState {
   commonHostData: Omit<HostData, "name"> & {
     clusterTemplateName?: string;
     clusterTemplateVersion?: string;
+    vPro?: boolean;
     securityFeature?: boolean;
     publicSshKey?: infra.LocalAccountRead;
     metadata?: infra.Metadata;
@@ -50,9 +52,11 @@ export const initialState: HostProvisionState = {
     currentStep: HostProvisionSteps["Configure All Hosts"],
     enableNextBtn: false,
     hasValidationError: false,
+    showAdvancedOptions: false,
   },
   hosts: {},
   commonHostData: {
+    vPro: true,
     securityFeature: true,
   },
   autoOnboard: true,
@@ -119,6 +123,9 @@ export const provisionHost = createSlice({
       }
       provisionHost.caseReducers.validateStep(state);
     },
+    setShowAdvancedOptions(state, action: PayloadAction<boolean>) {
+      state.formStatus.showAdvancedOptions = action.payload;
+    },
     reset() {
       return initialState;
     },
@@ -184,6 +191,7 @@ export const provisionHost = createSlice({
         host.instance.osID = state.commonHostData.os?.resourceId;
         host.templateName = state.commonHostData.clusterTemplateName;
         host.templateVersion = state.commonHostData.clusterTemplateVersion;
+        // TODO: how to populate vPro
         host.instance.securityFeature = state.commonHostData.securityFeature
           ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
           : "SECURITY_FEATURE_NONE";
@@ -212,6 +220,9 @@ export const provisionHost = createSlice({
       state.commonHostData.clusterTemplateVersion = action.payload;
       provisionHost.caseReducers.validateStep(state);
     },
+    setCommonVPro(state, action: PayloadAction<boolean>) {
+      state.commonHostData.vPro = action.payload;
+    },
     setCommonSecurityFeature(state, action: PayloadAction<boolean>) {
       state.commonHostData.securityFeature = action.payload;
     },
@@ -230,6 +241,7 @@ export const provisionHost = createSlice({
 export const {
   goToNextStep,
   goToPrevStep,
+  setShowAdvancedOptions,
   reset,
   setValidationError,
   setHostDefinitionError,
@@ -243,6 +255,7 @@ export const {
   setCommonOsProfile,
   setCommonClusterTemplateName,
   setCommonClusterTemplateVersion,
+  setCommonVPro,
   setCommonSecurityFeature,
   setCommonPublicSshKey,
   setCommonMetadata,

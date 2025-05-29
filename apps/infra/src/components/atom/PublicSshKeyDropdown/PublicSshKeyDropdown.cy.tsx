@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ApiErrorPom } from "@orch-ui/components";
 import { PublicSshKeyDropdown } from "./PublicSshKeyDropdown";
 import {
   localAccountMocks,
@@ -10,6 +11,7 @@ import {
 } from "./PublicSshKeyDropdown.pom";
 
 const pom = new PublicSshKeyDropdownPom();
+const apiErrorPom = new ApiErrorPom();
 
 describe("<PublicSshKeyDropdown/>", () => {
   beforeEach(() => {
@@ -40,5 +42,12 @@ describe("<PublicSshKeyDropdown/>", () => {
     pom.sshKeyDropdown.openDropdown(pom.root);
     pom.sshKeyDropdown.selectNthListItemValue(1);
     cy.get("@onPublicKeyRemove").should("have.been.called");
+  });
+
+  it("should handle API error", () => {
+    pom.interceptApis([pom.api.getLocalAccountsError]);
+    cy.mount(<PublicSshKeyDropdown />);
+    pom.waitForApis();
+    apiErrorPom.root.should("exist");
   });
 });

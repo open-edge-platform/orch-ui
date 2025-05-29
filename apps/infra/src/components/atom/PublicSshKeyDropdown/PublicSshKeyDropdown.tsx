@@ -4,7 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { SquareSpinner } from "@orch-ui/components";
+import { ApiError, SquareSpinner } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item } from "@spark-design/react";
 import { DropdownSize } from "@spark-design/tokens";
@@ -22,12 +22,21 @@ export const PublicSshKeyDropdown = ({
 }: PublicSshKeyDropdownProps) => {
   const cy = { "data-cy": dataCy };
 
-  const { data: localAccountsList, isSuccess } =
-    infra.useGetV1ProjectsByProjectNameLocalAccountsQuery({
-      projectName: SharedStorage.project?.name ?? "",
-    });
+  const {
+    data: localAccountsList,
+    isSuccess,
+    isLoading,
+    isError,
+    error,
+  } = infra.useGetV1ProjectsByProjectNameLocalAccountsQuery({
+    projectName: SharedStorage.project?.name ?? "",
+  });
 
-  if (!isSuccess || !localAccountsList) {
+  if (isError) {
+    return <ApiError error={error} />;
+  }
+
+  if (isLoading || !isSuccess) {
     return <SquareSpinner />;
   }
 
@@ -40,7 +49,7 @@ export const PublicSshKeyDropdown = ({
         label=""
         name="sshKey"
         placeholder="None"
-        size={DropdownSize.Medium}
+        size={DropdownSize.Large}
         selectedKey={selectedPublicKey ?? "None"}
         onSelectionChange={(key) => {
           if (key === "None") {

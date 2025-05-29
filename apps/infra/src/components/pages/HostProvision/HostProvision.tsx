@@ -42,7 +42,6 @@ const HostProvision = () => {
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
 
   const steps: StepperStep[] = Object.keys(HostProvisionSteps)
-    // @ts-ignore
     .filter((key) => !isNaN(Number(HostProvisionSteps[key])))
     .map((k) => {
       return { text: k };

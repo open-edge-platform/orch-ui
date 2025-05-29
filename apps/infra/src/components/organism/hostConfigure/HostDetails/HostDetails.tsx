@@ -47,6 +47,7 @@ interface HostDetailsProps {
   ) => void;
 }
 
+// TODO: remove this component
 // eslint-disable-next-line max-statements
 export const HostDetails = ({
   hostId,
@@ -204,7 +205,6 @@ export const HostDetails = ({
         <OsProfileDropdown
           hostOs={originalOs}
           value={localOsOptionValue}
-          hideLabel
           onSelectionChange={(os, effect) => {
             if (!os) return;
             dispatch(setOsProfile({ hostId: hostId, os }));

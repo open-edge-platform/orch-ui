@@ -25,7 +25,7 @@ export const localAccountMocks = [
   },
 ];
 
-type ApiAliases = "getLocalAccounts";
+type ApiAliases = "getLocalAccounts" | "getLocalAccountsError";
 
 const endpoints: CyApiDetails<
   ApiAliases,
@@ -39,6 +39,10 @@ const endpoints: CyApiDetails<
       localAccounts: localAccountMocks,
       totalElements: localAccountMocks.length,
     },
+  },
+  getLocalAccountsError: {
+    route: "**/localAccounts*",
+    statusCode: 500,
   },
 };
 

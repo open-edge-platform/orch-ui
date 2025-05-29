@@ -6,6 +6,7 @@
 import { ReactNode } from "react";
 import { FlexColConfigCss, FlexColSizeCss } from "../Flex/Flex";
 import "./FlexItem.scss";
+
 const dataCy = "flexItem";
 export interface FlexItemProps {
   config: FlexColConfigCss;
@@ -15,18 +16,13 @@ export const FlexItem = ({ config, ...rest }: FlexItemProps) => {
   const cy = { "data-cy": dataCy };
 
   const className = "flex-item";
-  const getColClasses = () => {
-    const result = (Object.keys(config) as FlexColSizeCss[]).reduce(
-      (accumulator, key) => {
-        const value = config[key];
-        return value
-          ? (accumulator += `${className}--${key}-${value} `)
-          : accumulator;
-      },
-      "",
-    );
-    return result;
-  };
+  const getColClasses = () =>
+    (Object.keys(config) as FlexColSizeCss[]).reduce((accumulator, key) => {
+      const value = config[key];
+      return value
+        ? accumulator + `${className}--${key}-${value} `
+        : accumulator;
+    }, "");
   return (
     <div {...cy} className={`${className} ${getColClasses()}`}>
       {rest.children}
