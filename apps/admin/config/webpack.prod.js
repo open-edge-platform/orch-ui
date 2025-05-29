@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const { merge } = require("webpack-merge");
 const commonConfig = require("./webpack.common");
@@ -30,6 +31,14 @@ const prodConfig = {
           },
         ],
       },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader, // Replace style-loader
+          "css-loader",
+          "sass-loader",
+        ],
+      },
     ],
   },
   output: {
@@ -43,10 +52,13 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        AppOrchUI: `AppOrchUI@http://localhost:8081/remoteEntry.js`,
-        ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
-        EimUI: `EimUI@/mfe/infrastructure/remoteEntry.js`,
+        AppOrchUI: "AppOrchUI@http://localhost:8081/remoteEntry.js",
+        ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
+        EimUI: "EimUI@/mfe/infrastructure/remoteEntry.js",
       },
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
     }),
   ],
 };
