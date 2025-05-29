@@ -21,9 +21,11 @@ import {
   admStatusToText,
   admStatusToUIStatus,
   API_INTERVAL,
+  deploymentClusterDetailRoute,
   Direction,
   getOrder,
   SharedStorage,
+  useAppOrchNavigate,
 } from "@orch-ui/utils";
 import { Hyperlink, Text } from "@spark-design/react";
 import {
@@ -32,7 +34,7 @@ import {
   TextSize,
 } from "@spark-design/tokens";
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import "./DeploymentInstancesTable.scss";
 
 const dataCy = "deploymentInstancesTable";
@@ -44,7 +46,7 @@ const DeploymentInstancesTable = ({
   clusterId,
 }: DeploymentInstancesTableProps) => {
   const cy = { "data-cy": dataCy };
-  const navigate = useNavigate();
+  const navigate = useAppOrchNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showErrorBanner, setShowErrorBanner] = useState<boolean>(false);
 
@@ -57,13 +59,16 @@ const DeploymentInstancesTable = ({
         row: { original: adm.DeploymentInstancesClusterRead };
       }) => {
         const row = table.row.original;
-        const route = `/applications/deployment/${row.deploymentUid}/cluster/${clusterId}`;
         return (
           <Hyperlink
             data-cy="link"
             variant={HyperlinkVariant.Primary}
             onPress={() => {
-              if (row.deploymentUid) navigate(route);
+              if (row.deploymentUid && clusterId)
+                navigate(deploymentClusterDetailRoute, {
+                  deplId: row.deploymentUid,
+                  name: clusterId,
+                });
               else setShowErrorBanner(true);
             }}
             visualType={HyperlinkType.Quiet}
