@@ -18,7 +18,7 @@ describe("<Region />", () => {
     });
     it("should render a list of regions", () => {
       cy.contains("Regions");
-      const regions: infra.GetV1ProjectsByProjectNameRegionsApiResponse =
+      const regions: infra.RegionServiceListRegionsApiResponse =
         pom.getDetailOfApi(pom.api.regionsListSuccess, "response");
       pom.regionsTable.getRows().should("have.length", regions.regions?.length);
     });

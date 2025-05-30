@@ -24,14 +24,14 @@ const endpoints: CyApiDetails<ApiAliases> = {
           },
         },
       ],
-    } as infra.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
+    } as infra.InstanceServiceGetInstanceApiResponse,
   },
   getClusterNameEmpty: {
     route: url,
     statusCode: 200,
     response: {
       workloadMembers: [],
-    } as infra.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
+    } as infra.InstanceServiceGetInstanceApiResponse,
   },
 };
 

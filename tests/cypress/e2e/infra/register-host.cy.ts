@@ -9,6 +9,7 @@ import {
   HostsTablePom,
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
+import { EIM_USER } from "@orch-ui/tests";
 import { NetworkLog } from "../../support/network-logs";
 import { deleteHostViaApi } from "../helpers";
 import {

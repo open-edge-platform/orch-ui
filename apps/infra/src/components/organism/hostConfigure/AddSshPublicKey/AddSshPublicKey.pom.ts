@@ -15,7 +15,7 @@ const instanceStore = new InstanceStore();
 
 export const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameLocalAccountsApiResponse
+  infra.LocalAccountServiceListLocalAccountsApiResponse
 > = {
   getLocalAccounts: {
     route: "**/localAccounts?*",

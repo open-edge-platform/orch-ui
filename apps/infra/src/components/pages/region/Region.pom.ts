@@ -51,7 +51,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       regions: store.list(),
       totalElements: totalElements,
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceGetRegionApiResponse,
   },
   getRegionsAfterDeleteMocked: {
     route: `${route}?*`,
@@ -61,7 +61,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       // pretend that one of the regions was deleted
       regions: store.list().slice(1),
       totalElements: totalElements - 1,
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceGetRegionApiResponse,
   },
   getRegionsUpdatedMocked: {
     route: `${route}?*`,
@@ -83,7 +83,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
           return r;
         }),
       totalElements: Math.min(10, totalElements),
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceGetRegionApiResponse,
   },
   regionsListSuccess: {
     route: `${route}?*`,
@@ -91,7 +91,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       regions: store.list().slice(0, 10),
       totalElements: Math.min(10, totalElements),
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceGetRegionApiResponse,
   },
   regionsListNotFound: {
     route: `${route}?*`,

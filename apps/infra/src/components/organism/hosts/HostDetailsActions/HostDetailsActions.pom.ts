@@ -21,7 +21,7 @@ type ApiAliases = InstanceApiAliases | DeleteApiAliases;
 
 const instanceEndpoints: CyApiDetails<
   InstanceApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse
+  infra.InstanceServiceGetInstanceApiResponse
 > = {
   getInstanceWithWorkload: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/instances/**`,
@@ -47,7 +47,7 @@ const instanceEndpoints: CyApiDetails<
 
 const deleteEndpoints: CyApiDetails<
   DeleteApiAliases,
-  infra.DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  infra.HostServiceDeleteHostApiResponse
   // | infra.DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse
 > = {
   deleteHost: {

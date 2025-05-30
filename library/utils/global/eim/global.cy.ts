@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedInfraSlice } from "@orch-ui/apis";
+import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne,
   assignedWorkloadHostTwo,
@@ -35,7 +35,7 @@ describe("The Utils", () => {
   });
   describe("inheritedScheduleToString", () => {
     const convertSingleSchedule2ToScheduleMaintenance = (
-      maintenance: infra.SingleSchedule,
+      maintenance: infra.RepeatedScheduleResource,
     ): enhancedInfraSlice.ScheduleMaintenance => ({
       name: maintenance.name,
       scheduleStatus: maintenance.scheduleStatus,
@@ -48,9 +48,9 @@ describe("The Utils", () => {
         cronMonth: maintenance.cronMonth,
         durationSeconds: maintenance.durationSeconds,
       },
-      targetSite: maintenance.targetSite as infra.SiteRead,
-      targetHost: maintenance.targetHost as infra.HostRead,
-      targetRegion: maintenance.targetRegion as infra.RegionRead,
+      targetSite: maintenance.targetSite as infra.SiteResourceRead,
+      targetHost: maintenance.targetHost as infra.HostResourceRead,
+      targetRegion: maintenance.targetRegion as infra.RegionResourceRead,
     });
     it("should show the inheritance of site maintenance for a host", () => {
       expect(

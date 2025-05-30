@@ -45,7 +45,7 @@ const kubeconfigRoute = "**/v2/**/clusters/kubeconfigs/**";
 const firstHostRoute = "**/v1/projects/**/compute/hosts/**";
 const siteRoute = "/v1/projects/**/regions/**/sites/**";
 
-const siteRestaurantOne: infra.SiteRead = {
+const siteRestaurantOne: infra.SiteResourceRead = {
   name: "Restaurant 01",
   region: { name: regionPortlandId },
   resourceId: "site-1",
@@ -73,7 +73,7 @@ const successClusterEndpoints: CyApiDetails<
 };
 const successHostEndpointconst: CyApiDetails<
   HostSuccessApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  infra.HostServiceGetHostApiResponse
 > = {
   getFirstHostData: {
     route: firstHostRoute,
@@ -88,7 +88,7 @@ const successHostEndpointconst: CyApiDetails<
 
 const successSiteEndpoint: CyApiDetails<
   SiteSuccessApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.SiteServiceGetSiteApiResponse
 > = {
   getSiteData: {
     route: siteRoute,

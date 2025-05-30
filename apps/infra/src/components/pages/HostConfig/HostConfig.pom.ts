@@ -25,8 +25,8 @@ const route = `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`;
 const instancesRoute = `**/v1/projects/${defaultActiveProject.name}/compute/instances`;
 
 const patchComputeHostsAndHostId: CyApiDetail<
-  infra.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
-  infra.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
+  infra.HostServicePatchHostApiResponse,
+  infra.HostServicePatchHostApiArg
 > = {
   route,
   response: provisionedHostOne,
@@ -43,8 +43,8 @@ const patchComputeHostsAndHostId400: CyApiDetail<infra.ProblemDetailsRead> = {
 };
 
 const postInstances: CyApiDetail<
-  infra.PostV1ProjectsByProjectNameComputeInstancesApiResponse,
-  infra.PostV1ProjectsByProjectNameComputeInstancesApiResponse
+  infra.InstanceServiceCreateInstanceApiResponse,
+  infra.InstanceServiceCreateInstanceApiResponse
 > = {
   route: instancesRoute,
   response: provisionedInstanceOne,
@@ -89,7 +89,7 @@ export class HostConfigPom extends CyPom<Selectors, ApiAliases> {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   public provisionHost(
     site: string,
-    metadata: infra.Metadata,
+    metadata: infra.MetadataItem,
     isSingle: boolean = false,
   ) {
     // search for site

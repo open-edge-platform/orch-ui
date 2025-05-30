@@ -25,7 +25,7 @@ const generateOperatingSystems = (size = 10, osMock = osRedHat) =>
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeOsApiResponse
+  infra.OperatingSystemServiceListOperatingSystemsApiResponse
 > = {
   getOperatingSystems: {
     route: `**/projects/${defaultActiveProject.name}/compute/os*`,

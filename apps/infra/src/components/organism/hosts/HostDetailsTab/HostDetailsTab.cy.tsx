@@ -32,7 +32,7 @@ describe("The HostDetailsTab component", () => {
         VERSIONS: {},
       };
 
-      const hostResourceUndefined: infra.HostRead = {
+      const hostResourceUndefined: infra.HostResourceRead = {
         ...hostOne,
       };
 
@@ -50,7 +50,7 @@ describe("The HostDetailsTab component", () => {
   });
   describe("when Host resources are set", () => {
     const storageCapacity = "1073741824"; // 1 GB
-    const hostWithResource: infra.HostRead = {
+    const hostWithResource: infra.HostResourceRead = {
       ...hostOne,
       cpuCores: 4,
       cpuModel: "cpu-model",

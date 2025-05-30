@@ -21,7 +21,7 @@ type ApiAliases =
 const url = "**/locations**";
 const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameLocationsApiResponse
+  infra.LocationServiceListLocationsApiResponse
 > = {
   getLocations200: {
     route: url,

@@ -78,7 +78,7 @@ import { StoreUtils } from "./utils";
 type KeyValuePairs = { [key: string]: string };
 
 // Configured/Assigned Hosts
-export const hostOneMetadata: infra.Metadata = [
+export const hostOneMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -93,7 +93,7 @@ export const hostOneMetadata: infra.Metadata = [
   },
 ];
 
-export const hostTwoMetadata: infra.Metadata = [
+export const hostTwoMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -108,7 +108,7 @@ export const hostTwoMetadata: infra.Metadata = [
   },
 ];
 
-export const hostThreeMetadata: infra.Metadata = [
+export const hostThreeMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -119,7 +119,7 @@ export const hostThreeMetadata: infra.Metadata = [
   },
 ];
 
-export const hostFourMetadata: infra.Metadata = [
+export const hostFourMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersTwo,
@@ -130,7 +130,7 @@ export const hostFourMetadata: infra.Metadata = [
   },
 ];
 
-export const hostFiveMetadata: infra.Metadata = [
+export const hostFiveMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersTwo,
@@ -141,7 +141,7 @@ export const hostFiveMetadata: infra.Metadata = [
   },
 ];
 
-export const hostSixMetadata: infra.Metadata = [
+export const hostSixMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersTwo,
@@ -152,7 +152,7 @@ export const hostSixMetadata: infra.Metadata = [
   },
 ];
 
-export interface HostMock extends infra.HostRead {
+export interface HostMock extends infra.HostResourceRead {
   deauthorized?: boolean;
   instance?: enhancedInfraSlice.InstanceReadModified;
 }
@@ -195,9 +195,7 @@ export const assignedWorkloadHostTwo: HostMock = {
   uuid: assignedWorkloadHostTwoUuid,
   serialNumber: assignedWorkloadHostTwoSerial,
   site: siteRestaurantTwo,
-  inheritedMetadata: {
-    location: hostFourMetadata,
-  },
+  inheritedMetadata: hostFourMetadata,
   metadata: hostTwoMetadata,
   instance: instanceTwo,
   provider: {
@@ -302,7 +300,7 @@ export const provisionedHostThree: HostMock = {
 };
 
 // Unconfigured Hosts
-const onboardedHostMetadata: infra.Metadata = [
+const onboardedHostMetadata: infra.MetadataItem[] = [
   {
     key: metadataBrokerMocks.customersKey,
     value: metadataBrokerMocks.customersOne,
@@ -316,9 +314,7 @@ const onboardedHostMetadata: infra.Metadata = [
 export const onboardedHostOne: HostMock = {
   resourceId: onboardedHostOneId,
   // Parent metadata
-  inheritedMetadata: {
-    location: onboardedHostMetadata,
-  },
+  inheritedMetadata: onboardedHostMetadata,
   name: onboardedHostOneId,
   uuid: onboardedHostOneUuid,
   serialNumber: onboardedHostOneSerial,
@@ -340,7 +336,7 @@ export const onboardedHostTwo: HostMock = {
 
 export const onboardedHostThree: HostMock = {
   resourceId: onboardedHostThreeId,
-  inheritedMetadata: { location: hostSixMetadata, ou: [] },
+  inheritedMetadata: hostSixMetadata,
   name: onboardedHostThreeId,
   uuid: onboardedHostThreeUuid,
   serialNumber: onboardedHostThreeSerial,
@@ -390,7 +386,7 @@ export const registeredHostTwo: HostMock = {
   currentState: "HOST_STATE_REGISTERED",
   instance: {
     resourceId: "registered-host-2",
-    desiredState: "INSTANCE_STATE_UNSPECIFIED",
+    desiredState: "INSTANCE_STATE_UNTRUSTED",
   },
   serialNumber: "ec269d77-9b98-bda3-2f68-34342w23432b",
   uuid: "ec26b1ed-311b-0da1-5f2b-fc17f60f35e3",
@@ -402,7 +398,7 @@ export const registeredHostThree: HostMock = {
   currentState: "HOST_STATE_REGISTERED",
   instance: {
     resourceId: "registered-host-3",
-    desiredState: "INSTANCE_STATE_UNSPECIFIED",
+    desiredState: "INSTANCE_STATE_UNTRUSTED",
   },
   serialNumber: "ec269d77-9b98-bda3-2f68-34342w23432c",
   uuid: "ec26b1ed-311b-0da0-5f2b-fc17f60f35e3",
@@ -413,7 +409,7 @@ export const registeredHostFourError: HostMock = {
   resourceId: "test-error-host-zz5c5736",
   currentState: "HOST_STATE_REGISTERED",
   instance: {
-    desiredState: "INSTANCE_STATE_UNSPECIFIED",
+    desiredState: "INSTANCE_STATE_UNTRUSTED",
   },
   serialNumber: "ec269d77-9b98-bda3-2f68-34342w23432c",
   uuid: "ec26b1ed-311b-0da0-5f2b-fc17f60f35e3",
@@ -429,7 +425,7 @@ export const registeredHostFiveIdle: HostMock = {
   currentState: "HOST_STATE_REGISTERED",
   instance: {
     resourceId: "registered-host-3",
-    desiredState: "INSTANCE_STATE_UNSPECIFIED",
+    desiredState: "INSTANCE_STATE_UNTRUSTED",
   },
   serialNumber: "ec269d77-9b98-bda3-2f68-34342w23432c",
   uuid: "ec26b1ed-311b-0da0-5f2b-fc17f60f35e3",
@@ -591,15 +587,14 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
 
   getSummary(
     filter?: string | null,
-  ): infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse {
+  ): infra.HostServiceGetHostsSummaryApiResponse {
     let hosts = this.resources;
-    const hostStat: infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse =
-      {
-        total: 0,
-        running: 0,
-        error: 0,
-        unallocated: 0,
-      };
+    const hostStat: infra.HostServiceGetHostsSummaryApiResponse = {
+      total: 0,
+      running: 0,
+      error: 0,
+      unallocated: 0,
+    };
 
     if (hosts) {
       // Seperate to simplest filters
@@ -632,7 +627,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
 
           // Host infra.Metadata: Both Inherited and Host-Specific
           const metadataSet: KeyValuePairs = {};
-          host.inheritedMetadata?.location?.forEach(({ key, value }) => {
+          host.inheritedMetadata?.forEach(({ key, value }) => {
             metadataSet[key] = value;
           });
           host.metadata?.forEach(({ key, value }) => {
@@ -652,7 +647,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
       }
 
       hostStat.total! += hosts.length;
-      hosts.map((host: infra.HostRead) => {
+      hosts.map((host: infra.HostResourceRead) => {
         if (!host.site) {
           hostStat.unallocated! += 1;
         }
@@ -672,7 +667,7 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
 }
 
 const hostsList = new HostStore().list();
-export const hosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse = {
+export const hosts: infra.HostServiceListHostsApiResponse = {
   hasNext: false,
   hosts: hostsList,
   totalElements: hostsList.length,
@@ -682,42 +677,38 @@ const assignedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "has(instance.workloadMembers) AND has(site)",
 });
-export const assignedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: assignedHostList,
-    totalElements: assignedHostList.length,
-  };
+export const assignedHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: assignedHostList,
+  totalElements: assignedHostList.length,
+};
 
 const provisionedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(instance.workloadMembers) AND has(site)",
 });
-export const provisionedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: provisionedHostList,
-    totalElements: provisionedHostList.length,
-  };
+export const provisionedHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: provisionedHostList,
+  totalElements: provisionedHostList.length,
+};
 
 const onboardedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(site)",
 });
-export const onboardedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: onboardedHostList,
-    totalElements: onboardedHostList.length,
-  };
+export const onboardedHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: onboardedHostList,
+  totalElements: onboardedHostList.length,
+};
 
 const registeredHostList = new HostStore().list({
   deviceUuid: null,
   filter: "currentState=HOST_STATE_REGISTERED",
 });
-export const registeredHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: registeredHostList,
-    totalElements: registeredHostList.length,
-  };
+export const registeredHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: registeredHostList,
+  totalElements: registeredHostList.length,
+};

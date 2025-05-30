@@ -72,7 +72,7 @@ describe("DeploymentsContainer helpers functions", () => {
   });
 
   describe("getHostsStatus", () => {
-    const nodes: infra.HostRead[] = [
+    const nodes: infra.HostResourceRead[] = [
       {
         resourceId: "host-1",
         name: "host-1",
@@ -100,7 +100,7 @@ describe("DeploymentsContainer helpers functions", () => {
     ];
 
     beforeEach(() => {
-      const mockRes: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse = {
+      const mockRes: infra.HostServiceListHostsApiResponse = {
         hosts: [],
         hasNext: false,
         totalElements: 0,

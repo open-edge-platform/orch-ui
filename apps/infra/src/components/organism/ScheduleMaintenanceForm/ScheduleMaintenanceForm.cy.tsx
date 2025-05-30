@@ -40,11 +40,14 @@ const TestingComponent = ({
   };
   // Note: target can be host or site. If targetSite is set then targetHost is undefined (not-set).
   if (mockEntityType === "region") {
-    initialMaintenanceFormData.targetRegion = mockEntity as infra.RegionRead;
+    initialMaintenanceFormData.targetRegion =
+      mockEntity as infra.RegionResourceRead;
   } else if (mockEntityType === "site") {
-    initialMaintenanceFormData.targetSite = mockEntity as infra.SiteRead;
+    initialMaintenanceFormData.targetSite =
+      mockEntity as infra.SiteResourceRead;
   } else {
-    initialMaintenanceFormData.targetHost = mockEntity as infra.HostRead;
+    initialMaintenanceFormData.targetHost =
+      mockEntity as infra.HostResourceRead;
   }
   const [maintenance, setMaintenance] =
     useState<enhancedInfraSlice.ScheduleMaintenance>(

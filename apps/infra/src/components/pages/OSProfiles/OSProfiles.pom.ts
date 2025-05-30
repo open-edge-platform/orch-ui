@@ -18,7 +18,7 @@ const route = `**/v1/projects/${defaultActiveProject.name}/compute/os?*`;
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  | infra.GetV1ProjectsByProjectNameComputeOsApiResponse
+  | infra.OperatingSystemServiceListOperatingSystemsApiResponse
   | infra.ProblemDetailsRead
 > = {
   getOSResources: {

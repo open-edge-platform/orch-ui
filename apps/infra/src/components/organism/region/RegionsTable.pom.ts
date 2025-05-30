@@ -101,7 +101,7 @@ class RegionsTablePom extends CyPom<Selectors, ApiAliases> {
     return this.root.find("tr:nth-child(2)");
   }
 
-  public select(region: infra.RegionRead) {
+  public select(region: infra.RegionResourceRead) {
     const row = this.table.getRowBySearchText(region.name!);
     row.find(".spark-table-cell:nth-child(2) button").click();
   }

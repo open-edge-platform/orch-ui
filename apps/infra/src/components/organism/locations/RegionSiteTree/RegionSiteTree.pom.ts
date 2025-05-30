@@ -26,7 +26,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
     response: {
       hasNext: false,
       regions: [{ resourceId: "root-1", name: "Root 1" }],
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceListRegionsApiResponse,
   },
   getRootRegionsEmptyMocked: {
     route: "**/regions*NOT%20has%28parentRegion%29*",
@@ -35,7 +35,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       regions: [],
       totalElements: 0,
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceListRegionsApiResponse,
   },
   getRoot1RegionsMocked: {
     route: "**/regions*parentRegion.resourceId%3D%22root-1%22*",
@@ -46,7 +46,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
         { resourceId: "region-1.1", name: "Region 1.1" },
         { resourceId: "region-1.2", name: "Region 1.2" },
       ],
-    } as infra.GetV1ProjectsByProjectNameRegionsApiResponse,
+    } as infra.RegionServiceListRegionsApiResponse,
   },
   getRegions500: {
     route: "**/regions*",
@@ -86,7 +86,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
         },
       ],
       totalElements: 1,
-    } as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse,
+    } as infra.SiteServiceListSitesApiResponse,
   },
 };
 

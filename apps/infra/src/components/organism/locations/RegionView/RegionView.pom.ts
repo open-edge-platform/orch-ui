@@ -14,7 +14,7 @@ type ApiAliases = "getRegionMocked";
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsApiResponse
+  infra.RegionServiceListRegionsApiResponse
 > = {
   getRegionMocked: {
     route: "**/regions/region-1.0",

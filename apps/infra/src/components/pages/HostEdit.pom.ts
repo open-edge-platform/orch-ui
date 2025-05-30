@@ -63,11 +63,11 @@ type ApiAliases =
   | InstanceApiAliases;
 
 type HostEditApiResponseType =
-  | infra.Host
-  | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
-  | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
-  | infra.GetV1ProjectsByProjectNameRegionsApiResponse
-  | infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+  | infra.HostResource
+  | infra.SiteServiceListSitesApiResponse
+  | infra.SiteServiceGetSiteApiResponse
+  | infra.RegionServiceListRegionsApiResponse
+  | infra.InstanceServiceListInstancesApiResponse
   | mbApi.MetadataList;
 const getApiEndpoints = (
   hostId = HostEditPom.testHost.resourceId,
@@ -102,29 +102,30 @@ const getApiEndpoints = (
   });
 
   /* --- Api Intercept Definitions starts here --- */
-  const successHostEndpoints: CyApiDetails<HostApiAliases, infra.Host> = {
-    hostSuccess: {
-      route: hostDetailRoute,
-      response: mockHost,
-    },
-    hostWithoutSite: {
-      route: hostDetailRoute,
-      response: mockHostNoSite,
-    },
-    hostWithoutMetadata: {
-      route: hostDetailRoute,
-      response: mockHostNoMetadata,
-    },
-    updateHostSuccess: {
-      method: "PUT",
-      route: hostDetailRoute,
-      response: mockHostUpdated,
-    },
-    hostUpdatedSuccess: {
-      route: hostDetailRoute,
-      response: mockHostUpdated,
-    },
-  };
+  const successHostEndpoints: CyApiDetails<HostApiAliases, infra.HostResource> =
+    {
+      hostSuccess: {
+        route: hostDetailRoute,
+        response: mockHost,
+      },
+      hostWithoutSite: {
+        route: hostDetailRoute,
+        response: mockHostNoSite,
+      },
+      hostWithoutMetadata: {
+        route: hostDetailRoute,
+        response: mockHostNoMetadata,
+      },
+      updateHostSuccess: {
+        method: "PUT",
+        route: hostDetailRoute,
+        response: mockHostUpdated,
+      },
+      hostUpdatedSuccess: {
+        route: hostDetailRoute,
+        response: mockHostUpdated,
+      },
+    };
 
   const successMetadataEndpoints: CyApiDetails<
     MetadataApiAliases,
@@ -146,8 +147,7 @@ const getApiEndpoints = (
 
   const successSiteEndpoints: CyApiDetails<
     SiteApiAliases,
-    | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
-    | infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+    infra.SiteServiceListSitesApiResponse | infra.SiteServiceGetSiteApiResponse
   > = {
     siteByIdSuccess: {
       route: siteByIdRoute,
@@ -169,7 +169,7 @@ const getApiEndpoints = (
 
   const successRegionEndpoints: CyApiDetails<
     RegionApiAliases,
-    infra.GetV1ProjectsByProjectNameRegionsApiResponse
+    infra.ListRegionsResponse
   > = {
     regionsSuccess: {
       route: regionsRoute,
@@ -187,7 +187,7 @@ const getApiEndpoints = (
 
   const successInstanceEndpoints: CyApiDetails<
     InstanceApiAliases,
-    infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+    infra.ListInstancesResponse
   > = {
     getInstances: {
       route: instanceRoute,

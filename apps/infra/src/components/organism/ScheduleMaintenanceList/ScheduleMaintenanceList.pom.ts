@@ -59,7 +59,7 @@ const crudMaintenanceIntercepts: CyApiDetails<CrudMaintenanceApiAliases> = {
 };
 const maintenanceIntercepts: CyApiDetails<
   MaintenanceApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.ScheduleServiceListSchedulesApiResponse
 > = {
   getMaintenance: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/schedules?**`,

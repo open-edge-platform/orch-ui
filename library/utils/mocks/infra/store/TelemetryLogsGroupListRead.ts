@@ -11,27 +11,29 @@ import {
 } from "../data";
 import { BaseStore } from "./baseStore";
 
-const TelemetryLogsGroups: infra.TelemetryLogsGroupRead[] = [
+const telemetryLogsGroups: infra.TelemetryLogsGroupResourceRead[] = [
   telemetryLogsGroup1,
   telemetryLogsGroup2,
   telemetryLogsGroup3,
 ];
 
-export const telemetryLogsGroupList: infra.TelemetryLogsGroupListRead = {
-  TelemetryLogsGroups,
+export const telemetryLogsGroupList: infra.ListTelemetryLogsGroupsResponse = {
+  telemetryLogsGroups,
   hasNext: true,
-  totalElements: TelemetryLogsGroups.length,
+  totalElements: telemetryLogsGroups.length,
 };
 
 export class TelemetryLogsGroupListStore extends BaseStore<
   "telemetryLogsGroupId",
-  infra.TelemetryLogsGroupRead
+  infra.TelemetryLogsGroupResourceRead
 > {
   constructor() {
-    super("telemetryLogsGroupId", TelemetryLogsGroups);
+    super("telemetryLogsGroupId", telemetryLogsGroups);
   }
 
-  convert(body: infra.TelemetryLogsGroupRead): infra.TelemetryLogsGroupRead {
+  convert(
+    body: infra.TelemetryLogsGroupResourceRead,
+  ): infra.TelemetryLogsGroupResourceRead {
     return body;
   }
 }

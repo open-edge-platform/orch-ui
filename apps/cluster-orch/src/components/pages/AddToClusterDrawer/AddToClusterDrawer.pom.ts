@@ -10,7 +10,7 @@ import { clusterOne, ClusterStore, regionPortlandId } from "@orch-ui/utils";
 const dataCySelectors = ["clusterDropdown"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-const site: infra.SiteRead = {
+const site: infra.SiteResourceRead = {
   siteID: "restaurant-one",
   resourceId: "restaurant-one",
   inheritedMetadata: {
@@ -25,7 +25,7 @@ const site: infra.SiteRead = {
   region: { name: regionPortlandId, resourceId: regionPortlandId },
 };
 
-export const hostOne: infra.HostRead = {
+export const hostOne: infra.HostResourceRead = {
   resourceId: "host-dh38bjw9",
   uuid: "4c4c4544-0044-4210-8031-c2c04f305239",
   name: "host-unassign1",
@@ -128,7 +128,7 @@ const clusterSuccessEndpoint: CyApiDetails<
 
 const hostSuccessEndpoint: CyApiDetails<
   SuccessHostApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse
+  infra.HostServiceGetHostApiResponse
 > = {
   getHostById: {
     route: hostByIdRoute,
@@ -139,7 +139,7 @@ const hostSuccessEndpoint: CyApiDetails<
 
 const siteSuccessEndpoint: CyApiDetails<
   SuccessSiteApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.SiteServiceGetSiteApiResponse
 > = {
   getSiteById: {
     route: siteByIdRoute,

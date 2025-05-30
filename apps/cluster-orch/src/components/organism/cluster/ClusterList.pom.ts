@@ -120,7 +120,7 @@ const successEndpoints: CyApiDetails<
 
 const hostEndpoints: CyApiDetails<
   HostSuccessApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.HostServiceListHostsApiResponse
 > = {
   getHosts: {
     route: hostRoute,
