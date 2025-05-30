@@ -39,6 +39,7 @@ export const apiServers = [
   "ALERT",
   "TM",
   "RPS",
+  "MPS",
 ] as const;
 export type ApiServer = (typeof apiServers)[number];
 
@@ -118,10 +119,17 @@ export class RuntimeConfig {
   }
 
   /**
-   * Returns the API URL for Remote Provisioning
+   * Returns the API URL for Remote Provisioning server
    */
   public static get rpsApiUrl(): string {
     return this.getApiUrl("RPS");
+  }
+
+  /**
+   * Returns the API URL for Management Presense server
+   */
+  public static get mpsApiUrl(): string {
+    return this.getApiUrl("MPS");
   }
 
   public static getComponentVersion(component: Components) {
