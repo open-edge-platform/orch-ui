@@ -15,7 +15,7 @@ spec:
     - match: ({{ required "A valid hostname entry required!" .Values.service.traefik.hostname }} || {{ required "A valid baseHostname entry required!" .Values.service.traefik.baseHostname }}) && PathPrefix(`/`)
       kind: Rule
       middlewares:
-        # - name: secure-headers
+        - name: secure-headers
         - name: {{ include "root.fullname" . }}
       priority: 10
       services:

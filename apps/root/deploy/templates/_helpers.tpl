@@ -29,7 +29,13 @@ Create chart name and version as used by the chart label.
 {{ $root := . }}
 server {
   listen 3000;
-  add_header Content-Security-Policy "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self'; style-src 'self' 'unsafe-inline'";
+  set $SCRIPT "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:;";
+  set $OBJECT "object-src 'none';";
+  set $DEFAULT "default-src 'self';";
+  set $STYLE "style-src 'self' 'unsafe-inline';";
+  set $CONNECT "connect-src 'self';";
+  set $VARIOUS "frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; base-uri 'self';";
+  add_header Content-Security-Policy "${SCRIPT} ${OBJECT} ${DEFAULT} ${CONNECT} ${STYLE} ${VARIOUS}";
   add_header X-Frame-Options "DENY";
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
   add_header X-XSS-Protection "1; mode=block";
