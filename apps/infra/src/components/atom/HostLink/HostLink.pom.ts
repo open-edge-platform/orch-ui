@@ -19,7 +19,7 @@ const endpoints: CyApiDetails<ApiAliases> = {
       hasNext: false,
       hosts: [mockHost],
       totalElements: 1,
-    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.HostServiceListHostsApiResponse,
   },
   getHostById: {
     route: "**/compute/hosts/*",

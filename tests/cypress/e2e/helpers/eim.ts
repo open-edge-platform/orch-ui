@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { infra } from "@orch-ui/apis";
 import * as _ from "lodash";
 import Chainable = Cypress.Chainable;
-
 export const validateEimTab = () => {
   cy.dataCy("header").should("not.contain.text", "Applications");
   cy.dataCy("header").should("contain.text", "Infrastructure");
@@ -21,7 +21,7 @@ export const createRegionViaAPi = (
   regionName: string,
 ): Chainable<string> => {
   return cy
-    .authenticatedRequest<infra.RegionRead>({
+    .authenticatedRequest<infra.RegionResourceRead>({
       method: "POST",
       url: `/v1/projects/${project}/regions`,
       body: {
@@ -37,9 +37,9 @@ export const createRegionViaAPi = (
 export const getRegionViaAPi = (
   project: string,
   regionName: string,
-): Chainable<infra.RegionRead[]> => {
+): Chainable<infra.RegionResourceRead[]> => {
   return cy
-    .authenticatedRequest<infra.RegionsListRead>({
+    .authenticatedRequest<infra.ListRegionsResponseRead>({
       method: "GET",
       url: `/v1/projects/${project}/regions`,
       body: {
@@ -59,7 +59,7 @@ export const createSiteViaApi = (
   siteName: string,
 ): Chainable<string> => {
   return cy
-    .authenticatedRequest<infra.SiteRead>({
+    .authenticatedRequest<infra.SiteResourceRead>({
       method: "POST",
       url: `/v1/projects/${project}/regions/${regionId}/sites`,
       body: {
@@ -78,9 +78,9 @@ export const getSiteViaApi = (
   project: string,
   regionId: string,
   siteName: string,
-): Chainable<infra.SiteRead[]> => {
+): Chainable<infra.SiteResourceRead[]> => {
   return cy
-    .authenticatedRequest<infra.SitesListRead>({
+    .authenticatedRequest<infra.ListSitesResponse>({
       method: "GET",
       url: `/v1/projects/${project}/regions/${regionId}/sites`,
       body: {

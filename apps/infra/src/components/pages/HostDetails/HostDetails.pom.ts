@@ -66,7 +66,7 @@ mockHostNoHostLabels.metadata = [];
 
 const mockHostNoSite = structuredClone(mockHost);
 mockHostNoSite.site = undefined;
-export const hostNoName: infra.HostRead = {
+export const hostNoName: infra.HostResourceRead = {
   ...mockHost,
   name: "",
 };
@@ -76,7 +76,7 @@ const emptyResponse = {
   SingleSchedules: [],
   RepeatedSchedules: [],
 };
-const schedule123: infra.SingleSchedule2 = {
+const schedule123: infra.SingleScheduleResource = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule123",
   startSeconds: 1688148856,

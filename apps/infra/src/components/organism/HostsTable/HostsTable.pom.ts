@@ -22,13 +22,13 @@ import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetailPom from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail.pom";
 import HostPopupPom from "../../molecules/ProvisionedHostPopup/ProvisionedHostPopup.pom";
 
-export const unconfiguredColumn: TableColumn<infra.HostRead>[] = [
+export const unconfiguredColumn: TableColumn<infra.HostResourceRead>[] = [
   HostTableColumn.name("../"),
   HostTableColumn.guid,
   HostTableColumn.serialNumber,
   HostTableColumn.status,
 ];
-export const configuredColumns: TableColumn<infra.HostRead>[] = [
+export const configuredColumns: TableColumn<infra.HostResourceRead>[] = [
   ...unconfiguredColumn,
   HostTableColumn.site,
 ];
@@ -95,7 +95,7 @@ const hostResponseOfSize10Total18 = {
 
 const genericHostSuccessEndpoints: CyApiDetails<
   GenericHostSuccessApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.HostServiceListHostsApiResponse
 > = {
   getHostsListEmpty: {
     route: route,
@@ -174,7 +174,7 @@ const genericHostSuccessEndpoints: CyApiDetails<
 
 const specificHostSuccessApiEndpoints: CyApiDetails<
   SpecificHostSuccessApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.HostServiceListHostsApiResponse
 > = {
   getOnboardedHosts: {
     route: `${route}filter=${encodeURLQuery("((desiredState=HOST_STATE_ONBOARDED OR currentState=HOST_STATE_ONBOARDED) OR (currentState=HOST_STATE_ERROR AND NOT desiredState=HOST_STATE_REGISTERED)) AND (NOT has(site) OR NOT has(instance) OR NOT instance.desiredState=INSTANCE_STATE_RUNNING)")}**`,

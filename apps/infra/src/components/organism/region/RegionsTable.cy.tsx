@@ -27,7 +27,7 @@ describe("<RegionTable /> with mocked data should ", () => {
   });
 
   it("show the defined actions", () => {
-    const actions: TableColumn<infra.RegionRead> = {
+    const actions: TableColumn<infra.RegionResourceRead> = {
       Header: "Action",
       Cell: () => <div>Action Column</div>,
     };

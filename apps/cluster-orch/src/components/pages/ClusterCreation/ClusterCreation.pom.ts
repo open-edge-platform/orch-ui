@@ -20,9 +20,9 @@ import { setNodesSpec } from "../../../store/reducers/nodeSpec";
 import ClusterNodesTableBySite from "../../organism/cluster/clusterCreation/ClusterNodesTableBySite/ClusterNodesTableBySite.pom";
 import ClusterNodesTablePom from "../../organism/ClusterNodesTable/ClusterNodesTable.pom";
 
-type ModifiedInstance = Omit<infra.InstanceRead, "os" | "host"> & {
+type ModifiedInstance = Omit<infra.InstanceResourceRead, "os" | "host"> & {
   os: infra.OperatingSystemResourceRead;
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
 };
 
 const dataCySelectors = [
@@ -93,7 +93,7 @@ const errorClusterEndpoint: CyApiDetails<
 
 const regionEndpoint: CyApiDetails<
   GetRegions,
-  infra.GetV1ProjectsByProjectNameRegionsApiResponse
+  infra.RegionServiceListRegionsApiResponse
 > = {
   getRegions: {
     route: `**/v1/projects/${defaultActiveProject.name}/regions*`,
@@ -114,7 +114,7 @@ const regionEndpoint: CyApiDetails<
 
 const rootRegionExpandEndpoint: CyApiDetails<
   ExpandRegions,
-  infra.GetV1ProjectsByProjectNameRegionsApiResponse
+  infra.RegionServiceListRegionsApiResponse
 > = {
   expandRegion: {
     route: "**/regions*parentRegion.resourceId%3D%22region-portland%22*",
@@ -155,7 +155,7 @@ export const siteOne = {
 
 const siteEndpoint: CyApiDetails<
   GetSites,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.SiteServiceGetSiteApiResponse
 > = {
   getSites: {
     route: `**/v1/projects/${defaultActiveProject.name}/sites*`,
@@ -199,7 +199,7 @@ const instanceOne: ModifiedInstance = {
 };
 const instancesEndpoint: CyApiDetails<
   GetInstances,
-  infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse
+  infra.InstanceServiceListInstancesApiResponse
 > = {
   getInstances: {
     route: "**/v1/projects/**/compute/instances**",
