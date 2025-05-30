@@ -32,9 +32,9 @@ export type ProvisionedHostPopupProps = Omit<
    *
    * Note: If instance is assigned make sure instance shows workloadMember before passing to this field.
    **/
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   onDeauthorizeHostWithoutWorkload?: (hostId: string) => void;
-  onScheduleMaintenance?: (targetEntity: infra.HostRead) => void;
+  onScheduleMaintenance?: (targetEntity: infra.HostResourceRead) => void;
 };
 
 /** This will show all available host actions within popup menu (active/configured, i.e, assigned/unassigned host only) */
@@ -69,8 +69,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       );
     }
   }, [deauthorizeHostWithinWorkloadIsOpen]);
-  const [deauthorizeHost] =
-    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
+  const [deauthorizeHost] = infra.useHostServiceInvalidateHostMutation();
 
   /** Is host a `Provisioned Host with assigned workload`. Here, Workload and Cluster are synonymous */
   const isAssigned = host.instance && isHostAssigned(host.instance);
@@ -122,8 +121,8 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
   const deauthorizeHostFn = async (deauthorizeReason: string) => {
     return await deauthorizeHost({
       projectName: SharedStorage.project?.name ?? "",
-      hostId: host.resourceId ?? "",
-      hostOperationWithNote: { note: deauthorizeReason },
+      resourceId: host.resourceId ?? "",
+      note: deauthorizeReason,
     });
   };
 

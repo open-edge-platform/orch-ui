@@ -31,7 +31,7 @@ const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 
-type ClusterNode = infra.HostRead & cm.NodeInfo;
+type ClusterNode = infra.HostResourceRead & cm.NodeInfo;
 
 interface ClusterNodesTableProps {
   nodes?: cm.NodeInfo[];
@@ -40,7 +40,7 @@ interface ClusterNodesTableProps {
   // as a result we need to filter on the former in the review page or the latter in the cluster list expansion
   filterOn: "resourceId" | "uuid";
   /** Invoked when data is loaded */
-  onDataLoad?: (data: infra.HostRead[]) => void;
+  onDataLoad?: (data: infra.HostResourceRead[]) => void;
 }
 const ClusterNodesTable = ({
   nodes,
@@ -60,7 +60,7 @@ const ClusterNodesTable = ({
     isSuccess,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  } = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter: hostsFilter,
@@ -87,7 +87,7 @@ const ClusterNodesTable = ({
   const statusHost: TableColumn<ClusterNode> = {
     Header: "Readiness",
     accessor: (item) => hostProviderStatusToString(item),
-    Cell: (table: { row: { original: infra.HostRead } }) => (
+    Cell: (table: { row: { original: infra.HostResourceRead } }) => (
       <Suspense fallback={<SquareSpinner />}>
         {AggregateHostStatus !== null ? (
           <AggregateHostStatus

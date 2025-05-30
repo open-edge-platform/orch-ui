@@ -32,7 +32,7 @@ interface HostsStatusByClusterProps {
   getHosts?: (
     dispatch: AppDispatch,
     uuids: string[],
-  ) => Promise<infra.HostRead[]>;
+  ) => Promise<infra.HostResourceRead[]>;
 }
 
 /**
@@ -50,7 +50,7 @@ const HostsStatusByCluster = ({
   const cy = { "data-cy": dataCy };
 
   const [error, setError] = useState<InternalError | undefined>();
-  const [hosts, setHosts] = useState<infra.HostRead[]>([]);
+  const [hosts, setHosts] = useState<infra.HostResourceRead[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

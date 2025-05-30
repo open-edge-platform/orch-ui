@@ -9,7 +9,7 @@ import { Icon } from "@spark-design/react";
 import "./OsConfig.scss";
 const dataCy = "osConfig";
 export interface OsConfigProps {
-  instance?: infra.InstanceRead;
+  instance?: infra.InstanceResourceRead;
   iconOnly?: boolean;
 }
 

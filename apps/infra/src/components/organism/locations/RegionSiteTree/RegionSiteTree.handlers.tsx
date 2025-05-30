@@ -18,7 +18,7 @@ import { AppDispatch } from "../../../../store/store";
 
 export const handleViewRegionAction = (
   dispatch: AppDispatch,
-  region: infra.RegionRead,
+  region: infra.RegionResourceRead,
 ) => {
   if (!region.resourceId) return;
   dispatch(setRegion(region));
@@ -26,7 +26,7 @@ export const handleViewRegionAction = (
 
 export const handleAddSiteAction = (
   navigate: InfraNavigateFunction,
-  region: infra.RegionRead,
+  region: infra.RegionResourceRead,
 ) => {
   if (!region.resourceId) return;
   navigate(
@@ -41,7 +41,7 @@ export const handleAddSiteAction = (
 
 export const handleSubRegionAction = (
   navigate: InfraNavigateFunction,
-  region: infra.RegionRead,
+  region: infra.RegionResourceRead,
 ) => {
   if (!region || !region.resourceId) return;
   navigate(subRegionRoute, {
@@ -52,7 +52,7 @@ export const handleSubRegionAction = (
 
 export const handleSiteViewAction = (
   dispatch: AppDispatch,
-  site: infra.SiteRead,
+  site: infra.SiteResourceRead,
 ) => {
   if (!site.resourceId || !site.region || !site.region.resourceId) return;
   dispatch(setLoadingBranch(site.region.resourceId));

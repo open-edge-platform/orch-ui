@@ -10,7 +10,7 @@ import { ScheduleMaintenanceStatusTag } from "../../molecules/ScheduleMaintenanc
 import "./HostsTableRowExpansionDetail.scss";
 const dataCy = "hostsTableRowExpansionDetail";
 interface HostsTableRowExpansionDetailProps {
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
 }
 const HostsTableRowExpansionDetail = ({
   host,

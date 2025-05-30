@@ -20,7 +20,7 @@ import "./AddSshPublicKey.scss";
 const dataCy = "addSshPublicKey";
 
 interface AddSshPublicKeyProps {
-  localAccounts?: infra.LocalAccountRead[];
+  localAccounts?: infra.LocalAccountResourceRead[];
 }
 
 export const AddSshPublicKey = ({ localAccounts }: AddSshPublicKeyProps) => {

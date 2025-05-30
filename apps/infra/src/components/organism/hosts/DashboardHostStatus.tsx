@@ -35,7 +35,7 @@ const DashboardHostsStatus = ({
     isError,
     error,
     isLoading,
-  } = infra.useGetV1ProjectsByProjectNameComputeHostsSummaryQuery(
+  } = infra.useHostServiceGetHostsSummaryQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter: `${filterQueries.join(` ${Operator.AND} `)}`,

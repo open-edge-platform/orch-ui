@@ -66,7 +66,7 @@ export const Search = ({
 
   const handleOnSelectionChange = (key: Key) => {
     const result = searchTypes.find((item) => item.id === key)!;
-    dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
+    dispatch(infra.infra.util.invalidateTags([{ type: "LocationService" }]));
     dispatch(setSearchType(result.id as SearchTypes));
   };
 
@@ -76,7 +76,7 @@ export const Search = ({
     searchType === SearchTypes.All || searchType === SearchTypes.Sites;
   const projectName = SharedStorage.project?.name ?? "";
   const { data: searchResults, isFetching } =
-    infra.useGetV1ProjectsByProjectNameLocationsQuery(
+    infra.useLocationServiceListLocationsQuery(
       {
         projectName,
         name: searchTerm,
@@ -129,7 +129,9 @@ export const Search = ({
         variant={ButtonVariant.Secondary}
         onPress={() => {
           if (!canSearch) return;
-          dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
+          dispatch(
+            infra.infra.util.invalidateTags([{ type: "LocationService" }]),
+          );
           dispatch(setSearchTerm(searchTerm));
         }}
       >

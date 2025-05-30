@@ -13,7 +13,7 @@ import "./AddToClusterDrawer.scss";
 
 const dataCy = "addToClusterDrawer";
 interface AddToClusterDrawerProps {
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   isDrawerShown?: boolean;
   setHideDrawer: () => void;
 }

@@ -92,23 +92,22 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
 
   // Used to get site id for drawer
   const { data: firstClusterHost, isSuccess: isHostSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useHostServiceGetHostQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        hostId: firstHostId as string,
+        resourceId: firstHostId as string,
       },
       { skip: !firstHostId || !SharedStorage.project?.name },
     );
   // Used to get region id for drawer
-  const { data: siteData } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: "*", // Cluster or associated host have no region information
-        siteId: siteId && siteId.length > 0 ? siteId : "",
-      },
-      { skip: !siteId || !SharedStorage.project?.name },
-    );
+  const { data: siteData } = infra.useSiteServiceGetSiteQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      regionResourceId: "*", // Cluster or associated host have no region information
+      resourceId: siteId && siteId.length > 0 ? siteId : "",
+    },
+    { skip: !siteId || !SharedStorage.project?.name },
+  );
 
   // Inherited metadata array for metadata display
   useEffect(() => {

@@ -24,7 +24,7 @@ import "./HostStatusPopover.scss";
 
 const dataCy = "hostStatusPopover";
 export interface HostStatusPopoverProps {
-  data: infra.HostRead;
+  data: infra.HostResourceRead;
 }
 
 type FieldLabel = {

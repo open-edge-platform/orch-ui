@@ -12,8 +12,11 @@ const dataCy = "publicSshKeyDropdown";
 interface PublicSshKeyDropdownProps {
   hostId: string;
   host: HostData;
-  onPublicKeySelect?: (hostId: string, acount: infra.LocalAccount) => void;
-  localAccounts: infra.LocalAccountRead[] | undefined;
+  onPublicKeySelect?: (
+    hostId: string,
+    acount: infra.LocalAccountResource,
+  ) => void;
+  localAccounts: infra.LocalAccountResourceRead[] | undefined;
 }
 export const PublicSshKeyDropdown = ({
   hostId,

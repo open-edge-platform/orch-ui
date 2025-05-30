@@ -31,7 +31,7 @@ export const GlobalOsDropdown = ({
     isError,
     isSuccess,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery({
+  } = infra.useOperatingSystemServiceListOperatingSystemsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });

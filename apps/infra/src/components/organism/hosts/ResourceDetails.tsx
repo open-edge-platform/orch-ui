@@ -14,11 +14,11 @@ import Usb from "./resourcedetails/Usb";
 
 export type ResourceType =
   | HostResourcesCpuRead[]
-  | infra.HostResourcesStorage[]
-  | infra.HostResourcesInterface[]
-  | infra.HostRead["hostStatus"]
-  | infra.HostResourcesGpuRead[]
-  | infra.HostResourcesUsb
+  | infra.HoststorageResourceRead[]
+  | infra.HostnicResourceRead[]
+  | infra.HostResourceRead["hostStatus"]
+  | infra.HostgpuResourceRead[]
+  | infra.HostusbResourceRead
   | string;
 
 export type ResourceTypeTitle =
@@ -48,18 +48,16 @@ const ResourceDetails = <T extends ResourceType>({
         setJsx(<Memory data={data as string} />);
         break;
       case "Storage":
-        setJsx(<Storage data={data as infra.HostResourcesStorageRead[]} />);
+        setJsx(<Storage data={data as infra.HoststorageResourceRead[]} />);
         break;
       case "GPUs":
-        setJsx(<Gpu data={data as infra.HostResourcesGpuRead[]} />);
+        setJsx(<Gpu data={data as infra.HostgpuResourceRead[]} />);
         break;
       case "Interfaces":
-        setJsx(
-          <Interfaces data={data as infra.HostResourcesInterfaceRead[]} />,
-        );
+        setJsx(<Interfaces data={data as infra.HostnicResourceRead[]} />);
         break;
       case "USB":
-        setJsx(<Usb data={data as infra.HostResourcesUsbRead} />);
+        setJsx(<Usb data={data as infra.HostusbResourceRead} />);
     }
   }, [title]);
 

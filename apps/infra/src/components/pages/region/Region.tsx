@@ -26,21 +26,19 @@ import { setErrorInfo, showToast } from "../../../store/notifications";
 export default function Region() {
   const dispatch = useAppDispatch();
   const navigate = useInfraNavigate();
-  const [deleteRegion] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+  const [deleteRegion] = infra.useRegionServiceDeleteRegionMutation();
 
-  const [regionToDelete, setRegionToDelete] = useState<infra.RegionRead | null>(
-    null,
-  );
+  const [regionToDelete, setRegionToDelete] =
+    useState<infra.RegionResourceRead | null>(null);
   const [scheduleMaintenanceRegion, setScheduleMaintenanceRegion] = useState<
-    infra.RegionRead | undefined
+    infra.RegionResourceRead | undefined
   >();
 
   const deleteRegionFn = async (regionId: string) => {
     try {
       await deleteRegion({
         projectName: SharedStorage.project?.name ?? "",
-        regionId,
+        resourceId: regionId,
       })
         .unwrap()
         .catch((error) => {
@@ -58,7 +56,7 @@ export default function Region() {
     setRegionToDelete(null);
   };
 
-  const actions: TableColumn<infra.RegionRead> = {
+  const actions: TableColumn<infra.RegionResourceRead> = {
     Header: "Action",
     textAlign: "center",
     padding: "0",

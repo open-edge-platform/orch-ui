@@ -19,7 +19,7 @@ const dataCy = "sshHostsTable";
 
 interface SshHostsTableProps {
   /** Local account having ssh which is getting used by the host that are displayed. */
-  localAccount: infra.LocalAccountRead;
+  localAccount: infra.LocalAccountResourceRead;
   poll?: boolean;
   AggregateHostStatusRemote?: React.LazyExoticComponent<
     React.ComponentType<any>
@@ -29,7 +29,9 @@ const AggregateHostStatus = RuntimeConfig.isEnabled("INFRA")
   ? React.lazy(async () => await import("EimUI/AggregateHostStatus"))
   : null;
 
-type InstanceReadModified = infra.InstanceRead & { host?: infra.HostRead };
+type InstanceReadModified = infra.InstanceResourceRead & {
+  host?: infra.HostResourceRead;
+};
 
 const SshHostsTable = ({
   localAccount,
@@ -38,7 +40,7 @@ const SshHostsTable = ({
 }: SshHostsTableProps) => {
   const cy = { "data-cy": dataCy };
   const filter = `has(localaccount) AND localaccount.resourceId="${localAccount.resourceId}"`;
-  const columns: TableColumn<infra.InstanceRead>[] = [
+  const columns: TableColumn<infra.InstanceResourceRead>[] = [
     {
       Header: "Name",
       apiName: "name",
@@ -48,12 +50,12 @@ const SshHostsTable = ({
     {
       Header: "Status",
       accessor: (item: InstanceReadModified) => item.host!.hostStatus,
-      Cell: (table: { row: { original: infra.InstanceRead } }) => (
+      Cell: (table: { row: { original: infra.InstanceResourceRead } }) => (
         <Suspense fallback={<SquareSpinner />}>
           {AggregateHostStatusRemote !== null ? (
             <AggregateHostStatusRemote
               instance={table.row.original}
-              host={table.row.original.host as infra.HostRead}
+              host={table.row.original.host as infra.HostResourceRead}
             />
           ) : (
             "Remote Error"
@@ -69,7 +71,7 @@ const SshHostsTable = ({
     isLoading,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+  } = infra.useInstanceServiceListInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       filter,

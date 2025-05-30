@@ -35,7 +35,7 @@ const OSProfiles = () => {
     isLoading,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery({
+  } = infra.useOperatingSystemServiceListOperatingSystemsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });

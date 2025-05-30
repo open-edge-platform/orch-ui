@@ -32,7 +32,7 @@ const Review = ({ accumulatedMeta }: ReviewProps) => {
   const cy = { "data-cy": dataCy };
   // this method is called when the list of Host is loaded
   // in the Host table. We use this to populate data in the Redux store
-  const onHostLoad = (hosts: infra.HostRead[]) => {
+  const onHostLoad = (hosts: infra.HostResourceRead[]) => {
     setIsTrustedComputeCompatible(
       hosts.some(
         (host) =>

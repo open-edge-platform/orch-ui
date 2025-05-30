@@ -10,8 +10,8 @@ import { ResourceDetailsDisplayProps } from "../ResourceDetails";
 
 const Usb = ({
   data,
-}: ResourceDetailsDisplayProps<infra.HostResourcesUsbRead>) => {
-  const columns: TableColumn<infra.HostResourcesUsbRead>[] = [
+}: ResourceDetailsDisplayProps<infra.HostusbResourceRead>) => {
+  const columns: TableColumn<infra.HostusbResourceRead>[] = [
     { Header: "Class", accessor: "class" },
     { Header: "Serial", accessor: "serial" },
     { Header: "Vendor Id", accessor: "idVendor" },

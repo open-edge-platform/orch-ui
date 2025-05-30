@@ -13,7 +13,7 @@ import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
 import { HostData } from "../store/configureHost";
 
-const _name = (): TableColumn<infra.HostRead> => {
+const _name = (): TableColumn<infra.HostResourceRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -24,7 +24,7 @@ const _name = (): TableColumn<infra.HostRead> => {
         return item.resourceId;
       }
     },
-    Cell: (table: { row: { original: infra.HostRead } }) => {
+    Cell: (table: { row: { original: infra.HostResourceRead } }) => {
       return (
         <Link
           to={getInfraPath(hostDetailsRoute, {
@@ -40,7 +40,7 @@ const _name = (): TableColumn<infra.HostRead> => {
   };
 };
 
-const name = (): TableColumn<infra.HostRead> => {
+const name = (): TableColumn<infra.HostResourceRead> => {
   return {
     Header: "Name",
     apiName: "name",
@@ -51,7 +51,7 @@ const name = (): TableColumn<infra.HostRead> => {
         return item.resourceId;
       }
     },
-    Cell: (table: { row: { original: infra.HostRead } }) => {
+    Cell: (table: { row: { original: infra.HostResourceRead } }) => {
       const hostId = table.row.original.resourceId;
       return hostId ? (
         <Link
@@ -67,7 +67,7 @@ const name = (): TableColumn<infra.HostRead> => {
   };
 };
 
-const nameWithoutLink: TableColumn<infra.HostRead> = {
+const nameWithoutLink: TableColumn<infra.HostResourceRead> = {
   Header: "Host Name",
   apiName: "name",
   accessor: (item) => {
@@ -79,22 +79,22 @@ const nameWithoutLink: TableColumn<infra.HostRead> = {
   },
 };
 
-const guid: TableColumn<infra.HostRead> = {
+const guid: TableColumn<infra.HostResourceRead> = {
   Header: "UUID",
   apiName: "uuid",
   accessor: (host) => host.uuid ?? "-",
 };
 
-const serialNumber: TableColumn<infra.HostRead> = {
+const serialNumber: TableColumn<infra.HostResourceRead> = {
   Header: "Serial Number",
   apiName: "serialNumber",
   accessor: (host) => host.serialNumber,
 };
 
-const site: TableColumn<infra.HostRead> = {
+const site: TableColumn<infra.HostResourceRead> = {
   Header: "Site",
   accessor: "site.siteID",
-  Cell: (table: { row: { original: infra.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostResourceRead } }) => {
     return (
       <SiteCell
         siteId={table.row.original.site?.region?.resourceId}
@@ -106,10 +106,10 @@ const site: TableColumn<infra.HostRead> = {
 
 const siteWithCustomBasePath = (
   basePath: string,
-): TableColumn<infra.HostRead> => ({
+): TableColumn<infra.HostResourceRead> => ({
   Header: "Site",
   accessor: "site.siteID",
-  Cell: (table: { row: { original: infra.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostResourceRead } }) => {
     return (
       <SiteCell
         siteId={table.row.original.site?.siteID}
@@ -120,50 +120,50 @@ const siteWithCustomBasePath = (
   },
 });
 
-const status: TableColumn<infra.HostRead> = {
+const status: TableColumn<infra.HostResourceRead> = {
   Header: "Host Status",
   apiName: "hostStatus",
   accessor: (host) =>
     aggregateStatuses(hostToStatuses(host, host.instance), "hostStatus")
       .message || "-",
-  Cell: (table: { row: { original: infra.HostRead } }) => (
+  Cell: (table: { row: { original: infra.HostResourceRead } }) => (
     <HostStatusPopover data={table.row.original} />
   ),
 };
 
-const os: TableColumn<infra.HostRead> = {
+const os: TableColumn<infra.HostResourceRead> = {
   Header: "Operating System",
   accessor: (host) => host.instance?.currentOs?.name ?? "-",
-  Cell: (table: { row: { original: infra.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostResourceRead } }) => {
     return <OsConfig instance={table.row.original.instance} iconOnly />;
   },
 };
 
-const reason: TableColumn<infra.HostRead> = {
+const reason: TableColumn<infra.HostResourceRead> = {
   Header: "Deauthorized Reason",
   apiName: "note",
   accessor: "note",
-  Cell: (table: { row: { original: infra.HostRead } }) =>
+  Cell: (table: { row: { original: infra.HostResourceRead } }) =>
     table.row.original.note || <em>(Reason not specified)</em>,
 };
 
-const autoOnboard: TableColumn<infra.HostRead> = {
+const autoOnboard: TableColumn<infra.HostResourceRead> = {
   Header: "Auto Onboard",
   accessor: (host) =>
     host.desiredState === "HOST_STATE_ONBOARDED" ? "Yes" : "No",
 };
 
-const workload: TableColumn<infra.HostRead> = {
+const workload: TableColumn<infra.HostResourceRead> = {
   Header: "Workload",
-  Cell: (table: { row: { original: infra.HostRead } }) => {
+  Cell: (table: { row: { original: infra.HostResourceRead } }) => {
     const host = table.row.original;
     return <ClusterNameAssociatedToHost host={host} />;
   },
 };
 
 const actions = (
-  popupFn: (host: infra.HostRead) => JSX.Element,
-): TableColumn<infra.HostRead> => ({
+  popupFn: (host: infra.HostResourceRead) => JSX.Element,
+): TableColumn<infra.HostResourceRead> => ({
   Header: "Actions",
   textAlign: "center",
   padding: "0",

@@ -18,6 +18,7 @@ import {
   parseError,
   Role,
   SharedStorage,
+  TelemetryLogLevel,
   useInfraNavigate,
 } from "@orch-ui/utils";
 import {
@@ -69,17 +70,16 @@ const RegionForm: React.FC = () => {
   const dataCy = "regionForm";
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
-  const [deleteRegion] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+  const [deleteRegion] = infra.useRegionServiceDeleteRegionMutation();
   const [deleteMetricProfile] =
-    infra.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.useTelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileMutation();
   const [deleteLogProfile] =
-    infra.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.useTelemetryLogsProfileServiceDeleteTelemetryLogsProfileMutation();
   const deleteRegionFn = async (regionId: string) => {
     try {
       await deleteRegion({
         projectName: SharedStorage.project?.name ?? "",
-        regionId,
+        resourceId: regionId,
       })
         .unwrap()
         .then(() => {
@@ -103,21 +103,20 @@ const RegionForm: React.FC = () => {
   const navigate = useInfraNavigate();
   const { regionId } = useParams<{ regionId: string }>();
   const { parentRegionId } = useParams<{ parentRegionId: string }>();
-  const { data: { regions } = {} } =
-    infra.useGetV1ProjectsByProjectNameRegionsQuery({
-      projectName: SharedStorage.project?.name ?? "",
-      pageSize: 100,
-    });
+  const { data: { regions } = {} } = infra.useRegionServiceListRegionsQuery({
+    projectName: SharedStorage.project?.name ?? "",
+    pageSize: 100,
+  });
   const {
     data: regionInfo,
     isLoading,
     isError,
     error,
     isFetching,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
+  } = infra.useRegionServiceGetRegionQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      regionId: regionId as string,
+      resourceId: regionId as string,
     },
     {
       skip: regionId === "new",
@@ -130,9 +129,9 @@ const RegionForm: React.FC = () => {
     isError: profileMetricIsError,
     isSuccess: profileMetricSuccess,
     isLoading: profileMetricLoading,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     {
-      telemetryMetricsGroupId: "group-id", //TODO: evaluate
+      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId,
     },
@@ -147,9 +146,9 @@ const RegionForm: React.FC = () => {
     isError: profileLogIsError,
     isSuccess: profileLogSuccess,
     isLoading: profileLogLoading,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
+  } = infra.useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery(
     {
-      telemetryLogsGroupId: "group-id", //TODO: evaluate
+      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId,
     },
@@ -159,7 +158,7 @@ const RegionForm: React.FC = () => {
   );
 
   const getMetricPairs = () => {
-    const metricProfiles = profileMetrics?.TelemetryMetricsProfiles ?? [];
+    const metricProfiles = profileMetrics?.telemetryMetricsProfiles ?? [];
     const metricPairs: SystemMetricPair[] = [];
     for (const profile of metricProfiles) {
       if (profile.profileId && profile.metricsGroup)
@@ -173,7 +172,7 @@ const RegionForm: React.FC = () => {
   };
 
   const getLogPairs = () => {
-    const logProfiles = profileLogs?.TelemetryLogsProfiles ?? [];
+    const logProfiles = profileLogs?.telemetryLogsProfiles ?? [];
     const logPairs: SystemLogPair[] = [];
     for (const profile of logProfiles) {
       if (profile.profileId && profile.logsGroup)
@@ -202,7 +201,7 @@ const RegionForm: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<infra.RegionRead>({
+  } = useForm<infra.RegionResourceRead>({
     mode: "all",
   });
 
@@ -211,31 +210,30 @@ const RegionForm: React.FC = () => {
     useState<string[]>(baseRegionTypes);
 
   const [hasTelemetry, setHasTelemetry] = useState<boolean>(false);
-  const [createRegion] = infra.usePostV1ProjectsByProjectNameRegionsMutation();
+  const [createRegion] = infra.useRegionServiceCreateRegionMutation();
   const [createMetricProfile] =
-    infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
+    infra.useTelemetryMetricsProfileServiceCreateTelemetryMetricsProfileMutation();
   const [editMetricProfile] =
-    infra.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.useTelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileMutation();
   const { data: metricsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useTelemetryMetricsGroupServiceListTelemetryMetricsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
-  const metricsgroup = metricsResponse?.TelemetryMetricsGroups ?? [];
+  const metricsgroup = metricsResponse?.telemetryMetricsGroups ?? [];
   const [currentSystemMetric, setCurrentSystemMetric] =
     useState<SystemMetricPair[]>(getMetricPairs());
   const [createLogProfile] =
-    infra.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
+    infra.useTelemetryLogsProfileServiceCreateTelemetryLogsProfileMutation();
   const [editLogProfile] =
-    infra.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.useTelemetryLogsProfileServiceUpdateTelemetryLogsProfileMutation();
   const { data: logsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
-  const logsgroup = logsResponse?.TelemetryLogsGroups ?? [];
+  const logsgroup = logsResponse?.telemetryLogsGroups ?? [];
   const [currentSystemLog, setCurrentSystemLog] =
     useState<SystemLogPair[]>(getLogPairs());
-  const [updateRegion] =
-    infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdMutation();
+  const [updateRegion] = infra.useRegionServiceUpdateRegionMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
   const [parentRegion, setParentRegion] = useState<string | undefined>(
@@ -250,7 +248,7 @@ const RegionForm: React.FC = () => {
   useEffect(() => {
     if (
       profileMetricSuccess &&
-      profileMetrics.TelemetryMetricsProfiles.length > 0
+      profileMetrics.telemetryMetricsProfiles.length > 0
     ) {
       setHasTelemetry(true);
       setCurrentSystemMetric(getMetricPairs());
@@ -258,7 +256,7 @@ const RegionForm: React.FC = () => {
   }, [profileMetricSuccess, profileMetrics]);
 
   useEffect(() => {
-    if (profileLogSuccess && profileLogs.TelemetryLogsProfiles.length > 0) {
+    if (profileLogSuccess && profileLogs.telemetryLogsProfiles.length > 0) {
       setHasTelemetry(true);
       setCurrentSystemLog(getLogPairs());
     }
@@ -301,7 +299,7 @@ const RegionForm: React.FC = () => {
 
   const redirectToLocationsPage = async () => navigate(locationRoute);
 
-  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroup => {
+  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroupResource => {
     const group = metricsgroup.find((group) => {
       return group.telemetryMetricsGroupId === id;
     });
@@ -314,7 +312,7 @@ const RegionForm: React.FC = () => {
     };
   };
 
-  const getLogsGroup = (id: string): infra.TelemetryLogsGroup => {
+  const getLogsGroup = (id: string): infra.TelemetryMetricsGroupResource => {
     const group = logsgroup.find((group) => {
       return group.telemetryLogsGroupId === id;
     });
@@ -327,7 +325,7 @@ const RegionForm: React.FC = () => {
     };
   };
 
-  const save: SubmitHandler<infra.RegionWrite> = async (data) => {
+  const save: SubmitHandler<infra.RegionResourceWrite> = async (data) => {
     // handle metadata generation
     if (!data.metadata) {
       data.metadata = [];
@@ -363,18 +361,18 @@ const RegionForm: React.FC = () => {
     }
 
     try {
-      let regionOperation: Promise<infra.PostV1ProjectsByProjectNameRegionsApiResponse>;
+      let regionOperation: Promise<infra.RegionServiceCreateRegionApiResponse>;
 
       if (regionId === "new") {
         regionOperation = createRegion({
           projectName: SharedStorage.project?.name ?? "",
-          region: data,
+          regionResource: data,
         }).unwrap();
       } else {
         regionOperation = updateRegion({
           projectName: SharedStorage.project?.name ?? "",
-          regionId: regionId as string,
-          region: data,
+          resourceId: regionId as string,
+          regionResource: data,
         }).unwrap();
       }
 
@@ -384,7 +382,7 @@ const RegionForm: React.FC = () => {
 
       // handle metric profiles
       for (const metricPair of currentSystemMetric) {
-        const metricProfile: infra.TelemetryMetricsProfile = {
+        const metricProfile: infra.TelemetryMetricsProfileResource = {
           targetRegion: response.regionID,
           metricsInterval: parseInt(metricPair.interval),
           metricsGroupId: metricPair.metricType,
@@ -394,18 +392,18 @@ const RegionForm: React.FC = () => {
         if (metricPair.profileId != "") {
           allPromises.push(
             editMetricProfile({
-              telemetryMetricsGroupId: "group-id", //TODO: evaluate
+              metricgroupResourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryMetricsProfileId: metricPair.profileId,
-              telemetryMetricsProfile: metricProfile,
+              resourceId: metricPair.profileId,
+              telemetryMetricsProfileResource: metricProfile,
             }),
           );
         } else {
           allPromises.push(
             createMetricProfile({
-              telemetryMetricsGroupId: "group-id", //TODO: evaluate
+              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryMetricsProfile: metricProfile,
+              telemetryMetricsProfileResource: metricProfile,
             }),
           );
         }
@@ -413,27 +411,27 @@ const RegionForm: React.FC = () => {
 
       // handle log profiles
       for (const logPair of currentSystemLog) {
-        const logProfile: infra.TelemetryLogsProfile = {
+        const logProfile: infra.TelemetryLogsProfileResource = {
           targetRegion: response.regionID,
-          logLevel: logPair.logLevel as infra.TelemetrySeverityLevel,
+          logLevel: logPair.logLevel as TelemetryLogLevel,
           logsGroupId: logPair.logSource,
           logsGroup: getLogsGroup(logPair.logSource),
         };
         if (logPair.profileId != "") {
           allPromises.push(
             editLogProfile({
-              telemetryLogsGroupId: "group-id", //TODO: evaluate
+              loggroupResourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryLogsProfileId: logPair.profileId,
-              telemetryLogsProfile: logProfile,
+              resourceId: logPair.profileId,
+              telemetryLogsProfileResource: logProfile,
             }),
           );
         } else {
           allPromises.push(
             createLogProfile({
-              telemetryLogsGroupId: "group-id", //TODO: evaluate
+              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryLogsProfile: logProfile,
+              telemetryLogsProfileResource: logProfile,
             }),
           );
         }
@@ -451,9 +449,9 @@ const RegionForm: React.FC = () => {
           ) {
             allPromises.push(
               deleteMetricProfile({
-                telemetryMetricsGroupId: "group-id", //TODO: evaluate
+                metricgroupResourceId: "group-id", //TODO: evaluate
                 projectName: SharedStorage.project?.name ?? "",
-                telemetryMetricsProfileId: responsePair.profileId,
+                resourceId: responsePair.profileId,
               }),
             );
           }
@@ -467,9 +465,9 @@ const RegionForm: React.FC = () => {
           ) {
             allPromises.push(
               deleteLogProfile({
-                telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
+                loggroupResourceId: "group-id", //TODO: not used in real endpoint
                 projectName: SharedStorage.project?.name ?? "",
-                telemetryLogsProfileId: responsePair.profileId,
+                resourceId: responsePair.profileId,
               }),
             );
           }
@@ -495,7 +493,7 @@ const RegionForm: React.FC = () => {
     }
   };
 
-  const checkAndUpdateMetadata = async (data: infra.RegionWrite) => {
+  const checkAndUpdateMetadata = async (data: infra.RegionResourceWrite) => {
     if (data.metadata && data.metadata.length >= 0)
       await updateMetadata({
         projectName: SharedStorage.project?.name ?? "",

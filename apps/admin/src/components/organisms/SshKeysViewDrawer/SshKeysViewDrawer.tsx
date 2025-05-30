@@ -28,7 +28,7 @@ import "./SshKeysViewDrawer.scss";
 const dataCy = "sshKeysViewDrawer";
 interface SshKeysViewDrawerProps {
   /** Local account value to view */
-  localAccount: infra.LocalAccountRead;
+  localAccount: infra.LocalAccountResourceRead;
   /** Is the drawer open in current state of UI. */
   isOpen?: boolean;
   /** This will be executed when we ckick any of the close button or drawer backdrop.  */

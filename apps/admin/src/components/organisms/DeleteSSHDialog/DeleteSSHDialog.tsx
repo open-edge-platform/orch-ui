@@ -12,7 +12,7 @@ import "./DeleteSSHDialog.scss";
 const dataCy = "deleteSSHDialog";
 
 interface DeleteSSHDialogProps {
-  ssh: infra.LocalAccountRead;
+  ssh: infra.LocalAccountResourceRead;
   onCancel: () => void;
   onDelete?: () => void;
   onError?: (err: string) => void;
@@ -29,8 +29,7 @@ const DeleteSSHDialog = ({
 }: DeleteSSHDialogProps) => {
   const cy = { "data-cy": dataCy };
 
-  const [deleteSsh] =
-    infra.useDeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdMutation();
+  const [deleteSsh] = infra.useLocalAccountServiceDeleteLocalAccountMutation();
 
   const onDeleteSsh = () => {
     const sshName = ssh.sshKey;
@@ -39,7 +38,7 @@ const DeleteSSHDialog = ({
     }
     deleteSsh({
       projectName: SharedStorage.project?.name ?? "",
-      localAccountId: ssh.resourceId ?? "",
+      resourceId: ssh.resourceId ?? "",
     })
       .then(() => {
         if (onDelete) onDelete();

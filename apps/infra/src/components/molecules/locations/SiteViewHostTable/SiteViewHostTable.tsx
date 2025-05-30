@@ -12,7 +12,7 @@ import "./SiteViewHostTable.scss";
 
 const dataCy = "siteViewHostTable";
 export interface SiteViewHostTableProps {
-  site?: infra.SiteRead;
+  site?: infra.SiteResourceRead;
   basePath?: string;
 }
 export const SiteViewHostTable = ({
@@ -21,22 +21,22 @@ export const SiteViewHostTable = ({
 }: SiteViewHostTableProps) => {
   const cy = { "data-cy": dataCy };
 
-  const columns: TableColumn<infra.HostRead>[] = [
+  const columns: TableColumn<infra.HostResourceRead>[] = [
     HostTableColumn.name(),
     HostTableColumn.status,
-    HostTableColumn.actions((host: infra.HostRead) => (
+    HostTableColumn.actions((host: infra.HostResourceRead) => (
       <HostPopup host={host} basePath={basePath} />
     )),
   ];
 
   const projectName = SharedStorage.project?.name ?? "";
   const { data, isSuccess, isError, isLoading, error } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+    infra.useHostServiceListHostsQuery(
       {
         projectName,
         pageSize: 10,
         orderBy: "name",
-        siteId: site?.resourceId,
+        filter: `site.resourceId="${site?.resourceId}"`,
       },
       {
         skip: !site?.resourceId || !projectName,

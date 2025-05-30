@@ -12,7 +12,7 @@ const dataCy = "clusterNodeDetailsDrawer";
 
 interface ClusterNodeDetailsDrawerProps {
   isOpen: boolean;
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   inheritedMeta?: TypedMetadata[];
   onHide: () => void;
 }

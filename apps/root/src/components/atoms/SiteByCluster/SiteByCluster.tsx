@@ -50,7 +50,7 @@ const SiteByCluster = ({ clusterName }: SiteByClusterProps) => {
           return getSite(dispatch, hosts[0].site.resourceId ?? "");
         }
       })
-      .then((res: infra.SiteRead) => {
+      .then((res: infra.SiteResourceRead) => {
         setIsLoading(false);
         setRegionId(res?.region?.resourceId);
         setSiteName(res?.name);

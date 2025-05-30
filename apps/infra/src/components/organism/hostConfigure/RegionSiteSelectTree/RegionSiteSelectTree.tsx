@@ -25,8 +25,8 @@ import "./RegionSiteSelectTree.scss";
 const dataCy = "stepTwoRegionAndSite";
 
 interface SiteSelectProps {
-  handleOnSiteSelected: (value: infra.SiteRead) => void;
-  selectedSite?: infra.SiteRead;
+  handleOnSiteSelected: (value: infra.SiteResourceRead) => void;
+  selectedSite?: infra.SiteResourceRead;
   showSingleSelection?: boolean;
 }
 

@@ -17,7 +17,7 @@ const dataCy = "genericHostPopup";
 
 export interface GenericHostPopupProps {
   /** host for which this popup affects upon. */
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   /** Additional Popup Options based on the host lifecycle contect */
   additionalPopupOptions?: PopupOption[];
   /**

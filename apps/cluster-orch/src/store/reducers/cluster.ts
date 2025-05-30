@@ -8,7 +8,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 type ModifiedClusterDetailInfo = cm.ClusterDetailInfo & {
-  selectedSite?: infra.SiteRead;
+  selectedSite?: infra.SiteResourceRead;
 };
 
 const initialState: ModifiedClusterDetailInfo = {

@@ -13,7 +13,7 @@ import {
 } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 interface ClusterNameAssociatedToHostProps {
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
 }
 const dataCy = "clusterNameAssociatedToHost";
 const ClusterNameAssociatedToHost = ({
@@ -22,14 +22,13 @@ const ClusterNameAssociatedToHost = ({
   const cy = { "data-cy": dataCy };
   const projectName = SharedStorage.project?.name ?? "";
   const instanceId = host.instance?.resourceId || "";
-  const { data } =
-    infra.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
-      {
-        projectName,
-        instanceId,
-      },
-      { skip: !instanceId, pollingInterval: API_INTERVAL },
-    );
+  const { data } = infra.useInstanceServiceGetInstanceQuery(
+    {
+      projectName,
+      resourceId: instanceId,
+    },
+    { skip: !instanceId, pollingInterval: API_INTERVAL },
+  );
 
   const workloadMember = data?.workloadMembers?.find(
     (member) => member.kind === WorkloadMemberKind.Cluster,

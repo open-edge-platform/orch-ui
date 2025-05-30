@@ -11,7 +11,7 @@ import "./DeploymentMetadata.scss";
 const dataCy = "deploymentMetadata";
 
 interface DeploymentMetadataProps {
-  site?: infra.SiteRead;
+  site?: infra.SiteResourceRead;
 }
 
 export const DeploymentMetadata = ({ site }: DeploymentMetadataProps) => {

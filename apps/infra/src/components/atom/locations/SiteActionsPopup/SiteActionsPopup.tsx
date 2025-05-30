@@ -15,7 +15,7 @@ import {
 
 const dataCy = "siteActionsPopup";
 export interface SiteActionsPopupProps {
-  site: infra.SiteRead;
+  site: infra.SiteResourceRead;
 }
 
 export const SiteActionsPopup = ({ site }: SiteActionsPopupProps) => {
