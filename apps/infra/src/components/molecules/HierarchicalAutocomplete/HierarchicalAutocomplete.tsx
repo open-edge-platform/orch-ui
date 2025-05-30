@@ -5,6 +5,7 @@
 
 import { Combobox, Item, Text } from "@spark-design/react";
 import { useMemo, useState } from "react";
+import Highlighter from "react-highlight-words";
 import { AutocompleteNode } from "./hierarchical-autocomplete.utils";
 import "./HierarchicalAutocomplete.scss";
 
@@ -71,16 +72,24 @@ export const HierarchicalAutocomplete = ({
         inputValue={inputValue}
         onInputChange={setInputValue}
         onSelectionChange={handleSelectionChange}
-        menuTrigger="focus"
+        menuTrigger="input"
         placeholder={placeholder}
         isRequired={isRequired}
       >
         {filteredNodes.length > 0 ? (
-          filteredNodes.map((node) => (
-            <Item key={node.resourceId}>
-              {node.path?.join(" | ") || node.name}
-            </Item>
-          ))
+          filteredNodes.map((node) => {
+            const displayText = node.path?.join(" | ") || node.name;
+            return (
+              <Item key={node.resourceId} textValue={displayText}>
+                <Highlighter
+                  highlightClassName="highlighted"
+                  searchWords={[inputValue.trim()]}
+                  autoEscape={true}
+                  textToHighlight={displayText}
+                />
+              </Item>
+            );
+          })
         ) : (
           <Item key="no-results">
             <Text>No locations found</Text>
