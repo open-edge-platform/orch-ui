@@ -23,9 +23,14 @@ export { infraApi as infraSlice } from "./infra/apiSlice";
 // Enhanced Api Slice
 export * as enhancedInfraSlice from "./infra/enhancedApiSlice";
 export * as infra from "./infra/infra";
+//vPRO device management
+export { mpsApi as mpsSlice } from "./management-presense/apiSlice";
 export { metadataBrokerApi as mbSlice } from "./metadata-broker/apiSlice";
 export * as mbApi from "./metadata-broker/generated";
 export { observabilityMonitorApi as omSlice } from "./observabilityMonitor/apiSlice";
 export * as omApi from "./observabilityMonitor/observabilityMonitorApi";
+//vPRO remote provisioning
+export { rpsApi as rpsSlice } from "./remote-provisioning/apiSlice";
+export * as rps from "./remote-provisioning/remoteProvisioningApis";
 export { tdmApi as tmSlice } from "./tenancy/apiSlice";
 export * as tm from "./tenancy/tenancyDataModelApi";
