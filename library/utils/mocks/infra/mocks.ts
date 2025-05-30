@@ -357,7 +357,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse>(
+      ctx.json<infra.HostServiceGetHostsSummaryApiResponse>(
         hostStore.getSummary(filter),
       ),
     );
@@ -561,7 +561,7 @@ export const handlers = [
     `${baseURL}/compute/hosts/:hostId/invalidate`,
     async (req, res, ctx) => {
       const { hostId } = req.params as { hostId: string };
-      const body = await req.json<infra.HostOperationWithNote>();
+      const body = await req.json();
       const note = body.note;
       const deauthResult = hostStore.deauthorizeHost(hostId, true, note);
 
@@ -920,9 +920,9 @@ export const handlers = [
     const metricsgroups = telemetryMetricsStore.list();
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse>(
+      ctx.json<infra.TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse>(
         {
-          TelemetryMetricsGroups: metricsgroups,
+          telemetryMetricsGroups: metricsgroups,
           hasNext: false,
           totalElements: metricsgroups.length,
         },
@@ -933,24 +933,26 @@ export const handlers = [
     const loggroups = telemetryLogsStore.list();
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryLoggroupsApiResponse>({
-        TelemetryLogsGroups: loggroups,
-        hasNext: false,
-        totalElements: loggroups.length,
-      }),
+      ctx.json<infra.TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse>(
+        {
+          telemetryLogsGroups: loggroups,
+          hasNext: false,
+          totalElements: loggroups.length,
+        },
+      ),
     );
   }),
 
   rest.get(
     `${baseURL}/telemetry/groups/logs/:telemetryLogsGroupId`,
     async (req, res, ctx) => {
-      const { telemetryLogsGroupId } =
-        req.params as infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiArg;
-      const loggroups = telemetryLogsStore.get(telemetryLogsGroupId);
+      const { resourceId } =
+        req.params as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg;
+      const loggroups = telemetryLogsStore.get(resourceId);
       if (loggroups) {
         return res(
           ctx.status(200),
-          ctx.json<infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiResponse>(
+          ctx.json<infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse>(
             loggroups,
           ),
         );
@@ -959,7 +961,7 @@ export const handlers = [
   ),
   rest.get(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
     const url = new URL(req.url);
-    let metricProfiles: infra.TelemetryMetricsProfileRead[] = [];
+    let metricProfiles: infra.TelemetryMetricsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
       const regionId = url.searchParams.get("regionId");
@@ -975,9 +977,9 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse>(
+      ctx.json<infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse>(
         {
-          TelemetryMetricsProfiles: metricProfiles,
+          telemetryMetricsProfiles: metricProfiles,
           hasNext: false,
           totalElements: metricProfiles.length,
         },
@@ -987,7 +989,7 @@ export const handlers = [
 
   rest.get(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
     const url = new URL(req.url);
-    let logProfiles: infra.TelemetryLogsProfileRead[] = [];
+    let logProfiles: infra.TelemetryLogsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
       const regionId = url.searchParams.get("regionId");
@@ -1002,9 +1004,9 @@ export const handlers = [
     }
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse>(
+      ctx.json<infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse>(
         {
-          TelemetryLogsProfiles: logProfiles,
+          telemetryLogsProfiles: logProfiles,
           hasNext: false,
           totalElements: logProfiles.length,
         },
@@ -1013,24 +1015,24 @@ export const handlers = [
   }),
 
   rest.post(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryMetricsProfile>();
+    const body = await req.json<infra.TelemetryMetricsProfileResource>();
     const profileRead = telemetryMetricsProfilesStore.create(body);
     if (!profileRead) return res(ctx.status(500));
     return res(
       ctx.status(200),
-      ctx.json<infra.PostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse>(
+      ctx.json<infra.TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse>(
         profileRead,
       ),
     );
   }),
   rest.post(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryLogsProfile>();
+    const body = await req.json<infra.TelemetryLogsProfileResource>();
     //const p = telemetrylogsProfilesStore.post(body);
     const profileRead = telemetrylogsProfilesStore.create(body);
     if (!profileRead) return await res(ctx.status(500));
     return res(
       ctx.status(201),
-      ctx.json<infra.PostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse>(
+      ctx.json<infra.TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse>(
         profileRead,
       ),
     );
@@ -1039,17 +1041,14 @@ export const handlers = [
   rest.put(
     `${baseURL}/telemetry/profiles/metrics/:telemetryMetricsProfileId`,
     async (req, res, ctx) => {
-      const { telemetryMetricsProfileId } =
-        req.params as infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg;
-      const body = await req.json<infra.TelemetryMetricsProfile>();
-      const p = telemetryMetricsProfilesStore.put(
-        telemetryMetricsProfileId,
-        body,
-      );
+      const { resourceId } =
+        req.params as infra.TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg;
+      const body = await req.json<infra.TelemetryMetricsProfileResource>();
+      const p = telemetryMetricsProfilesStore.put(resourceId, body);
       if (!p) return await res(ctx.status(500));
       return res(
         ctx.status(200),
-        ctx.json<infra.PutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse>(
+        ctx.json<infra.TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse>(
           p,
         ),
       );
@@ -1057,16 +1056,16 @@ export const handlers = [
   ),
 
   rest.put(
-    `${baseURL}/telemetry/profiles/logs/:telemetryLogsProfileId`,
+    `${baseURL}/telemetry/profiles/logs/:resourceId`,
     async (req, res, ctx) => {
-      const { telemetryLogsProfileId } =
-        req.params as infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg;
-      const body = await req.json<infra.TelemetryLogsProfile>();
-      const p = telemetrylogsProfilesStore.put(telemetryLogsProfileId, body);
+      const { resourceId } =
+        req.params as infra.TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg;
+      const body = await req.json<infra.TelemetryLogsProfileResource>();
+      const p = telemetrylogsProfilesStore.put(resourceId, body);
       if (!p) return res(ctx.status(500));
       return res(
         ctx.status(200),
-        ctx.json<infra.PutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse>(
+        ctx.json<infra.TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse>(
           p,
         ),
       );
@@ -1074,25 +1073,21 @@ export const handlers = [
   ),
 
   rest.delete(
-    `${baseURL}/telemetry/profiles/metrics/:telemetryMetricsProfileId`,
+    `${baseURL}/telemetry/profiles/metrics/:resourceId`,
     async (req, res, ctx) => {
-      const { telemetryMetricsProfileId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg;
-      const deleteResult = telemetryMetricsProfilesStore.delete(
-        telemetryMetricsProfileId,
-      );
+      const { resourceId } =
+        req.params as infra.TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg;
+      const deleteResult = telemetryMetricsProfilesStore.delete(resourceId);
       return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),
 
   rest.delete(
-    `${baseURL}/telemetry/profiles/logs/:telemetryLogsProfileId`,
+    `${baseURL}/telemetry/profiles/logs/:resourceId`,
     async (req, res, ctx) => {
-      const { telemetryLogsProfileId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg;
-      const deleteResult = telemetrylogsProfilesStore.delete(
-        telemetryLogsProfileId,
-      );
+      const { resourceId } =
+        req.params as infra.TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg;
+      const deleteResult = telemetrylogsProfilesStore.delete(resourceId);
       return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),

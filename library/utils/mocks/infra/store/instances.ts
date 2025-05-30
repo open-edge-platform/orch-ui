@@ -379,7 +379,7 @@ export class InstanceStore extends BaseStore<
       os: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
       currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
       desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
-      localAccount:
+      localaccount:
         localAccount ?? (body.localaccount as infra.LocalAccountResourceRead),
       timestamps: {
         createdAt: new Date().toISOString(),

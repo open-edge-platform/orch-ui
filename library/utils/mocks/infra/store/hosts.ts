@@ -587,15 +587,14 @@ export class HostStore extends BaseStore<"resourceId", HostMock> {
 
   getSummary(
     filter?: string | null,
-  ): infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse {
+  ): infra.HostServiceGetHostsSummaryApiResponse {
     let hosts = this.resources;
-    const hostStat: infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse =
-      {
-        total: 0,
-        running: 0,
-        error: 0,
-        unallocated: 0,
-      };
+    const hostStat: infra.HostServiceGetHostsSummaryApiResponse = {
+      total: 0,
+      running: 0,
+      error: 0,
+      unallocated: 0,
+    };
 
     if (hosts) {
       // Seperate to simplest filters
@@ -678,42 +677,38 @@ const assignedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "has(instance.workloadMembers) AND has(site)",
 });
-export const assignedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: assignedHostList,
-    totalElements: assignedHostList.length,
-  };
+export const assignedHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: assignedHostList,
+  totalElements: assignedHostList.length,
+};
 
 const provisionedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(instance.workloadMembers) AND has(site)",
 });
-export const provisionedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: provisionedHostList,
-    totalElements: provisionedHostList.length,
-  };
+export const provisionedHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: provisionedHostList,
+  totalElements: provisionedHostList.length,
+};
 
 const onboardedHostList = new HostStore().list({
   deviceUuid: null,
   filter: "NOT has(site)",
 });
-export const onboardedHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: onboardedHostList,
-    totalElements: onboardedHostList.length,
-  };
+export const onboardedHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: onboardedHostList,
+  totalElements: onboardedHostList.length,
+};
 
 const registeredHostList = new HostStore().list({
   deviceUuid: null,
   filter: "currentState=HOST_STATE_REGISTERED",
 });
-export const registeredHosts: infra.GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  {
-    hasNext: false,
-    hosts: registeredHostList,
-    totalElements: registeredHostList.length,
-  };
+export const registeredHosts: infra.HostServiceListHostsApiResponse = {
+  hasNext: false,
+  hosts: registeredHostList,
+  totalElements: registeredHostList.length,
+};

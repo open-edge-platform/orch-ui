@@ -37,7 +37,7 @@ export const hostResourceGpus: infra.HostgpuResourceRead[] = [
 export const hostResourceNics: infra.HostnicResourceRead[] = [
   {
     bmcInterface: false,
-    ipAddresses: [
+    ipaddresses: [
       {
         configMethod: "IP_ADDRESS_CONFIG_METHOD_STATIC",
         address: "2345:0425:2CA1::0567:5673:23b5/64",
@@ -51,7 +51,9 @@ export const hostResourceNics: infra.HostnicResourceRead[] = [
         statusDetail: "",
       },
     ],
-    linkState: "NETWORK_INTERFACE_LINK_STATE_UP",
+    linkState: {
+      type: "NETWORK_INTERFACE_LINK_STATE_UP",
+    },
     macAddr: "90:49:fa:07:6c:fd",
     mtu: 1500,
     deviceName: "eth0",
@@ -65,7 +67,7 @@ export const hostResourceNics: infra.HostnicResourceRead[] = [
   },
   {
     deviceName: "Network Interface",
-    ipAddresses: [
+    ipaddresses: [
       {
         address: "192.168.11.1",
         configMethod: "IP_ADDRESS_CONFIG_METHOD_STATIC",
@@ -85,7 +87,7 @@ export const hostResourceNics: infra.HostnicResourceRead[] = [
   },
   {
     deviceName: "Interface 2",
-    ipAddresses: [
+    ipaddresses: [
       {
         address: "343232",
         configMethod: "IP_ADDRESS_CONFIG_METHOD_STATIC",
@@ -97,11 +99,13 @@ export const hostResourceNics: infra.HostnicResourceRead[] = [
     sriovVfsNum: 234,
     mtu: 2,
     bmcInterface: true,
-    linkState: "NETWORK_INTERFACE_LINK_STATE_UP",
+    linkState: {
+      type: "NETWORK_INTERFACE_LINK_STATE_UP",
+    },
   },
   {
     deviceName: "Interface 3",
-    ipAddresses: [
+    ipaddresses: [
       {
         address: "12232",
         configMethod: "IP_ADDRESS_CONFIG_METHOD_DYNAMIC",
@@ -146,24 +150,24 @@ export const hostResourceUsb: infra.HostusbResourceRead[] = [
     addr: 32412351,
     bus: 100004,
     class: "0Eh",
-    idproduct: "0x0A12",
-    idvendor: "0x07GH",
+    idProduct: "0x0A12",
+    idVendor: "0x07GH",
     serial: "3AAB-AA16",
   },
   {
     addr: 31000003,
     bus: 99999999,
     class: "00h",
-    idproduct: "0x0A12",
-    idvendor: "0x08FF",
+    idProduct: "0x0A12",
+    idVendor: "0x08FF",
     serial: "3AAB-AA16",
   },
   {
     addr: 10000045,
     bus: 100006,
     class: "07h",
-    idproduct: "0x0A12",
-    idvendor: "0x07AB",
+    idProduct: "0x0A12",
+    idVendor: "0x07AB",
     serial: "3AAB-AA16",
   },
 ];
