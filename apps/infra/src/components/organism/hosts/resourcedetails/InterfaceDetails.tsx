@@ -28,7 +28,11 @@ function InterfaceDetails({ intf }: InterfaceDetailsProps) {
   return (
     <Flex cols={[4, 8]} className="interface-details">
       <Heading semanticLevel={6}>Link Status</Heading>
-      <LinkStatus status={intf.linkState?.type ?? "LINK_STATE_UNSPECIFIED"} />
+      <LinkStatus
+        status={
+          intf.linkState?.type ?? "NETWORK_INTERFACE_LINK_STATE_UNSPECIFIED"
+        }
+      />
       <Heading semanticLevel={6}>MTU</Heading>
       <span>{intf.mtu}</span>
       <Heading semanticLevel={6}>Mac Address</Heading>
