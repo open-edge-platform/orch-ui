@@ -16,6 +16,11 @@ const devConfig = {
   module: {
     rules: [
       {
+        test: /\.(ts|tsx)$/,
+        exclude: [/node_modules/, /\.cy\.tsx$/, /\.pom\.ts/],
+        use: ["@jsdevtools/coverage-istanbul-loader", "ts-loader"],
+      },
+      {
         test: /.*\.pom.(ts|tsx)?$/,
         use: [{ loader: "ignore-loader" }],
       },
@@ -42,6 +47,12 @@ const devConfig = {
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers":
         "X-Requested-With, content-type, Authorization",
+      // "Content-Security-Policy": [
+      //   "default-src 'self';",
+      //   "script-src 'nonce-UNIQUE_NONCE' 'strict-dynamic'",
+      //   "'unsafe-eval'",
+      //   "https:; object-src 'none'; base-uri 'self';",
+      // ].join(" "),
     },
     onListening: function (devServer) {
       if (!devServer) {
