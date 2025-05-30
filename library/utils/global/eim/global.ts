@@ -245,7 +245,7 @@ export const isOSUpdateAvailable = (
   const desiredOsId = instance?.desiredOs?.resourceId;
   const currentOs = instance?.currentOs;
   return (
-    currentOs?.osType === "OPERATING_SYSTEM_TYPE_IMMUTABLE" &&
+    currentOs?.osType === "OS_TYPE_IMMUTABLE" &&
     currentOs?.resourceId !== desiredOsId
   );
 };
@@ -330,6 +330,7 @@ const getHostCurrentStateTitles = (
       return {
         title: `${hostName} is deauthorized`,
       };
+    //@ts-ignore TODO: Ideally HOST_STATE_ERROR should be received in currenState rather than osType
     case "HOST_STATE_ERROR":
       return {
         title: `${hostName} has error`,
@@ -435,6 +436,7 @@ export const hostStateMapping: Record<
   NonNullable<infra.HostResourceRead["currentState"]>,
   { status: IconStatus; message: string }
 > = {
+  //@ts-ignore TODO: Ideally HOST_STATE_ERROR should be received in currenState rather than osType
   HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
   HOST_STATE_DELETING: { status: IconStatus.NotReady, message: "Deleting" },
   HOST_STATE_DELETED: { status: IconStatus.Error, message: "Deleted" },
