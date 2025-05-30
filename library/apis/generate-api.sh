@@ -57,4 +57,7 @@ npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonito
 echo -e "${CYAN}Generate REMOTE_PROVISIONING_SERVER RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}remote-provisioning/remoteProvisioning.config.json
 
+echo -e "${CYAN}Generate MANAGEMENT_PRSENCE_SERVER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}management-presense/managementPresense.config.json
+
 npm run library:fix
