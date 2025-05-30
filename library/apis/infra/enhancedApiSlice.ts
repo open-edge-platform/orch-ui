@@ -31,9 +31,9 @@ export interface InstanceReadModified extends infra.InstanceResourceRead {
 }
 
 export type ScheduleMaintenanceTargetEntity =
-  | infra.HostRead
-  | infra.SiteRead
-  | infra.RegionRead;
+  | infra.HostResourceRead
+  | infra.SiteResourceRead
+  | infra.RegionResourceRead;
 export type ScheduleMaintenanceTargetEntityType = "host" | "site" | "region";
 /** Schedule Maintenance targets that are fed into the APIs based on the Target Entity type */
 export interface ScheduleMaintenanceTargetData {
@@ -50,18 +50,18 @@ type commonMaintenanceFields = "name" | "scheduleStatus";
 type commonMaintenanceTargets = "targetHost" | "targetSite" | "targetRegion";
 interface _ScheduleMaintenance {
   type: ScheduleMaintenanceType;
-  targetHost?: infra.HostRead;
-  targetSite?: infra.SiteRead;
-  targetRegion?: infra.RegionRead;
+  targetHost?: infra.HostResourceRead;
+  targetSite?: infra.SiteResourceRead;
+  targetRegion?: infra.RegionResourceRead;
   single?: Partial<
     Omit<
-      infra.SingleSchedule2,
+      infra.SingleScheduleResource,
       commonMaintenanceFields | commonMaintenanceTargets
     >
   > & { isOpenEnded?: boolean };
   repeated?: Partial<
     Omit<
-      infra.SingleSchedule,
+      infra.RepeatedScheduleResource,
       commonMaintenanceFields | commonMaintenanceTargets
     >
   > & {
@@ -71,7 +71,7 @@ interface _ScheduleMaintenance {
 }
 
 export type ScheduleMaintenance = _ScheduleMaintenance &
-  Pick<infra.SingleSchedule2, commonMaintenanceFields>;
+  Pick<infra.SingleScheduleResource, commonMaintenanceFields>;
 export interface ScheduleMaintenanceRead extends ScheduleMaintenance {
   resourceId?: string;
 }
@@ -85,7 +85,7 @@ export type RepeatedMaintenance = Pick<
   commonScheduleTypeFields
 > & {
   repeated: Omit<
-    infra.SingleSchedule,
+    infra.RepeatedScheduleResource,
     commonMaintenanceFields | commonMaintenanceTargets
   > & {
     countPrevMonthOnTzGMT?: boolean;
@@ -97,7 +97,7 @@ export type SingleMaintenance = Pick<
   commonScheduleTypeFields
 > & {
   single: Omit<
-    infra.SingleSchedule2,
+    infra.SingleScheduleResource,
     commonMaintenanceFields | commonMaintenanceTargets
   > & { isOpenEnded?: boolean };
 };

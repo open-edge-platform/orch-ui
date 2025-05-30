@@ -14,10 +14,10 @@ export interface _HostStatusRootState {
 
 export interface HostStatusState {
   hostId: string;
-  status: infra.HostRead["hostStatus"] | infra.ScheduleStatus;
+  status: infra.HostResourceRead["hostStatus"] | infra.ScheduleStatus;
 }
 export interface HostStatusList {
-  [hostId: string]: infra.HostRead["hostStatus"] | infra.ScheduleStatus;
+  [hostId: string]: infra.HostResourceRead["hostStatus"] | infra.ScheduleStatus;
 }
 const initialState: HostStatusList = {};
 

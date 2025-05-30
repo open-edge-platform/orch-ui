@@ -10,18 +10,18 @@ import IpAddressStatus from "./IpAddressStatus";
 import LinkStatus from "./LinkStatus";
 
 interface InterfaceDetailsProps {
-  intf: infra.HostResourcesInterfaceRead;
+  intf: infra.HostnicResourceRead;
 }
 
 function InterfaceDetails({ intf }: InterfaceDetailsProps) {
   const isEnabledValue = (value: boolean) => (value ? "Enabled" : "Disabled");
   const isTrueValue = (value: boolean) => (value ? "Yes" : "No");
   const staticIps = intf.ipaddresses?.filter(
-    (ip) => ip.configMethod === "IP_ADDRESS_CONFIG_MODE_STATIC",
+    (ip) => ip.configMethod === "IP_ADDRESS_CONFIG_METHOD_STATIC",
   );
   const hasStaticIp = staticIps && staticIps.length > 0;
   const dynamicIps = intf.ipaddresses?.filter(
-    (ip) => ip.configMethod === "IP_ADDRESS_CONFIG_MODE_DYNAMIC",
+    (ip) => ip.configMethod === "IP_ADDRESS_CONFIG_METHOD_DYNAMIC",
   );
   const hasDynamicIp = dynamicIps && dynamicIps.length > 0;
 

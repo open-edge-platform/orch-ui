@@ -26,7 +26,7 @@ interface ComponentsProps {
 }
 
 export const createRegion = (
-  region: infra.RegionRead,
+  region: infra.RegionResourceRead,
   isRoot: boolean = false,
   isLoading: boolean = false,
   isExpanded: boolean = false,
@@ -57,7 +57,7 @@ export const createRegion = (
 };
 
 export const createSite = (
-  site: infra.SiteRead,
+  site: infra.SiteResourceRead,
   callbacks: RegionSiteTreeCallbacks,
   componentProps: ComponentsProps,
 ): TreeBranchProps<TreeNode> => {
@@ -81,7 +81,7 @@ export const generateTreeBranchJSX = (
   switch (branch.type) {
     case "region":
       return createRegion(
-        branch.data as infra.RegionRead,
+        branch.data as infra.RegionResourceRead,
         branch.isRoot,
         branch.isLoading,
         branch.isExpanded,
@@ -90,7 +90,7 @@ export const generateTreeBranchJSX = (
       );
     case "site":
       return createSite(
-        branch.data as infra.SiteRead,
+        branch.data as infra.SiteResourceRead,
         callbacks,
         componentProps,
       );

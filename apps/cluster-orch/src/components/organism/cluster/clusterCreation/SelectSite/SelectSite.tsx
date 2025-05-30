@@ -32,7 +32,7 @@ export interface SearchTypeItem {
   name: string;
 }
 interface SelectSiteForClusterProps {
-  selectedSite?: infra.SiteRead;
+  selectedSite?: infra.SiteResourceRead;
   selectedRegion?: infra.Region;
   onSelectedInheritedMeta: (value: TypedMetadata[]) => void;
 }
@@ -54,15 +54,14 @@ const SelectSite = ({
   const preSiteId = query.get("siteId");
   const preSiteName = query.get("siteName");
 
-  const { data: preSelectedSite, isLoading } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: preRegionId ?? "*",
-        siteId: preSiteId ?? "",
-      },
-      { skip: !preSiteId || !SharedStorage.project?.name },
-    );
+  const { data: preSelectedSite, isLoading } = infra.useSiteServiceGetSiteQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      regionResourceId: preRegionId ?? "*",
+      resourceId: preSiteId ?? "",
+    },
+    { skip: !preSiteId || !SharedStorage.project?.name },
+  );
 
   useEffect(() => {
     if (
@@ -105,7 +104,7 @@ const SelectSite = ({
     onSelectedInheritedMeta([...regionMetadata, ...siteMetadata]);
   }, [selectedSite, currentLocations]);
 
-  const handleOnSiteSelected = (site: infra.SiteRead) => {
+  const handleOnSiteSelected = (site: infra.SiteResourceRead) => {
     dispatch(updateRegionName(site.region?.name ?? ""));
     dispatch(updateRegionId(site.region?.resourceId ?? ""));
     dispatch(updateSiteId(site.resourceId ?? ""));
