@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 const REGEX = /^REACT_/i;
 function getClientEnvironment() {
   const raw = Object.keys(process.env)
@@ -24,6 +26,24 @@ function getClientEnvironment() {
   return { raw, stringified };
 }
 
+class NoncePlaceholder {
+  apply(compiler) {
+    compiler.hooks.thisCompilation.tap("NoncePlaceholder", (compilation) => {
+      HtmlWebpackPlugin.getHooks(compilation).afterTemplateExecution.tapAsync(
+        "NoncePlaceholder",
+        (data, cb) => {
+          const { headTags } = data;
+          headTags.forEach((x) => {
+            x.attributes.nonce = "UNIQUE_NONCE";
+          });
+          cb(null, data);
+        },
+      );
+    });
+  }
+}
+
 module.exports = {
   getClientEnvironment,
+  NoncePlaceholder,
 };

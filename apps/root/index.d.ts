@@ -17,6 +17,7 @@ declare global {
   interface Window {
     __RUNTIME_CONFIG__: RuntimeConfig;
     Cypress: { testingType: string };
+    nonce?: string;
   }
   namespace Cypress {
     interface Chainable {
@@ -29,4 +30,5 @@ declare global {
   let __webpack_public_path__: string;
   let __webpack_base_uri__: string;
   let __webpack_share_scopes__: any;
+  let __webpack_nonce__: string | undefined;
 }

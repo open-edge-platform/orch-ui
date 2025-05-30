@@ -29,7 +29,7 @@ Create chart name and version as used by the chart label.
 {{ $root := . }}
 server {
   listen 3000;
-  add_header Content-Security-Policy "frame-ancestors 'self' ";
+  add_header Content-Security-Policy "script-src 'nonce-$request_id' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'self'; default-src 'self';";
   add_header X-Frame-Options "DENY";
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
   add_header X-XSS-Protection "1; mode=block";
@@ -52,6 +52,8 @@ server {
   location / {
     limit_except GET { deny  all; }
     root   /usr/share/nginx/html;
+    sub_filter_once off;
+    sub_filter 'UNIQUE_NONCE' $request_id;
     index  index.html index.htm;
     try_files $uri $uri/ /index.html;
   }

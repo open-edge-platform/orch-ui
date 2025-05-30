@@ -9,7 +9,10 @@ const DefinePlugin = require("webpack/lib/DefinePlugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const webpackUtils = require("../../../library/utils/webpack.util");
+const {
+  getClientEnvironment,
+  NoncePlaceholder,
+} = require("../../../library/utils/webpack.util");
 const { dependencies, version } = require("../../../package.json");
 const path = require("path");
 
@@ -95,10 +98,11 @@ module.exports = {
         },
       },
     }),
-    new DefinePlugin(webpackUtils.getClientEnvironment().stringified),
+    new DefinePlugin(getClientEnvironment().stringified),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
+    new NoncePlaceholder(),
     new CopyPlugin({
       patterns: [{ from: "./public/runtime-config.js", to: "." }],
     }),

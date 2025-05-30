@@ -42,6 +42,12 @@ const devConfig = {
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers":
         "X-Requested-With, content-type, Authorization",
+      // "Content-Security-Policy": [
+      //   "default-src 'self';",
+      //   "script-src 'nonce-UNIQUE_NONCE' 'strict-dynamic'",
+      //   "'unsafe-eval'",
+      //   "https:; object-src 'none'; base-uri 'self';",
+      // ].join(" "),
     },
     onListening: function (devServer) {
       if (!devServer) {
