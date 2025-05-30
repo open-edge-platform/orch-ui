@@ -12,9 +12,21 @@ export interface AutocompleteNode {
   path?: string[];
 }
 
-export function buildNodeTree(
+const calculatePaths = (
   nodes: AutocompleteNode[],
-): Map<string, AutocompleteNode> {
+  parentPath: string[] = [],
+): void => {
+  nodes.forEach((node) => {
+    node.path = [...parentPath, node.name];
+    if (node.children?.length) {
+      calculatePaths(node.children, node.path);
+    }
+  });
+};
+
+export const buildNodeTree = (
+  nodes: AutocompleteNode[],
+): Map<string, AutocompleteNode> => {
   const nodeMap = new Map<string, AutocompleteNode>();
   const rootNodes: AutocompleteNode[] = [];
 
@@ -25,8 +37,7 @@ export function buildNodeTree(
   nodes.forEach((node) => {
     if (node.parentId && nodeMap.has(node.parentId)) {
       const parent = nodeMap.get(node.parentId) as AutocompleteNode;
-      if (!parent.children) parent.children = [];
-      parent.children.push(nodeMap.get(node.resourceId) as AutocompleteNode);
+      parent.children?.push(nodeMap.get(node.resourceId) as AutocompleteNode);
     } else if (!node.parentId) {
       rootNodes.push(nodeMap.get(node.resourceId) as AutocompleteNode);
     }
@@ -35,19 +46,7 @@ export function buildNodeTree(
   calculatePaths(rootNodes);
 
   return nodeMap;
-}
-
-function calculatePaths(
-  nodes: AutocompleteNode[],
-  parentPath: string[] = [],
-): void {
-  nodes.forEach((node) => {
-    node.path = [...parentPath, node.name];
-    if (node.children?.length) {
-      calculatePaths(node.children, node.path);
-    }
-  });
-}
+};
 
 export const NODES_MOCK = [
   {

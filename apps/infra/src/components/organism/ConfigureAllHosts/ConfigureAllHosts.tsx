@@ -23,8 +23,8 @@ import {
   AutocompleteNode,
   buildNodeTree,
   NODES_MOCK,
-} from "../../molecules/HierarchicalAutocomplete/hierarchical-autocomplete.utils";
-import HierarchicalAutocomplete from "../../molecules/HierarchicalAutocomplete/HierarchicalAutocomplete";
+} from "../../molecules/LocationAutocomplete/location-autocomplete";
+import { LocationAutocomplete } from "../../molecules/LocationAutocomplete/LocationAutocomplete";
 import { SecuritySwitch } from "../hostConfigure/SecuritySwitch/SecuritySwitch";
 import OsProfileDropdown from "../OsProfileDropdown/OsProfileDropdown";
 import "./ConfigureAllHosts.scss";
@@ -80,7 +80,7 @@ const ConfigureAllHosts = () => {
 
   return (
     <div {...cy} className="configure-all-hosts">
-      <HierarchicalAutocomplete
+      <LocationAutocomplete
         nodes={nodes}
         onNodeSelect={handleSiteChange}
         placeholder="Start typing..."

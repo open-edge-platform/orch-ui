@@ -6,8 +6,8 @@
 import { Combobox, Item, Text } from "@spark-design/react";
 import { useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { AutocompleteNode } from "./hierarchical-autocomplete.utils";
-import "./HierarchicalAutocomplete.scss";
+import { AutocompleteNode } from "./location-autocomplete";
+import "./LocationAutocomplete.scss";
 
 interface HierarchicalAutocompleteProps {
   nodes: AutocompleteNode[];
@@ -17,9 +17,9 @@ interface HierarchicalAutocompleteProps {
   isRequired?: boolean;
 }
 
-const dataCy = "hierarchical-autocomplete";
+const dataCy = "location-autocomplete";
 
-export const HierarchicalAutocomplete = ({
+export const LocationAutocomplete = ({
   nodes,
   onNodeSelect,
   placeholder = "Select a location",
@@ -28,13 +28,10 @@ export const HierarchicalAutocomplete = ({
 }: HierarchicalAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
 
-  const nodeMap = useMemo(() => {
-    const map = new Map<string, AutocompleteNode>();
-    nodes.forEach((node) => {
-      map.set(node.resourceId, node);
-    });
-    return map;
-  }, [nodes]);
+  const nodeMap = useMemo(
+    () => new Map(nodes.map((node) => [node.resourceId, node])),
+    [nodes],
+  );
 
   const filteredNodes = useMemo(() => {
     if (!inputValue.trim()) return nodes;
@@ -43,7 +40,7 @@ export const HierarchicalAutocomplete = ({
     return nodes.filter((node) => {
       if (node.name.toLowerCase().includes(lowerCaseInput)) return true;
 
-      const fullPath = node.path?.join(" | ").toLowerCase() || "";
+      const fullPath = node.path?.join(" | ").toLowerCase() ?? "";
       return fullPath.includes(lowerCaseInput);
     });
   }, [inputValue, nodes]);
@@ -54,7 +51,7 @@ export const HierarchicalAutocomplete = ({
     if (resourceId && nodeMap.has(resourceId)) {
       node = nodeMap.get(resourceId);
       if (node) {
-        setInputValue(node.path?.join(" | ") || node.name);
+        setInputValue(node.path?.join(" | ") ?? node.name);
       }
     } else {
       setInputValue("");
@@ -78,7 +75,7 @@ export const HierarchicalAutocomplete = ({
       >
         {filteredNodes.length > 0 ? (
           filteredNodes.map((node) => {
-            const displayText = node.path?.join(" | ") || node.name;
+            const displayText = node.path?.join(" | ") ?? node.name;
             return (
               <Item key={node.resourceId} textValue={displayText}>
                 <Highlighter
@@ -100,4 +97,4 @@ export const HierarchicalAutocomplete = ({
   );
 };
 
-export default HierarchicalAutocomplete;
+export default LocationAutocomplete;
