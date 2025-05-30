@@ -75,7 +75,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.hostResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["HostService"],
       }),
@@ -130,7 +129,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/compute/hosts/register`,
           method: "POST",
           body: queryArg.hostRegister,
-          params: { resourceId: queryArg.resourceId },
         }),
         invalidatesTags: ["HostService"],
       }),
@@ -197,7 +195,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.instanceResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["InstanceService"],
       }),
@@ -275,7 +272,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.operatingSystemResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["OperatingSystemService"],
       }),
@@ -360,7 +356,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.workloadResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["WorkloadService"],
       }),
@@ -578,7 +573,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.siteResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["SiteService"],
       }),
@@ -620,7 +614,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.regionResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["RegionService"],
       }),
@@ -716,7 +709,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.repeatedScheduleResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["ScheduleService"],
       }),
@@ -786,7 +778,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.singleScheduleResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["ScheduleService"],
       }),
@@ -853,7 +844,6 @@ const injectedRtkApi = api
           url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
           method: "PATCH",
           body: queryArg.telemetryLogsProfileResource,
-          params: { fieldMask: queryArg.fieldMask },
         }),
         invalidatesTags: ["TelemetryLogsProfileService"],
       }),
@@ -970,7 +960,6 @@ const injectedRtkApi = api
             url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
             method: "PATCH",
             body: queryArg.telemetryMetricsProfileResource,
-            params: { fieldMask: queryArg.fieldMask },
           }),
           invalidatesTags: ["TelemetryMetricsProfileService"],
         }),
@@ -1040,13 +1029,16 @@ const injectedRtkApi = api
   });
 export { injectedRtkApi as infra };
 export type HostServiceListHostsApiResponse =
-  /** status 200 OK */ ListHostsResponseRead;
+  /** status 200 Success */ ListHostsResponseRead;
 export type HostServiceListHostsApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1054,14 +1046,15 @@ export type HostServiceListHostsApiArg = {
   projectName: string;
 };
 export type HostServiceCreateHostApiResponse =
-  /** status 200 OK */ HostResourceRead;
+  /** status 200 Success */ HostResourceRead;
 export type HostServiceCreateHostApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The host to create. */
   hostResource: HostResourceWrite;
 };
 export type HostServiceDeleteHostApiResponse =
-  /** status 200 OK */ DeleteHostResponse;
+  /** status 200 Success */ DeleteHostResponse;
 export type HostServiceDeleteHostApiArg = {
   /** Name of the host host to be deleted. */
   resourceId: string;
@@ -1069,7 +1062,7 @@ export type HostServiceDeleteHostApiArg = {
   projectName: string;
 };
 export type HostServiceGetHostApiResponse =
-  /** status 200 OK */ HostResourceRead;
+  /** status 200 Success */ HostResourceRead;
 export type HostServiceGetHostApiArg = {
   /** Name of the requested host. */
   resourceId: string;
@@ -1077,42 +1070,45 @@ export type HostServiceGetHostApiArg = {
   projectName: string;
 };
 export type HostServicePatchHostApiResponse =
-  /** status 200 OK */ HostResourceRead;
+  /** status 200 Success */ HostResourceRead;
 export type HostServicePatchHostApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of host. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the host. */
   hostResource: HostResourceWrite;
 };
 export type HostServiceUpdateHostApiResponse =
-  /** status 200 OK */ HostResourceRead;
+  /** status 200 Success */ HostResourceRead;
 export type HostServiceUpdateHostApiArg = {
   /** Name of the host host to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the host. */
   hostResource: HostResourceWrite;
 };
 export type HostServiceInvalidateHostApiResponse =
-  /** status 200 OK */ InvalidateHostResponse;
+  /** status 200 Success */ InvalidateHostResponse;
 export type HostServiceInvalidateHostApiArg = {
+  /** Host resource ID */
   resourceId: string;
+  /** user-provided reason for change or a freeform field */
   note?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
 export type HostServiceOnboardHostApiResponse =
-  /** status 200 OK */ OnboardHostResponse;
+  /** status 200 Success */ OnboardHostResponse;
 export type HostServiceOnboardHostApiArg = {
+  /** Host resource ID */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
 export type HostServiceRegisterUpdateHostApiResponse =
-  /** status 200 OK */ HostResourceRead;
+  /** status 200 Success */ HostResourceRead;
 export type HostServiceRegisterUpdateHostApiArg = {
   resourceId: string;
   /** unique projectName for the resource */
@@ -1120,29 +1116,32 @@ export type HostServiceRegisterUpdateHostApiArg = {
   hostRegister: HostRegister;
 };
 export type HostServiceRegisterHostApiResponse =
-  /** status 200 OK */ HostResourceRead;
+  /** status 200 Success */ HostResourceRead;
 export type HostServiceRegisterHostApiArg = {
-  resourceId?: string;
   /** unique projectName for the resource */
   projectName: string;
   hostRegister: HostRegister;
 };
 export type HostServiceGetHostsSummaryApiResponse =
-  /** status 200 OK */ GetHostSummaryResponseRead;
+  /** status 200 Success */ GetHostSummaryResponseRead;
 export type HostServiceGetHostsSummaryApiArg = {
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
 export type InstanceServiceListInstancesApiResponse =
-  /** status 200 OK */ ListInstancesResponseRead;
+  /** status 200 Success */ ListInstancesResponseRead;
 export type InstanceServiceListInstancesApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1150,14 +1149,15 @@ export type InstanceServiceListInstancesApiArg = {
   projectName: string;
 };
 export type InstanceServiceCreateInstanceApiResponse =
-  /** status 200 OK */ InstanceResourceRead;
+  /** status 200 Success */ InstanceResourceRead;
 export type InstanceServiceCreateInstanceApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The instance to create. */
   instanceResource: InstanceResourceWrite;
 };
 export type InstanceServiceDeleteInstanceApiResponse =
-  /** status 200 OK */ DeleteInstanceResponse;
+  /** status 200 Success */ DeleteInstanceResponse;
 export type InstanceServiceDeleteInstanceApiArg = {
   /** Name of the instance instance to be deleted. */
   resourceId: string;
@@ -1165,7 +1165,7 @@ export type InstanceServiceDeleteInstanceApiArg = {
   projectName: string;
 };
 export type InstanceServiceGetInstanceApiResponse =
-  /** status 200 OK */ InstanceResourceRead;
+  /** status 200 Success */ InstanceResourceRead;
 export type InstanceServiceGetInstanceApiArg = {
   /** Name of the requested instance. */
   resourceId: string;
@@ -1173,40 +1173,44 @@ export type InstanceServiceGetInstanceApiArg = {
   projectName: string;
 };
 export type InstanceServicePatchInstanceApiResponse =
-  /** status 200 OK */ InstanceResourceRead;
+  /** status 200 Success */ InstanceResourceRead;
 export type InstanceServicePatchInstanceApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of instance. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the instance. */
   instanceResource: InstanceResourceWrite;
 };
 export type InstanceServiceUpdateInstanceApiResponse =
-  /** status 200 OK */ InstanceResourceRead;
+  /** status 200 Success */ InstanceResourceRead;
 export type InstanceServiceUpdateInstanceApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the instance. */
   instanceResource: InstanceResourceWrite;
 };
 export type InstanceServiceInvalidateInstanceApiResponse =
-  /** status 200 OK */ InvalidateInstanceResponse;
+  /** status 200 Success */ InvalidateInstanceResponse;
 export type InstanceServiceInvalidateInstanceApiArg = {
+  /** Instance resource ID */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
 export type OperatingSystemServiceListOperatingSystemsApiResponse =
-  /** status 200 OK */ ListOperatingSystemsResponseRead;
+  /** status 200 Success */ ListOperatingSystemsResponseRead;
 export type OperatingSystemServiceListOperatingSystemsApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1214,14 +1218,15 @@ export type OperatingSystemServiceListOperatingSystemsApiArg = {
   projectName: string;
 };
 export type OperatingSystemServiceCreateOperatingSystemApiResponse =
-  /** status 200 OK */ OperatingSystemResourceRead;
+  /** status 200 Success */ OperatingSystemResourceRead;
 export type OperatingSystemServiceCreateOperatingSystemApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The os to create. */
   operatingSystemResource: OperatingSystemResource;
 };
 export type OperatingSystemServiceDeleteOperatingSystemApiResponse =
-  /** status 200 OK */ DeleteOperatingSystemResponse;
+  /** status 200 Success */ DeleteOperatingSystemResponse;
 export type OperatingSystemServiceDeleteOperatingSystemApiArg = {
   /** Name of the os os to be deleted. */
   resourceId: string;
@@ -1229,7 +1234,7 @@ export type OperatingSystemServiceDeleteOperatingSystemApiArg = {
   projectName: string;
 };
 export type OperatingSystemServiceGetOperatingSystemApiResponse =
-  /** status 200 OK */ OperatingSystemResourceRead;
+  /** status 200 Success */ OperatingSystemResourceRead;
 export type OperatingSystemServiceGetOperatingSystemApiArg = {
   /** Name of the requested os. */
   resourceId: string;
@@ -1237,37 +1242,48 @@ export type OperatingSystemServiceGetOperatingSystemApiArg = {
   projectName: string;
 };
 export type OperatingSystemServicePatchOperatingSystemApiResponse =
-  /** status 200 OK */ OperatingSystemResourceRead;
+  /** status 200 Success */ OperatingSystemResourceRead;
 export type OperatingSystemServicePatchOperatingSystemApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of os. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the os. */
   operatingSystemResource: OperatingSystemResource;
 };
 export type OperatingSystemServiceUpdateOperatingSystemApiResponse =
-  /** status 200 OK */ OperatingSystemResourceRead;
+  /** status 200 Success */ OperatingSystemResourceRead;
 export type OperatingSystemServiceUpdateOperatingSystemApiArg = {
   /** Name of the os os to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the os. */
   operatingSystemResource: OperatingSystemResource;
 };
 export type ScheduleServiceListSchedulesApiResponse =
-  /** status 200 OK */ ListSchedulesResponseRead;
+  /** status 200 Success */ ListSchedulesResponseRead;
 export type ScheduleServiceListSchedulesApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** The host ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified host ID applied to them, i.e., target including the inherited ones (parent site if not null). If null, returns all the schedules without a host ID as target. */
+  /** The host ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified host ID applied to them, i.e., target including the inherited ones
+     (parent site if not null). If null, returns all the schedules without a host ID as target. */
   hostId?: string;
-  /** The site ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified site ID applied to them, i.e., target including the inherited ones. If null, returns all the schedules without a site ID as target */
+  /** The site ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified site ID applied to them, i.e., target including the inherited ones.
+     If null, returns all the schedules without a site ID as target */
   siteId?: string;
-  /** The region ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified region ID applied to them, i.e., target including the inherited ones (parent region if not null). If null, returns all the schedules without a region ID as target. */
+  /** The region ID target of the schedules. If not specified,
+     returns all schedules (given the other query params).
+     If specified, returns the schedules that have the specified region ID applied to them,
+     i.e., target including the inherited ones (parent region if not null).
+     If null, returns all the schedules without a region ID as target. */
   regionId?: string;
   /** Filter based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
   unixEpoch?: string;
@@ -1275,13 +1291,16 @@ export type ScheduleServiceListSchedulesApiArg = {
   projectName: string;
 };
 export type WorkloadServiceListWorkloadsApiResponse =
-  /** status 200 OK */ ListWorkloadsResponseRead;
+  /** status 200 Success */ ListWorkloadsResponseRead;
 export type WorkloadServiceListWorkloadsApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1289,14 +1308,15 @@ export type WorkloadServiceListWorkloadsApiArg = {
   projectName: string;
 };
 export type WorkloadServiceCreateWorkloadApiResponse =
-  /** status 200 OK */ WorkloadResourceRead;
+  /** status 200 Success */ WorkloadResourceRead;
 export type WorkloadServiceCreateWorkloadApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The workload to create. */
   workloadResource: WorkloadResourceWrite;
 };
 export type WorkloadServiceDeleteWorkloadApiResponse =
-  /** status 200 OK */ DeleteWorkloadResponse;
+  /** status 200 Success */ DeleteWorkloadResponse;
 export type WorkloadServiceDeleteWorkloadApiArg = {
   /** Name of the workload workload to be deleted. */
   resourceId: string;
@@ -1304,7 +1324,7 @@ export type WorkloadServiceDeleteWorkloadApiArg = {
   projectName: string;
 };
 export type WorkloadServiceGetWorkloadApiResponse =
-  /** status 200 OK */ WorkloadResourceRead;
+  /** status 200 Success */ WorkloadResourceRead;
 export type WorkloadServiceGetWorkloadApiArg = {
   /** Name of the requested workload. */
   resourceId: string;
@@ -1312,33 +1332,36 @@ export type WorkloadServiceGetWorkloadApiArg = {
   projectName: string;
 };
 export type WorkloadServicePatchWorkloadApiResponse =
-  /** status 200 OK */ WorkloadResourceRead;
+  /** status 200 Success */ WorkloadResourceRead;
 export type WorkloadServicePatchWorkloadApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of workload. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the workload. */
   workloadResource: WorkloadResourceWrite;
 };
 export type WorkloadServiceUpdateWorkloadApiResponse =
-  /** status 200 OK */ WorkloadResourceRead;
+  /** status 200 Success */ WorkloadResourceRead;
 export type WorkloadServiceUpdateWorkloadApiArg = {
   /** Name of the workload workload to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the workload. */
   workloadResource: WorkloadResourceWrite;
 };
 export type WorkloadMemberServiceListWorkloadMembersApiResponse =
-  /** status 200 OK */ ListWorkloadMembersResponseRead;
+  /** status 200 Success */ ListWorkloadMembersResponseRead;
 export type WorkloadMemberServiceListWorkloadMembersApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1348,16 +1371,17 @@ export type WorkloadMemberServiceListWorkloadMembersApiArg = {
   resourceId: string;
 };
 export type WorkloadMemberServiceCreateWorkloadMemberApiResponse =
-  /** status 200 OK */ WorkloadMemberRead;
+  /** status 200 Success */ WorkloadMemberRead;
 export type WorkloadMemberServiceCreateWorkloadMemberApiArg = {
   /** unique projectName for the resource */
   projectName: string;
   /** unique resourceId for the resource */
   resourceId: string;
+  /** The workload_member to create. */
   workloadMember: WorkloadMemberWrite;
 };
 export type WorkloadMemberServiceDeleteWorkloadMemberApiResponse =
-  /** status 200 OK */ DeleteWorkloadMemberResponse;
+  /** status 200 Success */ DeleteWorkloadMemberResponse;
 export type WorkloadMemberServiceDeleteWorkloadMemberApiArg = {
   /** Name of the workload_member workload_member to be deleted. */
   resourceId: string;
@@ -1367,7 +1391,7 @@ export type WorkloadMemberServiceDeleteWorkloadMemberApiArg = {
   workloadResourceId: string;
 };
 export type WorkloadMemberServiceGetWorkloadMemberApiResponse =
-  /** status 200 OK */ WorkloadMemberRead;
+  /** status 200 Success */ WorkloadMemberRead;
 export type WorkloadMemberServiceGetWorkloadMemberApiArg = {
   /** Name of the requested workload_member. */
   resourceId: string;
@@ -1377,13 +1401,16 @@ export type WorkloadMemberServiceGetWorkloadMemberApiArg = {
   workloadResourceId: string;
 };
 export type LocalAccountServiceListLocalAccountsApiResponse =
-  /** status 200 OK */ ListLocalAccountsResponseRead;
+  /** status 200 Success */ ListLocalAccountsResponseRead;
 export type LocalAccountServiceListLocalAccountsApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1391,14 +1418,15 @@ export type LocalAccountServiceListLocalAccountsApiArg = {
   projectName: string;
 };
 export type LocalAccountServiceCreateLocalAccountApiResponse =
-  /** status 200 OK */ LocalAccountResourceRead;
+  /** status 200 Success */ LocalAccountResourceRead;
 export type LocalAccountServiceCreateLocalAccountApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The localaccount to create. */
   localAccountResource: LocalAccountResource;
 };
 export type LocalAccountServiceDeleteLocalAccountApiResponse =
-  /** status 200 OK */ DeleteLocalAccountResponse;
+  /** status 200 Success */ DeleteLocalAccountResponse;
 export type LocalAccountServiceDeleteLocalAccountApiArg = {
   /** Name of the localaccount to be deleted. */
   resourceId: string;
@@ -1406,7 +1434,7 @@ export type LocalAccountServiceDeleteLocalAccountApiArg = {
   projectName: string;
 };
 export type LocalAccountServiceGetLocalAccountApiResponse =
-  /** status 200 OK */ LocalAccountResourceRead;
+  /** status 200 Success */ LocalAccountResourceRead;
 export type LocalAccountServiceGetLocalAccountApiArg = {
   /** Name of the requested localaccount. */
   resourceId: string;
@@ -1414,7 +1442,7 @@ export type LocalAccountServiceGetLocalAccountApiArg = {
   projectName: string;
 };
 export type LocationServiceListLocationsApiResponse =
-  /** status 200 OK */ ListLocationsResponse;
+  /** status 200 Success */ ListLocationsResponse;
 export type LocationServiceListLocationsApiArg = {
   /** Filter locations by name */
   name?: string;
@@ -1426,13 +1454,16 @@ export type LocationServiceListLocationsApiArg = {
   projectName: string;
 };
 export type ProviderServiceListProvidersApiResponse =
-  /** status 200 OK */ ListProvidersResponseRead;
+  /** status 200 Success */ ListProvidersResponseRead;
 export type ProviderServiceListProvidersApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1440,14 +1471,15 @@ export type ProviderServiceListProvidersApiArg = {
   projectName: string;
 };
 export type ProviderServiceCreateProviderApiResponse =
-  /** status 200 OK */ ProviderResourceRead;
+  /** status 200 Success */ ProviderResourceRead;
 export type ProviderServiceCreateProviderApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The provider to create. */
   providerResource: ProviderResource;
 };
 export type ProviderServiceDeleteProviderApiResponse =
-  /** status 200 OK */ DeleteProviderResponse;
+  /** status 200 Success */ DeleteProviderResponse;
 export type ProviderServiceDeleteProviderApiArg = {
   /** Name of the provider provider to be deleted. */
   resourceId: string;
@@ -1455,7 +1487,7 @@ export type ProviderServiceDeleteProviderApiArg = {
   projectName: string;
 };
 export type ProviderServiceGetProviderApiResponse =
-  /** status 200 OK */ ProviderResourceRead;
+  /** status 200 Success */ ProviderResourceRead;
 export type ProviderServiceGetProviderApiArg = {
   /** Name of the requested provider. */
   resourceId: string;
@@ -1463,13 +1495,16 @@ export type ProviderServiceGetProviderApiArg = {
   projectName: string;
 };
 export type RegionServiceListRegionsApiResponse =
-  /** status 200 OK */ ListRegionsResponseRead;
+  /** status 200 Success */ ListRegionsResponseRead;
 export type RegionServiceListRegionsApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1479,14 +1514,15 @@ export type RegionServiceListRegionsApiArg = {
   projectName: string;
 };
 export type RegionServiceCreateRegionApiResponse =
-  /** status 200 OK */ RegionResourceRead;
+  /** status 200 Success */ RegionResourceRead;
 export type RegionServiceCreateRegionApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The region to create. */
   regionResource: RegionResourceWrite;
 };
 export type SiteServiceDeleteSiteApiResponse =
-  /** status 200 OK */ DeleteSiteResponse;
+  /** status 200 Success */ DeleteSiteResponse;
 export type SiteServiceDeleteSiteApiArg = {
   /** Name of the site site to be deleted. */
   resourceId: string;
@@ -1496,7 +1532,7 @@ export type SiteServiceDeleteSiteApiArg = {
   regionResourceId: string;
 };
 export type SiteServiceGetSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
+  /** status 200 Success */ SiteResourceRead;
 export type SiteServiceGetSiteApiArg = {
   /** Name of the requested site. */
   resourceId: string;
@@ -1506,20 +1542,19 @@ export type SiteServiceGetSiteApiArg = {
   regionResourceId: string;
 };
 export type SiteServicePatchSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
+  /** status 200 Success */ SiteResourceRead;
 export type SiteServicePatchSiteApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of site. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
   /** unique regionResourceId for the resource */
   regionResourceId: string;
+  /** Updated values for the site. */
   siteResource: SiteResourceWrite;
 };
 export type SiteServiceUpdateSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
+  /** status 200 Success */ SiteResourceRead;
 export type SiteServiceUpdateSiteApiArg = {
   /** Name of the site site to be updated. */
   resourceId: string;
@@ -1527,10 +1562,11 @@ export type SiteServiceUpdateSiteApiArg = {
   projectName: string;
   /** unique regionResourceId for the resource */
   regionResourceId: string;
+  /** Updated values for the site. */
   siteResource: SiteResourceWrite;
 };
 export type RegionServiceDeleteRegionApiResponse =
-  /** status 200 OK */ DeleteRegionResponse;
+  /** status 200 Success */ DeleteRegionResponse;
 export type RegionServiceDeleteRegionApiArg = {
   /** Name of the region region to be deleted. */
   resourceId: string;
@@ -1538,7 +1574,7 @@ export type RegionServiceDeleteRegionApiArg = {
   projectName: string;
 };
 export type RegionServiceGetRegionApiResponse =
-  /** status 200 OK */ RegionResourceRead;
+  /** status 200 Success */ RegionResourceRead;
 export type RegionServiceGetRegionApiArg = {
   /** Name of the requested region. */
   resourceId: string;
@@ -1546,33 +1582,36 @@ export type RegionServiceGetRegionApiArg = {
   projectName: string;
 };
 export type RegionServicePatchRegionApiResponse =
-  /** status 200 OK */ RegionResourceRead;
+  /** status 200 Success */ RegionResourceRead;
 export type RegionServicePatchRegionApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of region. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the region. */
   regionResource: RegionResourceWrite;
 };
 export type RegionServiceUpdateRegionApiResponse =
-  /** status 200 OK */ RegionResourceRead;
+  /** status 200 Success */ RegionResourceRead;
 export type RegionServiceUpdateRegionApiArg = {
   /** Name of the region region to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the region. */
   regionResource: RegionResourceWrite;
 };
 export type SiteServiceListSitesApiResponse =
-  /** status 200 OK */ ListSitesResponseRead;
+  /** status 200 Success */ ListSitesResponseRead;
 export type SiteServiceListSitesApiArg = {
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Optional filter to return only item of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
@@ -1582,26 +1621,38 @@ export type SiteServiceListSitesApiArg = {
   resourceId: string;
 };
 export type SiteServiceCreateSiteApiResponse =
-  /** status 200 OK */ SiteResourceRead;
+  /** status 200 Success */ SiteResourceRead;
 export type SiteServiceCreateSiteApiArg = {
   /** unique projectName for the resource */
   projectName: string;
   /** unique resourceId for the resource */
   resourceId: string;
+  /** The site to create. */
   siteResource: SiteResourceWrite;
 };
 export type ScheduleServiceListRepeatedSchedulesApiResponse =
-  /** status 200 OK */ ListRepeatedSchedulesResponseRead;
+  /** status 200 Success */ ListRepeatedSchedulesResponseRead;
 export type ScheduleServiceListRepeatedSchedulesApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** The host ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified host ID applied to them, i.e., target including the inherited ones (parent site if not null). If null, returns all the schedules without a host ID as target. */
+  /** The host ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified host ID applied to them, i.e., target including the inherited ones
+     (parent site if not null). If null, returns all the schedules without a host ID as target. */
   hostId?: string;
-  /** The site ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified site ID applied to them, i.e., target including the inherited ones. If null, returns all the schedules without a site ID as target */
+  /** The site ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified site ID applied to them, i.e., target including the inherited ones.
+     If null, returns all the schedules without a site ID as target */
   siteId?: string;
-  /** The region ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified region ID applied to them, i.e., target including the inherited ones (parent region if not null). If null, returns all the schedules without a region ID as target. */
+  /** The region ID target of the schedules. If not specified,
+     returns all schedules (given the other query params).
+     If specified, returns the schedules that have the specified region ID applied to them,
+     i.e., target including the inherited ones (parent region if not null).
+     If null, returns all the schedules without a region ID as target. */
   regionId?: string;
   /** Filter based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
   unixEpoch?: string;
@@ -1609,14 +1660,15 @@ export type ScheduleServiceListRepeatedSchedulesApiArg = {
   projectName: string;
 };
 export type ScheduleServiceCreateRepeatedScheduleApiResponse =
-  /** status 200 OK */ RepeatedScheduleResourceRead;
+  /** status 200 Success */ RepeatedScheduleResourceRead;
 export type ScheduleServiceCreateRepeatedScheduleApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The repeated_schedule to create. */
   repeatedScheduleResource: RepeatedScheduleResourceWrite;
 };
 export type ScheduleServiceDeleteRepeatedScheduleApiResponse =
-  /** status 200 OK */ DeleteRepeatedScheduleResponse;
+  /** status 200 Success */ DeleteRepeatedScheduleResponse;
 export type ScheduleServiceDeleteRepeatedScheduleApiArg = {
   /** Name of the repeated_schedule repeated_schedule to be deleted. */
   resourceId: string;
@@ -1624,7 +1676,7 @@ export type ScheduleServiceDeleteRepeatedScheduleApiArg = {
   projectName: string;
 };
 export type ScheduleServiceGetRepeatedScheduleApiResponse =
-  /** status 200 OK */ RepeatedScheduleResourceRead;
+  /** status 200 Success */ RepeatedScheduleResourceRead;
 export type ScheduleServiceGetRepeatedScheduleApiArg = {
   /** Name of the requested repeated_schedule. */
   resourceId: string;
@@ -1632,37 +1684,48 @@ export type ScheduleServiceGetRepeatedScheduleApiArg = {
   projectName: string;
 };
 export type ScheduleServicePatchRepeatedScheduleApiResponse =
-  /** status 200 OK */ RepeatedScheduleResourceRead;
+  /** status 200 Success */ RepeatedScheduleResourceRead;
 export type ScheduleServicePatchRepeatedScheduleApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of repeated_schedule. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the repeated_schedule. */
   repeatedScheduleResource: RepeatedScheduleResourceWrite;
 };
 export type ScheduleServiceUpdateRepeatedScheduleApiResponse =
-  /** status 200 OK */ RepeatedScheduleResourceRead;
+  /** status 200 Success */ RepeatedScheduleResourceRead;
 export type ScheduleServiceUpdateRepeatedScheduleApiArg = {
   /** Name of the repeated_schedule repeated_schedule to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the repeated_schedule. */
   repeatedScheduleResource: RepeatedScheduleResourceWrite;
 };
 export type ScheduleServiceListSingleSchedulesApiResponse =
-  /** status 200 OK */ ListSingleSchedulesResponseRead;
+  /** status 200 Success */ ListSingleSchedulesResponseRead;
 export type ScheduleServiceListSingleSchedulesApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** The host ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified host ID applied to them, i.e., target including the inherited ones (parent site if not null). If null, returns all the schedules without a host ID as target. */
+  /** The host ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified host ID applied to them, i.e., target including the inherited ones
+     (parent site if not null). If null, returns all the schedules without a host ID as target. */
   hostId?: string;
-  /** The site ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified site ID applied to them, i.e., target including the inherited ones. If null, returns all the schedules without a site ID as target */
+  /** The site ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified site ID applied to them, i.e., target including the inherited ones.
+     If null, returns all the schedules without a site ID as target */
   siteId?: string;
-  /** The region ID target of the schedules. If not specified, returns all schedules (given the other query params). If specified, returns the schedules that have the specified region ID applied to them, i.e., target including the inherited ones (parent region if not null). If null, returns all the schedules without a region ID as target. */
+  /** The region ID target of the schedules. If not specified,
+     returns all schedules (given the other query params).
+     If specified, returns the schedules that have the specified region ID applied to them,
+     i.e., target including the inherited ones (parent region if not null).
+     If null, returns all the schedules without a region ID as target. */
   regionId?: string;
   /** Filter based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
   unixEpoch?: string;
@@ -1670,14 +1733,15 @@ export type ScheduleServiceListSingleSchedulesApiArg = {
   projectName: string;
 };
 export type ScheduleServiceCreateSingleScheduleApiResponse =
-  /** status 200 OK */ SingleScheduleResourceRead;
+  /** status 200 Success */ SingleScheduleResourceRead;
 export type ScheduleServiceCreateSingleScheduleApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The single_schedule to create. */
   singleScheduleResource: SingleScheduleResourceWrite;
 };
 export type ScheduleServiceDeleteSingleScheduleApiResponse =
-  /** status 200 OK */ DeleteSingleScheduleResponse;
+  /** status 200 Success */ DeleteSingleScheduleResponse;
 export type ScheduleServiceDeleteSingleScheduleApiArg = {
   /** Name of the single_schedule single_schedule to be deleted. */
   resourceId: string;
@@ -1685,7 +1749,7 @@ export type ScheduleServiceDeleteSingleScheduleApiArg = {
   projectName: string;
 };
 export type ScheduleServiceGetSingleScheduleApiResponse =
-  /** status 200 OK */ SingleScheduleResourceRead;
+  /** status 200 Success */ SingleScheduleResourceRead;
 export type ScheduleServiceGetSingleScheduleApiArg = {
   /** Name of the requested single_schedule. */
   resourceId: string;
@@ -1693,46 +1757,49 @@ export type ScheduleServiceGetSingleScheduleApiArg = {
   projectName: string;
 };
 export type ScheduleServicePatchSingleScheduleApiResponse =
-  /** status 200 OK */ SingleScheduleResourceRead;
+  /** status 200 Success */ SingleScheduleResourceRead;
 export type ScheduleServicePatchSingleScheduleApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of single_schedule. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the single_schedule. */
   singleScheduleResource: SingleScheduleResourceWrite;
 };
 export type ScheduleServiceUpdateSingleScheduleApiResponse =
-  /** status 200 OK */ SingleScheduleResourceRead;
+  /** status 200 Success */ SingleScheduleResourceRead;
 export type ScheduleServiceUpdateSingleScheduleApiArg = {
   /** Name of the single_schedule single_schedule to be updated. */
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
+  /** Updated values for the single_schedule. */
   singleScheduleResource: SingleScheduleResourceWrite;
 };
 export type TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse =
-  /** status 200 OK */ ListTelemetryLogsGroupsResponseRead;
+  /** status 200 Success */ ListTelemetryLogsGroupsResponseRead;
 export type TelemetryLogsGroupServiceListTelemetryLogsGroupsApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
 export type TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiResponse =
-  /** status 200 OK */ TelemetryLogsGroupResourceRead;
+  /** status 200 Success */ TelemetryLogsGroupResourceRead;
 export type TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The telemetry_logs_group to create. */
   telemetryLogsGroupResource: TelemetryLogsGroupResource;
 };
 export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ DeleteTelemetryLogsProfileResponse;
+  /** status 200 Success */ DeleteTelemetryLogsProfileResponse;
 export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg = {
   /** Name of the telemetry_logs_profile telemetry_logs_profile to be deleted. */
   resourceId: string;
@@ -1742,7 +1809,7 @@ export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg = {
   loggroupResourceId: string;
 };
 export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
 export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg = {
   /** Name of the requested telemetry_logs_profile. */
   resourceId: string;
@@ -1752,20 +1819,19 @@ export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg = {
   loggroupResourceId: string;
 };
 export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
 export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of telemetry_logs_profile. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
   /** unique loggroupResourceId for the resource */
   loggroupResourceId: string;
+  /** Updated values for the telemetry_logs_profile. */
   telemetryLogsProfileResource: TelemetryLogsProfileResource;
 };
 export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
 export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg = {
   /** Name of the telemetry_logs_profile telemetry_logs_profile to be updated. */
   resourceId: string;
@@ -1773,10 +1839,11 @@ export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg = {
   projectName: string;
   /** unique loggroupResourceId for the resource */
   loggroupResourceId: string;
+  /** Updated values for the telemetry_logs_profile. */
   telemetryLogsProfileResource: TelemetryLogsProfileResource;
 };
 export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiResponse =
-  /** status 200 OK */ DeleteTelemetryLogsGroupResponse;
+  /** status 200 Success */ DeleteTelemetryLogsGroupResponse;
 export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiArg = {
   /** Name of the telemetry_logs_group telemetry_logs_group to be deleted. */
   resourceId: string;
@@ -1784,7 +1851,7 @@ export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiArg = {
   projectName: string;
 };
 export type TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse =
-  /** status 200 OK */ TelemetryLogsGroupResourceRead;
+  /** status 200 Success */ TelemetryLogsGroupResourceRead;
 export type TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg = {
   /** Name of the requested telemetry_logs_group. */
   resourceId: string;
@@ -1792,13 +1859,15 @@ export type TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg = {
   projectName: string;
 };
 export type TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse =
-  /** status 200 OK */ ListTelemetryLogsProfilesResponseRead;
+  /** status 200 Success */ ListTelemetryLogsProfilesResponseRead;
 export type TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** Returns only the telemetry profiles that are assigned with the given instance identifier. */
   instanceId?: string;
@@ -1806,7 +1875,10 @@ export type TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg = {
   siteId?: string;
   /** Returns only the telemetry profiles that are assigned with the given regionID. */
   regionId?: string;
-  /** Indicates if listed telemetry profiles should be extended with telemetry profiles rendered from hierarchy. This flag is only used along with one of siteId, regionId or instanceId. If siteId, regionId or instanceId are not set, this flag is ignored. */
+  /** Indicates if listed telemetry profiles should be extended with telemetry
+     profiles rendered from hierarchy. This flag is only used along with one
+     of siteId, regionId or instanceId. If siteId, regionId or instanceId are
+     not set, this flag is ignored. */
   showInherited?: boolean;
   /** unique projectName for the resource */
   projectName: string;
@@ -1814,35 +1886,39 @@ export type TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg = {
   resourceId: string;
 };
 export type TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse =
-  /** status 200 OK */ TelemetryLogsProfileResourceRead;
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
 export type TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiArg = {
   /** unique projectName for the resource */
   projectName: string;
   /** unique resourceId for the resource */
   resourceId: string;
+  /** The telemetry_logs_profile to create. */
   telemetryLogsProfileResource: TelemetryLogsProfileResource;
 };
 export type TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse =
-  /** status 200 OK */ ListTelemetryMetricsGroupsResponseRead;
+  /** status 200 Success */ ListTelemetryMetricsGroupsResponseRead;
 export type TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
 export type TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiResponse =
-  /** status 200 OK */ TelemetryMetricsGroupResourceRead;
+  /** status 200 Success */ TelemetryMetricsGroupResourceRead;
 export type TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The telemetry_metrics_group to create. */
   telemetryMetricsGroupResource: TelemetryMetricsGroupResource;
 };
 export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ DeleteTelemetryMetricsProfileResponse;
+  /** status 200 Success */ DeleteTelemetryMetricsProfileResponse;
 export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg =
   {
     /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted. */
@@ -1853,7 +1929,7 @@ export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg =
     metricgroupResourceId: string;
   };
 export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
 export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg = {
   /** Name of the requested telemetry_metrics_profile. */
   resourceId: string;
@@ -1863,20 +1939,19 @@ export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg = {
   metricgroupResourceId: string;
 };
 export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
 export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg = {
   /** ID of the resource to be updated. */
   resourceId: string;
-  /** Field mask to be applied on the patch of telemetry_metrics_profile. */
-  fieldMask?: string;
   /** unique projectName for the resource */
   projectName: string;
   /** unique metricgroupResourceId for the resource */
   metricgroupResourceId: string;
+  /** Updated values for the telemetry_metrics_profile. */
   telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
 };
 export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
 export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg =
   {
     /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated. */
@@ -1885,10 +1960,11 @@ export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg =
     projectName: string;
     /** unique metricgroupResourceId for the resource */
     metricgroupResourceId: string;
+    /** Updated values for the telemetry_metrics_profile. */
     telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
 export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiResponse =
-  /** status 200 OK */ DeleteTelemetryMetricsGroupResponse;
+  /** status 200 Success */ DeleteTelemetryMetricsGroupResponse;
 export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiArg = {
   /** Name of the telemetry_metrics_group telemetry_metrics_group to be deleted. */
   resourceId: string;
@@ -1896,7 +1972,7 @@ export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiArg = {
   projectName: string;
 };
 export type TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiResponse =
-  /** status 200 OK */ TelemetryMetricsGroupResourceRead;
+  /** status 200 Success */ TelemetryMetricsGroupResourceRead;
 export type TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiArg = {
   /** Name of the requested telemetry_metrics_group. */
   resourceId: string;
@@ -1904,13 +1980,15 @@ export type TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiArg = {
   projectName: string;
 };
 export type TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse =
-  /** status 200 OK */ ListTelemetryMetricsProfilesResponseRead;
+  /** status 200 Success */ ListTelemetryMetricsProfilesResponseRead;
 export type TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg = {
-  /** Defines the amount of items to be contained in a single page. Default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
   /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** Returns only the telemetry profiles that are assigned with the given instance identifier. */
   instanceId?: string;
@@ -1918,7 +1996,10 @@ export type TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg = {
   siteId?: string;
   /** Returns only the telemetry profiles that are assigned with the given regionID. */
   regionId?: string;
-  /** Indicates if listed telemetry profiles should be extended with telemetry profiles rendered from hierarchy. This flag is only used along with one of siteId, regionId or instanceId. If siteId, regionId or instanceId are not set, this flag is ignored. */
+  /** Indicates if listed telemetry profiles should be extended with telemetry
+     profiles rendered from hierarchy. This flag is only used along with one
+     of siteId, regionId or instanceId. If siteId, regionId or instanceId are
+     not set, this flag is ignored. */
   showInherited?: boolean;
   /** unique projectName for the resource */
   projectName: string;
@@ -1926,21 +2007,54 @@ export type TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg = {
   resourceId: string;
 };
 export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse =
-  /** status 200 OK */ TelemetryMetricsProfileResourceRead;
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
 export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg =
   {
     /** unique projectName for the resource */
     projectName: string;
     /** unique resourceId for the resource */
     resourceId: string;
+    /** The telemetry_metrics_profile to create. */
     telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
-export type Timestamps = {};
-export type TimestampsRead = {
-  /** The time when the resource was created. */
-  createdAt?: string;
-  /** The time when the resource was last updated. */
-  updatedAt?: string;
+export type BaremetalControllerKind =
+  | "BAREMETAL_CONTROLLER_KIND_UNSPECIFIED"
+  | "BAREMETAL_CONTROLLER_KIND_NONE"
+  | "BAREMETAL_CONTROLLER_KIND_IPMI"
+  | "BAREMETAL_CONTROLLER_KIND_VPRO"
+  | "BAREMETAL_CONTROLLER_KIND_PDU";
+export type PowerState =
+  | "POWER_STATE_UNSPECIFIED"
+  | "POWER_STATE_ERROR"
+  | "POWER_STATE_ON"
+  | "POWER_STATE_OFF";
+export type HostState =
+  | "HOST_STATE_UNSPECIFIED"
+  | "HOST_STATE_DELETED"
+  | "HOST_STATE_ONBOARDED"
+  | "HOST_STATE_UNTRUSTED"
+  | "HOST_STATE_REGISTERED";
+export type StatusIndication =
+  | "STATUS_INDICATION_UNSPECIFIED"
+  | "STATUS_INDICATION_ERROR"
+  | "STATUS_INDICATION_IN_PROGRESS"
+  | "STATUS_INDICATION_IDLE";
+export type OsProviderKind =
+  | "OS_PROVIDER_KIND_UNSPECIFIED"
+  | "OS_PROVIDER_KIND_INFRA"
+  | "OS_PROVIDER_KIND_LENOVO";
+export type OsType =
+  | "OS_TYPE_UNSPECIFIED"
+  | "OS_TYPE_MUTABLE"
+  | "OS_TYPE_IMMUTABLE";
+export type SecurityFeature =
+  | "SECURITY_FEATURE_UNSPECIFIED"
+  | "SECURITY_FEATURE_NONE"
+  | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+export type GoogleProtobufTimestamp = string;
+export type Timestamps = {
+  createdAt?: GoogleProtobufTimestamp;
+  updatedAt?: GoogleProtobufTimestamp;
 };
 export type OperatingSystemResource = {
   /** The OS resource's CPU architecture. */
@@ -1956,22 +2070,18 @@ export type OperatingSystemResource = {
   kernelCommand?: string;
   /** The OS resource's name. */
   name?: string;
-  /** Indicating the provider of OS (e.g., Infra or Lenovo). */
-  osProvider?: "OS_PROVIDER_KIND_INFRA" | "OS_PROVIDER_KIND_LENOVO";
-  /** Indicating the type of OS (for example, mutable or immutable). */
-  osType?: "OS_TYPE_MUTABLE" | "OS_TYPE_IMMUTABLE";
+  osProvider?: OsProviderKind;
+  osType?: OsType;
   /** Name of an OS profile that the OS resource belongs to. Uniquely identifies a family of OS resources. */
   profileName?: string;
   /** Deprecated. OS image URL. URL of the original installation source. */
   repoUrl?: string;
-  /** Indicating if this OS is capable of supporting features like Secure Boot (SB) and Full Disk Encryption (FDE). Immutable after creation. */
-  securityFeature?:
-    | "SECURITY_FEATURE_NONE"
-    | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  securityFeature?: SecurityFeature;
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
   timestamps?: Timestamps;
-  /** The list of OS resource update sources. Should be in 'DEB822 Source Format' for Debian style OSs */
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs */
   updateSources: string[];
 };
 export type OperatingSystemResourceRead = {
@@ -1988,13 +2098,13 @@ export type OperatingSystemResourceRead = {
   kernelCommand?: string;
   /** The OS resource's name. */
   name?: string;
-  /** Indicating the provider of OS (e.g., Infra or Lenovo). */
-  osProvider?: "OS_PROVIDER_KIND_INFRA" | "OS_PROVIDER_KIND_LENOVO";
+  osProvider?: OsProviderKind;
   /** Deprecated, The OS resource's unique identifier. Alias of resourceId. */
   osResourceID?: string;
-  /** Indicating the type of OS (for example, mutable or immutable). */
-  osType?: "OS_TYPE_MUTABLE" | "OS_TYPE_IMMUTABLE";
-  /** Opaque JSON field storing references to custom installation script(s) that supplements the base OS with additional OS-level dependencies/configurations.  If empty, the default OS installation will be used. */
+  osType?: OsType;
+  /** Opaque JSON field storing references to custom installation script(s) that
+     supplements the base OS with additional OS-level dependencies/configurations.
+     If empty, the default OS installation will be used. */
   platformBundle?: string;
   /** Name of an OS profile that the OS resource belongs to. Uniquely identifies a family of OS resources. */
   profileName?: string;
@@ -2004,16 +2114,20 @@ export type OperatingSystemResourceRead = {
   repoUrl?: string;
   /** Resource ID, generated by inventory on Create. */
   resourceId?: string;
-  /** Indicating if this OS is capable of supporting features like Secure Boot (SB) and Full Disk Encryption (FDE). Immutable after creation. */
-  securityFeature?:
-    | "SECURITY_FEATURE_NONE"
-    | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  securityFeature?: SecurityFeature;
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
-  timestamps?: TimestampsRead;
-  /** The list of OS resource update sources. Should be in 'DEB822 Source Format' for Debian style OSs */
+  timestamps?: Timestamps;
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs */
   updateSources: string[];
 };
+export type InstanceState =
+  | "INSTANCE_STATE_UNSPECIFIED"
+  | "INSTANCE_STATE_RUNNING"
+  | "INSTANCE_STATE_DELETED"
+  | "INSTANCE_STATE_UNTRUSTED";
+export type InstanceKind = "INSTANCE_KIND_UNSPECIFIED" | "INSTANCE_KIND_METAL";
 export type LocalAccountResource = {
   /** SSH Public Key of EN */
   sshKey: string;
@@ -2028,31 +2142,38 @@ export type LocalAccountResourceRead = {
   resourceId?: string;
   /** SSH Public Key of EN */
   sshKey: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   /** Username provided by admin */
   username: string;
 };
 export type InstanceResource = {
   currentOs?: OperatingSystemResource;
+  currentState?: InstanceState;
   desiredOs?: OperatingSystemResource;
+  desiredState?: InstanceState;
   host?: HostResource;
-  /** Kind of resource. Frequently tied to Provider. */
-  kind?: "INSTANCE_KIND_METAL";
+  instanceStatusIndicator?: StatusIndication;
+  kind?: InstanceKind;
   localaccount?: LocalAccountResource;
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResource;
-  /** Select to enable security features such as Secure Boot (SB) and Full Disk Encryption (FDE). */
-  securityFeature?:
-    | "SECURITY_FEATURE_NONE"
-    | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  provisioningStatusIndicator?: StatusIndication;
+  securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
+  trustedAttestationStatusIndicator?: StatusIndication;
+  updateStatusIndicator?: StatusIndication;
 };
+export type WorkloadMemberKind =
+  | "WORKLOAD_MEMBER_KIND_UNSPECIFIED"
+  | "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
+export type WorkloadKind =
+  | "WORKLOAD_KIND_UNSPECIFIED"
+  | "WORKLOAD_KIND_CLUSTER";
 export type WorkloadResource = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
-  /** Type of workload. */
-  kind: "WORKLOAD_KIND_CLUSTER";
+  kind: WorkloadKind;
   /** Human-readable name for the workload. */
   name?: string;
   /** Human-readable status of the workload. */
@@ -2062,8 +2183,7 @@ export type WorkloadResource = {
 export type WorkloadResourceRead = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
-  /** Type of workload. */
-  kind: "WORKLOAD_KIND_CLUSTER";
+  kind: WorkloadKind;
   /** The members of the workload. */
   members: WorkloadMember[];
   /** Human-readable name for the workload. */
@@ -2072,15 +2192,14 @@ export type WorkloadResourceRead = {
   resourceId?: string;
   /** Human-readable status of the workload. */
   status?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   /** Deprecated, The workload unique identifier. Alias of resourceId. */
   workloadId?: string;
 };
 export type WorkloadResourceWrite = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
-  /** Type of workload. */
-  kind: "WORKLOAD_KIND_CLUSTER";
+  kind: WorkloadKind;
   /** Human-readable name for the workload. */
   name?: string;
   /** Human-readable status of the workload. */
@@ -2089,20 +2208,18 @@ export type WorkloadResourceWrite = {
 };
 export type WorkloadMember = {
   instance?: InstanceResource;
-  /** The kind of the workload member. */
-  kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
+  kind: WorkloadMemberKind;
   member?: InstanceResource;
   timestamps?: Timestamps;
   workload?: WorkloadResource;
 };
 export type WorkloadMemberRead = {
   instance?: InstanceResourceRead;
-  /** The kind of the workload member. */
-  kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
+  kind: WorkloadMemberKind;
   member?: InstanceResourceRead;
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   workload?: WorkloadResourceRead;
   /** Deprecated, The workload unique identifier. Alias of resourceId. */
   workloadMemberId?: string;
@@ -2111,8 +2228,7 @@ export type WorkloadMemberWrite = {
   instance?: InstanceResource;
   /** The unique identifier of the instance. */
   instanceId: string;
-  /** The kind of the workload member. */
-  kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
+  kind: WorkloadMemberKind;
   member?: InstanceResource;
   timestamps?: Timestamps;
   workload?: WorkloadResourceWrite;
@@ -2121,82 +2237,58 @@ export type WorkloadMemberWrite = {
 };
 export type InstanceResourceRead = {
   currentOs?: OperatingSystemResourceRead;
-  /** The Instance current state. */
-  currentState?:
-    | "INSTANCE_STATE_RUNNING"
-    | "INSTANCE_STATE_DELETED"
-    | "INSTANCE_STATE_UNTRUSTED";
+  currentState?: InstanceState;
   desiredOs?: OperatingSystemResourceRead;
-  /** The Instance desired state. */
-  desiredState?:
-    | "INSTANCE_STATE_RUNNING"
-    | "INSTANCE_STATE_DELETED"
-    | "INSTANCE_STATE_UNTRUSTED";
+  desiredState?: InstanceState;
   host?: HostResource;
   /** Deprecated, The instance's unique identifier. Alias of resourceID. */
   instanceID?: string;
   /** textual message that describes the current instance status. Set by RMs only. */
   instanceStatus?: string;
-  /** Indicates interpretation of instance_status. Set by RMs only. */
-  instanceStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  /** Textual message that gives detailed status of the instance's software components. */
+  instanceStatusDetail?: string;
+  instanceStatusIndicator?: StatusIndication;
   /** UTC timestamp when instance_status was last changed. Set by RMs only. */
   instanceStatusTimestamp?: number;
-  /** Kind of resource. Frequently tied to Provider. */
-  kind?: "INSTANCE_KIND_METAL";
+  kind?: InstanceKind;
   localaccount?: LocalAccountResourceRead;
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResourceRead;
   /** textual message that describes the provisioning status of Instance. Set by RMs only. */
   provisioningStatus?: string;
-  /** Indicates interpretation of provisioning_status. Set by RMs only. */
-  provisioningStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  provisioningStatusIndicator?: StatusIndication;
   /** UTC timestamp when provisioning_status was last changed. Set by RMs only. */
   provisioningStatusTimestamp?: number;
   /** Resource ID, generated on Create. */
   resourceId?: string;
-  /** Select to enable security features such as Secure Boot (SB) and Full Disk Encryption (FDE). */
-  securityFeature?:
-    | "SECURITY_FEATURE_NONE"
-    | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
-  timestamps?: TimestampsRead;
+  securityFeature?: SecurityFeature;
+  timestamps?: Timestamps;
   /** textual message that describes the trusted_attestation status of Instance. Set by RMs only. */
   trustedAttestationStatus?: string;
-  /** Indicates interpretation of trusted_attestation_status. Set by RMs only. */
-  trustedAttestationStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  trustedAttestationStatusIndicator?: StatusIndication;
   /** UTC timestamp when trusted_attestation_status was last changed. Set by RMs only. */
   trustedAttestationStatusTimestamp?: number;
   /** textual message that describes the update status of Instance. Set by RMs only. */
   updateStatus?: string;
   /** JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change. */
   updateStatusDetail?: string;
-  /** Indicates interpretation of update_status. Set by RMs only. */
-  updateStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  updateStatusIndicator?: StatusIndication;
   /** UTC timestamp when update_status was last changed. Set by RMs only. */
   updateStatusTimestamp?: number;
-  /** The workload members associated with the instance. */
+  /** The workload members associated with the instance. back-reference to the Workload Members associated to this Instance */
   workloadMembers?: WorkloadMemberRead[];
 };
 export type InstanceResourceWrite = {
   currentOs?: OperatingSystemResource;
+  currentState?: InstanceState;
   desiredOs?: OperatingSystemResource;
+  desiredState?: InstanceState;
   host?: HostResource;
   /** The host's unique identifier associated with the instance. */
   hostID?: string;
-  /** Kind of resource. Frequently tied to Provider. */
-  kind?: "INSTANCE_KIND_METAL";
+  instanceStatusIndicator?: StatusIndication;
+  kind?: InstanceKind;
   /** The unique identifier of local account will be associated with the instance. */
   localAccountID?: string;
   localaccount?: LocalAccountResource;
@@ -2205,11 +2297,11 @@ export type InstanceResourceWrite = {
   os?: OperatingSystemResource;
   /** The unique identifier of OS resource that must be installed on the instance. */
   osID?: string;
-  /** Select to enable security features such as Secure Boot (SB) and Full Disk Encryption (FDE). */
-  securityFeature?:
-    | "SECURITY_FEATURE_NONE"
-    | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  provisioningStatusIndicator?: StatusIndication;
+  securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
+  trustedAttestationStatusIndicator?: StatusIndication;
+  updateStatusIndicator?: StatusIndication;
 };
 export type MetadataItem = {
   /** The metadata key. */
@@ -2217,6 +2309,13 @@ export type MetadataItem = {
   /** The metadata value. */
   value: string;
 };
+export type ProviderKind =
+  | "PROVIDER_KIND_UNSPECIFIED"
+  | "PROVIDER_KIND_BAREMETAL";
+export type ProviderVendor =
+  | "PROVIDER_VENDOR_UNSPECIFIED"
+  | "PROVIDER_VENDOR_LENOVO_LXCA"
+  | "PROVIDER_VENDOR_LENOVO_LOCA";
 export type ProviderResource = {
   /** The provider resource's list of credentials. */
   apiCredentials?: string[];
@@ -2226,12 +2325,8 @@ export type ProviderResource = {
   config?: string;
   /** The provider resource's name. */
   name: string;
-  /** The provider kind. */
-  providerKind: "PROVIDER_KIND_BAREMETAL";
-  /** The provider vendor. */
-  providerVendor?:
-    | "PROVIDER_VENDOR_LENOVO_LXCA"
-    | "PROVIDER_VENDOR_LENOVO_LOCA";
+  providerKind: ProviderKind;
+  providerVendor?: ProviderVendor;
   timestamps?: Timestamps;
 };
 export type ProviderResourceRead = {
@@ -2245,18 +2340,15 @@ export type ProviderResourceRead = {
   name: string;
   /** Deprecated, The provider resource's unique identifier. Alias of resourceId. */
   providerID?: string;
-  /** The provider kind. */
-  providerKind: "PROVIDER_KIND_BAREMETAL";
-  /** The provider vendor. */
-  providerVendor?:
-    | "PROVIDER_VENDOR_LENOVO_LXCA"
-    | "PROVIDER_VENDOR_LENOVO_LOCA";
+  providerKind: ProviderKind;
+  providerVendor?: ProviderVendor;
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type RegionResource = {
-  /** The metadata associated to the Region, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The user-provided, human-readable name of region */
   name?: string;
@@ -2264,9 +2356,12 @@ export type RegionResource = {
   timestamps?: Timestamps;
 };
 export type RegionResourceRead = {
-  /** The rendered metadata from the Region parent(s) that can be inherited by the Region, represented by a list of key:value pairs. This field can not be used in filter. */
+  /** The rendered metadata from the Region parent(s)
+     that can be inherited by the Region, represented by a list of key:value pairs.
+     This field can not be used in filter. */
   inheritedMetadata?: MetadataItem[];
-  /** The metadata associated to the Region, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The user-provided, human-readable name of region */
   name?: string;
@@ -2275,37 +2370,50 @@ export type RegionResourceRead = {
   regionID?: string;
   /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   /** The total number of sites in the region. */
   totalSites?: number;
 };
 export type RegionResourceWrite = {
-  /** The metadata associated to the Region, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The user-provided, human-readable name of region */
   name?: string;
-  /** The parent Region unique identifier that the region is associated to, when existent. This field can not be used in filter. */
+  /** The parent Region unique identifier
+     that the region is associated to, when existent.
+     This field can not be used in filter. */
   parentId?: string;
   parentRegion?: RegionResourceWrite;
   timestamps?: Timestamps;
 };
 export type SiteResource = {
-  /** The metadata associated to the Region, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The site's human-readable name. */
   name?: string;
   provider?: ProviderResource;
   region?: RegionResource;
-  /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
+  /** The geolocation latitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
-  /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
+  /** The geolocation longitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
   timestamps?: Timestamps;
 };
 export type SiteResourceRead = {
-  /** The rendered metadata from the Region parent(s) that can be inherited by the Region, represented by a list of key:value pairs. This field can not be used in filter. */
+  /** The rendered metadata from the Region parent(s)
+     that can be inherited by the Region, represented by a list of key:value pairs.
+     This field can not be used in filter. */
   inheritedMetadata?: MetadataItem[];
-  /** The metadata associated to the Region, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The site's human-readable name. */
   name?: string;
@@ -2315,42 +2423,59 @@ export type SiteResourceRead = {
   resourceId?: string;
   /** Deprecated, The site unique identifier. Alias of resourceId. */
   siteID?: string;
-  /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
+  /** The geolocation latitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
-  /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
+  /** The geolocation longitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type SiteResourceWrite = {
-  /** The metadata associated to the Region, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The site's human-readable name. */
   name?: string;
   provider?: ProviderResource;
   region?: RegionResourceWrite;
-  /** The region's unique identifier that the site is associated to. This field cannot be used in filter. */
+  /** The region's unique identifier
+     that the site is associated to. This field cannot be used in filter. */
   regionId?: string;
-  /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
+  /** The geolocation latitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
-  /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
+  /** The geolocation longitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
   timestamps?: Timestamps;
 };
 export type HostResource = {
-  /** Desired power state of the host */
-  desiredPowerState?:
-    | "POWER_STATE_ERROR"
-    | "POWER_STATE_ON"
-    | "POWER_STATE_OFF";
+  bmcKind?: BaremetalControllerKind;
+  currentPowerState?: PowerState;
+  currentState?: HostState;
+  desiredPowerState?: PowerState;
+  desiredState?: HostState;
+  hostStatusIndicator?: StatusIndication;
   instance?: InstanceResource;
-  /** The metadata associated with the host, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated with the host, represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The host name. */
   name: string;
+  onboardingStatusIndicator?: StatusIndication;
   provider?: ProviderResource;
+  registrationStatusIndicator?: StatusIndication;
   site?: SiteResource;
   timestamps?: Timestamps;
-  /** The host UUID identifier; UUID is unique and immutable. */
+  /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
 export type HostgpuResource = {
@@ -2367,47 +2492,49 @@ export type HostgpuResourceRead = {
   pciId?: string;
   /** The GPU device model. */
   product?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   /** The GPU device vendor. */
   vendor?: string;
 };
+export type LinkState =
+  | "NETWORK_INTERFACE_LINK_STATE_UNSPECIFIED"
+  | "NETWORK_INTERFACE_LINK_STATE_UP"
+  | "NETWORK_INTERFACE_LINK_STATE_DOWN";
 export type NetworkInterfaceLinkState = {
   timestamps?: Timestamps;
-};
-export type NetworkInterfaceLinkStateRead = {
-  timestamps?: TimestampsRead;
-  /** The interface link state. */
-  type?:
-    | "NETWORK_INTERFACE_LINK_STATE_UP"
-    | "NETWORK_INTERFACE_LINK_STATE_DOWN";
+  type?: LinkState;
 };
 export type HostnicResource = {
   linkState?: NetworkInterfaceLinkState;
   timestamps?: Timestamps;
 };
+export type IpAddressConfigMethod =
+  | "IP_ADDRESS_CONFIG_METHOD_UNSPECIFIED"
+  | "IP_ADDRESS_CONFIG_METHOD_STATIC"
+  | "IP_ADDRESS_CONFIG_METHOD_DYNAMIC";
+export type IpAddressStatus =
+  | "IP_ADDRESS_STATUS_UNSPECIFIED"
+  | "IP_ADDRESS_STATUS_ASSIGNMENT_ERROR"
+  | "IP_ADDRESS_STATUS_ASSIGNED"
+  | "IP_ADDRESS_STATUS_CONFIGURATION_ERROR"
+  | "IP_ADDRESS_STATUS_CONFIGURED"
+  | "IP_ADDRESS_STATUS_RELEASED"
+  | "IP_ADDRESS_STATUS_ERROR";
 export type IpAddressResource = {
+  configMethod?: IpAddressConfigMethod;
+  status?: IpAddressStatus;
   timestamps?: Timestamps;
 };
 export type IpAddressResourceRead = {
   /** CIDR representation of the IP address. */
   address?: string;
-  /** Specifies how the IP address is configured. */
-  configMethod?:
-    | "IP_ADDRESS_CONFIG_METHOD_STATIC"
-    | "IP_ADDRESS_CONFIG_METHOD_DYNAMIC";
+  configMethod?: IpAddressConfigMethod;
   /** Resource ID, generated by Inventory on Create */
   resourceId?: string;
-  /** The status of the IP address. */
-  status?:
-    | "IP_ADDRESS_STATUS_ASSIGNMENT_ERROR"
-    | "IP_ADDRESS_STATUS_ASSIGNED"
-    | "IP_ADDRESS_STATUS_CONFIGURATION_ERROR"
-    | "IP_ADDRESS_STATUS_CONFIGURED"
-    | "IP_ADDRESS_STATUS_RELEASED"
-    | "IP_ADDRESS_STATUS_ERROR";
+  status?: IpAddressStatus;
   /** User-friendly status to provide details about the resource state */
   statusDetail?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type HostnicResourceRead = {
   /** Whether this is a bmc interface or not. */
@@ -2416,7 +2543,7 @@ export type HostnicResourceRead = {
   deviceName?: string;
   /** The interface's IP address list. */
   ipaddresses?: IpAddressResourceRead[];
-  linkState?: NetworkInterfaceLinkStateRead;
+  linkState?: NetworkInterfaceLinkState;
   /** The interface MAC address. */
   macAddr?: string;
   /** Maximum transmission unit of the interface. */
@@ -2429,7 +2556,7 @@ export type HostnicResourceRead = {
   sriovVfsNum?: number;
   /** The maximum number of VFs the interface supports, if SR-IOV is supported. */
   sriovVfsTotal?: number;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type HoststorageResource = {
   timestamps?: Timestamps;
@@ -2443,7 +2570,7 @@ export type HoststorageResourceRead = {
   model?: string;
   /** The storage device unique serial number. */
   serial?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   /** The Storage device vendor. */
   vendor?: string;
   /** The storage device unique identifier. */
@@ -2467,7 +2594,7 @@ export type HostusbResourceRead = {
   idVendor?: string;
   /** Serial number of device. */
   serial?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type HostResourceRead = {
   /** BIOS Release Date. */
@@ -2478,12 +2605,7 @@ export type HostResourceRead = {
   biosVersion?: string;
   /** BMC IP address, such as "192.0.0.1". */
   bmcIp?: string;
-  /** Kind of BMC. */
-  bmcKind?:
-    | "BAREMETAL_CONTROLLER_KIND_NONE"
-    | "BAREMETAL_CONTROLLER_KIND_IPMI"
-    | "BAREMETAL_CONTROLLER_KIND_VPRO"
-    | "BAREMETAL_CONTROLLER_KIND_PDU";
+  bmcKind?: BaremetalControllerKind;
   /** Architecture of the CPU model, e.g. x86_64. */
   cpuArchitecture?: string;
   /** String list of all CPU capabilities (possibly JSON). */
@@ -2498,39 +2620,17 @@ export type HostResourceRead = {
   cpuThreads?: number;
   /** JSON field storing the CPU topology, refer to HDA/HRM docs for the JSON schema. */
   cpuTopology?: string;
-  /** Current power state of the host */
-  currentPowerState?:
-    | "POWER_STATE_ERROR"
-    | "POWER_STATE_ON"
-    | "POWER_STATE_OFF";
-  /** The current state of the Host. */
-  currentState?:
-    | "HOST_STATE_DELETED"
-    | "HOST_STATE_ONBOARDED"
-    | "HOST_STATE_UNTRUSTED"
-    | "HOST_STATE_REGISTERED";
-  /** Desired power state of the host */
-  desiredPowerState?:
-    | "POWER_STATE_ERROR"
-    | "POWER_STATE_ON"
-    | "POWER_STATE_OFF";
-  /** The desired state of the Host. */
-  desiredState?:
-    | "HOST_STATE_DELETED"
-    | "HOST_STATE_ONBOARDED"
-    | "HOST_STATE_UNTRUSTED"
-    | "HOST_STATE_REGISTERED";
+  currentPowerState?: PowerState;
+  currentState?: HostState;
+  desiredPowerState?: PowerState;
+  desiredState?: HostState;
   /** Back-reference to attached host GPU resources. */
   hostGpus?: HostgpuResourceRead[];
   /** Back-reference to attached host NIC resources. */
   hostNics?: HostnicResourceRead[];
   /** textual message that describes the runtime status of Host. Set by RMs only. */
   hostStatus?: string;
-  /** Indicates interpretation of host_status. Set by RMs only. */
-  hostStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  hostStatusIndicator?: StatusIndication;
   /** UTC timestamp when host_status was last changed. Set by RMs only. */
   hostStatusTimestamp?: number;
   /** Back-reference to attached host storage resources. */
@@ -2544,7 +2644,7 @@ export type HostResourceRead = {
   instance?: InstanceResourceRead;
   /** Quantity of memory (RAM) in the system in bytes. */
   memoryBytes?: string;
-  /** The metadata associated with the host, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated with the host, represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The host name. */
   name: string;
@@ -2552,11 +2652,7 @@ export type HostResourceRead = {
   note?: string;
   /** textual message that describes the onboarding status of Host. Set by RMs only. */
   onboardingStatus?: string;
-  /** Indicates interpretation of onboarding_status. Set by RMs only. */
-  onboardingStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  onboardingStatusIndicator?: StatusIndication;
   /** UTC timestamp when onboarding_status was last changed. Set by RMs only. */
   onboardingStatusTimestamp?: number;
   /** System Product Name. */
@@ -2564,11 +2660,7 @@ export type HostResourceRead = {
   provider?: ProviderResourceRead;
   /** textual message that describes the onboarding status of Host. Set by RMs only. */
   registrationStatus?: string;
-  /** Indicates interpretation of registration_status. Set by RMs only. */
-  registrationStatusIndicator?:
-    | "STATUS_INDICATION_ERROR"
-    | "STATUS_INDICATION_IN_PROGRESS"
-    | "STATUS_INDICATION_IDLE";
+  registrationStatusIndicator?: StatusIndication;
   /** UTC timestamp when registration_status was last changed. Set by RMs only. */
   registrationStatusTimestamp?: number;
   /** Resource ID, generated on Create. */
@@ -2576,27 +2668,30 @@ export type HostResourceRead = {
   /** SMBIOS device serial number. */
   serialNumber?: string;
   site?: SiteResourceRead;
-  timestamps?: TimestampsRead;
-  /** The host UUID identifier; UUID is unique and immutable. */
+  timestamps?: Timestamps;
+  /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
 export type HostResourceWrite = {
-  /** Desired power state of the host */
-  desiredPowerState?:
-    | "POWER_STATE_ERROR"
-    | "POWER_STATE_ON"
-    | "POWER_STATE_OFF";
+  bmcKind?: BaremetalControllerKind;
+  currentPowerState?: PowerState;
+  currentState?: HostState;
+  desiredPowerState?: PowerState;
+  desiredState?: HostState;
+  hostStatusIndicator?: StatusIndication;
   instance?: InstanceResourceWrite;
-  /** The metadata associated with the host, represented by a list of key:value pairs. */
+  /** (OPTIONAL) The metadata associated with the host, represented by a list of key:value pairs. */
   metadata?: MetadataItem[];
   /** The host name. */
   name: string;
+  onboardingStatusIndicator?: StatusIndication;
   provider?: ProviderResource;
+  registrationStatusIndicator?: StatusIndication;
   site?: SiteResourceWrite;
   /** The site where the host is located. */
   siteId?: string;
   timestamps?: Timestamps;
-  /** The host UUID identifier; UUID is unique and immutable. */
+  /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
 export type ListHostsResponse = {
@@ -2624,17 +2719,36 @@ export type ListHostsResponseWrite = {
   totalElements: number;
 };
 export type GoogleProtobufAny = {
-  /** The type of the serialized message. */
-  "@type"?: string;
+  debug?: {
+    [key: string]: any;
+  };
+  type?: string;
+  value?: Blob;
   [key: string]: any;
 };
-export type Status = {
+export type ConnectError = {
   /** The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code]. */
-  code?: number;
-  /** A list of messages that carry the error details.  There is a common set of message types for APIs to use. */
-  details?: GoogleProtobufAny[];
+  code?:
+    | "canceled"
+    | "unknown"
+    | "invalid_argument"
+    | "deadline_exceeded"
+    | "not_found"
+    | "already_exists"
+    | "permission_denied"
+    | "resource_exhausted"
+    | "failed_precondition"
+    | "aborted"
+    | "out_of_range"
+    | "unimplemented"
+    | "internal"
+    | "unavailable"
+    | "data_loss"
+    | "unauthenticated";
+  detail?: GoogleProtobufAny;
   /** A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
   message?: string;
+  [key: string]: any;
 };
 export type DeleteHostResponse = object;
 export type InvalidateHostResponse = object;
@@ -2703,6 +2817,10 @@ export type ListOperatingSystemsResponseRead = {
   totalElements: number;
 };
 export type DeleteOperatingSystemResponse = object;
+export type ScheduleStatus =
+  | "SCHEDULE_STATUS_UNSPECIFIED"
+  | "SCHEDULE_STATUS_MAINTENANCE"
+  | "SCHEDULE_STATUS_OS_UPDATE";
 export type RepeatedScheduleResource = {
   /** cron style day of month (1-31), it can be empty only when used in a Filter */
   cronDayMonth: string;
@@ -2718,8 +2836,7 @@ export type RepeatedScheduleResource = {
   durationSeconds: number;
   /** The schedule's name. */
   name?: string;
-  /** The schedule status. */
-  scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
+  scheduleStatus: ScheduleStatus;
   targetHost?: HostResource;
   targetRegion?: RegionResource;
   targetSite?: SiteResource;
@@ -2744,12 +2861,11 @@ export type RepeatedScheduleResourceRead = {
   repeatedScheduleID?: string;
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  /** The schedule status. */
-  scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
+  scheduleStatus: ScheduleStatus;
   targetHost?: HostResourceRead;
   targetRegion?: RegionResourceRead;
   targetSite?: SiteResourceRead;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type RepeatedScheduleResourceWrite = {
   /** cron style day of month (1-31), it can be empty only when used in a Filter */
@@ -2766,26 +2882,31 @@ export type RepeatedScheduleResourceWrite = {
   durationSeconds: number;
   /** The schedule's name. */
   name?: string;
-  /** The schedule status. */
-  scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
+  scheduleStatus: ScheduleStatus;
   targetHost?: HostResourceWrite;
-  /** The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  /** The target region ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetHostId?: string;
   targetRegion?: RegionResourceWrite;
-  /** The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  /** The target region ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetRegionId?: string;
   targetSite?: SiteResourceWrite;
-  /** The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  /** The target site ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetSiteId?: string;
   timestamps?: Timestamps;
 };
 export type SingleScheduleResource = {
-  /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
+  /** The end time in seconds, of the single schedule.
+     The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
   name?: string;
-  /** The schedule status. */
-  scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
+  scheduleStatus: ScheduleStatus;
   /** The start time in seconds, of the single schedule. */
   startSeconds: number;
   targetHost?: HostResource;
@@ -2794,14 +2915,14 @@ export type SingleScheduleResource = {
   timestamps?: Timestamps;
 };
 export type SingleScheduleResourceRead = {
-  /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
+  /** The end time in seconds, of the single schedule.
+     The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
   name?: string;
   /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  /** The schedule status. */
-  scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
+  scheduleStatus: ScheduleStatus;
   /** Deprecated, The single schedule resource's unique identifier. Alias of resourceId. */
   singleScheduleID?: string;
   /** The start time in seconds, of the single schedule. */
@@ -2809,25 +2930,31 @@ export type SingleScheduleResourceRead = {
   targetHost?: HostResourceRead;
   targetRegion?: RegionResourceRead;
   targetSite?: SiteResourceRead;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type SingleScheduleResourceWrite = {
-  /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
+  /** The end time in seconds, of the single schedule.
+     The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
   name?: string;
-  /** The schedule status. */
-  scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE" | "SCHEDULE_STATUS_OS_UPDATE";
+  scheduleStatus: ScheduleStatus;
   /** The start time in seconds, of the single schedule. */
   startSeconds: number;
   targetHost?: HostResourceWrite;
-  /** The target host ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  /** The target host ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetHostId?: string;
   targetRegion?: RegionResourceWrite;
-  /** The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  /** The target region ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetRegionId?: string;
   targetSite?: SiteResourceWrite;
-  /** The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  /** The target site ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetSiteId?: string;
   timestamps?: Timestamps;
 };
@@ -2928,22 +3055,27 @@ export type ListLocalAccountsResponseRead = {
   totalElements: number;
 };
 export type DeleteLocalAccountResponse = object;
-export type ListLocationsResponseLocationNode = {
+export type ResourceKind =
+  | "RESOURCE_KIND_UNSPECIFIED"
+  | "RESOURCE_KIND_REGION"
+  | "RESOURCE_KIND_SITE";
+export type LocationNode = {
   /** The node human readable name. */
   name: string;
-  /** The associated resource ID, of the parent resource of this Location node. In the case of a region, it could be empty or a regionId. In the case of a site, it could be empty or a regionId. */
+  /** The associated resource ID, of the parent resource of this Location node.
+     In the case of a region, it could be empty or a regionId.
+     In the case of a site, it could be empty or a regionId. */
   parentId: string;
   /** The associated node resource ID, generated by inventory on Create. */
   resourceId: string;
-  /** The node type */
-  type: "RESOURCE_KIND_REGION" | "RESOURCE_KIND_SITE";
+  type: ResourceKind;
 };
 export type ListLocationsResponse = {
   /** Sorted and filtered list of regions. */
-  nodes: ListLocationsResponseLocationNode[];
-  /** Amount of items in the returned list. */
+  nodes: LocationNode[];
+  /** (OPTIONAL) Amount of items in the returned list. */
   outputElements?: number;
-  /** Count of items in the entire list, regardless of pagination. */
+  /** (OPTIONAL) Count of items in the entire list, regardless of pagination. */
   totalElements?: number;
 };
 export type ListProvidersResponse = {
@@ -3063,11 +3195,12 @@ export type ListSingleSchedulesResponseWrite = {
   totalElements: number;
 };
 export type DeleteSingleScheduleResponse = object;
+export type TelemetryCollectorKind =
+  | "TELEMETRY_COLLECTOR_KIND_UNSPECIFIED"
+  | "TELEMETRY_COLLECTOR_KIND_HOST"
+  | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
 export type TelemetryLogsGroupResource = {
-  /** The collector kind. */
-  collectorKind:
-    | "TELEMETRY_COLLECTOR_KIND_HOST"
-    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
+  collectorKind: TelemetryCollectorKind;
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
@@ -3075,10 +3208,7 @@ export type TelemetryLogsGroupResource = {
   timestamps?: Timestamps;
 };
 export type TelemetryLogsGroupResourceRead = {
-  /** The collector kind. */
-  collectorKind:
-    | "TELEMETRY_COLLECTOR_KIND_HOST"
-    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
+  collectorKind: TelemetryCollectorKind;
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
@@ -3087,7 +3217,7 @@ export type TelemetryLogsGroupResourceRead = {
   resourceId?: string;
   /** Deprecated, Unique ID of the telemetry group. Alias of resource_id. */
   telemetryLogsGroupId?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type ListTelemetryLogsGroupsResponse = {
   /** Inform if there are more elements */
@@ -3106,33 +3236,31 @@ export type ListTelemetryLogsGroupsResponseRead = {
   totalElements: number;
 };
 export type DeleteTelemetryLogsProfileResponse = object;
+export type SeverityLevel =
+  | "SEVERITY_LEVEL_UNSPECIFIED"
+  | "SEVERITY_LEVEL_CRITICAL"
+  | "SEVERITY_LEVEL_ERROR"
+  | "SEVERITY_LEVEL_WARN"
+  | "SEVERITY_LEVEL_INFO"
+  | "SEVERITY_LEVEL_DEBUG";
 export type TelemetryLogsProfileResource = {
-  /** The log level og the telemetry profile. */
-  logLevel:
-    | "SEVERITY_LEVEL_CRITICAL"
-    | "SEVERITY_LEVEL_ERROR"
-    | "SEVERITY_LEVEL_WARN"
-    | "SEVERITY_LEVEL_INFO"
-    | "SEVERITY_LEVEL_DEBUG";
+  logLevel: SeverityLevel;
   logsGroup?: TelemetryLogsGroupResource;
   /** The unique identifier of the telemetry log group. */
   logsGroupId: string;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
   timestamps?: Timestamps;
 };
 export type TelemetryLogsProfileResourceRead = {
-  /** The log level og the telemetry profile. */
-  logLevel:
-    | "SEVERITY_LEVEL_CRITICAL"
-    | "SEVERITY_LEVEL_ERROR"
-    | "SEVERITY_LEVEL_WARN"
-    | "SEVERITY_LEVEL_INFO"
-    | "SEVERITY_LEVEL_DEBUG";
+  logLevel: SeverityLevel;
   logsGroup?: TelemetryLogsGroupResourceRead;
   /** The unique identifier of the telemetry log group. */
   logsGroupId: string;
@@ -3140,13 +3268,16 @@ export type TelemetryLogsProfileResourceRead = {
   profileId?: string;
   /** The ID of the telemetry profile. */
   resourceId?: string;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type DeleteTelemetryLogsGroupResponse = object;
 export type ListTelemetryLogsProfilesResponse = {
@@ -3166,10 +3297,7 @@ export type ListTelemetryLogsProfilesResponseRead = {
   totalElements: number;
 };
 export type TelemetryMetricsGroupResource = {
-  /** The collector kind. */
-  collectorKind:
-    | "TELEMETRY_COLLECTOR_KIND_HOST"
-    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
+  collectorKind: TelemetryCollectorKind;
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
@@ -3177,10 +3305,7 @@ export type TelemetryMetricsGroupResource = {
   timestamps?: Timestamps;
 };
 export type TelemetryMetricsGroupResourceRead = {
-  /** The collector kind. */
-  collectorKind:
-    | "TELEMETRY_COLLECTOR_KIND_HOST"
-    | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
+  collectorKind: TelemetryCollectorKind;
   /** A list of log groups to collect. */
   groups: string[];
   /** Human-readable name for the log group. */
@@ -3189,7 +3314,7 @@ export type TelemetryMetricsGroupResourceRead = {
   resourceId?: string;
   /** Deprecated, Unique ID of the telemetry group. Alias of resource_id. */
   telemetryMetricsGroupId?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type ListTelemetryMetricsGroupsResponse = {
   /** Inform if there are more elements */
@@ -3212,13 +3337,17 @@ export type TelemetryMetricsProfileResource = {
   metricsGroup?: TelemetryMetricsGroupResource;
   /** The unique identifier of the telemetry metric group. */
   metricsGroupId: string;
-  /** Metric interval (in seconds) for the telemetry profile. This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
+  /** Metric interval (in seconds) for the telemetry profile.
+     This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
   metricsInterval: number;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
   timestamps?: Timestamps;
 };
@@ -3226,19 +3355,23 @@ export type TelemetryMetricsProfileResourceRead = {
   metricsGroup?: TelemetryMetricsGroupResourceRead;
   /** The unique identifier of the telemetry metric group. */
   metricsGroupId: string;
-  /** Metric interval (in seconds) for the telemetry profile. This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
+  /** Metric interval (in seconds) for the telemetry profile.
+     This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
   metricsInterval: number;
   /** Deprecated, The ID of the telemetry profile. */
   profileId?: string;
   /** The ID of the telemetry profile. */
   resourceId?: string;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
 export type DeleteTelemetryMetricsGroupResponse = object;
 export type ListTelemetryMetricsProfilesResponse = {

@@ -12,7 +12,9 @@ import {
   TableColumn,
 } from "@orch-ui/components";
 import {
+  getInfraPath,
   getTrustedComputeCompatibility,
+  hostDetailsRoute,
   hostProviderStatusToString,
   nodeStatusToIconStatus,
   nodeStatusToText,
@@ -131,11 +133,19 @@ const ClusterNodesTable = ({
       Header: "Actions",
       textAlign: "center",
       padding: "0",
-      accessor: (node) => (
-        <Link to={`/infrastructure/host/${node.resourceId}`}>
-          <Icon icon="clipboard-forward" /> View Host Details
-        </Link>
-      ),
+      accessor: (node: ClusterNode) => {
+        return (
+          node.resourceId && (
+            <Link
+              to={getInfraPath(hostDetailsRoute, {
+                id: node.resourceId,
+              })}
+            >
+              <Icon icon="clipboard-forward" /> View Host Details
+            </Link>
+          )
+        );
+      },
     },
   ];
 

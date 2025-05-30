@@ -188,7 +188,7 @@ describe("<ClusterCreation/>", () => {
             .should("contain.text", "Cluster is created");
 
           // check that the redux state has been cleared
-          pom.getPath().should("eq", "/clusters");
+          pom.getPath().should("contain", "/clusters");
           checkClearState(true);
         });
         it("should remove disable on button and show error when failed in creating cluster", () => {
@@ -220,7 +220,7 @@ describe("<ClusterCreation/>", () => {
 
           pom.el.nextBtn.should("have.class", "spark-button-disabled");
           // run common tests checks
-          pom.getPath().should("eq", "/clusters"); // should stay in same page
+          pom.getPath().should("contain", "/clusters"); // should stay in same page
           // check that the redux state is unaffected and page is not changed
           checkClearState(true);
         });

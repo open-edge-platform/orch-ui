@@ -20,14 +20,14 @@ class UploadButtonPom extends CyPom<UbSelectors> {
 
   public uploadFile(path: string) {
     this.el.uploadInput.selectFile(
-      [`${path}test.yaml`, `${path}example.yaml`],
+      [`${path}deployment_file_one.yaml`, `${path}deployment_file_two.yaml`],
       { force: true },
     );
   }
 
   public dragDropFile(path: string) {
     this.el.uploadInput.selectFile(
-      [`${path}test.yaml`, `${path}example.yaml`],
+      [`${path}deployment_file_one.yaml`, `${path}deployment_file_two.yaml`],
       { force: true, action: "drag-drop" },
     );
   }

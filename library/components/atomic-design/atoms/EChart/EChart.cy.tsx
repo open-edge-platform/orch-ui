@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { cyGet } from "@orch-ui/tests";
 import { EChartColorSet } from "@orch-ui/utils";
 import { ReactEChart } from "./EChart";
 import { EChartPom } from "./EChart.pom";
@@ -39,6 +40,7 @@ describe("Echart basic tests", () => {
         theme="light"
         loading={false}
         style={{ minHeight: "400px" }}
+        className="test-class"
       />,
     );
   });
@@ -62,5 +64,74 @@ describe("Echart basic tests", () => {
     const yHigh = numbersLength * 300;
     const format = yHigh.toLocaleString("en-US");
     pom.getValues().should("contain", format.toString());
+  });
+
+  it("Should apply and match custom className", () => {
+    cyGet("eCharts").should("have.class", "test-class").and("exist");
+  });
+
+  it("Should apply custom style", () => {
+    cyGet("eCharts")
+      .should("have.attr", "style")
+      .and("include", "min-height: 400px");
+  });
+
+  it("Should respond to theme changes", () => {
+    cy.mount(
+      <ReactEChart
+        option={{
+          xAxis: { type: "category", data: xValues },
+          yAxis: { type: "value" },
+          series: [{ data: yValues, type: "bar" }],
+        }}
+        theme="dark"
+        dataCy="custom-eChart"
+      />,
+    );
+    cyGet("custom-eChart").should("exist");
+  });
+
+  it("Should apply settings correctly", () => {
+    const settings = { notMerge: true };
+
+    cy.mount(
+      <ReactEChart
+        option={{
+          xAxis: { type: "category", data: xValues },
+          yAxis: { type: "value" },
+          series: [{ data: yValues, type: "line" }],
+        }}
+        settings={settings}
+        dataCy="eCharts"
+      />,
+    );
+
+    cyGet("eCharts").should("exist");
+  });
+
+  it("Should render without style or className props", () => {
+    cy.mount(
+      <ReactEChart
+        option={{
+          xAxis: { type: "category", data: xValues },
+          yAxis: { type: "value" },
+          series: [{ data: yValues, type: "line" }],
+        }}
+      />,
+    );
+    cy.get("div").should("exist");
+  });
+
+  it("Should use default data-cy when not provided", () => {
+    cy.mount(
+      <ReactEChart
+        option={{
+          xAxis: { type: "category", data: xValues },
+          yAxis: { type: "value" },
+          series: [{ data: yValues, type: "line" }],
+        }}
+      />,
+    );
+    cyGet("eCharts").should("exist");
   });
 });

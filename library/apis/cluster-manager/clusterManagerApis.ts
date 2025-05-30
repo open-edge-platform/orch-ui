@@ -210,9 +210,23 @@ export type GetV2ProjectsByProjectNameClustersApiArg = {
   pageSize?: number;
   /** Index of the first item to return. It is almost always used in conjunction with the 'pageSize' query. */
   offset?: number;
-  /** The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used. */
+  /** The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
+    
+    Supported fields:
+    - name
+    - kubernetesVersion
+    - providerStatus
+    - lifecyclePhase
+     */
   orderBy?: string;
-  /** Filters the entries based on the filter provided. */
+  /** Filters the entries based on the filter provided.
+    
+    Supported fields:
+    - name
+    - kubernetesVersion
+    - providerStatus
+    - lifecyclePhase
+     */
   filter?: string;
 };
 export type PostV2ProjectsByProjectNameClustersApiResponse =
@@ -398,7 +412,7 @@ export type ProblemDetails = {
   message?: string;
 };
 export type NodeSpec = {
-  /** The unique identifier of this host. */
+  /** UUID of the host. */
   id: string;
   role: "all" | "controlplane" | "worker";
 };
@@ -422,7 +436,7 @@ export type StatusInfo = {
   timestamp?: string;
 };
 export type NodeInfo = {
-  /** The unique identifier of this host. */
+  /** Host resource id */
   id?: string;
   role?: string;
   status?: StatusInfo;
@@ -500,7 +514,7 @@ export type TemplateInfo = {
   };
   clusterNetwork?: ClusterNetwork;
   clusterconfiguration?: object;
-  controlplaneprovidertype?: "kubeadm" | "rke2";
+  controlplaneprovidertype?: "kubeadm" | "rke2" | "k3s";
   description?: string;
   infraprovidertype?: "docker" | "intel";
   kubernetesVersion: string;

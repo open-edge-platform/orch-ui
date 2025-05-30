@@ -6,9 +6,11 @@
 import { cm, infra, mbApi } from "@orch-ui/apis";
 import { MetadataPair } from "@orch-ui/components";
 import {
+  clusterManagementRoute,
   ObjectKeyValue,
   objectToMetadataPair,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, ButtonGroup, Heading, Toast } from "@spark-design/react";
 import {
@@ -19,7 +21,7 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -45,7 +47,7 @@ export interface ClusterEditProps {
 const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
   const cy = { "data-cy": dataCy };
   const { clusterName } = useParams<urlParams>() as urlParams;
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   //initial nodes
@@ -339,7 +341,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           variant={ButtonVariant.Secondary}
           onPress={() => {
             dispatch(clearCluster());
-            navigate("/infrastructure/clusters");
+            navigate(clusterManagementRoute);
           }}
         >
           Cancel
@@ -360,7 +362,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           onReqSuccess()
             ? "Cluster updated, redirecting you back to the Clusters page..."
             : onReqError()
-              ? "Failed to edit cluster try again later, redirecting you back to Clusters page..."
+              ? "Failed to edit cluster. Please try again later."
               : onReqWarning()
                 ? `This is the only host in ${clusterName}. Delete the cluster to remove host and return to an unassinged state`
                 : ""
@@ -385,11 +387,10 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
         onHide={() => {
           if (onReqSuccess()) {
             setSuccessVisibility(ToastVisibility.Hide);
-            navigate("../clusters");
+            navigate(clusterManagementRoute);
           }
           if (onReqError()) {
             setErrorVisibility(ToastVisibility.Hide);
-            navigate("../clusters");
           }
           if (onReqWarning()) {
             setRemoveLast(false);
