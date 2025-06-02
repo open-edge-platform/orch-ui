@@ -90,7 +90,7 @@ class ProjectsTablePom extends CyPom<Selectors, ApiAliases> {
   }
   renameProjectPopup(index: number, name: string) {
     this.getPopupOptionsByRowIndex(index).click().as("popup");
-    cy.get("@popup").contains("Rename").click();
+    cy.get("@popup").contains("Rename").click({ force: true });
     this.createRenameProjectPom.el.projectName.type(name);
   }
   deleteProjectPopup(index: number, name: string) {
