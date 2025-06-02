@@ -33,7 +33,7 @@ export interface SearchTypeItem {
 }
 interface SelectSiteForClusterProps {
   selectedSite?: infra.SiteResourceRead;
-  selectedRegion?: infra.Region;
+  selectedRegion?: infra.RegionResource;
   onSelectedInheritedMeta: (value: TypedMetadata[]) => void;
 }
 
@@ -83,8 +83,8 @@ const SelectSite = ({
     // Get Row Data for Site Selection
     const siteMetadata: TypedMetadata[] = [];
     const regionMetadata: TypedMetadata[] = [];
-    if (selectedSite?.inheritedMetadata?.location) {
-      selectedSite.inheritedMetadata.location.map((metadata: TypedMetadata) => {
+    if (selectedSite?.inheritedMetadata) {
+      selectedSite.inheritedMetadata.map((metadata: TypedMetadata) => {
         regionMetadata.push({
           key: metadata.key,
           value: metadata.value,

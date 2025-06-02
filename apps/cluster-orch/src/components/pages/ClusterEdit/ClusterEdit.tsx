@@ -112,7 +112,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
   // Inherited metadata array for metadata display
   useEffect(() => {
     if (siteData) {
-      const regionMeta = siteData?.inheritedMetadata?.location ?? [];
+      const regionMeta = siteData?.inheritedMetadata ?? [];
       const siteMeta = siteData?.metadata ?? [];
       /** Combine Region and Site Metadata (a.k.a Inherited Metadata) */
       const combinedMetadata = [

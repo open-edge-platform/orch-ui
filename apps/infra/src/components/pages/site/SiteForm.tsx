@@ -284,12 +284,12 @@ const SiteForm = () => {
         regionId: "",
       },
     };
-    //TODO: confirm if its safe to remove
+
     //Grab the inherited Metadata
-    // const location = site?.inheritedMetadata?.location;
-    // if (location) {
-    //   setInheritedMetadata(location);
-    // }
+    const location = site?.inheritedMetadata;
+    if (location) {
+      setInheritedMetadata(location);
+    }
 
     // Create site with unknown regionId
     if (!regionId && siteId === "new" && !site) {

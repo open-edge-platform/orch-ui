@@ -22,22 +22,27 @@ const RegionsDropdown = ({
   onSelectionChange,
 }: RegionsDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
+  const params: {
+    projectName: string;
+    pageSize: number;
+    filter?: string;
+  } = {
+    projectName,
+    pageSize: pageSize,
+  };
+  if (parentRegionId) {
+    params.filter = `parentRegion.resourceId=${parentRegionId}`;
+  }
+
   const {
     data: { regions } = {},
     isLoading,
     isSuccess,
     isError,
     error,
-  } = infra.useRegionServiceListRegionsQuery(
-    {
-      projectName,
-      pageSize: pageSize,
-      filter: `parentRegion.resourceId=${parentRegionId}`,
-    },
-    {
-      skip: !projectName,
-    },
-  );
+  } = infra.useRegionServiceListRegionsQuery(params, {
+    skip: !projectName,
+  });
 
   const isEmptyError = () => isSuccess && (!regions || regions.length === 0);
 

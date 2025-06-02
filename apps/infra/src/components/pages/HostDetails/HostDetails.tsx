@@ -85,7 +85,7 @@ const HostDetails: React.FC = () => {
   const hostsQuery = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      filter: `uuid=${uuid} AND detail=true`,
+      filter: `uuid="${uuid}"`,
     },
     {
       skip: !uuid || !SharedStorage.project?.name,
