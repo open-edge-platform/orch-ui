@@ -13,7 +13,7 @@ type ApiAliases = "getHostByUUID" | "getHostById";
 
 const endpoints: CyApiDetails<ApiAliases> = {
   getHostByUUID: {
-    route: "**/compute/hosts?detail=true&uuid=*",
+    route: "**/compute/hosts?filter*",
     statusCode: 200,
     response: {
       hasNext: false,

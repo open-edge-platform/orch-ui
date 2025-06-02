@@ -4,7 +4,6 @@
  */
 
 import { enhancedInfraSlice, infra } from "@orch-ui/apis";
-import { clusterFiveName } from "../../cluster-orch";
 import {
   instanceFiveId,
   instanceFourId,
@@ -160,8 +159,8 @@ export const instanceFive: enhancedInfraSlice.InstanceReadModified = {
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
-      resourceId: clusterFiveName,
-      workloadMemberId: clusterFiveName,
+      resourceId: "minimart-dayton", //TODO: debug why import of clusterFiveName throws error
+      workloadMemberId: "minimart-dayton",
       workload: workloadFive,
     },
   ],

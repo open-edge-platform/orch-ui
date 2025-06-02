@@ -23,7 +23,6 @@ import {
   selectClusterTwoV1,
 } from "./clusterTemplates";
 import {
-  clusterFiveName,
   clusterFourName,
   clusterOneName,
   clusterSixName,
@@ -169,7 +168,7 @@ export const clusterFour: ClusterComplete = {
 };
 
 export const clusterFive: ClusterComplete = {
-  name: clusterFiveName,
+  name: "minimart-dayton",
   providerStatus: {
     message: "active",
     indicator: "STATUS_INDICATION_IDLE",

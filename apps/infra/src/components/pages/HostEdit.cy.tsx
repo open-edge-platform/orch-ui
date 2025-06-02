@@ -96,7 +96,6 @@ describe("<HostEdit />", () => {
       const expectedReq: infra.HostResourceWrite = {
         name: newHostName,
         siteId: mockHost.site?.resourceId,
-        inheritedMetadata: mockHost.inheritedMetadata,
         metadata: mockHost.metadata,
       };
       if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)
@@ -126,7 +125,6 @@ describe("<HostEdit />", () => {
       ];
       const expectedReq: infra.HostResource = {
         uuid: mockHost.uuid,
-        inheritedMetadata: mockHost.inheritedMetadata,
         name: newHostName,
         metadata: expectedMetadata,
       };
@@ -195,7 +193,6 @@ describe("<HostEdit />", () => {
       const expectedReq: infra.HostResourceWrite = {
         name: mockHost.name,
         siteId: siteMinimartTwo.resourceId,
-        inheritedMetadata: mockHost.inheritedMetadata,
         metadata: mockHost.metadata,
       };
       if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)

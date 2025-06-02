@@ -27,7 +27,7 @@ const singleRoute = `${route}/*`;
 
 const regionsStore = new RegionStore();
 const getRegions: CyApiDetail<infra.ListRegionsResponse> = {
-  route: `**/v1/projects/${defaultActiveProject.name}/regions?pageSize=*`,
+  route: `**/v1/projects/${defaultActiveProject.name}/regions*`,
   response: {
     regions: regionsStore.list(),
     totalElements: regionsStore.resources.length,

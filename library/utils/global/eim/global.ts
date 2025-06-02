@@ -103,7 +103,7 @@ export const hostToStatuses = (
           instance.instanceStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
         message: statusWithDetails(
           instance.instanceStatus ?? "",
-          // instance.instanceStatusDetail,
+          instance.instanceStatusDetail,
         ),
         timestamp: instance.instanceStatusTimestamp,
       };

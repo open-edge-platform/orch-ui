@@ -56,7 +56,7 @@ describe("HostDetails", () => {
     it("should render inherited", () => {
       const inheritedMetadataLength =
         (siteRestaurantTwo.metadata?.length ?? 0) +
-        (siteRestaurantTwo.inheritedMetadata?.location?.length ?? 0);
+        (siteRestaurantTwo.inheritedMetadata?.length ?? 0);
 
       if (inheritedMetadataLength) {
         pom.medataBadge.getAll().should("have.length", inheritedMetadataLength);
@@ -108,8 +108,7 @@ describe("HostDetails", () => {
     it("should display the Host information", () => {
       pom.el.infraHostDetailsHeader.contains(mockHost.name);
       cy.wait(`@${pom.api.hostUuidSuccess}`).then(({ request }) => {
-        expect(request.query.detail).eq("true");
-        expect(request.query.uuid).eq(mockHost.uuid);
+        expect(request.query.filter).contains(mockHost.uuid);
       });
     });
   });
