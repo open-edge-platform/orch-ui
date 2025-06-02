@@ -56,8 +56,16 @@ describe("Org Admin Smoke", () => {
       );
       pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
 
-      // wait for the project to be ready
+      // wait for the page to reload
+      cy.contains("Create Project").should("be.visible");
 
+      // search for the project so we only have one entry in the table
+      pom.projectsPom.projectsTablePom.tablePom.search(testData.description);
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
+
+      // wait for the project to be ready
       pom.projectsPom.projectsTablePom.tablePom
         .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
         .should(($el) => {
@@ -67,9 +75,7 @@ describe("Org Admin Smoke", () => {
 
     it("should rename the project", () => {
       cy.contains("Project Name").should("be.visible");
-      pom.projectsPom.projectsTablePom.tablePom.el.search.type(
-        testData.description,
-      );
+      pom.projectsPom.projectsTablePom.tablePom.search(testData.description);
       // wait for search to complete
       pom.projectsPom.projectsTablePom.tablePom
         .getRows()
@@ -85,9 +91,7 @@ describe("Org Admin Smoke", () => {
 
     it("should delete the project", () => {
       cy.contains("Project Name").should("be.visible");
-      pom.projectsPom.projectsTablePom.tablePom.el.search.type(
-        testData.description,
-      );
+      pom.projectsPom.projectsTablePom.tablePom.search(testData.description);
       // wait for search to complete
       pom.projectsPom.projectsTablePom.tablePom
         .getRows()
