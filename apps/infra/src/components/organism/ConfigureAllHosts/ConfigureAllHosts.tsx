@@ -81,7 +81,7 @@ const ConfigureAllHosts = () => {
             label="Site"
             isRequired
             size={InputSize.Large}
-            value={commonHostData?.site?.name}
+            value={commonHostData.site?.name}
             onChange={(value: string) => {
               dispatch(setCommonSite({ name: value, siteID: value }));
             }}
@@ -92,7 +92,7 @@ const ConfigureAllHosts = () => {
         <Flex cols={[6]}>
           <OsProfileDropdown
             label="OS Profile"
-            value={commonHostData?.os?.resourceId}
+            value={commonHostData.os?.resourceId}
             onSelectionChange={(os) => {
               if (!os) return;
               dispatch(setCommonOsProfile(os));
