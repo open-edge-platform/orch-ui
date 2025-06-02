@@ -4,7 +4,6 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { Metadata } from "@orch-ui/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isValidHostName } from "../components/organism/hostConfigure/HostDetails/HostDetails";
 import { RootState } from "./store";
@@ -233,7 +232,10 @@ export const configureHost = createSlice({
       host.name = action.payload.name;
       configureHost.caseReducers.validateStep(state);
     },
-    setMetadata(state, action: PayloadAction<{ metadata: Metadata }>) {
+    setMetadata(
+      state,
+      action: PayloadAction<{ metadata: infra.MetadataItem[] }>,
+    ) {
       const { hosts } = state;
       Object.values(hosts).forEach(
         (hd) => (hd.metadata = action.payload.metadata),

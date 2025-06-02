@@ -68,7 +68,7 @@ const store = setupStore({
     },
   ],
 });
-const mockSite: infra.SiteRead = {
+const mockSite: infra.SiteResourceRead = {
   resourceId: "site-a",
   name: "Site A",
   region: {

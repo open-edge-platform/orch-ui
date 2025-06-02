@@ -34,17 +34,6 @@ export type HostGenericStatuses = {
 export type TelemetryLogLevel =
   infra.TelemetryLogsProfileResourceRead["logLevel"];
 
-export type StatusIndicatorRead =
-  | "STATUS_INDICATION_UNSPECIFIED"
-  | "STATUS_INDICATION_ERROR"
-  | "STATUS_INDICATION_IN_PROGRESS"
-  | "STATUS_INDICATION_IDLE";
-
-export type Metadata = {
-  key: string;
-  value: string;
-}[];
-
 export const hostStatusIndicatorToIconStatus = (
   host: infra.HostResourceRead,
 ): IconStatus => {
@@ -103,7 +92,7 @@ export const hostToStatuses = (
           instance.instanceStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
         message: statusWithDetails(
           instance.instanceStatus ?? "",
-          // instance.instanceStatusDetail,
+          instance.instanceStatusDetail,
         ),
         timestamp: instance.instanceStatusTimestamp,
       };

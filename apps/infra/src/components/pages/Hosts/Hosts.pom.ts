@@ -15,7 +15,7 @@ type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "getHost";
 
-const generateHosts = (size = 10, hostMock: infra.HostRead = hostOne) =>
+const generateHosts = (size = 10, hostMock: infra.HostResourceRead = hostOne) =>
   [...Array(size).keys()].map((i) => ({
     ...hostMock,
     name: `Host ${i}`,
@@ -25,7 +25,7 @@ const generateHosts = (size = 10, hostMock: infra.HostRead = hostOne) =>
 const hostRoute = `**/projects/${defaultActiveProject.name}/compute/hosts*`;
 const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.HostServiceListHostsApiResponse
 > = {
   getHost: {
     route: hostRoute,

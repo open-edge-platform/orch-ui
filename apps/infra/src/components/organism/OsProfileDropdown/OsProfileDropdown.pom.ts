@@ -27,7 +27,7 @@ const route = `**/v1/projects/${defaultActiveProject.name}/compute/os?*`;
 
 const osResourceStore = new OsResourceStore();
 
-export const getOsResources: CyApiDetail<infra.GetV1ProjectsByProjectNameComputeOsApiResponse> =
+export const getOsResources: CyApiDetail<infra.OperatingSystemServiceListOperatingSystemsApiResponse> =
   {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/os?pageSize=*`,
     response: {
@@ -39,7 +39,7 @@ export const getOsResources: CyApiDetail<infra.GetV1ProjectsByProjectNameCompute
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  | infra.GetV1ProjectsByProjectNameComputeOsApiResponse
+  | infra.OperatingSystemServiceListOperatingSystemsApiResponse
   | infra.ProblemDetailsRead
 > = {
   getOSResources: getOsResources,
