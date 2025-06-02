@@ -188,7 +188,7 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
         md.type = "site";
       }
       if (
-        siteData?.inheritedMetadata?.location?.find(
+        siteData?.inheritedMetadata?.find(
           (rmd) => rmd.key === md.key && rmd.value === md.value,
         )
       ) {
