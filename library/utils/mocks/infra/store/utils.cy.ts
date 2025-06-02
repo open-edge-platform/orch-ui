@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwoUuid as hostTwoGuid,
   regionUsWestId,
