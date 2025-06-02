@@ -4,20 +4,18 @@
  */
 
 .section {
+  padding-bottom: 1.5rem;
+
+  &:has(+ .spark-divider) {
+    padding-bottom: 0.5rem;
+  }
+
   .flex {
     margin-bottom: 1rem;
 
     &:last-child {
       margin-bottom: 0;
     }
-  }
-
-  .spark-divider {
-    margin-top: 1.75rem;
-  }
-
-  &.last {
-    padding-bottom: 1.75rem;
   }
 
   h2 {

@@ -11,7 +11,7 @@ import {
   Section,
 } from "@orch-ui/components";
 import { RuntimeConfig } from "@orch-ui/utils";
-import { Heading, TextField, ToggleSwitch } from "@spark-design/react";
+import { Divider, Heading, TextField, ToggleSwitch } from "@spark-design/react";
 import { InputSize, ToggleSwitchSize } from "@spark-design/tokens";
 import React, { ComponentType, LazyExoticComponent, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -88,7 +88,8 @@ const ConfigureAllHosts = () => {
           />
         </Flex>
       </Section>
-      <Section title="Operating System" last>
+      <Divider />
+      <Section title="Operating System">
         <Flex cols={[6]}>
           <OsProfileDropdown
             label="OS Profile"
@@ -186,7 +187,8 @@ const ConfigureAllHosts = () => {
             </div>
           </Flex>
         </Section>
-        <Section title="Labels" last>
+        <Divider />
+        <Section title="Labels">
           <Flex cols={[6]}>{metadataContent}</Flex>
         </Section>
       </ExpansionPanel>
