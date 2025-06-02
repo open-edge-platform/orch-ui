@@ -4,6 +4,7 @@
  */
 
 import { TablePom } from "@orch-ui/components";
+import { EIM_USER } from "@orch-ui/tests";
 import { NetworkLog } from "../../support/network-logs";
 import { getHostsViaApi, getRegionViaAPi, getSiteViaApi } from "../helpers";
 import {
@@ -109,7 +110,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // deleteSiteViaApi(activeProject, regionId, siteId);
       // deleteRegionViaApi(activeProject, regionId);
 
-      netLog.save("infra_verify-host");
+      // netLog.save("infra_verify-host");
       netLog.clear();
     });
   });
