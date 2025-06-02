@@ -74,6 +74,8 @@ window.__RUNTIME_CONFIG__ = {
     MB: "https://api.kind.internal",
     TM: "https://api.kind.internal",
     ALERT: "https://api.kind.internal",
+    RPS: "https://api.kind.internal",
+    MPS: "https://api.kind.internal",
   },
   VERSIONS: {
     orchestrator: "unknown",
