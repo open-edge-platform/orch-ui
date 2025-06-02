@@ -137,14 +137,12 @@ export const siteOne = {
       value: "data",
     },
   ],
-  inheritedMetadata: {
-    location: [
-      {
-        key: "region",
-        value: "region-uswest",
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: "region-uswest",
+    },
+  ],
   region: {
     // parent region
     regionID: "region-portland",
@@ -155,7 +153,7 @@ export const siteOne = {
 
 const siteEndpoint: CyApiDetails<
   GetSites,
-  infra.SiteServiceGetSiteApiResponse
+  infra.SiteServiceListSitesApiResponse
 > = {
   getSites: {
     route: `**/v1/projects/${defaultActiveProject.name}/sites*`,
