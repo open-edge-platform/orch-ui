@@ -5,12 +5,16 @@
 
 import { infra } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { InternalError, SharedStorage } from "@orch-ui/utils";
+import {
+  hostsRoute,
+  InternalError,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { TextField } from "@spark-design/react";
 import { ButtonVariant, InputSize, ModalSize } from "@spark-design/tokens";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { setErrorInfo } from "../../../../store/notifications";
 import "./DeauthorizeHostStandalone.scss";
 
@@ -37,7 +41,6 @@ interface DeauthorizeHostStandaloneProps {
 const DeauthorizeHostStandalone = ({
   hostId,
   hostName,
-  basePath = "",
   isDeauthConfirmationOpen,
   setDeauthorizeConfirmationOpen,
 }: DeauthorizeHostStandaloneProps) => {
@@ -47,7 +50,7 @@ const DeauthorizeHostStandalone = ({
     mode: "all",
   });
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const [deauthorizeHost] =
     infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
 
@@ -91,7 +94,7 @@ const DeauthorizeHostStandalone = ({
       })
         .unwrap()
         .then(() => {
-          navigate(`${basePath}../hosts`, { relative: "path" });
+          navigate(hostsRoute);
         });
     } catch (e) {
       setErrorInfo(e as InternalError);

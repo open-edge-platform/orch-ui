@@ -8,30 +8,61 @@ import {
   CollapsableList,
   CollapsableListItem,
   Flex,
-  getActiveNavItem,
   MessageBanner as _MessageBanner,
   SidebarMain,
 } from "@orch-ui/components";
 import {
+  allClusterRoutes,
+  allLocationRoutes,
+  clusterManagementRoute,
   hasRole,
+  hostsRoute,
+  InfraRoute,
   innerTransitionTimeout,
+  locationRoute,
   Role,
   RuntimeConfig,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
-import { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { matchPath } from "react-router";
+import { Outlet, useLocation } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import {
-  clusterNavItem,
-  hostsNavItem,
-  InfraRoute,
-  locationsNavItem,
-} from "../../routes/const";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { hideToast, setMessageBanner } from "../../store/notifications";
 import "./Layout.scss";
+
+const defaultNavItem: CollapsableListItem<string> = {
+  icon: "minus",
+  route: "",
+  value: "",
+};
+
+const clusterNavItem: CollapsableListItem<string> = {
+  ...defaultNavItem,
+  route: clusterManagementRoute,
+  icon: "globe",
+  value: "Clusters",
+  divider: true,
+};
+
+const hostsNavItem: CollapsableListItem<string> = {
+  ...defaultNavItem,
+  route: hostsRoute,
+  value: "Hosts",
+  isBold: false,
+  divider: true,
+};
+
+const locationsNavItem: CollapsableListItem<string> = {
+  ...defaultNavItem,
+  route: locationRoute,
+  icon: "cube-detached",
+  value: "Locations",
+  divider: true,
+};
 
 const createMenuItems = () => {
   const items: CollapsableListItem<string>[] = [];
@@ -45,6 +76,20 @@ const createMenuItems = () => {
   return items;
 };
 
+const selectActiveMenu = (activePath: string): CollapsableListItem<string> => {
+  const cleanPath = activePath.replace(/\/infrastructure/g, "");
+
+  const routeMatches = [
+    { routes: allLocationRoutes, navItem: locationsNavItem },
+    { routes: allClusterRoutes, navItem: clusterNavItem },
+  ];
+
+  const matchedItem = routeMatches.find(({ routes }) =>
+    routes.some((route) => matchPath(route, cleanPath)),
+  );
+
+  return matchedItem?.navItem ?? hostsNavItem;
+};
 export const menuItems = createMenuItems();
 
 export const datacyComponentSelector = "eimLayout";
@@ -55,10 +100,10 @@ const Layout = () => {
   const dispatch = useAppDispatch();
 
   // Router transitions https://tinyurl.com/2u8kwvk8
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const location = useLocation();
-  const activeItem = useAppSelector(getActiveNavItem);
   const activePath = location.pathname;
+  const activeItem = useMemo(() => selectActiveMenu(activePath), [activePath]);
 
   // EIM Notification system
   const {

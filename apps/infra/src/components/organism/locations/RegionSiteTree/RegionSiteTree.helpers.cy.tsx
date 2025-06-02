@@ -22,7 +22,9 @@ describe("<RegionSiteTree/> helpers", () => {
     });
     cy.get("@navigateStub").should(
       "be.calledWith",
-      "../regions/1/sites/new?source=region",
+      "regions/:regionId/sites/:siteId",
+      { regionId: "1", siteId: "new" },
+      "?source=region",
     );
   });
 
@@ -31,6 +33,10 @@ describe("<RegionSiteTree/> helpers", () => {
       name: "Region-1",
       resourceId: "1",
     });
-    cy.get("@navigateStub").should("be.calledWith", "../regions/parent/1/new");
+    cy.get("@navigateStub").should(
+      "be.calledWith",
+      "regions/parent/:parentRegionId/:regionId",
+      { parentRegionId: "1", regionId: "new" },
+    );
   });
 });

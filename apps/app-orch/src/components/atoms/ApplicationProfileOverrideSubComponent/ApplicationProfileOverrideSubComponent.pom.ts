@@ -8,8 +8,11 @@ import { CyPom } from "@orch-ui/tests";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-export class BreadcrumbWrapperPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = "breadcrumbWrapper") {
+class ApplicationProfileOverrideSubComponentPom extends CyPom<Selectors> {
+  constructor(
+    public rootCy: string = "applicationProfileOverrideSubComponent",
+  ) {
     super(rootCy, [...dataCySelectors]);
   }
 }
+export default ApplicationProfileOverrideSubComponentPom;

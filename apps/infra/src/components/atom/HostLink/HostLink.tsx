@@ -4,7 +4,12 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { parseError, SharedStorage } from "@orch-ui/utils";
+import {
+  getInfraPath,
+  hostDetailsRoute,
+  parseError,
+  SharedStorage,
+} from "@orch-ui/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../store/hooks";
@@ -72,16 +77,16 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
     }
   }, [hostsQuery]);
 
-  return (
+  return host?.resourceId ? (
     <Link
       {...cy}
       className="host-link"
-      to={`/infrastructure/${host?.site ? "host" : "unconfigured-host"}/${
-        host?.resourceId
-      }`}
+      to={`${getInfraPath(hostDetailsRoute, { id: host.resourceId })}`}
       relative="path"
     >
-      {host?.name || host?.resourceId}
+      {host.name || host.resourceId}
     </Link>
+  ) : (
+    <>{host?.name}</>
   );
 };

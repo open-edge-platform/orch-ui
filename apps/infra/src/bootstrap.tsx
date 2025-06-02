@@ -48,7 +48,7 @@ const mount = (el: HTMLElement) => {
 
   root.render(
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename="/infrastructure">
         <Provider store={store}>
           <AuthProvider {...getAuthCfg()}>
             <Header size={HeaderSize.Large}>

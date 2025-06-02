@@ -52,6 +52,10 @@ spec:
               mountPath: /usr/share/nginx/html/runtime-config.js
               subPath: runtime-config.js
           securityContext:
+            readOnlyRootFilesystem: true
+            runAsGroup: 65533
+            runAsUser: 65533
+            runAsNonRoot: true
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]

@@ -4,16 +4,17 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { NavigateFunction } from "react-router-dom";
+import {
+  InfraNavigateFunction,
+  regionSiteRoute,
+  subRegionRoute,
+} from "@orch-ui/utils";
 import {
   setLoadingBranch,
   setRegion,
   setSite,
 } from "../../../../store/locations";
 import { AppDispatch } from "../../../../store/store";
-
-const sitesRoute = "sites";
-const regionsRoute = "regions";
 
 export const handleViewRegionAction = (
   dispatch: AppDispatch,
@@ -24,22 +25,28 @@ export const handleViewRegionAction = (
 };
 
 export const handleAddSiteAction = (
-  navigate: NavigateFunction,
+  navigate: InfraNavigateFunction,
   region: infra.RegionRead,
 ) => {
   if (!region.resourceId) return;
-  navigate(`../regions/${region.resourceId}/${sitesRoute}/new?source=region`, {
-    relative: "path",
-  });
+  navigate(
+    regionSiteRoute,
+    {
+      regionId: region.resourceId,
+      siteId: "new",
+    },
+    "?source=region",
+  );
 };
 
 export const handleSubRegionAction = (
-  navigate: NavigateFunction,
+  navigate: InfraNavigateFunction,
   region: infra.RegionRead,
 ) => {
   if (!region || !region.resourceId) return;
-  navigate(`../${regionsRoute}/parent/${region.resourceId}/new`, {
-    relative: "path",
+  navigate(subRegionRoute, {
+    parentRegionId: region.resourceId,
+    regionId: "new",
   });
 };
 

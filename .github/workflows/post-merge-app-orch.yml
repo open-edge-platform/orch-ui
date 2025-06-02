@@ -13,9 +13,15 @@ on:
       - 'apps/app-orch/**'
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   post-merge-pipeline:
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@main
+    permissions:
+      contents: read
+      security-events: write
+      id-token: write
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@0.1.10
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_version_check: true
