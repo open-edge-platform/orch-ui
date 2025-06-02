@@ -17,7 +17,7 @@ export const OSProfileSecurityFeatures: {
     infra.OperatingSystemResource["securityFeature"]
   >]: string;
 } = {
-  // SECURITY_FEATURE_UNSPECIFIED: "Unspecified",
+  SECURITY_FEATURE_UNSPECIFIED: "Unspecified",
   SECURITY_FEATURE_NONE: "None",
   SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION: "Secure Boot / FDE",
 };
