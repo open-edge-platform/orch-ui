@@ -4,14 +4,13 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { StatusIndicatorRead } from "@orch-ui/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type HostStatus = infra.HostResourceRead["hostStatus"];
 type OverallHostStatus =
   | HostStatus
   | infra.SingleScheduleResource["scheduleStatus"]
-  | StatusIndicatorRead;
+  | infra.StatusIndication;
 
 export const hostStatusSliceName = "hostStatusList";
 

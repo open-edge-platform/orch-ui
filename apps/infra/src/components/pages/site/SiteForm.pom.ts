@@ -65,7 +65,7 @@ type SingleSiteApis =
 
 const singleSiteEndpoints: CyApiDetails<
   SingleSiteApis,
-  infra.SiteResource /* | infra.ProblemDetails */,
+  infra.SiteResource,
   infra.SiteResource
 > = {
   createSite: {

@@ -127,9 +127,6 @@ export const deleteHostInstanceFn = (
       infra.infra.endpoints.hostServiceDeleteHost.initiate({
         projectName: SharedStorage.project?.name ?? "",
         resourceId: host.resourceId ?? "",
-        // hostOperationWithNote: { //TODO: required? no note is accepted from UI
-        //   note: host.note ?? "",
-        // },
       }),
     );
   };
