@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { EIM_USER } from "@orch-ui/tests";
 import * as _ from "lodash";
 import { LocationsPom } from "../../../../apps/infra/src/components/pages/Locations/Locations.pom";
 import RegionFormPom from "../../../../apps/infra/src/components/pages/region/RegionForm.pom";
