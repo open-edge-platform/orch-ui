@@ -4,8 +4,9 @@
  */
 
 import { handlers as alerts } from "./admin/handlers/alerts";
+import { handlers as alertDefinitions } from "./admin/handlers/alert-definitions";
 
-const handlersAdmin = [...alerts];
+const handlersAdmin = [...alerts, ...alertDefinitions];
 
 // mocks expose one collection of all handlers
 export const handlers = [...handlersAdmin];
