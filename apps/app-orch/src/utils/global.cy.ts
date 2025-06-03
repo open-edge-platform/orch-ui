@@ -83,8 +83,7 @@ describe("the global utilities", () => {
         });
     });
 
-    // NOTE this test is too flaky, disabling it until can be stabilized
-    it.skip("should invalidate cache to call new api", () => {
+    it("should invalidate cache to call new api", () => {
       // Note: not including this line will make the test fail, by `status = fulfilled`
       invalidateCacheByTagname("EndpointsService", store.dispatch);
 

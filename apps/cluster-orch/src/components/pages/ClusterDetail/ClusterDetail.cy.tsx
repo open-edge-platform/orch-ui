@@ -4,13 +4,11 @@
  */
 
 import { aggregateStatuses, ApiErrorPom } from "@orch-ui/components";
-import { cyGet } from "@orch-ui/tests";
 import {
   ClusterGenericStatuses,
   clusterToStatuses,
   IRuntimeConfig,
 } from "@orch-ui/utils";
-import moment from "moment";
 import ClusterDetail from "./ClusterDetail";
 import { ClusterDetailPom } from "./ClusterDetail.pom";
 
@@ -63,17 +61,6 @@ describe("<ClusterDetail />", () => {
           "lifecyclePhase",
         ).message,
       );
-    });
-
-    it("should render 'Last Change' column when showTimestamp is true", () => {
-      const timestamp = pom.testCluster.providerStatus?.timestamp as number;
-      const expectedDate = moment(new Date(timestamp * 1000)).format(
-        "MMM DD, YYYY",
-      );
-      cyGet("timestamp-lifecyclePhase").should("contain", expectedDate);
-      cyGet("timestamp-lifecyclePhase").should("exist");
-      cyGet("last-change").should("exist");
-      cyGet("last-change").contains("Last Change");
     });
 
     it("should delete a cluster", () => {

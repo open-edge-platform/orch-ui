@@ -26,6 +26,7 @@ import { AuthProvider } from "react-oidc-context";
 import { Provider } from "react-redux";
 import { MemoryRouter, useLocation, useRoutes } from "react-router-dom";
 import { setupStore } from "../../apps/admin/src/store";
+//import "./commands";
 
 //TODO: Move to @orch-ui/cypress
 export function RenderLocation() {

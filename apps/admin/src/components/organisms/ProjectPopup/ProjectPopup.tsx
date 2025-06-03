@@ -17,7 +17,6 @@ interface ProjectPopupProps {
   onDelete?: (project: AdminProject) => void;
   // these props are used for testing purposes
   hasRole?: (roles: string[]) => boolean;
-  setActionPopupState?: (isToggled: boolean) => void;
 }
 
 /** This will show all available project actions within popup menu */
@@ -27,7 +26,6 @@ const ProjectPopup = ({
   onRename,
   onDelete,
   hasRole = hasRoleDefault,
-  setActionPopupState,
 }: ProjectPopupProps) => {
   const getPopupActions = (): PopupOption[] => [
     {
@@ -47,14 +45,7 @@ const ProjectPopup = ({
 
   return (
     <div className="project-popup">
-      <Popup
-        onToggle={(isToggled: boolean) => {
-          setActionPopupState && setActionPopupState(isToggled);
-        }}
-        dataCy="projectPopup"
-        jsx={jsx}
-        options={getPopupActions()}
-      />
+      <Popup dataCy="projectPopup" jsx={jsx} options={getPopupActions()} />
     </div>
   );
 };

@@ -45,33 +45,11 @@ Class containing static helper methods for general use in mocks.
 
 ### api/data/ids
 
-Directory for files (e.g., hosts, regions) that will export an object of `id` values of pre-generated entities (usually `resourceId`).
+Directory for files (e.g., hosts, regions) that will contain a collection of `id` values of pre-generated entities (usually `resourceId`).
 
 ### api/data
 
-Directory for entity files (e.g., hosts, regions) that contain pre-generated mock entities. These entities are generated using helper functions from `data.helpers.ts` and exported as named constants. Example:
-
-```
-const hostRamUsageAlertDefinition = generateAlertDefinition(
-  AlertDefinitionIds.HOST_RAM_USAGE,
-  "HostRAMUsage",
-  { state: "new" },
-);
-...
-
-export const generateAlertDefinition = (
-  id: AlertDefinitionId,
-  name: string,
-  rest?: Partial<Omit<omApi.AlertDefinition, "id" | "name">>,
-): omApi.AlertDefinition => ({
-  id,
-  name,
-  state: "applied",
-  values: { threshold: "30", duration: "30s" },
-  ...rest,
-});
-
-```
+Directory for entity files (e.g., hosts, regions) that will contain pre-generated entities.
 
 ### api/handlers
 

@@ -59,10 +59,9 @@ describe("Org Admin Smoke", () => {
       // wait for the project to be ready
 
       pom.projectsPom.projectsTablePom.tablePom
-        .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
-        .should(($el) => {
-          expect($el, "Project status").to.contain.text("CREATE is complete");
-        });
+        .getCell(1, 3)
+        .contains(`Project ${testData.description}`, { timeout: 60 * 1000 })
+        .should("contain.text", "CREATE is complete");
     });
 
     it("should rename the project", () => {

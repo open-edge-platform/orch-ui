@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-import { StoreUtils } from "../../storeUtils";
+import { StoreUtils } from "../../utils";
 import { BaseStore } from "./baseStore";
 
 // when creating an object we only send the value to the API,

@@ -217,10 +217,6 @@ export const page2Data = generateData(8, 10);
 export const getMultiColumnKeyIdFromRow = (row: CustomRow) =>
   `${row.name},${row.ver}`;
 
-type cyOptions = Partial<
-  Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow
->;
-
 export class TablePom extends CyPom<Selectors> {
   tableRibbon: RibbonPom;
   constructor(public rootCy: string = "table") {
@@ -228,9 +224,8 @@ export class TablePom extends CyPom<Selectors> {
     this.tableRibbon = new RibbonPom();
   }
 
-  public getRows(options?: cyOptions): Cy {
-    // NOTE we need to reconcile the cypress configs in order to use .dataCy
-    return cy.get(`[data-cy="${this.rootCy}"]`, options).find(".table-row");
+  public getRows(): Cy {
+    return this.root.find(".table-row");
   }
 
   public getColumnHeader(index: number): Cy {
@@ -250,14 +245,13 @@ export class TablePom extends CyPom<Selectors> {
     return this.root.find('[data-testid="pagination-control-total"]');
   }
 
-  public getRow(n: number, options?: cyOptions): Cy {
-    return this.getRows(options).eq(n - 1);
+  public getRow(n: number): Cy {
+    return this.getRows().eq(n - 1);
   }
 
-  public getCell(row: number, column: number, options?: cyOptions) {
-    return this.getRow(row)
-      .find(".table-row-cell")
-      .eq(column - 1, options);
+  public getCell(row: number, column: number) {
+    const getRow = this.getRow(row);
+    return getRow.find(".table-row-cell").eq(column - 1);
   }
 
   public getPageButton(page: number): Cy {

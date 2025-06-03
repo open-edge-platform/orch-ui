@@ -133,22 +133,15 @@ For testing your changes in a virtual machine with deployment, refer to [Build a
 
 ## Contribute
 
-We welcome contributions from the community! To contribute, please open a pull request to have your changes reviewed and merged into the `main` branch. We encourage you to add appropriate unit tests and end-to-end tests if your contribution introduces a new feature.
 To learn how to contribute to the project, see the [Contributor's Guide](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/contributor_guide/index.html).
 
 ## Community and Support
 
 To learn more about the project, its community, and governance, visit
-the [Edge Orchestrator Community].
-
-For support, start with [Troubleshooting] or [Contact us].
+the [Edge Orchestrator Community](https://github.com/open-edge-platform).
 
 ## License
 
 Orchestrator GUI Web User Interface is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
 
-Last Updated Date: April 7, 2025
-
-[Troubleshooting]: https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/troubleshooting/ui.html
-[Contact us]: https://github.com/open-edge-platform
-[Edge Orchestrator Community]: https://docs.openedgeplatform.intel.com/edge-manage-docs/main/index.html
+Last Updated Date: {April 7, 2025}

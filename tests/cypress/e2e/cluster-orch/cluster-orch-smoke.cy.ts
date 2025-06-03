@@ -116,7 +116,10 @@ describe("Cluster orch Smoke test:", () => {
         url: "**/v2/**/templates?*",
       }).as("getTemplates");
 
-      cy.contains("Create Cluster").should("be.visible").click();
+      cy.dataCy("emptyActionBtn")
+        .contains("Create Cluster")
+        .should("be.visible")
+        .click();
 
       cy.waitForPageTransition();
 
@@ -165,11 +168,9 @@ describe("Cluster orch Smoke test:", () => {
       cy.visit("/infrastructure/clusters");
 
       tablePom
-        .getCell(1, 3, { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the cluster to be running
-        .should(($el) => {
-          expect($el, "Cluster status message").to.contain.text("active");
-        });
-
+        .getCell(1, 3)
+        .contains("active", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the cluster to be running
+        .should("contain.text", "active");
       tablePom.getCell(1, 2).contains(data.clusterName).click();
       cy.url().should("contain", `/infrastructure/cluster/${data.clusterName}`);
 
@@ -189,10 +190,9 @@ describe("Cluster orch Smoke test:", () => {
 
       cy.dataCy("deploymentInstancesTable").within(() => {
         tablePom
-          .getCell(1, 2, { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the deployment to be running
-          .should(($el) => {
-            expect($el, "Deployment status message").to.contain.text("ready");
-          });
+          .getCell(1, 2)
+          .contains("ready", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the cluster to be running
+          .should("contain.text", "ready");
       });
     });
 

@@ -69,7 +69,6 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
     ProjectModalState | undefined
   >();
 
-  const [pollingInterval, setPollingInterval] = useState<number>(API_INTERVAL);
   const onCloseModal = () => {
     const isCreate = projectModalState?.type === "create";
     setProjectModalState(undefined);
@@ -157,14 +156,11 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
     },
     {
       Header: "Actions",
-      accessor: (item: AdminProject) => (
+      Cell: (table: { row: { original: AdminProject } }) => (
         <ProjectPopup
           jsx={<Icon artworkStyle="light" icon="ellipsis-v" />}
-          project={item}
+          project={table.row.original}
           hasRole={hasRole}
-          setActionPopupState={(isToggled: boolean) =>
-            setPollingInterval(isToggled ? 0 : API_INTERVAL)
-          }
           onRename={(selectedProject) => {
             setProjectModalState({
               type: "rename",
@@ -193,7 +189,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
     { "member-role": true },
     {
       // If Modal is open i.e if the modal state is defined then skip polling
-      ...(!projectModalState ? { pollingInterval: pollingInterval } : {}),
+      ...(!projectModalState ? { pollingInterval: API_INTERVAL } : {}),
     },
   );
   const {
@@ -206,7 +202,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
     {},
     {
       // If Modal is open i.e if the modal state is defined then skip polling
-      ...(!projectModalState ? { pollingInterval: pollingInterval } : {}),
+      ...(!projectModalState ? { pollingInterval: API_INTERVAL } : {}),
     },
   );
 

@@ -1,6 +1,0 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
-
-# Though non-root access is added still fix is not reflecting
-# -  https://avd.aquasec.com/misconfig/ksv118
-AVD-KSV-0118

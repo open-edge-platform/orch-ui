@@ -446,7 +446,6 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
             <DetailedStatuses
               data={clusterToStatuses(clusterDetail)}
               statusFields={clusterStatusFields}
-              showTimestamp
             />
           </Item>
           <Item title={<Text>Hosts</Text>}>

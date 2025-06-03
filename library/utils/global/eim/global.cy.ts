@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedInfraSlice, infra } from "@orch-ui/apis";
+import { enhancedInfraSlice } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne,
   assignedWorkloadHostTwo,

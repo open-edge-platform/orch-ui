@@ -4,10 +4,10 @@
  */
 
 import { rest } from "msw";
-import AlertStore from "../../mocks_new/admin/store/alerts";
 import { SharedStorage } from "../../shared-storage/shared-storage";
 import AlertDefinitionStore from "./data/alertDefinitions";
 import AlertDefinitionTemplateStore from "./data/alertDefinitionTemplates";
+import AlertStore from "./data/alerts";
 import ReceiversStore from "./data/receivers";
 
 const baseURL = "/v1";
