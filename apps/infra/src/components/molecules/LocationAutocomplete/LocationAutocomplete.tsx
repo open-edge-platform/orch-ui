@@ -9,7 +9,7 @@ import Highlighter from "react-highlight-words";
 import { AutocompleteNode } from "./location-autocomplete";
 import "./LocationAutocomplete.scss";
 
-interface LocationAutocompleteProps {
+interface HierarchicalAutocompleteProps {
   nodes: AutocompleteNode[];
   onNodeSelect?: (selectedNode: AutocompleteNode | null) => void;
   placeholder?: string;
@@ -25,7 +25,7 @@ export const LocationAutocomplete = ({
   placeholder = "Select a location",
   label = "Location",
   isRequired = false,
-}: LocationAutocompleteProps) => {
+}: HierarchicalAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
 
   const nodeMap = useMemo(
@@ -63,7 +63,7 @@ export const LocationAutocomplete = ({
   };
 
   return (
-    <div className="location-autocomplete" data-cy={dataCy}>
+    <div className="hierarchical-autocomplete" data-cy={dataCy}>
       <Combobox
         label={label}
         inputValue={inputValue}
