@@ -60,10 +60,10 @@ describe("Org Admin Smoke", () => {
       cy.contains("Create Project").should("be.visible");
 
       // search for the project so we only have one entry in the table
-
+      cy.wait(3 * 60 * 1000); // allow 3 minutes for the project to be created
       pom.projectsPom.projectsTablePom.tablePom.search(testData.description);
       pom.projectsPom.projectsTablePom.tablePom
-        .getRows({ timeout: 3 * 60 * 1000 }) // allow 3 minutes for the project to be created
+        .getRows()
         .should("have.length", 1);
 
       // wait for the project to be ready
