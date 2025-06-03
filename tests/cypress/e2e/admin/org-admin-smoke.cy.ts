@@ -60,17 +60,16 @@ describe("Org Admin Smoke", () => {
       cy.contains("Create Project").should("be.visible");
 
       // search for the project so we only have one entry in the table
+
       pom.projectsPom.projectsTablePom.tablePom.search(testData.description);
       pom.projectsPom.projectsTablePom.tablePom
-        .getRows()
+        .getRows({ timeout: 3 * 60 * 1000 }) // allow 3 minutes for the project to be created
         .should("have.length", 1);
 
       // wait for the project to be ready
-      pom.projectsPom.projectsTablePom.tablePom
-        .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
-        .should(($el) => {
-          expect($el, "Project status").to.contain.text("CREATE is complete");
-        });
+      pom.projectsPom.projectsTablePom.tablePom.getCell(1, 3).should(($el) => {
+        expect($el, "Project status").to.contain.text("CREATE is complete");
+      });
     });
 
     it("should rename the project", () => {
