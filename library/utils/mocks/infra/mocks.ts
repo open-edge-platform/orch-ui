@@ -221,7 +221,7 @@ export const handlers = [
       ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
     );
   }),
-  rest.get(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
+  rest.get(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
     const { resourceId } = req.params as infra.RegionServiceGetRegionApiArg;
     const region = regionStore.get(resourceId);
 
@@ -266,7 +266,7 @@ export const handlers = [
     const deleteResult = regionStore.delete(resourceId);
     return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
   }),
-  rest.put(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
+  rest.put(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
     const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
     const body = await req.json<infra.RegionResourceWrite>();
     const r = regionStore.put(resourceId, body);
@@ -281,7 +281,7 @@ export const handlers = [
   }),
 
   // site
-  rest.get(`${baseURL}/regions/:regionId/sites`, async (req, res, ctx) => {
+  rest.get(`${baseURL}/regions/:resourceId/sites`, async (req, res, ctx) => {
     const { resourceId } =
       req.params as unknown as infra.SiteServiceListSitesApiArg;
 
@@ -334,7 +334,7 @@ export const handlers = [
       }),
     );
   }),
-  rest.put(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
+  rest.put(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
     const { resourceId } =
       req.params as unknown as infra.SiteServiceUpdateSiteApiArg;
     const body = await req.json<infra.SiteResourceWrite>();
@@ -345,7 +345,7 @@ export const handlers = [
       ctx.json<infra.SiteServiceUpdateSiteApiResponse>(s),
     );
   }),
-  rest.delete(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
+  rest.delete(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
     const { resourceId } = req.params as infra.SiteServiceDeleteSiteApiArg;
     const deleteResult = siteStore.delete(resourceId);
     return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
@@ -441,7 +441,7 @@ export const handlers = [
       ctx.delay(delay),
     );
   }),
-  rest.put(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
+  rest.put(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
     const { resourceId } =
       req.params as unknown as infra.HostServiceUpdateHostApiArg;
     const body = await req.json<infra.HostResourceWrite>();
@@ -504,7 +504,7 @@ export const handlers = [
       ctx.json<infra.HostServiceCreateHostApiResponse>(host),
     );
   }),
-  rest.patch(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
+  rest.patch(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
     const { resourceId } =
       req.params as unknown as infra.HostServiceUpdateHostApiArg;
     const hostPatchUpdate = await req.json<infra.HostResourceWrite>();
@@ -539,7 +539,7 @@ export const handlers = [
       }),
     );
   }),
-  rest.get(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
+  rest.get(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
     const { resourceId } = req.params as infra.HostServiceGetHostApiArg;
     const host = hostStore.get(resourceId);
     if (host) {

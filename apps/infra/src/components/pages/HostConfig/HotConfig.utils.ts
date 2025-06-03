@@ -23,7 +23,7 @@ export const createRegisteredHost = async (
 ): Promise<HostConfigResponse> => {
   let response: HostConfigResponse = undefined;
   await registerHostApi({
-    hostRegisterInfo: {
+    hostRegister: {
       autoOnboard,
       name: host.name,
       serialNumber: host.serialNumber || undefined, //undefined takes it away from existing in payload
