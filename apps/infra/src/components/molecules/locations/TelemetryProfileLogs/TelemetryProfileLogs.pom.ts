@@ -22,12 +22,12 @@ type ApiAliases =
   | "getRegionTelemetryLogs500";
 
 const regionUrl = "**/logprofiles?regionId=region-1.0";
-export const regionTelemetryLogResponse: infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse =
+export const regionTelemetryLogResponse: infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse =
   {
-    TelemetryLogsProfiles: [
+    telemetryLogsProfiles: [
       {
         logsGroupId: "1",
-        logLevel: "TELEMETRY_SEVERITY_LEVEL_INFO",
+        logLevel: "SEVERITY_LEVEL_INFO",
         logsGroup: {
           name: "log1",
           collectorKind: "TELEMETRY_COLLECTOR_KIND_CLUSTER",

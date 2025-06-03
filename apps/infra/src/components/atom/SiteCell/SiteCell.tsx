@@ -21,11 +21,11 @@ const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
     data: site,
     isLoading,
     isError,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+  } = infra.useSiteServiceGetSiteQuery(
     {
-      regionId,
+      regionResourceId: regionId,
       projectName: SharedStorage.project?.name ?? "",
-      siteId: siteId!,
+      resourceId: siteId!,
     },
     { skip: !siteId || !SharedStorage.project?.name },
   );

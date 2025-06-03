@@ -24,7 +24,7 @@ export type TelemetryMetricsProfile = {
   targetRegion?: string;
   metricsInterval: number;
   metricsGroupId: string;
-  metricsGroup?: infra.TelemetryMetricsGroup;
+  metricsGroup?: infra.TelemetryMetricsGroupResource;
 };
 
 export type SystemMetricPair = {
@@ -54,7 +54,7 @@ const TelemetryMetricsForm = ({
 }: TelemetryMetricsFormProps) => {
   const cy = { "data-cy": dataCy };
   const { data: metricsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useTelemetryMetricsGroupServiceListTelemetryMetricsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     }); //how to use isLoading and isSuccess in both calls
   //const [, setMetricExists] = useState<boolean>(false);
@@ -76,7 +76,7 @@ const TelemetryMetricsForm = ({
   });
 
   const metricTypesCount = metricsResponse
-    ? metricsResponse.TelemetryMetricsGroups.length
+    ? metricsResponse.telemetryMetricsGroups.length
     : 0;
 
   const { fields, append, remove } = useFieldArray({
@@ -167,7 +167,7 @@ const TelemetryMetricsForm = ({
                       }, 100);
                     }}
                   >
-                    {metricsResponse?.TelemetryMetricsGroups.map(
+                    {metricsResponse?.telemetryMetricsGroups.map(
                       (metricgroup) => (
                         <Item key={metricgroup.telemetryMetricsGroupId}>
                           {metricgroup.name}

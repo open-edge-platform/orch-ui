@@ -10,13 +10,13 @@ import "./Site.scss";
 const dataCy = "site";
 
 export interface SiteDynamicProps {
-  viewHandler?: (site: infra.SiteRead) => void;
-  handleOnSiteSelected?: (value: infra.SiteRead) => void;
-  selectedSite?: infra.SiteRead;
+  viewHandler?: (site: infra.SiteResourceRead) => void;
+  handleOnSiteSelected?: (value: infra.SiteResourceRead) => void;
+  selectedSite?: infra.SiteResourceRead;
   isSelectable?: boolean;
 }
 export interface SiteExtendedProps extends SiteDynamicProps {
-  site: infra.SiteRead;
+  site: infra.SiteResourceRead;
 }
 
 export const Site = ({
