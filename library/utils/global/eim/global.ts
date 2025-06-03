@@ -319,15 +319,6 @@ const getHostCurrentStateTitles = (
       return {
         title: `${hostName} is deauthorized`,
       };
-    //@ts-ignore TODO: Ideally HOST_STATE_ERROR should be received in currenState rather than osType
-    case "HOST_STATE_ERROR":
-      return {
-        title: `${hostName} has error`,
-      };
-    case "HOST_STATE_DELETED":
-      return {
-        title: `${hostName} is deleted`,
-      };
     default:
       return {
         title: `${hostName} is not connected`,
@@ -425,9 +416,6 @@ export const hostStateMapping: Record<
   NonNullable<infra.HostResourceRead["currentState"]>,
   { status: IconStatus; message: string }
 > = {
-  //@ts-ignore TODO: Ideally HOST_STATE_ERROR should be received in currenState rather than osType
-  HOST_STATE_ERROR: { status: IconStatus.Error, message: "Error" },
-  HOST_STATE_DELETING: { status: IconStatus.NotReady, message: "Deleting" },
   HOST_STATE_DELETED: { status: IconStatus.Error, message: "Deleted" },
   HOST_STATE_ONBOARDED: { status: IconStatus.Ready, message: "Onboarded" },
   HOST_STATE_REGISTERED: { status: IconStatus.Ready, message: "Registered" },

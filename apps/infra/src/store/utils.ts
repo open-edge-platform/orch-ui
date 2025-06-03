@@ -92,7 +92,7 @@ export const convert24hrTimeTo12hr = (timeStringIn24Hrs: string) => {
 
 export type ApiPromiseType =
   | void
-  | { data: void }
+  | { data: object }
   | { error: FetchBaseQueryError | SerializedError };
 
 export const showErrorMessageBanner = (
@@ -142,7 +142,6 @@ export const deleteHostInstanceFn = (
 
   try {
     if (host.instance) {
-      // @ts-ignore
       promise = deleteInstanceFn()
         .unwrap()
         .then(deleteHostFn)
@@ -157,8 +156,9 @@ export const deleteHostInstanceFn = (
           );
         });
     } else {
-      // @ts-ignore
-      promise = deleteHostFn().unwrap();
+      promise = deleteHostFn()
+        .unwrap()
+        .then((data) => ({ data }));
     }
     setErrorInfo();
   } catch (e) {
