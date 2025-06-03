@@ -109,7 +109,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
         // check that the region has been created and save the id
         cy.wait("@createRegion").then((interception) => {
-          expect(interception.response?.statusCode).to.equal(201);
+          expect(interception.response?.statusCode).to.equal(200);
           // NOTE that we store the IDs in reverse order to make it easier to delete them
           // (the last one created should be the first one delete to avoid dependencies)
           testRegionIds.unshift(interception.response?.body.regionID);
@@ -131,7 +131,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
         // check that the site has been created and save the id
         cy.wait("@createSite").then((interception) => {
-          expect(interception.response?.statusCode).to.equal(201);
+          expect(interception.response?.statusCode).to.equal(200);
           // NOTE that we store the IDs in reverse order to make it easier to delete them
           // (the last one created should be the first one delete to avoid dependencies)
           testSiteIds.unshift({
