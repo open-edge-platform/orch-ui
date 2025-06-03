@@ -30,7 +30,7 @@ import {
 import { BaseStore } from "./baseStore";
 
 // Cluster workloads
-export const workloadOne: infra.WorkloadRead = {
+export const workloadOne: infra.WorkloadResourceRead = {
   workloadId: workloadOneId,
   externalId: clusterOneId,
   members: [],
@@ -40,7 +40,7 @@ export const workloadOne: infra.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadTwo: infra.WorkloadRead = {
+export const workloadTwo: infra.WorkloadResourceRead = {
   workloadId: workloadTwoId,
   externalId: clusterTwoId,
   members: [],
@@ -50,7 +50,7 @@ export const workloadTwo: infra.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadThree: infra.WorkloadRead = {
+export const workloadThree: infra.WorkloadResourceRead = {
   workloadId: workloadThreeId,
   externalId: clusterThreeId,
   members: [],
@@ -60,7 +60,7 @@ export const workloadThree: infra.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadFour: infra.WorkloadRead = {
+export const workloadFour: infra.WorkloadResourceRead = {
   workloadId: workloadFourId,
   externalId: clusterFourId,
   members: [],
@@ -70,7 +70,7 @@ export const workloadFour: infra.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadFive: infra.WorkloadRead = {
+export const workloadFive: infra.WorkloadResourceRead = {
   workloadId: workloadFiveId,
   externalId: clusterFiveId,
   members: [],
@@ -80,7 +80,7 @@ export const workloadFive: infra.WorkloadRead = {
   kind: "WORKLOAD_KIND_CLUSTER",
 };
 
-export const workloadSix: infra.WorkloadRead = {
+export const workloadSix: infra.WorkloadResourceRead = {
   workloadId: workloadSixId,
   externalId: clusterSixId,
   members: [],
@@ -91,20 +91,20 @@ export const workloadSix: infra.WorkloadRead = {
 };
 
 // `Unspecified` workloads
-export const workloadUnspecifiedOne: infra.WorkloadRead = {
+export const workloadUnspecifiedOne: infra.WorkloadResourceRead = {
   workloadId: workloadUnspecifiedOneId,
   externalId: "",
   members: [],
   resourceId: workloadUnspecifiedOneId,
   name: "Unspecified Cluster",
   status: "",
-  kind: "WORKLOAD_KIND_UNSPECIFIED",
+  kind: "WORKLOAD_KIND_CLUSTER",
 };
 
 export class WorkloadStore extends BaseStore<
   "workloadId",
-  infra.WorkloadRead,
-  infra.Workload
+  infra.WorkloadResourceRead,
+  infra.WorkloadResourceWrite
 > {
   workloadIndex = 0;
 
@@ -122,7 +122,7 @@ export class WorkloadStore extends BaseStore<
     super("workloadId", workloadList);
   }
 
-  convert(body: infra.Workload): infra.WorkloadRead {
+  convert(body: infra.WorkloadResourceWrite): infra.WorkloadResourceRead {
     const currentTime = new Date().toISOString();
     return {
       ...body,
@@ -137,11 +137,11 @@ export class WorkloadStore extends BaseStore<
     };
   }
 
-  get(id: string): infra.WorkloadRead | undefined {
+  get(id: string): infra.WorkloadResourceRead | undefined {
     return this.resources.find((workload) => workload.workloadId === id);
   }
 
-  list(): infra.WorkloadRead[] {
+  list(): infra.WorkloadResourceRead[] {
     return this.resources;
   }
 }

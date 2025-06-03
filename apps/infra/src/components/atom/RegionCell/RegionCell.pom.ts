@@ -22,12 +22,11 @@ const store = new RegionStore();
 
 const route = `**/v1/projects/${defaultActiveProject.name}/regions/${regionUsWest.resourceId}`;
 
-const getRegionSuccess: CyApiDetail<infra.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse> =
-  {
-    route: route,
-    statusCode: 200,
-    response: store.get(regionUsWest.resourceId!),
-  };
+const getRegionSuccess: CyApiDetail<infra.RegionServiceGetRegionApiResponse> = {
+  route: route,
+  statusCode: 200,
+  response: store.get(regionUsWest.resourceId!),
+};
 
 const endpoints: CyApiDetails<ApiAliases> = {
   getRegionSuccess,

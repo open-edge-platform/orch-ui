@@ -7,14 +7,14 @@ import { infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { HostData } from "../../../store/configureHost";
 
-export const isHostRead = (object: any): object is infra.HostRead => {
+export const isHostRead = (object: any): object is infra.HostResourceRead => {
   return typeof object === "object" && object !== null && object.resourceId;
 };
 
-// infra.HostRead successfull API call that returns updated values
+// infra.HostResourceRead successfull API call that returns updated values
 // string = error message from API failure
 // undefined = no API call made
-export type HostConfigResponse = infra.HostRead | string | undefined;
+export type HostConfigResponse = infra.HostResourceRead | string | undefined;
 
 export const createRegisteredHost = async (
   host: HostData,
@@ -49,7 +49,7 @@ export const updateHostDetails = async (
   let response: HostConfigResponse = undefined;
   await patchHostApi({
     projectName: SharedStorage.project?.name ?? "",
-    hostId: host.resourceId!,
+    resourceId: host.resourceId!,
     body: {
       name: host.name,
       siteId: host.siteId,
@@ -73,9 +73,9 @@ export const createHostInstance = async (
   postInstanceApi,
 ): Promise<HostConfigResponse> => {
   let response: HostConfigResponse = undefined;
-  await postInstanceApi({
+  const payload: infra.InstanceServiceCreateInstanceApiArg = {
     projectName: SharedStorage.project?.name ?? "",
-    body: {
+    instanceResource: {
       securityFeature: host.instance?.securityFeature,
       osID: host.instance?.osID,
       kind: "INSTANCE_KIND_METAL",
@@ -83,7 +83,8 @@ export const createHostInstance = async (
       name: `${host.name}-instance`,
       localAccountID: host.instance?.localAccountID,
     },
-  })
+  };
+  await postInstanceApi(payload)
     .unwrap()
     .then(() => {
       response = host;

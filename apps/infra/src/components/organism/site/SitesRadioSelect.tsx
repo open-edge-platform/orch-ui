@@ -11,9 +11,9 @@ const SitesRadioSelect = ({
   row,
   onRadioSelect,
 }: {
-  row: infra.SiteRead;
+  row: infra.SiteResourceRead;
   selectedName?: string;
-  onRadioSelect?: (item: infra.SiteRead) => void;
+  onRadioSelect?: (item: infra.SiteResourceRead) => void;
 }) => {
   const [selected, setSelected] = useState(selectedName);
 
