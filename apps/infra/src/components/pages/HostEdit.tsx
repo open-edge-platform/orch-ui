@@ -70,9 +70,10 @@ const HostEdit = () => {
   });
 
   /* Host Edit states */
-  const [host, setHost] = useState<infra.HostRead>();
-  const [selectedSite, setSelectedSite] = useState<infra.SiteRead>();
-  const [selectedRegion, setSelectedRegion] = useState<infra.RegionRead>();
+  const [host, setHost] = useState<infra.HostResourceRead>();
+  const [selectedSite, setSelectedSite] = useState<infra.SiteResourceRead>();
+  const [selectedRegion, setSelectedRegion] =
+    useState<infra.RegionResourceRead>();
   const [metadataPairs, setMetadataPairs] = useState<MetadataPair[]>([]);
   const [hasMetadataError, setHasMetadataError] = useState<boolean>(false);
 
@@ -83,10 +84,10 @@ const HostEdit = () => {
     isSuccess,
     isLoading,
     isError,
-  } = infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+  } = infra.useHostServiceGetHostQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      hostId: id,
+      resourceId: id,
     },
     {
       selectFromResult: ({ data, isSuccess, isLoading, isError }) => ({
@@ -110,21 +111,20 @@ const HostEdit = () => {
 
   // Then, Get site data mentioned by host(.template.site) to get the region & site selected by default
   const isRegionNotSelected = !selectedRegion; // This is required to convert to boolean as Region is object not boolean
-  const { data: hostSiteData } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        // IMPORTANT: we used the "rid" fallback to pass anything else than empty string
-        // for 24.11 api requires any non-empty value to return the site data
-        // currently the host object does not contain the data about region
-        regionId: host?.site?.region?.resourceId ?? "rid",
-        projectName: SharedStorage.project?.name ?? "",
-        siteId: host?.site?.siteID ?? "",
-      },
-      {
-        // Skip this API if selection is made or host or host site value not exist
-        skip: !isRegionNotSelected || !host || (host && !host.site),
-      },
-    );
+  const { data: hostSiteData } = infra.useSiteServiceGetSiteQuery(
+    {
+      // IMPORTANT: we used the "rid" fallback to pass anything else than empty string
+      // for 24.11 api requires any non-empty value to return the site data
+      // currently the host object does not contain the data about region
+      regionResourceId: host?.site?.region?.resourceId ?? "rid",
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host?.site?.siteID ?? "",
+    },
+    {
+      // Skip this API if selection is made or host or host site value not exist
+      skip: !isRegionNotSelected || !host || (host && !host.site),
+    },
+  );
 
   // Seeing if a hostID is unassigned by seeing its instance workloadMemberID is a null
   const {
@@ -132,17 +132,16 @@ const HostEdit = () => {
     isSuccess: isInstanceSuccess,
     isLoading: isInstanceLoading,
     isError: isInstanceError,
-  } = infra.useGetV1ProjectsByProjectNameComputeInstancesQuery(
+  } = infra.useInstanceServiceListInstancesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      hostId: host?.resourceId,
-      workloadMemberId: "null",
+      filter: `host.resourceId="${host?.resourceId}"`,
     },
     { skip: !host?.resourceId },
   );
 
   const { data: regionData, isLoading: isRegionLoading } =
-    infra.useGetV1ProjectsByProjectNameRegionsQuery(
+    infra.useRegionServiceListRegionsQuery(
       { projectName: SharedStorage.project?.name ?? "" },
       { skip: !host || !isRegionNotSelected },
     );
@@ -166,11 +165,11 @@ const HostEdit = () => {
 
   // If Host & Region API data are both loaded
   const { data: siteData, isLoading: isSiteLoading } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+    infra.useSiteServiceListSitesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `region.resourceId='${selectedRegion?.resourceId ?? ""}'`,
-        regionId: selectedRegion?.resourceId ?? "",
+        resourceId: selectedRegion?.resourceId ?? "",
       },
       { skip: !host || !selectedRegion?.resourceId },
     );
@@ -192,8 +191,7 @@ const HostEdit = () => {
     (isInstanceSuccess && (instanceList.instances?.length ?? 0) === 0) ||
     isInstanceError;
 
-  const [updateHost] =
-    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
+  const [updateHost] = infra.useHostServiceUpdateHostMutation();
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
 
@@ -221,14 +219,13 @@ const HostEdit = () => {
       Promise.all([
         updateHost({
           projectName: SharedStorage.project?.name ?? "",
-          hostId: host.resourceId,
-          body: {
+          resourceId: host.resourceId,
+          hostResource: {
             name: host.name ?? "",
             site: undefined,
             siteId: selectedSite?.siteID,
             currentPowerState: host.currentPowerState,
             desiredPowerState: host.desiredPowerState,
-            inheritedMetadata: host.inheritedMetadata,
             metadata: metadataPairs,
           },
         }).unwrap(),

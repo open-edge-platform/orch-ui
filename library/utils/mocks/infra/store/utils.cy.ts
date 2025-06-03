@@ -4,10 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import {
-  assignedWorkloadHostTwoUuid as hostTwoGuid,
-  regionUsWestId,
-} from "../data";
+import { assignedWorkloadHostTwoUuid as hostTwoGuid } from "../data";
 import { metadataExample } from "../data/metadatas";
 import { assignedWorkloadHostFour as hostTwo, hostFourMetadata } from "./hosts";
 import { instanceOne, instanceTwo } from "./instances";
@@ -18,11 +15,8 @@ import { StoreUtils } from "./utils";
 describe("The Utils", () => {
   describe("convert host", () => {
     xit("should conver infra.HostRead to Host correctly", () => {
-      const hostTwoGeneral: infra.Host = {
-        currentPowerState: "POWER_STATE_ON",
-        inheritedMetadata: {
-          location: hostFourMetadata,
-        },
+      const hostTwoGeneral: infra.HostResourceRead = {
+        inheritedMetadata: hostFourMetadata,
         uuid: hostTwoGuid,
         name: "Host 2",
         site: siteRestaurantTwo,
@@ -33,31 +27,8 @@ describe("The Utils", () => {
         hostTwoGeneral,
       );
     });
-    xit("should conver infra.HostRead to infra.HostWrite correctly", () => {
-      const hostTwoWrite: infra.HostWrite = {
-        currentPowerState: "POWER_STATE_ON",
-        inheritedMetadata: {
-          ou: [
-            {
-              key: "region",
-              value: regionUsWestId,
-            },
-          ],
-          location: [
-            {
-              key: "region",
-              value: regionUsWestId,
-            },
-            {
-              key: "state",
-              value: "Arizona",
-            },
-            {
-              key: "city",
-              value: "Phoenix",
-            },
-          ],
-        },
+    xit("should convert infra.HostRead to infra.HostWrite correctly", () => {
+      const hostTwoWrite: infra.HostResourceWrite = {
         uuid: hostTwoGuid,
         name: "Host 2",
         site: siteSantaClara,
@@ -68,7 +39,7 @@ describe("The Utils", () => {
   });
   describe("convert instance", () => {
     it("should conver InstanceReadModified to Instance correctly", () => {
-      const instanceOneGeneral: infra.Instance = {
+      const instanceOneGeneral: infra.InstanceResource = {
         name: "Instance One",
         kind: "INSTANCE_KIND_METAL",
         os: osUbuntu,
@@ -78,7 +49,7 @@ describe("The Utils", () => {
       );
     });
     xit("should conver InstanceReadModified to infra.InstanceWrite correctly", () => {
-      const instanceOneWrite: infra.InstanceWrite = {
+      const instanceOneWrite: infra.InstanceResourceWrite = {
         name: "Instance One",
         kind: "INSTANCE_KIND_METAL",
         os: osUbuntu,

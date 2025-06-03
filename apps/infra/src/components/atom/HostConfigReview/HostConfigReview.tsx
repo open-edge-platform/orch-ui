@@ -32,7 +32,7 @@ interface IProcessStat {
 }
 export interface HostConfigReviewProps {
   hostResults: Map<string, string | true>;
-  localAccounts: infra.LocalAccountRead[] | undefined;
+  localAccounts: infra.LocalAccountResourceRead[] | undefined;
 }
 export const HostConfigReview = ({
   hostResults,

@@ -15,7 +15,10 @@ import ClusterNodesTableBySite, {
 const dataCy = "clusterEditAddNodesDrawer";
 
 type ClusterCompleteInfo = cm.ClusterDetailInfo & cm.ClusterInfo;
-const convertEimHostToCmNode = (host: infra.HostRead, role?: NodeRoles) => ({
+const convertEimHostToCmNode = (
+  host: infra.HostResourceRead,
+  role?: NodeRoles,
+) => ({
   id: host.resourceId,
   serial: host.serialNumber,
   os: host.instance?.os?.name,
@@ -35,7 +38,7 @@ interface ClusterEditAddNodesDrawerProps {
   HostsTableRemote?: React.LazyExoticComponent<React.ComponentType<any>> | null;
 }
 
-type HostRole = infra.HostRead & { role?: NodeRoles };
+type HostRole = infra.HostResourceRead & { role?: NodeRoles };
 
 const ClusterEditAddNodesDrawer = ({
   cluster,
@@ -53,7 +56,7 @@ const ClusterEditAddNodesDrawer = ({
   );
 
   //TODO : 22694 Site information to be updated from labels
-  const [site] = useState<infra.SiteRead>();
+  const [site] = useState<infra.SiteResourceRead>();
 
   return (
     <div {...cy} className="cluster-edit-add-nodes-drawer">

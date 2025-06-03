@@ -25,7 +25,9 @@ interface TestComponentProps {
 }
 
 const TestCompoent = ({ selectable }: TestComponentProps) => {
-  const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
+  const [selectedHosts, setSelectedHosts] = useState<infra.HostResourceRead[]>(
+    [],
+  );
   const { messageBanner } = useAppSelector(
     (state) => state.notificationStatusList,
   );
@@ -36,7 +38,7 @@ const TestCompoent = ({ selectable }: TestComponentProps) => {
       <HostsTable
         selectable={selectable}
         unsetSelectedHosts={() => setSelectedHosts([])}
-        onHostSelect={(row: infra.HostRead, isSelected: boolean) => {
+        onHostSelect={(row: infra.HostResourceRead, isSelected: boolean) => {
           setSelectedHosts((prev) => {
             return isSelected
               ? prev.concat(row)

@@ -20,13 +20,13 @@ describe("<TelemetryProfileLogs/>", () => {
       .eq(0)
       .should(
         "contain",
-        regionTelemetryLogResponse.TelemetryLogsProfiles[0].logsGroup?.name,
+        regionTelemetryLogResponse.telemetryLogsProfiles[0].logsGroup?.name,
       );
     pom.el.level
       .eq(0)
       .should(
         "contain",
-        regionTelemetryLogResponse.TelemetryLogsProfiles[0].logLevel,
+        regionTelemetryLogResponse.telemetryLogsProfiles[0].logLevel,
       );
   });
 

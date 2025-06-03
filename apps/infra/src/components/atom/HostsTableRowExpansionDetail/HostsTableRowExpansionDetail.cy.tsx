@@ -33,7 +33,7 @@ describe("<HostsTableRowExpansionDetail/>", () => {
               name: "desiredOsName",
               sha256: "desiredOsSha256",
               updateSources: [],
-              osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+              osType: "OS_TYPE_IMMUTABLE",
             },
           },
         }}
