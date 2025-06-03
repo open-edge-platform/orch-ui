@@ -20,9 +20,9 @@ export const RegionSite = () => {
   const dispatch = useAppDispatch();
   const { site: selectedSite } = useAppSelector(selectFirstHost);
 
-  const handleOnSiteSelected = (site: infra.SiteRead) => {
+  const handleOnSiteSelected = (site: infra.SiteResourceRead) => {
     // Dispatches to configureHost reducer
-    dispatch(setRegion({ region: site.region as infra.RegionRead }));
+    dispatch(setRegion({ region: site.region as infra.RegionResourceRead }));
     dispatch(setSite({ site: site }));
   };
 
@@ -32,7 +32,7 @@ export const RegionSite = () => {
         // The selected site is stored as SiteWrite within redux of HostConfigure having HostWrite.
         // The infra.ts enforces HostWrite to have RegionWrite or SiteWrite.
         // removing below line would cause error in eslint.
-        selectedSite={selectedSite as infra.SiteRead}
+        selectedSite={selectedSite as infra.SiteResourceRead}
         handleOnSiteSelected={handleOnSiteSelected}
       />
     </div>

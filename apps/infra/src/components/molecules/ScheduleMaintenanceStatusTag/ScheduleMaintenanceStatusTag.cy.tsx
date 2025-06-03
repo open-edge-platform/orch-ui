@@ -28,7 +28,7 @@ describe("<ScheduleMaintenanceStatusTag/>", () => {
       cy.get(`@${pom.api.getEmptySchedules}`)
         .its("request.query")
         .should("deep.include", {
-          hostID: hostOne.resourceId,
+          hostId: hostOne.resourceId,
         });
     });
     it("should show badge when single maintenance is seen", () => {
@@ -68,7 +68,7 @@ describe("<ScheduleMaintenanceStatusTag/>", () => {
     cy.get(`@${pom.api.getEmptySchedules}`)
       .its("request.query")
       .should("deep.include", {
-        regionID: regionAshland.resourceId,
+        regionId: regionAshland.resourceId,
       });
   });
 
@@ -85,7 +85,7 @@ describe("<ScheduleMaintenanceStatusTag/>", () => {
     cy.get(`@${pom.api.getEmptySchedules}`)
       .its("request.query")
       .should("deep.include", {
-        siteID: siteBoston.resourceId,
+        siteId: siteBoston.resourceId,
       });
   });
 });

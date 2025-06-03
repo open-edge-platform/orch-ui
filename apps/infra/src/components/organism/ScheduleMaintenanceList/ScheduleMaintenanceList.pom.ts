@@ -59,7 +59,7 @@ const crudMaintenanceIntercepts: CyApiDetails<CrudMaintenanceApiAliases> = {
 };
 const maintenanceIntercepts: CyApiDetails<
   MaintenanceApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.ScheduleServiceListSchedulesApiResponse
 > = {
   getMaintenance: {
     route: `**/v1/projects/${defaultActiveProject.name}/compute/schedules?**`,
@@ -67,8 +67,8 @@ const maintenanceIntercepts: CyApiDetails<
     statusCode: 200,
     response: {
       hasNext: false,
-      RepeatedSchedules: repeatedScheduleList,
-      SingleSchedules: singleScheduleList,
+      repeatedSchedules: repeatedScheduleList,
+      singleSchedules: singleScheduleList,
       totalElements: repeatedScheduleList.length + singleScheduleList.length,
     },
   },
@@ -78,7 +78,7 @@ const maintenanceIntercepts: CyApiDetails<
     statusCode: 200,
     response: {
       hasNext: false,
-      RepeatedSchedules: [
+      repeatedSchedules: [
         {
           ...repeatedScheduleOne,
           cronDayMonth: "*",
@@ -87,7 +87,7 @@ const maintenanceIntercepts: CyApiDetails<
           cronMinutes: "00",
         },
       ],
-      SingleSchedules: [],
+      singleSchedules: [],
       totalElements: 1,
     },
   },
@@ -97,7 +97,7 @@ const maintenanceIntercepts: CyApiDetails<
     statusCode: 200,
     response: {
       hasNext: false,
-      RepeatedSchedules: [
+      repeatedSchedules: [
         {
           ...repeatedScheduleOne,
           cronDayMonth: "*",
@@ -106,7 +106,7 @@ const maintenanceIntercepts: CyApiDetails<
           cronMinutes: "00",
         },
       ],
-      SingleSchedules: [],
+      singleSchedules: [],
       totalElements: 1,
     },
   },
@@ -116,7 +116,7 @@ const maintenanceIntercepts: CyApiDetails<
     statusCode: 200,
     response: {
       hasNext: false,
-      RepeatedSchedules: [
+      repeatedSchedules: [
         {
           ...repeatedScheduleOne,
           cronDayMonth:
@@ -126,7 +126,7 @@ const maintenanceIntercepts: CyApiDetails<
           cronMinutes: "00",
         },
       ],
-      SingleSchedules: [],
+      singleSchedules: [],
       totalElements: 1,
     },
   },
@@ -136,7 +136,7 @@ const maintenanceIntercepts: CyApiDetails<
     statusCode: 200,
     response: {
       hasNext: false,
-      RepeatedSchedules: [
+      repeatedSchedules: [
         {
           ...repeatedScheduleOne,
           cronDayMonth:
@@ -146,7 +146,7 @@ const maintenanceIntercepts: CyApiDetails<
           cronMinutes: "00",
         },
       ],
-      SingleSchedules: [],
+      singleSchedules: [],
       totalElements: 1,
     },
   },

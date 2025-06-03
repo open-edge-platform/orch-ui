@@ -45,7 +45,7 @@ describe("<DrawerHeader/>", () => {
       cy.get(`@${pom.maintenanceStatusTag.api.getSchedulesMockSingle}`)
         .its("request.url")
         .then((url: string) => {
-          const match = url.match(`regionID=${regionAshland.resourceId!}`);
+          const match = url.match(`regionId=${regionAshland.resourceId!}`);
           expect(match && match.length > 0).to.be.eq(true);
         });
     });
@@ -59,7 +59,7 @@ describe("<DrawerHeader/>", () => {
       cy.get(`@${pom.maintenanceStatusTag.api.getSchedulesMockSingle}`)
         .its("request.url")
         .then((url: string) => {
-          const match = url.match(`siteID=${siteBoston.resourceId!}`);
+          const match = url.match(`siteId=${siteBoston.resourceId!}`);
           expect(match && match.length > 0).to.be.eq(true);
         });
     });
