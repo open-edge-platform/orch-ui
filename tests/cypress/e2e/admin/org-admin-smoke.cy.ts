@@ -79,7 +79,11 @@ describe("Org Admin Smoke", () => {
 
     it("should delete the project", () => {
       cy.contains("Project Name").should("be.visible");
-      pom.projectsPom.projectsTablePom.tablePom.search(testData.description);
+
+      pom.projectsPom.projectsTablePom.deleteProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
       pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
       cy.contains("Deletion in process").should("be.visible");
     });
