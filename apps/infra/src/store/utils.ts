@@ -92,7 +92,7 @@ export const convert24hrTimeTo12hr = (timeStringIn24Hrs: string) => {
 
 export type ApiPromiseType =
   | void
-  | { data: void }
+  | { data: object }
   | { error: FetchBaseQueryError | SerializedError };
 
 export const showErrorMessageBanner = (
@@ -118,32 +118,25 @@ const showMessageBanner = (
 
 export const deleteHostInstanceFn = (
   dispatch: AppDispatch,
-  host: infra.HostRead,
-  instance?: infra.InstanceRead,
+  host: infra.HostResourceRead,
+  instance?: infra.InstanceResourceRead,
 ): Promise<ApiPromiseType> => {
   let promise = new Promise<ApiPromiseType>(() => {});
   const deleteHostFn = () => {
     return dispatch(
-      infra.infra.endpoints.deleteV1ProjectsByProjectNameComputeHostsAndHostId.initiate(
-        {
-          projectName: SharedStorage.project?.name ?? "",
-          hostId: host.resourceId ?? "",
-          hostOperationWithNote: {
-            note: host.note ?? "",
-          },
-        },
-      ),
+      infra.infra.endpoints.hostServiceDeleteHost.initiate({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: host.resourceId ?? "",
+      }),
     );
   };
 
   const deleteInstanceFn = () => {
     return dispatch(
-      infra.infra.endpoints.deleteV1ProjectsByProjectNameComputeInstancesAndInstanceId.initiate(
-        {
-          projectName: SharedStorage.project?.name ?? "",
-          instanceId: instance?.instanceID ?? host.instance?.instanceID ?? "",
-        },
-      ),
+      infra.infra.endpoints.instanceServiceDeleteInstance.initiate({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: instance?.instanceID ?? host.instance?.instanceID ?? "",
+      }),
     );
   };
 
@@ -163,7 +156,9 @@ export const deleteHostInstanceFn = (
           );
         });
     } else {
-      promise = deleteHostFn().unwrap();
+      promise = deleteHostFn()
+        .unwrap()
+        .then((data) => ({ data }));
     }
     setErrorInfo();
   } catch (e) {

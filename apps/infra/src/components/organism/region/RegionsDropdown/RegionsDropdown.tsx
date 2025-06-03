@@ -13,7 +13,7 @@ interface RegionsDropdownProps {
   value?: string;
   parentRegionId?: string;
   pageSize?: number;
-  onSelectionChange?: (value: infra.RegionRead) => void;
+  onSelectionChange?: (value: infra.RegionResourceRead) => void;
 }
 const RegionsDropdown = ({
   value,
@@ -22,22 +22,27 @@ const RegionsDropdown = ({
   onSelectionChange,
 }: RegionsDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
+  const params: {
+    projectName: string;
+    pageSize: number;
+    filter?: string;
+  } = {
+    projectName,
+    pageSize: pageSize,
+  };
+  if (parentRegionId) {
+    params.filter = `parentRegion.resourceId=${parentRegionId}`;
+  }
+
   const {
     data: { regions } = {},
     isLoading,
     isSuccess,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
-    {
-      projectName,
-      parent: parentRegionId,
-      pageSize: pageSize,
-    },
-    {
-      skip: !projectName,
-    },
-  );
+  } = infra.useRegionServiceListRegionsQuery(params, {
+    skip: !projectName,
+  });
 
   const isEmptyError = () => isSuccess && (!regions || regions.length === 0);
 

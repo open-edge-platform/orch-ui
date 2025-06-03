@@ -34,14 +34,14 @@ export enum AggregatedStatus {
 }
 export const buildStatusQuery = (
   detailedStatuses: string[],
-  statusIndicator: infra.StatusIndicator,
+  statusIndicator: infra.StatusIndication,
 ) => {
   return `${detailedStatuses.map((value) => `${value}=${statusIndicator}`).join(" OR ")}`;
 };
 
 const getIndicator = (
   value: "IDLE" | "UNSPECIFIED" | "IN_PROGRESS" | "ERROR",
-) => `STATUS_INDICATION_${value}` as infra.StatusIndicator;
+) => `STATUS_INDICATION_${value}` as infra.StatusIndication;
 
 export const lifeCycleStateQuery = new Map<LifeCycleState, string | undefined>([
   [

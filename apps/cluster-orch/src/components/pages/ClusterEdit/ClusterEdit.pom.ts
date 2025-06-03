@@ -158,7 +158,7 @@ const successScheduleEndpoint: CyApiDetails<SuccessSchedules> = {
 
 const successSitesEndpoint: CyApiDetails<
   SuccessSitesApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.SiteServiceListSitesApiResponse
 > = {
   siteSuccess: {
     route: siteByIdRoute,
@@ -169,7 +169,7 @@ const successSitesEndpoint: CyApiDetails<
 };
 const errorSitesEndpoint: CyApiDetails<
   ErrorSitesApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.SiteServiceListSitesApiResponse
 > = {
   siteError: {
     route: siteByIdRoute,
@@ -177,18 +177,20 @@ const errorSitesEndpoint: CyApiDetails<
   },
 };
 
-const successFirstHostEndpoint: CyApiDetails<SuccessFirstHost, infra.HostRead> =
-  {
-    firstHostSuccess: {
-      route: firstHostRoute,
-      statusCode: 200,
-      response: {
-        resourceId: "test-host",
-        name: "Host One",
-        site: siteOregonPortland,
-      },
+const successFirstHostEndpoint: CyApiDetails<
+  SuccessFirstHost,
+  infra.HostResourceRead
+> = {
+  firstHostSuccess: {
+    route: firstHostRoute,
+    statusCode: 200,
+    response: {
+      resourceId: "test-host",
+      name: "Host One",
+      site: siteOregonPortland,
     },
-  };
+  },
+};
 
 class ClusterEditPom extends CyPom<Selectors, ApiAliases> {
   public clusterTemplateDropdown = new SiDropdown("clusterTemplateDropdown");
