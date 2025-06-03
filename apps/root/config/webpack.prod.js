@@ -9,7 +9,7 @@ const commonConfig = require("./webpack.common");
 
 const prodConfig = {
   mode: "production",
-  devtool: false,
+  devtool: "hidden-source-map",
   module: {
     rules: [
       {
