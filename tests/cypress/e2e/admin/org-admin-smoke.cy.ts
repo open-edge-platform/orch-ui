@@ -66,6 +66,8 @@ describe("Org Admin Smoke", () => {
       cy.wait("@createProject");
       cy.contains("Create Project").should("be.visible");
 
+      cy.dataCy("squareSpinner").should("not.exist");
+
       // search for the project so we only have one entry in the table
       pom.projectsPom.projectsTablePom.tablePom.search(
         testData.description,
