@@ -93,10 +93,9 @@ describe("<HostEdit />", () => {
 
     it("should update Host name", () => {
       // we're making sure all the existing properties are sent
-      const expectedReq: infra.HostWrite = {
+      const expectedReq: infra.HostResourceWrite = {
         name: newHostName,
         siteId: mockHost.site?.resourceId,
-        inheritedMetadata: mockHost.inheritedMetadata,
         metadata: mockHost.metadata,
       };
       if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)
@@ -124,9 +123,8 @@ describe("<HostEdit />", () => {
           value: "production",
         },
       ];
-      const expectedReq: infra.Host = {
+      const expectedReq: infra.HostResource = {
         uuid: mockHost.uuid,
-        inheritedMetadata: mockHost.inheritedMetadata,
         name: newHostName,
         metadata: expectedMetadata,
       };
@@ -192,10 +190,9 @@ describe("<HostEdit />", () => {
       pom.el.siteCombobox.find("button").click();
       cy.contains(siteMinimartTwoName).click();
 
-      const expectedReq: infra.HostWrite = {
+      const expectedReq: infra.HostResourceWrite = {
         name: mockHost.name,
         siteId: siteMinimartTwo.resourceId,
-        inheritedMetadata: mockHost.inheritedMetadata,
         metadata: mockHost.metadata,
       };
       if (expectedReq.site?.region?.parentRegion?.parentRegion === undefined)

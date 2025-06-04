@@ -22,9 +22,9 @@ type ApiAliases =
   | "getRegionTelemetryMetrics500";
 
 const regionMetricsUrl = "**/metricprofiles?regionId=region-1.0";
-export const regionTelemetryMetricsResponse: infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse =
+export const regionTelemetryMetricsResponse: infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse =
   {
-    TelemetryMetricsProfiles: [
+    telemetryMetricsProfiles: [
       {
         metricsGroupId: "1",
         metricsInterval: 0,

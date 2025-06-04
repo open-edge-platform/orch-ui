@@ -26,29 +26,27 @@ export const HostLink = ({ id, uuid }: HostLinkProps) => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
 
-  const [host, setHost] = useState<infra.HostRead>();
+  const [host, setHost] = useState<infra.HostResourceRead>();
 
-  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      uuid: uuid,
-      detail: true,
+      filter: `uuid="${uuid}"`,
     },
     {
       skip: !uuid, // Skip call if url does not include uuid
     },
   );
 
-  const hostQuery =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        hostId: id ?? "",
-      },
-      {
-        skip: !id, // Skip call if url does not include host-id
-      },
-    );
+  const hostQuery = infra.useHostServiceGetHostQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: id ?? "",
+    },
+    {
+      skip: !id, // Skip call if url does not include host-id
+    },
+  );
 
   useEffect(() => {
     if (!hostQuery.isLoading && !hostQuery.isError && hostQuery.data && id) {

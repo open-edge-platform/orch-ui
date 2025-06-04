@@ -23,11 +23,11 @@ const HostTableRemoteMock = ({
   onDataLoad,
   mockHosts = [assignedHosts.hosts[0]],
 }: {
-  columns: TableColumn<infra.HostRead>[];
-  selectedHosts?: infra.HostRead[];
+  columns: TableColumn<infra.HostResourceRead>[];
+  selectedHosts?: infra.HostResourceRead[];
   onHostSelect: (host: infra.Host, isSelected: boolean) => void;
-  onDataLoad?: (hosts: infra.HostRead[]) => void;
-  mockHosts?: infra.HostRead[];
+  onDataLoad?: (hosts: infra.HostResourceRead[]) => void;
+  mockHosts?: infra.HostResourceRead[];
 }) => {
   useEffect(() => {
     if (onDataLoad) {
@@ -68,7 +68,7 @@ const store = setupStore({
     },
   ],
 });
-const mockSite: infra.SiteRead = {
+const mockSite: infra.SiteResourceRead = {
   resourceId: "site-a",
   name: "Site A",
   region: {

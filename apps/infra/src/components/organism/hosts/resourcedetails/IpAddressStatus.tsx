@@ -7,7 +7,7 @@ import { infra } from "@orch-ui/apis";
 import { Status, StatusIcon } from "@orch-ui/components";
 
 interface IpAddressStatusProps {
-  status: infra.IpAddressRead["status"];
+  status: infra.IpAddressResourceRead["status"];
 }
 
 const IpAddressStatus = ({ status }: IpAddressStatusProps) => {

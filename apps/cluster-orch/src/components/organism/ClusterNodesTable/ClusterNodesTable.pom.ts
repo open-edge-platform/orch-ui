@@ -16,7 +16,7 @@ const route = "**/v1/**/compute/hosts?filter=resourceId**";
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.HostServiceListHostsApiResponse
 > = {
   getHosts: {
     route,

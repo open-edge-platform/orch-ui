@@ -9,6 +9,7 @@ import {
   HostsTablePom,
   RegisterHostsPom,
 } from "@orch-ui/infra-poms";
+import { EIM_USER } from "@orch-ui/tests";
 import { NetworkLog } from "../../support/network-logs";
 import { deleteHostViaApi } from "../helpers";
 import {
@@ -85,7 +86,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       // wait for the registered host id for deletion afterwards
       cy.wait("@registerHost").then((interception) => {
-        expect(interception.response?.statusCode).to.equal(201);
+        expect(interception.response?.statusCode).to.equal(200);
         registeredHostId = interception.response?.body.resourceId;
       });
 
