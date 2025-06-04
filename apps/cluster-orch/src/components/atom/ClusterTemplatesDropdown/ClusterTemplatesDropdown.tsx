@@ -5,20 +5,17 @@
 
 import { cm } from "@orch-ui/apis";
 import { ApiError, Empty, SquareSpinner } from "@orch-ui/components";
-import { getAuthCfg, SharedStorage } from "@orch-ui/utils";
+import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item } from "@spark-design/react";
 import { useEffect, useState } from "react";
-import { AuthProvider } from "react-oidc-context";
-import { Provider } from "react-redux";
-import { store } from "../../../store";
 
-interface ClusterTemplatesDropdownProps {
+export interface ClusterTemplatesDropdownProps {
   pageSize?: number;
   onSelectionChange?: (value: string) => void;
   clusterTemplateName?: string;
   isDisabled?: boolean;
 }
-export const ClusterTemplatesDropdown = ({
+const ClusterTemplatesDropdown = ({
   onSelectionChange,
   clusterTemplateName,
   isDisabled,
@@ -85,10 +82,4 @@ export const ClusterTemplatesDropdown = ({
   );
 };
 
-export default (props: ClusterTemplatesDropdownProps) => (
-  <Provider store={store}>
-    <AuthProvider {...getAuthCfg()}>
-      <ClusterTemplatesDropdown {...props} />
-    </AuthProvider>
-  </Provider>
-);
+export default ClusterTemplatesDropdown;

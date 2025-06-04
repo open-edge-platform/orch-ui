@@ -221,3 +221,45 @@ export const clearAllStorage = () => {
   // Clear sessionStorage
   sessionStorage.clear();
 };
+
+export const areArraysOfObjectsIdentical = <T extends object>(
+  arr1: Array<T>,
+  arr2: Array<T>,
+) => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  const areObjectsIdentical = (obj1: T, obj2: T) => {
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+
+    for (const key of keys1) {
+      const val1 = obj1[key as keyof T];
+      const val2 = obj2[key as keyof T];
+      if (val1 !== val2) {
+        if (typeof val1 === "object" && typeof val2 === "object") {
+          if (!areObjectsIdentical(val1 as T, val2 as T)) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (!areObjectsIdentical(arr1[i], arr2[i])) {
+      return false;
+    }
+  }
+
+  return true;
+};
