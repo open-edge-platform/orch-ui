@@ -17,6 +17,7 @@ describe("<AlertsList/>", () => {
     cy.mount(<AlertsList />);
     pom.waitForApis();
     pom.root.should("exist");
+    pom.table.selectPageSize(2);
     pom.table.getRows().should("have.length", alertStore.list().length);
   });
   it("should open drawer", () => {
