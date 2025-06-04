@@ -15,15 +15,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["AMT"],
       }),
-      getV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuid: build.query<
-        GetV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuidApiResponse,
-        GetV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuidApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/dm/amt/power/capabilities/${queryArg.guid}`,
-        }),
-        providesTags: ["AMT"],
-      }),
       deleteV1ProjectsByProjectNameDmDevicesAndGuid: build.mutation<
         DeleteV1ProjectsByProjectNameDmDevicesAndGuidApiResponse,
         DeleteV1ProjectsByProjectNameDmDevicesAndGuidApiArg
@@ -51,14 +42,6 @@ export { injectedRtkApi as managementPresenseApis };
 export type GetV1ProjectsByProjectNameDmAmtGeneralSettingsAndGuidApiResponse =
   /** status 200 Successful operation */ GeneralSettingsResponse;
 export type GetV1ProjectsByProjectNameDmAmtGeneralSettingsAndGuidApiArg = {
-  /** GUID of device */
-  guid: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuidApiResponse =
-  /** status 200 Successful operation */ PowerCapabilitiesResponse;
-export type GetV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuidApiArg = {
   /** GUID of device */
   guid: string;
   /** unique projectName for the resource */
@@ -116,25 +99,6 @@ export type GeneralSettingsResponse = {
     To?: string;
   };
 };
-export type PowerCapabilitiesResponse = {
-  hibernate?: number;
-  powerCycle?: number;
-  powerDown?: number;
-  "powerOnToIDE-RCDROM"?: number;
-  "powerOnToIDE-RFloppy"?: number;
-  powerOnToPXE?: number;
-  powerUp?: number;
-  powerUpToBIOS?: number;
-  reset?: number;
-  resetToBIOS?: number;
-  "resetToIDE-RCDROM"?: number;
-  "resetToIDE-RFloppy"?: number;
-  resetToPXE?: number;
-  resetToSecureErase?: number;
-  sleep?: number;
-  softOff?: number;
-  softReset?: number;
-};
 export type DeleteResponse = {
   /** HTTP returncode */
   success?: number;
@@ -173,8 +137,6 @@ export type Device = {
 export const {
   useGetV1ProjectsByProjectNameDmAmtGeneralSettingsAndGuidQuery,
   useLazyGetV1ProjectsByProjectNameDmAmtGeneralSettingsAndGuidQuery,
-  useGetV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuidQuery,
-  useLazyGetV1ProjectsByProjectNameDmAmtPowerCapabilitiesAndGuidQuery,
   useDeleteV1ProjectsByProjectNameDmDevicesAndGuidMutation,
   useGetV1ProjectsByProjectNameDmDevicesAndGuidQuery,
   useLazyGetV1ProjectsByProjectNameDmDevicesAndGuidQuery,

@@ -40,6 +40,21 @@ const injectedRtkApi = api
           invalidatesTags: ["Domains"],
         },
       ),
+      removeDomain: build.mutation<RemoveDomainApiResponse, RemoveDomainApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/v1/projects/${queryArg.projectName}/dm/amt/admin/domains/${queryArg.profileName}`,
+            method: "DELETE",
+          }),
+          invalidatesTags: ["Domains"],
+        },
+      ),
+      getDomain: build.query<GetDomainApiResponse, GetDomainApiArg>({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/dm/amt/admin/domains/${queryArg.profileName}`,
+        }),
+        providesTags: ["Domains"],
+      }),
     }),
     overrideExisting: false,
   });
@@ -72,6 +87,22 @@ export type CreateDomainApiArg = {
   /** **provisioningCert** must be a base64 string of the Personal Information Exchange (PFX) certificate that includes the entire certificate chain and private key.
    */
   domainPost: DomainPost;
+};
+export type RemoveDomainApiResponse =
+  /** status 204 successful operation */ void;
+export type RemoveDomainApiArg = {
+  /** Name of domain profile to remove */
+  profileName: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type GetDomainApiResponse =
+  /** status 200 successful operation */ DomainResponse;
+export type GetDomainApiArg = {
+  /** Name of domain profile to return */
+  profileName: string;
+  /** unique projectName for the resource */
+  projectName: string;
 };
 export type DomainResponse = {
   domainSuffix: string;
@@ -109,4 +140,7 @@ export const {
   useLazyGetAllDomainsQuery,
   useUpdateDomainSuffixMutation,
   useCreateDomainMutation,
+  useRemoveDomainMutation,
+  useGetDomainQuery,
+  useLazyGetDomainQuery,
 } = injectedRtkApi;
