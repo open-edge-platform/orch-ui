@@ -3,16 +3,23 @@
 
 <!DOCTYPE html>
 <html lang="en" data-theme-colors="tb">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="assets/favicon.png" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edge Orchestrator</title>
-    <!-- Runtime environment variables -->
-    <script src="/runtime-config.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="assets/favicon.png" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edge Orchestrator</title>
+  <!-- Storying generated NONCE so we can add it to every script -->
+  <script nonce="UNIQUE_NONCE">
+    window.nonce = "UNIQUE_NONCE";
+  </script>
+  <!-- Runtime environment variables -->
+  <script nonce="UNIQUE_NONCE" src="/runtime-config.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
 </html>
