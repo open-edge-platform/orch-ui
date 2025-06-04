@@ -15,7 +15,7 @@ describe("<OsConfig/>", () => {
     name: "currentOsName",
     sha256: "currentOsSha256",
     updateSources: [],
-    osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+    osType: "OS_TYPE_IMMUTABLE",
   };
 
   it("should render empty", () => {
@@ -34,7 +34,7 @@ describe("<OsConfig/>", () => {
             name: "desiredOsName",
             sha256: "desiredOsSha256",
             updateSources: [],
-            osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+            osType: "OS_TYPE_IMMUTABLE",
           },
         }}
       />,

@@ -10,17 +10,17 @@ import { Text } from "@spark-design/react";
 import "./TelemetryProfileMetrics.scss";
 const dataCy = "telemetryProfileMetrics";
 export interface TelemetryProfileMetricsProps {
-  region?: infra.RegionRead;
-  site?: infra.SiteRead;
+  region?: infra.RegionResourceRead;
+  site?: infra.SiteResourceRead;
 }
 export const TelemetryProfileMetrics = ({
   region,
   site,
 }: TelemetryProfileMetricsProps) => {
   const cy = { "data-cy": dataCy };
-  const args: infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg =
+  const args: infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg =
     {
-      telemetryMetricsGroupId: "group-id", //TODO: evaluate
+      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       ...(region
         ? { regionId: region.resourceId }
@@ -34,13 +34,13 @@ export const TelemetryProfileMetrics = ({
     isError,
     isLoading,
     error,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     args,
     {
       skip: Object.keys(args).length === 0,
     },
   );
-  const metrics = _metrics ? _metrics.TelemetryMetricsProfiles : [];
+  const metrics = _metrics ? _metrics.telemetryMetricsProfiles : [];
   const className = "telemetry-profile-metrics";
 
   const getJSX = () => {
