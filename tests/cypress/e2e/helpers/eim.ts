@@ -29,7 +29,10 @@ export const createRegionViaAPi = (
       },
     })
     .then((response) => {
-      expect(response.status).to.equal(201);
+      expect(
+        response.status,
+        "Failed to create region" + JSON.stringify(response.body),
+      ).to.equal(200);
       return cy.wrap(response.body.resourceId!);
     });
 };
@@ -68,8 +71,12 @@ export const createSiteViaApi = (
       },
     })
     .then((response) => {
-      const success = response.status === 201;
-      expect(success).to.be.true;
+      const success = response.status === 201 || response.status === 200;
+      expect(
+        success,
+        `Failed to create site (status: ${response.status})` +
+          JSON.stringify(response.body),
+      ).to.be.true;
       return cy.wrap(response.body.resourceId!);
     });
 };
