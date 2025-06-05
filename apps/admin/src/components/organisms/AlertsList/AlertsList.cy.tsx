@@ -12,12 +12,31 @@ const pom = new AlertsListPom();
 const alertStore = new AlertStore();
 
 describe("<AlertsList/>", () => {
-  it("should render component", () => {
+  it("should render all alerts across paginated pages", () => {
     pom.interceptApis([pom.api.alertDefinitionList, pom.api.alertList]);
     cy.mount(<AlertsList />);
     pom.waitForApis();
-    pom.root.should("exist");
-    pom.table.getRows().should("have.length", alertStore.list().length);
+  
+    const totalAlerts = alertStore.list().length;
+    let seenCount = 0;
+  
+    cy.get('[data-testid^="page-btn-"]')
+      .then(($buttons) => {
+        const pages = [...$buttons].map((btn) => btn.getAttribute("data-testid"));
+        cy.wrap(pages).each((pageTestId) => {
+          cy.get(`[data-testid="${pageTestId}"]`).click();
+          pom.waitForApis();
+  
+          pom.table.getRows().then(($rows) => {
+            seenCount += $rows.length;
+          });
+        });
+      })
+      .then(() => {
+        cy.wrap(null).then(() => {
+          expect(seenCount).to.eq(totalAlerts);
+        });
+      });
   });
   it("should open drawer", () => {
     pom.interceptApis([pom.api.alertDefinitionList, pom.api.alertList]);
