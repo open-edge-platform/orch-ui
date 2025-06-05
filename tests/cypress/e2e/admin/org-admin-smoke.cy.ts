@@ -69,59 +69,60 @@ describe("Org Admin Smoke", () => {
       cy.dataCy("squareSpinner").should("not.exist");
 
       // search for the project so we only have one entry in the table
-      // pom.projectsPom.projectsTablePom.tablePom.search(
-      //   testData.description,
-      //   false,
-      // );
-      // pom.projectsPom.projectsTablePom.tablePom
-      //   .getRows()
-      //   .should("have.length", 1);
+      pom.projectsPom.projectsTablePom.tablePom.search(
+        testData.description,
+        false,
+      );
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
 
       // wait for the project to be ready is not working as project is getting stuck in create mode for sometime
-      // pom.projectsPom.projectsTablePom.tablePom
-      //   .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
-      //   .should(($el) => {
-      //     expect($el, "Project status").to.contain.text("CREATE is complete");
-      //   });
+      pom.projectsPom.projectsTablePom.tablePom
+        .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
+        .should(($el) => {
+          expect($el, "Project status").to.contain.text("CREATE is complete");
+        });
     });
+
     // TODO: once search type issue is addressed we need to uncomment it
-    // it.skip("should rename the project", () => {
-    //   cy.contains("Project Name").should("be.visible");
-    //   pom.projectsPom.projectsTablePom.tablePom.search(
-    //     testData.description,
-    //     false,
-    //   );
-    //   // wait for search to complete
-    //   pom.projectsPom.projectsTablePom.tablePom
-    //     .getRows()
-    //     .should("have.length", 1);
+    it("should rename the project", () => {
+      cy.contains("Project Name").should("be.visible");
+      pom.projectsPom.projectsTablePom.tablePom.search(
+        testData.description,
+        false,
+      );
+      // wait for search to complete
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
 
-    //   pom.projectsPom.projectsTablePom.renameProjectPopup(
-    //     0,
-    //     testData.updatedDescription,
-    //   );
-    //   pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
-    //   cy.contains(testData.updatedDescription).should("exist");
-    // });
+      pom.projectsPom.projectsTablePom.renameProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
+      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
+      cy.contains(testData.updatedDescription).should("exist");
+    });
 
-    // it.skip("should delete the project", () => {
-    //   cy.contains("Project Name").should("be.visible");
-    //   pom.projectsPom.projectsTablePom.tablePom.search(
-    //     testData.description,
-    //     false,
-    //   );
-    //   // wait for search to complete
-    //   pom.projectsPom.projectsTablePom.tablePom
-    //     .getRows()
-    //     .should("have.length", 1);
+    it("should delete the project", () => {
+      cy.contains("Project Name").should("be.visible");
+      pom.projectsPom.projectsTablePom.tablePom.search(
+        testData.description,
+        false,
+      );
+      // wait for search to complete
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
 
-    //   pom.projectsPom.projectsTablePom.deleteProjectPopup(
-    //     0,
-    //     testData.updatedDescription,
-    //   );
-    //   pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
-    //   cy.contains("Deletion in process").should("be.visible");
-    // });
+      pom.projectsPom.projectsTablePom.deleteProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
+      pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
+      cy.contains("Deletion in process").should("be.visible");
+    });
   });
 
   afterEach(() => {
