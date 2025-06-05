@@ -1,15 +1,25 @@
 import { toDashCase } from '@spark-design/utils';
-export class CSSCustomProperty extends Function {
+// Instead of extending Function, create a class with a callable wrapper
+export class CSSCustomProperty {
     config;
     constructor(config) {
-        super();
-        Object.setPrototypeOf(this, CSSCustomProperty.prototype);
         this.config = config;
-        return new Proxy(this, {
-            apply: (_, __, args) => {
-                return new CSSCustomProperty(this.config.fork(args[0]));
+        // Create a callable wrapper function that will be returned instead of this class instance
+        const callableWrapper = (...args) => {
+            return new CSSCustomProperty(this.config.fork(args[0]));
+        };
+        // Copy all methods from the prototype to the wrapper function
+        Object.getOwnPropertyNames(CSSCustomProperty.prototype).forEach(key => {
+            if (key !== 'constructor') {
+                callableWrapper[key] = this[key].bind(this);
             }
         });
+        // Add the config property to the wrapper
+        Object.defineProperty(callableWrapper, 'config', {
+            get: () => this.config,
+            enumerable: true
+        });
+        return callableWrapper;
     }
     getKey = (config = {}) => {
         const conf = this.getConfig(config);
@@ -88,4 +98,10 @@ export const normalizePrefix = (str) => {
     return `--${toDashCase(str)}`;
 };
 export const createCustomProperty = (options) => new CSSCustomProperty(options);
-export const isCustomProperty = (entity) => entity instanceof CSSCustomProperty;
+export const isCustomProperty = (entity) => {
+    // Check if entity is a function and has our specific properties
+    return typeof entity === 'function' &&
+        typeof entity.getKey === 'function' &&
+        typeof entity.toVariable === 'function' &&
+        typeof entity.config !== 'undefined';
+};
