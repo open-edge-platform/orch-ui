@@ -17,6 +17,7 @@ import { useEffect, useReducer } from "react";
 import { useOutlet } from "react-router-dom";
 
 const Layout = () => {
+  console.log("stop extending function");
   const currentOutlet = useOutlet();
 
   // NOTE that it's possible that when the Layout renders an "Active Project" is not stored in the local storage yet
