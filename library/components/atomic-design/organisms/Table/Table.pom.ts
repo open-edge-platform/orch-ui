@@ -284,16 +284,24 @@ export class TablePom extends CyPom<Selectors> {
     cyGet("rowExpander").eq(row).click();
   }
 
-  public search(term: string) {
+  /**
+   * Searches the table for a term and waits for the search to complete.
+   * @param term The term to search for.
+   * @param intercept Whether to intercept the search request. Defaults to true. Set it to false if the search is on local data.
+   */
+  public search(term: string, intercept: boolean = true) {
     this.root.should("be.visible");
-    cy
-      .intercept({
+    if (intercept) {
+      cy.intercept({
         url: "**filter*", // TODO we might need to parametrize this URL
         method: "GET",
         times: 1,
-      })
-      .as("search"),
-      this.el.search.type(term);
-    cy.wait("@search");
+      }).as("search");
+    }
+    this.el.search.type(term);
+    if (intercept) {
+      // Wait for the search request to complete
+      cy.wait("@search");
+    }
   }
 }

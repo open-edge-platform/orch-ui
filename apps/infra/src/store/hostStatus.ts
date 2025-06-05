@@ -6,11 +6,11 @@
 import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type HostStatus = infra.HostRead["hostStatus"];
+type HostStatus = infra.HostResourceRead["hostStatus"];
 type OverallHostStatus =
   | HostStatus
-  | infra.ScheduleStatus
-  | infra.StatusIndicatorRead;
+  | infra.SingleScheduleResource["scheduleStatus"]
+  | infra.StatusIndication;
 
 export const hostStatusSliceName = "hostStatusList";
 

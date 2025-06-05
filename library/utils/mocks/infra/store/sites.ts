@@ -43,23 +43,15 @@ import {
 } from "./regions";
 import { StoreUtils } from "./utils";
 
-export const siteOregonPortland: infra.SiteRead = {
+export const siteOregonPortland: infra.SiteResourceRead = {
   siteID: siteOregonPortlandId,
   resourceId: siteOregonPortlandId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionUsWestId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionUsWestId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionUsWestId,
+    },
+  ],
   name: "Portland",
   siteLat: 90 * Math.pow(10, 7),
   siteLng: 90 * Math.pow(10, 7),
@@ -72,23 +64,15 @@ export const siteOregonPortland: infra.SiteRead = {
   ],
 };
 
-export const siteSantaClara: infra.SiteRead = {
+export const siteSantaClara: infra.SiteResourceRead = {
   siteID: siteSantaClaraId,
   resourceId: siteSantaClaraId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionUsWestId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionUsWestId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionUsWestId,
+    },
+  ],
   name: "Santa Clara",
   region: regionUsWest,
   metadata: [],
@@ -96,69 +80,45 @@ export const siteSantaClara: infra.SiteRead = {
   siteLng: 0,
 };
 
-export const siteBoston: infra.SiteRead = {
+export const siteBoston: infra.SiteResourceRead = {
   siteID: siteBostonId,
   resourceId: siteBostonId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionUsEastId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionUsEastId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionUsEastId,
+    },
+  ],
   name: "Boston",
   region: regionUsEast,
   siteLat: 0,
   siteLng: 0,
 };
 
-export const siteRestaurantOne: infra.SiteRead = {
+export const siteRestaurantOne: infra.SiteResourceRead = {
   siteID: siteRestaurantOneId,
   resourceId: siteRestaurantOneId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionPortlandId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionPortlandId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionPortlandId,
+    },
+  ],
   name: siteRestaurantOneName,
   region: regionPortland,
   siteLat: 0,
   siteLng: 0,
 };
 
-export const siteRestaurantTwo: infra.SiteRead = {
+export const siteRestaurantTwo: infra.SiteResourceRead = {
   siteID: siteRestaurantTwoId,
   resourceId: siteRestaurantTwoId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionSalemId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionSalemId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionSalemId,
+    },
+  ],
   name: siteRestaurantTwoName,
   region: regionSalem,
   metadata: [
@@ -175,54 +135,38 @@ export const siteRestaurantTwo: infra.SiteRead = {
   siteLng: 0,
 };
 
-export const siteRestaurantThree: infra.SiteRead = {
+export const siteRestaurantThree: infra.SiteResourceRead = {
   siteID: siteRestaurantThreeId,
   resourceId: siteRestaurantThreeId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionAshlandId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionAshlandId,
-      },
-      {
-        key: "region",
-        value: regionUsEastId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionAshlandId,
+    },
+    {
+      key: "region",
+      value: regionUsEastId,
+    },
+  ],
   name: siteRestaurantThreeName,
   region: regionAshland,
   siteLat: 0,
   siteLng: 0,
 };
 
-export const siteMinimartOne: infra.SiteRead = {
+export const siteMinimartOne: infra.SiteResourceRead = {
   siteID: siteMinimartOneId,
   resourceId: siteMinimartOneId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionColumbusId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionColumbusId,
-      },
-      {
-        key: "region",
-        value: regionAshlandId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionColumbusId,
+    },
+    {
+      key: "region",
+      value: regionAshlandId,
+    },
+  ],
   name: siteMinimartOneName,
   region: regionColumbus,
   metadata: [
@@ -243,46 +187,30 @@ export const siteMinimartOne: infra.SiteRead = {
   siteLng: 0,
 };
 
-export const siteMinimartTwo: infra.SiteRead = {
+export const siteMinimartTwo: infra.SiteResourceRead = {
   siteID: siteMinimartTwoId,
   resourceId: siteMinimartTwoId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionDaytonId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionDaytonId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionDaytonId,
+    },
+  ],
   name: siteMinimartTwoName,
   region: regionDayton,
   siteLat: 0,
   siteLng: 0,
 };
 
-export const siteStore: infra.SiteRead = {
+export const siteStore: infra.SiteResourceRead = {
   siteID: siteStoreId,
   resourceId: siteStoreId,
-  inheritedMetadata: {
-    ou: [
-      {
-        key: "region",
-        value: regionChicagoId,
-      },
-    ],
-    location: [
-      {
-        key: "region",
-        value: regionChicagoId,
-      },
-    ],
-  },
+  inheritedMetadata: [
+    {
+      key: "region",
+      value: regionChicagoId,
+    },
+  ],
   name: siteStoreName,
   region: regionChicago,
   siteLat: 0,
@@ -305,8 +233,8 @@ export const updateSite = {
 
 export class SiteStore extends BaseStore<
   "resourceId",
-  infra.SiteRead,
-  infra.Site
+  infra.SiteResourceRead,
+  infra.SiteResourceWrite
 > {
   constructor() {
     super("resourceId", [
@@ -322,7 +250,7 @@ export class SiteStore extends BaseStore<
     ]);
   }
 
-  list(params?: { regionId: string | null }): infra.SiteRead[] {
+  list(params?: { regionId: string | null }): infra.SiteResourceRead[] {
     if (params?.regionId != null) {
       return this.resources.filter(
         (r) => r.region?.regionID === params.regionId,
@@ -331,7 +259,7 @@ export class SiteStore extends BaseStore<
     return this.resources;
   }
 
-  convert(body: infra.SiteWrite, id?: string): infra.SiteRead {
+  convert(body: infra.SiteResourceWrite, id?: string): infra.SiteResourceRead {
     const randomString = StoreUtils.randomString();
     const siteID = id ?? `site-${randomString}`;
     const currentTime = new Date().toISOString();
@@ -339,7 +267,7 @@ export class SiteStore extends BaseStore<
       createdAt: currentTime,
       updatedAt: currentTime,
     };
-    const resultSite: infra.SiteRead = {
+    const resultSite: infra.SiteResourceRead = {
       siteID,
       resourceId: siteID,
       ...body,
@@ -351,17 +279,7 @@ export class SiteStore extends BaseStore<
         providerKind: "PROVIDER_KIND_BAREMETAL",
         timestamps,
       },
-      ou: {
-        // TODO: Create a store for OUs
-        resourceId: `ou-${siteID}`,
-        ouID: `ou-${siteID}`,
-        name: `ou-${siteID}`,
-        parentOu: undefined,
-        inheritedMetadata: [],
-        metadata: [],
-        timestamps,
-      },
-      region: body.region as infra.RegionRead,
+      region: body.region as infra.RegionResourceRead,
     };
 
     return resultSite;

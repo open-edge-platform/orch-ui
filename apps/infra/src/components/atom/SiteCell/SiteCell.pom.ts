@@ -12,20 +12,18 @@ type ApiAliases = "getSiteSuccess" | "getSiteNotFound";
 
 const route = `**/v1/projects/${defaultActiveProject.name}/regions/**/sites/${siteOregonPortland.resourceId}`;
 
-const endpoints: CyApiDetails<
-  ApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
-> = {
-  getSiteSuccess: {
-    route: route,
-    statusCode: 200,
-    response: siteOregonPortland,
-  },
-  getSiteNotFound: {
-    route: route,
-    statusCode: 404,
-  },
-};
+const endpoints: CyApiDetails<ApiAliases, infra.SiteServiceGetSiteApiResponse> =
+  {
+    getSiteSuccess: {
+      route: route,
+      statusCode: 200,
+      response: siteOregonPortland,
+    },
+    getSiteNotFound: {
+      route: route,
+      statusCode: 404,
+    },
+  };
 
 class SiteCellPom extends CyPom<Selectors, ApiAliases> {
   constructor(public rootCy: string = "siteCell") {

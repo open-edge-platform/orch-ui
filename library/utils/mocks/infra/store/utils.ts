@@ -16,7 +16,9 @@ export class StoreUtils {
    * for example `host.status="HOST_STATUS_RUNNING"` which is a readonly,
    * the option will be removed with the substituted value.
    **/
-  public static convertToGeneralHost(host: infra.HostRead): infra.Host {
+  public static convertToGeneralHost(
+    host: infra.HostResourceRead,
+  ): infra.HostResource {
     const newHost = { ...host };
 
     // Remove all read-only values
@@ -54,7 +56,9 @@ export class StoreUtils {
     };
   }
 
-  public static convertToWriteHost(host: infra.HostRead): infra.HostWrite {
+  public static convertToWriteHost(
+    host: infra.HostResourceRead,
+  ): infra.HostResourceWrite {
     const newHost = { ...host };
 
     // Remove all read-only values
@@ -97,8 +101,8 @@ export class StoreUtils {
 
   public static convertToWriteInstance(
     instance: enhancedInfraSlice.InstanceReadModified,
-  ): infra.InstanceWrite {
-    const newInstance: infra.InstanceWrite = {
+  ): infra.InstanceResourceWrite {
+    const newInstance: infra.InstanceResourceWrite = {
       name: instance.name,
       kind: instance.kind,
       hostID: instance.host?.resourceId ?? "",
@@ -123,9 +127,9 @@ export class StoreUtils {
     return newInstance;
   }
   public static convertToGeneralInstance(
-    instance: infra.InstanceRead,
-  ): infra.Instance {
-    const newInstance: infra.Instance = {
+    instance: infra.InstanceResourceRead,
+  ): infra.InstanceResource {
+    const newInstance: infra.InstanceResource = {
       name: instance.name,
       kind: instance.kind,
       host: instance.host,
@@ -142,15 +146,16 @@ export class StoreUtils {
     return newInstance;
   }
 
-  public static convertToWriteSite(site: infra.SiteRead): infra.SiteWrite {
+  public static convertToWriteSite(
+    site: infra.SiteResourceRead,
+  ): infra.SiteResourceWrite {
     const copySite = { ...site };
 
     // Remove all read-only values
     if (copySite.resourceId !== undefined) delete copySite.resourceId;
     if (copySite.siteID !== undefined) delete copySite.siteID;
 
-    const newSite: infra.SiteWrite = { ...copySite };
-    if (copySite.ou) newSite.ou = this.convertToGeneralOu(copySite.ou);
+    const newSite: infra.SiteResourceWrite = { ...copySite };
     if (copySite.region)
       newSite.region = this.convertToWriteRegion(copySite.region);
 
@@ -158,15 +163,15 @@ export class StoreUtils {
   }
 
   public static convertToWriteRegion(
-    region: infra.RegionRead,
-  ): infra.RegionWrite {
+    region: infra.RegionResourceRead,
+  ): infra.RegionResourceWrite {
     const copyRegion = { ...region };
 
     // Remove all read-only values
     if (copyRegion.resourceId !== undefined) delete copyRegion.resourceId;
     if (copyRegion.regionID !== undefined) delete copyRegion.regionID;
 
-    const newRegion: infra.RegionWrite = { ...copyRegion };
+    const newRegion: infra.RegionResourceWrite = { ...copyRegion };
     if (copyRegion.parentRegion !== undefined)
       newRegion.parentRegion = this.convertToWriteRegion(
         copyRegion.parentRegion,
@@ -174,14 +179,5 @@ export class StoreUtils {
     else delete newRegion.parentRegion;
 
     return newRegion;
-  }
-
-  public static convertToGeneralOu(ou: infra.OuRead): infra.Ou {
-    const newOu = { ...ou };
-
-    // Remove all read-only values
-    if (ou.ouID !== undefined) delete ou.ouID;
-
-    return newOu;
   }
 }

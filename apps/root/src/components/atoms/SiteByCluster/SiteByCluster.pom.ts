@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 import { clusterTwo, regionUsWest, regionUsWestId } from "@orch-ui/utils";
 
@@ -16,14 +16,14 @@ type SiteApiAliases = "getSiteSalem" | "getSiteSuccess" | "getSite500";
 type ApiAliases = ClusterApiAliases | HostApiAliases | SiteApiAliases;
 
 export const regionId = regionUsWestId;
-export const siteRestaurantTwo: infra.SiteRead = {
+export const siteRestaurantTwo: infra.SiteResourceRead = {
   resourceId: "test-site",
   siteID: "test-site",
   name: "Restaurant Two",
   // regionId: regionId,
   region: regionUsWest,
 };
-const hostTwo: infra.HostRead = {
+const hostTwo: infra.HostResourceRead = {
   name: "Edge Node",
   resourceId: "test-host",
   site: siteRestaurantTwo,
@@ -32,7 +32,7 @@ const hostTwo: infra.HostRead = {
 
 const siteEndpoints: CyApiDetails<
   SiteApiAliases,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse
+  infra.SiteServiceGetSiteApiResponse
 > = {
   getSiteSalem: {
     route: "**/clusters/restaurant-salem",
@@ -52,7 +52,7 @@ const siteEndpoints: CyApiDetails<
 
 const hostEndpoints: CyApiDetails<
   HostApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsApiResponse
+  infra.HostServiceListHostsApiResponse
 > = {
   getHostByResourceIdSuccess: {
     route: "**/compute/hosts?filter=resourceId%3D**",

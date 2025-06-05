@@ -25,29 +25,31 @@ export const ScheduleMaintenanceStatusTag = ({
   const cy = { "data-cy": dataCy };
   const [isInMaintenance, setIsInMaintenance] = useState<boolean>(false);
 
-  const apiFilter: infra.GetV1ProjectsByProjectNameComputeSchedulesApiArg = {
+  const apiFilter: infra.ScheduleServiceListSchedulesApiArg = {
     projectName: SharedStorage.project?.name ?? "",
     unixEpoch: Math.trunc(+new Date() / 1000).toString(),
   };
 
   switch (targetEntityType) {
     case "region":
-      apiFilter.regionId = (targetEntity as infra.RegionRead).resourceId;
+      apiFilter.regionId = (
+        targetEntity as infra.RegionResourceRead
+      ).resourceId;
       break;
     case "site":
-      apiFilter.siteId = (targetEntity as infra.SiteRead).resourceId;
+      apiFilter.siteId = (targetEntity as infra.SiteResourceRead).resourceId;
       break;
     default:
-      apiFilter.hostId = (targetEntity as infra.HostRead).resourceId;
+      apiFilter.hostId = (targetEntity as infra.HostResourceRead).resourceId;
   }
 
   const { data: schedules, isSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(apiFilter, {
+    infra.useScheduleServiceListSchedulesQuery(apiFilter, {
       skip: !apiFilter.hostId && !apiFilter.siteId && !apiFilter.regionId,
       ...(poll ? { pollingInterval: API_INTERVAL } : {}),
     });
 
-  const filteredMaintenance = schedules?.SingleSchedules.filter(
+  const filteredMaintenance = schedules?.singleSchedules.filter(
     (schedule) =>
       // filter schedules based on shipping and maintenance
       schedule.scheduleStatus === "SCHEDULE_STATUS_MAINTENANCE",
@@ -58,7 +60,7 @@ export const ScheduleMaintenanceStatusTag = ({
     (filteredMaintenance && filteredMaintenance.length > 0) || false;
   // If a new repeated schedule exists
   const newRepeatedScheduleExists =
-    (schedules?.RepeatedSchedules && schedules.RepeatedSchedules.length > 0) ||
+    (schedules?.repeatedSchedules && schedules.repeatedSchedules.length > 0) ||
     false;
 
   useEffect(() => {

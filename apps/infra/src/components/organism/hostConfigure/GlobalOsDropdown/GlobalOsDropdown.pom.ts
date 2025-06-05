@@ -17,7 +17,7 @@ const osResourceStore = new OsResourceStore();
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  | infra.GetV1ProjectsByProjectNameComputeOsApiResponse
+  | infra.OperatingSystemServiceListOperatingSystemsApiResponse
   | infra.ProblemDetailsRead
 > = {
   getOSResources: {
