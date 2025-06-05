@@ -201,6 +201,16 @@ export const unconfigureHostViaApi = (project: string, hostId: string) => {
       "onboardingStatusTimestamp",
       "registrationStatusIndicator",
       "registrationStatusTimestamp",
+      "provider",
+      "amtSku",
+      "amtStatus",
+      "amtStatusTimestamp",
+      "bmcIp",
+      "inheritedMetadata",
+      "powerOnTime",
+      "powerStatus",
+      "powerStatusIndicator",
+      "powerStatusTimestamp",
     ];
 
     _.forEach(readOnlyProps, (prop) => {
