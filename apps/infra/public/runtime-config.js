@@ -6,13 +6,15 @@
 // SPDX-FileCopyrightText: (C) 2022 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 
+const fqdn = "kind.internal";
+
 window.__RUNTIME_CONFIG__ = {
   AUTH: "true",
-  KC_URL: "https://keycloak.kind.internal",
+  KC_URL: `https://keycloak.${fqdn}`,
   KC_REALM: "master",
   KC_CLIENT_ID: "webui-client",
   SESSION_TIMEOUT: 0,
-  OBSERVABILITY_URL: "https://observability-ui.kind.internal",
+  OBSERVABILITY_URL: `https://observability-ui.${fqdn}`,
   DOCUMENTATION_URL: "https://docs.openedgeplatform.intel.com/edge-manage-docs/main",
   DOCUMENTATION: [
     { src: "/dashboard", dest: "/user_guide/monitor_deployments/index.html" },
@@ -66,16 +68,16 @@ window.__RUNTIME_CONFIG__ = {
   },
   TITLE: "Infra Manager",
   API: {
-    CATALOG: "https://app-orch.kind.internal",
-    ADM: "https://app-orch.kind.internal",
-    INFRA: "https://api.kind.internal",
-    ARM: "https://app-orch.kind.internal",
-    CO: "https://cluster-orch.kind.internal",
-    MB: "https://api.kind.internal",
-    TM: "https://api.kind.internal",
-    ALERT: "https://api.kind.internal",
-    RPS: "https://api.kind.internal",
-    MPS: "https://api.kind.internal",
+    CATALOG: `https://app-orch.${fqdn}`,
+    ADM: `https://app-orch.${fqdn}`,
+    INFRA: `https://api.${fqdn}`,
+    ARM: `https://app-orch.${fqdn}`,
+    CO: `https://cluster-orch.${fqdn}`,
+    MB: `https://api.${fqdn}`,
+    TM: `https://api.${fqdn}`,
+    ALERT: `https://api.${fqdn}`,
+    RPS: `https://api.${fqdn}`,
+    MPS: `https://api.${fqdn}`,
   },
   VERSIONS: {
     orchestrator: "unknown",
