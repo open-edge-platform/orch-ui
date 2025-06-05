@@ -4,12 +4,16 @@
  */
 
 import { omApi } from "@orch-ui/apis";
-import { alertMocks } from "../data/alerts";
 import { BaseStore } from "../../base-store";
+import { alertMocks } from "../data/alerts";
 
-export default class AlertStore extends BaseStore<"alertDefinitionId", omApi.Alert>{
+export default class AlertStore extends BaseStore<
+  "alertDefinitionId",
+  omApi.Alert
+> {
   constructor() {
-    super("alertDefinitionId", [alertMocks.hostConnectionLostAlert,
+    super("alertDefinitionId", [
+      alertMocks.hostConnectionLostAlert,
       alertMocks.hostErrorAlert,
       alertMocks.hostCpuUsageAlert,
       alertMocks.hostRamUsageAlert,
@@ -19,7 +23,8 @@ export default class AlertStore extends BaseStore<"alertDefinitionId", omApi.Ale
       alertMocks.clusterErrorAlert,
       alertMocks.clusterCpuUsageAlert,
       alertMocks.clusterRamUsageAlert,
-      alertMocks.clusterRamUsageAlertNoSource] );
+      alertMocks.clusterRamUsageAlertNoSource,
+    ]);
   }
 
   convert(body: omApi.Alert): omApi.Alert {

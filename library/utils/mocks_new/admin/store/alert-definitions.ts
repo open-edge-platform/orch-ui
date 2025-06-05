@@ -4,11 +4,14 @@
  */
 
 import { omApi } from "@orch-ui/apis";
-import { alertDefinitionMocks } from "../data/alert-definitions";
-import { MockUtils } from "../../mock-utils";
 import { BaseStore } from "../../base-store";
+import { MockUtils } from "../../mock-utils";
+import { alertDefinitionMocks } from "../data/alert-definitions";
 
-export default class AlertDefinitionStore extends BaseStore<"id", omApi.AlertDefinition>{
+export default class AlertDefinitionStore extends BaseStore<
+  "id",
+  omApi.AlertDefinition
+> {
   alertDefinitions: omApi.AlertDefinition[];
   constructor() {
     super("id", [
@@ -26,11 +29,11 @@ export default class AlertDefinitionStore extends BaseStore<"id", omApi.AlertDef
   }
 
   convert(body: omApi.AlertDefinition): omApi.AlertDefinition {
-      return {
-        ...body,
-        name: body.id ?? MockUtils.randomString(),
-      };
-    }
+    return {
+      ...body,
+      name: body.id ?? MockUtils.randomString(),
+    };
+  }
 
   list(): omApi.AlertDefinition[] {
     return this.alertDefinitions;
