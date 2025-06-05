@@ -16,17 +16,19 @@ describe("<AlertsList/>", () => {
     pom.interceptApis([pom.api.alertDefinitionList, pom.api.alertList]);
     cy.mount(<AlertsList />);
     pom.waitForApis();
-  
+
     const totalAlerts = alertStore.list().length;
     let seenCount = 0;
-  
+
     cy.get('[data-testid^="page-btn-"]')
       .then(($buttons) => {
-        const pages = [...$buttons].map((btn) => btn.getAttribute("data-testid"));
+        const pages = [...$buttons].map((btn) =>
+          btn.getAttribute("data-testid"),
+        );
         cy.wrap(pages).each((pageTestId) => {
           cy.get(`[data-testid="${pageTestId}"]`).click();
           pom.waitForApis();
-  
+
           pom.table.getRows().then(($rows) => {
             seenCount += $rows.length;
           });
