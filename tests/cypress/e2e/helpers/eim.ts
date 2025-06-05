@@ -109,7 +109,7 @@ export const deleteRegionViaApi = (project: string, regionId: string) => {
   }).then((response) => {
     // we only care that the created region is  not there,
     // if the test failed before creating it we're fine with a 404
-    const success = response.status === 200 || response.status === 404;
+    const success = response.status === 204 || response.status === 404 || response.status === 200;
     expect(success).to.be.true;
   });
 };
@@ -125,7 +125,11 @@ export const deleteSiteViaApi = (
   }).then((response) => {
     // we only care that the created region is  not there,
     // if the test failed before creating it we're fine with a 404
+<<<<<<< HEAD
     const success = response.status === 200 || response.status === 404;
+=======
+    const success = response.status === 204 || response.status === 404 || response.status === 200;
+>>>>>>> 3819c983 (Fix 204 checks in delete responses, change it to 200)
     expect(success).to.be.true;
   });
 };
@@ -138,7 +142,7 @@ export const deleteHostInstanceViaApi = (
     method: "DELETE",
     url: `/v1/projects/${project}/compute/instances/${instanceId}`,
   }).then((response) => {
-    const success = response.status === 204 || response.status === 404;
+    const success = response.status === 204 || response.status === 404 || response.status === 200;
     expect(success).to.be.true;
   });
 };
@@ -148,7 +152,7 @@ export const deleteHostViaApi = (project: string, hostId: string) => {
     method: "DELETE",
     url: `/v1/projects/${project}/compute/hosts/${hostId}`,
   }).then((response) => {
-    const success = response.status === 204 || response.status === 404;
+    const success = response.status === 204 || response.status === 404 || response.status === 200;
     expect(success).to.be.true;
   });
 };
