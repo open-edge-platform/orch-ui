@@ -1,25 +1,22 @@
 import { toDashCase } from '@spark-design/utils';
-// Instead of extending Function, create a class with a callable wrapper
 export class CSSCustomProperty {
     config;
     constructor(config) {
         this.config = config;
-        // Create a callable wrapper function that will be returned instead of this class instance
-        const callableWrapper = (...args) => {
-            return new CSSCustomProperty(this.config.fork(args[0]));
-        };
-        // Copy all methods from the prototype to the wrapper function
-        Object.getOwnPropertyNames(CSSCustomProperty.prototype).forEach(key => {
-            if (key !== 'constructor') {
-                callableWrapper[key] = this[key].bind(this);
+    }
+
+    // Factory method to replace the Function constructor pattern
+    static create(config) {
+        const instance = new CSSCustomProperty(config);
+        return new Proxy(instance, {
+            apply: (target, _, args) => {
+                return CSSCustomProperty.create(target.config.fork(args[0]));
+            },
+            get: (target, prop, receiver) => {
+                // Forward property access to the target instance
+                return Reflect.get(target, prop, receiver);
             }
         });
-        // Add the config property to the wrapper
-        Object.defineProperty(callableWrapper, 'config', {
-            get: () => this.config,
-            enumerable: true
-        });
-        return callableWrapper;
     }
     getKey = (config = {}) => {
         const conf = this.getConfig(config);
@@ -97,11 +94,5 @@ export const normalizePrefix = (str) => {
         return '';
     return `--${toDashCase(str)}`;
 };
-export const createCustomProperty = (options) => new CSSCustomProperty(options);
-export const isCustomProperty = (entity) => {
-    // Check if entity is a function and has our specific properties
-    return typeof entity === 'function' &&
-        typeof entity.getKey === 'function' &&
-        typeof entity.toVariable === 'function' &&
-        typeof entity.config !== 'undefined';
-};
+export const createCustomProperty = (options) => CSSCustomProperty.create(options);
+export const isCustomProperty = (entity) => entity instanceof CSSCustomProperty;

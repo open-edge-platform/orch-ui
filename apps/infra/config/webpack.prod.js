@@ -10,7 +10,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 const prodConfig = {
   mode: mode,
-  devtool: false,
+  devtool: "source-map",
   module: {
     rules: [
       {
