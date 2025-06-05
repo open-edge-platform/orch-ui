@@ -75,5 +75,5 @@ export const alertDefinitionMocks = {
   clusterErrorAlertDefinition,
   clusterCpuUsageAlertDefinition,
   clusterRamUsageAlertDefinition,
-  clusterRamUsageAlertNoSourceDefinition
+  clusterRamUsageAlertNoSourceDefinition,
 };
