@@ -27,11 +27,11 @@ export default class AlertStore extends BaseStore<
     ]);
   }
 
-  convert(body: omApi.Alert): omApi.Alert {
+  convert(): omApi.Alert {
     throw new Error("Not supported by API");
   }
 
-  get(id: string): omApi.Alert | undefined {
+  get(): omApi.Alert | undefined {
     throw new Error("Not supported by API");
   }
 }
