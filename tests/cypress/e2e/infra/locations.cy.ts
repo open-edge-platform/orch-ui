@@ -122,7 +122,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       cy.url().should("contain", "locations");
       cy.reload(); // seems like this is required to get the latest regions?
-
+      cy.wait(5000);
       // create sites
       cy.intercept({
         method: "POST",
