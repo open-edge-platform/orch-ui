@@ -185,6 +185,7 @@ export const unconfigureHostViaApi = (project: string, hostId: string) => {
       "memoryBytes",
       "note",
       "productName",
+      "provider",
       "providerStatus",
       "providerStatusDetail",
       "serialNumber",
