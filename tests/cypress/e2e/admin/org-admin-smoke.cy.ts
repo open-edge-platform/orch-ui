@@ -48,6 +48,12 @@ describe("Org Admin Smoke", () => {
     it("should create a project", () => {
       cy.contains("Create Project").should("be.visible");
 
+      cy.intercept({
+        method: "PUT",
+        url: "/v1/projects/*",
+        times: 1,
+      }).as("createProject");
+
       // we select by text so it supports both the empty and full table
       cy.contains("Create Project").click();
 
@@ -56,8 +62,22 @@ describe("Org Admin Smoke", () => {
       );
       pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
 
-      // wait for the project to be ready
+      // wait for the modal to close and the page to reload
+      cy.wait("@createProject");
+      cy.contains("Create Project").should("be.visible");
 
+      cy.dataCy("squareSpinner").should("not.exist");
+
+      // search for the project so we only have one entry in the table
+      pom.projectsPom.projectsTablePom.tablePom.search(
+        testData.description,
+        false,
+      );
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
+
+      // wait for the project to be ready
       pom.projectsPom.projectsTablePom.tablePom
         .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
         .should(($el) => {
@@ -67,8 +87,9 @@ describe("Org Admin Smoke", () => {
 
     it("should rename the project", () => {
       cy.contains("Project Name").should("be.visible");
-      pom.projectsPom.projectsTablePom.tablePom.el.search.type(
+      pom.projectsPom.projectsTablePom.tablePom.search(
         testData.description,
+        false,
       );
       // wait for search to complete
       pom.projectsPom.projectsTablePom.tablePom
@@ -85,8 +106,9 @@ describe("Org Admin Smoke", () => {
 
     it("should delete the project", () => {
       cy.contains("Project Name").should("be.visible");
-      pom.projectsPom.projectsTablePom.tablePom.el.search.type(
+      pom.projectsPom.projectsTablePom.tablePom.search(
         testData.description,
+        false,
       );
       // wait for search to complete
       pom.projectsPom.projectsTablePom.tablePom

@@ -35,10 +35,10 @@ const AggregateHostStatusInfraRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
   : null;
 
 interface ClusterNodesTableBySitesProps {
-  site: infra.SiteRead;
+  site: infra.SiteResourceRead;
   inheritedMeta?: TypedMetadata[];
-  onNodeSelection: (host: infra.HostRead, isSelected: boolean) => void;
-  onNodeUpdate?: (host: infra.HostRead, role: NodeRoles) => void;
+  onNodeSelection: (host: infra.HostResourceRead, isSelected: boolean) => void;
+  onNodeUpdate?: (host: infra.HostResourceRead, role: NodeRoles) => void;
   poll?: boolean;
 
   // This is needed for testing purpose
@@ -69,12 +69,14 @@ const ClusterNodesTableBySite = ({
   const currentNodesSpec = useAppSelector(getNodesSpec);
 
   // Hosts/Nodes Table selection and dropdown states
-  const [selectedHosts, setSelectedHosts] = useState<infra.HostRead[]>([]);
+  const [selectedHosts, setSelectedHosts] = useState<infra.HostResourceRead[]>(
+    [],
+  );
   const [selectedRoles, setSelectedRole] = useState<SelectedRole[]>([]); // List of role in dropdown selection for each host/uuid row.
 
   // Drawer related states
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [hostDetail, setHostDetail] = useState<infra.HostRead>();
+  const [hostDetail, setHostDetail] = useState<infra.HostResourceRead>();
 
   // Pre-selection of Hosts logic block, when component is mounted (at beginning)
   useEffect(() => {
@@ -99,7 +101,7 @@ const ClusterNodesTableBySite = ({
     }
   }, [currentNodes]);
 
-  const handleRoleSelectInRow = (host: infra.HostRead) => {
+  const handleRoleSelectInRow = (host: infra.HostResourceRead) => {
     const currentNode = currentNodes.find(
       (node) => node.id === host.resourceId,
     );
@@ -160,14 +162,17 @@ const ClusterNodesTableBySite = ({
     );
   };
 
-  const eimNodeToCMNode = (host: infra.HostRead): cm.NodeInfo => {
+  const eimNodeToCMNode = (host: infra.HostResourceRead): cm.NodeInfo => {
     return {
       id: host.uuid,
       role: "all",
     };
   };
 
-  const handleNodeSelection = (host: infra.HostRead, isSelected: boolean) => {
+  const handleNodeSelection = (
+    host: infra.HostResourceRead,
+    isSelected: boolean,
+  ) => {
     // Make Cluster-Orch Node from the updated host row
     const selectedNode = eimNodeToCMNode(host);
     const selectedNodeSpec: cm.NodeSpec = {
@@ -208,7 +213,7 @@ const ClusterNodesTableBySite = ({
 
   // this method is called when the list of Host is loaded
   // in the Host table. We use this to populate data in the Redux store
-  const onHostLoad = (hosts: infra.HostRead[]) => {
+  const onHostLoad = (hosts: infra.HostResourceRead[]) => {
     if (hostIdUrlParam && selectedHosts.length === 0) {
       // we only execute this code if the url param contains a hostId
       // and the user have not selected any host yet
@@ -237,7 +242,7 @@ const ClusterNodesTableBySite = ({
     } else {
       // if we get back to this component when moving in the stepper,
       // check the selected nodes in the redux store and update the selectedHosts list
-      const _hosts: infra.HostRead[] = [];
+      const _hosts: infra.HostResourceRead[] = [];
       currentNodes.forEach((node) => {
         const host = hosts.find((h) => h.uuid === node.id);
         if (host) {
@@ -248,12 +253,12 @@ const ClusterNodesTableBySite = ({
     }
   };
 
-  const columns: TableColumn<infra.HostRead>[] = [
+  const columns: TableColumn<infra.HostResourceRead>[] = [
     {
       Header: "Host Name",
       apiName: "name",
       accessor: (item) => item.name || item.resourceId,
-      Cell: (table: { row: { original: infra.HostRead } }) => {
+      Cell: (table: { row: { original: infra.HostResourceRead } }) => {
         const host = table.row.original;
         return (
           <Link
@@ -271,7 +276,7 @@ const ClusterNodesTableBySite = ({
     {
       Header: "Readiness",
       accessor: (item) => hostProviderStatusToString(item),
-      Cell: (table: { row: { original: infra.HostRead } }) => (
+      Cell: (table: { row: { original: infra.HostResourceRead } }) => (
         <Suspense fallback={<SquareSpinner />}>
           {AggregateHostStatus !== null ? (
             <AggregateHostStatus

@@ -9,10 +9,10 @@ import HostsStatusByCluster from "./HostsStatusByCluster";
 import HostsStatusByClusterPom from "./HostsStatusByCluster.pom";
 
 const createMockHost = (status: {
-  indicator?: infra.StatusIndicatorRead;
+  indicator?: infra.StatusIndication;
   message?: string;
   timestamp?: number;
-}): infra.HostRead => {
+}): infra.HostResourceRead => {
   return {
     resourceId: "test-host",
     name: "Test Host",
@@ -29,7 +29,10 @@ describe("<HostsStatusByCluster/>", () => {
       dispatch: AppDispatch,
       clusterNames?: string[],
     ) => Promise<string[]>,
-    gh: (dispatch: AppDispatch, uuids: string[]) => Promise<infra.HostRead[]>;
+    gh: (
+      dispatch: AppDispatch,
+      uuids: string[],
+    ) => Promise<infra.HostResourceRead[]>;
 
   beforeEach(() => {
     ghl = cy

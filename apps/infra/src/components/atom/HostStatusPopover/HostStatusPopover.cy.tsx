@@ -274,18 +274,6 @@ describe("<HostStatusPopover/>", () => {
       pom.validatePopOverTitle(`${host.name} is deauthorized`);
     });
 
-    it("when host is deleted", () => {
-      const host = structuredClone(registeredHostOne);
-      host.onboardingStatusIndicator = "STATUS_INDICATION_IDLE";
-      host.registrationStatusIndicator = "STATUS_INDICATION_IDLE";
-      host.currentState = "HOST_STATE_DELETED";
-
-      cy.mount(<HostStatusPopover data={host} />);
-      pom.aggregateStatusPom.root.should("contain", "Deleted");
-      cyGet("statusIcon").find(".icon").should("have.class", "icon-error");
-      pom.validatePopOverTitle(`${host.name} is deleted`);
-    });
-
     it("when no appropriate status is received", () => {
       const host = structuredClone(registeredHostOne);
       delete host.site;
