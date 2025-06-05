@@ -77,7 +77,7 @@ describe("Org Admin Smoke", () => {
         .getRows()
         .should("have.length", 1);
 
-      // wait for the project to be ready is not working as projecting getting stuck in create mode for sometime
+      // wait for the project to be ready is not working as project is getting stuck in create mode for sometime
       // pom.projectsPom.projectsTablePom.tablePom
       //   .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
       //   .should(($el) => {
