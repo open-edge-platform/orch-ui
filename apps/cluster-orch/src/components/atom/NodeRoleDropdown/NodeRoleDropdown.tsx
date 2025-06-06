@@ -1,7 +1,7 @@
 /*
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
- */
+*/
 
 import { Dropdown, Item } from "@spark-design/react";
 import { useEffect, useState } from "react";
@@ -47,13 +47,14 @@ const NodeRoleDropdown = ({
         variant="ghost"
         validationState="valid"
         name="role"
-        selectedKey={value}
-        onSelectionChange={(value) => {
-          setValue(value.toString());
-          if (onSelect) onSelect(value.toString());
+        selectedKey={value ?? "all"}
+        onSelectionChange={(selectedValue) => {
+          const newValue = selectedValue?.toString() ?? "all";
+          setValue(newValue);
+          if (onSelect) onSelect(newValue);
         }}
         isDisabled={disable}
-        placeholder={role.length > 0 ? roleFormat(role) : "All"} //set default all role
+        placeholder={role.length > 0 ? roleFormat(role) : "All"}
       >
         <Item key="all">All</Item>
         <Item key="controlplane">Control Plane</Item>

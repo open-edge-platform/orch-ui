@@ -611,7 +611,8 @@ const SiteForm = () => {
                 isRequired={true}
                 label="Region"
                 onSelectionChange={(e) => {
-                  setValue("site.regionId", e.toString());
+                  const selectedKey = e?.toString() ?? "";
+                  setValue("site.regionId", selectedKey);
                   trigger("site.regionId");
                 }}
                 {...field}

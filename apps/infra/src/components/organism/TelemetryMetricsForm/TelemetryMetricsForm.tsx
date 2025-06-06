@@ -143,7 +143,6 @@ const TelemetryMetricsForm = ({
                 },
               }}
               render={({ field, fieldState: { error } }) => {
-                //Note: need any here to make compiler happy
                 const path: any = `systemMetricPairs.${index}.metricType`;
                 return (
                   <Dropdown
@@ -159,7 +158,8 @@ const TelemetryMetricsForm = ({
                     validationState={valid ? "valid" : "invalid"}
                     errorMessage={error?.message}
                     onSelectionChange={(key) => {
-                      setValue(path, key.toString());
+                      const selectedKey = key?.toString() ?? "";
+                      setValue(path, selectedKey);
                       setTimeout(() => {
                         trigger(path);
                         if (getSystemMetricPairs()[index].interval !== "")
@@ -167,13 +167,11 @@ const TelemetryMetricsForm = ({
                       }, 100);
                     }}
                   >
-                    {metricsResponse?.TelemetryMetricsGroups.map(
-                      (metricgroup) => (
-                        <Item key={metricgroup.telemetryMetricsGroupId}>
-                          {metricgroup.name}
-                        </Item>
-                      ),
-                    )}
+                    {metricsResponse?.TelemetryMetricsGroups.map((metricgroup) => (
+                      <Item key={metricgroup.telemetryMetricsGroupId}>
+                        {metricgroup.name}
+                      </Item>
+                    ))}
                   </Dropdown>
                 );
               }}
@@ -185,7 +183,6 @@ const TelemetryMetricsForm = ({
               control={control}
               rules={{
                 required: true,
-                //validate: { noMetric: (value: string) => checkMetricExists(index) }
               }}
               render={({ field }) => {
                 return (
@@ -196,21 +193,16 @@ const TelemetryMetricsForm = ({
                     placeholder="Select an Interval"
                     isRequired={true}
                     defaultSelectedKey={pairs[index]?.interval ?? ""}
-                    //isDisabled={!metricExists || !valid}
-                    //disabledMessage="Please select metric type"
-                    //validationState={metricExists ? "valid" : "invalid"}
-                    //errorMessage={error?.message}
                     name="interval-dropdown"
                     key={`systemMetricPairs.${index}.interval`}
                     label=""
                     onSelectionChange={(key) => {
-                      //trigger(`systemMetricPairs.${index}.interval`)
-
+                      const selectedKey = key?.toString() ?? "";
                       setValue(
                         `systemMetricPairs.${index}.interval`,
-                        key.toString(),
+                        selectedKey,
                       );
-                      setSelectedMetricInterval(key.toString());
+                      setSelectedMetricInterval(selectedKey);
                       onUpdate(getSystemMetricPairs());
                       setIntervalExists(true);
                     }}

@@ -64,7 +64,8 @@ export const Search = ({
     [],
   );
 
-  const handleOnSelectionChange = (key: Key) => {
+  const handleOnSelectionChange = (key: Key | null) => {
+    if (!key) return;
     const result = searchTypes.find((item) => item.id === key)!;
     dispatch(eim.eim.util.invalidateTags([{ type: "Location" }]));
     dispatch(setSearchType(result.id as SearchTypes));
