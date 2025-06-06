@@ -4,9 +4,10 @@ export interface CSSCustomPropertyConfg extends BaseSparkConfig {
     value: string | number | CSSCustomProperty;
 }
 export type CSSCustomPropertyExtractConfg = Partial<CSSCustomPropertyConfg>;
-export declare class CSSCustomProperty extends Function {
+export declare class CSSCustomProperty {
     config: SparkConfigInstance<CSSCustomPropertyConfg>;
     constructor(config: SparkConfigInstance<CSSCustomPropertyConfg>);
+    static create(config: SparkConfigInstance<CSSCustomPropertyConfg>): CSSCustomProperty;
     getKey: (config?: CSSCustomPropertyExtractConfg) => string;
     getConfig: (opts?: Partial<CSSCustomPropertyConfg>) => SparkConfigInstance<CSSCustomPropertyConfg>;
     toVariable: (config?: CSSCustomPropertyExtractConfg) => string;

@@ -21,11 +21,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
-        use: ["@jsdevtools/coverage-istanbul-loader", "ts-loader"],
-      },
-      {
         test: /\.(s[ac]ss|css)$/i,
         use: [
           // Creates `style` nodes from JS strings

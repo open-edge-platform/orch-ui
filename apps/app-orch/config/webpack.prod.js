@@ -12,6 +12,11 @@ const prodConfig = {
   module: {
     rules: [
       {
+        test: /\.(ts|tsx)$/,
+        exclude: [/node_modules/, /\.cy\.tsx$/, /\.pom\.ts/],
+        use: ["ts-loader"],
+      },
+      {
         test: /.*\.pom.(ts|tsx)?$/,
         use: [{ loader: "ignore-loader" }],
       },
