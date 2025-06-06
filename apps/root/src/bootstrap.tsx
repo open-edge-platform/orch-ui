@@ -96,6 +96,9 @@ prepare()
   });
 
 const mount = (el: HTMLElement) => {
+  console.log("testing without devtools sourcemap in prod")
+  console.log("env", process.env.NODE_ENV)
+
   ReactDOM.createRoot(el).render(
     <React.StrictMode>
       <BrowserRouter>
