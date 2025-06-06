@@ -298,7 +298,7 @@ export class TablePom extends CyPom<Selectors> {
         times: 1,
       }).as("search");
     }
-    this.el.search.type(term);
+    this.el.search.should("be.visible").type(term);
     if (intercept) {
       // Wait for the search request to complete
       cy.wait("@search");
