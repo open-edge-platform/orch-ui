@@ -68,7 +68,8 @@ describe("Org Admin Smoke", () => {
 
       cy.dataCy("squareSpinner").should("not.exist");
 
-      // search for the project so we only have one entry in the table
+      // FIXME: the search is properly working, for now using APIs to check the project creation
+      // // search for the project so we only have one entry in the table
       // pom.projectsPom.projectsTablePom.tablePom.search(
       //   testData.description,
       //   false,
@@ -77,51 +78,87 @@ describe("Org Admin Smoke", () => {
       //   .getRows()
       //   .should("have.length", 1);
 
-      // wait for the project to be ready is not working as project is getting stuck in create mode for sometime
+      // // wait for the project to be ready is not working as project is getting stuck in create mode for sometime
       // pom.projectsPom.projectsTablePom.tablePom
       //   .getCell(1, 3, { timeout: 5 * 60 * 1000 }) // allow 5 minutes for the project to be created
       //   .should(($el) => {
       //     expect($el, "Project status").to.contain.text("CREATE is complete");
       //   });
+
+      // check in the API that the project was created
+      let ready = false;
+      for (let i = 0; i < 60 && !ready; i++) {
+        cy.authenticatedRequest({
+          method: "GET",
+          url: `/v1/projects/${testData.description}`,
+        }).then((response) => {
+          const completed =
+            response.body.status.projectStatus.statusIndicator ===
+              "STATUS_INDICATION_IDLE" &&
+            response.body.status.projectStatus.message.indexOf(
+              "CREATE is complete",
+            ) > -1;
+          if (completed) {
+            // exiting from the loop
+            ready = true;
+          }
+        });
+        cy.wait(1000); // wait 1 second before checking again
+      }
     });
-    // TODO: once search type issue is addressed we need to uncomment it
-    // it.skip("should rename the project", () => {
-    //   cy.contains("Project Name").should("be.visible");
-    //   pom.projectsPom.projectsTablePom.tablePom.search(
-    //     testData.description,
-    //     false,
-    //   );
-    //   // wait for search to complete
-    //   pom.projectsPom.projectsTablePom.tablePom
-    //     .getRows()
-    //     .should("have.length", 1);
 
-    //   pom.projectsPom.projectsTablePom.renameProjectPopup(
-    //     0,
-    //     testData.updatedDescription,
-    //   );
-    //   pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
-    //   cy.contains(testData.updatedDescription).should("exist");
-    // });
+    it("should rename the project", () => {
+      cy.contains("Project Name").should("be.visible");
+      pom.projectsPom.projectsTablePom.tablePom.search(
+        testData.description,
+        false,
+      );
+      // wait for search to complete
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
 
-    // it.skip("should delete the project", () => {
-    //   cy.contains("Project Name").should("be.visible");
-    //   pom.projectsPom.projectsTablePom.tablePom.search(
-    //     testData.description,
-    //     false,
-    //   );
-    //   // wait for search to complete
-    //   pom.projectsPom.projectsTablePom.tablePom
-    //     .getRows()
-    //     .should("have.length", 1);
+      pom.projectsPom.projectsTablePom.renameProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
+      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
+      cy.contains(testData.updatedDescription).should("exist");
+    });
 
-    //   pom.projectsPom.projectsTablePom.deleteProjectPopup(
-    //     0,
-    //     testData.updatedDescription,
-    //   );
-    //   pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
-    //   cy.contains("Deletion in process").should("be.visible");
-    // });
+    it("should delete the project", () => {
+      cy.contains("Project Name").should("be.visible");
+      pom.projectsPom.projectsTablePom.tablePom.search(
+        testData.description,
+        false,
+      );
+      // wait for search to complete
+      pom.projectsPom.projectsTablePom.tablePom
+        .getRows()
+        .should("have.length", 1);
+
+      pom.projectsPom.projectsTablePom.deleteProjectPopup(
+        0,
+        testData.updatedDescription,
+      );
+      pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
+      cy.contains("Deletion in process").should("be.visible");
+
+      // check in the API that the project was deleted
+      let deleted = false;
+      for (let i = 0; i < 60 && !deleted; i++) {
+        cy.authenticatedRequest({
+          method: "GET",
+          url: `/v1/projects/${testData.description}`,
+        }).then((response) => {
+          if (response.status === 404) {
+            // exiting from the loop
+            deleted = true;
+          }
+        });
+        cy.wait(1000); // wait 1 second before checking again
+      }
+    });
   });
 
   afterEach(() => {
