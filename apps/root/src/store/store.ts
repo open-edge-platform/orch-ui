@@ -8,9 +8,7 @@ import {
   cm,
   enhancedInfraSlice,
   mbApi,
-  mpsSlice,
   omSlice,
-  rpsSlice,
   tmSlice,
 } from "@orch-ui/apis";
 import {
@@ -45,8 +43,6 @@ const rootReducer = combineReducers({
   [cm.clusterManagerApis.reducerPath]: cm.clusterManagerApis.reducer,
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
   [omSlice.reducerPath]: omSlice.reducer,
-  [rpsSlice.reducerPath]: rpsSlice.reducer,
-  [mpsSlice.reducerPath]: mpsSlice.reducer,
   // TODO: Remove this after updating openapi.schema
   [admUpdated.reducerPath]: admUpdated.reducer,
   [tmSlice.reducerPath]: tmSlice.reducer,
@@ -65,8 +61,6 @@ export const setupStore = (preloadedState?: RootState) => {
         .concat(admUpdated.middleware)
         .concat(mbApi.metadataBroker.middleware)
         .concat(omSlice.middleware)
-        .concat(rpsSlice.middleware)
-        .concat(mpsSlice.middleware)
         .concat(tmSlice.middleware),
     preloadedState,
   });
@@ -84,8 +78,6 @@ export const store = configureStore({
       .concat(admUpdated.middleware)
       .concat(mbApi.metadataBroker.middleware)
       .concat(omSlice.middleware)
-      .concat(rpsSlice.middleware)
-      .concat(mpsSlice.middleware)
       .concat(tmSlice.middleware),
 });
 

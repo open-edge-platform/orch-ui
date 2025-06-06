@@ -2,8 +2,8 @@
   "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/amc-opendmt-rps-openapi.yaml",
   "apiFile": "./apiSlice.ts",
   "apiImport": "rpsApi",
-  "outputFile": "./remoteProvisioningApis.ts",
-  "exportName": "remoteProvisioningApis",
+  "outputFile": "./rpsApis.ts",
+  "exportName": "rpsApis",
   "hooks": { "queries": true, "lazyQueries": true, "mutations": true },
   "tag": true
 }
