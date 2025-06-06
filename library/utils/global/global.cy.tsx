@@ -6,6 +6,7 @@
 import { Direction, Operator } from "../interfaces/Pagination";
 import { IRuntimeConfig } from "../runtime-config/runtime-config";
 import {
+  areArraysOfObjectsIdentical,
   clearAllStorage,
   convertUTCtoOrchUIDate,
   convertUTCtoOrchUIDateTime,
@@ -257,6 +258,42 @@ describe("the global utilities", () => {
       // Verify that localStorage and sessionStorage are cleared
       expect(localStorage.getItem("testLocalStorageKey")).to.be.null;
       expect(sessionStorage.getItem("testSessionStorageKey")).to.be.null;
+    });
+  });
+
+  describe("areArraysOfObjectsIdentical", () => {
+    it("should check if arrays are identical", () => {
+      const arr1 = [
+        {
+          id: 1,
+          name: "test1",
+        },
+        {
+          id: 2,
+          name: "test2",
+        },
+      ];
+      const arr2 = [
+        {
+          id: 1,
+          name: "test1",
+        },
+        {
+          id: 2,
+          name: "test2",
+        },
+      ];
+      const arr3 = [
+        {
+          id: 1,
+          name: "test1",
+        },
+        {
+          id: 2,
+        },
+      ];
+      expect(areArraysOfObjectsIdentical(arr1, arr2)).to.be.true;
+      expect(areArraysOfObjectsIdentical(arr1, arr3)).to.be.false;
     });
   });
 });
