@@ -175,16 +175,15 @@ export function buildFilterNew(params: HostFilterBuilderState): string | undefin
     filterParts.push(lifeCycleStateQuery.get(params.lifeCycleState));
   }
 
-  // searchTerm - budowany dynamicznie z searchableColumns, uwzględniając wyjątki UUID i hostIds
   if (params.searchTerm && params.searchTerm.trim().length > 0) {
     const term = params.searchTerm.trim();
     const searchParts = searchableColumns
       .map((column) => {
         if (column === "uuid" && params.uuids && params.uuids.length > 0) {
-          return undefined; // ignoruj uuid jeśli jest filtr po uuids
+          return undefined;
         }
         if (column === "resourceId" && params.hostIds && params.hostIds.length > 0) {
-          return undefined; // ignoruj resourceId jeśli jest filtr po hostIds
+          return undefined;
         }
         return `${column}="${term}"`;
       })
