@@ -3,7 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { enhancedInfraSlice, mbApi, tmSlice } from "@orch-ui/apis";
+import {
+  enhancedInfraSlice,
+  mbApi,
+  mpsSlice,
+  rpsSlice,
+  tmSlice,
+} from "@orch-ui/apis";
 import { UiSlice, uiSliceName } from "@orch-ui/components";
 import {
   Action,
@@ -29,6 +35,8 @@ const rootReducer = combineReducers({
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
   [uiSliceName]: UiSlice,
   [tmSlice.reducerPath]: tmSlice.reducer,
+  [rpsSlice.reducerPath]: rpsSlice.reducer,
+  [mpsSlice.reducerPath]: mpsSlice.reducer,
 });
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {
@@ -41,7 +49,9 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
       })
         .concat(enhancedInfraSlice.miEnhancedApi.middleware)
         .concat(mbApi.metadataBroker.middleware)
-        .concat(tmSlice.middleware),
+        .concat(tmSlice.middleware)
+        .concat(rpsSlice.middleware)
+        .concat(mpsSlice.middleware),
     preloadedState,
   });
 };
@@ -55,7 +65,9 @@ export const store = configureStore({
     })
       .concat(enhancedInfraSlice.miEnhancedApi.middleware)
       .concat(mbApi.metadataBroker.middleware)
-      .concat(tmSlice.middleware),
+      .concat(tmSlice.middleware)
+      .concat(rpsSlice.middleware)
+      .concat(mpsSlice.middleware),
 });
 
 setupListeners(store.dispatch);

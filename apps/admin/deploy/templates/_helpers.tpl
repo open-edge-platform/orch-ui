@@ -84,6 +84,8 @@ window.__RUNTIME_CONFIG__ = {
     MB: {{ .Values.api.metadataBroker | quote }},
     ALERT: {{ .Values.api.alertManager | quote }},
     TM: {{ .Values.api.tenantManager | quote }},
+    RPS: {{ .Values.api.rps | quote }},
+    MPS: {{ .Values.api.mps | quote }},
   },
 }
 {{- end -}}

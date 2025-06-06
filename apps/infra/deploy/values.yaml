@@ -135,6 +135,8 @@ api:
   clusterOrch: "https://api.kind.internal"
   metadataBroker: "https://api.kind.internal"
   alertManager: "https://api.kind.internal"
+  rps: "https://api.kind.internal"
+  mps: "https://api.kind.internal"
 
 image:
   repository: orch-ui/infra

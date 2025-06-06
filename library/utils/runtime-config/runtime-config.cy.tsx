@@ -25,6 +25,8 @@ const runtimeConfig: IRuntimeConfig = {
     MB: "MB",
     ALERT: "ALERT",
     TM: "TM",
+    RPS: "RPS",
+    MPS: "MPS",
   },
   VERSIONS: {
     orchestrator: "test-version",

@@ -91,6 +91,8 @@ AUTH: {{ .Values.global.auth.enabled | quote }},
     CO: {{ .Values.api.clusterOrch | quote }},
     MB: {{ .Values.api.metadataBroker | quote }},
     ALERT: {{ .Values.api.alertManager | quote }},
+    RPS: {{ .Values.api.rps | quote }},
+    MPS: {{ .Values.api.mps | quote }},
   },
   VERSIONS: {
     orchestrator: {{ .Values.versions.orchestrator | quote }},

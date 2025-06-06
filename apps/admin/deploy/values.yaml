@@ -32,6 +32,8 @@ api:
   metadataBroker: "https://metadata.kind.internal"
   alertManager: "https://alerting-monitor.kind.internal"
   tenantManager: "https://api.kind.internal"
+  rps: "https://api.kind.internal"
+  mps: "https://api.kind.internal"
 
 image:
   repository: orch-ui/admin
