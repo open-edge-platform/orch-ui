@@ -53,8 +53,8 @@ const SitesDropdown = ({
           size={DropdownSize.Large}
           selectedKey={value}
           onSelectionChange={(e) => {
-            const site =
-              sites && sites.find((s) => e.toString() === s.resourceId);
+            const selectedKey = e?.toString() ?? "";
+            const site = sites && sites.find((s) => selectedKey === s.resourceId);
             return site && onSelectionChange?.(site);
           }}
           isRequired

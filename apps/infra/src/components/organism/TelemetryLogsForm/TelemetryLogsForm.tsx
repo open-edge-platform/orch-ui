@@ -150,7 +150,8 @@ const TelemetryLogsForm = ({
                     validationState={valid ? "valid" : "invalid"}
                     errorMessage={error?.message}
                     onSelectionChange={(key) => {
-                      setValue(path, key.toString());
+                      const selectedKey = key?.toString() ?? "";
+                      setValue(path, selectedKey);
                       setTimeout(() => {
                         trigger(path);
                         if (getSystemLogPairs()[index].logLevel !== "")
@@ -184,14 +185,12 @@ const TelemetryLogsForm = ({
                   key={`systemLogPairs.${index}.logLevel`}
                   defaultSelectedKey={pairs[index]?.logLevel ?? ""}
                   label=""
-                  //isDisabled={!sourceExists || !valid}
-                  //disabledMessage="Please select log Source"
                   onSelectionChange={(key) => {
-                    setValue(
-                      `systemLogPairs.${index}.logLevel`,
-                      key.toString(),
+                    const selectedKey = key?.toString() ?? "";
+                    setValue(`systemLogPairs.${index}.logLevel`, selectedKey);
+                    setSelectedLogLevel(
+                      selectedKey as eim.TelemetrySeverityLevel,
                     );
-                    setSelectedLogLevel(key.toString() as TelemetryLogLevel);
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);
                     setSourceExists(false);

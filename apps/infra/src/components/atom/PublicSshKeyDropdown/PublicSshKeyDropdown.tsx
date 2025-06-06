@@ -52,12 +52,13 @@ export const PublicSshKeyDropdown = ({
         size={DropdownSize.Large}
         selectedKey={selectedPublicKey ?? "None"}
         onSelectionChange={(key) => {
-          if (key === "None") {
+          const selectedKey = key?.toString() ?? "None";
+          if (selectedKey === "None") {
             onPublicKeyRemove?.();
           }
-          if (onPublicKeySelect && key !== "None") {
+          if (onPublicKeySelect && selectedKey !== "None") {
             const selectedAccount = localAccounts?.find(
-              (account) => account.resourceId === key.toString(),
+              (account) => account.resourceId === selectedKey,
             );
             if (!selectedAccount) return;
             onPublicKeySelect(selectedAccount);
