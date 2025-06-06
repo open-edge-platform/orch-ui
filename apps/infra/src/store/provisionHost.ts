@@ -59,6 +59,28 @@ export const initialState: HostProvisionState = {
   commonHostData: {
     vPro: true,
     securityFeature: true,
+
+    // TODO: remove, just for testing
+    clusterTemplateName: "5G Template3",
+    clusterTemplateVersion: "v3.4.5",
+    os: {
+      resourceId: "os-ubuntu",
+      architecture: "x86_64",
+      name: "Ubuntu",
+      repoUrl: "http://archive.ubuntu.com/ubuntu",
+      kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+      updateSources: ["deb https://files.edgeorch.net orchui release"],
+      sha256:
+        "09f6e5d55cd9741a026c0388d4905b7492749feedbffc741e65aab35fc38430d",
+      profileName: "Ubuntu-x86_profile",
+      securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
+      osType: "OPERATING_SYSTEM_TYPE_MUTABLE",
+      installedPackages:
+        '{"Repo":[{"Name":"libpcre2-32-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"},{"Name":"libpcre2-16-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"}]}',
+    },
+    site: {
+      name: "test",
+    },
   },
   autoOnboard: true,
   autoProvision: false,

@@ -4,5 +4,47 @@
  */
 
 .review-and-customize {
-  /*Add styles*/
+  border: 0.063rem solid var(--spark-color-theme-light-gray300);
+
+  .deployment-application-details-row {
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+
+    .hosts-overview-container {
+      display: flex;
+      align-items: center;
+
+      .icon-container {
+        margin-right: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--spark-color-theme-light-gray100);
+        border-radius: 50%;
+        height: 4.5rem;
+        width: 4.5rem;
+        cursor: pointer;
+
+        .hosts-overview-icon {
+          font-size: 2.625rem;
+        }
+      }
+
+      .hosts-overview-details {
+        flex-grow: 1;
+
+        div {
+          line-height: 1rem;
+          min-height: 1.25rem;
+        }
+      }
+    }
+
+    .expand-action-icon-container {
+      text-align: end;
+
+      .expand-toggle {
+        cursor: pointer;
+      }
+    }
+  }
 }
