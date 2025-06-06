@@ -5,7 +5,6 @@ export class CSSCustomProperty {
         this.config = config;
     }
 
-    // Factory method to replace the Function constructor pattern
     static create(config) {
         const instance = new CSSCustomProperty(config);
         return new Proxy(instance, {
@@ -13,7 +12,6 @@ export class CSSCustomProperty {
                 return CSSCustomProperty.create(target.config.fork(args[0]));
             },
             get: (target, prop, receiver) => {
-                // Forward property access to the target instance
                 return Reflect.get(target, prop, receiver);
             }
         });
