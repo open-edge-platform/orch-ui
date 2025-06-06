@@ -1,0 +1,48 @@
+---
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+name: Component Tests
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    types: [labeled]
+  schedule:
+    - cron: "0 0 * * *"  # Run every day at midnight
+  issue_comment:
+    types: [created]
+  workflow_dispatch:   # Run on manual trigger
+    inputs:
+      run-component-tests:
+        description: 'Run component tests'
+        required: true
+        type: boolean
+        default: false
+      emf-branch:
+        description: 'The branch, tag or SHA to checkout EMF'
+        required: true
+        type: string
+        default: 'main'
+
+permissions:
+  contents: read
+
+jobs:
+  component-tests:
+    name: Deploy Orchestrator and Run Component Tests
+    # yamllint disable rule:line-length
+    if: |
+      ${{ inputs.run-component-tests || github.event_name == 'schedule' || github.event.label.name == 'component-tests' || (contains(github.event.comment.body, '/component-tests') && github.event.issue.pull_request) }}
+    # yamllint enable rule:line-length
+    runs-on: ubuntu-24.04-16core-64GB
+    timeout-minutes: 60
+
+    steps:
+      - name: Deploy Orchestrator
+        uses: open-edge-platform/edge-manageability-framework/.github/actions/deploy_kind@feature/deploy-kind-gha  # yamllint disable-line rule:line-length
+        with:
+          orch_version: ${{ inputs.emf-branch || 'main' }}
+          orch_password: ${{ secrets.ORCH_DEFAULT_PASSWORD }}
+          docker_username: ${{ secrets.SYS_DOCKERHUB_USERNAME }}
+          docker_password: ${{ secrets.SYS_DOCKERHUB_RO }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_type: "minimal"
