@@ -47,4 +47,13 @@
       }
     }
   }
+
+  .scrollable-table-container table {
+    border: none;
+    margin-bottom: 0;
+
+    thead tr th {
+      background-color: var(--spark-color-theme-light-gray100) !important;
+    }
+  }
 }

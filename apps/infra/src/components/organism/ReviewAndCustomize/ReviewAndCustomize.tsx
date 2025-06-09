@@ -3,16 +3,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Flex } from "@orch-ui/components";
+import {
+  Flex,
+  Popup,
+  PopupOption,
+  Table,
+  TableColumn,
+} from "@orch-ui/components";
 import { Icon, Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   HostData,
+  removeHost,
   selectHostProvisionState,
 } from "../../../store/provisionHost";
+import HostReviewDetails from "./HostReviewDetails";
 import "./ReviewAndCustomize.scss";
 
 const dataCy = "reviewAndCustomize";
@@ -55,15 +63,69 @@ const ReviewAndCustomize = () => {
 
   const tableRef = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(true);
+  const [showEditDrawer, setShowEditDrawer] = useState(false);
 
-  const { hosts } = useAppSelector(selectHostProvisionState);
+  const { hosts, createCluster } = useAppSelector(selectHostProvisionState);
+  const dispatch = useAppDispatch();
 
   const hostValues = Object.values(hosts);
 
-  useEffect(() => {
-    // Trigger any logic or state updates when hostValues changes
-    console.log("hostValues changed:", hostValues);
-  }, [hostValues]);
+  const columns: TableColumn<HostData>[] = [
+    {
+      Header: "Host Name",
+      accessor: "name",
+    },
+    {
+      Header: "Serial Number and UUID",
+      Cell: (table) => (
+        <>
+          {table.row.original.serialNumber}
+          <br />
+          {table.row.original.uuid}
+        </>
+      ),
+    },
+    {
+      Header: "OS Profile",
+      accessor: "instance.os.name",
+    },
+    {
+      Header: "Site",
+      accessor: "site.name",
+    },
+  ];
+
+  if (createCluster) {
+    columns.push({
+      Header: "Cluster",
+      accessor: (item) => `Cluster-${item.name}`,
+    });
+  }
+
+  const getActionItems = (hostData: HostData): PopupOption[] => [
+    {
+      displayText: "Edit",
+      onSelect: () => {
+        setShowEditDrawer(true);
+      },
+    },
+    {
+      displayText: "Delete",
+      disable: Object.keys(hosts).length <= 1,
+      onSelect: () => {
+        dispatch(removeHost(hostData.name));
+      },
+    },
+  ];
+
+  columns.push({
+    Header: "Actions",
+    textAlign: "center",
+    padding: "0",
+    accessor: (row) => (
+      <Popup options={getActionItems(row)} jsx={<Icon icon="ellipsis-v" />} />
+    ),
+  });
 
   return (
     <div {...cy} className="review-and-customize">
@@ -148,7 +210,13 @@ const ReviewAndCustomize = () => {
         addEndListener={(done: () => void) => done}
       >
         <div ref={tableRef} className="slide-down">
-          <div className="scrollable-table-container"></div>
+          <div className="scrollable-table-container">
+            <Table
+              columns={columns}
+              data={hostValues}
+              subRow={(row) => <HostReviewDetails host={row.original} />}
+            />
+          </div>
         </div>
       </CSSTransition>
     </div>

@@ -281,6 +281,9 @@ export const provisionHost = createSlice({
     setCommonMetadata(state, action: PayloadAction<infra.Metadata>) {
       state.commonHostData.metadata = action.payload;
     },
+    removeHost(state, action: PayloadAction<string>) {
+      delete state.hosts[action.payload];
+    },
   },
 });
 
@@ -305,6 +308,7 @@ export const {
   setCommonSecurityFeature,
   setCommonPublicSshKey,
   setCommonMetadata,
+  removeHost,
 } = provisionHost.actions;
 
 // selectors
