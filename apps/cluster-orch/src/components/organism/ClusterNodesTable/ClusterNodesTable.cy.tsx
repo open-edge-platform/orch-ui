@@ -38,6 +38,46 @@ describe("<ClusterNodesTable/> should", () => {
     pom.root.should("contain", "Running");
   });
 
+  it("display 'unknown' when status.reason is missing", () => {
+    const nodesWithoutReason: cm.NodeInfo[] = [
+      {
+        id: "hostId",
+        status: { condition: "STATUS_CONDITION_READY" },
+      },
+    ];
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodesWithoutReason}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
+    pom.root.should("contain", "Node 1");
+    pom.root.should("contain", "linux");
+    pom.root.should("contain", "unknown");
+    pom.root.should("not.contain", "Running");
+  });
+
+  it("display 'unknown' when status is empty object", () => {
+    const nodesWithEmptyStatus: cm.NodeInfo[] = [
+      {
+        id: "hostId",
+        status: {},
+      },
+    ];
+    cy.mount(
+      <ClusterNodesTable
+        nodes={nodesWithEmptyStatus}
+        readinessType="cluster"
+        filterOn="resourceId"
+      />,
+    );
+    pom.root.should("contain", "Node 1");
+    pom.root.should("contain", "linux");
+    pom.root.should("contain", "unknown");
+    pom.root.should("not.contain", "Running");
+  });
+
   it("display 'Not compatible' when trusted compute is not enabled", () => {
     pom.root.should("contain", "Not compatible");
   });
