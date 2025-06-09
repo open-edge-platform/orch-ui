@@ -55,3 +55,35 @@ describe("<ClusterList/>", () => {
       });
   });
 });
+
+describe("<ClusterList/> - Sorting by Status", () => {
+  beforeEach(() => {
+    pom.interceptApis([pom.api.clusterMocked]);
+    cy.mount(
+      <ClusterList
+        onSelect={cy.stub().as("onSelectStub")}
+        onShowDetails={cy.stub().as("onShowDetailsStub")}
+        isForm={true}
+      />,
+    );
+    pom.waitForApis();
+  });
+
+  it("should sort by lifecyclePhase when clicking on the Status column header", () => {
+    cy.get("th:contains('Status') .caret.caret-up").click({ force: true });
+    cy.get(`@${pom.api.clusterMocked}`)
+      .its("request.url")
+      .then((url: string) => {
+        expect(url).to.include("orderBy=lifecyclePhase");
+        expect(url).to.include("asc");
+      });
+    cy.get("th:contains('Status') .caret.caret-down").click({ force: true });
+    cy.get(`@${pom.api.clusterMocked}`)
+      .its("request.url")
+      .then((url: string) => {
+        expect(url).to.include("orderBy=lifecyclePhase");
+        expect(url).to.include("desc");
+      });
+  });
+});
+
