@@ -26,15 +26,14 @@ const routeAll = `${route}?*`;
 const singleRoute = `${route}/*`;
 
 const regionsStore = new RegionStore();
-const getRegions: CyApiDetail<infra.GetV1ProjectsByProjectNameRegionsApiResponse> =
-  {
-    route: `**/v1/projects/${defaultActiveProject.name}/regions?pageSize=*`,
-    response: {
-      regions: regionsStore.list(),
-      totalElements: regionsStore.resources.length,
-      hasNext: false,
-    },
-  };
+const getRegions: CyApiDetail<infra.ListRegionsResponse> = {
+  route: `**/v1/projects/${defaultActiveProject.name}/regions*`,
+  response: {
+    regions: regionsStore.list(),
+    totalElements: regionsStore.resources.length,
+    hasNext: false,
+  },
+};
 
 export const endpoints: CyApiDetails<ApiAliases> = {
   getRegions,

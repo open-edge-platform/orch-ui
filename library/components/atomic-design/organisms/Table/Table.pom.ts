@@ -217,6 +217,10 @@ export const page2Data = generateData(8, 10);
 export const getMultiColumnKeyIdFromRow = (row: CustomRow) =>
   `${row.name},${row.ver}`;
 
+type cyOptions = Partial<
+  Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow
+>;
+
 export class TablePom extends CyPom<Selectors> {
   tableRibbon: RibbonPom;
   constructor(public rootCy: string = "table") {
@@ -224,8 +228,9 @@ export class TablePom extends CyPom<Selectors> {
     this.tableRibbon = new RibbonPom();
   }
 
-  public getRows(): Cy {
-    return this.root.find(".table-row");
+  public getRows(options?: cyOptions): Cy {
+    // NOTE we need to reconcile the cypress configs in order to use .dataCy
+    return cy.get(`[data-cy="${this.rootCy}"]`, options).find(".table-row");
   }
 
   public getColumnHeader(index: number): Cy {
@@ -245,13 +250,14 @@ export class TablePom extends CyPom<Selectors> {
     return this.root.find('[data-testid="pagination-control-total"]');
   }
 
-  public getRow(n: number): Cy {
-    return this.getRows().eq(n - 1);
+  public getRow(n: number, options?: cyOptions): Cy {
+    return this.getRows(options).eq(n - 1);
   }
 
-  public getCell(row: number, column: number) {
-    const getRow = this.getRow(row);
-    return getRow.find(".table-row-cell").eq(column - 1);
+  public getCell(row: number, column: number, options?: cyOptions) {
+    return this.getRow(row)
+      .find(".table-row-cell")
+      .eq(column - 1, options);
   }
 
   public getPageButton(page: number): Cy {
@@ -278,16 +284,24 @@ export class TablePom extends CyPom<Selectors> {
     cyGet("rowExpander").eq(row).click();
   }
 
-  public search(term: string) {
+  /**
+   * Searches the table for a term and waits for the search to complete.
+   * @param term The term to search for.
+   * @param intercept Whether to intercept the search request. Defaults to true. Set it to false if the search is on local data.
+   */
+  public search(term: string, intercept: boolean = true) {
     this.root.should("be.visible");
-    cy
-      .intercept({
+    if (intercept) {
+      cy.intercept({
         url: "**filter*", // TODO we might need to parametrize this URL
         method: "GET",
         times: 1,
-      })
-      .as("search"),
-      this.el.search.type(term);
-    cy.wait("@search");
+      }).as("search");
+    }
+    this.el.search.should("be.visible").type(term);
+    if (intercept) {
+      // Wait for the search request to complete
+      cy.wait("@search");
+    }
   }
 }

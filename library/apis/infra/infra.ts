@@ -1,20 +1,20 @@
 import { infraApi as api } from "./apiSlice";
 export const addTagTypes = [
-  "Compute",
-  "Host",
-  "Instance",
-  "OS",
-  "Schedule",
-  "Workload",
-  "LocalAccount",
-  "Location",
-  "Provider",
-  "Region",
-  "Site",
-  "TelemetryLogsGroup",
-  "TelemetryLogsProfile",
-  "TelemetryMetricsGroup",
-  "TelemetryMetricsProfile",
+  "HostService",
+  "InstanceService",
+  "OperatingSystemService",
+  "ScheduleService",
+  "WorkloadService",
+  "WorkloadMemberService",
+  "LocalAccountService",
+  "LocationService",
+  "ProviderService",
+  "RegionService",
+  "SiteService",
+  "TelemetryLogsGroupService",
+  "TelemetryLogsProfileService",
+  "TelemetryMetricsGroupService",
+  "TelemetryMetricsProfileService",
 ] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -22,475 +22,447 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: (build) => ({
-      getV1ProjectsByProjectNameCompute: build.query<
-        GetV1ProjectsByProjectNameComputeApiResponse,
-        GetV1ProjectsByProjectNameComputeApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute`,
-          params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
-            orderBy: queryArg.orderBy,
-            siteID: queryArg.siteId,
-            instanceID: queryArg.instanceId,
-            uuid: queryArg.uuid,
-            metadata: queryArg.metadata,
-            detail: queryArg.detail,
-          },
-        }),
-        providesTags: ["Compute"],
-      }),
-      getV1ProjectsByProjectNameComputeHosts: build.query<
-        GetV1ProjectsByProjectNameComputeHostsApiResponse,
-        GetV1ProjectsByProjectNameComputeHostsApiArg
+      hostServiceListHosts: build.query<
+        HostServiceListHostsApiResponse,
+        HostServiceListHostsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/hosts`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
-            siteID: queryArg.siteId,
-            instanceID: queryArg.instanceId,
-            uuid: queryArg.uuid,
-            metadata: queryArg.metadata,
-            detail: queryArg.detail,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["Host"],
+        providesTags: ["HostService"],
       }),
-      postV1ProjectsByProjectNameComputeHosts: build.mutation<
-        PostV1ProjectsByProjectNameComputeHostsApiResponse,
-        PostV1ProjectsByProjectNameComputeHostsApiArg
+      hostServiceCreateHost: build.mutation<
+        HostServiceCreateHostApiResponse,
+        HostServiceCreateHostApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/hosts`,
           method: "POST",
-          body: queryArg.body,
+          body: queryArg.hostResource,
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      deleteV1ProjectsByProjectNameComputeHostsAndHostId: build.mutation<
-        DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
-        DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
+      hostServiceDeleteHost: build.mutation<
+        HostServiceDeleteHostApiResponse,
+        HostServiceDeleteHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "DELETE",
-          body: queryArg.hostOperationWithNote,
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      getV1ProjectsByProjectNameComputeHostsAndHostId: build.query<
-        GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
-        GetV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
+      hostServiceGetHost: build.query<
+        HostServiceGetHostApiResponse,
+        HostServiceGetHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
         }),
-        providesTags: ["Host"],
+        providesTags: ["HostService"],
       }),
-      patchV1ProjectsByProjectNameComputeHostsAndHostId: build.mutation<
-        PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
-        PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
+      hostServicePatchHost: build.mutation<
+        HostServicePatchHostApiResponse,
+        HostServicePatchHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "PATCH",
-          body: queryArg.body,
+          body: queryArg.hostResource,
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      putV1ProjectsByProjectNameComputeHostsAndHostId: build.mutation<
-        PutV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse,
-        PutV1ProjectsByProjectNameComputeHostsAndHostIdApiArg
+      hostServiceUpdateHost: build.mutation<
+        HostServiceUpdateHostApiResponse,
+        HostServiceUpdateHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}`,
           method: "PUT",
-          body: queryArg.body,
+          body: queryArg.hostResource,
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      putV1ProjectsByProjectNameComputeHostsAndHostIdInvalidate: build.mutation<
-        PutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateApiResponse,
-        PutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateApiArg
+      hostServiceInvalidateHost: build.mutation<
+        HostServiceInvalidateHostApiResponse,
+        HostServiceInvalidateHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}/invalidate`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/invalidate`,
           method: "PUT",
-          body: queryArg.hostOperationWithNote,
+          params: { note: queryArg.note },
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      patchV1ProjectsByProjectNameComputeHostsAndHostIdOnboard: build.mutation<
-        PatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardApiResponse,
-        PatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardApiArg
+      hostServiceOnboardHost: build.mutation<
+        HostServiceOnboardHostApiResponse,
+        HostServiceOnboardHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}/onboard`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/onboard`,
           method: "PATCH",
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      patchV1ProjectsByProjectNameComputeHostsAndHostIdRegister: build.mutation<
-        PatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterApiResponse,
-        PatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterApiArg
+      hostServiceRegisterUpdateHost: build.mutation<
+        HostServiceRegisterUpdateHostApiResponse,
+        HostServiceRegisterUpdateHostApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.hostId}/register`,
+          url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/register`,
           method: "PATCH",
-          body: queryArg.body,
+          body: queryArg.hostRegister,
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      postV1ProjectsByProjectNameComputeHostsRegister: build.mutation<
-        PostV1ProjectsByProjectNameComputeHostsRegisterApiResponse,
-        PostV1ProjectsByProjectNameComputeHostsRegisterApiArg
+      hostServiceRegisterHost: build.mutation<
+        HostServiceRegisterHostApiResponse,
+        HostServiceRegisterHostApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/hosts/register`,
           method: "POST",
-          body: queryArg.hostRegisterInfo,
+          body: queryArg.hostRegister,
         }),
-        invalidatesTags: ["Host"],
+        invalidatesTags: ["HostService"],
       }),
-      getV1ProjectsByProjectNameComputeHostsSummary: build.query<
-        GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse,
-        GetV1ProjectsByProjectNameComputeHostsSummaryApiArg
+      hostServiceGetHostsSummary: build.query<
+        HostServiceGetHostsSummaryApiResponse,
+        HostServiceGetHostsSummaryApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/hosts/summary`,
-          params: { siteID: queryArg.siteId, filter: queryArg.filter },
+          params: { filter: queryArg.filter },
         }),
-        providesTags: ["Host"],
+        providesTags: ["HostService"],
       }),
-      getV1ProjectsByProjectNameComputeInstances: build.query<
-        GetV1ProjectsByProjectNameComputeInstancesApiResponse,
-        GetV1ProjectsByProjectNameComputeInstancesApiArg
+      instanceServiceListInstances: build.query<
+        InstanceServiceListInstancesApiResponse,
+        InstanceServiceListInstancesApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/instances`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
-            workloadMemberID: queryArg.workloadMemberId,
-            hostID: queryArg.hostId,
-            siteID: queryArg.siteId,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["Instance"],
+        providesTags: ["InstanceService"],
       }),
-      postV1ProjectsByProjectNameComputeInstances: build.mutation<
-        PostV1ProjectsByProjectNameComputeInstancesApiResponse,
-        PostV1ProjectsByProjectNameComputeInstancesApiArg
+      instanceServiceCreateInstance: build.mutation<
+        InstanceServiceCreateInstanceApiResponse,
+        InstanceServiceCreateInstanceApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/instances`,
           method: "POST",
-          body: queryArg.body,
+          body: queryArg.instanceResource,
         }),
-        invalidatesTags: ["Instance"],
+        invalidatesTags: ["InstanceService"],
       }),
-      deleteV1ProjectsByProjectNameComputeInstancesAndInstanceId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
-          DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.instanceId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["Instance"],
-        }),
-      getV1ProjectsByProjectNameComputeInstancesAndInstanceId: build.query<
-        GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
-        GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg
+      instanceServiceDeleteInstance: build.mutation<
+        InstanceServiceDeleteInstanceApiResponse,
+        InstanceServiceDeleteInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.instanceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-        providesTags: ["Instance"],
+        invalidatesTags: ["InstanceService"],
       }),
-      patchV1ProjectsByProjectNameComputeInstancesAndInstanceId: build.mutation<
-        PatchV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse,
-        PatchV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg
+      instanceServiceGetInstance: build.query<
+        InstanceServiceGetInstanceApiResponse,
+        InstanceServiceGetInstanceApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.instanceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+        }),
+        providesTags: ["InstanceService"],
+      }),
+      instanceServicePatchInstance: build.mutation<
+        InstanceServicePatchInstanceApiResponse,
+        InstanceServicePatchInstanceApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
           method: "PATCH",
-          body: queryArg.body,
+          body: queryArg.instanceResource,
         }),
-        invalidatesTags: ["Instance"],
+        invalidatesTags: ["InstanceService"],
       }),
-      putV1ProjectsByProjectNameComputeInstancesAndInstanceIdInvalidate:
-        build.mutation<
-          PutV1ProjectsByProjectNameComputeInstancesAndInstanceIdInvalidateApiResponse,
-          PutV1ProjectsByProjectNameComputeInstancesAndInstanceIdInvalidateApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.instanceId}/invalidate`,
-            method: "PUT",
-          }),
-          invalidatesTags: ["Instance"],
+      instanceServiceUpdateInstance: build.mutation<
+        InstanceServiceUpdateInstanceApiResponse,
+        InstanceServiceUpdateInstanceApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}`,
+          method: "PUT",
+          body: queryArg.instanceResource,
         }),
-      getV1ProjectsByProjectNameComputeOs: build.query<
-        GetV1ProjectsByProjectNameComputeOsApiResponse,
-        GetV1ProjectsByProjectNameComputeOsApiArg
+        invalidatesTags: ["InstanceService"],
+      }),
+      instanceServiceInvalidateInstance: build.mutation<
+        InstanceServiceInvalidateInstanceApiResponse,
+        InstanceServiceInvalidateInstanceApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/instances/${queryArg.resourceId}/invalidate`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["InstanceService"],
+      }),
+      operatingSystemServiceListOperatingSystems: build.query<
+        OperatingSystemServiceListOperatingSystemsApiResponse,
+        OperatingSystemServiceListOperatingSystemsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/os`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["OS"],
+        providesTags: ["OperatingSystemService"],
       }),
-      postV1ProjectsByProjectNameComputeOs: build.mutation<
-        PostV1ProjectsByProjectNameComputeOsApiResponse,
-        PostV1ProjectsByProjectNameComputeOsApiArg
+      operatingSystemServiceCreateOperatingSystem: build.mutation<
+        OperatingSystemServiceCreateOperatingSystemApiResponse,
+        OperatingSystemServiceCreateOperatingSystemApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/os`,
           method: "POST",
           body: queryArg.operatingSystemResource,
         }),
-        invalidatesTags: ["OS"],
+        invalidatesTags: ["OperatingSystemService"],
       }),
-      deleteV1ProjectsByProjectNameComputeOsAndOsResourceId: build.mutation<
-        DeleteV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse,
-        DeleteV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg
+      operatingSystemServiceDeleteOperatingSystem: build.mutation<
+        OperatingSystemServiceDeleteOperatingSystemApiResponse,
+        OperatingSystemServiceDeleteOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.osResourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["OS"],
+        invalidatesTags: ["OperatingSystemService"],
       }),
-      getV1ProjectsByProjectNameComputeOsAndOsResourceId: build.query<
-        GetV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse,
-        GetV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg
+      operatingSystemServiceGetOperatingSystem: build.query<
+        OperatingSystemServiceGetOperatingSystemApiResponse,
+        OperatingSystemServiceGetOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.osResourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
         }),
-        providesTags: ["OS"],
+        providesTags: ["OperatingSystemService"],
       }),
-      patchV1ProjectsByProjectNameComputeOsAndOsResourceId: build.mutation<
-        PatchV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse,
-        PatchV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg
+      operatingSystemServicePatchOperatingSystem: build.mutation<
+        OperatingSystemServicePatchOperatingSystemApiResponse,
+        OperatingSystemServicePatchOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.osResourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "PATCH",
-          body: queryArg.body,
+          body: queryArg.operatingSystemResource,
         }),
-        invalidatesTags: ["OS"],
+        invalidatesTags: ["OperatingSystemService"],
       }),
-      putV1ProjectsByProjectNameComputeOsAndOsResourceId: build.mutation<
-        PutV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse,
-        PutV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg
+      operatingSystemServiceUpdateOperatingSystem: build.mutation<
+        OperatingSystemServiceUpdateOperatingSystemApiResponse,
+        OperatingSystemServiceUpdateOperatingSystemApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.osResourceId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/os/${queryArg.resourceId}`,
           method: "PUT",
-          body: queryArg.body,
+          body: queryArg.operatingSystemResource,
         }),
-        invalidatesTags: ["OS"],
+        invalidatesTags: ["OperatingSystemService"],
       }),
-      getV1ProjectsByProjectNameComputeSchedules: build.query<
-        GetV1ProjectsByProjectNameComputeSchedulesApiResponse,
-        GetV1ProjectsByProjectNameComputeSchedulesApiArg
+      scheduleServiceListSchedules: build.query<
+        ScheduleServiceListSchedulesApiResponse,
+        ScheduleServiceListSchedulesApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/schedules`,
           params: {
-            offset: queryArg.offset,
             pageSize: queryArg.pageSize,
-            regionID: queryArg.regionId,
-            siteID: queryArg.siteId,
-            hostID: queryArg.hostId,
-            unix_epoch: queryArg.unixEpoch,
+            offset: queryArg.offset,
+            hostId: queryArg.hostId,
+            siteId: queryArg.siteId,
+            regionId: queryArg.regionId,
+            unixEpoch: queryArg.unixEpoch,
           },
         }),
-        providesTags: ["Schedule"],
+        providesTags: ["ScheduleService"],
       }),
-      getV1ProjectsByProjectNameComputeWorkloads: build.query<
-        GetV1ProjectsByProjectNameComputeWorkloadsApiResponse,
-        GetV1ProjectsByProjectNameComputeWorkloadsApiArg
+      workloadServiceListWorkloads: build.query<
+        WorkloadServiceListWorkloadsApiResponse,
+        WorkloadServiceListWorkloadsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/workloads`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
-            kind: queryArg.kind,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["Workload"],
+        providesTags: ["WorkloadService"],
       }),
-      postV1ProjectsByProjectNameComputeWorkloads: build.mutation<
-        PostV1ProjectsByProjectNameComputeWorkloadsApiResponse,
-        PostV1ProjectsByProjectNameComputeWorkloadsApiArg
+      workloadServiceCreateWorkload: build.mutation<
+        WorkloadServiceCreateWorkloadApiResponse,
+        WorkloadServiceCreateWorkloadApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/workloads`,
           method: "POST",
-          body: queryArg.workload,
+          body: queryArg.workloadResource,
         }),
-        invalidatesTags: ["Workload"],
+        invalidatesTags: ["WorkloadService"],
       }),
-      deleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse,
-          DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["Workload"],
-        }),
-      getV1ProjectsByProjectNameComputeWorkloadsAndWorkloadId: build.query<
-        GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse,
-        GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg
+      workloadServiceDeleteWorkload: build.mutation<
+        WorkloadServiceDeleteWorkloadApiResponse,
+        WorkloadServiceDeleteWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-        providesTags: ["Workload"],
+        invalidatesTags: ["WorkloadService"],
       }),
-      patchV1ProjectsByProjectNameComputeWorkloadsAndWorkloadId: build.mutation<
-        PatchV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse,
-        PatchV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg
+      workloadServiceGetWorkload: build.query<
+        WorkloadServiceGetWorkloadApiResponse,
+        WorkloadServiceGetWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
+        }),
+        providesTags: ["WorkloadService"],
+      }),
+      workloadServicePatchWorkload: build.mutation<
+        WorkloadServicePatchWorkloadApiResponse,
+        WorkloadServicePatchWorkloadApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
           method: "PATCH",
-          body: queryArg.workload,
+          body: queryArg.workloadResource,
         }),
-        invalidatesTags: ["Workload"],
+        invalidatesTags: ["WorkloadService"],
       }),
-      putV1ProjectsByProjectNameComputeWorkloadsAndWorkloadId: build.mutation<
-        PutV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse,
-        PutV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg
+      workloadServiceUpdateWorkload: build.mutation<
+        WorkloadServiceUpdateWorkloadApiResponse,
+        WorkloadServiceUpdateWorkloadApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}`,
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}`,
           method: "PUT",
-          body: queryArg.workload,
+          body: queryArg.workloadResource,
         }),
-        invalidatesTags: ["Workload"],
+        invalidatesTags: ["WorkloadService"],
       }),
-      getV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembers:
-        build.query<
-          GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiResponse,
-          GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg._workloadId}/members`,
-            params: {
-              offset: queryArg.offset,
-              pageSize: queryArg.pageSize,
-              filter: queryArg.filter,
-              orderBy: queryArg.orderBy,
-              workload_id: queryArg.workloadId,
-            },
-          }),
-          providesTags: ["Workload"],
+      workloadMemberServiceListWorkloadMembers: build.query<
+        WorkloadMemberServiceListWorkloadMembersApiResponse,
+        WorkloadMemberServiceListWorkloadMembersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members`,
+          params: {
+            orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+          },
         }),
-      postV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembers:
-        build.mutation<
-          PostV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiResponse,
-          PostV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}/members`,
-            method: "POST",
-            body: queryArg.workloadMember,
-          }),
-          invalidatesTags: ["Workload"],
+        providesTags: ["WorkloadMemberService"],
+      }),
+      workloadMemberServiceCreateWorkloadMember: build.mutation<
+        WorkloadMemberServiceCreateWorkloadMemberApiResponse,
+        WorkloadMemberServiceCreateWorkloadMemberApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.resourceId}/members`,
+          method: "POST",
+          body: queryArg.workloadMember,
         }),
-      deleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiResponse,
-          DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}/members/${queryArg.workloadMemberId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["Workload"],
+        invalidatesTags: ["WorkloadMemberService"],
+      }),
+      workloadMemberServiceDeleteWorkloadMember: build.mutation<
+        WorkloadMemberServiceDeleteWorkloadMemberApiResponse,
+        WorkloadMemberServiceDeleteWorkloadMemberApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadResourceId}/members/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-      getV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberId:
-        build.query<
-          GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiResponse,
-          GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadId}/members/${queryArg.workloadMemberId}`,
-          }),
-          providesTags: ["Workload"],
+        invalidatesTags: ["WorkloadMemberService"],
+      }),
+      workloadMemberServiceGetWorkloadMember: build.query<
+        WorkloadMemberServiceGetWorkloadMemberApiResponse,
+        WorkloadMemberServiceGetWorkloadMemberApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/compute/workloads/${queryArg.workloadResourceId}/members/${queryArg.resourceId}`,
         }),
-      getV1ProjectsByProjectNameLocalAccounts: build.query<
-        GetV1ProjectsByProjectNameLocalAccountsApiResponse,
-        GetV1ProjectsByProjectNameLocalAccountsApiArg
+        providesTags: ["WorkloadMemberService"],
+      }),
+      localAccountServiceListLocalAccounts: build.query<
+        LocalAccountServiceListLocalAccountsApiResponse,
+        LocalAccountServiceListLocalAccountsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/localAccounts`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["LocalAccount"],
+        providesTags: ["LocalAccountService"],
       }),
-      postV1ProjectsByProjectNameLocalAccounts: build.mutation<
-        PostV1ProjectsByProjectNameLocalAccountsApiResponse,
-        PostV1ProjectsByProjectNameLocalAccountsApiArg
+      localAccountServiceCreateLocalAccount: build.mutation<
+        LocalAccountServiceCreateLocalAccountApiResponse,
+        LocalAccountServiceCreateLocalAccountApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/localAccounts`,
           method: "POST",
-          body: queryArg.localAccount,
+          body: queryArg.localAccountResource,
         }),
-        invalidatesTags: ["LocalAccount"],
+        invalidatesTags: ["LocalAccountService"],
       }),
-      deleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiResponse,
-          DeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/localAccounts/${queryArg.localAccountId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["LocalAccount"],
-        }),
-      getV1ProjectsByProjectNameLocalAccountsAndLocalAccountId: build.query<
-        GetV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiResponse,
-        GetV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiArg
+      localAccountServiceDeleteLocalAccount: build.mutation<
+        LocalAccountServiceDeleteLocalAccountApiResponse,
+        LocalAccountServiceDeleteLocalAccountApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/localAccounts/${queryArg.localAccountId}`,
+          url: `/v1/projects/${queryArg.projectName}/localAccounts/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-        providesTags: ["LocalAccount"],
+        invalidatesTags: ["LocalAccountService"],
       }),
-      getV1ProjectsByProjectNameLocations: build.query<
-        GetV1ProjectsByProjectNameLocationsApiResponse,
-        GetV1ProjectsByProjectNameLocationsApiArg
+      localAccountServiceGetLocalAccount: build.query<
+        LocalAccountServiceGetLocalAccountApiResponse,
+        LocalAccountServiceGetLocalAccountApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/localAccounts/${queryArg.resourceId}`,
+        }),
+        providesTags: ["LocalAccountService"],
+      }),
+      locationServiceListLocations: build.query<
+        LocationServiceListLocationsApiResponse,
+        LocationServiceListLocationsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/locations`,
@@ -500,1703 +472,1705 @@ const injectedRtkApi = api
             showRegions: queryArg.showRegions,
           },
         }),
-        providesTags: ["Location"],
+        providesTags: ["LocationService"],
       }),
-      getV1ProjectsByProjectNameProviders: build.query<
-        GetV1ProjectsByProjectNameProvidersApiResponse,
-        GetV1ProjectsByProjectNameProvidersApiArg
+      providerServiceListProviders: build.query<
+        ProviderServiceListProvidersApiResponse,
+        ProviderServiceListProvidersApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/providers`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["Provider"],
+        providesTags: ["ProviderService"],
       }),
-      postV1ProjectsByProjectNameProviders: build.mutation<
-        PostV1ProjectsByProjectNameProvidersApiResponse,
-        PostV1ProjectsByProjectNameProvidersApiArg
+      providerServiceCreateProvider: build.mutation<
+        ProviderServiceCreateProviderApiResponse,
+        ProviderServiceCreateProviderApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/providers`,
           method: "POST",
-          body: queryArg.provider,
+          body: queryArg.providerResource,
         }),
-        invalidatesTags: ["Provider"],
+        invalidatesTags: ["ProviderService"],
       }),
-      deleteV1ProjectsByProjectNameProvidersAndProviderId: build.mutation<
-        DeleteV1ProjectsByProjectNameProvidersAndProviderIdApiResponse,
-        DeleteV1ProjectsByProjectNameProvidersAndProviderIdApiArg
+      providerServiceDeleteProvider: build.mutation<
+        ProviderServiceDeleteProviderApiResponse,
+        ProviderServiceDeleteProviderApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/providers/${queryArg.providerId}`,
+          url: `/v1/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["Provider"],
+        invalidatesTags: ["ProviderService"],
       }),
-      getV1ProjectsByProjectNameProvidersAndProviderId: build.query<
-        GetV1ProjectsByProjectNameProvidersAndProviderIdApiResponse,
-        GetV1ProjectsByProjectNameProvidersAndProviderIdApiArg
+      providerServiceGetProvider: build.query<
+        ProviderServiceGetProviderApiResponse,
+        ProviderServiceGetProviderApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/providers/${queryArg.providerId}`,
+          url: `/v1/projects/${queryArg.projectName}/providers/${queryArg.resourceId}`,
         }),
-        providesTags: ["Provider"],
+        providesTags: ["ProviderService"],
       }),
-      getV1ProjectsByProjectNameRegions: build.query<
-        GetV1ProjectsByProjectNameRegionsApiResponse,
-        GetV1ProjectsByProjectNameRegionsApiArg
+      regionServiceListRegions: build.query<
+        RegionServiceListRegionsApiResponse,
+        RegionServiceListRegionsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/regions`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            filter: queryArg.filter,
             orderBy: queryArg.orderBy,
-            parent: queryArg.parent,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
             showTotalSites: queryArg.showTotalSites,
           },
         }),
-        providesTags: ["Region"],
+        providesTags: ["RegionService"],
       }),
-      postV1ProjectsByProjectNameRegions: build.mutation<
-        PostV1ProjectsByProjectNameRegionsApiResponse,
-        PostV1ProjectsByProjectNameRegionsApiArg
+      regionServiceCreateRegion: build.mutation<
+        RegionServiceCreateRegionApiResponse,
+        RegionServiceCreateRegionApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/regions`,
           method: "POST",
-          body: queryArg.region,
+          body: queryArg.regionResource,
         }),
-        invalidatesTags: ["Region"],
+        invalidatesTags: ["RegionService"],
       }),
-      deleteV1ProjectsByProjectNameRegionsAndRegionId: build.mutation<
-        DeleteV1ProjectsByProjectNameRegionsAndRegionIdApiResponse,
-        DeleteV1ProjectsByProjectNameRegionsAndRegionIdApiArg
+      siteServiceDeleteSite: build.mutation<
+        SiteServiceDeleteSiteApiResponse,
+        SiteServiceDeleteSiteApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
           method: "DELETE",
         }),
-        invalidatesTags: ["Region"],
+        invalidatesTags: ["SiteService"],
       }),
-      getV1ProjectsByProjectNameRegionsAndRegionId: build.query<
-        GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse,
-        GetV1ProjectsByProjectNameRegionsAndRegionIdApiArg
+      siteServiceGetSite: build.query<
+        SiteServiceGetSiteApiResponse,
+        SiteServiceGetSiteApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
         }),
-        providesTags: ["Region"],
+        providesTags: ["SiteService"],
       }),
-      patchV1ProjectsByProjectNameRegionsAndRegionId: build.mutation<
-        PatchV1ProjectsByProjectNameRegionsAndRegionIdApiResponse,
-        PatchV1ProjectsByProjectNameRegionsAndRegionIdApiArg
+      siteServicePatchSite: build.mutation<
+        SiteServicePatchSiteApiResponse,
+        SiteServicePatchSiteApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
           method: "PATCH",
-          body: queryArg.region,
+          body: queryArg.siteResource,
         }),
-        invalidatesTags: ["Region"],
+        invalidatesTags: ["SiteService"],
       }),
-      putV1ProjectsByProjectNameRegionsAndRegionId: build.mutation<
-        PutV1ProjectsByProjectNameRegionsAndRegionIdApiResponse,
-        PutV1ProjectsByProjectNameRegionsAndRegionIdApiArg
+      siteServiceUpdateSite: build.mutation<
+        SiteServiceUpdateSiteApiResponse,
+        SiteServiceUpdateSiteApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionResourceId}/sites/${queryArg.resourceId}`,
           method: "PUT",
-          body: queryArg.region,
+          body: queryArg.siteResource,
         }),
-        invalidatesTags: ["Region"],
+        invalidatesTags: ["SiteService"],
       }),
-      getV1ProjectsByProjectNameRegionsAndRegionIdSites: build.query<
-        GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse,
-        GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg
+      regionServiceDeleteRegion: build.mutation<
+        RegionServiceDeleteRegionApiResponse,
+        RegionServiceDeleteRegionApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}/sites`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["RegionService"],
+      }),
+      regionServiceGetRegion: build.query<
+        RegionServiceGetRegionApiResponse,
+        RegionServiceGetRegionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+        }),
+        providesTags: ["RegionService"],
+      }),
+      regionServicePatchRegion: build.mutation<
+        RegionServicePatchRegionApiResponse,
+        RegionServicePatchRegionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          method: "PATCH",
+          body: queryArg.regionResource,
+        }),
+        invalidatesTags: ["RegionService"],
+      }),
+      regionServiceUpdateRegion: build.mutation<
+        RegionServiceUpdateRegionApiResponse,
+        RegionServiceUpdateRegionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}`,
+          method: "PUT",
+          body: queryArg.regionResource,
+        }),
+        invalidatesTags: ["RegionService"],
+      }),
+      siteServiceListSites: build.query<
+        SiteServiceListSitesApiResponse,
+        SiteServiceListSitesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites`,
           params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
+            orderBy: queryArg.orderBy,
             filter: queryArg.filter,
-            orderBy: queryArg.orderBy,
-            ouID: queryArg.ouId,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
           },
         }),
-        providesTags: ["Site"],
+        providesTags: ["SiteService"],
       }),
-      postV1ProjectsByProjectNameRegionsAndRegionIdSites: build.mutation<
-        PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse,
-        PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg
+      siteServiceCreateSite: build.mutation<
+        SiteServiceCreateSiteApiResponse,
+        SiteServiceCreateSiteApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}/sites`,
+          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.resourceId}/sites`,
           method: "POST",
-          body: queryArg.site,
+          body: queryArg.siteResource,
         }),
-        invalidatesTags: ["Site"],
+        invalidatesTags: ["SiteService"],
       }),
-      deleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse,
-          DeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}/sites/${queryArg.siteId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["Site"],
-        }),
-      getV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId: build.query<
-        GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse,
-        GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
+      scheduleServiceListRepeatedSchedules: build.query<
+        ScheduleServiceListRepeatedSchedulesApiResponse,
+        ScheduleServiceListRepeatedSchedulesApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}/sites/${queryArg.siteId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated`,
+          params: {
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+            hostId: queryArg.hostId,
+            siteId: queryArg.siteId,
+            regionId: queryArg.regionId,
+            unixEpoch: queryArg.unixEpoch,
+          },
         }),
-        providesTags: ["Site"],
+        providesTags: ["ScheduleService"],
       }),
-      patchV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId: build.mutation<
-        PatchV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse,
-        PatchV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
+      scheduleServiceCreateRepeatedSchedule: build.mutation<
+        ScheduleServiceCreateRepeatedScheduleApiResponse,
+        ScheduleServiceCreateRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}/sites/${queryArg.siteId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated`,
+          method: "POST",
+          body: queryArg.repeatedScheduleResource,
+        }),
+        invalidatesTags: ["ScheduleService"],
+      }),
+      scheduleServiceDeleteRepeatedSchedule: build.mutation<
+        ScheduleServiceDeleteRepeatedScheduleApiResponse,
+        ScheduleServiceDeleteRepeatedScheduleApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["ScheduleService"],
+      }),
+      scheduleServiceGetRepeatedSchedule: build.query<
+        ScheduleServiceGetRepeatedScheduleApiResponse,
+        ScheduleServiceGetRepeatedScheduleApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
+        }),
+        providesTags: ["ScheduleService"],
+      }),
+      scheduleServicePatchRepeatedSchedule: build.mutation<
+        ScheduleServicePatchRepeatedScheduleApiResponse,
+        ScheduleServicePatchRepeatedScheduleApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
           method: "PATCH",
-          body: queryArg.site,
+          body: queryArg.repeatedScheduleResource,
         }),
-        invalidatesTags: ["Site"],
+        invalidatesTags: ["ScheduleService"],
       }),
-      putV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteId: build.mutation<
-        PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse,
-        PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
+      scheduleServiceUpdateRepeatedSchedule: build.mutation<
+        ScheduleServiceUpdateRepeatedScheduleApiResponse,
+        ScheduleServiceUpdateRepeatedScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/regions/${queryArg.regionId}/sites/${queryArg.siteId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.resourceId}`,
           method: "PUT",
-          body: queryArg.site,
+          body: queryArg.repeatedScheduleResource,
         }),
-        invalidatesTags: ["Site"],
+        invalidatesTags: ["ScheduleService"],
       }),
-      getV1ProjectsByProjectNameSchedulesRepeated: build.query<
-        GetV1ProjectsByProjectNameSchedulesRepeatedApiResponse,
-        GetV1ProjectsByProjectNameSchedulesRepeatedApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/schedules/repeated`,
-          params: {
-            offset: queryArg.offset,
-            pageSize: queryArg.pageSize,
-            regionID: queryArg.regionId,
-            siteID: queryArg.siteId,
-            hostID: queryArg.hostId,
-            unix_epoch: queryArg.unixEpoch,
-          },
-        }),
-        providesTags: ["Schedule"],
-      }),
-      postV1ProjectsByProjectNameSchedulesRepeated: build.mutation<
-        PostV1ProjectsByProjectNameSchedulesRepeatedApiResponse,
-        PostV1ProjectsByProjectNameSchedulesRepeatedApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/schedules/repeated`,
-          method: "POST",
-          body: queryArg.repeatedSchedule,
-        }),
-        invalidatesTags: ["Schedule"],
-      }),
-      deleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse,
-          DeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.repeatedScheduleId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["Schedule"],
-        }),
-      getV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleId:
-        build.query<
-          GetV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse,
-          GetV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.repeatedScheduleId}`,
-          }),
-          providesTags: ["Schedule"],
-        }),
-      patchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleId:
-        build.mutation<
-          PatchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse,
-          PatchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.repeatedScheduleId}`,
-            method: "PATCH",
-            body: queryArg.repeatedSchedule,
-          }),
-          invalidatesTags: ["Schedule"],
-        }),
-      putV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleId:
-        build.mutation<
-          PutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse,
-          PutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/repeated/${queryArg.repeatedScheduleId}`,
-            method: "PUT",
-            body: queryArg.repeatedSchedule,
-          }),
-          invalidatesTags: ["Schedule"],
-        }),
-      getV1ProjectsByProjectNameSchedulesSingle: build.query<
-        GetV1ProjectsByProjectNameSchedulesSingleApiResponse,
-        GetV1ProjectsByProjectNameSchedulesSingleApiArg
+      scheduleServiceListSingleSchedules: build.query<
+        ScheduleServiceListSingleSchedulesApiResponse,
+        ScheduleServiceListSingleSchedulesApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/schedules/single`,
           params: {
-            offset: queryArg.offset,
             pageSize: queryArg.pageSize,
-            regionID: queryArg.regionId,
-            siteID: queryArg.siteId,
-            hostID: queryArg.hostId,
-            unix_epoch: queryArg.unixEpoch,
+            offset: queryArg.offset,
+            hostId: queryArg.hostId,
+            siteId: queryArg.siteId,
+            regionId: queryArg.regionId,
+            unixEpoch: queryArg.unixEpoch,
           },
         }),
-        providesTags: ["Schedule"],
+        providesTags: ["ScheduleService"],
       }),
-      postV1ProjectsByProjectNameSchedulesSingle: build.mutation<
-        PostV1ProjectsByProjectNameSchedulesSingleApiResponse,
-        PostV1ProjectsByProjectNameSchedulesSingleApiArg
+      scheduleServiceCreateSingleSchedule: build.mutation<
+        ScheduleServiceCreateSingleScheduleApiResponse,
+        ScheduleServiceCreateSingleScheduleApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/schedules/single`,
           method: "POST",
-          body: queryArg.singleSchedule,
+          body: queryArg.singleScheduleResource,
         }),
-        invalidatesTags: ["Schedule"],
+        invalidatesTags: ["ScheduleService"],
       }),
-      deleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse,
-          DeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.singleScheduleId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["Schedule"],
-        }),
-      getV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleId: build.query<
-        GetV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse,
-        GetV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg
+      scheduleServiceDeleteSingleSchedule: build.mutation<
+        ScheduleServiceDeleteSingleScheduleApiResponse,
+        ScheduleServiceDeleteSingleScheduleApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.singleScheduleId}`,
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-        providesTags: ["Schedule"],
+        invalidatesTags: ["ScheduleService"],
       }),
-      patchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleId:
-        build.mutation<
-          PatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse,
-          PatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.singleScheduleId}`,
-            method: "PATCH",
-            body: queryArg.singleSchedule,
-          }),
-          invalidatesTags: ["Schedule"],
+      scheduleServiceGetSingleSchedule: build.query<
+        ScheduleServiceGetSingleScheduleApiResponse,
+        ScheduleServiceGetSingleScheduleApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
         }),
-      putV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleId:
-        build.mutation<
-          PutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse,
-          PutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.singleScheduleId}`,
-            method: "PUT",
-            body: queryArg.singleSchedule,
-          }),
-          invalidatesTags: ["Schedule"],
+        providesTags: ["ScheduleService"],
+      }),
+      scheduleServicePatchSingleSchedule: build.mutation<
+        ScheduleServicePatchSingleScheduleApiResponse,
+        ScheduleServicePatchSingleScheduleApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          method: "PATCH",
+          body: queryArg.singleScheduleResource,
         }),
-      getV1ProjectsByProjectNameTelemetryLoggroups: build.query<
-        GetV1ProjectsByProjectNameTelemetryLoggroupsApiResponse,
-        GetV1ProjectsByProjectNameTelemetryLoggroupsApiArg
+        invalidatesTags: ["ScheduleService"],
+      }),
+      scheduleServiceUpdateSingleSchedule: build.mutation<
+        ScheduleServiceUpdateSingleScheduleApiResponse,
+        ScheduleServiceUpdateSingleScheduleApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/schedules/single/${queryArg.resourceId}`,
+          method: "PUT",
+          body: queryArg.singleScheduleResource,
+        }),
+        invalidatesTags: ["ScheduleService"],
+      }),
+      telemetryLogsGroupServiceListTelemetryLogsGroups: build.query<
+        TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse,
+        TelemetryLogsGroupServiceListTelemetryLogsGroupsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups`,
           params: {
-            offset: queryArg.offset,
             pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
             orderBy: queryArg.orderBy,
           },
         }),
-        providesTags: ["TelemetryLogsGroup"],
+        providesTags: ["TelemetryLogsGroupService"],
       }),
-      postV1ProjectsByProjectNameTelemetryLoggroups: build.mutation<
-        PostV1ProjectsByProjectNameTelemetryLoggroupsApiResponse,
-        PostV1ProjectsByProjectNameTelemetryLoggroupsApiArg
+      telemetryLogsGroupServiceCreateTelemetryLogsGroup: build.mutation<
+        TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiResponse,
+        TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups`,
           method: "POST",
-          body: queryArg.telemetryLogsGroup,
+          body: queryArg.telemetryLogsGroupResource,
         }),
-        invalidatesTags: ["TelemetryLogsGroup"],
+        invalidatesTags: ["TelemetryLogsGroupService"],
       }),
-      deleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiResponse,
-          DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["TelemetryLogsGroup"],
+      telemetryLogsProfileServiceDeleteTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-      getV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupId:
-        build.query<
-          GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiResponse,
-          GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}`,
-          }),
-          providesTags: ["TelemetryLogsGroup"],
+        invalidatesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServiceGetTelemetryLogsProfile: build.query<
+        TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
         }),
-      getV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofiles:
-        build.query<
-          GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse,
-          GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}/logprofiles`,
-            params: {
-              offset: queryArg.offset,
-              pageSize: queryArg.pageSize,
-              siteId: queryArg.siteId,
-              regionId: queryArg.regionId,
-              instanceId: queryArg.instanceId,
-              showInherited: queryArg.showInherited,
-              orderBy: queryArg.orderBy,
-            },
-          }),
-          providesTags: ["TelemetryLogsProfile"],
+        providesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServicePatchTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+          method: "PATCH",
+          body: queryArg.telemetryLogsProfileResource,
         }),
-      postV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofiles:
-        build.mutation<
-          PostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse,
-          PostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}/logprofiles`,
-            method: "POST",
-            body: queryArg.telemetryLogsProfile,
-          }),
-          invalidatesTags: ["TelemetryLogsProfile"],
+        invalidatesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServiceUpdateTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.loggroupResourceId}/logprofiles/${queryArg.resourceId}`,
+          method: "PUT",
+          body: queryArg.telemetryLogsProfileResource,
         }),
-      deleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse,
-          DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}/logprofiles/${queryArg.telemetryLogsProfileId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["TelemetryLogsProfile"],
+        invalidatesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsGroupServiceDeleteTelemetryLogsGroup: build.mutation<
+        TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiResponse,
+        TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}`,
+          method: "DELETE",
         }),
-      getV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileId:
-        build.query<
-          GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse,
-          GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}/logprofiles/${queryArg.telemetryLogsProfileId}`,
-          }),
-          providesTags: ["TelemetryLogsProfile"],
+        invalidatesTags: ["TelemetryLogsGroupService"],
+      }),
+      telemetryLogsGroupServiceGetTelemetryLogsGroup: build.query<
+        TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse,
+        TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}`,
         }),
-      patchV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileId:
-        build.mutation<
-          PatchV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse,
-          PatchV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}/logprofiles/${queryArg.telemetryLogsProfileId}`,
-            method: "PATCH",
-            body: queryArg.telemetryLogsProfile,
-          }),
-          invalidatesTags: ["TelemetryLogsProfile"],
+        providesTags: ["TelemetryLogsGroupService"],
+      }),
+      telemetryLogsProfileServiceListTelemetryLogsProfiles: build.query<
+        TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse,
+        TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles`,
+          params: {
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+            orderBy: queryArg.orderBy,
+            instanceId: queryArg.instanceId,
+            siteId: queryArg.siteId,
+            regionId: queryArg.regionId,
+            showInherited: queryArg.showInherited,
+          },
         }),
-      putV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileId:
-        build.mutation<
-          PutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse,
-          PutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.telemetryLogsGroupId}/logprofiles/${queryArg.telemetryLogsProfileId}`,
-            method: "PUT",
-            body: queryArg.telemetryLogsProfile,
-          }),
-          invalidatesTags: ["TelemetryLogsProfile"],
+        providesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryLogsProfileServiceCreateTelemetryLogsProfile: build.mutation<
+        TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse,
+        TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/loggroups/${queryArg.resourceId}/logprofiles`,
+          method: "POST",
+          body: queryArg.telemetryLogsProfileResource,
         }),
-      getV1ProjectsByProjectNameTelemetryMetricgroups: build.query<
-        GetV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse,
-        GetV1ProjectsByProjectNameTelemetryMetricgroupsApiArg
+        invalidatesTags: ["TelemetryLogsProfileService"],
+      }),
+      telemetryMetricsGroupServiceListTelemetryMetricsGroups: build.query<
+        TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse,
+        TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups`,
           params: {
-            offset: queryArg.offset,
             pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
             orderBy: queryArg.orderBy,
           },
         }),
-        providesTags: ["TelemetryMetricsGroup"],
+        providesTags: ["TelemetryMetricsGroupService"],
       }),
-      postV1ProjectsByProjectNameTelemetryMetricgroups: build.mutation<
-        PostV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse,
-        PostV1ProjectsByProjectNameTelemetryMetricgroupsApiArg
+      telemetryMetricsGroupServiceCreateTelemetryMetricsGroup: build.mutation<
+        TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiResponse,
+        TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups`,
           method: "POST",
-          body: queryArg.telemetryMetricsGroup,
+          body: queryArg.telemetryMetricsGroupResource,
         }),
-        invalidatesTags: ["TelemetryMetricsGroup"],
+        invalidatesTags: ["TelemetryMetricsGroupService"],
       }),
-      deleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupId:
+      telemetryMetricsProfileServiceDeleteTelemetryMetricsProfile:
         build.mutation<
-          DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiResponse,
-          DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiArg
+          TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg
         >({
           query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}`,
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
             method: "DELETE",
           }),
-          invalidatesTags: ["TelemetryMetricsGroup"],
+          invalidatesTags: ["TelemetryMetricsProfileService"],
         }),
-      getV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupId:
-        build.query<
-          GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiResponse,
-          GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}`,
-          }),
-          providesTags: ["TelemetryMetricsGroup"],
+      telemetryMetricsProfileServiceGetTelemetryMetricsProfile: build.query<
+        TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse,
+        TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
         }),
-      getV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofiles:
-        build.query<
-          GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse,
-          GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}/metricprofiles`,
-            params: {
-              offset: queryArg.offset,
-              pageSize: queryArg.pageSize,
-              siteId: queryArg.siteId,
-              regionId: queryArg.regionId,
-              instanceId: queryArg.instanceId,
-              showInherited: queryArg.showInherited,
-              orderBy: queryArg.orderBy,
-            },
-          }),
-          providesTags: ["TelemetryMetricsProfile"],
-        }),
-      postV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofiles:
+        providesTags: ["TelemetryMetricsProfileService"],
+      }),
+      telemetryMetricsProfileServicePatchTelemetryMetricsProfile:
         build.mutation<
-          PostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse,
-          PostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg
+          TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg
         >({
           query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}/metricprofiles`,
-            method: "POST",
-            body: queryArg.telemetryMetricsProfile,
-          }),
-          invalidatesTags: ["TelemetryMetricsProfile"],
-        }),
-      deleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileId:
-        build.mutation<
-          DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse,
-          DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}/metricprofiles/${queryArg.telemetryMetricsProfileId}`,
-            method: "DELETE",
-          }),
-          invalidatesTags: ["TelemetryMetricsProfile"],
-        }),
-      getV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileId:
-        build.query<
-          GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse,
-          GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}/metricprofiles/${queryArg.telemetryMetricsProfileId}`,
-          }),
-          providesTags: ["TelemetryMetricsProfile"],
-        }),
-      patchV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileId:
-        build.mutation<
-          PatchV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse,
-          PatchV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg
-        >({
-          query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}/metricprofiles/${queryArg.telemetryMetricsProfileId}`,
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
             method: "PATCH",
-            body: queryArg.telemetryMetricsProfile,
+            body: queryArg.telemetryMetricsProfileResource,
           }),
-          invalidatesTags: ["TelemetryMetricsProfile"],
+          invalidatesTags: ["TelemetryMetricsProfileService"],
         }),
-      putV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileId:
+      telemetryMetricsProfileServiceUpdateTelemetryMetricsProfile:
         build.mutation<
-          PutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse,
-          PutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg
+          TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg
         >({
           query: (queryArg) => ({
-            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.telemetryMetricsGroupId}/metricprofiles/${queryArg.telemetryMetricsProfileId}`,
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.metricgroupResourceId}/metricprofiles/${queryArg.resourceId}`,
             method: "PUT",
-            body: queryArg.telemetryMetricsProfile,
+            body: queryArg.telemetryMetricsProfileResource,
           }),
-          invalidatesTags: ["TelemetryMetricsProfile"],
+          invalidatesTags: ["TelemetryMetricsProfileService"],
+        }),
+      telemetryMetricsGroupServiceDeleteTelemetryMetricsGroup: build.mutation<
+        TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiResponse,
+        TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["TelemetryMetricsGroupService"],
+      }),
+      telemetryMetricsGroupServiceGetTelemetryMetricsGroup: build.query<
+        TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiResponse,
+        TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}`,
+        }),
+        providesTags: ["TelemetryMetricsGroupService"],
+      }),
+      telemetryMetricsProfileServiceListTelemetryMetricsProfiles: build.query<
+        TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse,
+        TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles`,
+          params: {
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+            orderBy: queryArg.orderBy,
+            instanceId: queryArg.instanceId,
+            siteId: queryArg.siteId,
+            regionId: queryArg.regionId,
+            showInherited: queryArg.showInherited,
+          },
+        }),
+        providesTags: ["TelemetryMetricsProfileService"],
+      }),
+      telemetryMetricsProfileServiceCreateTelemetryMetricsProfile:
+        build.mutation<
+          TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse,
+          TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg
+        >({
+          query: (queryArg) => ({
+            url: `/v1/projects/${queryArg.projectName}/telemetry/metricgroups/${queryArg.resourceId}/metricprofiles`,
+            method: "POST",
+            body: queryArg.telemetryMetricsProfileResource,
+          }),
+          invalidatesTags: ["TelemetryMetricsProfileService"],
         }),
     }),
     overrideExisting: false,
   });
 export { injectedRtkApi as infra };
-export type GetV1ProjectsByProjectNameComputeApiResponse =
-  /** status 200 A compute object */ HostsListRead;
-export type GetV1ProjectsByProjectNameComputeApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-  filter?: string;
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+export type HostServiceListHostsApiResponse =
+  /** status 200 Success */ ListHostsResponseRead;
+export type HostServiceListHostsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Returns only the compute elements that are assigned with the given site ID. If equals to 'null', then it returns all the hosts not associated with any site. */
-  siteId?: string;
-  /** Returns only the compute elements that are assigned to the given instanceID. If equals to 'null', then it returns all the hosts not associated with any instance. */
-  instanceId?: string;
-  /** Returns the compute elements associated with the given UUID. UUID field cannot be null, if specified needs to be filled. */
-  uuid?: string;
-  /** Filters the metadata associated with the compute element. Values are expected to be in the form of 'key=value'. */
-  metadata?: string[];
-  /** Indicates if compute elements identified by the filter need to be returned with all their respective child resources, e.g., USBs, Interfaces, Storages. */
-  detail?: boolean;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameComputeHostsApiResponse =
-  /** status 200 Array of all host objects */ HostsListRead;
-export type GetV1ProjectsByProjectNameComputeHostsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-  filter?: string;
-  /** Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
-  orderBy?: string;
-  /** Returns only the hosts that are assigned with the given site ID. If equals to 'null', then it returns all the hosts not associated with any site. */
-  siteId?: string;
-  /** Returns only the hosts that are assigned to the given instanceID. If equals to 'null', then it returns all the hosts not associated with any instance. */
-  instanceId?: string;
-  /** Returns the host associated with the given UUID. UUID field cannot be null, if specified needs to be filled. */
-  uuid?: string;
-  /** Filters the metadata associated with the Host. Values are expected to be in the form 'key=value'. */
-  metadata?: string[];
-  /** Indicates if the host identified by the filter needs to be returned with all their respective child resources, e.g., USBs, interfaces, and storages. */
-  detail?: boolean;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PostV1ProjectsByProjectNameComputeHostsApiResponse =
-  /** status 201 The host was created. */ HostRead;
-export type PostV1ProjectsByProjectNameComputeHostsApiArg = {
-  /** unique projectName for the resource */
-  projectName: string;
-  body: HostWrite;
-};
-export type DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse =
-  /** status 204 The host was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiArg = {
-  /** The unique host identifier */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  hostOperationWithNote: HostOperationWithNote;
-};
-export type GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse =
-  /** status 200 The requested instance based on it's ID */ HostRead;
-export type GetV1ProjectsByProjectNameComputeHostsAndHostIdApiArg = {
-  /** The unique host identifier */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse =
-  /** status 200 The host was patched. */ HostRead;
-export type PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiArg = {
-  /** The unique host identifier */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  body: HostWrite & {
-    uuid?: any;
-  };
-};
-export type PutV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse =
-  /** status 200 The host was updated */ HostRead;
-export type PutV1ProjectsByProjectNameComputeHostsAndHostIdApiArg = {
-  /** The unique host identifier */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  body: HostWrite & {
-    uuid?: any;
-  };
-};
-export type PutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateApiResponse =
-  /** status 200 The host was invalidated */ void;
-export type PutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateApiArg = {
-  /** The unique host identifier */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  hostOperationWithNote: HostOperationWithNote;
-};
-export type PatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardApiResponse =
-  /** status 200 The host was onboarded. */ void;
-export type PatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardApiArg = {
-  /** The unique host identifier. */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterApiResponse =
-  /** status 200 The host registration information was updated. */ void;
-export type PatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterApiArg = {
-  /** The unique host identifier. */
-  hostId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  body: HostRegisterInfo & {};
-};
-export type PostV1ProjectsByProjectNameComputeHostsRegisterApiResponse =
-  /** status 201 The host was registered. */ HostRead;
-export type PostV1ProjectsByProjectNameComputeHostsRegisterApiArg = {
-  /** unique projectName for the resource */
-  projectName: string;
-  hostRegisterInfo: HostRegisterInfo;
-};
-export type GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse =
-  /** status 200 A summary of host objects associated with the given site ID.  */ HostsSummaryRead;
-export type GetV1ProjectsByProjectNameComputeHostsSummaryApiArg = {
-  /** The site ID the hosts belong to. If not specified, returns the summary of all hosts. If specified, returns the summary of hosts that have the given site ID applied to them. */
-  siteId?: string;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-  filter?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameComputeInstancesApiResponse =
-  /** status 200 Array of all instance objects. */ InstanceListRead;
-export type GetV1ProjectsByProjectNameComputeInstancesApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
+  /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. */
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type HostServiceCreateHostApiResponse =
+  /** status 200 Success */ HostResourceRead;
+export type HostServiceCreateHostApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** The host to create. */
+  hostResource: HostResourceWrite;
+};
+export type HostServiceDeleteHostApiResponse =
+  /** status 200 Success */ DeleteHostResponse;
+export type HostServiceDeleteHostApiArg = {
+  /** Name of the host host to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type HostServiceGetHostApiResponse =
+  /** status 200 Success */ HostResourceRead;
+export type HostServiceGetHostApiArg = {
+  /** Name of the requested host. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type HostServicePatchHostApiResponse =
+  /** status 200 Success */ HostResourceRead;
+export type HostServicePatchHostApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the host. */
+  hostResource: HostResourceWrite;
+};
+export type HostServiceUpdateHostApiResponse =
+  /** status 200 Success */ HostResourceRead;
+export type HostServiceUpdateHostApiArg = {
+  /** Name of the host host to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the host. */
+  hostResource: HostResourceWrite;
+};
+export type HostServiceInvalidateHostApiResponse =
+  /** status 200 Success */ InvalidateHostResponse;
+export type HostServiceInvalidateHostApiArg = {
+  /** Host resource ID */
+  resourceId: string;
+  /** user-provided reason for change or a freeform field */
+  note?: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type HostServiceOnboardHostApiResponse =
+  /** status 200 Success */ OnboardHostResponse;
+export type HostServiceOnboardHostApiArg = {
+  /** Host resource ID */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type HostServiceRegisterUpdateHostApiResponse =
+  /** status 200 Success */ HostResourceRead;
+export type HostServiceRegisterUpdateHostApiArg = {
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  hostRegister: HostRegister;
+};
+export type HostServiceRegisterHostApiResponse =
+  /** status 200 Success */ HostResourceRead;
+export type HostServiceRegisterHostApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  hostRegister: HostRegister;
+};
+export type HostServiceGetHostsSummaryApiResponse =
+  /** status 200 Success */ GetHostSummaryResponseRead;
+export type HostServiceGetHostsSummaryApiArg = {
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type InstanceServiceListInstancesApiResponse =
+  /** status 200 Success */ ListInstancesResponseRead;
+export type InstanceServiceListInstancesApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** Returns only the instances that are assigned to the given workload member. If equals to 'null', returns all instances not associated with any workload member. If equal to '' (empty string), returns all instances that have a workload member associated. */
-  workloadMemberId?: string;
-  /** Returns the instances associated with the host with the given host ID. */
-  hostId?: string;
-  /** Returns the instances associated with the hosts in the site identified. by the given siteID */
-  siteId?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PostV1ProjectsByProjectNameComputeInstancesApiResponse =
-  /** status 201 The instance was created. */ InstanceRead;
-export type PostV1ProjectsByProjectNameComputeInstancesApiArg = {
-  /** unique projectName for the resource */
-  projectName: string;
-  body: InstanceWrite;
-};
-export type DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse =
-  /** status 204 The instance was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg = {
-  /** The unique instance identifier. */
-  instanceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse =
-  /** status 200 The requested instance based on its ID. */ InstanceRead;
-export type GetV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg = {
-  /** The unique instance identifier. */
-  instanceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PatchV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiResponse =
-  /** status 200 The instance was patched. */ InstanceRead;
-export type PatchV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg = {
-  /** The unique instance identifier. */
-  instanceId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  body: InstanceWrite & {
-    securityFeature?: any;
-  };
-};
-export type PutV1ProjectsByProjectNameComputeInstancesAndInstanceIdInvalidateApiResponse =
-  /** status 200 The instance was invalidated */ void;
-export type PutV1ProjectsByProjectNameComputeInstancesAndInstanceIdInvalidateApiArg =
-  {
-    /** The unique instance identifier. */
-    instanceId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type GetV1ProjectsByProjectNameComputeOsApiResponse =
-  /** status 200 Array of all OS resource objects. */ OperatingSystemResourceListRead;
-export type GetV1ProjectsByProjectNameComputeOsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
   offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-  filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
-  orderBy?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameComputeOsApiResponse =
-  /** status 201 The OS resource was created. */ OperatingSystemResourceRead;
-export type PostV1ProjectsByProjectNameComputeOsApiArg = {
+export type InstanceServiceCreateInstanceApiResponse =
+  /** status 200 Success */ InstanceResourceRead;
+export type InstanceServiceCreateInstanceApiArg = {
   /** unique projectName for the resource */
   projectName: string;
+  /** The instance to create. */
+  instanceResource: InstanceResourceWrite;
+};
+export type InstanceServiceDeleteInstanceApiResponse =
+  /** status 200 Success */ DeleteInstanceResponse;
+export type InstanceServiceDeleteInstanceApiArg = {
+  /** Name of the instance instance to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type InstanceServiceGetInstanceApiResponse =
+  /** status 200 Success */ InstanceResourceRead;
+export type InstanceServiceGetInstanceApiArg = {
+  /** Name of the requested instance. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type InstanceServicePatchInstanceApiResponse =
+  /** status 200 Success */ InstanceResourceRead;
+export type InstanceServicePatchInstanceApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the instance. */
+  instanceResource: InstanceResourceWrite;
+};
+export type InstanceServiceUpdateInstanceApiResponse =
+  /** status 200 Success */ InstanceResourceRead;
+export type InstanceServiceUpdateInstanceApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the instance. */
+  instanceResource: InstanceResourceWrite;
+};
+export type InstanceServiceInvalidateInstanceApiResponse =
+  /** status 200 Success */ InvalidateInstanceResponse;
+export type InstanceServiceInvalidateInstanceApiArg = {
+  /** Instance resource ID */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OperatingSystemServiceListOperatingSystemsApiResponse =
+  /** status 200 Success */ ListOperatingSystemsResponseRead;
+export type OperatingSystemServiceListOperatingSystemsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OperatingSystemServiceCreateOperatingSystemApiResponse =
+  /** status 200 Success */ OperatingSystemResourceRead;
+export type OperatingSystemServiceCreateOperatingSystemApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** The os to create. */
   operatingSystemResource: OperatingSystemResource;
 };
-export type DeleteV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse =
-  /** status 204 The OS resource was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg = {
-  /** The unique OS resource identifier. */
-  osResourceId: string;
+export type OperatingSystemServiceDeleteOperatingSystemApiResponse =
+  /** status 200 Success */ DeleteOperatingSystemResponse;
+export type OperatingSystemServiceDeleteOperatingSystemApiArg = {
+  /** Name of the os os to be deleted. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type GetV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse =
-  /** status 200 The requested OS resource. */ OperatingSystemResourceRead;
-export type GetV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg = {
-  /** The unique OS resource identifier. */
-  osResourceId: string;
+export type OperatingSystemServiceGetOperatingSystemApiResponse =
+  /** status 200 Success */ OperatingSystemResourceRead;
+export type OperatingSystemServiceGetOperatingSystemApiArg = {
+  /** Name of the requested os. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PatchV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse =
-  /** status 200 The OS resource was patched. */ OperatingSystemResourceRead;
-export type PatchV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg = {
-  /** The unique OS resource identifier. */
-  osResourceId: string;
+export type OperatingSystemServicePatchOperatingSystemApiResponse =
+  /** status 200 Success */ OperatingSystemResourceRead;
+export type OperatingSystemServicePatchOperatingSystemApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
-  body: OperatingSystemResource & {
-    profileName?: any;
-    securityFeature?: any;
-    sha256?: any;
-  };
+  /** Updated values for the os. */
+  operatingSystemResource: OperatingSystemResource;
 };
-export type PutV1ProjectsByProjectNameComputeOsAndOsResourceIdApiResponse =
-  /** status 200 The OS resource was updated. */ OperatingSystemResourceRead;
-export type PutV1ProjectsByProjectNameComputeOsAndOsResourceIdApiArg = {
-  /** The unique OS resource identifier. */
-  osResourceId: string;
+export type OperatingSystemServiceUpdateOperatingSystemApiResponse =
+  /** status 200 Success */ OperatingSystemResourceRead;
+export type OperatingSystemServiceUpdateOperatingSystemApiArg = {
+  /** Name of the os os to be updated. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
-  body: OperatingSystemResource & {
-    profileName?: any;
-    securityFeature?: any;
-    sha256?: any;
-  };
+  /** Updated values for the os. */
+  operatingSystemResource: OperatingSystemResource;
 };
-export type GetV1ProjectsByProjectNameComputeSchedulesApiResponse =
-  /** status 200 Arrays of all schedule objects. */ SchedulesListJoinRead;
-export type GetV1ProjectsByProjectNameComputeSchedulesApiArg = {
-  /** Identifies the paging unique identifier for a single page, starts index at 1. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
+export type ScheduleServiceListSchedulesApiResponse =
+  /** status 200 Success */ ListSchedulesResponseRead;
+export type ScheduleServiceListSchedulesApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
-  /** The region ID target of the schedules. If not specified, returns all schedules (given the other query parameters). If specified, returns the schedules that have the specified region ID applied to them, i.e., target including the inherited ones (parent region if not null). If null, returns all schedules without a region ID as target. */
-  regionId?: string;
-  /** The site ID target of the schedules. If not specified, returns all schedules (given the other query parameters). If specified, returns the schedules that have the specified site ID applied to them, i.e., target including the inherited ones. If null, returns all schedules without a site ID as target. */
-  siteId?: string;
-  /** The host ID target of the schedules. If not specified, returns all schedules (given the other query parameters). If specified, returns the schedules that have the specified host ID applied to them, i.e., target including the inherited ones (parent site if not null). If null, returns all schedules without a host ID as target. */
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** The host ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified host ID applied to them, i.e., target including the inherited ones
+     (parent site if not null). If null, returns all the schedules without a host ID as target. */
   hostId?: string;
-  /** Filters based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds */
+  /** The site ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified site ID applied to them, i.e., target including the inherited ones.
+     If null, returns all the schedules without a site ID as target */
+  siteId?: string;
+  /** The region ID target of the schedules. If not specified,
+     returns all schedules (given the other query params).
+     If specified, returns the schedules that have the specified region ID applied to them,
+     i.e., target including the inherited ones (parent region if not null).
+     If null, returns all the schedules without a region ID as target. */
+  regionId?: string;
+  /** Filter based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
   unixEpoch?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type GetV1ProjectsByProjectNameComputeWorkloadsApiResponse =
-  /** status 200 Array of all workload objects. */ WorkloadListRead;
-export type GetV1ProjectsByProjectNameComputeWorkloadsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-  filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+export type WorkloadServiceListWorkloadsApiResponse =
+  /** status 200 Success */ ListWorkloadsResponseRead;
+export type WorkloadServiceListWorkloadsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  kind?: WorkloadKind;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PostV1ProjectsByProjectNameComputeWorkloadsApiResponse =
-  /** status 201 The workload was created. */ WorkloadRead;
-export type PostV1ProjectsByProjectNameComputeWorkloadsApiArg = {
-  /** unique projectName for the resource */
-  projectName: string;
-  workload: WorkloadWrite;
-};
-export type DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse =
-  /** status 204 The workload was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg = {
-  /** The unique workload identifier. */
-  workloadId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse =
-  /** status 200 The requested workload object given its ID. */ WorkloadRead;
-export type GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg = {
-  /** The unique workload identifier. */
-  workloadId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PatchV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse =
-  /** status 200 The workload was patched. */ WorkloadRead;
-export type PatchV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg = {
-  /** The unique workload identifier. */
-  workloadId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  workload: WorkloadWrite;
-};
-export type PutV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse =
-  /** status 200 The workload was updated. */ WorkloadRead;
-export type PutV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg = {
-  /** The unique workload identifier. */
-  workloadId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  workload: WorkloadWrite;
-};
-export type GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiResponse =
-  /** status 200 The requested workload members. */ WorkloadMemberListRead;
-export type GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiArg =
-  {
-    /** Index of the first item to return. This allows skipping of items. */
-    offset?: number;
-    /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-    pageSize?: number;
-    /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-    filter?: string;
-    /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
-    orderBy?: string;
-    /** The unique workload identifier. */
-    workloadId?: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique workloadID for the resource */
-    _workloadId: string;
-  };
-export type PostV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiResponse =
-  /** status 201 The member was added. */ WorkloadMemberRead;
-export type PostV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersApiArg =
-  {
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique workloadID for the resource */
-    workloadId: string;
-    workloadMember: WorkloadMemberWrite;
-  };
-export type DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiResponse =
-  /** status 204 The workload member was removed. */ void;
-export type DeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiArg =
-  {
-    /** The unique identifier of the workload member. */
-    workloadMemberId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique workloadID for the resource */
-    workloadId: string;
-  };
-export type GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiResponse =
-  /** status 200 The requested workload member. */ WorkloadMemberRead;
-export type GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdApiArg =
-  {
-    /** The unique identifier of the workload member. */
-    workloadMemberId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique workloadID for the resource */
-    workloadId: string;
-  };
-export type GetV1ProjectsByProjectNameLocalAccountsApiResponse =
-  /** status 200 Array of all local account objects. */ LocalAccountListRead;
-export type GetV1ProjectsByProjectNameLocalAccountsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type WorkloadServiceCreateWorkloadApiResponse =
+  /** status 200 Success */ WorkloadResourceRead;
+export type WorkloadServiceCreateWorkloadApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** The workload to create. */
+  workloadResource: WorkloadResourceWrite;
+};
+export type WorkloadServiceDeleteWorkloadApiResponse =
+  /** status 200 Success */ DeleteWorkloadResponse;
+export type WorkloadServiceDeleteWorkloadApiArg = {
+  /** Name of the workload workload to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type WorkloadServiceGetWorkloadApiResponse =
+  /** status 200 Success */ WorkloadResourceRead;
+export type WorkloadServiceGetWorkloadApiArg = {
+  /** Name of the requested workload. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type WorkloadServicePatchWorkloadApiResponse =
+  /** status 200 Success */ WorkloadResourceRead;
+export type WorkloadServicePatchWorkloadApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the workload. */
+  workloadResource: WorkloadResourceWrite;
+};
+export type WorkloadServiceUpdateWorkloadApiResponse =
+  /** status 200 Success */ WorkloadResourceRead;
+export type WorkloadServiceUpdateWorkloadApiArg = {
+  /** Name of the workload workload to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the workload. */
+  workloadResource: WorkloadResourceWrite;
+};
+export type WorkloadMemberServiceListWorkloadMembersApiResponse =
+  /** status 200 Success */ ListWorkloadMembersResponseRead;
+export type WorkloadMemberServiceListWorkloadMembersApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+};
+export type WorkloadMemberServiceCreateWorkloadMemberApiResponse =
+  /** status 200 Success */ WorkloadMemberRead;
+export type WorkloadMemberServiceCreateWorkloadMemberApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+  /** The workload_member to create. */
+  workloadMember: WorkloadMemberWrite;
+};
+export type WorkloadMemberServiceDeleteWorkloadMemberApiResponse =
+  /** status 200 Success */ DeleteWorkloadMemberResponse;
+export type WorkloadMemberServiceDeleteWorkloadMemberApiArg = {
+  /** Name of the workload_member workload_member to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique workloadResourceId for the resource */
+  workloadResourceId: string;
+};
+export type WorkloadMemberServiceGetWorkloadMemberApiResponse =
+  /** status 200 Success */ WorkloadMemberRead;
+export type WorkloadMemberServiceGetWorkloadMemberApiArg = {
+  /** Name of the requested workload_member. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique workloadResourceId for the resource */
+  workloadResourceId: string;
+};
+export type LocalAccountServiceListLocalAccountsApiResponse =
+  /** status 200 Success */ ListLocalAccountsResponseRead;
+export type LocalAccountServiceListLocalAccountsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameLocalAccountsApiResponse =
-  /** status 201 Local account created successfully. */ LocalAccountRead;
-export type PostV1ProjectsByProjectNameLocalAccountsApiArg = {
+export type LocalAccountServiceCreateLocalAccountApiResponse =
+  /** status 200 Success */ LocalAccountResourceRead;
+export type LocalAccountServiceCreateLocalAccountApiArg = {
   /** unique projectName for the resource */
   projectName: string;
-  localAccount: LocalAccount;
+  /** The localaccount to create. */
+  localAccountResource: LocalAccountResource;
 };
-export type DeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiResponse =
-  /** status 204 The locallaccount was removed. */ void;
-export type DeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiArg =
-  {
-    /** The unique identifier of the local account. */
-    localAccountId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type GetV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiResponse =
-  /** status 200 Local account object. */ LocalAccountRead;
-export type GetV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdApiArg = {
-  /** The unique identifier of the local account. */
-  localAccountId: string;
+export type LocalAccountServiceDeleteLocalAccountApiResponse =
+  /** status 200 Success */ DeleteLocalAccountResponse;
+export type LocalAccountServiceDeleteLocalAccountApiArg = {
+  /** Name of the localaccount to be deleted. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type GetV1ProjectsByProjectNameLocationsApiResponse =
-  /** status 200 Array of the location node objects containing the resources that match the query name parameter. For each type of location, the maximum amount of resources to be returned is 20. */ LocationNodeListRead;
-export type GetV1ProjectsByProjectNameLocationsApiArg = {
-  /** The name of the resource to be queried; it can be a region and/or site name, if the query parameters below are stated. */
+export type LocalAccountServiceGetLocalAccountApiResponse =
+  /** status 200 Success */ LocalAccountResourceRead;
+export type LocalAccountServiceGetLocalAccountApiArg = {
+  /** Name of the requested localaccount. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type LocationServiceListLocationsApiResponse =
+  /** status 200 Success */ ListLocationsResponse;
+export type LocationServiceListLocationsApiArg = {
+  /** Filter locations by name */
   name?: string;
-  /** Indicates if the filter will be applied on the site resources. */
+  /** Return site locations */
   showSites?: boolean;
-  /** Indicates if the filter will be applied on the region resources. */
+  /** Return region locations */
   showRegions?: boolean;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type GetV1ProjectsByProjectNameProvidersApiResponse =
-  /** status 200 Array of all provider objects. */ ProviderListRead;
-export type GetV1ProjectsByProjectNameProvidersApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set. */
-  filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+export type ProviderServiceListProvidersApiResponse =
+  /** status 200 Success */ ListProvidersResponseRead;
+export type ProviderServiceListProvidersApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PostV1ProjectsByProjectNameProvidersApiResponse =
-  /** status 201 The provider resource was created. */ ProviderRead;
-export type PostV1ProjectsByProjectNameProvidersApiArg = {
-  /** unique projectName for the resource */
-  projectName: string;
-  provider: Provider;
-};
-export type DeleteV1ProjectsByProjectNameProvidersAndProviderIdApiResponse =
-  /** status 204 The provider resource was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameProvidersAndProviderIdApiArg = {
-  /** The provider resource's unique identifier. */
-  providerId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameProvidersAndProviderIdApiResponse =
-  /** status 200 The requested provider resource. */ ProviderRead;
-export type GetV1ProjectsByProjectNameProvidersAndProviderIdApiArg = {
-  /** The provider resource's unique identifier. */
-  providerId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type GetV1ProjectsByProjectNameRegionsApiResponse =
-  /** status 200 Array of all region objects. */ RegionsListRead;
-export type GetV1ProjectsByProjectNameRegionsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type ProviderServiceCreateProviderApiResponse =
+  /** status 200 Success */ ProviderResourceRead;
+export type ProviderServiceCreateProviderApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** The provider to create. */
+  providerResource: ProviderResource;
+};
+export type ProviderServiceDeleteProviderApiResponse =
+  /** status 200 Success */ DeleteProviderResponse;
+export type ProviderServiceDeleteProviderApiArg = {
+  /** Name of the provider provider to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type ProviderServiceGetProviderApiResponse =
+  /** status 200 Success */ ProviderResourceRead;
+export type ProviderServiceGetProviderApiArg = {
+  /** Name of the requested provider. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type RegionServiceListRegionsApiResponse =
+  /** status 200 Success */ ListRegionsResponseRead;
+export type RegionServiceListRegionsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
-  /** The parent region ID that the region belongs to. If not specified, returns all regions. If specified, returns the regions that have the specified parent applied to them. If null, returns all the regions without a parent. */
-  parent?: string;
-  /** Indicates if the region identified by the filter needs to be returned with the field totalSites filled. */
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** Flag to signal if the total amount of site in a region should be returned. */
   showTotalSites?: boolean;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameRegionsApiResponse =
-  /** status 201 The region was created. */ RegionRead;
-export type PostV1ProjectsByProjectNameRegionsApiArg = {
+export type RegionServiceCreateRegionApiResponse =
+  /** status 200 Success */ RegionResourceRead;
+export type RegionServiceCreateRegionApiArg = {
   /** unique projectName for the resource */
   projectName: string;
-  region: RegionWrite;
+  /** The region to create. */
+  regionResource: RegionResourceWrite;
 };
-export type DeleteV1ProjectsByProjectNameRegionsAndRegionIdApiResponse =
-  /** status 204 The region was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameRegionsAndRegionIdApiArg = {
-  /** The unique region identifier */
-  regionId: string;
+export type SiteServiceDeleteSiteApiResponse =
+  /** status 200 Success */ DeleteSiteResponse;
+export type SiteServiceDeleteSiteApiArg = {
+  /** Name of the site site to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+};
+export type SiteServiceGetSiteApiResponse =
+  /** status 200 Success */ SiteResourceRead;
+export type SiteServiceGetSiteApiArg = {
+  /** Name of the requested site. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+};
+export type SiteServicePatchSiteApiResponse =
+  /** status 200 Success */ SiteResourceRead;
+export type SiteServicePatchSiteApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+  /** Updated values for the site. */
+  siteResource: SiteResourceWrite;
+};
+export type SiteServiceUpdateSiteApiResponse =
+  /** status 200 Success */ SiteResourceRead;
+export type SiteServiceUpdateSiteApiArg = {
+  /** Name of the site site to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique regionResourceId for the resource */
+  regionResourceId: string;
+  /** Updated values for the site. */
+  siteResource: SiteResourceWrite;
+};
+export type RegionServiceDeleteRegionApiResponse =
+  /** status 200 Success */ DeleteRegionResponse;
+export type RegionServiceDeleteRegionApiArg = {
+  /** Name of the region region to be deleted. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse =
-  /** status 200 The requested region. */ RegionRead;
-export type GetV1ProjectsByProjectNameRegionsAndRegionIdApiArg = {
-  /** The unique region identifier */
-  regionId: string;
+export type RegionServiceGetRegionApiResponse =
+  /** status 200 Success */ RegionResourceRead;
+export type RegionServiceGetRegionApiArg = {
+  /** Name of the requested region. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PatchV1ProjectsByProjectNameRegionsAndRegionIdApiResponse =
-  /** status 200 The region was patched. */ RegionRead;
-export type PatchV1ProjectsByProjectNameRegionsAndRegionIdApiArg = {
-  /** The unique region identifier */
-  regionId: string;
+export type RegionServicePatchRegionApiResponse =
+  /** status 200 Success */ RegionResourceRead;
+export type RegionServicePatchRegionApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
-  region: RegionWrite;
+  /** Updated values for the region. */
+  regionResource: RegionResourceWrite;
 };
-export type PutV1ProjectsByProjectNameRegionsAndRegionIdApiResponse =
-  /** status 200 The region was updated. */ RegionRead;
-export type PutV1ProjectsByProjectNameRegionsAndRegionIdApiArg = {
-  /** The unique region identifier */
-  regionId: string;
+export type RegionServiceUpdateRegionApiResponse =
+  /** status 200 Success */ RegionResourceRead;
+export type RegionServiceUpdateRegionApiArg = {
+  /** Name of the region region to be updated. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
-  region: RegionWrite;
+  /** Updated values for the region. */
+  regionResource: RegionResourceWrite;
 };
-export type GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse =
-  /** status 200 Array of all site objects. */ SitesListRead;
-export type GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-  pageSize?: number;
-  /** Optional filter to return only items of interest. See https://google.aip.dev/160 for details. */
+export type SiteServiceListSitesApiResponse =
+  /** status 200 Success */ ListSitesResponseRead;
+export type SiteServiceListSitesApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
   filter?: string;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
-  orderBy?: string;
-  /** The region ID that the sites belong to. If not specified, returns all sites (given the other query params). If specified, returns the sites that have the specified region ID applied to them. If null, returns all sites without a region ID. */
-  regionId: string;
-  /** The OUID that the sites belong to. If not specified, returns all sites (given the other query parameters). If specified, returns the sites that have the specified OUID applied to them. If null, returns all sites without an OUID. */
-  ouId?: string;
-  /** unique projectName for the resource */
-  projectName: string;
-};
-export type PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse =
-  /** status 201 The site was created. */ SiteRead;
-export type PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg = {
-  /** unique projectName for the resource */
-  projectName: string;
-  /** unique regionID for the resource */
-  regionId: string;
-  site: SiteWrite;
-};
-export type DeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse =
-  /** status 204 The site was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg = {
-  /** The unique site identifier. */
-  siteId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  /** unique regionID for the resource */
-  regionId: string;
-};
-export type GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse =
-  /** status 200 The requested site. */ SiteRead;
-export type GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg = {
-  /** The unique site identifier. */
-  siteId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  /** unique regionID for the resource */
-  regionId: string;
-};
-export type PatchV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse =
-  /** status 200 The site was patched. */ SiteRead;
-export type PatchV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg = {
-  /** The unique site identifier. */
-  siteId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  /** unique regionID for the resource */
-  regionId: string;
-  site: SiteWrite;
-};
-export type PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse =
-  /** status 200 The site was updated. */ SiteRead;
-export type PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg = {
-  /** The unique site identifier. */
-  siteId: string;
-  /** unique projectName for the resource */
-  projectName: string;
-  /** unique regionID for the resource */
-  regionId: string;
-  site: SiteWrite;
-};
-export type GetV1ProjectsByProjectNameSchedulesRepeatedApiResponse =
-  /** status 200 Arrays of all repeated schedule objects. */ RepeatedSchedulesListRead;
-export type GetV1ProjectsByProjectNameSchedulesRepeatedApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
-  /** The region ID target of the schedules. If not specified, returns all repeated schedules (given the other query parameters). If specified, returns the schedules that have the specified region ID applied to them, i.e., target. If null, returns all repeated schedules without a region ID as target. */
-  regionId?: string;
-  /** The site ID target of the schedules. If not specified, returns all repeated schedules (given the other query parameters). If specified, returns the schedules that have the specified site ID applied to them, i.e., target. If null, returns all repeated schedules without a site ID as target. */
-  siteId?: string;
-  /** The host ID target of the repeated schedules. If not specified, returns all repeated schedules (given the other query parameters). If specified, returns the schedules that have the specified host ID applied to them, i.e., target. If null, returns all repeated schedules without a host ID as target. */
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+};
+export type SiteServiceCreateSiteApiResponse =
+  /** status 200 Success */ SiteResourceRead;
+export type SiteServiceCreateSiteApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+  /** The site to create. */
+  siteResource: SiteResourceWrite;
+};
+export type ScheduleServiceListRepeatedSchedulesApiResponse =
+  /** status 200 Success */ ListRepeatedSchedulesResponseRead;
+export type ScheduleServiceListRepeatedSchedulesApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** The host ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified host ID applied to them, i.e., target including the inherited ones
+     (parent site if not null). If null, returns all the schedules without a host ID as target. */
   hostId?: string;
-  /** Filters based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
+  /** The site ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified site ID applied to them, i.e., target including the inherited ones.
+     If null, returns all the schedules without a site ID as target */
+  siteId?: string;
+  /** The region ID target of the schedules. If not specified,
+     returns all schedules (given the other query params).
+     If specified, returns the schedules that have the specified region ID applied to them,
+     i.e., target including the inherited ones (parent region if not null).
+     If null, returns all the schedules without a region ID as target. */
+  regionId?: string;
+  /** Filter based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
   unixEpoch?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameSchedulesRepeatedApiResponse =
-  /** status 201 The repeated schedule was created. */ SingleScheduleRead;
-export type PostV1ProjectsByProjectNameSchedulesRepeatedApiArg = {
+export type ScheduleServiceCreateRepeatedScheduleApiResponse =
+  /** status 200 Success */ RepeatedScheduleResourceRead;
+export type ScheduleServiceCreateRepeatedScheduleApiArg = {
   /** unique projectName for the resource */
   projectName: string;
-  repeatedSchedule: SingleScheduleWrite;
+  /** The repeated_schedule to create. */
+  repeatedScheduleResource: RepeatedScheduleResourceWrite;
 };
-export type DeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse =
-  /** status 204 The repeated schedule was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg =
-  {
-    /** The unique repeated schedule identifier. */
-    repeatedScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type GetV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse =
-  /** status 200 The requested repeated schedule. */ SingleScheduleRead;
-export type GetV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg =
-  {
-    /** The unique repeated schedule identifier. */
-    repeatedScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type PatchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse =
-  /** status 200 The repeated schedule was patched. */ SingleScheduleRead;
-export type PatchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg =
-  {
-    /** The unique repeated schedule identifier. */
-    repeatedScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    repeatedSchedule: SingleScheduleWrite;
-  };
-export type PutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiResponse =
-  /** status 200 The repeated schedule was updated. */ SingleScheduleRead;
-export type PutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg =
-  {
-    /** The unique repeated schedule identifier. */
-    repeatedScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    repeatedSchedule: SingleScheduleWrite;
-  };
-export type GetV1ProjectsByProjectNameSchedulesSingleApiResponse =
-  /** status 200 Arrays of all single schedule objects. */ SingleSchedulesListRead;
-export type GetV1ProjectsByProjectNameSchedulesSingleApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
+export type ScheduleServiceDeleteRepeatedScheduleApiResponse =
+  /** status 200 Success */ DeleteRepeatedScheduleResponse;
+export type ScheduleServiceDeleteRepeatedScheduleApiArg = {
+  /** Name of the repeated_schedule repeated_schedule to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type ScheduleServiceGetRepeatedScheduleApiResponse =
+  /** status 200 Success */ RepeatedScheduleResourceRead;
+export type ScheduleServiceGetRepeatedScheduleApiArg = {
+  /** Name of the requested repeated_schedule. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type ScheduleServicePatchRepeatedScheduleApiResponse =
+  /** status 200 Success */ RepeatedScheduleResourceRead;
+export type ScheduleServicePatchRepeatedScheduleApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the repeated_schedule. */
+  repeatedScheduleResource: RepeatedScheduleResourceWrite;
+};
+export type ScheduleServiceUpdateRepeatedScheduleApiResponse =
+  /** status 200 Success */ RepeatedScheduleResourceRead;
+export type ScheduleServiceUpdateRepeatedScheduleApiArg = {
+  /** Name of the repeated_schedule repeated_schedule to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the repeated_schedule. */
+  repeatedScheduleResource: RepeatedScheduleResourceWrite;
+};
+export type ScheduleServiceListSingleSchedulesApiResponse =
+  /** status 200 Success */ ListSingleSchedulesResponseRead;
+export type ScheduleServiceListSingleSchedulesApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
-  /** The region ID target of the schedules. If not specified, returns all single schedules (given the other query parameters). If specified, returns the schedules that have the specified region ID applied to them, i.e., target. If null, returns all single schedules without a region ID as target. */
-  regionId?: string;
-  /** The site ID target of the schedules. If not specified, returns all single schedules (given the other query parameters). If specified, returns the schedules that have the specified site ID applied to them, i.e., target. If null, returns all single schedules without a site ID as target. */
-  siteId?: string;
-  /** The host ID target of the single schedules. If not specified, returns all single schedules (given the other query parameters). If specified, returns the schedules that have the specified host ID applied to them, i.e., target. If null, returns all single schedules without a host ID as target. */
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** The host ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified host ID applied to them, i.e., target including the inherited ones
+     (parent site if not null). If null, returns all the schedules without a host ID as target. */
   hostId?: string;
-  /** Filters based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds */
+  /** The site ID target of the schedules. If not specified, returns all schedules
+     (given the other query params). If specified, returns the schedules that have
+     the specified site ID applied to them, i.e., target including the inherited ones.
+     If null, returns all the schedules without a site ID as target */
+  siteId?: string;
+  /** The region ID target of the schedules. If not specified,
+     returns all schedules (given the other query params).
+     If specified, returns the schedules that have the specified region ID applied to them,
+     i.e., target including the inherited ones (parent region if not null).
+     If null, returns all the schedules without a region ID as target. */
+  regionId?: string;
+  /** Filter based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds. */
   unixEpoch?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameSchedulesSingleApiResponse =
-  /** status 201 The single schedule was created. */ SingleScheduleRead2;
-export type PostV1ProjectsByProjectNameSchedulesSingleApiArg = {
+export type ScheduleServiceCreateSingleScheduleApiResponse =
+  /** status 200 Success */ SingleScheduleResourceRead;
+export type ScheduleServiceCreateSingleScheduleApiArg = {
   /** unique projectName for the resource */
   projectName: string;
-  singleSchedule: SingleScheduleWrite2;
+  /** The single_schedule to create. */
+  singleScheduleResource: SingleScheduleResourceWrite;
 };
-export type DeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse =
-  /** status 204 The single schedule was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg =
-  {
-    /** The unique single schedule identifier. */
-    singleScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type GetV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse =
-  /** status 200 The requested single schedule. */ SingleScheduleRead2;
-export type GetV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg =
-  {
-    /** The unique single schedule identifier. */
-    singleScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type PatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse =
-  /** status 200 The single schedule was patched. */ SingleScheduleRead2;
-export type PatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg =
-  {
-    /** The unique single schedule identifier. */
-    singleScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    singleSchedule: SingleScheduleWrite2;
-  };
-export type PutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse =
-  /** status 200 The single schedule was updated. */ SingleScheduleRead2;
-export type PutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg =
-  {
-    /** The unique single schedule identifier. */
-    singleScheduleId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    singleSchedule: SingleScheduleWrite2;
-  };
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsApiResponse =
-  /** status 200 Array of all telemetry log groups. */ TelemetryLogsGroupListRead;
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
+export type ScheduleServiceDeleteSingleScheduleApiResponse =
+  /** status 200 Success */ DeleteSingleScheduleResponse;
+export type ScheduleServiceDeleteSingleScheduleApiArg = {
+  /** Name of the single_schedule single_schedule to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type ScheduleServiceGetSingleScheduleApiResponse =
+  /** status 200 Success */ SingleScheduleResourceRead;
+export type ScheduleServiceGetSingleScheduleApiArg = {
+  /** Name of the requested single_schedule. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type ScheduleServicePatchSingleScheduleApiResponse =
+  /** status 200 Success */ SingleScheduleResourceRead;
+export type ScheduleServicePatchSingleScheduleApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the single_schedule. */
+  singleScheduleResource: SingleScheduleResourceWrite;
+};
+export type ScheduleServiceUpdateSingleScheduleApiResponse =
+  /** status 200 Success */ SingleScheduleResourceRead;
+export type ScheduleServiceUpdateSingleScheduleApiArg = {
+  /** Name of the single_schedule single_schedule to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** Updated values for the single_schedule. */
+  singleScheduleResource: SingleScheduleResourceWrite;
+};
+export type TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse =
+  /** status 200 Success */ ListTelemetryLogsGroupsResponseRead;
+export type TelemetryLogsGroupServiceListTelemetryLogsGroupsApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameTelemetryLoggroupsApiResponse =
-  /** status 201 The telemetry log group was created. */ TelemetryLogsGroupRead;
-export type PostV1ProjectsByProjectNameTelemetryLoggroupsApiArg = {
+export type TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiResponse =
+  /** status 200 Success */ TelemetryLogsGroupResourceRead;
+export type TelemetryLogsGroupServiceCreateTelemetryLogsGroupApiArg = {
   /** unique projectName for the resource */
   projectName: string;
-  telemetryLogsGroup: TelemetryLogsGroup;
+  /** The telemetry_logs_group to create. */
+  telemetryLogsGroupResource: TelemetryLogsGroupResource;
 };
-export type DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiResponse =
-  /** status 204 The telemetry log group was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiArg =
-  {
-    /** The unique telemetry group resource identifier. */
-    telemetryLogsGroupId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiResponse =
-  /** status 200 The requested telemetry log group. */ TelemetryLogsGroupRead;
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiArg =
-  {
-    /** The unique telemetry group resource identifier. */
-    telemetryLogsGroupId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-  };
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse =
-  /** status 200 Array of all telemetry log profiles. */ TelemetryLogsProfileListRead;
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiArg =
-  {
-    /** Index of the first item to return. This allows skipping of items. */
-    offset?: number;
-    /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-    pageSize?: number;
-    /** Returns only the telemetry profiles that are assigned with the given site ID. */
-    siteId?: string;
-    /** Returns only the telemetry profiles that are assigned with the given region ID. */
-    regionId?: string;
-    /** Returns only the telemetry profiles that are assigned with the given instance identifier. */
-    instanceId?: string;
-    /** Indicates if the listed telemetry profiles will be extended with telemetry profiles rendered from the hierarchy. This flag is used along with one of site ID, region ID or instance ID. If site ID, region ID, or instance ID are not set, this flag is ignored. */
-    showInherited?: boolean;
-    /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
-    orderBy?: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryLogsGroupId for the resource */
-    telemetryLogsGroupId: string;
-  };
-export type PostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse =
-  /** status 201 The telemetry profile was created. */ TelemetryLogsProfileRead;
-export type PostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiArg =
-  {
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryLogsGroupId for the resource */
-    telemetryLogsGroupId: string;
-    telemetryLogsProfile: TelemetryLogsProfile;
-  };
-export type DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse =
-  /** status 204 The telemetry log profile was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryLogsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryLogsGroupId for the resource */
-    telemetryLogsGroupId: string;
-  };
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse =
-  /** status 200 The requested telemetry log profile. */ TelemetryLogsProfileRead;
-export type GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryLogsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryLogsGroupId for the resource */
-    telemetryLogsGroupId: string;
-  };
-export type PatchV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse =
-  /** status 200 The telemetry log profile was patched. */ TelemetryLogsProfileRead;
-export type PatchV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryLogsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryLogsGroupId for the resource */
-    telemetryLogsGroupId: string;
-    telemetryLogsProfile: TelemetryLogsProfile;
-  };
-export type PutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse =
-  /** status 200 The telemetry log profile was updated. */ TelemetryLogsProfileRead;
-export type PutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryLogsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryLogsGroupId for the resource */
-    telemetryLogsGroupId: string;
-    telemetryLogsProfile: TelemetryLogsProfile;
-  };
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse =
-  /** status 200 Array of all telemetry metric groups. */ TelemetryMetricsGroupListRead;
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsApiArg = {
-  /** Index of the first item to return. This allows skipping of items. */
-  offset?: number;
-  /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
+export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiResponse =
+  /** status 200 Success */ DeleteTelemetryLogsProfileResponse;
+export type TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg = {
+  /** Name of the telemetry_logs_profile telemetry_logs_profile to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+};
+export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiResponse =
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg = {
+  /** Name of the requested telemetry_logs_profile. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+};
+export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiResponse =
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServicePatchTelemetryLogsProfileApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+  /** Updated values for the telemetry_logs_profile. */
+  telemetryLogsProfileResource: TelemetryLogsProfileResource;
+};
+export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse =
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiArg = {
+  /** Name of the telemetry_logs_profile telemetry_logs_profile to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique loggroupResourceId for the resource */
+  loggroupResourceId: string;
+  /** Updated values for the telemetry_logs_profile. */
+  telemetryLogsProfileResource: TelemetryLogsProfileResource;
+};
+export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiResponse =
+  /** status 200 Success */ DeleteTelemetryLogsGroupResponse;
+export type TelemetryLogsGroupServiceDeleteTelemetryLogsGroupApiArg = {
+  /** Name of the telemetry_logs_group telemetry_logs_group to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse =
+  /** status 200 Success */ TelemetryLogsGroupResourceRead;
+export type TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg = {
+  /** Name of the requested telemetry_logs_group. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse =
+  /** status 200 Success */ ListTelemetryLogsProfilesResponseRead;
+export type TelemetryLogsProfileServiceListTelemetryLogsProfilesApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
   pageSize?: number;
-  /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Returns only the telemetry profiles that are assigned with the given instance identifier. */
+  instanceId?: string;
+  /** Returns only the telemetry profiles that are assigned with the given siteID. */
+  siteId?: string;
+  /** Returns only the telemetry profiles that are assigned with the given regionID. */
+  regionId?: string;
+  /** Indicates if listed telemetry profiles should be extended with telemetry
+     profiles rendered from hierarchy. This flag is only used along with one
+     of siteId, regionId or instanceId. If siteId, regionId or instanceId are
+     not set, this flag is ignored. */
+  showInherited?: boolean;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+};
+export type TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse =
+  /** status 200 Success */ TelemetryLogsProfileResourceRead;
+export type TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+  /** The telemetry_logs_profile to create. */
+  telemetryLogsProfileResource: TelemetryLogsProfileResource;
+};
+export type TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse =
+  /** status 200 Success */ ListTelemetryMetricsGroupsResponseRead;
+export type TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
   orderBy?: string;
   /** unique projectName for the resource */
   projectName: string;
 };
-export type PostV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse =
-  /** status 201 The telemetry metric group was created. */ TelemetryMetricsGroupRead;
-export type PostV1ProjectsByProjectNameTelemetryMetricgroupsApiArg = {
+export type TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiResponse =
+  /** status 200 Success */ TelemetryMetricsGroupResourceRead;
+export type TelemetryMetricsGroupServiceCreateTelemetryMetricsGroupApiArg = {
   /** unique projectName for the resource */
   projectName: string;
-  telemetryMetricsGroup: TelemetryMetricsGroup;
+  /** The telemetry_metrics_group to create. */
+  telemetryMetricsGroupResource: TelemetryMetricsGroupResource;
 };
-export type DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiResponse =
-  /** status 204 The telemetry metric group was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiArg =
+export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiResponse =
+  /** status 200 Success */ DeleteTelemetryMetricsProfileResponse;
+export type TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg =
   {
-    /** The unique telemetry group resource identifier. */
-    telemetryMetricsGroupId: string;
+    /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted. */
+    resourceId: string;
     /** unique projectName for the resource */
     projectName: string;
+    /** unique metricgroupResourceId for the resource */
+    metricgroupResourceId: string;
   };
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiResponse =
-  /** status 200 The requested telemetry metric group. */ TelemetryMetricsGroupRead;
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdApiArg =
+export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiResponse =
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg = {
+  /** Name of the requested telemetry_metrics_profile. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique metricgroupResourceId for the resource */
+  metricgroupResourceId: string;
+};
+export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiResponse =
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServicePatchTelemetryMetricsProfileApiArg = {
+  /** ID of the resource to be updated. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique metricgroupResourceId for the resource */
+  metricgroupResourceId: string;
+  /** Updated values for the telemetry_metrics_profile. */
+  telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
+};
+export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse =
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiArg =
   {
-    /** The unique telemetry group resource identifier. */
-    telemetryMetricsGroupId: string;
+    /** Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated. */
+    resourceId: string;
     /** unique projectName for the resource */
     projectName: string;
+    /** unique metricgroupResourceId for the resource */
+    metricgroupResourceId: string;
+    /** Updated values for the telemetry_metrics_profile. */
+    telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse =
-  /** status 200 Array of all telemetry metric profiles. */ TelemetryLogsProfileListRead2;
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg =
+export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiResponse =
+  /** status 200 Success */ DeleteTelemetryMetricsGroupResponse;
+export type TelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupApiArg = {
+  /** Name of the telemetry_metrics_group telemetry_metrics_group to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiResponse =
+  /** status 200 Success */ TelemetryMetricsGroupResourceRead;
+export type TelemetryMetricsGroupServiceGetTelemetryMetricsGroupApiArg = {
+  /** Name of the requested telemetry_metrics_group. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse =
+  /** status 200 Success */ ListTelemetryMetricsProfilesResponseRead;
+export type TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiArg = {
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Returns only the telemetry profiles that are assigned with the given instance identifier. */
+  instanceId?: string;
+  /** Returns only the telemetry profiles that are assigned with the given siteID. */
+  siteId?: string;
+  /** Returns only the telemetry profiles that are assigned with the given regionID. */
+  regionId?: string;
+  /** Indicates if listed telemetry profiles should be extended with telemetry
+     profiles rendered from hierarchy. This flag is only used along with one
+     of siteId, regionId or instanceId. If siteId, regionId or instanceId are
+     not set, this flag is ignored. */
+  showInherited?: boolean;
+  /** unique projectName for the resource */
+  projectName: string;
+  /** unique resourceId for the resource */
+  resourceId: string;
+};
+export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse =
+  /** status 200 Success */ TelemetryMetricsProfileResourceRead;
+export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg =
   {
-    /** Index of the first item to return. This allows skipping of items. */
-    offset?: number;
-    /** Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20. */
-    pageSize?: number;
-    /** Returns only the telemetry profiles that are assigned with the given site ID. */
-    siteId?: string;
-    /** Returns only the telemetry profiles that are assigned with the given region ID. */
-    regionId?: string;
-    /** Returns only the telemetry profiles that are assigned with the given instance identifier. */
-    instanceId?: string;
-    /** Indicates if the listed telemetry profiles will be extended with telemetry profiles rendered from the hierarchy. This flag is only used along with one of site ID, region ID or instance ID. If site ID, region ID, or instance ID are not set, this flag is ignored. */
-    showInherited?: boolean;
-    /** Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details. */
-    orderBy?: string;
     /** unique projectName for the resource */
     projectName: string;
-    /** unique telemetryMetricsGroupId for the resource */
-    telemetryMetricsGroupId: string;
+    /** unique resourceId for the resource */
+    resourceId: string;
+    /** The telemetry_metrics_profile to create. */
+    telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
-export type PostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse =
-  /** status 201 The telemetry profile was created. */ TelemetryMetricsProfileRead;
-export type PostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiArg =
-  {
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryMetricsGroupId for the resource */
-    telemetryMetricsGroupId: string;
-    telemetryMetricsProfile: TelemetryMetricsProfile;
-  };
-export type DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse =
-  /** status 204 The telemetry metric profile was deleted. */ void;
-export type DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryMetricsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryMetricsGroupId for the resource */
-    telemetryMetricsGroupId: string;
-  };
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse =
-  /** status 200 The requested telemetry metric profile. */ TelemetryMetricsProfileRead;
-export type GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryMetricsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryMetricsGroupId for the resource */
-    telemetryMetricsGroupId: string;
-  };
-export type PatchV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse =
-  /** status 200 The telemetry metric profile was patched. */ TelemetryMetricsProfileRead;
-export type PatchV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryMetricsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryMetricsGroupId for the resource */
-    telemetryMetricsGroupId: string;
-    telemetryMetricsProfile: TelemetryMetricsProfile;
-  };
-export type PutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse =
-  /** status 200 The telemetry metric profile was updated. */ TelemetryMetricsProfileRead;
-export type PutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg =
-  {
-    /** The unique telemetry profile identifier. */
-    telemetryMetricsProfileId: string;
-    /** unique projectName for the resource */
-    projectName: string;
-    /** unique telemetryMetricsGroupId for the resource */
-    telemetryMetricsGroupId: string;
-    telemetryMetricsProfile: TelemetryMetricsProfile;
-  };
-export type HostsList = {};
-export type HostPowerState =
+export type BaremetalControllerKind =
+  | "BAREMETAL_CONTROLLER_KIND_UNSPECIFIED"
+  | "BAREMETAL_CONTROLLER_KIND_NONE"
+  | "BAREMETAL_CONTROLLER_KIND_IPMI"
+  | "BAREMETAL_CONTROLLER_KIND_VPRO"
+  | "BAREMETAL_CONTROLLER_KIND_PDU";
+export type PowerState =
   | "POWER_STATE_UNSPECIFIED"
   | "POWER_STATE_ERROR"
   | "POWER_STATE_ON"
   | "POWER_STATE_OFF";
 export type HostState =
   | "HOST_STATE_UNSPECIFIED"
-  | "HOST_STATE_ERROR"
-  | "HOST_STATE_DELETING"
   | "HOST_STATE_DELETED"
   | "HOST_STATE_ONBOARDED"
   | "HOST_STATE_UNTRUSTED"
   | "HOST_STATE_REGISTERED";
-export type StatusIndicator =
+export type StatusIndication =
   | "STATUS_INDICATION_UNSPECIFIED"
   | "STATUS_INDICATION_ERROR"
   | "STATUS_INDICATION_IN_PROGRESS"
   | "STATUS_INDICATION_IDLE";
-export type StatusIndicatorRead =
-  | "STATUS_INDICATION_UNSPECIFIED"
-  | "STATUS_INDICATION_ERROR"
-  | "STATUS_INDICATION_IN_PROGRESS"
-  | "STATUS_INDICATION_IDLE";
-export type Metadata = {
-  key: string;
-  value: string;
-}[];
-export type MetadataJoin = {
-  location?: Metadata;
-  ou?: Metadata;
-};
-export type OperatingSystemProvider =
-  | "OPERATING_SYSTEM_PROVIDER_UNSPECIFIED"
-  | "OPERATING_SYSTEM_PROVIDER_INFRA"
-  | "OPERATING_SYSTEM_PROVIDER_LENOVO";
-export type OperatingSystemType =
-  | "OPERATING_SYSTEM_TYPE_UNSPECIFIED"
-  | "OPERATING_SYSTEM_TYPE_MUTABLE"
-  | "OPERATING_SYSTEM_TYPE_IMMUTABLE";
+export type OsProviderKind =
+  | "OS_PROVIDER_KIND_UNSPECIFIED"
+  | "OS_PROVIDER_KIND_INFRA"
+  | "OS_PROVIDER_KIND_LENOVO";
+export type OsType =
+  | "OS_TYPE_UNSPECIFIED"
+  | "OS_TYPE_MUTABLE"
+  | "OS_TYPE_IMMUTABLE";
 export type SecurityFeature =
   | "SECURITY_FEATURE_UNSPECIFIED"
   | "SECURITY_FEATURE_NONE"
   | "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
-export type Timestamps = {};
-export type TimestampsRead = {
-  /** Timestamp for the creation of the resource. */
-  createdAt: string;
-  /** Timestamp for the last update of the resource. */
-  updatedAt?: string;
+export type GoogleProtobufTimestamp = string;
+export type Timestamps = {
+  createdAt?: GoogleProtobufTimestamp;
+  updatedAt?: GoogleProtobufTimestamp;
 };
 export type OperatingSystemResource = {
-  /** The OS resource's architecture. */
+  /** The OS resource's CPU architecture. */
   architecture?: string;
+  description?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
-  /** The URL repository of the OS image. If set, overwrites repoUrl. */
+  /** The URL repository of the OS image. */
   imageUrl?: string;
   /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information. */
   installedPackages?: string;
-  /** The OS resource's kernel command. */
+  /** The OS resource's kernel Command Line Options. */
   kernelCommand?: string;
   /** The OS resource's name. */
   name?: string;
-  osProvider?: OperatingSystemProvider;
-  osType?: OperatingSystemType;
-  /** Name of the OS profile that the OS resource belongs to. */
+  osProvider?: OsProviderKind;
+  osType?: OsType;
+  /** Name of an OS profile that the OS resource belongs to. Uniquely identifies a family of OS resources. */
   profileName?: string;
-  /** The URL repository of the OS update sources. Deprecated. Use imageUrl to filter repoUrl. */
+  /** Deprecated. OS image URL. URL of the original installation source. */
   repoUrl?: string;
   securityFeature?: SecurityFeature;
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
   timestamps?: Timestamps;
-  /** The list of OS resource update sources. */
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs */
   updateSources: string[];
 };
 export type OperatingSystemResourceRead = {
-  /** The OS resource's architecture. */
+  /** The OS resource's CPU architecture. */
   architecture?: string;
+  description?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
-  /** The URL repository of the OS image. If set, overwrites repoUrl. */
+  /** The URL repository of the OS image. */
   imageUrl?: string;
   /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information. */
   installedPackages?: string;
-  /** The OS resource's kernel command. */
+  /** The OS resource's kernel Command Line Options. */
   kernelCommand?: string;
   /** The OS resource's name. */
   name?: string;
-  osProvider?: OperatingSystemProvider;
-  /** The OS resource's unique identifier. Alias of resourceId. */
+  osProvider?: OsProviderKind;
+  /** Deprecated, The OS resource's unique identifier. Alias of resourceId. */
   osResourceID?: string;
-  osType?: OperatingSystemType;
-  /** Opaque JSON field storing references to custom installation script(s) that supplements the base OS with additional OS-level dependencies/configurations. If empty, the default OS installation will be used. */
+  osType?: OsType;
+  /** Opaque JSON field storing references to custom installation script(s) that
+     supplements the base OS with additional OS-level dependencies/configurations.
+     If empty, the default OS installation will be used. */
   platformBundle?: string;
-  /** Name of the OS profile that the OS resource belongs to. */
+  /** Name of an OS profile that the OS resource belongs to. Uniquely identifies a family of OS resources. */
   profileName?: string;
   /** Version of OS profile that the OS resource belongs to. */
   profileVersion?: string;
-  /** The URL repository of the OS update sources. Deprecated. Use imageUrl to filter repoUrl. */
+  /** Deprecated. OS image URL. URL of the original installation source. */
   repoUrl?: string;
-  /** Resource ID, generated by inventory on Create */
+  /** Resource ID, generated by inventory on Create. */
   resourceId?: string;
   securityFeature?: SecurityFeature;
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
-  timestamps?: TimestampsRead;
-  /** The list of OS resource update sources. */
+  timestamps?: Timestamps;
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs */
   updateSources: string[];
 };
 export type InstanceState =
   | "INSTANCE_STATE_UNSPECIFIED"
-  | "INSTANCE_STATE_ERROR"
   | "INSTANCE_STATE_RUNNING"
-  | "INSTANCE_STATE_UNTRUSTED"
-  | "INSTANCE_STATE_DELETED";
+  | "INSTANCE_STATE_DELETED"
+  | "INSTANCE_STATE_UNTRUSTED";
 export type InstanceKind = "INSTANCE_KIND_UNSPECIFIED" | "INSTANCE_KIND_METAL";
-export type LocalAccount = {
-  /** The local account's sshkey. */
+export type LocalAccountResource = {
+  /** SSH Public Key of EN */
   sshKey: string;
   timestamps?: Timestamps;
-  /** The local account's username. */
+  /** Username provided by admin */
   username: string;
 };
-export type LocalAccountRead = {
-  /** The local account resource's unique identifier. Alias of resourceId. */
+export type LocalAccountResourceRead = {
+  /** Deprecated, The local account resource's unique identifier. Alias of resourceId. */
   localAccountID?: string;
-  /** resource ID, generated by the inventory on Create. */
+  /** resource identifier */
   resourceId?: string;
-  /** The local account's sshkey. */
+  /** SSH Public Key of EN */
   sshKey: string;
-  timestamps?: TimestampsRead;
-  /** The local account's username. */
+  timestamps?: Timestamps;
+  /** Username provided by admin */
   username: string;
 };
-export type Instance = {
+export type InstanceResource = {
   currentOs?: OperatingSystemResource;
   currentState?: InstanceState;
   desiredOs?: OperatingSystemResource;
   desiredState?: InstanceState;
-  host?: Host;
-  instanceStatusIndicator?: StatusIndicator;
+  host?: HostResource;
+  instanceStatusIndicator?: StatusIndication;
   kind?: InstanceKind;
-  localAccount?: LocalAccount;
+  localaccount?: LocalAccountResource;
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResource;
-  provisioningStatusIndicator?: StatusIndicator;
+  provisioningStatusIndicator?: StatusIndication;
   securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
-  trustedAttestationStatusIndicator?: StatusIndicator;
-  updateStatusIndicator?: StatusIndicator;
+  trustedAttestationStatusIndicator?: StatusIndication;
+  updateStatusIndicator?: StatusIndication;
 };
+export type WorkloadMemberKind =
+  | "WORKLOAD_MEMBER_KIND_UNSPECIFIED"
+  | "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
 export type WorkloadKind =
   | "WORKLOAD_KIND_UNSPECIFIED"
   | "WORKLOAD_KIND_CLUSTER";
-export type Workload = {
+export type WorkloadResource = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
   kind: WorkloadKind;
@@ -2206,22 +2180,23 @@ export type Workload = {
   status?: string;
   timestamps?: Timestamps;
 };
-export type WorkloadRead = {
+export type WorkloadResourceRead = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
   kind: WorkloadKind;
+  /** The members of the workload. */
   members: WorkloadMember[];
   /** Human-readable name for the workload. */
   name?: string;
-  /** resource ID, generated by the inventory on Create */
+  /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
   /** Human-readable status of the workload. */
   status?: string;
-  timestamps?: TimestampsRead;
-  /** The workload's unique identifier. Alias of resourceId. */
+  timestamps?: Timestamps;
+  /** Deprecated, The workload unique identifier. Alias of resourceId. */
   workloadId?: string;
 };
-export type WorkloadWrite = {
+export type WorkloadResourceWrite = {
   /** The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager. */
   externalId?: string;
   kind: WorkloadKind;
@@ -2232,110 +2207,107 @@ export type WorkloadWrite = {
   timestamps?: Timestamps;
 };
 export type WorkloadMember = {
-  instance?: Instance;
-  /** Type of workload member. */
-  kind:
-    | "WORKLOAD_MEMBER_KIND_UNSPECIFIED"
-    | "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
-  member?: Instance;
+  instance?: InstanceResource;
+  kind: WorkloadMemberKind;
+  member?: InstanceResource;
   timestamps?: Timestamps;
-  workload?: Workload;
+  workload?: WorkloadResource;
 };
 export type WorkloadMemberRead = {
-  instance?: InstanceRead;
-  /** Type of workload member. */
-  kind:
-    | "WORKLOAD_MEMBER_KIND_UNSPECIFIED"
-    | "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
-  member?: InstanceRead;
-  /** resource ID, generated by the inventory on Create */
-  resourceId: string;
-  timestamps?: TimestampsRead;
-  workload?: WorkloadRead;
-  /** The workload member's unique identifier. Alias of resourceId. */
-  workloadMemberId: string;
+  instance?: InstanceResourceRead;
+  kind: WorkloadMemberKind;
+  member?: InstanceResourceRead;
+  /** Resource ID, generated by the inventory on Create. */
+  resourceId?: string;
+  timestamps?: Timestamps;
+  workload?: WorkloadResourceRead;
+  /** Deprecated, The workload unique identifier. Alias of resourceId. */
+  workloadMemberId?: string;
 };
 export type WorkloadMemberWrite = {
-  instance?: Instance;
+  instance?: InstanceResource;
   /** The unique identifier of the instance. */
   instanceId: string;
-  /** Type of workload member. */
-  kind:
-    | "WORKLOAD_MEMBER_KIND_UNSPECIFIED"
-    | "WORKLOAD_MEMBER_KIND_CLUSTER_NODE";
-  member?: Instance;
+  kind: WorkloadMemberKind;
+  member?: InstanceResource;
   timestamps?: Timestamps;
-  workload?: WorkloadWrite;
-  /** The unique identifier of the workload. */
+  workload?: WorkloadResourceWrite;
+  /** The workload unique identifier. */
   workloadId: string;
 };
-export type InstanceRead = {
+export type InstanceResourceRead = {
   currentOs?: OperatingSystemResourceRead;
   currentState?: InstanceState;
   desiredOs?: OperatingSystemResourceRead;
   desiredState?: InstanceState;
-  host?: Host;
-  /** The instance's unique identifier. Alias of resourceID. */
+  host?: HostResource;
+  /** Deprecated, The instance's unique identifier. Alias of resourceID. */
   instanceID?: string;
-  /** The instance's lifecycle status message. */
+  /** textual message that describes the current instance status. Set by RMs only. */
   instanceStatus?: string;
-  /** The detailed status of the instance's software components. */
+  /** Textual message that gives detailed status of the instance's software components. */
   instanceStatusDetail?: string;
-  instanceStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the instance's lifecycle status was last updated. */
+  instanceStatusIndicator?: StatusIndication;
+  /** UTC timestamp when instance_status was last changed. Set by RMs only. */
   instanceStatusTimestamp?: number;
   kind?: InstanceKind;
-  localAccount?: LocalAccountRead;
+  localaccount?: LocalAccountResourceRead;
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResourceRead;
-  /** The instance's provisioning status message. */
+  /** textual message that describes the provisioning status of Instance. Set by RMs only. */
   provisioningStatus?: string;
-  provisioningStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the instance's provisioning status was last updated. */
+  provisioningStatusIndicator?: StatusIndication;
+  /** UTC timestamp when provisioning_status was last changed. Set by RMs only. */
   provisioningStatusTimestamp?: number;
-  /** Resource ID, generated by the inventory on Create. */
+  /** Resource ID, generated on Create. */
   resourceId?: string;
   securityFeature?: SecurityFeature;
-  timestamps?: TimestampsRead;
-  /** The instance's software trusted attestation status message. */
+  timestamps?: Timestamps;
+  /** textual message that describes the trusted_attestation status of Instance. Set by RMs only. */
   trustedAttestationStatus?: string;
-  trustedAttestationStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the instance's software trusted attestation status was last updated. */
+  trustedAttestationStatusIndicator?: StatusIndication;
+  /** UTC timestamp when trusted_attestation_status was last changed. Set by RMs only. */
   trustedAttestationStatusTimestamp?: number;
-  /** The instance's software update status message. */
+  /** textual message that describes the update status of Instance. Set by RMs only. */
   updateStatus?: string;
-  /** Beta: The detailed description of the instance's last software update. */
+  /** JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change. */
   updateStatusDetail?: string;
-  updateStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the instance's software update status was last updated. */
+  updateStatusIndicator?: StatusIndication;
+  /** UTC timestamp when update_status was last changed. Set by RMs only. */
   updateStatusTimestamp?: number;
-  /** The workload members associated with the instance. */
+  /** The workload members associated with the instance. back-reference to the Workload Members associated to this Instance */
   workloadMembers?: WorkloadMemberRead[];
 };
-export type InstanceWrite = {
+export type InstanceResourceWrite = {
   currentOs?: OperatingSystemResource;
   currentState?: InstanceState;
   desiredOs?: OperatingSystemResource;
   desiredState?: InstanceState;
-  host?: Host;
+  host?: HostResource;
   /** The host's unique identifier associated with the instance. */
   hostID?: string;
-  instanceStatusIndicator?: StatusIndicator;
+  instanceStatusIndicator?: StatusIndication;
   kind?: InstanceKind;
-  localAccount?: LocalAccount;
   /** The unique identifier of local account will be associated with the instance. */
   localAccountID?: string;
+  localaccount?: LocalAccountResource;
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResource;
   /** The unique identifier of OS resource that must be installed on the instance. */
   osID?: string;
-  provisioningStatusIndicator?: StatusIndicator;
+  provisioningStatusIndicator?: StatusIndication;
   securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
-  trustedAttestationStatusIndicator?: StatusIndicator;
-  updateStatusIndicator?: StatusIndicator;
+  trustedAttestationStatusIndicator?: StatusIndication;
+  updateStatusIndicator?: StatusIndication;
+};
+export type MetadataItem = {
+  /** The metadata key. */
+  key: string;
+  /** The metadata value. */
+  value: string;
 };
 export type ProviderKind =
   | "PROVIDER_KIND_UNSPECIFIED"
@@ -2344,7 +2316,7 @@ export type ProviderVendor =
   | "PROVIDER_VENDOR_UNSPECIFIED"
   | "PROVIDER_VENDOR_LENOVO_LXCA"
   | "PROVIDER_VENDOR_LENOVO_LOCA";
-export type Provider = {
+export type ProviderResource = {
   /** The provider resource's list of credentials. */
   apiCredentials?: string[];
   /** The provider resource's API endpoint. */
@@ -2357,7 +2329,7 @@ export type Provider = {
   providerVendor?: ProviderVendor;
   timestamps?: Timestamps;
 };
-export type ProviderRead = {
+export type ProviderResourceRead = {
   /** The provider resource's list of credentials. */
   apiCredentials?: string[];
   /** The provider resource's API endpoint. */
@@ -2366,905 +2338,1145 @@ export type ProviderRead = {
   config?: string;
   /** The provider resource's name. */
   name: string;
-  /** The provider resource's unique identifier. Alias of resourceId. */
+  /** Deprecated, The provider resource's unique identifier. Alias of resourceId. */
   providerID?: string;
   providerKind: ProviderKind;
   providerVendor?: ProviderVendor;
-  /** resource ID, generated by the inventory on Create. */
+  /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  timestamps?: TimestampsRead;
-};
-export type Ou = {
-  inheritedMetadata?: Metadata;
-  metadata?: Metadata;
-  /** The OU's name. */
-  name: string;
-  /** The kind of OU resource, e.g. BU and client. */
-  ouKind?: string;
-  /** The parent OU's unique identifier that the OU is associated to, when it exists. */
-  parentOu?: string;
   timestamps?: Timestamps;
 };
-export type OuRead = {
-  inheritedMetadata?: Metadata;
-  metadata?: Metadata;
-  /** The OU's name. */
-  name: string;
-  /** The OU resource's unique identifier. Alias of resourceId. */
-  ouID?: string;
-  /** The kind of OU resource, e.g. BU and client. */
-  ouKind?: string;
-  /** The parent OU's unique identifier that the OU is associated to, when it exists. */
-  parentOu?: string;
-  /** resource ID, generated by the inventory on Create. */
-  resourceId?: string;
-  timestamps?: TimestampsRead;
-};
-export type Proxy = {
-  /** The FTP proxy. */
-  ftpProxy?: string;
-  /** The HTTP proxy. */
-  httpProxy?: string;
-  /** The HTTPS proxy. */
-  httpsProxy?: string;
-  /** The no-proxy info. */
-  noProxy?: string;
-};
-export type Region = {
-  inheritedMetadata?: Metadata;
-  metadata?: Metadata;
-  /** The region's name. */
+export type RegionResource = {
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
+  /** The user-provided, human-readable name of region */
   name?: string;
-  parentRegion?: Region;
+  parentRegion?: RegionResource;
   timestamps?: Timestamps;
 };
-export type RegionRead = {
-  inheritedMetadata?: Metadata;
-  metadata?: Metadata;
-  /** The region's name. */
+export type RegionResourceRead = {
+  /** The rendered metadata from the Region parent(s)
+     that can be inherited by the Region, represented by a list of key:value pairs.
+     This field can not be used in filter. */
+  inheritedMetadata?: MetadataItem[];
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
+  /** The user-provided, human-readable name of region */
   name?: string;
-  parentRegion?: RegionRead;
-  /** The region's unique identifier. Alias of resourceId. */
+  parentRegion?: RegionResourceRead;
+  /** Deprecated, The Region unique identifier. Alias of resourceId. */
   regionID?: string;
-  /** resource ID, generated by the inventory on Create */
+  /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  timestamps?: TimestampsRead;
-  /** Total number of sites associated to this region, directly or by child regions. */
+  timestamps?: Timestamps;
+  /** The total number of sites in the region. */
   totalSites?: number;
 };
-export type RegionWrite = {
-  inheritedMetadata?: Metadata;
-  metadata?: Metadata;
-  /** The region's name. */
+export type RegionResourceWrite = {
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
+  /** The user-provided, human-readable name of region */
   name?: string;
-  /** The parent region's unique identifier that the region is associated to, if it exists. This field cannot be used in filter. */
+  /** The parent Region unique identifier
+     that the region is associated to, when existent.
+     This field can not be used in filter. */
   parentId?: string;
-  parentRegion?: RegionWrite;
+  parentRegion?: RegionResourceWrite;
   timestamps?: Timestamps;
 };
-export type Site = {
-  /** The list of DNS servers that the site has available. */
-  dnsServers?: string[];
-  /** The set of Docker* registries that the site has available. */
-  dockerRegistries?: string[];
-  inheritedMetadata?: MetadataJoin;
-  metadata?: Metadata;
-  /** The set of site-available metrics, specified in a single JSON object. */
-  metricsEndpoint?: string;
+export type SiteResource = {
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
   /** The site's human-readable name. */
   name?: string;
-  ou?: Ou;
-  provider?: Provider;
-  proxy?: Proxy;
-  region?: Region;
-  /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
+  provider?: ProviderResource;
+  region?: RegionResource;
+  /** The geolocation latitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
-  /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
+  /** The geolocation longitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
   timestamps?: Timestamps;
 };
-export type SiteRead = {
-  /** The list of DNS servers that the site has available. */
-  dnsServers?: string[];
-  /** The set of Docker* registries that the site has available. */
-  dockerRegistries?: string[];
-  inheritedMetadata?: MetadataJoin;
-  metadata?: Metadata;
-  /** The set of site-available metrics, specified in a single JSON object. */
-  metricsEndpoint?: string;
+export type SiteResourceRead = {
+  /** The rendered metadata from the Region parent(s)
+     that can be inherited by the Region, represented by a list of key:value pairs.
+     This field can not be used in filter. */
+  inheritedMetadata?: MetadataItem[];
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
   /** The site's human-readable name. */
   name?: string;
-  ou?: OuRead;
-  provider?: ProviderRead;
-  proxy?: Proxy;
-  region?: RegionRead;
+  provider?: ProviderResourceRead;
+  region?: RegionResourceRead;
   /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  /** The site's unique identifier. Alias of resourceId. */
+  /** Deprecated, The site unique identifier. Alias of resourceId. */
   siteID?: string;
-  /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
+  /** The geolocation latitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
-  /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
+  /** The geolocation longitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
-export type SiteWrite = {
-  /** The list of DNS servers that the site has available. */
-  dnsServers?: string[];
-  /** The set of Docker* registries that the site has available. */
-  dockerRegistries?: string[];
-  inheritedMetadata?: MetadataJoin;
-  metadata?: Metadata;
-  /** The set of site-available metrics, specified in a single JSON object. */
-  metricsEndpoint?: string;
+export type SiteResourceWrite = {
+  /** (OPTIONAL) The metadata associated to the Region,
+     represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
   /** The site's human-readable name. */
   name?: string;
-  ou?: Ou;
-  /** The OU unique identifier that the site is associated to, if it exists. This field cannot be used in filter. */
-  ouId?: string;
-  provider?: Provider;
-  proxy?: Proxy;
-  region?: RegionWrite;
-  /** The region's unique identifier that the site is associated to. This field cannot be used in filter. */
+  provider?: ProviderResource;
+  region?: RegionResourceWrite;
+  /** The region's unique identifier
+     that the site is associated to. This field cannot be used in filter. */
   regionId?: string;
-  /** The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees. */
+  /** The geolocation latitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLat must be in the range of +/- 90 degrees. */
   siteLat?: number;
-  /** The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive). */
+  /** The geolocation longitude of the site.
+     Points are represented as latitude-longitude pairs in the E7 representation
+     (degrees are multiplied by 10**7 and rounded to the nearest integer).
+     siteLng must be in the range of +/- 180 degrees (inclusive). */
   siteLng?: number;
   timestamps?: Timestamps;
 };
-export type Host = {
-  currentPowerState?: HostPowerState;
+export type HostResource = {
+  bmcKind?: BaremetalControllerKind;
+  currentPowerState?: PowerState;
   currentState?: HostState;
-  desiredPowerState?: HostPowerState;
+  desiredPowerState?: PowerState;
   desiredState?: HostState;
-  hostStatusIndicator?: StatusIndicator;
-  inheritedMetadata?: MetadataJoin;
-  instance?: Instance;
-  metadata?: Metadata;
+  hostStatusIndicator?: StatusIndication;
+  instance?: InstanceResource;
+  /** (OPTIONAL) The metadata associated with the host, represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
   /** The host name. */
   name: string;
-  onboardingStatusIndicator?: StatusIndicator;
-  provider?: Provider;
-  registrationStatusIndicator?: StatusIndicator;
-  site?: Site;
+  onboardingStatusIndicator?: StatusIndication;
+  provider?: ProviderResource;
+  registrationStatusIndicator?: StatusIndication;
+  site?: SiteResource;
   timestamps?: Timestamps;
-  /** The host UUID identifier; UUID is unique and immutable. */
+  /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
-export type HostResourcesGpu = {
+export type HostgpuResource = {
   timestamps?: Timestamps;
 };
-export type HostResourcesGpuRead = {
-  /** The specific GPU device capabilities [e.g., PCI Express*, MSI*, power management (PM)]. */
+export type HostgpuResourceRead = {
+  /** The features of this GPU device, comma separated. */
   capabilities?: string[];
   /** The human-readable GPU device description. */
   description?: string;
-  /** The GPU device name. */
+  /** GPU name as reported by OS. */
   deviceName?: string;
-  /** The GPU device's PCI identifier. */
+  /** The GPU device PCI identifier. */
   pciId?: string;
   /** The GPU device model. */
   product?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
   /** The GPU device vendor. */
   vendor?: string;
 };
-export type LinkState = {
+export type LinkState =
+  | "NETWORK_INTERFACE_LINK_STATE_UNSPECIFIED"
+  | "NETWORK_INTERFACE_LINK_STATE_UP"
+  | "NETWORK_INTERFACE_LINK_STATE_DOWN";
+export type NetworkInterfaceLinkState = {
+  timestamps?: Timestamps;
+  type?: LinkState;
+};
+export type HostnicResource = {
+  linkState?: NetworkInterfaceLinkState;
   timestamps?: Timestamps;
 };
-export type LinkStateRead = {
-  /** The timestamp when the link state was last updated. */
-  timestamp: string;
-  timestamps?: TimestampsRead;
-  /** the type of the state. */
-  type: "LINK_STATE_UNSPECIFIED" | "LINK_STATE_UP" | "LINK_STATE_DOWN";
-};
-export type Amount = string;
-export type HostResourcesInterface = {
-  linkState?: LinkState;
-  mtu?: Amount;
+export type IpAddressConfigMethod =
+  | "IP_ADDRESS_CONFIG_METHOD_UNSPECIFIED"
+  | "IP_ADDRESS_CONFIG_METHOD_STATIC"
+  | "IP_ADDRESS_CONFIG_METHOD_DYNAMIC";
+export type IpAddressStatus =
+  | "IP_ADDRESS_STATUS_UNSPECIFIED"
+  | "IP_ADDRESS_STATUS_ASSIGNMENT_ERROR"
+  | "IP_ADDRESS_STATUS_ASSIGNED"
+  | "IP_ADDRESS_STATUS_CONFIGURATION_ERROR"
+  | "IP_ADDRESS_STATUS_CONFIGURED"
+  | "IP_ADDRESS_STATUS_RELEASED"
+  | "IP_ADDRESS_STATUS_ERROR";
+export type IpAddressResource = {
+  configMethod?: IpAddressConfigMethod;
+  status?: IpAddressStatus;
   timestamps?: Timestamps;
 };
-export type IpAddress = {
-  timestamps?: Timestamps;
-};
-export type IpAddressRead = {
+export type IpAddressResourceRead = {
   /** CIDR representation of the IP address. */
-  address: any;
-  /** Specifies how the IP address is configured. */
-  configMethod:
-    | "IP_ADDRESS_CONFIG_MODE_UNSPECIFIED"
-    | "IP_ADDRESS_CONFIG_MODE_STATIC"
-    | "IP_ADDRESS_CONFIG_MODE_DYNAMIC";
-  /** The status of the IP address. */
-  status?:
-    | "IP_ADDRESS_STATUS_UNSPECIFIED"
-    | "IP_ADDRESS_STATUS_ASSIGNMENT_ERROR"
-    | "IP_ADDRESS_STATUS_ASSIGNED"
-    | "IP_ADDRESS_STATUS_CONFIGURATION_ERROR"
-    | "IP_ADDRESS_STATUS_CONFIGURED"
-    | "IP_ADDRESS_STATUS_RELEASED"
-    | "IP_ADDRESS_STATUS_ERROR";
-  /** The details of the status of the IP address. */
+  address?: string;
+  configMethod?: IpAddressConfigMethod;
+  /** Resource ID, generated by Inventory on Create */
+  resourceId?: string;
+  status?: IpAddressStatus;
+  /** User-friendly status to provide details about the resource state */
   statusDetail?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
-export type HostResourcesInterfaceRead = {
-  /** Defines if the card is the Baseboard Management Controller (BMC) interface. */
+export type HostnicResourceRead = {
+  /** Whether this is a bmc interface or not. */
   bmcInterface?: boolean;
-  /** The interface name. */
+  /** The device name (OS provided, like eth0, enp1s0, etc.). */
   deviceName?: string;
   /** The interface's IP address list. */
-  ipaddresses?: IpAddressRead[];
-  linkState?: LinkStateRead;
-  /** The interface's MAC address. */
+  ipaddresses?: IpAddressResourceRead[];
+  linkState?: NetworkInterfaceLinkState;
+  /** The interface MAC address. */
   macAddr?: string;
-  mtu?: Amount;
-  /** The interface's PCI identifier. */
+  /** Maximum transmission unit of the interface. */
+  mtu?: number;
+  /** PCI identifier string for this network interface. */
   pciIdentifier?: string;
-  /** Flag that represents if the interface has SR-IOV support. */
+  /** If the interface has SRIOV enabled. */
   sriovEnabled?: boolean;
-  /** The number of virtual functions (VFs) currently provisioned on the interface, if SR-IOV is supported. */
+  /** The number of VFs currently provisioned on the interface, if SR-IOV is supported. */
   sriovVfsNum?: number;
   /** The maximum number of VFs the interface supports, if SR-IOV is supported. */
   sriovVfsTotal?: number;
-  timestamps?: TimestampsRead;
-};
-export type HostResourcesStorage = {
-  capacityBytes?: Amount;
   timestamps?: Timestamps;
 };
-export type HostResourcesStorageRead = {
-  capacityBytes?: Amount;
-  /** The storage device name. */
+export type HoststorageResource = {
+  timestamps?: Timestamps;
+};
+export type HoststorageResourceRead = {
+  /** The storage device Capacity (size) in bytes. */
+  capacityBytes?: string;
+  /** The storage device device name (OS provided, like sda, sdb, etc.) */
   deviceName?: string;
-  /** The storage model. */
+  /** The storage device model. */
   model?: string;
-  /** The storage device's unique serial number. */
+  /** The storage device unique serial number. */
   serial?: string;
-  timestamps?: TimestampsRead;
-  /** The storage vendor. */
+  timestamps?: Timestamps;
+  /** The Storage device vendor. */
   vendor?: string;
-  /** The storage device's unique identifier. */
+  /** The storage device unique identifier. */
   wwid?: string;
 };
-export type HostResourcesUsb = {
+export type HostusbResource = {
   timestamps?: Timestamps;
 };
-export type HostResourcesUsbRead = {
-  /** USB device number assigned by the OS. */
-  addr?: string;
-  /** Bus number that the device connects to. */
-  bus?: string;
-  /** Class defined by USB Implementers Forum, Inc (USB-IF). */
+export type HostusbResourceRead = {
+  /** USB Device number assigned by OS. */
+  addr?: number;
+  /** Bus number of device connected with. */
+  bus?: number;
+  /** class defined by USB-IF. */
   class?: string;
-  /** The USB device name. */
+  /** the OS-provided device name. */
   deviceName?: string;
-  /** Hexadecimal number representing the ID of the USB device product. */
+  /** Hexadecimal number representing ID of the USB device product. */
   idProduct?: string;
-  /** Hexadecimal number representing the ID of the USB device vendor. */
+  /** Hexadecimal number representing ID of the USB device vendor. */
   idVendor?: string;
-  /** Serial number of the USB device. */
+  /** Serial number of device. */
   serial?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
-export type HostRead = {
-  /** The release date of the host BIOS. */
+export type HostResourceRead = {
+  /** BIOS Release Date. */
   biosReleaseDate?: string;
-  /** The vendor of the host BIOS. */
+  /** BIOS Vendor. */
   biosVendor?: string;
-  /** The version of the host BIOS. */
+  /** BIOS Version. */
   biosVersion?: string;
   /** BMC IP address, such as "192.0.0.1". */
   bmcIp?: string;
-  /** The type of BMC. */
-  bmcKind?:
-    | "BAREMETAL_CONTROLLER_KIND_UNSPECIFIED"
-    | "BAREMETAL_CONTROLLER_KIND_NONE"
-    | "BAREMETAL_CONTROLLER_KIND_IPMI"
-    | "BAREMETAL_CONTROLLER_KIND_VPRO"
-    | "BAREMETAL_CONTROLLER_KIND_PDU";
+  bmcKind?: BaremetalControllerKind;
   /** Architecture of the CPU model, e.g. x86_64. */
   cpuArchitecture?: string;
   /** String list of all CPU capabilities (possibly JSON). */
   cpuCapabilities?: string;
   /** Number of CPU cores. */
   cpuCores?: number;
-  /** CPU model of the host. */
+  /** CPU model of the Host. */
   cpuModel?: string;
   /** Number of physical CPU sockets. */
   cpuSockets?: number;
-  /** Total number of threads supported by the CPU. */
+  /** Total Number of threads supported by the CPU. */
   cpuThreads?: number;
-  /** A JSON field describing the CPU topology. The CPU topology may contain, among others, information about CPU core types, their layout, and mapping to CPU sockets. */
+  /** JSON field storing the CPU topology, refer to HDA/HRM docs for the JSON schema. */
   cpuTopology?: string;
-  currentPowerState?: HostPowerState;
+  currentPowerState?: PowerState;
   currentState?: HostState;
-  desiredPowerState?: HostPowerState;
+  desiredPowerState?: PowerState;
   desiredState?: HostState;
-  /** The list of GPU capabilities. */
-  hostGpus?: HostResourcesGpuRead[];
-  /** The list of interface capabilities. */
-  hostNics?: HostResourcesInterfaceRead[];
-  /** The host's lifecycle status message. */
+  /** Back-reference to attached host GPU resources. */
+  hostGpus?: HostgpuResourceRead[];
+  /** Back-reference to attached host NIC resources. */
+  hostNics?: HostnicResourceRead[];
+  /** textual message that describes the runtime status of Host. Set by RMs only. */
   hostStatus?: string;
-  hostStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the host's lifecycle status was last updated. */
+  hostStatusIndicator?: StatusIndication;
+  /** UTC timestamp when host_status was last changed. Set by RMs only. */
   hostStatusTimestamp?: number;
-  /** The list of storage capabilities. */
-  hostStorages?: HostResourcesStorageRead[];
-  /** The list of USB capabilities. */
-  hostUsbs?: HostResourcesUsbRead[];
-  /** The host name. */
+  /** Back-reference to attached host storage resources. */
+  hostStorages?: HoststorageResourceRead[];
+  /** Back-reference to attached host USB resources. */
+  hostUsbs?: HostusbResourceRead[];
+  /** Hostname. */
   hostname?: string;
-  inheritedMetadata?: MetadataJoin;
-  instance?: InstanceRead;
-  /** Quantity of the RAM in the system, in bytes. */
+  /** The metadata inherited by the host, represented by a list of key:value pairs, rendered by location and logical structures. */
+  inheritedMetadata?: MetadataItem[];
+  instance?: InstanceResourceRead;
+  /** Quantity of memory (RAM) in the system in bytes. */
   memoryBytes?: string;
-  metadata?: Metadata;
+  /** (OPTIONAL) The metadata associated with the host, represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
   /** The host name. */
   name: string;
   /** The note associated with the host. */
   note?: string;
-  /** The host's onboarding status message. */
+  /** textual message that describes the onboarding status of Host. Set by RMs only. */
   onboardingStatus?: string;
-  onboardingStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the host's onboarding status was last updated. */
+  onboardingStatusIndicator?: StatusIndication;
+  /** UTC timestamp when onboarding_status was last changed. Set by RMs only. */
   onboardingStatusTimestamp?: number;
-  /** The host's product name. */
+  /** System Product Name. */
   productName?: string;
-  provider?: ProviderRead;
-  /** The host's registration status message. */
+  provider?: ProviderResourceRead;
+  /** textual message that describes the onboarding status of Host. Set by RMs only. */
   registrationStatus?: string;
-  registrationStatusIndicator?: StatusIndicatorRead;
-  /** A Unix, UTC timestamp when the host's registration status was last updated. */
+  registrationStatusIndicator?: StatusIndication;
+  /** UTC timestamp when registration_status was last changed. Set by RMs only. */
   registrationStatusTimestamp?: number;
   /** Resource ID, generated on Create. */
   resourceId?: string;
   /** SMBIOS device serial number. */
   serialNumber?: string;
-  site?: SiteRead;
-  timestamps?: TimestampsRead;
-  /** The host UUID identifier; UUID is unique and immutable. */
+  site?: SiteResourceRead;
+  timestamps?: Timestamps;
+  /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
-export type HostWrite = {
-  currentPowerState?: HostPowerState;
+export type HostResourceWrite = {
+  bmcKind?: BaremetalControllerKind;
+  currentPowerState?: PowerState;
   currentState?: HostState;
-  desiredPowerState?: HostPowerState;
+  desiredPowerState?: PowerState;
   desiredState?: HostState;
-  hostStatusIndicator?: StatusIndicator;
-  inheritedMetadata?: MetadataJoin;
-  instance?: InstanceWrite;
-  metadata?: Metadata;
+  hostStatusIndicator?: StatusIndication;
+  instance?: InstanceResourceWrite;
+  /** (OPTIONAL) The metadata associated with the host, represented by a list of key:value pairs. */
+  metadata?: MetadataItem[];
   /** The host name. */
   name: string;
-  onboardingStatusIndicator?: StatusIndicator;
-  provider?: Provider;
-  registrationStatusIndicator?: StatusIndicator;
-  site?: SiteWrite;
+  onboardingStatusIndicator?: StatusIndication;
+  provider?: ProviderResource;
+  registrationStatusIndicator?: StatusIndication;
+  site?: SiteResourceWrite;
   /** The site where the host is located. */
   siteId?: string;
   timestamps?: Timestamps;
-  /** The host UUID identifier; UUID is unique and immutable. */
+  /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
-export type HostsListRead = {
-  /** Indicates if there are more hosts available to be retrieved. */
+export type ListHostsResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  hosts: HostRead[];
-  /** Total number of items the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of hosts. */
+  hosts: HostResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type HostsListWrite = {};
-export type ProblemDetails = {};
-export type ProblemDetailsRead = {
-  /** Contains detailed information about the problem, such as its source data that can be used for debugging purposes. */
+export type ListHostsResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of hosts. */
+  hosts: HostResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListHostsResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of hosts. */
+  hosts: HostResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type GoogleProtobufAny = {
+  debug?: {
+    [key: string]: any;
+  };
+  type?: string;
+  value?: Blob;
+  [key: string]: any;
+};
+export type ConnectError = {
+  /** The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code]. */
+  code?:
+    | "canceled"
+    | "unknown"
+    | "invalid_argument"
+    | "deadline_exceeded"
+    | "not_found"
+    | "already_exists"
+    | "permission_denied"
+    | "resource_exhausted"
+    | "failed_precondition"
+    | "aborted"
+    | "out_of_range"
+    | "unimplemented"
+    | "internal"
+    | "unavailable"
+    | "data_loss"
+    | "unauthenticated";
+  detail?: GoogleProtobufAny;
+  /** A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client. */
   message?: string;
+  [key: string]: any;
 };
-export type HostOperationWithNote = {
-  note: string;
-};
-export type HostRegisterInfo = {
-  /** Set to enforce auto-onboarding of the host, which means that no confirmation will be required when the host connects for the first time, to Edge Orchestrator. */
+export type DeleteHostResponse = object;
+export type InvalidateHostResponse = object;
+export type OnboardHostResponse = object;
+export type HostRegister = {
+  /** Flag ot signal to automatically onboard the host. */
   autoOnboard?: boolean;
   /** The host name. */
   name?: string;
-  /** The host's SMBIOS serial number. */
+  /** The host serial number. */
   serialNumber?: string;
-  timestamps?: Timestamps;
-  /** The host's UUID identifier. */
+  /** The host UUID. */
   uuid?: string;
 };
-export type HostRegisterInfoRead = {
-  /** Set to enforce auto-onboarding of the host, which means that no confirmation will be required when the host connects for the first time, to Edge Orchestrator. */
-  autoOnboard?: boolean;
-  /** The host name. */
-  name?: string;
-  /** The host's SMBIOS serial number. */
-  serialNumber?: string;
-  timestamps?: TimestampsRead;
-  /** The host's UUID identifier. */
-  uuid?: string;
-};
-export type HostsSummary = {};
-export type HostsSummaryRead = {
+export type GetHostSummaryResponse = {};
+export type GetHostSummaryResponseRead = {
+  /** The total number of hosts presenting an Error. */
   error?: number;
+  /** The total number of hosts in Running state. */
   running?: number;
+  /** The total number of hosts. */
   total?: number;
+  /** The total number of hosts without a site. */
   unallocated?: number;
 };
-export type InstanceList = {};
-export type InstanceListRead = {
-  /** Indicates if there are more instance objects available to be retrieved. */
+export type ListInstancesResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  instances: InstanceRead[];
-  /** Total number of items the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of instances. */
+  instances: InstanceResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type InstanceListWrite = {};
-export type OperatingSystemResourceList = {};
-export type OperatingSystemResourceListRead = {
+export type ListInstancesResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of instances. */
+  instances: InstanceResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListInstancesResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of instances. */
+  instances: InstanceResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteInstanceResponse = object;
+export type InvalidateInstanceResponse = object;
+export type ListOperatingSystemsResponse = {
+  /** Sorted and filtered list of oss. */
+  OperatingSystemResources: OperatingSystemResource[];
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListOperatingSystemsResponseRead = {
+  /** Sorted and filtered list of oss. */
   OperatingSystemResources: OperatingSystemResourceRead[];
-  /** Indicates if there are more OS objects available to be retrieved. */
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Total number of items the request would return, if not limited by pagination. */
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type SchedulesListJoin = {};
+export type DeleteOperatingSystemResponse = object;
 export type ScheduleStatus =
   | "SCHEDULE_STATUS_UNSPECIFIED"
   | "SCHEDULE_STATUS_MAINTENANCE"
   | "SCHEDULE_STATUS_OS_UPDATE";
-export type SingleSchedule = {
+export type RepeatedScheduleResource = {
+  /** cron style day of month (1-31), it can be empty only when used in a Filter */
   cronDayMonth: string;
+  /** cron style day of week (0-6), it can be empty only when used in a Filter */
   cronDayWeek: string;
+  /** cron style hours (0-23), it can be empty only when used in a Filter */
   cronHours: string;
+  /** cron style minutes (0-59), it can be empty only when used in a Filter. */
   cronMinutes: string;
+  /** cron style month (1-12), it can be empty only when used in a Filter */
   cronMonth: string;
   /** The duration in seconds of the repeated schedule, per schedule. */
   durationSeconds: number;
   /** The schedule's name. */
   name?: string;
   scheduleStatus: ScheduleStatus;
-  targetHost?: Host;
-  targetRegion?: Region;
-  targetSite?: Site;
+  targetHost?: HostResource;
+  targetRegion?: RegionResource;
+  targetSite?: SiteResource;
   timestamps?: Timestamps;
 };
-export type SingleScheduleRead = {
+export type RepeatedScheduleResourceRead = {
+  /** cron style day of month (1-31), it can be empty only when used in a Filter */
   cronDayMonth: string;
+  /** cron style day of week (0-6), it can be empty only when used in a Filter */
   cronDayWeek: string;
+  /** cron style hours (0-23), it can be empty only when used in a Filter */
   cronHours: string;
+  /** cron style minutes (0-59), it can be empty only when used in a Filter. */
   cronMinutes: string;
+  /** cron style month (1-12), it can be empty only when used in a Filter */
   cronMonth: string;
   /** The duration in seconds of the repeated schedule, per schedule. */
   durationSeconds: number;
   /** The schedule's name. */
   name?: string;
-  /** The repeated schedule's unique identifier. Alias of resourceId. */
+  /** Deprecated, The repeated schedule's unique identifier. Alias of resourceId. */
   repeatedScheduleID?: string;
-  /** resource ID, generated by the inventory on Create. */
+  /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
   scheduleStatus: ScheduleStatus;
-  targetHost?: HostRead;
-  targetRegion?: RegionRead;
-  targetSite?: SiteRead;
-  timestamps?: TimestampsRead;
+  targetHost?: HostResourceRead;
+  targetRegion?: RegionResourceRead;
+  targetSite?: SiteResourceRead;
+  timestamps?: Timestamps;
 };
-export type SingleScheduleWrite = {
+export type RepeatedScheduleResourceWrite = {
+  /** cron style day of month (1-31), it can be empty only when used in a Filter */
   cronDayMonth: string;
+  /** cron style day of week (0-6), it can be empty only when used in a Filter */
   cronDayWeek: string;
+  /** cron style hours (0-23), it can be empty only when used in a Filter */
   cronHours: string;
+  /** cron style minutes (0-59), it can be empty only when used in a Filter. */
   cronMinutes: string;
+  /** cron style month (1-12), it can be empty only when used in a Filter */
   cronMonth: string;
   /** The duration in seconds of the repeated schedule, per schedule. */
   durationSeconds: number;
   /** The schedule's name. */
   name?: string;
   scheduleStatus: ScheduleStatus;
-  targetHost?: HostWrite;
-  /** The target host ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  targetHost?: HostResourceWrite;
+  /** The target region ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetHostId?: string;
-  targetRegion?: RegionWrite;
-  /** The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  targetRegion?: RegionResourceWrite;
+  /** The target region ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetRegionId?: string;
-  targetSite?: SiteWrite;
-  /** The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  targetSite?: SiteResourceWrite;
+  /** The target site ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetSiteId?: string;
   timestamps?: Timestamps;
 };
-export type SingleSchedule2 = {
-  /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
+export type SingleScheduleResource = {
+  /** The end time in seconds, of the single schedule.
+     The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
   name?: string;
   scheduleStatus: ScheduleStatus;
   /** The start time in seconds, of the single schedule. */
   startSeconds: number;
-  targetHost?: Host;
-  targetRegion?: Region;
-  targetSite?: Site;
+  targetHost?: HostResource;
+  targetRegion?: RegionResource;
+  targetSite?: SiteResource;
   timestamps?: Timestamps;
 };
-export type SingleScheduleRead2 = {
-  /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
+export type SingleScheduleResourceRead = {
+  /** The end time in seconds, of the single schedule.
+     The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
   name?: string;
-  /** resource ID, generated by the inventory on Create. */
+  /** Resource ID, generated by the inventory on Create. */
   resourceId?: string;
   scheduleStatus: ScheduleStatus;
-  /** The single schedule resource's unique identifier. Alias of resourceId. */
+  /** Deprecated, The single schedule resource's unique identifier. Alias of resourceId. */
   singleScheduleID?: string;
   /** The start time in seconds, of the single schedule. */
   startSeconds: number;
-  targetHost?: HostRead;
-  targetRegion?: RegionRead;
-  targetSite?: SiteRead;
-  timestamps?: TimestampsRead;
+  targetHost?: HostResourceRead;
+  targetRegion?: RegionResourceRead;
+  targetSite?: SiteResourceRead;
+  timestamps?: Timestamps;
 };
-export type SingleScheduleWrite2 = {
-  /** The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds. */
+export type SingleScheduleResourceWrite = {
+  /** The end time in seconds, of the single schedule.
+     The value of endSeconds must be equal to or bigger than the value of startSeconds. */
   endSeconds?: number;
   /** The schedule's name. */
   name?: string;
   scheduleStatus: ScheduleStatus;
   /** The start time in seconds, of the single schedule. */
   startSeconds: number;
-  targetHost?: HostWrite;
-  /** The target host ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  targetHost?: HostResourceWrite;
+  /** The target host ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetHostId?: string;
-  targetRegion?: RegionWrite;
-  /** The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  targetRegion?: RegionResourceWrite;
+  /** The target region ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetRegionId?: string;
-  targetSite?: SiteWrite;
-  /** The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter. */
+  targetSite?: SiteResourceWrite;
+  /** The target site ID of the schedule.
+     Only one target can be provided per schedule.
+     This field cannot be used as filter. */
   targetSiteId?: string;
   timestamps?: Timestamps;
 };
-export type SchedulesListJoinRead = {
-  /** Contains a flat list of repeated schedules, possibly including all inherited ones. */
-  RepeatedSchedules: SingleScheduleRead[];
-  /** Contains a flat list of single schedules, possibly including all inherited ones. */
-  SingleSchedules: SingleScheduleRead2[];
-  /** Indicates if there are more schedule objects available to be retrieved. */
+export type ListSchedulesResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of repeated_schedules. */
+  repeatedSchedules: RepeatedScheduleResource[];
+  /** Sorted and filtered list of single_schedules. */
+  singleSchedules: SingleScheduleResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type SchedulesListJoinWrite = {};
-export type WorkloadList = {};
-export type WorkloadListRead = {
-  Workloads: WorkloadRead[];
-  /** Indicates if there are more workload objects available to be retrieved. */
+export type ListSchedulesResponseRead = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Total number of items the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of repeated_schedules. */
+  repeatedSchedules: RepeatedScheduleResourceRead[];
+  /** Sorted and filtered list of single_schedules. */
+  singleSchedules: SingleScheduleResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type WorkloadListWrite = {};
-export type WorkloadMemberList = {};
-export type WorkloadMemberListRead = {
-  WorkloadMembers: WorkloadMemberRead[];
-  /** Indicates if there are more workload members objects available to be retrieved. */
+export type ListSchedulesResponseWrite = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Total number of items the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of repeated_schedules. */
+  repeatedSchedules: RepeatedScheduleResourceWrite[];
+  /** Sorted and filtered list of single_schedules. */
+  singleSchedules: SingleScheduleResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type WorkloadMemberListWrite = {};
-export type LocalAccountList = {};
-export type LocalAccountListRead = {
-  /** Indicates if there are more objects available to be retrieved. */
+export type ListWorkloadsResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Array of local account objects. */
-  localAccounts: LocalAccountRead[];
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+  /** Sorted and filtered list of workloads. */
+  workloads: WorkloadResource[];
+};
+export type ListWorkloadsResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+  /** Sorted and filtered list of workloads. */
+  workloads: WorkloadResourceRead[];
+};
+export type ListWorkloadsResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+  /** Sorted and filtered list of workloads. */
+  workloads: WorkloadResourceWrite[];
+};
+export type DeleteWorkloadResponse = object;
+export type ListWorkloadMembersResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+  /** Sorted and filtered list of workload_members. */
+  workloadMembers: WorkloadMember[];
+};
+export type ListWorkloadMembersResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+  /** Sorted and filtered list of workload_members. */
+  workloadMembers: WorkloadMemberRead[];
+};
+export type ListWorkloadMembersResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+  /** Sorted and filtered list of workload_members. */
+  workloadMembers: WorkloadMemberWrite[];
+};
+export type DeleteWorkloadMemberResponse = object;
+export type ListLocalAccountsResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of localaccounts. */
+  localAccounts: LocalAccountResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type LocationNodeList = {};
-export type LocationType = "RESOURCE_KIND_REGION" | "RESOURCE_KIND_SITE";
-export type LocationTypeRead = "RESOURCE_KIND_REGION" | "RESOURCE_KIND_SITE";
+export type ListLocalAccountsResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of localaccounts. */
+  localAccounts: LocalAccountResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteLocalAccountResponse = object;
+export type ResourceKind =
+  | "RESOURCE_KIND_UNSPECIFIED"
+  | "RESOURCE_KIND_REGION"
+  | "RESOURCE_KIND_SITE";
 export type LocationNode = {
-  type: LocationType;
-};
-export type LocationNodeRead = {
-  /** The node's human-readable name. */
+  /** The node human readable name. */
   name: string;
-  /** The associated resource ID of the parent resource of this location node. For a region, it could be empty or a regionId. For a site, it could be empty or a regionId. */
+  /** The associated resource ID, of the parent resource of this Location node.
+     In the case of a region, it could be empty or a regionId.
+     In the case of a site, it could be empty or a regionId. */
   parentId: string;
-  /** The associated node's resource ID, generated by the inventory on Create. */
+  /** The associated node resource ID, generated by inventory on Create. */
   resourceId: string;
-  type: LocationTypeRead;
+  type: ResourceKind;
 };
-export type LocationNodeListRead = {
-  /** The ordered list of nodes (root to leaf) of the location's hierarchy tree of regions and sites. The relationship of the root to leaf is limited by the maximum depth of seven items. */
-  nodes: LocationNodeRead[];
-  /** The number of items returned in the nodes's array that match the query parameters of the request. */
+export type ListLocationsResponse = {
+  /** Sorted and filtered list of regions. */
+  nodes: LocationNode[];
+  /** (OPTIONAL) Amount of items in the returned list. */
   outputElements?: number;
-  /** The total number of items that match the query parameters of the request. */
+  /** (OPTIONAL) Count of items in the entire list, regardless of pagination. */
   totalElements?: number;
 };
-export type ProviderList = {};
-export type ProviderListRead = {
-  /** Indicates if there are more objects available to be retrieved. */
+export type ListProvidersResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  providers: ProviderRead[];
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of providers. */
+  providers: ProviderResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type RegionsList = {};
-export type RegionsListRead = {
-  /** Indicates if there are more location objects available to be retrieved. */
+export type ListProvidersResponseRead = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  regions: RegionRead[];
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of providers. */
+  providers: ProviderResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type RegionsListWrite = {};
-export type SitesList = {};
-export type SitesListRead = {
-  /** Indicates if there are more objects available to be retrieved. */
+export type DeleteProviderResponse = object;
+export type ListRegionsResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  sites: SiteRead[];
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of regions. */
+  regions: RegionResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type SitesListWrite = {};
-export type RepeatedSchedulesList = {};
-export type RepeatedSchedulesListRead = {
-  RepeatedSchedules: SingleScheduleRead[];
-  /** Indicates if there are more repeated schedule objects available to be retrieved. */
+export type ListRegionsResponseRead = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of regions. */
+  regions: RegionResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type RepeatedSchedulesListWrite = {};
-export type SingleSchedulesList = {};
-export type SingleSchedulesListRead = {
-  SingleSchedules: SingleScheduleRead2[];
-  /** Indicates if there are more objects available to be retrieved. */
+export type ListRegionsResponseWrite = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of regions. */
+  regions: RegionResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type SingleSchedulesListWrite = {};
-export type TelemetryLogsGroupList = {
-  timestamps?: Timestamps;
+export type DeleteSiteResponse = object;
+export type DeleteRegionResponse = object;
+export type ListSitesResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of sites. */
+  sites: SiteResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
 };
+export type ListSitesResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of sites. */
+  sites: SiteResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListSitesResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of sites. */
+  sites: SiteResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListRepeatedSchedulesResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of repeated_schedules. */
+  repeatedSchedules: RepeatedScheduleResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListRepeatedSchedulesResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of repeated_schedules. */
+  repeatedSchedules: RepeatedScheduleResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListRepeatedSchedulesResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of repeated_schedules. */
+  repeatedSchedules: RepeatedScheduleResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteRepeatedScheduleResponse = object;
+export type ListSingleSchedulesResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of single_schedules. */
+  singleSchedules: SingleScheduleResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListSingleSchedulesResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of single_schedules. */
+  singleSchedules: SingleScheduleResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListSingleSchedulesResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of single_schedules. */
+  singleSchedules: SingleScheduleResourceWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteSingleScheduleResponse = object;
 export type TelemetryCollectorKind =
   | "TELEMETRY_COLLECTOR_KIND_UNSPECIFIED"
   | "TELEMETRY_COLLECTOR_KIND_HOST"
   | "TELEMETRY_COLLECTOR_KIND_CLUSTER";
-export type TelemetryLogsGroup = {
+export type TelemetryLogsGroupResource = {
   collectorKind: TelemetryCollectorKind;
   /** A list of log groups to collect. */
   groups: string[];
-  /** Human-readable name for the log group */
+  /** Human-readable name for the log group. */
   name: string;
   timestamps?: Timestamps;
 };
-export type TelemetryLogsGroupRead = {
+export type TelemetryLogsGroupResourceRead = {
   collectorKind: TelemetryCollectorKind;
   /** A list of log groups to collect. */
   groups: string[];
-  /** Human-readable name for the log group */
+  /** Human-readable name for the log group. */
   name: string;
   /** Unique ID of the telemetry group. */
+  resourceId?: string;
+  /** Deprecated, Unique ID of the telemetry group. Alias of resource_id. */
   telemetryLogsGroupId?: string;
-  timestamps?: TimestampsRead;
-};
-export type TelemetryLogsGroupListRead = {
-  TelemetryLogsGroups: TelemetryLogsGroupRead[];
-  /** Indicates if there are more log group objects available to be retrieved. */
-  hasNext: boolean;
-  timestamps?: TimestampsRead;
-  /** Total number of items that the request would return, if not limited by pagination. */
-  totalElements: number;
-};
-export type TelemetryLogsProfileList = {
   timestamps?: Timestamps;
 };
-export type TelemetrySeverityLevel =
-  | "TELEMETRY_SEVERITY_LEVEL_UNSPECIFIED"
-  | "TELEMETRY_SEVERITY_LEVEL_CRITICAL"
-  | "TELEMETRY_SEVERITY_LEVEL_ERROR"
-  | "TELEMETRY_SEVERITY_LEVEL_WARN"
-  | "TELEMETRY_SEVERITY_LEVEL_INFO"
-  | "TELEMETRY_SEVERITY_LEVEL_DEBUG";
-export type TelemetryLogsProfile = {
-  logLevel: TelemetrySeverityLevel;
-  logsGroup?: TelemetryLogsGroup;
+export type ListTelemetryLogsGroupsResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of telemetry_logs_groups. */
+  telemetryLogsGroups: TelemetryLogsGroupResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListTelemetryLogsGroupsResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of telemetry_logs_groups. */
+  telemetryLogsGroups: TelemetryLogsGroupResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteTelemetryLogsProfileResponse = object;
+export type SeverityLevel =
+  | "SEVERITY_LEVEL_UNSPECIFIED"
+  | "SEVERITY_LEVEL_CRITICAL"
+  | "SEVERITY_LEVEL_ERROR"
+  | "SEVERITY_LEVEL_WARN"
+  | "SEVERITY_LEVEL_INFO"
+  | "SEVERITY_LEVEL_DEBUG";
+export type TelemetryLogsProfileResource = {
+  logLevel: SeverityLevel;
+  logsGroup?: TelemetryLogsGroupResource;
   /** The unique identifier of the telemetry log group. */
   logsGroupId: string;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
   timestamps?: Timestamps;
 };
-export type TelemetryLogsProfileRead = {
-  logLevel: TelemetrySeverityLevel;
-  logsGroup?: TelemetryLogsGroupRead;
+export type TelemetryLogsProfileResourceRead = {
+  logLevel: SeverityLevel;
+  logsGroup?: TelemetryLogsGroupResourceRead;
   /** The unique identifier of the telemetry log group. */
   logsGroupId: string;
-  /** The ID of the telemetry profile. */
+  /** Deprecated, The ID of the telemetry profile. */
   profileId?: string;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the telemetry profile. */
+  resourceId?: string;
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
   targetSite?: string;
-  timestamps?: TimestampsRead;
-};
-export type TelemetryLogsProfileListRead = {
-  TelemetryLogsProfiles: TelemetryLogsProfileRead[];
-  /** Indicates if there are more telemetry log profile objects available to be retrieved. */
-  hasNext: boolean;
-  timestamps?: TimestampsRead;
-  /** Total number of items that the request would return, if not limited by pagination. */
-  totalElements: number;
-};
-export type TelemetryMetricsGroupList = {
   timestamps?: Timestamps;
 };
-export type TelemetryMetricsGroup = {
+export type DeleteTelemetryLogsGroupResponse = object;
+export type ListTelemetryLogsProfilesResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of telemetry_logs_profiles. */
+  telemetryLogsProfiles: TelemetryLogsProfileResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListTelemetryLogsProfilesResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of telemetry_logs_profiles. */
+  telemetryLogsProfiles: TelemetryLogsProfileResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type TelemetryMetricsGroupResource = {
   collectorKind: TelemetryCollectorKind;
-  /** A list of metric groups to collect. */
+  /** A list of log groups to collect. */
   groups: string[];
-  /** Human-readable name for the metric group. */
+  /** Human-readable name for the log group. */
   name: string;
   timestamps?: Timestamps;
 };
-export type TelemetryMetricsGroupRead = {
+export type TelemetryMetricsGroupResourceRead = {
   collectorKind: TelemetryCollectorKind;
-  /** A list of metric groups to collect. */
+  /** A list of log groups to collect. */
   groups: string[];
-  /** Human-readable name for the metric group. */
+  /** Human-readable name for the log group. */
   name: string;
   /** Unique ID of the telemetry group. */
+  resourceId?: string;
+  /** Deprecated, Unique ID of the telemetry group. Alias of resource_id. */
   telemetryMetricsGroupId?: string;
-  timestamps?: TimestampsRead;
+  timestamps?: Timestamps;
 };
-export type TelemetryMetricsGroupListRead = {
-  TelemetryMetricsGroups: TelemetryMetricsGroupRead[];
-  /** Indicates if there are more telemetry metric group objects available to be retrieved. */
+export type ListTelemetryMetricsGroupsResponse = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  timestamps?: TimestampsRead;
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of telemetry_metrics_groups. */
+  telemetryMetricsGroups: TelemetryMetricsGroupResource[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
-export type TelemetryLogsProfileList2 = {
-  timestamps?: Timestamps;
-};
-export type TelemetryMetricsProfile = {
-  metricsGroup?: TelemetryMetricsGroup;
-  /** The unique identifier of the telemetry metric group. */
-  metricsGroupId: string;
-  /** Metric interval (in seconds) for the telemetry profile. This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
-  metricsInterval: number;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
-  targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
-  targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
-  targetSite?: string;
-  timestamps?: Timestamps;
-};
-export type TelemetryMetricsProfileRead = {
-  metricsGroup?: TelemetryMetricsGroupRead;
-  /** The unique identifier of the telemetry metric group. */
-  metricsGroupId: string;
-  /** Metric interval (in seconds) for the telemetry profile. This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
-  metricsInterval: number;
-  /** The ID of the telemetry profile. */
-  profileId?: string;
-  /** The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
-  targetInstance?: string;
-  /** The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
-  targetRegion?: string;
-  /** The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion. */
-  targetSite?: string;
-  timestamps?: TimestampsRead;
-};
-export type TelemetryLogsProfileListRead2 = {
-  TelemetryMetricsProfiles: TelemetryMetricsProfileRead[];
-  /** Indicates if there are more telemetry metric profile objects available to be retrieved. */
+export type ListTelemetryMetricsGroupsResponseRead = {
+  /** Inform if there are more elements */
   hasNext: boolean;
-  timestamps?: TimestampsRead;
-  /** Total number of items that the request would return, if not limited by pagination. */
+  /** Sorted and filtered list of telemetry_metrics_groups. */
+  telemetryMetricsGroups: TelemetryMetricsGroupResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteTelemetryMetricsProfileResponse = object;
+export type TelemetryMetricsProfileResource = {
+  metricsGroup?: TelemetryMetricsGroupResource;
+  /** The unique identifier of the telemetry metric group. */
+  metricsGroupId: string;
+  /** Metric interval (in seconds) for the telemetry profile.
+     This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
+  metricsInterval: number;
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
+  targetInstance?: string;
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
+  targetRegion?: string;
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
+  targetSite?: string;
+  timestamps?: Timestamps;
+};
+export type TelemetryMetricsProfileResourceRead = {
+  metricsGroup?: TelemetryMetricsGroupResourceRead;
+  /** The unique identifier of the telemetry metric group. */
+  metricsGroupId: string;
+  /** Metric interval (in seconds) for the telemetry profile.
+     This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS. */
+  metricsInterval: number;
+  /** Deprecated, The ID of the telemetry profile. */
+  profileId?: string;
+  /** The ID of the telemetry profile. */
+  resourceId?: string;
+  /** The ID of the instance that the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
+  targetInstance?: string;
+  /** The ID of the region where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
+  targetRegion?: string;
+  /** The ID of the site where the telemetry profile is assigned to.
+     Can only be one of targetInstance, targetSite, or targetRegion. */
+  targetSite?: string;
+  timestamps?: Timestamps;
+};
+export type DeleteTelemetryMetricsGroupResponse = object;
+export type ListTelemetryMetricsProfilesResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of telemetry_metrics_profiles. */
+  telemetryMetricsProfiles: TelemetryMetricsProfileResource[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListTelemetryMetricsProfilesResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of telemetry_metrics_profiles. */
+  telemetryMetricsProfiles: TelemetryMetricsProfileResourceRead[];
+  /** Count of items in the entire list, regardless of pagination. */
   totalElements: number;
 };
 export const {
-  useGetV1ProjectsByProjectNameComputeQuery,
-  useGetV1ProjectsByProjectNameComputeHostsQuery,
-  usePostV1ProjectsByProjectNameComputeHostsMutation,
-  useDeleteV1ProjectsByProjectNameComputeHostsAndHostIdMutation,
-  useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery,
-  usePatchV1ProjectsByProjectNameComputeHostsAndHostIdMutation,
-  usePutV1ProjectsByProjectNameComputeHostsAndHostIdMutation,
-  usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation,
-  usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation,
-  usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation,
-  usePostV1ProjectsByProjectNameComputeHostsRegisterMutation,
-  useGetV1ProjectsByProjectNameComputeHostsSummaryQuery,
-  useGetV1ProjectsByProjectNameComputeInstancesQuery,
-  usePostV1ProjectsByProjectNameComputeInstancesMutation,
-  useDeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdMutation,
-  useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery,
-  usePatchV1ProjectsByProjectNameComputeInstancesAndInstanceIdMutation,
-  usePutV1ProjectsByProjectNameComputeInstancesAndInstanceIdInvalidateMutation,
-  useGetV1ProjectsByProjectNameComputeOsQuery,
-  usePostV1ProjectsByProjectNameComputeOsMutation,
-  useDeleteV1ProjectsByProjectNameComputeOsAndOsResourceIdMutation,
-  useGetV1ProjectsByProjectNameComputeOsAndOsResourceIdQuery,
-  usePatchV1ProjectsByProjectNameComputeOsAndOsResourceIdMutation,
-  usePutV1ProjectsByProjectNameComputeOsAndOsResourceIdMutation,
-  useGetV1ProjectsByProjectNameComputeSchedulesQuery,
-  useGetV1ProjectsByProjectNameComputeWorkloadsQuery,
-  usePostV1ProjectsByProjectNameComputeWorkloadsMutation,
-  useDeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMutation,
-  useGetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdQuery,
-  usePatchV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMutation,
-  usePutV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMutation,
-  useGetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersQuery,
-  usePostV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersMutation,
-  useDeleteV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdMutation,
-  useGetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdMembersWorkloadMemberIdQuery,
-  useGetV1ProjectsByProjectNameLocalAccountsQuery,
-  usePostV1ProjectsByProjectNameLocalAccountsMutation,
-  useDeleteV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdMutation,
-  useGetV1ProjectsByProjectNameLocalAccountsAndLocalAccountIdQuery,
-  useGetV1ProjectsByProjectNameLocationsQuery,
-  useGetV1ProjectsByProjectNameProvidersQuery,
-  usePostV1ProjectsByProjectNameProvidersMutation,
-  useDeleteV1ProjectsByProjectNameProvidersAndProviderIdMutation,
-  useGetV1ProjectsByProjectNameProvidersAndProviderIdQuery,
-  useGetV1ProjectsByProjectNameRegionsQuery,
-  usePostV1ProjectsByProjectNameRegionsMutation,
-  useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation,
-  useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery,
-  usePatchV1ProjectsByProjectNameRegionsAndRegionIdMutation,
-  usePutV1ProjectsByProjectNameRegionsAndRegionIdMutation,
-  useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery,
-  usePostV1ProjectsByProjectNameRegionsAndRegionIdSitesMutation,
-  useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation,
-  useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery,
-  usePatchV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation,
-  usePutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation,
-  useGetV1ProjectsByProjectNameSchedulesRepeatedQuery,
-  usePostV1ProjectsByProjectNameSchedulesRepeatedMutation,
-  useDeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation,
-  useGetV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdQuery,
-  usePatchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation,
-  usePutV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdMutation,
-  useGetV1ProjectsByProjectNameSchedulesSingleQuery,
-  usePostV1ProjectsByProjectNameSchedulesSingleMutation,
-  useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation,
-  useGetV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdQuery,
-  usePatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation,
-  usePutV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation,
-  useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery,
-  usePostV1ProjectsByProjectNameTelemetryLoggroupsMutation,
-  useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdMutation,
-  useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdQuery,
-  useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery,
-  usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation,
-  useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation,
-  useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdQuery,
-  usePatchV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation,
-  usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation,
-  useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery,
-  usePostV1ProjectsByProjectNameTelemetryMetricgroupsMutation,
-  useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMutation,
-  useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdQuery,
-  useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery,
-  usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation,
-  useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation,
-  useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdQuery,
-  usePatchV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation,
-  usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation,
+  useHostServiceListHostsQuery,
+  useHostServiceCreateHostMutation,
+  useHostServiceDeleteHostMutation,
+  useHostServiceGetHostQuery,
+  useHostServicePatchHostMutation,
+  useHostServiceUpdateHostMutation,
+  useHostServiceInvalidateHostMutation,
+  useHostServiceOnboardHostMutation,
+  useHostServiceRegisterUpdateHostMutation,
+  useHostServiceRegisterHostMutation,
+  useHostServiceGetHostsSummaryQuery,
+  useInstanceServiceListInstancesQuery,
+  useInstanceServiceCreateInstanceMutation,
+  useInstanceServiceDeleteInstanceMutation,
+  useInstanceServiceGetInstanceQuery,
+  useInstanceServicePatchInstanceMutation,
+  useInstanceServiceUpdateInstanceMutation,
+  useInstanceServiceInvalidateInstanceMutation,
+  useOperatingSystemServiceListOperatingSystemsQuery,
+  useOperatingSystemServiceCreateOperatingSystemMutation,
+  useOperatingSystemServiceDeleteOperatingSystemMutation,
+  useOperatingSystemServiceGetOperatingSystemQuery,
+  useOperatingSystemServicePatchOperatingSystemMutation,
+  useOperatingSystemServiceUpdateOperatingSystemMutation,
+  useScheduleServiceListSchedulesQuery,
+  useWorkloadServiceListWorkloadsQuery,
+  useWorkloadServiceCreateWorkloadMutation,
+  useWorkloadServiceDeleteWorkloadMutation,
+  useWorkloadServiceGetWorkloadQuery,
+  useWorkloadServicePatchWorkloadMutation,
+  useWorkloadServiceUpdateWorkloadMutation,
+  useWorkloadMemberServiceListWorkloadMembersQuery,
+  useWorkloadMemberServiceCreateWorkloadMemberMutation,
+  useWorkloadMemberServiceDeleteWorkloadMemberMutation,
+  useWorkloadMemberServiceGetWorkloadMemberQuery,
+  useLocalAccountServiceListLocalAccountsQuery,
+  useLocalAccountServiceCreateLocalAccountMutation,
+  useLocalAccountServiceDeleteLocalAccountMutation,
+  useLocalAccountServiceGetLocalAccountQuery,
+  useLocationServiceListLocationsQuery,
+  useProviderServiceListProvidersQuery,
+  useProviderServiceCreateProviderMutation,
+  useProviderServiceDeleteProviderMutation,
+  useProviderServiceGetProviderQuery,
+  useRegionServiceListRegionsQuery,
+  useRegionServiceCreateRegionMutation,
+  useSiteServiceDeleteSiteMutation,
+  useSiteServiceGetSiteQuery,
+  useSiteServicePatchSiteMutation,
+  useSiteServiceUpdateSiteMutation,
+  useRegionServiceDeleteRegionMutation,
+  useRegionServiceGetRegionQuery,
+  useRegionServicePatchRegionMutation,
+  useRegionServiceUpdateRegionMutation,
+  useSiteServiceListSitesQuery,
+  useSiteServiceCreateSiteMutation,
+  useScheduleServiceListRepeatedSchedulesQuery,
+  useScheduleServiceCreateRepeatedScheduleMutation,
+  useScheduleServiceDeleteRepeatedScheduleMutation,
+  useScheduleServiceGetRepeatedScheduleQuery,
+  useScheduleServicePatchRepeatedScheduleMutation,
+  useScheduleServiceUpdateRepeatedScheduleMutation,
+  useScheduleServiceListSingleSchedulesQuery,
+  useScheduleServiceCreateSingleScheduleMutation,
+  useScheduleServiceDeleteSingleScheduleMutation,
+  useScheduleServiceGetSingleScheduleQuery,
+  useScheduleServicePatchSingleScheduleMutation,
+  useScheduleServiceUpdateSingleScheduleMutation,
+  useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery,
+  useTelemetryLogsGroupServiceCreateTelemetryLogsGroupMutation,
+  useTelemetryLogsProfileServiceDeleteTelemetryLogsProfileMutation,
+  useTelemetryLogsProfileServiceGetTelemetryLogsProfileQuery,
+  useTelemetryLogsProfileServicePatchTelemetryLogsProfileMutation,
+  useTelemetryLogsProfileServiceUpdateTelemetryLogsProfileMutation,
+  useTelemetryLogsGroupServiceDeleteTelemetryLogsGroupMutation,
+  useTelemetryLogsGroupServiceGetTelemetryLogsGroupQuery,
+  useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery,
+  useTelemetryLogsProfileServiceCreateTelemetryLogsProfileMutation,
+  useTelemetryMetricsGroupServiceListTelemetryMetricsGroupsQuery,
+  useTelemetryMetricsGroupServiceCreateTelemetryMetricsGroupMutation,
+  useTelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileMutation,
+  useTelemetryMetricsProfileServiceGetTelemetryMetricsProfileQuery,
+  useTelemetryMetricsProfileServicePatchTelemetryMetricsProfileMutation,
+  useTelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileMutation,
+  useTelemetryMetricsGroupServiceDeleteTelemetryMetricsGroupMutation,
+  useTelemetryMetricsGroupServiceGetTelemetryMetricsGroupQuery,
+  useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery,
+  useTelemetryMetricsProfileServiceCreateTelemetryMetricsProfileMutation,
 } = injectedRtkApi;

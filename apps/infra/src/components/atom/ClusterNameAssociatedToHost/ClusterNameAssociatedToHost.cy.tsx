@@ -8,7 +8,7 @@ import ClusterNameAssociatedToHost from "./ClusterNameAssociatedToHost";
 import ClusterNameAssociatedToHostPom from "./ClusterNameAssociatedToHost.pom";
 
 const pom = new ClusterNameAssociatedToHostPom();
-const defaultHost: infra.HostRead = {
+const defaultHost: infra.HostResourceRead = {
   name: "host-1",
   instance: { resourceId: "host-1-id" },
 };

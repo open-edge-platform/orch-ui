@@ -76,17 +76,16 @@ const HostDetails: React.FC = () => {
   const { id, uuid } = useParams<urlParams>() as urlParams;
 
   /* Managing Host/Host-Resource details with api-hooks & states */
-  const [host, setHost] = useState<infra.HostRead>();
+  const [host, setHost] = useState<infra.HostResourceRead>();
   const [showResourceDetails, setShowResourceDetails] =
     useState<boolean>(false);
   const [resourceTitle, setResourceTitle] = useState<ResourceTypeTitle>();
   const [resourceData, setResourceData] = useState<ResourceType | null>(null);
   // Calling Host-related APIs
-  const hostsQuery = infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+  const hostsQuery = infra.useHostServiceListHostsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      uuid: uuid,
-      detail: true,
+      filter: `uuid="${uuid}"`,
     },
     {
       skip: !uuid || !SharedStorage.project?.name,
@@ -94,30 +93,28 @@ const HostDetails: React.FC = () => {
     },
   );
 
-  const hostQuery =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        hostId: id,
-      },
-      {
-        skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
-        refetchOnMountOrArgChange: true,
-        pollingInterval: API_INTERVAL,
-      },
-    );
+  const hostQuery = infra.useHostServiceGetHostQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: id,
+    },
+    {
+      skip: !id || !SharedStorage.project?.name, // Skip call if url does not include host-id
+      refetchOnMountOrArgChange: true,
+      pollingInterval: API_INTERVAL,
+    },
+  );
 
-  const sitesQuery =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: "*", // sitesFiltered logic can be updated with host regionId mapping
-        pageSize: 100,
-      },
-      {
-        skip: !SharedStorage.project?.name,
-      },
-    ); // Host's Site details
+  const sitesQuery = infra.useSiteServiceListSitesQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: "*", // sitesFiltered logic can be updated with host regionId mapping
+      pageSize: 100,
+    },
+    {
+      skip: !SharedStorage.project?.name,
+    },
+  ); // Host's Site details
 
   // Below useEffects will set the host/site data to display
   useEffect(() => {
@@ -164,30 +161,29 @@ const HostDetails: React.FC = () => {
   const [deleteMaintenanceSchedule] =
     // For Deactivating Maintenance option within Maintenance message banner or Host-Actions popup.
     // This option is only available within configured host details
-    infra.useDeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdMutation();
-  const { data: schedules } =
-    infra.useGetV1ProjectsByProjectNameComputeSchedulesQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        hostId: id,
-        unixEpoch: Math.trunc(+new Date() / 1000).toString(),
-      },
-      {
-        skip: !host?.site || !SharedStorage.project?.name,
-        pollingInterval: API_INTERVAL,
-        // This will skip the isFetching event of rerender happening on every API polling cycle
-        selectFromResult: ({ data, isError, isSuccess, isLoading }) => ({
-          data,
-          isError,
-          isSuccess,
-          isLoading,
-          isFetching: true,
-        }),
-      },
-    );
+    infra.useScheduleServiceDeleteSingleScheduleMutation();
+  const { data: schedules } = infra.useScheduleServiceListSchedulesQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      hostId: id,
+      unixEpoch: Math.trunc(+new Date() / 1000).toString(),
+    },
+    {
+      skip: !host?.site || !SharedStorage.project?.name,
+      pollingInterval: API_INTERVAL,
+      // This will skip the isFetching event of rerender happening on every API polling cycle
+      selectFromResult: ({ data, isError, isSuccess, isLoading }) => ({
+        data,
+        isError,
+        isSuccess,
+        isLoading,
+        isFetching: true,
+      }),
+    },
+  );
   /** contains all maintenance schedules that are not set from UI (by os, routine or external) */
   const filteredMaintenance =
-    (schedules?.SingleSchedules?.filter(
+    (schedules?.singleSchedules?.filter(
       (schedule) =>
         // Gather all schedules that decide a host is in maintenance
         (schedule.scheduleStatus === "SCHEDULE_STATUS_MAINTENANCE" &&
@@ -195,11 +191,11 @@ const HostDetails: React.FC = () => {
           schedule.endSeconds !== 0) ||
         schedule.scheduleStatus !== "SCHEDULE_STATUS_MAINTENANCE",
     ) ||
-      schedules?.RepeatedSchedules) ??
+      schedules?.repeatedSchedules) ??
     [];
   /** contains all maintenance schedules that are set by UI and can be deleted from UI */
   const filteredMaintenanceToDelete =
-    schedules?.SingleSchedules?.filter(
+    schedules?.singleSchedules?.filter(
       (schedule) =>
         // This condition determines whether a host is set by using UI
         schedule.scheduleStatus === "SCHEDULE_STATUS_MAINTENANCE" &&
@@ -211,11 +207,11 @@ const HostDetails: React.FC = () => {
   const isInMaintenance =
     schedules &&
     // Filtered host has atleast one single active maintenance schedule
-    ((schedules.SingleSchedules && schedules.SingleSchedules?.length > 0) ||
+    ((schedules.singleSchedules && schedules.singleSchedules?.length > 0) ||
       // OR Filtered host has atleast one periodically repeated active maintenance schedule
-      (schedules.RepeatedSchedules && schedules.RepeatedSchedules.length > 0));
+      (schedules.repeatedSchedules && schedules.repeatedSchedules.length > 0));
   /** This will trigger an API call to Deactivate Maintenance: if host & the maintenance for that host exist */
-  const deactivateMaintenance = (host: infra.HostRead) => {
+  const deactivateMaintenance = (host: infra.HostResourceRead) => {
     if (filteredMaintenance.length !== 0) {
       dispatch(
         showMessageNotification({
@@ -246,7 +242,7 @@ const HostDetails: React.FC = () => {
       // deactivate maintenance button should only delete first item in maintenance list
       deleteMaintenanceSchedule({
         projectName: SharedStorage.project?.name ?? "",
-        singleScheduleId: filteredMaintenanceToDelete[0].resourceId,
+        resourceId: filteredMaintenanceToDelete[0].resourceId,
       })
         .unwrap()
         .then(() => {
@@ -299,7 +295,8 @@ const HostDetails: React.FC = () => {
     ...(site?.metadata?.map((metadata) => {
       return { ...metadata, type: "site" };
     }) ?? []),
-    ...(site?.inheritedMetadata?.location?.map((metadata) => {
+
+    ...(site?.inheritedMetadata?.map((metadata) => {
       return { ...metadata, type: "region" };
     }) ?? []),
   ];
@@ -363,7 +360,7 @@ const HostDetails: React.FC = () => {
             primaryText=""
             secondaryText={
               // Not rendering secondary button for repeated schedules
-              schedules?.RepeatedSchedules?.length === 0
+              schedules?.repeatedSchedules?.length === 0
                 ? "Deactivate Maintenance Mode"
                 : ""
             }

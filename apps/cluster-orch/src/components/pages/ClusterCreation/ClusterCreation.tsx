@@ -6,6 +6,7 @@
 import { cm, mbApi } from "@orch-ui/apis";
 import { Empty, MetadataPair } from "@orch-ui/components";
 import {
+  clusterCreateRoute,
   clusterManagementRoute,
   InternalError,
   SharedStorage,
@@ -84,7 +85,7 @@ const ClusterCreation = () => {
   const [step, setStep] = useState<number>(0);
   useEffect(() => {
     if (step === 0 && !window.location.search) {
-      navigate(clusterManagementRoute, undefined, "?offset=0");
+      navigate(clusterCreateRoute, undefined, "?offset=0");
     }
   }, [step]);
 

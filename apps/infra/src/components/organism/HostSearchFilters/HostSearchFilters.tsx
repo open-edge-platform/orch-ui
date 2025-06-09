@@ -72,7 +72,7 @@ const HostSearchFilters = () => {
 
   // Update OS profiles options by api response
   const { data: osProfiles, isSuccess: isOSSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeOsQuery(
+    infra.useOperatingSystemServiceListOperatingSystemsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
       },

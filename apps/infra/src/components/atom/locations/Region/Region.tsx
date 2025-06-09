@@ -20,15 +20,15 @@ const dataCy = "region";
 
 export interface RegionDynamicProps {
   showActionsMenu?: boolean;
-  viewHandler?: (region: infra.RegionRead) => void;
-  addSiteHandler?: (region: infra.RegionRead) => void;
-  addSubRegionHandler?: (region: infra.RegionRead) => void;
-  deleteHandler?: (region: infra.RegionRead) => void;
-  scheduleMaintenanceHandler?: (region: infra.RegionRead) => void;
+  viewHandler?: (region: infra.RegionResourceRead) => void;
+  addSiteHandler?: (region: infra.RegionResourceRead) => void;
+  addSubRegionHandler?: (region: infra.RegionResourceRead) => void;
+  deleteHandler?: (region: infra.RegionResourceRead) => void;
+  scheduleMaintenanceHandler?: (region: infra.RegionResourceRead) => void;
 }
 
 export interface RegionProps extends RegionDynamicProps {
-  region: infra.RegionRead;
+  region: infra.RegionResourceRead;
   sitesCount?: number;
   showSitesCount?: boolean;
 }

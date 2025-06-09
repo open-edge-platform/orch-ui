@@ -13,13 +13,13 @@ type ApiAliases = "getHostByUUID" | "getHostById";
 
 const endpoints: CyApiDetails<ApiAliases> = {
   getHostByUUID: {
-    route: "**/compute/hosts?detail=true&uuid=*",
+    route: "**/compute/hosts?filter*",
     statusCode: 200,
     response: {
       hasNext: false,
       hosts: [mockHost],
       totalElements: 1,
-    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.HostServiceListHostsApiResponse,
   },
   getHostById: {
     route: "**/compute/hosts/*",

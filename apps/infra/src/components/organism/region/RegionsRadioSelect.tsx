@@ -11,10 +11,10 @@ const RegionRadioSelect = ({
   row,
   onRadioSelect,
 }: {
-  region?: infra.RegionRead;
-  row: infra.RegionRead;
+  region?: infra.RegionResourceRead;
+  row: infra.RegionResourceRead;
   selectedName?: string;
-  onRadioSelect?: (item: infra.RegionRead) => void;
+  onRadioSelect?: (item: infra.RegionResourceRead) => void;
 }) => {
   const [selected, setSelected] = useState(selectedName);
 

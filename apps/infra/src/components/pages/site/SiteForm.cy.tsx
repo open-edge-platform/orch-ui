@@ -64,17 +64,11 @@ describe("<SiteForm />", () => {
 
     it("should render inherited metadata", () => {
       pom.table.root.should("exist");
-      if (
-        !siteOregonPortland.metadata ||
-        !siteOregonPortland.inheritedMetadata?.location
-      )
+      if (!siteOregonPortland.metadata || !siteOregonPortland.inheritedMetadata)
         throw new Error("Test data missing required metadata information");
       pom.table
         .getRows()
-        .should(
-          "have.length",
-          siteOregonPortland.inheritedMetadata?.location.length,
-        );
+        .should("have.length", siteOregonPortland.inheritedMetadata.length);
     });
 
     it("should successfully modify site name", () => {
