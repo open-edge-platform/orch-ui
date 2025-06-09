@@ -4,12 +4,6 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export const hostFilterBuilderSliceName = "hostFilterBuilder";
-export interface _FilterBuilderRootState {
-  [hostFilterBuilderSliceName]: HostFilterBuilderState;
-}
 
 export const detailedStatuses = [
   "hostStatusIndicator",
@@ -76,22 +70,6 @@ aggregatedStatusQuery.set(
 aggregatedStatusQuery.set(AggregatedStatus.Unknown, "currentState=HOST_STATE_UNSPECIFIED");
 aggregatedStatusQuery.set(AggregatedStatus.Deauthorized, "currentState=HOST_STATE_UNTRUSTED");
 
-interface HostFilterBuilderState {
-  lifeCycleState?: LifeCycleState;
-  searchTerm?: string;
-  statuses?: AggregatedStatus[];
-  osProfiles?: string[];
-  hasWorkload?: boolean;
-  workloadMemberId?: string;
-  siteId?: string;
-  uuids?: string[];
-  hostIds?: string[];
-}
-
-const initialState: HostFilterBuilderState = {
-  lifeCycleState: LifeCycleState.Provisioned,
-};
-
 export const searchableColumns = [
   "name",
   "uuid",
@@ -105,70 +83,17 @@ export const searchableColumns = [
 export const buildColumnOrs = (column: string, values: string[]): string =>
   `(${values.map((value) => `${column}="${value}"`).join(" OR ")})`;
 
-export const _setSiteId = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string | undefined>,
-) => {
-  state.siteId = action.payload;
-};
-
-export const _setLifeCycleState = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<LifeCycleState>,
-) => {
-  state.lifeCycleState = action.payload;
-};
-
-export const _setHasWorkload = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<boolean | undefined>,
-) => {
-  state.hasWorkload = action.payload;
-};
-
-export const _setWorkloadMemberId = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string | undefined>,
-) => {
-  state.workloadMemberId = action.payload;
-};
-
-export const _setSearchTerm = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string | undefined>,
-) => {
-  state.searchTerm = action.payload;
-};
-
-export const _setStatuses = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<AggregatedStatus[] | undefined>,
-) => {
-  state.statuses = action.payload;
-};
-
-export const _setFiltersByUuids = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string[] | undefined>,
-) => {
-  state.uuids = action.payload;
-};
-
-export const _setFiltersByHostIds = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string[] | undefined>,
-) => {
-  state.hostIds = action.payload;
-};
-
-export const _setOsProfiles = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string[] | undefined>,
-) => {
-  state.osProfiles = action.payload;
-};
-
-export function buildFilterNew(params: HostFilterBuilderState): string | undefined {
+export function buildFilterNew(params: {
+  lifeCycleState?: LifeCycleState;
+  searchTerm?: string;
+  statuses?: AggregatedStatus[];
+  osProfiles?: string[];
+  hasWorkload?: boolean;
+  workloadMemberId?: string;
+  siteId?: string;
+  uuids?: string[];
+  hostIds?: string[];
+}): string | undefined {
   const filterParts: (string | undefined)[] = [];
 
   if (params.lifeCycleState) {
@@ -177,21 +102,17 @@ export function buildFilterNew(params: HostFilterBuilderState): string | undefin
 
   if (params.searchTerm && params.searchTerm.trim().length > 0) {
     const term = params.searchTerm.trim();
-    const searchParts = searchableColumns
-      .map((column) => {
-        if (column === "uuid" && params.uuids && params.uuids.length > 0) {
-          return undefined;
-        }
-        if (column === "resourceId" && params.hostIds && params.hostIds.length > 0) {
-          return undefined;
-        }
-        return `${column}="${term}"`;
-      })
-      .filter(Boolean);
+    const searchParts = searchableColumns.map((column) => {
+      if (column === "uuid" && params.uuids && params.uuids.length > 0) {
+        return `uuid="${term}"`; // UUID column takes precedence
+      }
+      if (column === "resourceId" && params.hostIds && params.hostIds.length > 0) {
+        return `resourceId="${term}"`; // Resource ID column takes precedence
+      }
+      return `${column}="${term}"`;
+    });
 
-    if (searchParts.length > 0) {
-      filterParts.push(`(${searchParts.join(" OR ")})`);
-    }
+    filterParts.push(`(${searchParts.join(" OR ")})`);
   }
 
   if (params.statuses && params.statuses.length > 0) {
@@ -230,41 +151,3 @@ export function buildFilterNew(params: HostFilterBuilderState): string | undefin
   const result = filterParts.filter(Boolean).join(" AND ");
   return result.length > 0 ? result : undefined;
 }
-
-export const hostFilterBuilder = createSlice({
-  name: hostFilterBuilderSliceName,
-  initialState,
-  reducers: {
-    setLifeCycleState: _setLifeCycleState,
-    setHasWorkload: _setHasWorkload,
-    setWorkloadMemberId: _setWorkloadMemberId,
-    setSearchTerm: _setSearchTerm,
-    setStatuses: _setStatuses,
-    setOsProfiles: _setOsProfiles,
-    setSiteId: _setSiteId,
-    setFiltersByUuids: _setFiltersByUuids,
-    setFiltersByHostIds: _setFiltersByHostIds,
-  },
-});
-
-export const selectHostFilterState = (state: _FilterBuilderRootState) =>
-  state.hostFilterBuilder;
-
-export const selectFilter = (state: _FilterBuilderRootState): string | undefined => {
-  const filterState = selectHostFilterState(state);
-  return buildFilterNew(filterState);
-};
-
-export const {
-  setLifeCycleState,
-  setHasWorkload,
-  setWorkloadMemberId,
-  setSearchTerm,
-  setStatuses,
-  setOsProfiles,
-  setSiteId,
-  setFiltersByUuids,
-  setFiltersByHostIds,
-} = hostFilterBuilder.actions;
-
-export default hostFilterBuilder.reducer;

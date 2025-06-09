@@ -28,26 +28,16 @@ import {
 import { Button } from "@spark-design/react";
 import { useEffect } from "react";
 import { reset, setHosts } from "../../../store/configureHost";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  LifeCycleState,
-  setFiltersByHostIds,
-  setFiltersByUuids,
-  setHasWorkload,
-  setLifeCycleState,
-  setSearchTerm,
-  setSiteId,
-  setWorkloadMemberId,
-} from "../../../store/hostFilterBuilder";
-import {
-  showErrorMessageBanner,
-  showSuccessMessageBanner,
-} from "../../../store/utils";
+import { showErrorMessageBanner, showSuccessMessageBanner } from "../../../store/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
 import HostDetailsActions from "../hosts/HostDetailsActions/HostDetailsActions";
+import { buildFilterNew, LifeCycleState } from "../../../store/hostFilterBuilder";
 import "./HostsTable.scss";
+import { useAppDispatch } from "src/store/hooks";
+
 export const dataCy = "hostsTable";
+
 export interface HostsTableProps {
   /** columns to show from Host object */
   columns?: TableColumn<eim.HostRead>[];
@@ -102,6 +92,7 @@ const hostColumns: TableColumn<eim.HostRead>[] = [
     <HostDetailsActions host={host} />
   )),
 ];
+
 const HostsTable = ({
   columns = hostColumns,
   category,
@@ -126,8 +117,8 @@ const HostsTable = ({
   };
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [onboardHost] =
     eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
@@ -135,40 +126,19 @@ const HostsTable = ({
   // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
   const offset = parseInt(searchParams.get("offset") ?? "0");
-  // const sortColumn =
-  //   columnApiNameToDisplayName(columns, searchParams.get("column")) ?? "Name";
   const sortDirection = (searchParams.get("direction") as Direction) ?? "asc";
   const searchTerm = searchParams.get("searchTerm") ?? "";
 
-  const { filter, lifeCycleState } = useAppSelector(
-    (state) => state.hostFilterBuilder,
-  );
-
-  useEffect(() => {
-    dispatch(setSiteId(siteId));
-  }, [siteId]);
-
-  useEffect(() => {
-    if (category) {
-      dispatch(setLifeCycleState(category));
-    }
-  }, [category]);
-
-  useEffect(() => {
-    dispatch(setHasWorkload(hasWorkload));
-  }, [hasWorkload]);
-
-  useEffect(() => {
-    if (filters) {
-      dispatch(setWorkloadMemberId(filters.workloadMemberId));
-      if (filters.byUuids) {
-        dispatch(setFiltersByUuids(filters.byUuids));
-      } else if (filters.byHostIds) {
-        dispatch(setFiltersByHostIds(filters.byHostIds));
-      }
-      /* Add more dispatch if you have more filters here ... */
-    }
-  }, [filters]);
+  // Build the filter query directly using the new `buildFilterNew` function
+  const filter = buildFilterNew({
+    lifeCycleState: category,
+    searchTerm,
+    hasWorkload,
+    siteId,
+    uuids: filters?.byUuids,
+    hostIds: filters?.byHostIds,
+    workloadMemberId: filters?.workloadMemberId,
+  });
 
   const { data, isSuccess, isError, isLoading, error } =
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
@@ -181,31 +151,19 @@ const HostsTable = ({
         filter,
       },
       {
-        // Skip polling
         ...(poll ? { pollingInterval: API_INTERVAL } : {}),
-        // Skip if `filters` component props are provided, but `filter` query param is not yet set in the above useEffect
         skip: !SharedStorage.project?.name,
       },
     );
 
   const onSearchChange = (searchTerm: string) => {
     setSearchParams((prev) => {
-      // reset page offset before getting search result
       prev.set("offset", "0");
-      //apply search
       if (searchTerm) prev.set("searchTerm", searchTerm);
       else prev.delete("searchTerm");
       return prev;
     });
-    dispatch(setSearchTerm(searchTerm));
   };
-
-  useEffect(() => {
-    // clear selections when tab changes
-    if (selectedHosts?.length && unsetSelectedHosts) {
-      unsetSelectedHosts();
-    }
-  }, [lifeCycleState]);
 
   useEffect(() => {
     if (onDataLoad && isSuccess && data) {
@@ -213,23 +171,14 @@ const HostsTable = ({
     }
   }, [data, isSuccess]);
 
-  useEffect(() => {
-    dispatch(setSearchTerm(searchTerm));
-  }, [searchTerm]);
-
   const isEmptyError = () =>
     isSuccess && data.hosts.length === 0 && !searchTerm;
 
   const provisionHosts = () => {
     if (selectedHosts) {
-      // reset the HostConfig form
       dispatch(reset());
-      // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
-      const path = "../hosts/set-up-provisioning";
-      navigate(path, {
-        relative: "path",
-      });
+      navigate("../hosts/set-up-provisioning", { relative: "path" });
     }
   };
 
@@ -279,7 +228,7 @@ const HostsTable = ({
         <div className="action-btns-container">
           <Button
             isDisabled={
-              !hasWriteAccess || lifeCycleState === LifeCycleState.Onboarded
+              !hasWriteAccess || category === LifeCycleState.Onboarded
             }
             className="hosts-action-btn"
             data-cy="onboardBtn"
@@ -291,7 +240,7 @@ const HostsTable = ({
           </Button>
           <Button
             isDisabled={
-              !hasWriteAccess || lifeCycleState === LifeCycleState.Registered
+              !hasWriteAccess || category === LifeCycleState.Registered
             }
             className="hosts-action-btn"
             data-cy="provisionBtn"
@@ -338,11 +287,9 @@ const HostsTable = ({
     <div {...cy} className="hosts-table">
       {!hideSelectedItemBanner && renderSelectedItemsBanner()}
       <Table
-        // Basic Table data
         key={selectable ? "selectable" : "non-selectable"}
         columns={columns}
         data={data.hosts}
-        // Pagination
         canPaginate
         isServerSidePaginated
         totalOverallRowsCount={data.totalElements}
@@ -358,7 +305,6 @@ const HostsTable = ({
             return prev;
           });
         }}
-        // Sorting
         sortColumns={[1]}
         initialSort={{
           column: "Name",
@@ -379,11 +325,9 @@ const HostsTable = ({
             return prev;
           });
         }}
-        // Searching
-        canSearch={hideSelectedItemBanner || !selectedIds?.length} // If selctedItems banner is shown, hiding the search
+        canSearch={hideSelectedItemBanner || !selectedIds?.length}
         searchTerm={searchTerm}
         onSearch={onSearchChange}
-        // Checkbox Selection
         canSelectRows={selectable}
         onSelect={onHostSelect}
         getRowId={getSelectionId}
