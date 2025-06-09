@@ -4,8 +4,8 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { areArraysOfObjectsIdentical } from "@orch-ui/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { isEqual } from "lodash";
 import { RootState } from "./store";
 
 export enum HostProvisionSteps {
@@ -80,7 +80,7 @@ const isSet = (value: string | undefined) => {
 
 const everyHost = (
   state: HostProvisionState,
-  predicate: (hostData: HostData) => void,
+  predicate: (hostData: HostData) => boolean,
 ) => {
   const { hosts } = state;
   return Object.values(hosts).every(predicate);
@@ -323,10 +323,7 @@ export const selectNoChangesInHosts = (state: RootState) =>
         commonData.securityFeature,
       ) &&
       host.instance?.localAccountID === commonData.publicSshKey?.resourceId &&
-      areArraysOfObjectsIdentical(
-        host.metadata ?? [],
-        commonData.metadata ?? [],
-      );
+      isEqual(host.metadata ?? [], commonData.metadata ?? []);
 
     if (state.provisionHost.createCluster) {
       result &&=
