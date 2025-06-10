@@ -83,7 +83,7 @@ export const searchableColumns = [
 export const buildColumnOrs = (column: string, values: string[]): string =>
   `(${values.map((value) => `${column}="${value}"`).join(" OR ")})`;
 
-export function buildFilterNew(params: {
+export interface FilterParams {
   lifeCycleState?: LifeCycleState;
   searchTerm?: string;
   statuses?: AggregatedStatus[];
@@ -93,26 +93,32 @@ export function buildFilterNew(params: {
   siteId?: string;
   uuids?: string[];
   hostIds?: string[];
-}): string | undefined {
+}
+
+function buildSearchTermQuery(
+  searchTerm: string,
+  uuids?: string[],
+  hostIds?: string[],
+): string {
+  return `(${searchableColumns
+    .map((col) => {
+      if (col === "uuid" && uuids && uuids.length > 0) return `(uuid="${searchTerm}")`;
+      if (col === "resourceId" && hostIds && hostIds.length > 0) return `(resourceId="${searchTerm}")`;
+      return `${col}="${searchTerm}"`;
+    })
+    .filter(Boolean)
+    .join(" OR ")})`;
+}
+
+export function buildFilterNew(params: FilterParams): string | undefined {
   const filterParts: (string | undefined)[] = [];
 
   if (params.lifeCycleState) {
     filterParts.push(lifeCycleStateQuery.get(params.lifeCycleState));
   }
 
-  if (params.searchTerm && params.searchTerm.trim().length > 0) {
-    const term = params.searchTerm.trim();
-    const searchParts = searchableColumns.map((column) => {
-      if (column === "uuid" && params.uuids && params.uuids.length > 0) {
-        return `uuid="${term}"`; // UUID column takes precedence
-      }
-      if (column === "resourceId" && params.hostIds && params.hostIds.length > 0) {
-        return `resourceId="${term}"`; // Resource ID column takes precedence
-      }
-      return `${column}="${term}"`;
-    });
-
-    filterParts.push(`(${searchParts.join(" OR ")})`);
+  if (params.searchTerm) {
+    filterParts.push(buildSearchTermQuery(params.searchTerm, params.uuids, params.hostIds));
   }
 
   if (params.statuses && params.statuses.length > 0) {

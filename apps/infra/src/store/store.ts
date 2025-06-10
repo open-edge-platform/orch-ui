@@ -13,7 +13,6 @@ import {
 } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import configureHostReducer from "./configureHost";
-import hostFilterBuilderReducer from "./hostFilterBuilder";
 import hostStatusReducer from "./hostStatus";
 import locationsReducer from "./locations";
 import notificationStatusReducer from "./notifications";
@@ -23,7 +22,6 @@ const rootReducer = combineReducers({
   hostStatusList: hostStatusReducer,
   configureHost: configureHostReducer,
   locations: locationsReducer,
-  hostFilterBuilder: hostFilterBuilderReducer,
   [enhancedEimSlice.miEnhancedApi.reducerPath]:
     enhancedEimSlice.miEnhancedApi.reducer,
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,

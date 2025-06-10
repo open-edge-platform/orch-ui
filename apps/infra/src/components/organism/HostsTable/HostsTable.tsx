@@ -16,6 +16,7 @@ import {
   TableColumn,
 } from "@orch-ui/components";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import {
   API_INTERVAL,
@@ -26,19 +27,19 @@ import {
   SharedStorage,
 } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
-import { useEffect } from "react";
 import { reset, setHosts } from "../../../store/configureHost";
 import { showErrorMessageBanner, showSuccessMessageBanner } from "../../../store/utils";
 import { HostTableColumn } from "../../../utils/HostTableColumns";
 import HostsTableRowExpansionDetail from "../../atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail";
 import HostDetailsActions from "../hosts/HostDetailsActions/HostDetailsActions";
-import { buildFilterNew, LifeCycleState } from "../../../store/hostFilterBuilder";
+import { LifeCycleState } from "../../../store/hostFilterBuilder";
 import "./HostsTable.scss";
 import { useAppDispatch } from "src/store/hooks";
 
 export const dataCy = "hostsTable";
 
 export interface HostsTableProps {
+  searchTerm?: string;
   /** columns to show from Host object */
   columns?: TableColumn<eim.HostRead>[];
   /** Lifecycle category */
@@ -79,6 +80,7 @@ export interface HostsTableProps {
   provisionHosts?: () => void;
   /** This will decide on what HostRead info basis is host is selected  */
   getSelectionId?: (row: eim.HostRead) => string;
+  onSearch?: (term: string) => void;
 }
 
 const hostColumns: TableColumn<eim.HostRead>[] = [
@@ -97,9 +99,8 @@ const HostsTable = ({
   columns = hostColumns,
   category,
   filters,
-  hasWorkload,
+  searchTerm,  
   poll,
-  siteId,
   selectable,
   selectedHosts,
   expandable,
@@ -109,7 +110,8 @@ const HostsTable = ({
   onDataLoad,
   onHostSelect,
   unsetSelectedHosts,
-  getSelectionId = (row) => row.resourceId!,
+  getSelectionId = (row) => row.resourceId!,   
+  onSearch,        
 }: HostsTableProps) => {
   const cy = { "data-cy": dataCy };
   const defaultPageSize = {
@@ -123,22 +125,10 @@ const HostsTable = ({
   const [onboardHost] =
     eim.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
 
-  // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
   const offset = parseInt(searchParams.get("offset") ?? "0");
   const sortDirection = (searchParams.get("direction") as Direction) ?? "asc";
-  const searchTerm = searchParams.get("searchTerm") ?? "";
-
-  // Build the filter query directly using the new `buildFilterNew` function
-  const filter = buildFilterNew({
-    lifeCycleState: category,
-    searchTerm,
-    hasWorkload,
-    siteId,
-    uuids: filters?.byUuids,
-    hostIds: filters?.byHostIds,
-    workloadMemberId: filters?.workloadMemberId,
-  });
+  const filter = filters?.filter;
 
   const { data, isSuccess, isError, isLoading, error } =
     eim.useGetV1ProjectsByProjectNameComputeHostsQuery(
@@ -155,15 +145,6 @@ const HostsTable = ({
         skip: !SharedStorage.project?.name,
       },
     );
-
-  const onSearchChange = (searchTerm: string) => {
-    setSearchParams((prev) => {
-      prev.set("offset", "0");
-      if (searchTerm) prev.set("searchTerm", searchTerm);
-      else prev.delete("searchTerm");
-      return prev;
-    });
-  };
 
   useEffect(() => {
     if (onDataLoad && isSuccess && data) {
@@ -270,7 +251,7 @@ const HostsTable = ({
       <div {...cy}>
         <Ribbon
           defaultValue={searchTerm}
-          onSearchChange={onSearchChange}
+          onSearchChange={onSearch}
           customButtons={actionsJsx}
         />
         <Empty
@@ -327,7 +308,7 @@ const HostsTable = ({
         }}
         canSearch={hideSelectedItemBanner || !selectedIds?.length}
         searchTerm={searchTerm}
-        onSearch={onSearchChange}
+        onSearch={onSearch}
         canSelectRows={selectable}
         onSelect={onHostSelect}
         getRowId={getSelectionId}
