@@ -1,13 +1,18 @@
 import { toDashCase } from '@spark-design/utils';
-export class CSSCustomProperty extends Function {
+export class CSSCustomProperty {
     config;
     constructor(config) {
-        super();
-        Object.setPrototypeOf(this, CSSCustomProperty.prototype);
         this.config = config;
-        return new Proxy(this, {
-            apply: (_, __, args) => {
-                return new CSSCustomProperty(this.config.fork(args[0]));
+    }
+
+    static create(config) {
+        const instance = new CSSCustomProperty(config);
+        return new Proxy(instance, {
+            apply: (target, _, args) => {
+                return CSSCustomProperty.create(target.config.fork(args[0]));
+            },
+            get: (target, prop, receiver) => {
+                return Reflect.get(target, prop, receiver);
             }
         });
     }
@@ -87,5 +92,5 @@ export const normalizePrefix = (str) => {
         return '';
     return `--${toDashCase(str)}`;
 };
-export const createCustomProperty = (options) => new CSSCustomProperty(options);
+export const createCustomProperty = (options) => CSSCustomProperty.create(options);
 export const isCustomProperty = (entity) => entity instanceof CSSCustomProperty;

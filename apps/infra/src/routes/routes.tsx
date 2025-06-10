@@ -9,24 +9,31 @@ import {
   RBACWrapper,
   SquareSpinner,
 } from "@orch-ui/components";
-import { Role, RuntimeConfig } from "@orch-ui/utils";
+import {
+  clusterCreateRoute,
+  clusterDetailRoute,
+  clusterEditRoute,
+  clusterManagementRoute,
+  hostDetailsRoute,
+  hostEditRoute,
+  hostProvisioningRoute,
+  hostRegisterRoute,
+  hostsRoute,
+  locationRoute,
+  regionRoute,
+  regionSiteRoute,
+  Role,
+  RuntimeConfig,
+  siteRoute,
+  subRegionRoute,
+} from "@orch-ui/utils";
 import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
 import { Navigate, RouteObject } from "react-router-dom";
 import HostDetails from "../components/pages/HostDetails/HostDetails";
 import Hosts from "../components/pages/Hosts/Hosts";
 import RegionForm from "../components/pages/region/RegionForm";
 import SiteForm from "../components/pages/site/SiteForm";
-import {
-  hostConfigureRoute,
-  hostDetailsGuidRoute,
-  hostDetailsRoute,
-  hostsRoute,
-  unassignedDetailsRoute,
-  unconfiguredDetailsGuidRoute,
-  unconfiguredDetailsRoute,
-} from "./const";
 
-import { BreadcrumbWrapper } from "../components/atom/BreadcrumbWrapper/BreadcrumbWrapper";
 import { HostConfig } from "../components/pages/HostConfig/HostConfig";
 import HostEdit from "../components/pages/HostEdit";
 import { Locations } from "../components/pages/Locations/Locations";
@@ -54,10 +61,6 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
   );
 }
 
-const Admin = RuntimeConfig.isEnabled("ADMIN")
-  ? React.lazy(async () => await import("Admin/App"))
-  : null;
-
 export const createChildRoutes = () => {
   const routes: RouteObject[] = [];
 
@@ -67,23 +70,23 @@ export const createChildRoutes = () => {
       element: <Navigate to={hostsRoute} replace />,
     },
     {
-      path: "regions/:regionId",
+      path: regionRoute,
       element: <RegionForm />,
     },
     {
-      path: "regions/parent/:parentRegionId/:regionId",
+      path: subRegionRoute,
       element: <RegionForm />,
     },
     {
-      path: "regions/:regionId/sites/:siteId",
+      path: regionSiteRoute,
       element: <SiteForm />,
     },
     {
-      path: "sites/:siteId",
+      path: siteRoute,
       element: <SiteForm />,
     },
     {
-      path: "locations",
+      path: locationRoute,
       element: <Locations />,
     },
     {
@@ -91,11 +94,11 @@ export const createChildRoutes = () => {
       element: <Hosts />,
     },
     {
-      path: `${hostsRoute}/set-up-provisioning`,
+      path: hostProvisioningRoute,
       element: <HostConfig />,
     },
     {
-      path: "register-hosts",
+      path: hostRegisterRoute,
       element: (
         <RBACWrapper
           showTo={[Role.INFRA_MANAGER_WRITE]}
@@ -106,56 +109,12 @@ export const createChildRoutes = () => {
       ),
     },
     {
-      path: `${hostDetailsRoute}/edit`,
-      element: <HostEdit />,
-    },
-    {
-      path: `${unassignedDetailsRoute}/edit`,
+      path: hostEditRoute,
       element: <HostEdit />,
     },
     {
       path: hostDetailsRoute,
       element: <HostDetails />,
-    },
-    {
-      path: unassignedDetailsRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: hostDetailsGuidRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: unconfiguredDetailsRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: unconfiguredDetailsGuidRoute,
-      element: <HostDetails />,
-    },
-    {
-      path: hostConfigureRoute,
-      element: (
-        <RBACWrapper
-          showTo={[Role.INFRA_MANAGER_WRITE]}
-          missingRoleContent={<PermissionDenied />}
-        >
-          <HostConfig />
-        </RBACWrapper>
-      ),
-    },
-    {
-      path: "/admin/*",
-      element: (
-        <RBACWrapper
-          showTo={[Role.ALERTS_READ, Role.ALERTS_WRITE]}
-          missingRoleContent={<PermissionDenied />}
-        >
-          <Suspense fallback={<SquareSpinner message="One moment..." />}>
-            {Admin !== null ? <Admin /> : "Administration disabled"}
-          </Suspense>
-        </RBACWrapper>
-      ),
     },
   );
 
@@ -168,19 +127,23 @@ export const createChildRoutes = () => {
 };
 const routes = createChildRoutes();
 
-const addClusterRoute = (path: string, subComponent: RemoteComponent) => {
-  if (subComponent)
+const addClusterRoute = (path: string, SubComponent: RemoteComponent) => {
+  if (SubComponent)
     routes.push({
       path,
-      element: <BreadcrumbWrapper subComponent={subComponent} />,
+      element: (
+        <Suspense fallback={<SquareSpinner message="One moment..." />}>
+          <SubComponent />
+        </Suspense>
+      ),
     });
 };
 
 if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
-  addClusterRoute("clusters", ClusterManagement);
-  addClusterRoute("cluster/:clusterName", ClusterDetail);
-  addClusterRoute("cluster/:clusterName/edit", ClusterEdit);
-  addClusterRoute("clusters/create", ClusterCreation);
+  addClusterRoute(clusterManagementRoute, ClusterManagement);
+  addClusterRoute(clusterDetailRoute, ClusterDetail);
+  addClusterRoute(clusterEditRoute, ClusterEdit);
+  addClusterRoute(clusterCreateRoute, ClusterCreation);
 }
 
 export const childRoutes = routes;

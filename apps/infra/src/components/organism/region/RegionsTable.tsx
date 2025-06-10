@@ -20,23 +20,25 @@ import {
   getFilter,
   getOrder,
   Operator,
+  regionRoute,
   SharedStorage,
+  subRegionRoute,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, Heading, Tag, Text, Tooltip } from "@spark-design/react";
 import { ButtonSize, HeaderSize } from "@spark-design/tokens";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { regionsRoute } from "../../../routes/const";
+import { Link, useSearchParams } from "react-router-dom";
 import "./RegionsTable.scss";
 
 interface RegionsTableProps {
   parentRegionId?: string;
-  actions?: TableColumn<infra.RegionRead>;
-  radioSelect?: TableColumn<infra.RegionRead>;
+  actions?: TableColumn<infra.RegionResourceRead>;
+  radioSelect?: TableColumn<infra.RegionResourceRead>;
   hiddenColumns?: string[];
   hasPermission?: boolean;
   sort?: number[];
   isAllocated?: boolean;
-  tableTextSelect?: (item: infra.RegionRead) => void;
+  tableTextSelect?: (item: infra.RegionResourceRead) => void;
   basePath?: string;
   subtitle?: string;
   showSearch?: boolean;
@@ -63,26 +65,30 @@ const RegionsTable = ({
     isError,
     error,
     isLoading,
-  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
+  } = infra.useRegionServiceListRegionsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      parent: parentRegionId,
       pageSize: searchParams.get("pageSize")
         ? parseInt(searchParams.get("pageSize")!)
         : 10,
       offset: searchParams.get("offset")
         ? parseInt(searchParams.get("offset")!)
         : 0,
-      filter: getFilter<
-        Omit<infra.RegionRead, "parentRegion"> & {
-          parentRegion: Omit<infra.RegionRead, "parentRegion">;
-        }
-      >(
-        searchParams.get("searchTerm") ?? "",
-        ["name", "resourceId", "parentRegion.name"],
-        Operator.OR,
-        true,
-      ),
+      filter: [
+        parentRegionId ? `parentRegion.resourceId=${parentRegionId}` : null,
+        getFilter<
+          Omit<infra.RegionResourceRead, "parentRegion"> & {
+            parentRegion: Omit<infra.RegionResourceRead, "parentRegion">;
+          }
+        >(
+          searchParams.get("searchTerm") ?? "",
+          ["name", "resourceId", "parentRegion.name"],
+          Operator.OR,
+          true,
+        ),
+      ]
+        .filter(Boolean)
+        .join(" AND "),
       orderBy: getOrder(
         searchParams.get("column"),
         searchParams.get("direction") as Direction,
@@ -90,13 +96,13 @@ const RegionsTable = ({
     },
     { pollingInterval: API_INTERVAL },
   );
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
-  const columns: TableColumn<infra.RegionRead>[] = [
+  const columns: TableColumn<infra.RegionResourceRead>[] = [
     {
       Header: "Name",
       accessor: "name",
-      Cell: (table: { row: { original: infra.RegionRead } }) => {
+      Cell: (table: { row: { original: infra.RegionResourceRead } }) => {
         if (!isAllocated) {
           return (
             <Link
@@ -133,7 +139,7 @@ const RegionsTable = ({
           return "item";
         }
       },
-      Cell: (table: { row: { original: infra.RegionRead } }) => {
+      Cell: (table: { row: { original: infra.RegionResourceRead } }) => {
         const metadataPairs = table.row.original.metadata ?? [];
         const tags =
           metadataPairs.length > 2 ? (
@@ -233,11 +239,9 @@ const RegionsTable = ({
       size={ButtonSize.Large}
       onPress={() => {
         if (parentRegionId) {
-          navigate(`../../${regionsRoute}/parent/${parentRegionId}/new`, {
-            relative: "path",
-          });
+          navigate(subRegionRoute, { parentRegionId, regionId: "new" });
         } else {
-          navigate(`../${regionsRoute}/new`, { relative: "path" });
+          navigate(regionRoute, { regionId: "new" });
         }
       }}
     >
@@ -255,14 +259,12 @@ const RegionsTable = ({
               name: parentRegionId ? "Add a Subregion" : "Add a Region",
               action: () => {
                 if (parentRegionId) {
-                  navigate(
-                    `../../${regionsRoute}/parent/${parentRegionId}/new`,
-                    {
-                      relative: "path",
-                    },
-                  );
+                  navigate(subRegionRoute, {
+                    parentRegionId,
+                    regionId: "new",
+                  });
                 } else {
-                  navigate(`../${regionsRoute}/new`, { relative: "path" });
+                  navigate(regionRoute, { regionId: "new" });
                 }
               },
               disable: !hasPermission,

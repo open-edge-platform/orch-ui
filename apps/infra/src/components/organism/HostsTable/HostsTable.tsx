@@ -15,15 +15,17 @@ import {
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import {
   API_INTERVAL,
   checkAuthAndRole,
   Direction,
   getOrder,
+  hostProvisioningRoute,
   Role,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { useEffect } from "react";
@@ -48,11 +50,11 @@ import "./HostsTable.scss";
 export const dataCy = "hostsTable";
 export interface HostsTableProps {
   /** columns to show from Host object */
-  columns?: TableColumn<infra.HostRead>[];
+  columns?: TableColumn<infra.HostResourceRead>[];
   /** Lifecycle category */
   category?: LifeCycleState;
   /** API filters */
-  filters?: infra.GetV1ProjectsByProjectNameComputeHostsApiArg & {
+  filters?: infra.HostServiceGetHostApiArg & {
     workloadMemberId?: string | undefined;
   };
   hasWorkload?: boolean;
@@ -72,29 +74,32 @@ export interface HostsTableProps {
   /** enable checkbox select feature on this table component */
   selectable?: boolean;
   /** initial selected rows */
-  selectedHosts?: infra.HostRead[];
+  selectedHosts?: infra.HostResourceRead[];
   /** manually skip polling */
   poll?: boolean;
   emptyActionProps?: EmptyActionProps[];
   hideSelectedItemBanner?: boolean;
   /** Invoked when a Host is selected */
-  onHostSelect?: (selectedHost: infra.HostRead, isSelected: boolean) => void;
+  onHostSelect?: (
+    selectedHost: infra.HostResourceRead,
+    isSelected: boolean,
+  ) => void;
   /** Invoked when data is loaded */
-  onDataLoad?: (data: infra.HostRead[]) => void;
+  onDataLoad?: (data: infra.HostResourceRead[]) => void;
   unsetSelectedHosts?: () => void;
   provisionHosts?: () => void;
   /** This will decide on what HostRead info basis is host is selected  */
-  getSelectionId?: (row: infra.HostRead) => string;
+  getSelectionId?: (row: infra.HostResourceRead) => string;
 }
 
-const hostColumns: TableColumn<infra.HostRead>[] = [
-  HostTableColumn.name("../"),
+const hostColumns: TableColumn<infra.HostResourceRead>[] = [
+  HostTableColumn.name(),
   HostTableColumn.status,
   HostTableColumn.serialNumber,
   HostTableColumn.os,
   HostTableColumn.siteWithCustomBasePath("../"),
   HostTableColumn.workload,
-  HostTableColumn.actions((host: infra.HostRead) => (
+  HostTableColumn.actions((host: infra.HostResourceRead) => (
     <HostDetailsActions host={host} />
   )),
 ];
@@ -120,10 +125,9 @@ const HostsTable = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
-  const [onboardHost] =
-    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdOnboardMutation();
+  const [onboardHost] = infra.useHostServiceOnboardHostMutation();
 
   // API configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
@@ -158,7 +162,7 @@ const HostsTable = ({
   }, [filter]);
 
   const { data, isSuccess, isError, isLoading, error } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsQuery(
+    infra.useHostServiceListHostsQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         offset,
@@ -216,10 +220,7 @@ const HostsTable = ({
       dispatch(reset());
       // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
-      const path = "../hosts/set-up-provisioning";
-      navigate(path, {
-        relative: "path",
-      });
+      navigate(hostProvisioningRoute);
     }
   };
 
@@ -230,7 +231,7 @@ const HostsTable = ({
     for (const host of selectedHosts) {
       await onboardHost({
         projectName: SharedStorage.project?.name ?? "",
-        hostId: host.resourceId!,
+        resourceId: host.resourceId!,
       })
         .unwrap()
         .catch((e) => {
@@ -380,7 +381,7 @@ const HostsTable = ({
         getRowId={getSelectionId}
         selectedIds={selectedIds}
         canExpandRows={expandable}
-        subRow={(row: { original: infra.HostRead }) => {
+        subRow={(row: { original: infra.HostResourceRead }) => {
           const host = row.original;
           return <HostsTableRowExpansionDetail host={host} />;
         }}

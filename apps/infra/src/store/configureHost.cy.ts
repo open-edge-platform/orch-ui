@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { infra } from "@orch-ui/apis";
 import {
   HostConfigForm,
   HostConfigFormStatus,
@@ -22,7 +23,7 @@ describe("configureHost Reducer", () => {
           hosts: {
             hostId: {
               siteId: undefined,
-            } as infra.HostWrite,
+            } as infra.HostResourceWrite,
           },
           autoOnboard: false,
           autoProvision: false,
@@ -48,7 +49,7 @@ describe("configureHost Reducer", () => {
           hosts: {
             hostId: {
               name: "",
-            } as infra.HostWrite,
+            } as infra.HostResourceWrite,
           },
           autoOnboard: false,
           autoProvision: false,

@@ -20,7 +20,6 @@ import {
   telemetryProfilesMetricsEndpoints,
 } from "../../../utils/TelemetryApis";
 import RegionsTablePom from "../../organism/region/RegionsTable.pom";
-import SitesTablePom from "../../organism/site/SitesTable.pom";
 
 const metadataRoute = "**/v1/projects/**/metadata";
 
@@ -33,7 +32,7 @@ const dataCySelectors = [
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-const regionUsWestUpdated: infra.Region = {
+const regionUsWestUpdated: infra.RegionResource = {
   ...regionUsWest,
   name: `${regionUsWest.name} Updated`,
 };
@@ -46,7 +45,7 @@ const siteStore = new SiteStore();
 const sites = siteStore.list();
 const siteEndpoints: CyApiDetails<
   SiteApis,
-  infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse
+  infra.SiteServiceListSitesApiResponse
 > = {
   getSites: {
     route: `${route_sites}?*regionID=${regionUsWest.resourceId}`,
@@ -79,7 +78,7 @@ const metadataEndpoints: CyApiDetails<MetadataApis, mbApi.MetadataResponse> = {
 type RegionsApis = "getRegions" | "getRegionsError" | "deleteRegion";
 const regionsEndpoints: CyApiDetails<
   RegionsApis,
-  infra.RegionsList | infra.ProblemDetails
+  infra.ListRegionsResponse | infra.ProblemDetails
 > = {
   getRegions: {
     route: `${route}?*`,
@@ -112,8 +111,8 @@ type SingleRegionApis =
 
 const singleRegionEndpoints: CyApiDetails<
   SingleRegionApis,
-  infra.Region | infra.ProblemDetails,
-  infra.Region
+  infra.RegionResource | infra.ProblemDetails,
+  infra.RegionResource
 > = {
   getRegion: {
     route: `${route}/*`,
@@ -183,7 +182,6 @@ class RegionFormPom extends CyPom<Selectors, ApiAliases> {
   regionType = new SiComboboxPom("regionType");
   parentRegion = new SiComboboxPom("parentRegion");
   regionTable = new RegionsTablePom();
-  sitesTable = new SitesTablePom();
   confirmationDialog = new ConfirmationDialogPom();
 
   constructor(public rootCy: string = "regionForm") {
@@ -199,7 +197,7 @@ class RegionFormPom extends CyPom<Selectors, ApiAliases> {
     });
   }
 
-  public submit(region: infra.Region) {
+  public submit(region: infra.RegionResource) {
     this.root.should("be.visible");
     this.el.name.clear().type(region.name!);
     this.regionType.select("State");

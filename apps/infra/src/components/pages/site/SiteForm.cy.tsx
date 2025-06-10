@@ -64,17 +64,11 @@ describe("<SiteForm />", () => {
 
     it("should render inherited metadata", () => {
       pom.table.root.should("exist");
-      if (
-        !siteOregonPortland.metadata ||
-        !siteOregonPortland.inheritedMetadata?.location
-      )
+      if (!siteOregonPortland.metadata || !siteOregonPortland.inheritedMetadata)
         throw new Error("Test data missing required metadata information");
       pom.table
         .getRows()
-        .should(
-          "have.length",
-          siteOregonPortland.inheritedMetadata?.location.length,
-        );
+        .should("have.length", siteOregonPortland.inheritedMetadata.length);
     });
 
     it("should successfully modify site name", () => {
@@ -124,7 +118,7 @@ describe("<SiteForm />", () => {
     cy.contains("button", "Cancel").click();
     pom.waitForApis();
 
-    pom.getPath().should("eq", "/locations");
+    pom.getPath().should("contain", "/locations");
   });
 
   it("should cancel create a site from region's site page", () => {
@@ -155,7 +149,7 @@ describe("<SiteForm />", () => {
     cy.contains("button", "Cancel").click();
     pom.waitForApis();
 
-    pom.getPath().should("eq", "/locations");
+    pom.getPath().should("contain", "/locations");
   });
 
   describe("when creating new site", () => {
@@ -198,7 +192,7 @@ describe("<SiteForm />", () => {
             .its("request.body")
             .should("deep.equal", expectedRequest);
 
-          pom.getPath().should("eq", "/locations");
+          pom.getPath().should("contain", "/locations");
         });
 
         it("should show metadata form when select yes in advanced settings", () => {
@@ -217,7 +211,7 @@ describe("<SiteForm />", () => {
             expect(request.body.siteLat).eq(10 * Math.pow(10, 7));
             expect(request.body.siteLng).eq(20 * Math.pow(10, 7));
           });
-          pom.getPath().should("eq", "/locations");
+          pom.getPath().should("contain", "/locations");
         });
       });
       describe("and the metadata broker is throwing an error", () => {
@@ -247,7 +241,7 @@ describe("<SiteForm />", () => {
             .its("request.body")
             .should("deep.equal", expectedRequest);
 
-          pom.getPath().should("eq", "/locations");
+          pom.getPath().should("contain", "/locations");
         });
       });
     });
@@ -289,7 +283,7 @@ describe("<SiteForm />", () => {
           cy.wait(`@${pom.api.postSiteSuccess}`)
             .its("request.body")
             .should("deep.equal", expectedRequest);
-          pom.getPath().should("eq", "/locations");
+          pom.getPath().should("contain", "/locations");
         });
 
         it("should show metadata form when select yes in advanced settings", () => {
@@ -308,7 +302,7 @@ describe("<SiteForm />", () => {
             expect(request.body.siteLat).eq(10 * Math.pow(10, 7));
             expect(request.body.siteLng).eq(20 * Math.pow(10, 7));
           });
-          pom.getPath().should("eq", "/locations");
+          pom.getPath().should("contain", "/locations");
         });
       });
       describe("and the metadata broker is throwing an error", () => {
@@ -338,7 +332,7 @@ describe("<SiteForm />", () => {
             .its("request.body")
             .should("deep.equal", expectedRequest);
 
-          pom.getPath().should("eq", "/locations");
+          pom.getPath().should("contain", "/locations");
         });
       });
     });

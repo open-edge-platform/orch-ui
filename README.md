@@ -5,13 +5,16 @@
 
 # Orchestrator GUI Web User Interface
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/open-edge-platform/orch-ui/badge)](https://scorecard.dev/viewer/?uri=github.com/open-edge-platform/orch-ui)
+
 ## Overview
 
 This implements the web user interface for the Orchestrator,
 allowing the user to do most of the features of the product in an
 intuitive, visual, manner without having learn all the complexities
-of the APIs.  That being said, everything the Web UI does and shows
-comes from the APIs.  This UI is intended for the day to day edge
+of the APIs. That being said, everything the Web UI does and shows
+comes from the APIs. This UI is intended for the day to day edge
 operators, who want to be able to:
 
 - Register, Onboard and Provision hosts
@@ -109,11 +112,13 @@ The application is separated into multiple micro front-ends that can be develope
   ```
 
 ### Running with mock data
+
 If you would like to see data without connecting to real API's you can enable the mock server by setting the `REACT_MOCK_API` environment variable value to `true`
 
 Set this value BEFORE you run the `npm run start`.
 
 ### Testing
+
 The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
 
 ```bash
@@ -128,15 +133,22 @@ For testing your changes in a virtual machine with deployment, refer to [Build a
 
 ## Contribute
 
+We welcome contributions from the community! To contribute, please open a pull request to have your changes reviewed and merged into the `main` branch. We encourage you to add appropriate unit tests and end-to-end tests if your contribution introduces a new feature.
 To learn how to contribute to the project, see the [Contributor's Guide](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/contributor_guide/index.html).
 
 ## Community and Support
 
 To learn more about the project, its community, and governance, visit
-the [Edge Orchestrator Community](https://github.com/open-edge-platform).
+the [Edge Orchestrator Community].
+
+For support, start with [Troubleshooting] or [Contact us].
 
 ## License
 
 Orchestrator GUI Web User Interface is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
 
-Last Updated Date: {April 7, 2025}
+Last Updated Date: April 7, 2025
+
+[Troubleshooting]: https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/troubleshooting/ui.html
+[Contact us]: https://github.com/open-edge-platform
+[Edge Orchestrator Community]: https://docs.openedgeplatform.intel.com/edge-manage-docs/main/index.html

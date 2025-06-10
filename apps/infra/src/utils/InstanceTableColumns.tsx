@@ -6,6 +6,8 @@
 import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { AggregatedStatuses, aggregateStatuses } from "@orch-ui/components";
 import {
+  getInfraPath,
+  hostDetailsRoute,
   HostGenericStatuses,
   hostToStatuses,
   SparkTableColumn,
@@ -25,7 +27,11 @@ const name: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
   Cell: (table: {
     row: { original: enhancedInfraSlice.InstanceReadModified };
   }) => (
-    <Link to={`../host/${table.row.original.host?.resourceId}`} relative="path">
+    <Link
+      to={getInfraPath(hostDetailsRoute, {
+        id: table.row.original.host?.resourceId ?? "",
+      })}
+    >
       {table.row.original.host?.name ?? table.row.original.host?.resourceId}
     </Link>
   ),
@@ -42,7 +48,7 @@ const status: SparkTableColumn<enhancedInfraSlice.InstanceReadModified> = {
     <AggregatedStatuses<HostGenericStatuses>
       defaultStatusName="hostStatus"
       statuses={hostToStatuses(
-        table.row.original.host! as infra.HostRead,
+        table.row.original.host! as infra.HostResourceRead,
         table.row.original.host?.instance,
       )}
     />

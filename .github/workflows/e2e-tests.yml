@@ -8,8 +8,12 @@ on:
 env:
   CYPRESS_BASE_URL: "http://localhost:8080"
 
+permissions: {}
+
 jobs:
   pre-merge-pipeline:
+    permissions:
+      contents: read
     uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
     with:
       bootstrap_tools: "base"
@@ -20,7 +24,6 @@ jobs:
       prefix_tag_separator: "/"
       project_folder: tests
       orch_ci_repo_ref: main
-    secrets: inherit
   # run-e2e-tests-pipeline:
   #   runs-on: 'ubuntu-latest'
   #   steps:

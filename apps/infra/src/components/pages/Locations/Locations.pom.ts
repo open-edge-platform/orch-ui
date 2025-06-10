@@ -52,7 +52,9 @@ export class LocationsPom extends CyPom<Selectors, ApiAliases> {
   public goToAddSubRegion(parentName: string): void {
     this.root
       .dataCy("region")
+      .should("be.visible", { timeout: 5000 })
       .contains(parentName)
+      .should("be.visible", { timeout: 5000 })
       .parent()
       .parent()
       .within(() => {
@@ -67,15 +69,26 @@ export class LocationsPom extends CyPom<Selectors, ApiAliases> {
     _.forEach(parentRegions.slice(0, -1), (r) => {
       this.regionSiteTreePom.expandRegion(r);
     });
+    this.root.dataCy("region").then(() => {
+      cy.contains('[data-cy="region"]', lastRegion, { timeout: 5000 })
+        .should("be.visible")
+        .parent()
+        .parent()
+        .within(() => {
+          cy.dataCy("regionTreePopup").click();
+        });
+    });
 
-    this.root
-      .dataCy("region")
-      .contains(lastRegion)
-      .parent()
-      .parent()
-      .within(() => {
-        cy.dataCy("regionTreePopup").click();
-      });
+    // this.root
+    //   .dataCy("region")
+    //   .should("be.visible", { timeout: 10000 })
+    //   .contains(lastRegion)
+    //   .should("be.visible", { timeout: 10000 })
+    //   .parent()
+    //   .parent()
+    //   .within(() => {
+    //     cy.dataCy("regionTreePopup").click();
+    //   });
     cy.contains("Add Site").click();
     cy.url().should("contain", "sites/new");
   }

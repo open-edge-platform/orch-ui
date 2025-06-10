@@ -4,6 +4,7 @@
  */
 
 import { TablePom } from "@orch-ui/components";
+import { EIM_USER } from "@orch-ui/tests";
 import { NetworkLog } from "../../support/network-logs";
 import { getHostsViaApi, getRegionViaAPi, getSiteViaApi } from "../helpers";
 import {
@@ -92,9 +93,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         tablePom.getRows().should("have.length", 1);
         cy.contains(host.serialNumber).should("be.visible");
         tablePom
-          .getCell(1, 3)
-          .contains("Provisioned", { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the Host to be provisioned
-          .should("contain.text", "Provisioned");
+          .getCell(1, 3, { timeout: 10 * 60 * 1000 }) // it can take up to 10 minutes for the Host to be provisioned)
+          .should(($el) => {
+            expect($el, "Host status").to.contain.text("Provisioned");
+          });
       });
     });
 
@@ -108,7 +110,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       // deleteSiteViaApi(activeProject, regionId, siteId);
       // deleteRegionViaApi(activeProject, regionId);
 
-      netLog.save("infra_verify-host");
+      // netLog.save("infra_verify-host");
       netLog.clear();
     });
   });

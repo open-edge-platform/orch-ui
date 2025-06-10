@@ -5,7 +5,7 @@
 
 import { infra } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { hostsRoute, SharedStorage, useInfraNavigate } from "@orch-ui/utils";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { useAppDispatch } from "../../../../store/hooks";
@@ -35,6 +35,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const { host, basePath } = props;
 
   const dispatch = useAppDispatch();
+  const navigate = useInfraNavigate();
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
     useState<boolean>(false);
@@ -45,8 +46,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const [isRegisterHostDrawerOpen, setIsRegisterHostDrawerOpen] =
     useState<boolean>(false);
 
-  const [onboardHost] =
-    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterMutation();
+  const [onboardHost] = infra.useHostServiceRegisterUpdateHostMutation();
 
   const onDelete = () => {
     setDeleteConfirmationOpen(true);
@@ -60,8 +60,8 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const onRegisterHostOnboard = () => {
     onboardHost({
       projectName: SharedStorage.project?.name ?? "",
-      hostId: host.resourceId!,
-      body: { autoOnboard: true },
+      resourceId: host.resourceId!,
+      hostRegister: { autoOnboard: true },
     })
       .unwrap()
       .then(() => {
@@ -74,14 +74,13 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
 
   // Note: By default upon GET `compute/hosts` doesnot specify existance of workloadMember within `host.instance`.
   // We need to make seperate instance call to fetch complete instance data by `host.instance.resourceId`.
-  const { data: instanceRef } =
-    infra.useGetV1ProjectsByProjectNameComputeInstancesAndInstanceIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        instanceId: host.instance?.resourceId ?? "",
-      },
-      { skip: !host.instance?.resourceId },
-    );
+  const { data: instanceRef } = infra.useInstanceServiceGetInstanceQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.instance?.resourceId ?? "",
+    },
+    { skip: !host.instance?.resourceId },
+  );
 
   const getHostPopup = () => {
     if (host.instance) {
@@ -138,6 +137,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
           buttonPlacement="left-reverse"
           confirmCb={() => {
             deleteHostInstanceFn(dispatch, host);
+            if (basePath) navigate(hostsRoute);
             setDeleteConfirmationOpen(false);
           }}
           confirmBtnText="Delete"

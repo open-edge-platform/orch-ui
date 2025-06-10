@@ -5,8 +5,8 @@
 
 import { infra } from "@orch-ui/apis";
 import { Popup, SquareSpinner } from "@orch-ui/components";
+import { regionSiteRoute, useInfraNavigate } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../../store/hooks";
 import {
   setMaintenanceEntity,
@@ -15,19 +15,17 @@ import {
 
 const dataCy = "siteActionsPopup";
 export interface SiteActionsPopupProps {
-  site: infra.SiteRead;
+  site: infra.SiteResourceRead;
 }
 
 export const SiteActionsPopup = ({ site }: SiteActionsPopupProps) => {
   const cy = { "data-cy": dataCy };
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   if (!site) {
     return <SquareSpinner />;
   }
-
-  const redirectUrl = `../regions/${site.region?.regionID}/sites/${site.siteID}?source=locations`;
 
   return (
     <div {...cy}>
@@ -46,7 +44,11 @@ export const SiteActionsPopup = ({ site }: SiteActionsPopupProps) => {
         options={[
           {
             displayText: "Edit",
-            onSelect: () => navigate(redirectUrl, { relative: "path" }),
+            onSelect: () =>
+              navigate(regionSiteRoute, {
+                regionId: site.region?.regionID ?? "",
+                siteId: site.siteID ?? "",
+              }),
           },
           {
             displayText: "Schedule Maintenance",

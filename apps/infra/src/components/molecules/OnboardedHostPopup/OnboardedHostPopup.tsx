@@ -4,8 +4,12 @@
  */
 
 import { PopupOption } from "@orch-ui/components";
-import { checkAuthAndRole, Role } from "@orch-ui/utils";
-import { useNavigate } from "react-router-dom";
+import {
+  checkAuthAndRole,
+  hostProvisioningRoute,
+  Role,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { reset, setHosts } from "../../../store/configureHost";
 import { useAppDispatch } from "../../../store/hooks";
 import GenericHostPopup, {
@@ -21,9 +25,9 @@ export type OnboardedHostPopupProps = Omit<
 /** This will show all available host actions within popup menu */
 const OnboardedHostPopup = (props: OnboardedHostPopupProps) => {
   const cy = { "data-cy": dataCy };
-  const { host, basePath = "" } = props;
+  const { host } = props;
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   const onProvision = () => {
@@ -32,10 +36,7 @@ const OnboardedHostPopup = (props: OnboardedHostPopupProps) => {
     // store the current Host in Redux, so we don't have to fetch it again
     dispatch(setHosts({ hosts: [host] }));
 
-    const path = `${basePath}../hosts/set-up-provisioning`;
-    navigate(path, {
-      relative: "path",
-    });
+    navigate(hostProvisioningRoute);
   };
 
   const onboardedHostPopup: PopupOption[] = [

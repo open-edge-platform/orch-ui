@@ -9,17 +9,18 @@ import {
   Flex,
   MetadataForm,
   MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb,
   TableLoader,
 } from "@orch-ui/components";
 import {
   checkAuthAndRole,
+  locationRoute,
   logError,
   parseError,
   Role,
   SharedStorage,
   SparkTableColumn,
+  TelemetryLogLevel,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -46,20 +47,13 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import TelemetryLogsForm, {
   SystemLogPair,
 } from "../../../components/organism/TelemetryLogsForm/TelemetryLogsForm";
 import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
-import {
-  homeBreadcrumb,
-  locationsBreadcrumb,
-  sitesBreadcrumb,
-  sitesCreateBreadcrumb,
-  sitesMenuItem,
-} from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setTreeBranchNodeCollapse } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
@@ -81,25 +75,24 @@ const SiteForm = () => {
     isError,
     isFetching,
     error,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
+  } = infra.useSiteServiceGetSiteQuery(
     {
-      regionId: regionId ?? "", //TODO: not used in EIM endpoint
+      regionResourceId: regionId ?? "", //TODO: not used in EIM endpoint
       projectName: SharedStorage.project?.name ?? "",
-      siteId: siteId,
+      resourceId: siteId,
     },
     {
       skip: siteId === "new" || !regionId || !SharedStorage.project?.name,
     },
   );
 
-  const { data: region } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: regionId ?? "",
-      },
-      { skip: !regionId || !SharedStorage.project?.name },
-    );
+  const { data: region } = infra.useRegionServiceGetRegionQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: regionId ?? "",
+    },
+    { skip: !regionId || !SharedStorage.project?.name },
+  );
 
   const {
     data: profileMetrics,
@@ -107,9 +100,9 @@ const SiteForm = () => {
     isError: profileMetricIsError,
     isSuccess: profileMetricSuccess,
     isLoading: profileMetricLoading,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesQuery(
+  } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     {
-      telemetryMetricsGroupId: "group-id", //TODO: not used in real endpoint
+      resourceId: "group-id", //TODO: check if its right ?
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -124,9 +117,9 @@ const SiteForm = () => {
     isError: profileLogIsError,
     isSuccess: profileLogSuccess,
     isLoading: profileLogLoading,
-  } = infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesQuery(
+  } = infra.useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery(
     {
-      telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
+      resourceId: "group-id", //TODO: check if its right ?
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -136,7 +129,7 @@ const SiteForm = () => {
   );
 
   const getMetricPairs = () => {
-    const metricProfiles = profileMetrics?.TelemetryMetricsProfiles ?? [];
+    const metricProfiles = profileMetrics?.telemetryMetricsProfiles ?? [];
     const metricPairs: SystemMetricPair[] = [];
     for (const profile of metricProfiles) {
       if (profile.profileId && profile.metricsGroup)
@@ -150,7 +143,7 @@ const SiteForm = () => {
   };
 
   const getLogPairs = () => {
-    const logProfiles = profileLogs?.TelemetryLogsProfiles ?? [];
+    const logProfiles = profileLogs?.telemetryLogsProfiles ?? [];
     const logPairs: SystemLogPair[] = [];
     for (const profile of logProfiles) {
       if (profile.profileId && profile.logsGroup)
@@ -163,57 +156,36 @@ const SiteForm = () => {
     return logPairs;
   };
 
-  const regionsQuery = infra.useGetV1ProjectsByProjectNameRegionsQuery({
+  const regionsQuery = infra.useRegionServiceListRegionsQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
 
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
-  const breadcrumb = useMemo(() => {
-    if (siteId === "new") {
-      return [locationsBreadcrumb, sitesCreateBreadcrumb];
-    }
-    return [
-      homeBreadcrumb,
-      sitesBreadcrumb,
-      {
-        // text may show `undefined` if template.name is not available
-        // especially when an error (404), consider siteId specified
-        text: `${site?.name || siteId}`,
-        link: `regions/${regionId}/sites/${siteId}`,
-      },
-    ];
-  }, [site]);
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(sitesMenuItem));
-  }, [breadcrumb]);
 
   const [hasSiteMetadata, setHasSiteMetadata] = useState(false);
-  const [createSite] =
-    infra.usePostV1ProjectsByProjectNameRegionsAndRegionIdSitesMutation();
-  const [updateSite] =
-    infra.usePutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+  const [createSite] = infra.useSiteServiceCreateSiteMutation();
+  const [updateSite] = infra.useSiteServiceUpdateSiteMutation();
   const [createLogProfile] =
-    infra.usePostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesMutation();
+    infra.useTelemetryLogsProfileServiceCreateTelemetryLogsProfileMutation();
   const [editLogProfile] =
-    infra.usePutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.useTelemetryLogsProfileServiceUpdateTelemetryLogsProfileMutation();
   const { data: logsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryLoggroupsQuery({
+    infra.useTelemetryLogsGroupServiceListTelemetryLogsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
-  const logsgroup = logsResponse?.TelemetryLogsGroups ?? [];
+  const logsgroup = logsResponse?.telemetryLogsGroups ?? [];
   const [createMetricProfile] =
-    infra.usePostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesMutation();
+    infra.useTelemetryMetricsProfileServiceCreateTelemetryMetricsProfileMutation();
   const [editMetricProfile] =
-    infra.usePutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.useTelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileMutation();
   const { data: metricsResponse } =
-    infra.useGetV1ProjectsByProjectNameTelemetryMetricgroupsQuery({
+    infra.useTelemetryMetricsGroupServiceListTelemetryMetricsGroupsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
-  const metricsgroup = metricsResponse?.TelemetryMetricsGroups ?? [];
+  const metricsgroup = metricsResponse?.telemetryMetricsGroups ?? [];
   const [hasTelemetry, setHasTelemetry] = useState<boolean>(false);
   const [updateMetadata] =
     mbApi.useMetadataServiceCreateOrUpdateMetadataMutation();
@@ -223,9 +195,9 @@ const SiteForm = () => {
   const [currentSystemLog, setCurrentSystemLog] =
     useState<SystemLogPair[]>(getLogPairs());
   const [deleteMetricProfile] =
-    infra.useDeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdMutation();
+    infra.useTelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileMutation();
   const [deleteLogProfile] =
-    infra.useDeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdMutation();
+    infra.useTelemetryLogsProfileServiceDeleteTelemetryLogsProfileMutation();
   const [inheritedMetadata, setInheritedMetadata] = useState<MetadataPair[]>(
     [],
   );
@@ -233,7 +205,7 @@ const SiteForm = () => {
   useEffect(() => {
     if (
       profileMetricSuccess &&
-      profileMetrics.TelemetryMetricsProfiles.length > 0
+      profileMetrics.telemetryMetricsProfiles.length > 0
     ) {
       setHasTelemetry(true);
       setCurrentSystemMetric(getMetricPairs());
@@ -241,7 +213,7 @@ const SiteForm = () => {
   }, [profileMetricSuccess, profileMetrics]);
 
   useEffect(() => {
-    if (profileLogSuccess && profileLogs.TelemetryLogsProfiles.length > 0) {
+    if (profileLogSuccess && profileLogs.telemetryLogsProfiles.length > 0) {
       setHasTelemetry(true);
       setCurrentSystemLog(getLogPairs());
     }
@@ -261,7 +233,7 @@ const SiteForm = () => {
     );
   }, [site?.metadata]);
 
-  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroup => {
+  const getMetricsGroup = (id: string): infra.TelemetryMetricsGroupResource => {
     const group = metricsgroup.find((group) => {
       return group.telemetryMetricsGroupId === id;
     });
@@ -274,7 +246,7 @@ const SiteForm = () => {
     };
   };
 
-  const getLogsGroup = (id: string): infra.TelemetryLogsGroup => {
+  const getLogsGroup = (id: string): infra.TelemetryLogsGroupResource => {
     const group = logsgroup.find((group) => {
       return group.telemetryLogsGroupId === id;
     });
@@ -294,29 +266,27 @@ const SiteForm = () => {
     setValue,
     trigger,
     formState: { errors, isValid },
-  } = useForm<infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg>(
-    {
-      mode: "all",
-    },
-  );
+  } = useForm<infra.SiteServiceUpdateSiteApiArg>({
+    mode: "all",
+  });
 
   // reset form registered defaultValue when API response returns to check field sanity
   useEffect(() => {
-    const defaultValue: infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg =
-      {
-        regionId: regionId ?? "", //TODO: not used in real endpoint
-        projectName: SharedStorage.project?.name ?? "",
-        siteId: siteId,
-        site: {
-          siteLat: 0,
-          siteLng: 0,
-          name: "",
-          metadata: [],
-          regionId: "",
-        },
-      };
+    const defaultValue: infra.SiteServiceUpdateSiteApiArg = {
+      regionResourceId: regionId ?? "", //TODO: not used in real endpoint
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: siteId,
+      siteResource: {
+        siteLat: 0,
+        siteLng: 0,
+        name: "",
+        metadata: [],
+        regionId: "",
+      },
+    };
+
     //Grab the inherited Metadata
-    const location = site?.inheritedMetadata?.location;
+    const location = site?.inheritedMetadata;
     if (location) {
       setInheritedMetadata(location);
     }
@@ -328,20 +298,20 @@ const SiteForm = () => {
     } else if (regionId && siteId === "new") {
       reset({
         ...defaultValue,
-        site: {
-          ...defaultValue.site,
+        siteResource: {
+          ...defaultValue.siteResource,
           regionId: regionId,
         },
       });
     } else if (site) {
       // Update site with known regionId and siteId
       reset({
-        site: {
+        siteResource: {
           ...site,
           siteLat: site.siteLat ? site.siteLat / Math.pow(10, 7) : undefined,
           siteLng: site.siteLng ? site.siteLng / Math.pow(10, 7) : undefined,
         },
-        siteId: site.resourceId,
+        resourceId: site.resourceId,
       });
       if (site.metadata && site.metadata.length > 0) {
         setHasSiteMetadata(true);
@@ -353,8 +323,8 @@ const SiteForm = () => {
   // Update Region for the first time
   useEffect(() => {
     if (regionsQuery.data?.regions) {
-      setValue("site.regionId", regionId);
-      trigger("site.regionId");
+      setValue("siteResource.regionId", regionId);
+      trigger("siteResource.regionId");
     }
   }, [regionsQuery.data?.regions]);
 
@@ -366,44 +336,44 @@ const SiteForm = () => {
     return <ApiError error={error} />;
   }
 
-  const save: SubmitHandler<
-    infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg
-  > = async (formData) => {
-    const site: infra.SiteWrite = {
-      name: formData.site.name,
-      siteLat: formData.site.siteLat
-        ? Math.round(formData.site.siteLat * Math.pow(10, 7))
+  const save: SubmitHandler<infra.SiteServiceUpdateSiteApiArg> = async (
+    formData,
+  ) => {
+    const site: infra.SiteResourceWrite = {
+      name: formData.siteResource.name,
+      siteLat: formData.siteResource.siteLat
+        ? Math.round(formData.siteResource.siteLat * Math.pow(10, 7))
         : undefined,
-      siteLng: formData.site.siteLng
-        ? Math.round(formData.site.siteLng * Math.pow(10, 7))
+      siteLng: formData.siteResource.siteLng
+        ? Math.round(formData.siteResource.siteLng * Math.pow(10, 7))
         : undefined,
       metadata: currentMetadata,
-      regionId: formData.site.regionId,
+      regionId: formData.siteResource.regionId,
     };
 
     try {
-      let siteOperation: Promise<infra.PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse>;
+      let siteOperation: Promise<infra.SiteServiceCreateSiteApiResponse>;
 
       if (siteId === "new") {
         siteOperation = createSite({
-          regionId: site.regionId!,
+          resourceId: site.regionId!,
           projectName: SharedStorage.project?.name ?? "",
-          site,
+          siteResource: site,
         }).unwrap();
       } else {
         siteOperation = updateSite({
-          regionId: site.regionId!,
+          regionResourceId: site.regionId!,
           projectName: SharedStorage.project?.name ?? "",
-          siteId: siteId,
-          site,
+          resourceId: siteId,
+          siteResource: site,
         }).unwrap();
       }
 
-      const response: infra.SiteRead = await siteOperation;
+      const response: infra.SiteResourceRead = await siteOperation;
       const allPromises: Promise<any>[] = [];
 
       for (const metricPair of currentSystemMetric) {
-        const metricProfile: infra.TelemetryMetricsProfile = {
+        const metricProfile: infra.TelemetryMetricsProfileResource = {
           targetSite: response.siteID,
           metricsInterval: parseInt(metricPair.interval),
           metricsGroupId: metricPair.metricType,
@@ -413,27 +383,27 @@ const SiteForm = () => {
         if (metricPair.profileId != "") {
           allPromises.push(
             editMetricProfile({
-              telemetryMetricsGroupId: "group-id", //TODO: not used in real endpoint,
+              metricgroupResourceId: "group-id", //TODO: not used in real endpoint,
               projectName: SharedStorage.project?.name ?? "",
-              telemetryMetricsProfileId: metricPair.profileId,
-              telemetryMetricsProfile: metricProfile,
+              resourceId: metricPair.profileId,
+              telemetryMetricsProfileResource: metricProfile,
             }),
           );
         } else {
           allPromises.push(
             createMetricProfile({
-              telemetryMetricsGroupId: "group-id", //TODO: evaluate
+              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryMetricsProfile: metricProfile,
+              telemetryMetricsProfileResource: metricProfile,
             }),
           );
         }
       }
 
       for (const logPair of currentSystemLog) {
-        const logProfile: infra.TelemetryLogsProfile = {
+        const logProfile: infra.TelemetryLogsProfileResource = {
           targetSite: response.siteID,
-          logLevel: logPair.logLevel as infra.TelemetrySeverityLevel,
+          logLevel: logPair.logLevel as TelemetryLogLevel,
           logsGroupId: logPair.logSource,
           logsGroup: getLogsGroup(logPair.logSource),
         };
@@ -441,18 +411,18 @@ const SiteForm = () => {
         if (logPair.profileId != "") {
           allPromises.push(
             editLogProfile({
-              telemetryLogsGroupId: "group-id", //TODO: not used in real endpoint
+              loggroupResourceId: "group-id", //TODO: not used in real endpoint
               projectName: SharedStorage.project?.name ?? "",
-              telemetryLogsProfileId: logPair.profileId,
-              telemetryLogsProfile: logProfile,
+              resourceId: logPair.profileId,
+              telemetryLogsProfileResource: logProfile,
             }),
           );
         } else {
           allPromises.push(
             createLogProfile({
-              telemetryLogsGroupId: "group-id", //TODO: evaluate
+              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryLogsProfile: logProfile,
+              telemetryLogsProfileResource: logProfile,
             }),
           );
         }
@@ -470,9 +440,9 @@ const SiteForm = () => {
           ) {
             allPromises.push(
               deleteMetricProfile({
-                telemetryMetricsGroupId: "group-id", //TODO: evaluate
+                metricgroupResourceId: "group-id", //TODO: evaluate
                 projectName: SharedStorage.project?.name ?? "",
-                telemetryMetricsProfileId: responsePair.profileId,
+                resourceId: responsePair.profileId,
               }),
             );
           }
@@ -485,9 +455,9 @@ const SiteForm = () => {
             )
           ) {
             deleteLogProfile({
-              telemetryLogsGroupId: "group-id", //TODO: evaluate
+              loggroupResourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
-              telemetryLogsProfileId: responsePair.profileId,
+              resourceId: responsePair.profileId,
             });
           }
         }
@@ -504,12 +474,6 @@ const SiteForm = () => {
             state: ToastState.Success,
           }),
         );
-
-        if (regionId) {
-          navigate("../../../../locations", { relative: "path" });
-        } else {
-          navigate("../../locations", { relative: "path" });
-        }
       } else {
         // dispatch to update the edited site details in redux store
         handleSiteViewAction(dispatch, response);
@@ -519,9 +483,8 @@ const SiteForm = () => {
             state: ToastState.Success,
           }),
         );
-
-        navigate("../../../../locations", { relative: "path" });
       }
+      navigate(locationRoute);
     } catch (error) {
       setErrorInfo(error);
       dispatch(
@@ -570,7 +533,7 @@ const SiteForm = () => {
         <div className="site-form-item">
           <FieldLabel required>Name *</FieldLabel>
           <Controller
-            name="site.name"
+            name="siteResource.name"
             control={control}
             // defaultValue={siteId === "new" ? "" : siteInfo.template.name}
             rules={{ required: true }}
@@ -582,10 +545,12 @@ const SiteForm = () => {
                 isRequired={true}
                 isDisabled={!checkAuthAndRole([Role.INFRA_MANAGER_WRITE])}
                 validationState={
-                  errors.site?.name !== undefined ? "invalid" : "valid"
+                  errors.siteResource?.name !== undefined ? "invalid" : "valid"
                 }
                 errorMessage={
-                  errors.site?.name !== undefined ? "Name is required" : ""
+                  errors.siteResource?.name !== undefined
+                    ? "Name is required"
+                    : ""
                 }
                 size={InputSize.Large}
                 {...field}
@@ -595,7 +560,7 @@ const SiteForm = () => {
         </div>
         <div className="site-form-item">
           <Controller
-            name="site.regionId"
+            name="siteResource.regionId"
             control={control}
             rules={{ required: true }}
             render={(field) => (
@@ -611,15 +576,17 @@ const SiteForm = () => {
                 isRequired={true}
                 label="Region"
                 onSelectionChange={(e) => {
-                  setValue("site.regionId", e.toString());
-                  trigger("site.regionId");
+                  setValue("siteResource.regionId", e.toString());
+                  trigger("siteResource.regionId");
                 }}
                 {...field}
                 validationState={
-                  errors.site?.region !== undefined ? "invalid" : "valid"
+                  errors.siteResource?.region !== undefined
+                    ? "invalid"
+                    : "valid"
                 }
                 errorMessage={
-                  errors.site?.region !== undefined
+                  errors.siteResource?.region !== undefined
                     ? "region Id is required"
                     : ""
                 }
@@ -634,7 +601,7 @@ const SiteForm = () => {
         <div className="site-form-item">
           <FieldLabel>Latitude</FieldLabel>
           <Controller
-            name="site.siteLat"
+            name="siteResource.siteLat"
             control={control}
             render={({ field }) => (
               // TextField doesn't seem to realize it is configured to be a number
@@ -654,7 +621,7 @@ const SiteForm = () => {
         <div className="site-form-item">
           <FieldLabel>Longitude</FieldLabel>
           <Controller
-            name="site.siteLng"
+            name="siteResource.siteLng"
             control={control}
             render={({ field }) => (
               // @ts-ignore
@@ -762,15 +729,9 @@ const SiteForm = () => {
           variant={ButtonVariant.Secondary}
           size={ButtonSize.Large}
           onPress={() => {
+            navigate(locationRoute);
             if (regionId && location.search.includes("source=region")) {
-              navigate("../../../../locations", { relative: "path" });
               dispatch(setTreeBranchNodeCollapse(regionId));
-            } else {
-              let redirectPath = "../../../../locations";
-              if (location.pathname.includes("sites/new")) {
-                redirectPath = "../../locations";
-              }
-              navigate(redirectPath, { relative: "path" });
             }
           }}
         >

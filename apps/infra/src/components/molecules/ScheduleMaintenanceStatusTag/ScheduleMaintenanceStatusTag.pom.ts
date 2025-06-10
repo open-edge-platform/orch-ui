@@ -18,17 +18,16 @@ type SuccessScheduleApiAliases =
 type ErrorScheduleApiAliases = "getSchedulesError";
 type ApiAliases = SuccessScheduleApiAliases | ErrorScheduleApiAliases;
 
-const emptyResponse: infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse =
-  {
-    SingleSchedules: [],
-    RepeatedSchedules: [],
-    hasNext: false,
-    totalElements: 0,
-  };
+const emptyResponse: infra.ScheduleServiceListSchedulesApiResponse = {
+  singleSchedules: [],
+  repeatedSchedules: [],
+  hasNext: false,
+  totalElements: 0,
+};
 
 const successScheduleEndpoints: CyApiDetails<
   SuccessScheduleApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.ScheduleServiceListSchedulesApiResponse
 > = {
   getEmptySchedules: {
     route: "**/schedules*",
@@ -39,7 +38,7 @@ const successScheduleEndpoints: CyApiDetails<
     route: "**/schedules*",
     statusCode: 200,
     response: {
-      SingleSchedules: [
+      singleSchedules: [
         {
           scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
           name: "schedule123",
@@ -49,7 +48,7 @@ const successScheduleEndpoints: CyApiDetails<
           resourceId: "schedule_123",
         },
       ],
-      RepeatedSchedules: [],
+      repeatedSchedules: [],
       hasNext: false,
       totalElements: 1,
     },
@@ -57,8 +56,8 @@ const successScheduleEndpoints: CyApiDetails<
   getSchedulesMockRepeated: {
     route: "**/schedules*",
     response: {
-      SingleSchedules: [],
-      RepeatedSchedules: [
+      singleSchedules: [],
+      repeatedSchedules: [
         {
           scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
           name: "RepeatSchedule123",
@@ -81,7 +80,7 @@ const successScheduleEndpoints: CyApiDetails<
 
 const errorScheduleEndpoints: CyApiDetails<
   ErrorScheduleApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse
+  infra.ScheduleServiceListSchedulesApiResponse
 > = {
   getSchedulesError: {
     route: "**/schedules*",

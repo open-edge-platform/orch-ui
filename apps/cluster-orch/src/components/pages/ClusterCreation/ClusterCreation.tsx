@@ -4,13 +4,14 @@
  */
 
 import { cm, mbApi } from "@orch-ui/apis";
+import { Empty, MetadataPair } from "@orch-ui/components";
 import {
-  Empty,
-  MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb,
-} from "@orch-ui/components";
-import { InternalError, SharedStorage } from "@orch-ui/utils";
+  clusterCreateRoute,
+  clusterManagementRoute,
+  InternalError,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import {
   Button,
   ButtonGroup,
@@ -28,13 +29,7 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  clustersBreadcrumb,
-  clustersMenuItem,
-  homeBreadcrumb,
-} from "../../../routes/const";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -61,7 +56,7 @@ const ClusterCreation = () => {
   const topRef = useRef<HTMLDivElement | null>(null);
   const projectName = SharedStorage.project?.name ?? "";
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   // TODO: reduce below redux states to single redux state
@@ -79,17 +74,7 @@ const ClusterCreation = () => {
       ...props,
       visibility: ToastVisibility.Hide,
     }));
-  const breadcrumb = useMemo(
-    () => [
-      homeBreadcrumb,
-      clustersBreadcrumb,
-      {
-        text: "test",
-        link: "#",
-      },
-    ],
-    [],
-  );
+
   const [steps, setSteps] = useState<StepperStep[]>([
     { text: "Enter Cluster Details" },
     { text: "Select Site" },
@@ -100,7 +85,7 @@ const ClusterCreation = () => {
   const [step, setStep] = useState<number>(0);
   useEffect(() => {
     if (step === 0 && !window.location.search) {
-      navigate("?offset=0");
+      navigate(clusterCreateRoute, undefined, "?offset=0");
     }
   }, [step]);
 
@@ -157,11 +142,7 @@ const ClusterCreation = () => {
 
   // Clear form data at begining of the form
   useEffect(clearData, []);
-  // Set breadcrumb
-  useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumb));
-    dispatch(setActiveNavItem(clustersMenuItem));
-  }, [breadcrumb]);
+
   // Reset `template version` selection if `template name` selection changes
   useEffect(() => {
     setClusterTemplateVersion("Select Cluster Version");
@@ -251,7 +232,7 @@ const ClusterCreation = () => {
       clearData();
       topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       const timeoutId = setTimeout(() => {
-        navigate("../clusters");
+        navigate(clusterManagementRoute);
         clearInterval(timeoutId);
       }, 3000);
     };
@@ -284,7 +265,7 @@ const ClusterCreation = () => {
         clearData();
         // If metadata failed then move to cluster page as cluster is created
         const timeoutId = setTimeout(() => {
-          navigate("../clusters");
+          navigate(clusterManagementRoute);
           clearInterval(timeoutId);
         }, 3000);
       }
@@ -402,7 +383,7 @@ const ClusterCreation = () => {
           variant={ButtonVariant.Secondary}
           onPress={() => {
             clearData();
-            navigate("../clusters");
+            navigate(clusterManagementRoute);
           }}
         >
           Cancel

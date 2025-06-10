@@ -5,10 +5,10 @@
 
 import { infra } from "@orch-ui/apis";
 import { ApiError, SquareSpinner, Tree, TreeNode } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { SharedStorage, useInfraNavigate } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useCallback, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { RegionDynamicProps } from "../../../../components/atom/locations/Region/Region";
 import { SiteDynamicProps } from "../../../../components/atom/locations/Site/Site";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -56,7 +56,7 @@ export const RegionSiteTree = ({
 }: RegionSiteTreeProps) => {
   const cy = { "data-cy": dataCy };
   const className = "region-site-tree";
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const location = useLocation();
 
   const searchTerm = useAppSelector(selectSearchTerm);
@@ -83,7 +83,7 @@ export const RegionSiteTree = ({
     isError: isErrorRegions,
     refetch,
     isUninitialized, // If query is not fetched before
-  } = infra.useGetV1ProjectsByProjectNameRegionsQuery(
+  } = infra.useRegionServiceListRegionsQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       // TODO: use `parent` param here rather than `filter`
@@ -106,7 +106,7 @@ export const RegionSiteTree = ({
 
   const getSiteCount = async (id: string) => {
     const apiCallRegion =
-      infra.infra.endpoints.getV1ProjectsByProjectNameRegions.initiate(
+      infra.infra.endpoints.regionServiceListRegions.initiate(
         {
           projectName: SharedStorage.project?.name ?? "",
           filter: `resourceId="${id}"`,
@@ -126,11 +126,11 @@ export const RegionSiteTree = ({
     data: { sites } = {},
     isFetching: isFetchingSites,
     isError: isErrorSites,
-  } = infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesQuery(
+  } = infra.useSiteServiceListSitesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       orderBy: ORDER_BY,
-      regionId: currentRegionId ?? "",
+      resourceId: currentRegionId ?? "",
       filter: `region.resourceId="${currentRegionId}"`,
     },
     {
@@ -143,30 +143,35 @@ export const RegionSiteTree = ({
   const hasSiteResults = !isFetchingSites && sites;
 
   const viewRegionAction = useCallback(
-    (region: infra.RegionRead) => handleViewRegionAction(dispatch, region),
+    (region: infra.RegionResourceRead) =>
+      handleViewRegionAction(dispatch, region),
     [],
   );
   const viewSiteAction = useCallback(
-    (site: infra.SiteRead) => handleSiteViewAction(dispatch, site),
+    (site: infra.SiteResourceRead) => handleSiteViewAction(dispatch, site),
     [],
   );
   const addSiteAction = useCallback(
-    (region: infra.RegionRead) => handleAddSiteAction(navigate, region),
+    (region: infra.RegionResourceRead) => handleAddSiteAction(navigate, region),
     [],
   );
   const subRegionAction = useCallback(
-    (region: infra.RegionRead) => handleSubRegionAction(navigate, region),
+    (region: infra.RegionResourceRead) =>
+      handleSubRegionAction(navigate, region),
     [],
   );
-  const scheduleMaintenanceAction = useCallback((region: infra.RegionRead) => {
-    dispatch(
-      setMaintenanceEntity({
-        targetEntity: region,
-        targetEntityType: "region",
-        showBack: false,
-      }),
-    );
-  }, []);
+  const scheduleMaintenanceAction = useCallback(
+    (region: infra.RegionResourceRead) => {
+      dispatch(
+        setMaintenanceEntity({
+          targetEntity: region,
+          targetEntityType: "region",
+          showBack: false,
+        }),
+      );
+    },
+    [],
+  );
 
   const onExpand = useCallback(({ id }: TreeNode) => {
     dispatch(setLoadingBranch(id));
@@ -182,7 +187,7 @@ export const RegionSiteTree = ({
       localStorage.getItem(clearTree) === "true"
     ) {
       localStorage.removeItem(clearTree);
-      dispatch(infra.infra.util.invalidateTags([{ type: "Region" }]));
+      dispatch(infra.infra.util.invalidateTags([{ type: "RegionService" }]));
       dispatch(resetTree(location.pathname + location.search));
       return;
     }
@@ -215,12 +220,12 @@ export const RegionSiteTree = ({
     if (!showSingleSelection || !selectedSite || !selectedSite.name) {
       return;
     }
-    dispatch(infra.infra.util.invalidateTags([{ type: "Location" }]));
+    dispatch(infra.infra.util.invalidateTags([{ type: "LocationService" }]));
     dispatch(setSearchTerm(selectedSite.name));
   }, [showSingleSelection, selectedSite]);
 
   const createSingleSelectionTree = (): TreeBranchState<
-    infra.SiteRead | infra.RegionRead
+    infra.SiteResourceRead | infra.RegionResourceRead
   >[] => {
     if (!selectedSite || !selectedSite.resourceId)
       throw new Error("Selected site is missing resourceId");

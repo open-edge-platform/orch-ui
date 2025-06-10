@@ -4,16 +4,13 @@
  */
 
 import { cm, infra, mbApi } from "@orch-ui/apis";
+import { MetadataPair } from "@orch-ui/components";
 import {
-  BreadcrumbPiece,
-  MetadataPair,
-  setActiveNavItem,
-  setBreadcrumb as setClusterBreadcrumb,
-} from "@orch-ui/components";
-import {
+  clusterManagementRoute,
   ObjectKeyValue,
   objectToMetadataPair,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import { Button, ButtonGroup, Heading, Toast } from "@spark-design/react";
 import {
@@ -23,9 +20,8 @@ import {
   ToastState,
   ToastVisibility,
 } from "@spark-design/tokens";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { clustersMenuItem, homeBreadcrumb } from "../../../routes/const";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -44,17 +40,14 @@ type urlParams = {
 };
 
 export interface ClusterEditProps {
-  /** This is required for cluster plugin to to set breadcrumb from fleet-management UI */
-  setBreadcrumb?: (breadcrumbs: BreadcrumbPiece[]) => void;
-
   // This is needed for testing purpose
   HostsTableRemote?: React.LazyExoticComponent<React.ComponentType<any>> | null;
 }
 
-const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
+const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
   const cy = { "data-cy": dataCy };
   const { clusterName } = useParams<urlParams>() as urlParams;
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   //initial nodes
@@ -99,28 +92,27 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
 
   // Used to get site id for drawer
   const { data: firstClusterHost, isSuccess: isHostSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useHostServiceGetHostQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        hostId: firstHostId as string,
+        resourceId: firstHostId as string,
       },
       { skip: !firstHostId || !SharedStorage.project?.name },
     );
   // Used to get region id for drawer
-  const { data: siteData } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: "*", // Cluster or associated host have no region information
-        siteId: siteId && siteId.length > 0 ? siteId : "",
-      },
-      { skip: !siteId || !SharedStorage.project?.name },
-    );
+  const { data: siteData } = infra.useSiteServiceGetSiteQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      regionResourceId: "*", // Cluster or associated host have no region information
+      resourceId: siteId && siteId.length > 0 ? siteId : "",
+    },
+    { skip: !siteId || !SharedStorage.project?.name },
+  );
 
   // Inherited metadata array for metadata display
   useEffect(() => {
     if (siteData) {
-      const regionMeta = siteData?.inheritedMetadata?.location ?? [];
+      const regionMeta = siteData?.inheritedMetadata ?? [];
       const siteMeta = siteData?.metadata ?? [];
       /** Combine Region and Site Metadata (a.k.a Inherited Metadata) */
       const combinedMetadata = [
@@ -233,35 +225,6 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
       firstClusterHost?.site?.resourceId || firstClusterHost?.site?.siteID,
     );
   }, [firstClusterHost, isHostSuccess, currentCluster]);
-
-  // Breadcrumb settings
-  const breadcrumb = useMemo(
-    () => [
-      homeBreadcrumb,
-      {
-        text: "Clusters",
-        link: "../../clusters",
-      },
-      {
-        text: `${clusterDetail?.name}`,
-        link: `../../cluster/${clusterName}`,
-      },
-      {
-        text: "Edit Cluster",
-        link: "#",
-      },
-    ],
-    [clusterDetail],
-  );
-  useEffect(() => {
-    // use cluster-native breadcrumb unless specified
-    if (setBreadcrumb) {
-      setBreadcrumb(breadcrumb);
-    } else {
-      dispatch(setClusterBreadcrumb(breadcrumb));
-    }
-    dispatch(setActiveNavItem(clustersMenuItem));
-  }, [breadcrumb]);
 
   const onReqSuccess = () => {
     if (
@@ -378,7 +341,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
           variant={ButtonVariant.Secondary}
           onPress={() => {
             dispatch(clearCluster());
-            navigate("/infrastructure/clusters");
+            navigate(clusterManagementRoute);
           }}
         >
           Cancel
@@ -399,7 +362,7 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
           onReqSuccess()
             ? "Cluster updated, redirecting you back to the Clusters page..."
             : onReqError()
-              ? "Failed to edit cluster try again later, redirecting you back to Clusters page..."
+              ? "Failed to edit cluster. Please try again later."
               : onReqWarning()
                 ? `This is the only host in ${clusterName}. Delete the cluster to remove host and return to an unassinged state`
                 : ""
@@ -424,11 +387,10 @@ const ClusterEdit = ({ setBreadcrumb, HostsTableRemote }: ClusterEditProps) => {
         onHide={() => {
           if (onReqSuccess()) {
             setSuccessVisibility(ToastVisibility.Hide);
-            navigate("../clusters");
+            navigate(clusterManagementRoute);
           }
           if (onReqError()) {
             setErrorVisibility(ToastVisibility.Hide);
-            navigate("../clusters");
           }
           if (onReqWarning()) {
             setRemoveLast(false);

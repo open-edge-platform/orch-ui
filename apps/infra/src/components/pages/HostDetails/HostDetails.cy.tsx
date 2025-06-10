@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getActiveNavItem } from "@orch-ui/components";
 import { cyGet } from "@orch-ui/tests";
 import { IRuntimeConfig, siteRestaurantTwo } from "@orch-ui/utils";
-import { useAppSelector } from "../../../store/hooks";
 import HostDetails from "./HostDetails";
 import { HostDetailsPom, hostNoName, mockHost } from "./HostDetails.pom";
 
@@ -28,11 +26,9 @@ describe("HostDetails", () => {
 
   describe("when the Host is correctly loaded", () => {
     const JSX = () => {
-      const activeItem = useAppSelector(getActiveNavItem);
       return (
         <>
           <HostDetails />
-          <h1 data-cy="active">{activeItem?.value}</h1>
         </>
       );
     };
@@ -45,10 +41,6 @@ describe("HostDetails", () => {
         routerRule: [{ path: "/host/:id", element: <JSX /> }],
       });
       pom.waitForApis();
-    });
-
-    it("will generate the correct active nav value", () => {
-      cyGet("active").should("contain.text", "Active");
     });
 
     it("should display the Host information", () => {
@@ -64,7 +56,7 @@ describe("HostDetails", () => {
     it("should render inherited", () => {
       const inheritedMetadataLength =
         (siteRestaurantTwo.metadata?.length ?? 0) +
-        (siteRestaurantTwo.inheritedMetadata?.location?.length ?? 0);
+        (siteRestaurantTwo.inheritedMetadata?.length ?? 0);
 
       if (inheritedMetadataLength) {
         pom.medataBadge.getAll().should("have.length", inheritedMetadataLength);
@@ -116,8 +108,7 @@ describe("HostDetails", () => {
     it("should display the Host information", () => {
       pom.el.infraHostDetailsHeader.contains(mockHost.name);
       cy.wait(`@${pom.api.hostUuidSuccess}`).then(({ request }) => {
-        expect(request.query.detail).eq("true");
-        expect(request.query.uuid).eq(mockHost.uuid);
+        expect(request.query.filter).contains(mockHost.uuid);
       });
     });
   });

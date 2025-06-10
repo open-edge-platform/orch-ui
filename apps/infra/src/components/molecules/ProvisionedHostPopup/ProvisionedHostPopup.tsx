@@ -8,13 +8,14 @@ import { PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
   getObservabilityUrl,
+  hostEditRoute,
   isHostAssigned,
   Role,
   RuntimeConfig,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { setErrorInfo } from "../../../store/notifications";
 import GenericHostPopup, {
   GenericHostPopupProps,
@@ -31,22 +32,18 @@ export type ProvisionedHostPopupProps = Omit<
    *
    * Note: If instance is assigned make sure instance shows workloadMember before passing to this field.
    **/
-  host: infra.HostRead;
+  host: infra.HostResourceRead;
   onDeauthorizeHostWithoutWorkload?: (hostId: string) => void;
-  onScheduleMaintenance?: (targetEntity: infra.HostRead) => void;
+  onScheduleMaintenance?: (targetEntity: infra.HostResourceRead) => void;
 };
 
 /** This will show all available host actions within popup menu (active/configured, i.e, assigned/unassigned host only) */
 const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
   const cy = { "data-cy": dataCy };
-  const {
-    host,
-    basePath = "",
-    onDeauthorizeHostWithoutWorkload,
-    onScheduleMaintenance,
-  } = props;
+  const { host, onDeauthorizeHostWithoutWorkload, onScheduleMaintenance } =
+    props;
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
 
   // Deauthorizing a Host
   const [
@@ -72,8 +69,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       );
     }
   }, [deauthorizeHostWithinWorkloadIsOpen]);
-  const [deauthorizeHost] =
-    infra.usePutV1ProjectsByProjectNameComputeHostsAndHostIdInvalidateMutation();
+  const [deauthorizeHost] = infra.useHostServiceInvalidateHostMutation();
 
   /** Is host a `Provisioned Host with assigned workload`. Here, Workload and Cluster are synonymous */
   const isAssigned = host.instance && isHostAssigned(host.instance);
@@ -88,9 +84,10 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       displayText: "Edit",
       disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
       onSelect: async () => {
-        navigate(`${basePath}../host/${host.resourceId}/edit`, {
-          relative: "path",
-        });
+        if (host.resourceId)
+          navigate(hostEditRoute, {
+            id: host.resourceId,
+          });
       },
     },
     {
@@ -124,8 +121,8 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
   const deauthorizeHostFn = async (deauthorizeReason: string) => {
     return await deauthorizeHost({
       projectName: SharedStorage.project?.name ?? "",
-      hostId: host.resourceId ?? "",
-      hostOperationWithNote: { note: deauthorizeReason },
+      resourceId: host.resourceId ?? "",
+      note: deauthorizeReason,
     });
   };
 

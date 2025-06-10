@@ -11,12 +11,16 @@ import {
   MessageBannerAlertState,
   setBreadcrumb,
 } from "@orch-ui/components";
-import { parseError, SharedStorage } from "@orch-ui/utils";
+import {
+  parseError,
+  regionRoute,
+  SharedStorage,
+  useInfraNavigate,
+} from "@orch-ui/utils";
 import { Button, Drawer, Heading, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { DrawerHeader } from "../../../components/molecules/DrawerHeader/DrawerHeader";
 import {
   Search,
@@ -53,12 +57,10 @@ export const DELETE_SITE_DIALOG_TITLE = "Delete Site ?";
 
 export const Locations = () => {
   const cy = { "data-cy": dataCy };
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useDispatch();
-  const [deleteRegion] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdMutation();
-  const [deleteSite] =
-    infra.useDeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdMutation();
+  const [deleteRegion] = infra.useRegionServiceDeleteRegionMutation();
+  const [deleteSite] = infra.useSiteServiceDeleteSiteMutation();
   const region = useAppSelector(selectRegion);
   const regionToDelete = useAppSelector(selectRegionToDelete);
   const siteToDelete = useAppSelector(selectSiteToDelete);
@@ -68,7 +70,6 @@ export const Locations = () => {
   const regionToDeleteHtmlId = "regionToDelete";
   const siteToDeleteHtmlId = "siteToDelete";
   const className: string = "locations";
-  const newRegionUrl: string = "../regions/new";
   const searchTypes: SearchTypeItem[] = Object.keys(SearchTypes).map((key) => ({
     id: key,
     name: `Search ${key}`,
@@ -99,7 +100,7 @@ export const Locations = () => {
   const deleteRegionHandler = (regionId: string) => {
     deleteRegion({
       projectName: SharedStorage.project?.name ?? "",
-      regionId,
+      resourceId: regionId,
     })
       .unwrap()
       .then(() => {
@@ -130,9 +131,9 @@ export const Locations = () => {
 
   const deleteSiteHandler = (siteId: string) => {
     deleteSite({
-      regionId: siteToDelete?.region?.resourceId ?? "",
+      regionResourceId: siteToDelete?.region?.resourceId ?? "",
       projectName: SharedStorage.project?.name ?? "",
-      siteId,
+      resourceId: siteId,
     })
       .unwrap()
       .then(() => {
@@ -174,7 +175,7 @@ export const Locations = () => {
               name: "Add Region",
               action: () => {
                 dispatch(setLoadingBranch(ROOT_REGIONS));
-                navigate(newRegionUrl);
+                navigate(regionRoute, { regionId: "new" });
               },
             },
           ]}
@@ -191,7 +192,7 @@ export const Locations = () => {
           <Button
             onPress={() => {
               dispatch(setLoadingBranch(ROOT_REGIONS));
-              navigate(newRegionUrl);
+              navigate(regionRoute, { regionId: "new" });
             }}
             size={ButtonSize.Large}
           >
@@ -275,14 +276,18 @@ export const Locations = () => {
                 maintenanceEntity.targetEntityType === "site"
               ) {
                 dispatch(
-                  setSite(maintenanceEntity.targetEntity as infra.SiteRead),
+                  setSite(
+                    maintenanceEntity.targetEntity as infra.SiteResourceRead,
+                  ),
                 );
               } else if (
                 maintenanceEntity.showBack &&
                 maintenanceEntity.targetEntityType === "region"
               ) {
                 dispatch(
-                  setRegion(maintenanceEntity.targetEntity as infra.RegionRead),
+                  setRegion(
+                    maintenanceEntity.targetEntity as infra.RegionResourceRead,
+                  ),
                 );
               }
               dispatch(setMaintenanceEntity(undefined));

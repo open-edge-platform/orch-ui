@@ -10,10 +10,13 @@ import {
   MessageBannerAlertState,
 } from "@orch-ui/components";
 import {
+  clusterCreateRoute,
   hasRole as hasRoleDefault,
+  hostsRoute,
   Role,
   RuntimeConfig,
   SharedStorage,
+  useInfraNavigate,
 } from "@orch-ui/utils";
 import {
   Button,
@@ -25,7 +28,6 @@ import {
 } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   goToNextStep,
   goToPrevStep,
@@ -76,7 +78,7 @@ export enum HostProvisiongProcedures {
 export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const cy = { "data-cy": dataCy };
 
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   const [apiErrorData, setApiErrorData] = useState<{
@@ -116,16 +118,13 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const containsHosts = useAppSelector(selectContainsHosts);
   const firstHost =
     Object.keys(hosts).length > 0 ? useAppSelector(selectFirstHost) : undefined;
-  const preselectedSite = firstHost?.site as infra.SiteRead;
+  const preselectedSite = firstHost?.site as infra.SiteResourceRead;
 
   // host register - used when coming in from 'autoProvision' flow, host will not exist
-  const [registerHost] =
-    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+  const [registerHost] = infra.useHostServiceRegisterHostMutation();
   // host update
-  const [patchHost] =
-    infra.usePatchV1ProjectsByProjectNameComputeHostsAndHostIdMutation();
-  const [postInstance] =
-    infra.usePostV1ProjectsByProjectNameComputeInstancesMutation();
+  const [patchHost] = infra.useHostServicePatchHostMutation();
+  const [postInstance] = infra.useInstanceServiceCreateInstanceMutation();
 
   const [clusterConfirmationOpen, setClusterConfirmationOpen] =
     useState<boolean>(false);
@@ -244,7 +243,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   };
 
   const { data: localAccountsList } =
-    infra.useGetV1ProjectsByProjectNameLocalAccountsQuery({
+    infra.useLocalAccountServiceListLocalAccountsQuery({
       projectName: SharedStorage.project?.name ?? "",
     });
 
@@ -255,8 +254,8 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
     for (const host of Object.values(hosts)) {
       await patchHost({
         projectName: SharedStorage.project?.name ?? "",
-        hostId: host.resourceId!,
-        body: {
+        resourceId: host.resourceId!,
+        hostResource: {
           name: host.name,
           siteId: host.siteId,
           metadata: host.metadata,
@@ -271,23 +270,22 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         });
 
       if (!host.originalOs && !createdInstances.has(host.resourceId!)) {
-        const postInstancePayload: infra.PostV1ProjectsByProjectNameComputeInstancesApiArg =
-          {
-            projectName: SharedStorage.project?.name ?? "",
-            body: {
-              securityFeature: host.instance?.securityFeature,
-              osID: host.instance?.osID,
-              kind: "INSTANCE_KIND_METAL",
-              hostID: host.resourceId,
-              name: `${host.name}-instance`,
-            },
-          };
+        const postInstancePayload: infra.InstanceServiceCreateInstanceApiArg = {
+          projectName: SharedStorage.project?.name ?? "",
+          instanceResource: {
+            securityFeature: host.instance?.securityFeature,
+            osID: host.instance?.osID,
+            kind: "INSTANCE_KIND_METAL",
+            hostID: host.resourceId,
+            name: `${host.name}-instance`,
+          },
+        };
         /*
           instance is associated with localAccount selected by user
           in "SSH key" step.
         */
         if (host.instance?.localAccountID) {
-          postInstancePayload.body.localAccountID =
+          postInstancePayload.instanceResource.localAccountID =
             host.instance?.localAccountID;
         }
         await postInstance(postInstancePayload)
@@ -327,7 +325,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
         setClusterConfirmationOpen(true);
       } else {
         setTimeout(() => {
-          navigate("../../hosts", { relative: "path" });
+          navigate(hostsRoute);
         }, 500);
       }
     }
@@ -356,7 +354,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
   const goToListPage = () => {
     dispatch(reset());
     dispatch(resetTree(location.pathname + location.search));
-    navigate("../../hosts", { relative: "path" });
+    navigate(hostsRoute);
   };
 
   useEffect(() => {
@@ -385,7 +383,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           break;
         case HostProvisiongProcedures.BackToHosts:
           dispatch(resetMultiHostForm());
-          navigate("../../hosts?reset"); //could do route param
+          navigate(hostsRoute);
           break;
       }
     })();
@@ -520,10 +518,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
             const hostId = host.resourceId;
 
             const query = `?regionId=${regionId}&regionName=${regionName}&siteId=${siteId}&siteName=${siteName}&hostId=${hostId}`;
-
-            navigate(`/infrastructure/clusters/create${query}`, {
-              relative: "path",
-            });
+            navigate(clusterCreateRoute, undefined, query);
             setClusterConfirmationOpen(false);
           }}
           confirmBtnText="Create Now"
@@ -531,7 +526,7 @@ export const HostConfig = ({ hasRole = hasRoleDefault }: HostConfigProps) => {
           cancelBtnText="Create Later"
           cancelCb={() => {
             setClusterConfirmationOpen(false);
-            navigate("../../hosts", { relative: "path" });
+            navigate(hostsRoute);
           }}
         />
       )}

@@ -6,6 +6,11 @@
 import { infra } from "@orch-ui/apis";
 import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
+  hostProvisioningRoute,
+  hostsRoute,
+  useInfraNavigate,
+} from "@orch-ui/utils";
+import {
   Button,
   ButtonGroup,
   Heading,
@@ -16,7 +21,6 @@ import {
   ButtonSize,
   ButtonVariant,
 } from "@spark-design/tokens";
-import { useNavigate } from "react-router-dom";
 import {
   reset,
   selectUnregisteredHosts,
@@ -34,14 +38,13 @@ const dataCy = "registerHosts";
 const RegisterHosts = () => {
   const cy = { "data-cy": dataCy };
   const className = "register-hosts";
-  const navigate = useNavigate();
+  const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
   const { autoOnboard, autoProvision, hosts, hasMultiHostValidationError } =
     useAppSelector((state) => state.configureHost);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
-  const [registerHost] =
-    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+  const [registerHost] = infra.useHostServiceRegisterHostMutation();
 
   return (
     <div {...cy} className={className}>
@@ -93,7 +96,7 @@ const RegisterHosts = () => {
           variant={ButtonVariant.Primary}
           onPress={() => {
             dispatch(reset());
-            navigate("../hosts");
+            navigate(hostsRoute);
           }}
         >
           Cancel
@@ -127,11 +130,11 @@ const RegisterHosts = () => {
                 );
                 if (allSucceeded) {
                   dispatch(reset());
-                  navigate("../hosts");
+                  navigate(hostsRoute);
                 }
               }, 20);
             } else {
-              navigate("../hosts/set-up-provisioning");
+              navigate(hostProvisioningRoute);
             }
           }}
           isDisabled={

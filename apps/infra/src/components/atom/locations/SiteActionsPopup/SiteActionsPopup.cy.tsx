@@ -72,7 +72,9 @@ describe("<SiteActionsPopup/>", () => {
       });
       pom.el.siteActionsBtn.click();
       pom.el.Edit.click();
-      cy.get("#pathname").contains("/infrastructure");
+      cy.get("#pathname").contains(
+        "/regions/region-salem/sites/restaurant-two",
+      );
     });
 
     it("from INFRA only context", () => {

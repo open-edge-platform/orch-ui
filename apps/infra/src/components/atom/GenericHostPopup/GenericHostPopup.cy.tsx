@@ -43,7 +43,7 @@ describe("<GenericHostPopup/>", () => {
     it("should call default host details route when `View Details` is clicked", () => {
       cy.mount(<GenericHostPopup host={hostOne} showViewDetailsOption />);
       pom.getActionPopupBySearchText("View Details").click();
-      pom.getPath().should("eq", `/host/${hostOne.resourceId!}`);
+      pom.getPath().should("contain", `/host/${hostOne.resourceId!}`);
     });
     it("should call onViewDetails when `View Details` is clicked", () => {
       cy.mount(

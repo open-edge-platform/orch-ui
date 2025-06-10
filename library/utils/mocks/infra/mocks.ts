@@ -75,9 +75,9 @@ const randomizeHostStatus = () => {
   return hostStatuses[Math.floor(Math.random() * hostStatuses.length)];
 };
 
-const randomizeHostList = (hosts: infra.HostRead[]): HostMock[] => {
+const randomizeHostList = (hosts: infra.HostResourceRead[]): HostMock[] => {
   if (IS_MOCK_RANDOMIZE_ENABLED) {
-    const mockHosts: infra.HostRead[] = hosts.map((host, i) => {
+    const mockHosts: infra.HostResourceRead[] = hosts.map((host, i) => {
       if (i === 0) {
         return host;
       }
@@ -181,7 +181,7 @@ export const handlers = [
       }
     }
 
-    let list: infra.RegionRead[] = [];
+    let list: infra.RegionResourceRead[] = [];
     if (regionId) {
       const region = regionStore.get(regionId);
       if (region) list = [region];
@@ -200,7 +200,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameRegionsApiResponse>({
+      ctx.json<infra.RegionServiceListRegionsApiResponse>({
         hasNext: false,
         regions: list,
         totalElements: list.length,
@@ -208,7 +208,7 @@ export const handlers = [
     );
   }),
   rest.post(`${baseURL}/regions`, async (req, res, ctx) => {
-    const body = await req.json<infra.RegionWrite>();
+    const body = await req.json<infra.RegionResourceWrite>();
 
     if (body.parentId) {
       body.parentRegion = regionStore.get(body.parentId);
@@ -217,23 +217,18 @@ export const handlers = [
     const r = regionStore.post(body);
     if (!r) return res(ctx.status(500));
     return res(
-      ctx.status(201),
-      ctx.json<infra.PutV1ProjectsByProjectNameRegionsAndRegionIdApiResponse>(
-        r,
-      ),
+      ctx.status(200),
+      ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
     );
   }),
-  rest.get(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
-    const { regionId } =
-      req.params as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdApiArg;
-    const region = regionStore.get(regionId);
+  rest.get(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } = req.params as infra.RegionServiceGetRegionApiArg;
+    const region = regionStore.get(resourceId);
 
     if (region) {
       return res(
         ctx.status(200),
-        ctx.json<infra.GetV1ProjectsByProjectNameRegionsAndRegionIdApiResponse>(
-          region,
-        ),
+        ctx.json<infra.RegionServiceGetRegionApiResponse>(region),
       );
     }
     return res(
@@ -246,10 +241,9 @@ export const handlers = [
   }),
 
   rest.delete(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
-    const { regionId } =
-      req.params as infra.DeleteV1ProjectsByProjectNameRegionsAndRegionIdApiArg;
+    const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
 
-    const sites = siteStore.list({ regionId: regionId });
+    const sites = siteStore.list({ regionId: resourceId });
     if (sites.length > 0) {
       return res(
         ctx.status(412),
@@ -259,7 +253,7 @@ export const handlers = [
       );
     }
 
-    const region = regionStore.get(regionId);
+    const region = regionStore.get(resourceId);
     if (region?.parentRegion) {
       return res(
         ctx.status(412),
@@ -269,20 +263,17 @@ export const handlers = [
       );
     }
 
-    const deleteResult = regionStore.delete(regionId);
+    const deleteResult = regionStore.delete(resourceId);
     return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
   }),
-  rest.put(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
-    const { regionId } =
-      req.params as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdApiArg;
-    const body = await req.json<infra.Region>();
-    const r = regionStore.put(regionId, body);
+  rest.put(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
+    const body = await req.json<infra.RegionResourceWrite>();
+    const r = regionStore.put(resourceId, body);
     if (!r) return res(ctx.status(500));
     return res(
       ctx.status(200),
-      ctx.json<infra.PutV1ProjectsByProjectNameRegionsAndRegionIdApiResponse>(
-        r,
-      ),
+      ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
     );
   }),
   rest.patch(`${baseURL}/regions/:regionId`, async (_, res, ctx) => {
@@ -290,21 +281,19 @@ export const handlers = [
   }),
 
   // site
-  rest.get(`${baseURL}/regions/:regionId/sites`, async (req, res, ctx) => {
-    const { regionId } =
-      req.params as unknown as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiArg;
+  rest.get(`${baseURL}/regions/:resourceId/sites`, async (req, res, ctx) => {
+    const { resourceId } =
+      req.params as unknown as infra.SiteServiceListSitesApiArg;
 
-    if (regionId) {
-      const sites = siteStore.list({ regionId });
+    if (resourceId) {
+      const sites = siteStore.list({ regionId: resourceId });
       return res(
         ctx.status(200),
-        ctx.json<infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse>(
-          {
-            hasNext: false,
-            sites: sites,
-            totalElements: Math.min(sites.length, 10),
-          },
-        ),
+        ctx.json<infra.SiteServiceListSitesApiResponse>({
+          hasNext: false,
+          sites: sites,
+          totalElements: Math.min(sites.length, 10),
+        }),
       );
     } else {
       return res(
@@ -317,29 +306,24 @@ export const handlers = [
     }
   }),
   rest.post(`${baseURL}/sites`, async (req, res, ctx) => {
-    const body = await req.json<infra.SiteWrite>();
+    const body = await req.json<infra.SiteResourceWrite>();
     if (body.regionId) {
       body.region = regionStore.get(body.regionId);
     }
     const r = siteStore.post(body);
     if (!r) return res(ctx.status(500));
     return res(
-      ctx.status(201),
-      ctx.json<infra.PostV1ProjectsByProjectNameRegionsAndRegionIdSitesApiResponse>(
-        r,
-      ),
+      ctx.status(200),
+      ctx.json<infra.SiteServiceUpdateSiteApiResponse>(r),
     );
   }),
   rest.get(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
-    const { siteId } =
-      req.params as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg;
-    const site = siteStore.get(siteId);
+    const { resourceId } = req.params as infra.SiteServiceGetSiteApiArg;
+    const site = siteStore.get(resourceId);
     if (site) {
       return res(
         ctx.status(200),
-        ctx.json<infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse>(
-          site,
-        ),
+        ctx.json<infra.SiteServiceGetSiteApiResponse>(site),
       );
     }
     return res(
@@ -350,23 +334,20 @@ export const handlers = [
       }),
     );
   }),
-  rest.put(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
-    const { siteId } =
-      req.params as infra.GetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg;
-    const body = await req.json<infra.Site>();
-    const s = siteStore.put(siteId, body);
+  rest.put(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } =
+      req.params as unknown as infra.SiteServiceUpdateSiteApiArg;
+    const body = await req.json<infra.SiteResourceWrite>();
+    const s = siteStore.put(resourceId, body);
     if (!s) return res(ctx.status(500));
     return res(
       ctx.status(200),
-      ctx.json<infra.PutV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiResponse>(
-        s,
-      ),
+      ctx.json<infra.SiteServiceUpdateSiteApiResponse>(s),
     );
   }),
-  rest.delete(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
-    const { siteId } =
-      req.params as infra.DeleteV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdApiArg;
-    const deleteResult = siteStore.delete(siteId);
+  rest.delete(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } = req.params as infra.SiteServiceDeleteSiteApiArg;
+    const deleteResult = siteStore.delete(resourceId);
     return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
   }),
 
@@ -376,7 +357,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse>(
+      ctx.json<infra.HostServiceGetHostsSummaryApiResponse>(
         hostStore.getSummary(filter),
       ),
     );
@@ -384,9 +365,9 @@ export const handlers = [
 
   rest.get(`${baseURL}/localAccounts`, async (req, res, ctx) => {
     const localAccounts = instanceStore.getLocalAccounts();
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameLocalAccountsApiResponse>({
+      ctx.json<infra.LocalAccountServiceListLocalAccountsApiResponse>({
         hasNext: false,
         localAccounts,
         totalElements: localAccounts.length,
@@ -412,7 +393,7 @@ export const handlers = [
         /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/,
       )
     ) {
-      return await res(
+      return res(
         ctx.status(400),
         ctx.json({ message: "parameter UUID has wrong format" }),
       );
@@ -426,7 +407,7 @@ export const handlers = [
         metadataParam.forEach((keyValuePairs) => {
           // End if atleast one metadata matched from the ous
           const [key, value] = keyValuePairs.split("=");
-          const metadataSet = host.inheritedMetadata?.location?.concat(
+          const metadataSet = host.inheritedMetadata?.concat(
             host.metadata ?? [],
           );
           if (metadataSet) {
@@ -450,9 +431,9 @@ export const handlers = [
     if (hosts.length > 0) {
       hosts = randomizeHostList(hosts);
     }
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeHostsApiResponse>({
+      ctx.json<infra.HostServiceListHostsApiResponse>({
         hasNext: false,
         hosts,
         totalElements: hosts.length,
@@ -460,12 +441,12 @@ export const handlers = [
       ctx.delay(delay),
     );
   }),
-  rest.put(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
-    const { hostId } =
-      req.params as unknown as infra.PutV1ProjectsByProjectNameComputeHostsAndHostIdApiArg;
-    const body = await req.json<infra.Host>();
-    if (!hostId || !body) {
-      return await res(
+  rest.put(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } =
+      req.params as unknown as infra.HostServiceUpdateHostApiArg;
+    const body = await req.json<infra.HostResourceWrite>();
+    if (!resourceId || !body) {
+      return res(
         ctx.status(400),
         ctx.json({
           detail:
@@ -476,7 +457,7 @@ export const handlers = [
     }
 
     const processError = async () => {
-      return await res(
+      return res(
         ctx.status(500),
         ctx.json({
           detail:
@@ -486,17 +467,17 @@ export const handlers = [
       );
     };
 
-    let host: infra.HostRead | void = hostStore.get(hostId);
+    let host: infra.HostResourceRead | void = hostStore.get(resourceId);
     if (host) {
       try {
-        host = hostStore.put(hostId, { ...host, ...body } as HostMock);
-        const instanceMatchList = instanceStore.list({ hostId });
+        host = hostStore.put(resourceId, { ...host, ...body } as HostMock);
+        const instanceMatchList = instanceStore.list({ hostId: resourceId });
         const instance =
           instanceMatchList.length > 0 ? instanceMatchList[0] : undefined;
         if (instance && host) {
           instanceStore.put(instance.instanceID!, {
             ...instance,
-            host: host as infra.HostRead,
+            host: host as infra.HostResourceRead,
           });
         }
       } catch {
@@ -508,39 +489,37 @@ export const handlers = [
       return await processError();
     }
 
-    return await res(
-      ctx.status(201),
-      ctx.json<infra.PutV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse>(
-        host,
-      ),
+    return res(
+      ctx.status(200),
+      ctx.json<infra.HostServiceUpdateHostApiResponse>(host),
     );
   }),
   rest.post(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
-    const { body } =
-      await req.json<infra.PostV1ProjectsByProjectNameComputeHostsApiArg>();
-    const host = hostStore.post(body as HostMock);
+    const { hostResource } =
+      await req.json<infra.HostServiceCreateHostApiArg>();
+    const host = hostStore.post(hostResource as HostMock);
     if (!host) throw new Error("infra.Host POST was unsuccessful");
-    return await res(
-      ctx.status(201),
-      ctx.json<infra.PostV1ProjectsByProjectNameComputeHostsApiResponse>(host),
+    return res(
+      ctx.status(200),
+      ctx.json<infra.HostServiceCreateHostApiResponse>(host),
     );
   }),
-  rest.patch(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
-    const { hostId } =
-      req.params as infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiArg;
-    const hostPatchUpdate = await req.json<infra.Host>();
+  rest.patch(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } =
+      req.params as unknown as infra.HostServiceUpdateHostApiArg;
+    const hostPatchUpdate = await req.json<infra.HostResourceWrite>();
 
-    const host = hostStore.get(hostId);
+    const host = hostStore.get(resourceId);
     if (host) {
       const patchedHost = { ...host, ...hostPatchUpdate } as HostMock;
-      hostStore.put(hostId, patchedHost);
+      hostStore.put(resourceId, patchedHost);
       if (host.instance?.instanceID) {
         const instance = instanceStore.get(host.instance.instanceID);
 
         if (instance && instance.instanceID) {
           instanceStore.put(instance.instanceID, {
             ...instance,
-            // instance is only defined upto first-level
+            // instance is only defined up to first-level
             host: { ...host, site: hostPatchUpdate.site, instance: undefined },
           });
         }
@@ -548,34 +527,29 @@ export const handlers = [
 
       return res(
         ctx.status(200),
-        ctx.json<infra.PatchV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse>(
-          host,
-        ),
+        ctx.json<infra.HostServiceUpdateHostApiResponse>(host),
       );
     }
 
     return res(
       ctx.status(500),
       ctx.json({
-        detail: `response has an error: cannot update host to ${hostId}`,
+        detail: `response has an error: cannot update host to ${resourceId}`,
         status: 500,
       }),
     );
   }),
-  rest.get(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
-    const { hostId } =
-      req.params as infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiArg;
-    const host = hostStore.get(hostId);
+  rest.get(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } = req.params as infra.HostServiceGetHostApiArg;
+    const host = hostStore.get(resourceId);
     if (host) {
-      return await res(
+      return res(
         ctx.status(200),
-        ctx.json<infra.GetV1ProjectsByProjectNameComputeHostsAndHostIdApiResponse>(
-          host,
-        ),
+        ctx.json<infra.HostServiceGetHostApiResponse>(host),
       );
     }
 
-    return await res(
+    return res(
       ctx.status(404),
       ctx.json({
         detail: "rpc error: code = NotFound desc = ent: hosts not found",
@@ -587,12 +561,12 @@ export const handlers = [
     `${baseURL}/compute/hosts/:hostId/invalidate`,
     async (req, res, ctx) => {
       const { hostId } = req.params as { hostId: string };
-      const body = await req.json<infra.HostOperationWithNote>();
+      const body = await req.json();
       const note = body.note;
       const deauthResult = hostStore.deauthorizeHost(hostId, true, note);
 
       if (!deauthResult) {
-        return await res(ctx.status(404));
+        return res(ctx.status(404));
       }
 
       const instances = instanceStore.list({ hostId });
@@ -608,14 +582,14 @@ export const handlers = [
     },
   ),
   rest.delete(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
-    const { hostId } =
-      req.params as unknown as infra.DeleteV1ProjectsByProjectNameComputeHostsAndHostIdApiArg;
-    const host = hostStore.delete(hostId);
+    const { resourceId } =
+      req.params as unknown as infra.HostServiceDeleteHostApiArg;
+    const host = hostStore.delete(resourceId);
     if (host) {
-      return await res(ctx.status(200));
+      return res(ctx.status(200));
     }
 
-    return await res(
+    return res(
       ctx.status(404),
       ctx.json({
         detail: "rpc error: code = NotFound desc = ent: hosts not found",
@@ -627,17 +601,17 @@ export const handlers = [
   //Register related
   rest.post(`${baseURL}/compute/hosts/register`, async (req, res, ctx) => {
     const hostRegisterInfo =
-      (await req.json<infra.PostV1ProjectsByProjectNameComputeHostsRegisterApiArg>()) as infra.HostRegisterInfo;
+      (await req.json<infra.HostServiceRegisterHostApiArg>()) as infra.HostRegister;
     hostStore.registerHost({
       ...hostRegisterInfo,
       name: hostRegisterInfo.name ?? "default",
       timestamps: { createdAt: new Date().toISOString() },
     });
 
-    return await res(
-      ctx.status(hostRegisterInfo.name === "fail" ? 500 : 201),
+    return res(
+      ctx.status(hostRegisterInfo.name === "fail" ? 500 : 200),
       ctx.json<
-        infra.PostV1ProjectsByProjectNameComputeHostsRegisterApiResponse & {
+        infra.HostServiceRegisterHostApiResponse & {
           message?: string;
         }
       >({
@@ -651,22 +625,22 @@ export const handlers = [
   rest.patch(
     `${baseURL}/compute/hosts/:hostId/register`,
     async (req, res, ctx) => {
-      const { hostId } =
-        req.params as unknown as infra.PatchV1ProjectsByProjectNameComputeHostsAndHostIdRegisterApiArg;
+      const { resourceId } =
+        req.params as unknown as infra.HostServiceRegisterUpdateHostApiArg;
 
-      const result = hostStore.get(hostId);
+      const result = hostStore.get(resourceId);
       const updatedResult: HostMock = {
         ...result,
         name: result?.name ?? "default",
         instance: {
           ...(result?.instance ?? {}),
-          desiredState: "INSTANCE_STATE_UNSPECIFIED",
+          desiredState: "INSTANCE_STATE_RUNNING",
         },
       };
 
-      hostStore.put(hostId, updatedResult);
+      hostStore.put(resourceId, updatedResult);
 
-      return await res(ctx.status(200));
+      return res(ctx.status(200));
     },
   ),
 
@@ -687,9 +661,9 @@ export const handlers = [
       ) as enhancedInfraSlice.InstanceReadModified[];
     }
 
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeInstancesApiResponse>({
+      ctx.json<infra.InstanceServiceListInstancesApiResponse>({
         hasNext: false,
         instances,
         totalElements: instances.length,
@@ -698,7 +672,7 @@ export const handlers = [
     );
   }),
   rest.post(`${baseURL}/compute/instances`, async (req, res, ctx) => {
-    const body = req.body as infra.InstanceWrite;
+    const body = req.body as infra.InstanceResourceWrite;
 
     const { name, kind, hostID, osID, securityFeature } = body;
 
@@ -707,7 +681,7 @@ export const handlers = [
       const os = osResourceStore.get(osID);
 
       if (host && os) {
-        const newInstance: infra.InstanceRead = {
+        const newInstance: infra.InstanceResourceRead = {
           instanceID: (Math.random() + 1).toString(36).substring(7),
           kind,
           name,
@@ -721,16 +695,14 @@ export const handlers = [
 
         instanceStore.post(newInstance);
 
-        return await res(
-          ctx.status(201),
-          ctx.json<infra.PostV1ProjectsByProjectNameComputeInstancesApiResponse>(
-            newInstance,
-          ),
+        return res(
+          ctx.status(200),
+          ctx.json<infra.InstanceServiceCreateInstanceApiResponse>(newInstance),
         );
       }
     }
 
-    return await res(
+    return res(
       ctx.status(404),
       ctx.json({ data: "infra.Host/OS not found!", status: "404" }),
     );
@@ -738,26 +710,21 @@ export const handlers = [
   rest.delete(
     `${baseURL}/compute/instances/:instanceId`,
     async (req, res, ctx) => {
-      const { instanceId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameComputeInstancesAndInstanceIdApiArg;
-      const deleteResult = instanceStore.delete(instanceId);
+      const { resourceId } =
+        req.params as infra.InstanceServiceDeleteInstanceApiArg;
+      const deleteResult = instanceStore.delete(resourceId);
 
-      return await res(
-        ctx.status(deleteResult ? 200 : 404),
-        ctx.json(undefined),
-      );
+      return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),
 
   // workload
   rest.get(`${baseURL}/workloads/:workloadId`, async (req, res, ctx) => {
-    const { workloadId } =
-      req.params as infra.GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiArg;
-    const workload = workloadStore.get(workloadId);
+    const { resourceId } = req.params as infra.WorkloadServiceGetWorkloadApiArg;
+    const workload = workloadStore.get(resourceId);
 
     if (!workload) {
-      // TODO: create a `WorkloadStore`
-      return await res(
+      return res(
         ctx.status(400),
         ctx.json({
           detail:
@@ -767,11 +734,9 @@ export const handlers = [
       );
     }
 
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeWorkloadsAndWorkloadIdApiResponse>(
-        workload,
-      ),
+      ctx.json<infra.WorkloadServiceGetWorkloadApiResponse>(workload),
     );
   }),
 
@@ -813,18 +778,18 @@ export const handlers = [
       );
     }
 
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeSchedulesApiResponse>({
+      ctx.json<infra.ScheduleServiceListSchedulesApiResponse>({
         hasNext: false,
-        SingleSchedules: schedulesList,
-        RepeatedSchedules: repeatedScheduleList,
+        singleSchedules: schedulesList,
+        repeatedSchedules: repeatedScheduleList,
         totalElements: schedulesList.length + repeatedScheduleList.length,
       }),
     );
   }),
   rest.post(`${baseURL}/schedules/single`, async (req, res, ctx) => {
-    const singleSchedule = req.body as infra.SingleScheduleWrite2;
+    const singleSchedule = req.body as infra.SingleScheduleResourceWrite;
     const result = singleScheduleStore.post({
       ...singleSchedule,
       targetHost: singleSchedule.targetHostId
@@ -838,18 +803,16 @@ export const handlers = [
         : undefined,
     });
     if (result) {
-      return await res(
+      return res(
         ctx.status(200),
-        ctx.json<infra.PostV1ProjectsByProjectNameSchedulesSingleApiResponse>(
-          result,
-        ),
+        ctx.json<infra.ScheduleServiceCreateSingleScheduleApiResponse>(result),
       );
     }
-    return await res(ctx.status(404));
+    return res(ctx.status(404));
   }),
 
   rest.post(`${baseURL}/schedules/repeated`, async (req, res, ctx) => {
-    const repeatedSchedule = req.body as infra.SingleScheduleWrite;
+    const repeatedSchedule = req.body as infra.RepeatedScheduleResourceWrite;
     const result = repeatedScheduleStore.post({
       ...repeatedSchedule,
       targetHost: repeatedSchedule.targetHostId
@@ -863,32 +826,32 @@ export const handlers = [
         : undefined,
     });
     if (result) {
-      return await res(
+      return res(
         ctx.status(200),
-        ctx.json<infra.PostV1ProjectsByProjectNameSchedulesRepeatedApiResponse>(
+        ctx.json<infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
           result,
         ),
       );
     }
-    return await res(ctx.status(404));
+    return res(ctx.status(404));
   }),
 
   rest.put(
     `${baseURL}/schedules/single/:singleScheduleId`,
     async (req, res, ctx) => {
-      const { singleScheduleId } =
-        req.params as unknown as infra.PatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg;
-      const singleSchedule = req.body as infra.SingleScheduleWrite2;
-      const result = singleScheduleStore.put(singleScheduleId, {
+      const { resourceId } =
+        req.params as unknown as infra.ScheduleServicePatchSingleScheduleApiArg;
+      const singleSchedule = req.body as infra.SingleScheduleResourceWrite;
+      const result = singleScheduleStore.put(resourceId, {
         ...singleSchedule,
         targetHost: singleSchedule.targetHostId
           ? hostStore.get(singleSchedule.targetHostId)
           : undefined,
       });
       if (result) {
-        return await res(
+        return res(
           ctx.status(200),
-          ctx.json<infra.PatchV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiResponse>(
+          ctx.json<infra.ScheduleServiceCreateSingleScheduleApiResponse>(
             result,
           ),
         );
@@ -899,19 +862,19 @@ export const handlers = [
   rest.put(
     `${baseURL}/schedules/repeated/:repeatedScheduleId`,
     async (req, res, ctx) => {
-      const { repeatedScheduleId } =
-        req.params as unknown as infra.PatchV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg;
-      const repeatedSchedule = req.body as infra.SingleScheduleWrite;
-      const result = repeatedScheduleStore.put(repeatedScheduleId, {
+      const { resourceId } =
+        req.params as unknown as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
+      const repeatedSchedule = req.body as infra.RepeatedScheduleResourceWrite;
+      const result = repeatedScheduleStore.put(resourceId, {
         ...repeatedSchedule,
         targetHost: repeatedSchedule.targetHostId
           ? hostStore.get(repeatedSchedule.targetHostId)
           : undefined,
       });
       if (result) {
-        return await res(
+        return res(
           ctx.status(200),
-          ctx.json<infra.PostV1ProjectsByProjectNameSchedulesRepeatedApiResponse>(
+          ctx.json<infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
             result,
           ),
         );
@@ -923,18 +886,18 @@ export const handlers = [
   rest.delete(
     `${baseURL}/schedules/single/:singleScheduleId`,
     async (req, res, ctx) => {
-      const { singleScheduleId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameSchedulesSingleAndSingleScheduleIdApiArg;
-      const result = singleScheduleStore.delete(singleScheduleId);
+      const { resourceId } =
+        req.params as infra.ScheduleServiceDeleteSingleScheduleApiArg;
+      const result = singleScheduleStore.delete(resourceId);
       return res(ctx.status(result ? 200 : 404), ctx.json(undefined));
     },
   ),
   rest.delete(
     `${baseURL}/schedules/repeated/:repeatedScheduleId`,
     async (req, res, ctx) => {
-      const { repeatedScheduleId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameSchedulesRepeatedAndRepeatedScheduleIdApiArg;
-      const result = repeatedScheduleStore.delete(repeatedScheduleId);
+      const { resourceId } =
+        req.params as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
+      const result = repeatedScheduleStore.delete(resourceId);
       return res(ctx.status(result ? 200 : 404), ctx.json(undefined));
     },
   ),
@@ -944,7 +907,7 @@ export const handlers = [
     const list = osResourceStore.list();
     return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameComputeOsApiResponse>({
+      ctx.json<infra.OperatingSystemServiceListOperatingSystemsApiResponse>({
         hasNext: false,
         OperatingSystemResources: list,
         totalElements: list.length,
@@ -955,11 +918,11 @@ export const handlers = [
   // telemetry
   rest.get(`${baseURL}/telemetry/groups/metrics`, async (req, res, ctx) => {
     const metricsgroups = telemetryMetricsStore.list();
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsApiResponse>(
+      ctx.json<infra.TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse>(
         {
-          TelemetryMetricsGroups: metricsgroups,
+          telemetryMetricsGroups: metricsgroups,
           hasNext: false,
           totalElements: metricsgroups.length,
         },
@@ -968,26 +931,28 @@ export const handlers = [
   }),
   rest.get(`${baseURL}/telemetry/groups/logs`, async (req, res, ctx) => {
     const loggroups = telemetryLogsStore.list();
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryLoggroupsApiResponse>({
-        TelemetryLogsGroups: loggroups,
-        hasNext: false,
-        totalElements: loggroups.length,
-      }),
+      ctx.json<infra.TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse>(
+        {
+          telemetryLogsGroups: loggroups,
+          hasNext: false,
+          totalElements: loggroups.length,
+        },
+      ),
     );
   }),
 
   rest.get(
     `${baseURL}/telemetry/groups/logs/:telemetryLogsGroupId`,
     async (req, res, ctx) => {
-      const { telemetryLogsGroupId } =
-        req.params as infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiArg;
-      const loggroups = telemetryLogsStore.get(telemetryLogsGroupId);
+      const { resourceId } =
+        req.params as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg;
+      const loggroups = telemetryLogsStore.get(resourceId);
       if (loggroups) {
-        return await res(
+        return res(
           ctx.status(200),
-          ctx.json<infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdApiResponse>(
+          ctx.json<infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse>(
             loggroups,
           ),
         );
@@ -996,7 +961,7 @@ export const handlers = [
   ),
   rest.get(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
     const url = new URL(req.url);
-    let metricProfiles: infra.TelemetryMetricsProfileRead[] = [];
+    let metricProfiles: infra.TelemetryMetricsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
       const regionId = url.searchParams.get("regionId");
@@ -1010,11 +975,11 @@ export const handlers = [
         .filter((profiles) => profiles.targetSite === siteId);
     }
 
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse>(
+      ctx.json<infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse>(
         {
-          TelemetryMetricsProfiles: metricProfiles,
+          telemetryMetricsProfiles: metricProfiles,
           hasNext: false,
           totalElements: metricProfiles.length,
         },
@@ -1024,7 +989,7 @@ export const handlers = [
 
   rest.get(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
     const url = new URL(req.url);
-    let logProfiles: infra.TelemetryLogsProfileRead[] = [];
+    let logProfiles: infra.TelemetryLogsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
       const regionId = url.searchParams.get("regionId");
@@ -1037,11 +1002,11 @@ export const handlers = [
         .list()
         .filter((profiles) => profiles.targetSite === siteId);
     }
-    return await res(
+    return res(
       ctx.status(200),
-      ctx.json<infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse>(
+      ctx.json<infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse>(
         {
-          TelemetryLogsProfiles: logProfiles,
+          telemetryLogsProfiles: logProfiles,
           hasNext: false,
           totalElements: logProfiles.length,
         },
@@ -1050,24 +1015,24 @@ export const handlers = [
   }),
 
   rest.post(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryMetricsProfile>();
+    const body = await req.json<infra.TelemetryMetricsProfileResource>();
     const profileRead = telemetryMetricsProfilesStore.create(body);
-    if (!profileRead) return await res(ctx.status(500));
-    return await res(
-      ctx.status(201),
-      ctx.json<infra.PostV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesApiResponse>(
+    if (!profileRead) return res(ctx.status(500));
+    return res(
+      ctx.status(200),
+      ctx.json<infra.TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse>(
         profileRead,
       ),
     );
   }),
   rest.post(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryLogsProfile>();
+    const body = await req.json<infra.TelemetryLogsProfileResource>();
     //const p = telemetrylogsProfilesStore.post(body);
     const profileRead = telemetrylogsProfilesStore.create(body);
     if (!profileRead) return await res(ctx.status(500));
-    return await res(
+    return res(
       ctx.status(201),
-      ctx.json<infra.PostV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesApiResponse>(
+      ctx.json<infra.TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse>(
         profileRead,
       ),
     );
@@ -1076,17 +1041,14 @@ export const handlers = [
   rest.put(
     `${baseURL}/telemetry/profiles/metrics/:telemetryMetricsProfileId`,
     async (req, res, ctx) => {
-      const { telemetryMetricsProfileId } =
-        req.params as infra.GetV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg;
-      const body = await req.json<infra.TelemetryMetricsProfile>();
-      const p = telemetryMetricsProfilesStore.put(
-        telemetryMetricsProfileId,
-        body,
-      );
+      const { resourceId } =
+        req.params as infra.TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg;
+      const body = await req.json<infra.TelemetryMetricsProfileResource>();
+      const p = telemetryMetricsProfilesStore.put(resourceId, body);
       if (!p) return await res(ctx.status(500));
-      return await res(
+      return res(
         ctx.status(200),
-        ctx.json<infra.PutV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiResponse>(
+        ctx.json<infra.TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse>(
           p,
         ),
       );
@@ -1094,16 +1056,16 @@ export const handlers = [
   ),
 
   rest.put(
-    `${baseURL}/telemetry/profiles/logs/:telemetryLogsProfileId`,
+    `${baseURL}/telemetry/profiles/logs/:resourceId`,
     async (req, res, ctx) => {
-      const { telemetryLogsProfileId } =
-        req.params as infra.GetV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg;
-      const body = await req.json<infra.TelemetryLogsProfile>();
-      const p = telemetrylogsProfilesStore.put(telemetryLogsProfileId, body);
-      if (!p) return await res(ctx.status(500));
-      return await res(
+      const { resourceId } =
+        req.params as infra.TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg;
+      const body = await req.json<infra.TelemetryLogsProfileResource>();
+      const p = telemetrylogsProfilesStore.put(resourceId, body);
+      if (!p) return res(ctx.status(500));
+      return res(
         ctx.status(200),
-        ctx.json<infra.PutV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiResponse>(
+        ctx.json<infra.TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse>(
           p,
         ),
       );
@@ -1111,32 +1073,22 @@ export const handlers = [
   ),
 
   rest.delete(
-    `${baseURL}/telemetry/profiles/metrics/:telemetryMetricsProfileId`,
+    `${baseURL}/telemetry/profiles/metrics/:resourceId`,
     async (req, res, ctx) => {
-      const { telemetryMetricsProfileId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameTelemetryMetricgroupsAndTelemetryMetricsGroupIdMetricprofilesTelemetryMetricsProfileIdApiArg;
-      const deleteResult = telemetryMetricsProfilesStore.delete(
-        telemetryMetricsProfileId,
-      );
-      return await res(
-        ctx.status(deleteResult ? 200 : 404),
-        ctx.json(undefined),
-      );
+      const { resourceId } =
+        req.params as infra.TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg;
+      const deleteResult = telemetryMetricsProfilesStore.delete(resourceId);
+      return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),
 
   rest.delete(
-    `${baseURL}/telemetry/profiles/logs/:telemetryLogsProfileId`,
+    `${baseURL}/telemetry/profiles/logs/:resourceId`,
     async (req, res, ctx) => {
-      const { telemetryLogsProfileId } =
-        req.params as infra.DeleteV1ProjectsByProjectNameTelemetryLoggroupsAndTelemetryLogsGroupIdLogprofilesTelemetryLogsProfileIdApiArg;
-      const deleteResult = telemetrylogsProfilesStore.delete(
-        telemetryLogsProfileId,
-      );
-      return await res(
-        ctx.status(deleteResult ? 200 : 404),
-        ctx.json(undefined),
-      );
+      const { resourceId } =
+        req.params as infra.TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg;
+      const deleteResult = telemetrylogsProfilesStore.delete(resourceId);
+      return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),
 
@@ -1144,9 +1096,9 @@ export const handlers = [
     const filter = req.url.searchParams.get("filter");
 
     if (filter?.match(/name="infra_onboarding"/)) {
-      return await res(
+      return res(
         ctx.status(200),
-        ctx.json<infra.GetV1ProjectsByProjectNameProvidersApiResponse>({
+        ctx.json<infra.ProviderServiceListProvidersApiResponse>({
           hasNext: false,
           providers: [
             {
@@ -1157,7 +1109,7 @@ export const handlers = [
               name: "infra_onboarding",
               providerID: "provider-3148c6c1",
               providerKind: "PROVIDER_KIND_BAREMETAL",
-              providerVendor: "PROVIDER_VENDOR_UNSPECIFIED",
+              providerVendor: "PROVIDER_VENDOR_LENOVO_LOCA",
               config: `{"defaultOs":"${osUbuntuId}"}`,
             },
           ],
@@ -1166,6 +1118,6 @@ export const handlers = [
       );
     }
 
-    return await res(ctx.status(502));
+    return res(ctx.status(502));
   }),
 ];

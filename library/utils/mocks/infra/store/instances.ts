@@ -4,7 +4,6 @@
  */
 
 import { enhancedInfraSlice, infra } from "@orch-ui/apis";
-import { clusterFiveName } from "../../cluster-orch/data/clusterOrchIds";
 import {
   instanceFiveId,
   instanceFourId,
@@ -89,7 +88,7 @@ export const instanceTwo: enhancedInfraSlice.InstanceReadModified = {
       workload: workloadTwo,
     },
     {
-      kind: "WORKLOAD_MEMBER_KIND_UNSPECIFIED",
+      kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
       resourceId: workloadUnspecifiedOneId,
       workloadMemberId: workloadUnspecifiedOneId,
       workload: workloadUnspecifiedOne,
@@ -160,8 +159,8 @@ export const instanceFive: enhancedInfraSlice.InstanceReadModified = {
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
-      resourceId: clusterFiveName,
-      workloadMemberId: clusterFiveName,
+      resourceId: "minimart-dayton", //TODO: debug why import of clusterFiveName throws error
+      workloadMemberId: "minimart-dayton",
       workload: workloadFive,
     },
   ],
@@ -195,7 +194,7 @@ export const instanceSix: enhancedInfraSlice.InstanceReadModified = {
       workload: workloadSix,
     },
     {
-      kind: "WORKLOAD_MEMBER_KIND_UNSPECIFIED",
+      kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
       resourceId: workloadUnspecifiedOneId,
       workloadMemberId: workloadUnspecifiedOneId,
       workload: workloadUnspecifiedOne,
@@ -237,7 +236,7 @@ export const provisionedInstanceThree: enhancedInfraSlice.InstanceReadModified =
     instanceStatusIndicator: "STATUS_INDICATION_ERROR",
     instanceStatus: "Error message",
     instanceStatusTimestamp: 1717761389,
-    kind: "INSTANCE_KIND_UNSPECIFIED",
+    kind: "INSTANCE_KIND_METAL",
     desiredState: "INSTANCE_STATE_RUNNING",
     os: osUbuntu,
   };
@@ -249,18 +248,18 @@ export const instanceOnboardedOne: enhancedInfraSlice.InstanceReadModified = {
   instanceStatusIndicator: "STATUS_INDICATION_ERROR",
   instanceStatus: "Error message",
   instanceStatusTimestamp: 1717761389,
-  kind: "INSTANCE_KIND_UNSPECIFIED",
+  kind: "INSTANCE_KIND_METAL",
   os: osUbuntu,
 };
 
 export const instanceUnspecified: enhancedInfraSlice.InstanceReadModified = {
-  currentState: "INSTANCE_STATE_UNSPECIFIED",
+  currentState: "INSTANCE_STATE_UNTRUSTED",
   instanceID: "inst-ebfe2da9",
   resourceId: "inst-ebfe2da9",
   kind: "INSTANCE_KIND_METAL",
   name: "",
   os: osUbuntu,
-  instanceStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
+  instanceStatusIndicator: "STATUS_INDICATION_IDLE",
   instanceStatus: "Unknown",
   instanceStatusTimestamp: 1717761389,
 };
@@ -286,7 +285,7 @@ export const registeredInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   ],
 };
 
-export const mockSsh: infra.LocalAccountRead = {
+export const mockSsh: infra.LocalAccountResourceRead = {
   resourceId: "ssh-abcd81",
   username: "all-groups-example-user",
   sshKey:
@@ -303,7 +302,7 @@ export const generateSshMocks = (size = 10, offset = 0, mock = mockSsh) =>
 export class InstanceStore extends BaseStore<
   "instanceID",
   enhancedInfraSlice.InstanceReadModified,
-  infra.Instance
+  infra.InstanceResourceWrite
 > {
   instanceIndex = 0;
 
@@ -348,7 +347,7 @@ export class InstanceStore extends BaseStore<
     });
   }
 
-  assignHostToInstance(id: string, host: infra.HostRead) {
+  assignHostToInstance(id: string, host: infra.HostResourceRead) {
     const instance = this.get(id);
     if (instance) {
       this.put(id, { ...instance, host });
@@ -356,34 +355,31 @@ export class InstanceStore extends BaseStore<
   }
 
   convert(
-    body: infra.Instance,
+    body: infra.InstanceResourceWrite,
     id?: string,
-    host?: infra.HostRead,
+    host?: infra.HostResourceRead,
     os?: infra.OperatingSystemResourceRead,
-    localAccount?: infra.LocalAccountRead,
+    localAccount?: infra.LocalAccountResourceRead,
   ): enhancedInfraSlice.InstanceReadModified {
     const currentTime = +new Date();
     return {
       ...body,
       resourceId: id,
-      instanceStatusIndicator:
-        body.instanceStatusIndicator ?? "STATUS_INDICATION_IDLE",
+      instanceStatusIndicator: "STATUS_INDICATION_IDLE",
       instanceStatus: "Running",
       instanceStatusTimestamp: currentTime,
-      updateStatusIndicator:
-        body.updateStatusIndicator ?? "STATUS_INDICATION_ERROR",
+      updateStatusIndicator: "STATUS_INDICATION_ERROR",
       updateStatus: "Failed",
       updateStatusTimestamp: currentTime,
-      provisioningStatusIndicator:
-        body.provisioningStatusIndicator ?? "STATUS_INDICATION_IN_PROGRESS",
+      provisioningStatusIndicator: "STATUS_INDICATION_IN_PROGRESS",
       provisioningStatus: "Provisioning In Progress",
       provisioningStatusTimestamp: currentTime,
-      host: host ?? (body.host as infra.HostRead),
+      host: host ?? (body.host as infra.HostResourceRead),
       os: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
       currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
       desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
-      localAccount:
-        localAccount ?? (body.localAccount as infra.LocalAccountRead),
+      localaccount:
+        localAccount ?? (body.localaccount as infra.LocalAccountResourceRead),
       timestamps: {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -392,10 +388,10 @@ export class InstanceStore extends BaseStore<
   }
 
   post(
-    body: infra.Instance,
-    host?: infra.HostRead,
+    body: infra.InstanceResourceWrite,
+    host?: infra.HostResourceRead,
     os?: infra.OperatingSystemResourceRead,
-    localAccount?: infra.LocalAccountRead,
+    localAccount?: infra.LocalAccountResourceRead,
   ) {
     const data = this.convert(
       body,

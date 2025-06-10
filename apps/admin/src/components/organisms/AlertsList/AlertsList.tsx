@@ -86,6 +86,7 @@ const AlertsList = () => {
       accessor: "startsAt",
     },
   ];
+
   return (
     <div {...cy} className="alert-definitions-list">
       <OrchTable
