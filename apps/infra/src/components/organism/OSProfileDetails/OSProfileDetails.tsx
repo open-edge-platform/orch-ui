@@ -24,8 +24,7 @@ export const OSProfileSecurityFeatures: {
 
 interface OSProfileDetailsProps {
   os: infra.OperatingSystemResourceRead;
-  updateSources?: string[] | undefined;
-  kernelCommand?: string | undefined;
+  updatePolicy?: infra.OsUpdatePolicyRead | undefined;
 }
 /**
  * Represents a OS package with its name, version, and distribution.
@@ -83,11 +82,7 @@ const renderPackage = (pkg: Package) => {
   );
 };
 
-const OSProfileDetails = ({
-  os,
-  updateSources,
-  kernelCommand,
-}: OSProfileDetailsProps) => {
+const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
   const cy = { "data-cy": dataCy };
   const osProfileSecurity =
     os.securityFeature && OSProfileSecurityFeatures[os.securityFeature];
@@ -111,11 +106,14 @@ const OSProfileDetails = ({
       <div className="os-details-advanced-settings">Advanced Settings</div>
       <OsProfileDetailField
         label="Update Sources"
-        value={updateSources?.join()}
+        value={updatePolicy?.updateSources?.join()}
       />
       <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />
-      <OsProfileDetailField label="Kernel Command" value={kernelCommand} />
+      <OsProfileDetailField
+        label="Kernel Command"
+        value={updatePolicy?.kernelCommand}
+      />
 
       {installedPackages.length ? (
         <>
