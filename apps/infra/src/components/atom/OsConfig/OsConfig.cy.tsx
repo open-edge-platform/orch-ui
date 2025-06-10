@@ -14,7 +14,6 @@ describe("<OsConfig/>", () => {
     resourceId: "currentOsId",
     name: "currentOsName",
     sha256: "currentOsSha256",
-    updateSources: [],
     osType: "OS_TYPE_IMMUTABLE",
   };
 
@@ -28,14 +27,15 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
-          desiredOs: {
-            resourceId: "desiredOsId",
-            name: "desiredOsName",
-            sha256: "desiredOsSha256",
-            updateSources: [],
-            osType: "OS_TYPE_IMMUTABLE",
-          },
+          os: os,
+          // currentOs: os,
+          // desiredOs: {
+          //   resourceId: "desiredOsId",
+          //   name: "desiredOsName",
+          //   sha256: "desiredOsSha256",
+          //   // updateSources: [],
+          //   osType: "OS_TYPE_IMMUTABLE",
+          // },
         }}
       />,
     );
@@ -46,8 +46,9 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
-          desiredOs: os,
+          os: os,
+          // currentOs: os,
+          // desiredOs: os,
         }}
       />,
     );
@@ -58,7 +59,8 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
+          os: os,
+          // currentOs: os,
         }}
       />,
     );

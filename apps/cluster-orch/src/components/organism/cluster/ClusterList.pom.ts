@@ -135,7 +135,7 @@ const hostEndpoints: CyApiDetails<
             os: {
               name: "linux",
               sha256: "sha",
-              updateSources: [],
+              // updateSources: [],
             },
           },
         },

@@ -47,7 +47,7 @@ describe("HostDetails", () => {
       pom.el.infraHostDetailsHeader.contains(mockHost.name);
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
-      pom.el.osProfiles.should("have.text", mockHost.instance?.currentOs?.name);
+      pom.el.osProfiles.should("have.text", mockHost.instance?.os?.name);
       pom.el.site.should("have.text", "Restaurant 02");
       pom.el.trustedCompute.should("contain.text", "Not compatible");
       pom.el.provider.should("have.text", mockHost.provider?.name);

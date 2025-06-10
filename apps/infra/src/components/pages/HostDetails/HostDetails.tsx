@@ -394,14 +394,12 @@ const HostDetails: React.FC = () => {
             </tr>
             <tr>
               <td>OS</td>
-              <td data-cy="osProfiles">
-                {host?.instance?.currentOs?.name ?? "-"}
-              </td>
+              <td data-cy="osProfiles">{host?.instance?.os?.name ?? "-"}</td>
             </tr>
             <tr>
               <td>Updates</td>
               <td data-cy="desiredOsProfiles">
-                {host?.instance?.desiredOs?.name ?? "-"}
+                {host?.instance?.osUpdateAvailable ?? "-"}
               </td>
             </tr>
             {host.site && (

@@ -56,7 +56,7 @@ export const instanceOne: enhancedInfraSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   currentState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
-  currentOs: osUbuntu,
+  // currentOs: osUbuntu,
   securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   workloadMembers: [
     {
@@ -78,8 +78,8 @@ export const instanceTwo: enhancedInfraSlice.InstanceReadModified = {
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: osTb,
-  currentOs: osTb,
-  desiredOs: osTbUpdate,
+  // currentOs: osTb,
+  // desiredOs: osTbUpdate,
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
@@ -376,8 +376,8 @@ export class InstanceStore extends BaseStore<
       provisioningStatusTimestamp: currentTime,
       host: host ?? (body.host as infra.HostResourceRead),
       os: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
-      currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
-      desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
+      // currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
+      // desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
       localaccount:
         localAccount ?? (body.localaccount as infra.LocalAccountResourceRead),
       timestamps: {

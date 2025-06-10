@@ -26,7 +26,7 @@ export const OsConfig = ({ instance, iconOnly = false }: OsConfigProps) => {
           title="OS update available"
         />
       )}
-      {instance?.currentOs?.name ?? <em>(Not set)</em>}
+      {instance?.os?.name ?? <em>(Not set)</em>}
       {showUpdateAvailable && iconOnly === false && (
         <label
           className="os-update"
