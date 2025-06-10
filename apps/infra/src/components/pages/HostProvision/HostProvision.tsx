@@ -66,7 +66,9 @@ const HostProvision = () => {
   const handleCancel = () => {
     if (autoProvision) {
       setShowContinueDialog(true);
-    } else goToListPage();
+    } else {
+      goToListPage();
+    }
   };
 
   const handlePrev = () => {
