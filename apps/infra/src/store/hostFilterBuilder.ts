@@ -4,12 +4,6 @@
  */
 
 import { eim } from "@orch-ui/apis";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export const hostFilterBuilderSliceName = "hostFilterBuilder";
-export interface _FilterBuilderRootState {
-  [hostFilterBuilderSliceName]: HostFilterBuilderState;
-}
 
 export const detailedStatuses = [
   "hostStatusIndicator",
@@ -32,11 +26,14 @@ export enum AggregatedStatus {
   Unknown,
   Deauthorized,
 }
+
 export const buildStatusQuery = (
   detailedStatuses: string[],
   statusIndicator: eim.StatusIndicator,
 ) => {
-  return `${detailedStatuses.map((value) => `${value}=${statusIndicator}`).join(" OR ")}`;
+  return `${detailedStatuses
+    .map((value) => `${value}=${statusIndicator}`)
+    .join(" OR ")}`;
 };
 
 const getIndicator = (
@@ -48,26 +45,19 @@ export const lifeCycleStateQuery = new Map<LifeCycleState, string | undefined>([
     LifeCycleState.Healthy,
     "(currentState=HOST_STATE_ONBOARDED AND has(instance) AND instance.currentState=INSTANCE_STATE_RUNNING)",
   ],
-  [
-    LifeCycleState.Provisioned,
-    "(currentState=HOST_STATE_ONBOARDED AND has(instance))",
-  ],
-  [
-    LifeCycleState.Onboarded,
-    "(currentState=HOST_STATE_ONBOARDED AND NOT has(instance))",
-  ],
-
-  [
-    LifeCycleState.Registered,
-    "(currentState=HOST_STATE_REGISTERED OR currentState=HOST_STATE_UNSPECIFIED)",
-  ],
+  [LifeCycleState.Provisioned, "(currentState=HOST_STATE_ONBOARDED AND has(instance))"],
+  [LifeCycleState.Onboarded, "(currentState=HOST_STATE_ONBOARDED AND NOT has(instance))"],
+  [LifeCycleState.Registered, "(currentState=HOST_STATE_REGISTERED OR currentState=HOST_STATE_UNSPECIFIED)"],
   [LifeCycleState.All, undefined],
 ]);
 
 const aggregatedStatusQuery = new Map<AggregatedStatus, string>();
 aggregatedStatusQuery.set(
   AggregatedStatus.Ready,
-  `${buildStatusQuery(detailedStatuses, getIndicator("IDLE"))} OR ${buildStatusQuery(detailedStatuses, getIndicator("UNSPECIFIED"))}`,
+  `${buildStatusQuery(detailedStatuses, getIndicator("IDLE"))} OR ${buildStatusQuery(
+    detailedStatuses,
+    getIndicator("UNSPECIFIED"),
+  )}`,
 );
 aggregatedStatusQuery.set(
   AggregatedStatus.Error,
@@ -77,41 +67,8 @@ aggregatedStatusQuery.set(
   AggregatedStatus.InProgress,
   buildStatusQuery(detailedStatuses, getIndicator("IN_PROGRESS")),
 );
-aggregatedStatusQuery.set(
-  AggregatedStatus.Unknown,
-  "currentState=HOST_STATE_UNSPECIFIED",
-);
-aggregatedStatusQuery.set(
-  AggregatedStatus.Deauthorized,
-  "currentState=HOST_STATE_UNTRUSTED",
-);
-
-export interface HostFilterBuilderState {
-  lifeCycleState: LifeCycleState;
-  lifeCycleStateQuery?: string;
-  uuids?: string[];
-  uuidsQuery?: string;
-  hostIds?: string[];
-  hostIdsQuery?: string;
-  hasSiteIdQuery?: string;
-  siteId?: string;
-  siteIdQuery?: string;
-  hasWorkload?: boolean;
-  hasWorkloadQuery?: string;
-  workloadMemberId?: string;
-  workloadMemberIdQuery?: string;
-  searchTerm?: string;
-  searchTermQuery?: string;
-  statuses?: AggregatedStatus[];
-  statusesQuery?: string;
-  osProfiles?: string[];
-  osProfilesQuery?: string;
-  filter?: string; //The final result send over
-}
-
-const initialState: HostFilterBuilderState = {
-  lifeCycleState: LifeCycleState.Provisioned,
-};
+aggregatedStatusQuery.set(AggregatedStatus.Unknown, "currentState=HOST_STATE_UNSPECIFIED");
+aggregatedStatusQuery.set(AggregatedStatus.Deauthorized, "currentState=HOST_STATE_UNTRUSTED");
 
 export const searchableColumns = [
   "name",
@@ -126,184 +83,77 @@ export const searchableColumns = [
 export const buildColumnOrs = (column: string, values: string[]): string =>
   `(${values.map((value) => `${column}="${value}"`).join(" OR ")})`;
 
-export const _setSiteId = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string | undefined>,
-) => {
-  state.siteId = action.payload;
-  state.siteIdQuery = `site.resourceId="${action.payload}"`;
-  hostFilterBuilder.caseReducers.buildFilter(state);
-  return state;
-};
+export interface FilterParams {
+  lifeCycleState?: LifeCycleState;
+  searchTerm?: string;
+  statuses?: AggregatedStatus[];
+  osProfiles?: string[];
+  hasWorkload?: boolean;
+  workloadMemberId?: string;
+  siteId?: string;
+  uuids?: string[];
+  hostIds?: string[];
+}
 
-export const _setLifeCycleState = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<LifeCycleState>,
-) => {
-  state.lifeCycleState = action.payload;
-  hostFilterBuilder.caseReducers.buildFilter(state);
-  return state;
-};
-
-export const _setHasWorkload = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<boolean | undefined>,
-) => {
-  state.hasWorkload = action.payload;
-  state.hasWorkloadQuery = action.payload
-    ? "has(instance.workloadMembers)"
-    : "NOT has(instance.workloadMembers)";
-  hostFilterBuilder.caseReducers.buildFilter(state);
-  return state;
-};
-
-export const _setWorkloadMemberId = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string | undefined>,
-) => {
-  state.workloadMemberId = action.payload;
-  state.workloadMemberIdQuery = `workloadMembers="${action.payload}"`;
-  hostFilterBuilder.caseReducers.buildFilter(state);
-  return state;
-};
-
-export const _setSearchTerm = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string>,
-) => {
-  state.searchTerm = action.payload;
-  state.searchTermQuery = `(${searchableColumns
-    .map((value) => {
-      // Ignore search filter on `uuid` column if filters.uuids are set
-      if (value === "uuid" && state.uuidsQuery !== undefined) {
-        return;
-      }
-      // Ignore search filter on `resourceId` column if filters.hostIds are set
-      if (value === "resourceId" && state.hostIdsQuery !== undefined) {
-        return;
-      }
-      return `${value}="${action.payload}"`;
+function buildSearchTermQuery(
+  searchTerm: string,
+  uuids?: string[],
+  hostIds?: string[],
+): string {
+  return `(${searchableColumns
+    .map((col) => {
+      if (col === "uuid" && uuids && uuids.length > 0) return `(uuid="${searchTerm}")`;
+      if (col === "resourceId" && hostIds && hostIds.length > 0) return `(resourceId="${searchTerm}")`;
+      return `${col}="${searchTerm}"`;
     })
-    .filter((value) => value !== undefined)
+    .filter(Boolean)
     .join(" OR ")})`;
-  hostFilterBuilder.caseReducers.buildFilter(state);
-};
+}
 
-export const _setStatuses = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<AggregatedStatus[] | undefined>,
-) => {
-  state.statuses = action.payload;
-  if (state.statuses) {
-    state.statusesQuery = `(${state.statuses
-      .map((value) => aggregatedStatusQuery.get(value))
-      .join(" OR ")})`;
-  } else {
-    state.statusesQuery = undefined;
+export function buildFilterNew(params: FilterParams): string | undefined {
+  const filterParts: (string | undefined)[] = [];
+
+  if (params.lifeCycleState) {
+    filterParts.push(lifeCycleStateQuery.get(params.lifeCycleState));
   }
-  hostFilterBuilder.caseReducers.buildFilter(state);
-};
 
-export const _setFiltersByUuids = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string[] | undefined>,
-) => {
-  state.uuids = action.payload;
-  if (action.payload && action.payload.length > 0) {
-    state.uuidsQuery = buildColumnOrs("uuid", action.payload);
-  } else {
-    state.uuidsQuery = undefined;
+  if (params.searchTerm) {
+    filterParts.push(buildSearchTermQuery(params.searchTerm, params.uuids, params.hostIds));
   }
-  hostFilterBuilder.caseReducers.buildFilter(state);
-  return state;
-};
 
-export const _setFiltersByHostIds = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string[] | undefined>,
-) => {
-  state.hostIds = action.payload;
-  if (action.payload && action.payload.length > 0) {
-    state.hostIdsQuery = buildColumnOrs("resourceId", action.payload);
-  } else {
-    state.hostIdsQuery = undefined;
+  if (params.statuses && params.statuses.length > 0) {
+    const statusQueries = params.statuses
+      .map((status) => aggregatedStatusQuery.get(status))
+      .filter(Boolean);
+    if (statusQueries.length > 0) {
+      filterParts.push(`(${statusQueries.join(" OR ")})`);
+    }
   }
-  hostFilterBuilder.caseReducers.buildFilter(state);
-  return state;
-};
 
-export const _setOsProfiles = (
-  state: HostFilterBuilderState,
-  action: PayloadAction<string[] | undefined>,
-) => {
-  state.osProfiles = action.payload;
-  if (action.payload) {
-    state.osProfilesQuery = buildColumnOrs(
-      "instance.currentOs.profileName",
-      action.payload,
-    );
-  } else {
-    state.osProfilesQuery = undefined;
+  if (params.osProfiles && params.osProfiles.length > 0) {
+    filterParts.push(buildColumnOrs("instance.currentOs.profileName", params.osProfiles));
   }
-  hostFilterBuilder.caseReducers.buildFilter(state);
-};
 
-export const _buildFilter = (state: HostFilterBuilderState) => {
-  const filter: (string | undefined)[] = [];
-  filter.push(
-    state.lifeCycleState
-      ? lifeCycleStateQuery.get(state.lifeCycleState)
-      : undefined,
-  );
-  filter.push(state.searchTerm ? state.searchTermQuery : undefined);
-  filter.push(state.statuses ? state.statusesQuery : undefined);
-  filter.push(state.osProfiles ? state.osProfilesQuery : undefined);
-  filter.push(
-    state.hasWorkload !== undefined ? state.hasWorkloadQuery : undefined,
-  );
-  filter.push(state.workloadMemberId ? state.workloadMemberIdQuery : undefined);
-  filter.push(state.siteId ? state.siteIdQuery : undefined);
-  filter.push(
-    state.uuids && state.uuids.length > 0 ? state.uuidsQuery : undefined,
-  );
-  filter.push(
-    state.hostIds && state.hostIds.length > 0 ? state.hostIdsQuery : undefined,
-  );
-  const result = filter.filter((value) => value !== undefined).join(" AND ");
-  state.filter = result.length === 0 ? undefined : result;
-};
+  if (params.hasWorkload !== undefined) {
+    filterParts.push(params.hasWorkload ? "has(instance.workloadMembers)" : "NOT has(instance.workloadMembers)");
+  }
 
-export const hostFilterBuilder = createSlice({
-  name: hostFilterBuilderSliceName,
-  initialState,
-  reducers: {
-    setLifeCycleState: _setLifeCycleState,
-    setHasWorkload: _setHasWorkload,
-    setWorkloadMemberId: _setWorkloadMemberId,
-    setSearchTerm: _setSearchTerm,
-    setStatuses: _setStatuses,
-    setOsProfiles: _setOsProfiles,
-    buildFilter: _buildFilter,
-    setSiteId: _setSiteId,
-    setFiltersByUuids: _setFiltersByUuids,
-    setFiltersByHostIds: _setFiltersByHostIds,
-  },
-});
+  if (params.workloadMemberId) {
+    filterParts.push(`workloadMembers="${params.workloadMemberId}"`);
+  }
 
-export const {
-  setLifeCycleState,
-  setHasWorkload,
-  setWorkloadMemberId,
-  setSearchTerm,
-  setStatuses,
-  setOsProfiles,
-  buildFilter,
-  setSiteId,
-  setFiltersByUuids,
-  setFiltersByHostIds,
-} = hostFilterBuilder.actions;
+  if (params.siteId) {
+    filterParts.push(`site.resourceId="${params.siteId}"`);
+  }
 
-export const selectFilter = (state: _FilterBuilderRootState) =>
-  state.hostFilterBuilder.filter;
+  if (params.uuids && params.uuids.length > 0) {
+    filterParts.push(buildColumnOrs("uuid", params.uuids));
+  }
 
-export default hostFilterBuilder.reducer;
+  if (params.hostIds && params.hostIds.length > 0) {
+    filterParts.push(buildColumnOrs("resourceId", params.hostIds));
+  }
+
+  const result = filterParts.filter(Boolean).join(" AND ");
+  return result.length > 0 ? result : undefined;
+}

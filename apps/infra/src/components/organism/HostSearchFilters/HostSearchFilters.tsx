@@ -13,29 +13,36 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Button, ButtonGroup, Icon } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   AggregatedStatus,
   LifeCycleState,
-  setOsProfiles,
-  setStatuses,
+  buildFilterNew,
 } from "../../../store/hostFilterBuilder";
 import "./HostSearchFilters.scss";
 
 const dataCy = "hostSearchFilters";
 
-const HostSearchFilters = () => {
+interface HostSearchFiltersProps {
+  lifeCycleState: LifeCycleState;
+  onFilterChange: (filters: {
+    statuses?: AggregatedStatus[];
+    osProfiles?: string[];
+    lifeCycleState?: LifeCycleState;
+  }) => void;
+}
+
+const HostSearchFilters = ({ lifeCycleState, onFilterChange }: HostSearchFiltersProps) => {
   const cy = { "data-cy": dataCy };
-  const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
+
+    const [localLifeCycleState, setLocalLifeCycleState] = useState<LifeCycleState>(lifeCycleState);
+
   const reassignFilterState = () => {
     return [
       "Ready",
       "InProgress",
       "Error",
       "Unknown",
-      ...(hostFilterState.lifeCycleState === LifeCycleState.All
-        ? ["Deauthorized"]
-        : []),
+      ...(lifeCycleState === LifeCycleState.All ? ["Deauthorized"] : []),
     ].map((name) => ({
       id: name,
       name,
@@ -43,31 +50,26 @@ const HostSearchFilters = () => {
     }));
   };
 
-  const dispatch = useAppDispatch();
-  const [statusSelections, setStatusSelection] = useState<
-    CheckboxSelectionOption[]
-  >(reassignFilterState());
-  // Initialize status selection list
-  const [osProfileSelections, setOsProfileSelection] = useState<
-    CheckboxSelectionOption[]
-  >([]);
+  const [statusSelections, setStatusSelection] = useState<CheckboxSelectionOption[]>(reassignFilterState());
+  const [osProfileSelections, setOsProfileSelection] = useState<CheckboxSelectionOption[]>([]);
 
   useEffect(() => {
     setStatusSelection(reassignFilterState());
-  }, [hostFilterState.lifeCycleState]);
+  }, [lifeCycleState]);
 
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const ribbonFilterRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    document.addEventListener("mousedown", (e) => {
-      // Check if the click is outside of this (popup) component
+    const handleClick = (e: MouseEvent) => {
       if (
         ribbonFilterRef.current &&
         !ribbonFilterRef.current.contains(e.target as Node)
       ) {
         setShowFilter(false);
       }
-    });
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
   // Update OS profiles options by api response
@@ -109,32 +111,25 @@ const HostSearchFilters = () => {
         isSelected: false,
       })),
     );
-
-    // Reset filters
-    dispatch(setStatuses(undefined));
-    dispatch(setOsProfiles(undefined));
+    setLocalLifeCycleState(LifeCycleState.All);
     setShowFilter(false);
   };
 
-  /** Set Redux store to apply host search filter */
   const applyFilters = () => {
-    const selectedOs = osProfileSelections.filter((os) => os.isSelected);
-    const selectedStatus = statusSelections.filter(
-      (status) => status.isSelected,
-    );
-    dispatch(
-      setStatuses(
-        selectedStatus.length > 0
-          ? selectedStatus.map((status) => AggregatedStatus[status.id])
-          : undefined,
-      ),
-    );
-    dispatch(
-      setOsProfiles(
-        selectedOs.length > 0 ? selectedOs.map((os) => os.id) : undefined,
-      ),
-    );
+    const selectedOs = osProfileSelections.filter((os) => os.isSelected).map((os) => os.id);
+    const selectedStatus = statusSelections
+      .filter((status) => status.isSelected)
+      .map((status) => AggregatedStatus[status.id as keyof typeof AggregatedStatus]);
+    const filter = buildFilterNew({
+      lifeCycleState: localLifeCycleState,
+      statuses: selectedStatus.length > 0 ? selectedStatus : undefined,
+      osProfiles: selectedOs.length > 0 ? selectedOs : undefined,
+    });
     setShowFilter(false);
+    onFilterChange({
+  statuses: selectedStatus.length > 0 ? selectedStatus : undefined,
+  osProfiles: selectedOs.length > 0 ? selectedOs : undefined,
+});
   };
 
   return (

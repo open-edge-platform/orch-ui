@@ -8,18 +8,12 @@ import { ContextSwitcher } from "@orch-ui/components";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { reset } from "../../../store/configureHost";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  buildFilter,
-  LifeCycleState,
-  setLifeCycleState,
-} from "../../../store/hostFilterBuilder";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HostSearchFilters from "../../organism/HostSearchFilters/HostSearchFilters";
 import HostsTable from "../../organism/HostsTable/HostsTable";
 import { RegisterHostDrawer } from "../../organism/RegisterHostDrawer/RegisterHostDrawer";
+import { AggregatedStatus, LifeCycleState, buildFilterNew } from "../../../store/hostFilterBuilder";
 import "./Hosts.scss";
 
 const dataCy = "hosts";
@@ -27,26 +21,36 @@ const dataCy = "hosts";
 const Hosts = () => {
   const cy = { "data-cy": dataCy };
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const className = "hosts";
 
+  const [lifeCycleState, setLifeCycleState] = useState<LifeCycleState>(LifeCycleState.Provisioned);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [drawerFilters, setDrawerFilters] = useState<{
+    statuses?: AggregatedStatus[];
+    osProfiles?: string[];
+  }>({});
   const [selectedHosts, setSelectedHosts] = useState<eim.HostRead[]>([]);
-  const hostFilterState = useAppSelector((state) => state.hostFilterBuilder);
   const [showRegisterDrawer, setShowRegisterDrawer] = useState<boolean>(false);
 
-  //Triggers the initial query of the Hosts table
-  useEffect(() => {
-    if (location.search.includes("?reset")) {
-      dispatch(reset());
-    }
-    dispatch(buildFilter());
-  }, []);
+  const filter = useMemo(() => {
+    return buildFilterNew({
+      lifeCycleState: lifeCycleState === LifeCycleState.All ? undefined : lifeCycleState,
+      statuses: drawerFilters.statuses,
+      osProfiles: drawerFilters.osProfiles,
+      searchTerm,
+    });
+  }, [lifeCycleState,  drawerFilters, searchTerm]);
 
   const hostTableActionButtons = (
     <>
-      <HostSearchFilters />
+      <HostSearchFilters
+        lifeCycleState={lifeCycleState}
+        onFilterChange={(filters) => {
+        console.log("Filter z HostSearchFilters:", filters);
+        setDrawerFilters(filters);
+      }}
+      />
       <Button
         data-cy="registerHosts"
         variant={ButtonVariant.Action}
@@ -72,16 +76,18 @@ const Hosts = () => {
           LifeCycleState.Registered,
           LifeCycleState.All,
         ]}
-        defaultName={hostFilterState.lifeCycleState}
+        defaultName={lifeCycleState}
         onSelectChange={(selection) => {
-          dispatch(setLifeCycleState(selection as LifeCycleState));
+          setLifeCycleState(selection as LifeCycleState);
+          setSelectedHosts([]);
+          setSearchTerm("");
         }}
       />
 
       <HostsTable
         selectable={
-          hostFilterState.lifeCycleState === LifeCycleState.Onboarded ||
-          hostFilterState.lifeCycleState === LifeCycleState.Registered
+          lifeCycleState === LifeCycleState.Onboarded ||
+          lifeCycleState === LifeCycleState.Registered
         }
         selectedHosts={selectedHosts}
         unsetSelectedHosts={() => setSelectedHosts([])}
@@ -94,9 +100,14 @@ const Hosts = () => {
           });
         }}
         poll
+        filters={{          
+          filter:  filter,
+        }}
         searchConfig={{
           searchTooltipContent: "Search active hosts from the table below.",
         }}
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm} 
         actionsJsx={hostTableActionButtons}
       />
 
