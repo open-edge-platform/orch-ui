@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Deploy Orchestrator
-        uses: open-edge-platform/edge-manageability-framework/.github/actions/deploy_kind@feature/deploy-kind-gha  # yamllint disable-line rule:line-length
+        uses: open-edge-platform/edge-manageability-framework/.github/actions/deploy_kind@hotfix/gha_kind  # yamllint disable-line rule:line-length
         with:
           orch_version: ${{ inputs.emf-branch || 'main' }}
           orch_password: ${{ secrets.ORCH_DEFAULT_PASSWORD }}
