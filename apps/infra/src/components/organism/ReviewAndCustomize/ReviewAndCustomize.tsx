@@ -63,6 +63,9 @@ const ReviewAndCustomize = () => {
 
   const tableRef = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(true);
+
+  // TODO: attach drawer here
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showEditDrawer, setShowEditDrawer] = useState(false);
 
   const { hosts, createCluster } = useAppSelector(selectHostProvisionState);
