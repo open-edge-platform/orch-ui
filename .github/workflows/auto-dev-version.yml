@@ -4,23 +4,29 @@
 name: Update Versions to -dev
 
 on:
-  push:
-    branches:
-      - main
-      - release-*
+  # push:
+  #   branches:
+  #     - main
+  #     - release-*
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 permissions: {}
 
 jobs:
   update-version:
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+
+      - name: Log github token
+        run: echo "${{ secrets.SYS_ORCH_GITHUB }}" | gh auth login --with-token
       - name: Run Version Update Action
-        uses: open-edge-platform/orch-ci/dev-version-update@main
+        uses: open-edge-platform/orch-ci/dev-version-update@fix_permissions
         with:
           gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
