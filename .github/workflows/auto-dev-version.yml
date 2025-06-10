@@ -4,12 +4,10 @@
 name: Update Versions to -dev
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #     - release-*
-  pull_request:
-    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - main
+      - release-*
 
 permissions: {}
 
