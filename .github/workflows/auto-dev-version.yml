@@ -27,3 +27,5 @@ jobs:
         uses: open-edge-platform/orch-ci/dev-version-update@main
         with:
           gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
+      - name: Log github token
+        run: echo "${{ secrets.SYS_ORCH_GITHUB }}" | gh auth login --with-token
