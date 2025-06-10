@@ -64,7 +64,6 @@ jobs:
       # TODO do we manually invoke the tests here or we use the GHA defined in EMF?
       # Or do we move that in this repo?
       - name: Run Admin Cypress tests
-        if: ${{ always() && inputs.admin == 'true' }}
         working-directory: orch-ui/tests
         shell: bash
         run: |
