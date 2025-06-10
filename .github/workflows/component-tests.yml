@@ -46,6 +46,9 @@ jobs:
           docker_password: ${{ secrets.SYS_DOCKERHUB_RO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_type: "minimal"
+      - name: Setup Sample Org and Project with default users
+        id: default-mt-setup
+        run: mage tenantUtils:createDefaultMtSetup
       - name: Checkout UI repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
