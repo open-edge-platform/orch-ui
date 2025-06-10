@@ -35,8 +35,6 @@ export const hostOne: infra.HostResourceRead = {
     resourceId: "host-dh38bjw9",
     //status: "INSTANCE_STATUS_RUNNING",
     kind: "INSTANCE_KIND_METAL",
-    //hostID: "host-dh38bjw9",
-    //osID: "os-ubuntu",
     updatePolicy: {
       name: "Update policy",
       updateSources: ["updateResources"],
@@ -47,8 +45,6 @@ export const hostOne: infra.HostResourceRead = {
       architecture: "x86_64",
       name: "os-ubuntu",
       repoUrl: "repoUrl",
-      // kernelCommand: "kernelCommand",
-      // updateSources: ["updateResources"],
       sha256:
         "09f6e5d55cd9741a026c0388d4905b7492749feedbffc741e65aab35fc38430d",
     },

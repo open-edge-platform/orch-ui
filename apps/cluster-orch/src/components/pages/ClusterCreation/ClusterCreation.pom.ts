@@ -179,7 +179,6 @@ const instanceOne: ModifiedInstance = {
   },
   os: {
     osResourceID: "os-ubuntu",
-    // updateSources: [],
     sha256: "",
     repoUrl: "",
   },

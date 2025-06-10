@@ -106,7 +106,11 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
       <div className="os-details-advanced-settings">Advanced Settings</div>
       <OsProfileDetailField
         label="Update Sources"
-        value={updatePolicy?.updateSources?.join()}
+        value={
+          updatePolicy?.updateSources
+            ? updatePolicy?.updateSources?.join()
+            : "-"
+        }
       />
       <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />

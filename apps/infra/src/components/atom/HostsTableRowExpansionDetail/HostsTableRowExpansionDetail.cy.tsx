@@ -29,17 +29,21 @@ describe("<HostsTableRowExpansionDetail/>", () => {
           ...hostThree,
           instance: {
             ...hostThree.instance,
+            osUpdateAvailable: "desiredOsName",
+            updatePolicy: {
+              name: "desiredOsName",
+              updateSources: [],
+              targetOs: {
+                name: "desiredOsName",
+                sha256: "desiredOsSha256",
+                osType: "OS_TYPE_IMMUTABLE",
+              },
+            },
             os: {
               name: "desiredOsName",
               sha256: "desiredOsSha256",
               osType: "OS_TYPE_IMMUTABLE",
             },
-            // desiredOs: {
-            //   name: "desiredOsName",
-            //   sha256: "desiredOsSha256",
-            //   // updateSources: [],
-            //   osType: "OS_TYPE_IMMUTABLE",
-            // },
           },
         }}
       />,
@@ -54,7 +58,6 @@ describe("<HostsTableRowExpansionDetail/>", () => {
           ...hostThree,
           instance: {
             ...hostThree.instance,
-            // desiredOs: undefined,
           },
         }}
       />,
