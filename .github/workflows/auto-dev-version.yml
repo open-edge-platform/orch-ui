@@ -27,6 +27,6 @@ jobs:
       - name: Log github token
         run: echo "${{ secrets.SYS_ORCH_GITHUB }}" | gh auth login --with-token
       - name: Run Version Update Action
-        uses: open-edge-platform/orch-ci/dev-version-update@main
+        uses: open-edge-platform/orch-ci/dev-version-update@fix_permissions
         with:
           gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
