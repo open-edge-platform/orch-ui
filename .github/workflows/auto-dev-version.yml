@@ -16,7 +16,7 @@ permissions: {}
 jobs:
   update-version:
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
       id-token: write
     runs-on: ubuntu-latest
