@@ -36,18 +36,6 @@ export const LocationAutocomplete = ({
     [nodes],
   );
 
-  const filteredNodes = useMemo(() => {
-    if (!inputValue.trim()) return nodes;
-
-    const lowerCaseInput = inputValue.toLowerCase();
-    return nodes.filter((node) => {
-      if (node.name.toLowerCase().includes(lowerCaseInput)) return true;
-
-      const fullPath = node.path?.join(" | ").toLowerCase() ?? "";
-      return fullPath.includes(lowerCaseInput);
-    });
-  }, [inputValue, nodes]);
-
   const handleSelectionChange = (resourceId: string | null) => {
     let node: AutocompleteNode | undefined;
 
@@ -83,8 +71,8 @@ export const LocationAutocomplete = ({
         isRequired={isRequired}
         size={InputSize.Large}
       >
-        {filteredNodes.length > 0 ? (
-          filteredNodes.map((node) => {
+        {nodes.length > 0 ? (
+          nodes.map((node) => {
             const displayText = node.path?.join(" | ") ?? node.name;
             return (
               <Item key={node.resourceId} textValue={displayText}>
