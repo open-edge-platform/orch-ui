@@ -7,6 +7,7 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const commonConfig = require("./webpack.common");
 const mode = "production";
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const prodConfig = {
   mode: mode,
@@ -35,6 +36,14 @@ const prodConfig = {
           },
         ],
       },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader, // Replace style-loader
+          "css-loader",
+          "sass-loader",
+        ],
+      },
     ],
   },
   output: {
@@ -48,9 +57,12 @@ const prodConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        ClusterOrchUI: `ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js`,
-        Admin: `Admin@/mfe/admin/remoteEntry.js`,
+        ClusterOrchUI: "ClusterOrchUI@/mfe/cluster-orch/remoteEntry.js",
+        Admin: "Admin@/mfe/admin/remoteEntry.js",
       },
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
     }),
   ],
   resolve: {
