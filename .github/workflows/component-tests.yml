@@ -37,6 +37,7 @@ jobs:
     timeout-minutes: 60
 
     steps:
+      - run: ls -la
       - name: Deploy Orchestrator
         uses: open-edge-platform/edge-manageability-framework/.github/actions/deploy_kind@hotfix/gha_kind  # yamllint disable-line rule:line-length
         with:
@@ -46,3 +47,20 @@ jobs:
           docker_password: ${{ secrets.SYS_DOCKERHUB_RO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_type: "minimal"
+      - run: tree -L 2 ..
+      - name: Cache npm dependencies
+        uses: actions/setup-node@v4.2.0
+        with:
+          cache: "npm"
+          cache-dependency-path: orch-ui/package-lock.json
+      - name: Install UI test deps
+        working-directory: orch-ui
+        shell: bash
+        run: npm ci
+      - name: Run Admin Cypress tests
+        if: ${{ always() && inputs.admin == 'true' }}
+        working-directory: orch-ui/tests
+        shell: bash
+        run: |
+          npx cypress run --e2e \
+            -s "cypress/e2e/admin/non-org-admin-smoke.cy.ts,cypress/e2e/admin/org-admin-smoke.cy.ts"
