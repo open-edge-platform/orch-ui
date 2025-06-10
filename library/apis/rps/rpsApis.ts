@@ -58,7 +58,7 @@ const injectedRtkApi = api
     }),
     overrideExisting: false,
   });
-export { injectedRtkApi as remoteProvisioningApis };
+export { injectedRtkApi as rpsApis };
 export type GetAllDomainsApiResponse =
   /** status 200 successful operation */
   DomainResponse[] | CountDomainResponse;

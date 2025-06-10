@@ -38,7 +38,7 @@ const injectedRtkApi = api
     }),
     overrideExisting: false,
   });
-export { injectedRtkApi as managementPresenseApis };
+export { injectedRtkApi as mpsApis };
 export type GetV1ProjectsByProjectNameDmAmtGeneralSettingsAndGuidApiResponse =
   /** status 200 Successful operation */ GeneralSettingsResponse;
 export type GetV1ProjectsByProjectNameDmAmtGeneralSettingsAndGuidApiArg = {
