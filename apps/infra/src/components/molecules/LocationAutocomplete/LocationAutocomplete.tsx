@@ -4,6 +4,7 @@
  */
 
 import { Combobox, Item, Text } from "@spark-design/react";
+import { InputSize } from "@spark-design/tokens";
 import { useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { AutocompleteNode } from "./location-autocomplete";
@@ -11,20 +12,22 @@ import "./LocationAutocomplete.scss";
 
 interface LocationAutocompleteProps {
   nodes: AutocompleteNode[];
-  onNodeSelect?: (selectedNode: AutocompleteNode | null) => void;
   placeholder?: string;
   label?: string;
   isRequired?: boolean;
+  onNodeSelect?: (selectedNode: AutocompleteNode | null) => void;
+  onInputChange?: (value: string) => void;
 }
 
 const dataCy = "location-autocomplete";
 
 export const LocationAutocomplete = ({
   nodes,
-  onNodeSelect,
   placeholder = "Select a location",
   label = "Location",
   isRequired = false,
+  onNodeSelect,
+  onInputChange,
 }: LocationAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -51,7 +54,7 @@ export const LocationAutocomplete = ({
     if (resourceId && nodeMap.has(resourceId)) {
       node = nodeMap.get(resourceId);
       if (node) {
-        setInputValue(node.path?.join(" | ") ?? node.name);
+        setInputValue(node.name);
       }
     } else {
       setInputValue("");
@@ -62,16 +65,23 @@ export const LocationAutocomplete = ({
     }
   };
 
+  const handleInputChange = (value: string) => {
+    setInputValue(value);
+    if (onInputChange) {
+      onInputChange(value);
+    }
+  };
+
   return (
     <div className="location-autocomplete" data-cy={dataCy}>
       <Combobox
         label={label}
-        inputValue={inputValue}
-        onInputChange={setInputValue}
+        onInputChange={handleInputChange}
         onSelectionChange={handleSelectionChange}
         menuTrigger="input"
         placeholder={placeholder}
         isRequired={isRequired}
+        size={InputSize.Large}
       >
         {filteredNodes.length > 0 ? (
           filteredNodes.map((node) => {
