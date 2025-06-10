@@ -37,7 +37,6 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - run: ls -la
       - name: Deploy Orchestrator
         uses: open-edge-platform/edge-manageability-framework/.github/actions/deploy_kind@hotfix/gha_kind  # yamllint disable-line rule:line-length
         with:
@@ -47,7 +46,12 @@ jobs:
           docker_password: ${{ secrets.SYS_DOCKERHUB_RO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment_type: "minimal"
-      - run: tree -L 2 ..
+      - name: Checkout UI repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: open-edge-platform/orch-ui
+          path: orch-ui
+          persist-credentials: false
       - name: Cache npm dependencies
         uses: actions/setup-node@v4.2.0
         with:
@@ -57,6 +61,8 @@ jobs:
         working-directory: orch-ui
         shell: bash
         run: npm ci
+      # TODO do we manually invoke the tests here or we use the GHA defined in EMF?
+      # Or do we move that in this repo?
       - name: Run Admin Cypress tests
         if: ${{ always() && inputs.admin == 'true' }}
         working-directory: orch-ui/tests
