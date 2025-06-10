@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Flex } from "@orch-ui/components";
+import { ConfirmationDialog, Flex } from "@orch-ui/components";
 import { hostsRoute, useInfraNavigate } from "@orch-ui/utils";
 import {
   Button,
@@ -24,6 +24,7 @@ import {
   populateCommonHostData,
   reset,
   selectHostProvisionState,
+  selectNoChangesInHosts,
 } from "../../../store/provisionHost";
 import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import ConfigureAllHosts from "../../organism/ConfigureAllHosts/ConfigureAllHosts";
@@ -40,6 +41,8 @@ const HostProvision = () => {
   const dispatch = useAppDispatch();
 
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
+  const [showCommonDataDialog, setShowCommonDataDialog] =
+    useState<boolean>(false);
 
   const steps: StepperStep[] = Object.keys(HostProvisionSteps)
     .filter((key) => !isNaN(Number(HostProvisionSteps[key])))
@@ -53,13 +56,28 @@ const HostProvision = () => {
   } = useAppSelector(selectHostProvisionState);
 
   const containsHosts = useAppSelector(selectContainsHosts);
+  const containsChangedHosts = !useAppSelector(selectNoChangesInHosts);
 
   const goToListPage = () => {
     dispatch(reset());
     navigate(hostsRoute);
   };
 
-  const handlePrev = () => dispatch(goToPrevStep());
+  const handleCancel = () => {
+    if (autoProvision) {
+      setShowContinueDialog(true);
+    } else {
+      goToListPage();
+    }
+  };
+
+  const handlePrev = () => {
+    if (containsChangedHosts) {
+      setShowCommonDataDialog(true);
+    } else {
+      dispatch(goToPrevStep());
+    }
+  };
 
   const handleNext = async () => {
     switch (currentStep) {
@@ -122,11 +140,7 @@ const HostProvision = () => {
           <Button
             size={ButtonSize.Large}
             variant={ButtonVariant.Secondary}
-            onPress={() => {
-              if (autoProvision) {
-                setShowContinueDialog(true);
-              } else goToListPage();
-            }}
+            onPress={handleCancel}
           >
             Cancel
           </Button>
@@ -154,6 +168,24 @@ const HostProvision = () => {
         <HostRegistrationAndProvisioningCancelDialog
           isOpen={showContinueDialog}
           onClose={() => setShowContinueDialog(false)}
+        />
+      )}
+      {showCommonDataDialog && (
+        <ConfirmationDialog
+          title="Return to the configuration for all hosts?"
+          content="Changes made will be applied to all hosts and any customization made to individual hosts will be lost."
+          isOpen={showCommonDataDialog}
+          confirmBtnText="Continue Customization"
+          confirmBtnVariant={ButtonVariant.Primary}
+          cancelBtnText="Cancel Customization"
+          cancelBtnVariant={ButtonVariant.Action}
+          confirmCb={() => {
+            setShowCommonDataDialog(false);
+          }}
+          cancelCb={() => {
+            dispatch(goToPrevStep());
+            setShowCommonDataDialog(false);
+          }}
         />
       )}
     </div>

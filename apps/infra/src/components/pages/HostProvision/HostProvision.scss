@@ -12,9 +12,9 @@
     right: 0;
     bottom: 0;
     padding: 1rem 2rem;
-    box-shadow: 1px -2px 4px 0px rgba(4, 4, 4, 0.12);
+    box-shadow: 0.063rem -0.125rem 0.25rem 0 rgba(4, 4, 4, 0.12);
     background-color: var(--spark-color-theme-dark-gray900);
-    z-index: 100;
+    z-index: 2;
   }
 
   &__buttons {

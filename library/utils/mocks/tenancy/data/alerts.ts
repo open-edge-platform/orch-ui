@@ -87,7 +87,7 @@ export const alertFive: omApi.Alert = {
   labels: {
     alert_category: "Deployment",
     alert_context: "deployment",
-    deployment_id: "deploymentA",
+    deployment_id: "deployment-one",
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };
@@ -102,7 +102,7 @@ export const alertSix: omApi.Alert = {
   labels: {
     alert_category: "Deployment",
     alert_context: "deployment",
-    deployment_id: "deploymentB",
+    deployment_id: "deployment-three",
   },
   annotations: { description: "accumsan ante sagittis ege" },
 };

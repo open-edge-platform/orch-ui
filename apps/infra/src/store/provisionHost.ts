@@ -5,6 +5,7 @@
 
 import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { isEqual } from "lodash";
 import { RootState } from "./store";
 
 export enum HostProvisionSteps {
@@ -75,6 +76,25 @@ const isSet = (value: string | undefined) => {
     return false;
   }
   return value.trim().length > 0;
+};
+
+const everyHost = (
+  state: HostProvisionState,
+  predicate: (hostData: HostData) => boolean,
+) => {
+  const { hosts } = state;
+  return Object.values(hosts).every(predicate);
+};
+
+const checkSecurityFeature = (
+  sfHost: infra.SecurityFeature | undefined,
+  sfData: boolean | undefined,
+) => {
+  if (sfData) {
+    return sfHost === "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION";
+  } else {
+    return sfHost === "SECURITY_FEATURE_NONE";
+  }
 };
 
 const validateStep = (state: HostProvisionState) => {
@@ -189,8 +209,12 @@ export const provisionHost = createSlice({
         host.site = state.commonHostData.site;
         host.instance.os = state.commonHostData.os;
         host.instance.osID = state.commonHostData.os?.resourceId;
-        host.templateName = state.commonHostData.clusterTemplateName;
-        host.templateVersion = state.commonHostData.clusterTemplateVersion;
+
+        if (state.createCluster) {
+          host.templateName = state.commonHostData.clusterTemplateName;
+          host.templateVersion = state.commonHostData.clusterTemplateVersion;
+        }
+
         // TODO: how to populate vPro
         host.instance.securityFeature = state.commonHostData.securityFeature
           ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
@@ -285,5 +309,28 @@ export const selectContainsHosts = (state: RootState) =>
 
 export const selectCommonHostData = (state: RootState) =>
   state.provisionHost.commonHostData;
+
+export const selectNoChangesInHosts = (state: RootState) =>
+  everyHost(state.provisionHost, (host) => {
+    const commonData = state.provisionHost.commonHostData;
+
+    let result =
+      host.site?.name === commonData.site?.name &&
+      host.instance?.os?.name === commonData.os?.name &&
+      host.instance?.osID === commonData.os?.resourceId &&
+      checkSecurityFeature(
+        host.instance?.securityFeature,
+        commonData.securityFeature,
+      ) &&
+      host.instance?.localAccountID === commonData.publicSshKey?.resourceId &&
+      isEqual(host.metadata ?? [], commonData.metadata ?? []);
+
+    if (state.provisionHost.createCluster) {
+      result &&=
+        host.templateName === commonData.clusterTemplateName &&
+        host.templateVersion === commonData.clusterTemplateVersion;
+    }
+    return result && false;
+  });
 
 export default provisionHost.reducer;
