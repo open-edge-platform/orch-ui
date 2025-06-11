@@ -4,8 +4,14 @@
  */
 
 .location-autocomplete {
-  flex: 1 1 30rem;
   min-width: 30rem;
+  margin-right: 0.1rem;
+
+  &__combobox {
+    .spark-combobox-arrow-button {
+      display: none;
+    }
+  }
 }
 
 .highlighted {

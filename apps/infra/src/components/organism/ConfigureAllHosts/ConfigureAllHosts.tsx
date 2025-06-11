@@ -28,13 +28,9 @@ import {
   setShowAdvancedOptions,
   setValidationError,
 } from "../../../store/provisionHost";
+import { SiteSearch } from "../../atom/locations/SiteSearch/SiteSearch";
 import { PublicSshKeyDropdown } from "../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
-import {
-  AutocompleteNode,
-  buildNodeTree,
-  NODES_MOCK,
-} from "../../molecules/LocationAutocomplete/location-autocomplete";
-import { LocationAutocomplete } from "../../molecules/LocationAutocomplete/LocationAutocomplete";
+import { AutocompleteNode } from "../../molecules/LocationAutocomplete/location-autocomplete";
 import OsProfileDropdown from "../OsProfileDropdown/OsProfileDropdown";
 import "./ConfigureAllHosts.scss";
 
@@ -79,29 +75,17 @@ const ConfigureAllHosts = () => {
     [commonHostData.metadata],
   );
 
-  const nodeTree = buildNodeTree(NODES_MOCK);
-
   const handleSiteChange = (node: AutocompleteNode | null) => {
     if (node) {
       dispatch(setCommonSite({ name: node.name, siteID: node.resourceId }));
     }
   };
 
-  const nodes = Array.from(nodeTree.values()).filter(
-    (node) => node.path && node.type === "RESOURCE_KIND_SITE",
-  );
-
   return (
     <div {...cy} className="configure-all-hosts">
       <Section title="Site">
         <Flex cols={[6]}>
-          <LocationAutocomplete
-            nodes={nodes}
-            onNodeSelect={handleSiteChange}
-            placeholder="Start typing..."
-            label="Site"
-            isRequired
-          />
+          <SiteSearch onSiteSelect={handleSiteChange} isRequired />
         </Flex>
       </Section>
       <Divider />
