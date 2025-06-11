@@ -173,7 +173,7 @@ const HostProvision = () => {
       {showCommonDataDialog && (
         <ConfirmationDialog
           title="Return to the configuration for all hosts?"
-          content="Changes made will be applied to all hosts and any customization made to individual hosts will be lost."
+          content="Any customization made to individual hosts will be lost."
           isOpen={showCommonDataDialog}
           confirmBtnText="Continue Customization"
           confirmBtnVariant={ButtonVariant.Primary}

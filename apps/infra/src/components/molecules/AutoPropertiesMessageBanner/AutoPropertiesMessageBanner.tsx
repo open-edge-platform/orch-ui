@@ -5,6 +5,7 @@
 
 import { MessageBanner } from "@spark-design/react";
 import { useAppSelector } from "../../../store/hooks";
+import { selectHostProvisionState } from "../../../store/provisionHost";
 import { AutoPropertiesMessages } from "./AutoPropertiesMessages";
 const dataCy = "autoPropertiesMessageBanner";
 
@@ -30,7 +31,7 @@ const AutoPropertiesMessageBanner = () => {
   const cy = { "data-cy": dataCy };
 
   const { autoOnboard, autoProvision, createCluster } = useAppSelector(
-    (state) => state.configureHost,
+    selectHostProvisionState,
   );
 
   return (
