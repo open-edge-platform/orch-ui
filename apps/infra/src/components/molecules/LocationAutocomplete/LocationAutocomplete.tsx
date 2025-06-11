@@ -15,7 +15,7 @@ interface LocationAutocompleteProps {
   placeholder?: string;
   label?: string;
   isRequired?: boolean;
-  onNodeSelect?: (selectedNode: AutocompleteNode | null) => void;
+  onSelect?: (selectedNode: AutocompleteNode | null) => void;
   onInputChange?: (value: string) => void;
 }
 
@@ -26,7 +26,7 @@ export const LocationAutocomplete = ({
   placeholder = "Select a location",
   label = "Location",
   isRequired = false,
-  onNodeSelect,
+  onSelect,
   onInputChange,
 }: LocationAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
@@ -48,8 +48,8 @@ export const LocationAutocomplete = ({
       setInputValue("");
     }
 
-    if (onNodeSelect) {
-      onNodeSelect(node || null);
+    if (onSelect) {
+      onSelect(node || null);
     }
   };
 

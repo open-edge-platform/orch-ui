@@ -51,7 +51,7 @@ export const SiteSearch = ({
     );
   }, [data]);
 
-  const handleNodeSelect = (selectedNode: AutocompleteNode | null) => {
+  const handleSelect = (selectedNode: AutocompleteNode | null) => {
     onSiteSelect(selectedNode);
   };
 
@@ -69,7 +69,7 @@ export const SiteSearch = ({
   return (
     <LocationAutocomplete
       nodes={nodes}
-      onNodeSelect={handleNodeSelect}
+      onSelect={handleSelect}
       onInputChange={handleInputChange}
       placeholder={placeholder}
       label={label}
