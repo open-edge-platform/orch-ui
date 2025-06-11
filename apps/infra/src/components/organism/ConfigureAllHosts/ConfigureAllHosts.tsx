@@ -14,7 +14,6 @@ import { RuntimeConfig } from "@orch-ui/utils";
 import { Divider, Heading, ToggleSwitch } from "@spark-design/react";
 import { ToggleSwitchSize } from "@spark-design/tokens";
 import React, { ComponentType, LazyExoticComponent, useMemo } from "react";
-import SiteSearch from "src/components/atom/locations/SiteSearch/SiteSearch";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   selectHostProvisionState,
@@ -29,6 +28,7 @@ import {
   setShowAdvancedOptions,
   setValidationError,
 } from "../../../store/provisionHost";
+import { SiteSearch } from "../../atom/locations/SiteSearch/SiteSearch";
 import { PublicSshKeyDropdown } from "../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
 import { AutocompleteNode } from "../../molecules/LocationAutocomplete/location-autocomplete";
 import OsProfileDropdown from "../OsProfileDropdown/OsProfileDropdown";
