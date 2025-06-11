@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# Spark Design is a library we imported, developed internally by Intel
+library/@spark-design
+
+# API clients and interfaces are auto-generated from API Specs
+library/apis/infra/infra.ts
+library/apis/cluster-manager/clusterManagerApis.ts
+library/apis/app-resource-mgr/resourceManagerApis.ts
+library/apis/app-deploy-mgr/deploymentManagerApis.ts
+library/apis/app-catalog/catalogServiceApis.ts
+library/apis/metadata-broker/generated.ts
+library/apis/observabilityMonitor/observabilityMonitorApi.ts
+library/apis/tenancy/tenancyDataModelApi.ts
