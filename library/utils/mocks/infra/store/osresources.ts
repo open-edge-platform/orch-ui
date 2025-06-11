@@ -12,8 +12,6 @@ export const createOsResource = (
   name: string,
   architecture: string,
   repoUrl: string,
-  // kernelCommand: string,
-  // updateResources: string[],
   profileName: string,
   securityFeature: infra.InstanceResourceRead["securityFeature"],
   osType: infra.OperatingSystemResourceRead["osType"],
@@ -23,8 +21,6 @@ export const createOsResource = (
     architecture,
     name,
     repoUrl: repoUrl,
-    // kernelCommand: kernelCommand,
-    // updateSources: updateResources,
     sha256: "09f6e5d55cd9741a026c0388d4905b7492749feedbffc741e65aab35fc38430d",
     profileName: profileName,
     securityFeature: securityFeature,
@@ -59,8 +55,6 @@ export const osUbuntu = createOsResource(
   "Ubuntu",
   "x86_64",
   "http://archive.ubuntu.com/ubuntu",
-  // "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
-  // ["deb https://files.edgeorch.net orchui release"],
   "Ubuntu-x86_profile",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
@@ -71,8 +65,6 @@ export const osRedHat = createOsResource(
   "Red Hat",
   "x86_64",
   "http://redhat.com/redhat",
-  // "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
-  // ["deb https://files.edgeorch.net orchui release"],
   "Redhat-x86_profile",
   "SECURITY_FEATURE_NONE",
   "OS_TYPE_IMMUTABLE",
@@ -89,7 +81,6 @@ export class OsResourceStore extends BaseStore<
 
   convert(
     body: infra.OperatingSystemResource,
-    //id: string | undefined
   ): infra.OperatingSystemResourceRead {
     const currentTime = new Date().toISOString();
     return {

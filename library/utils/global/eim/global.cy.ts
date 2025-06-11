@@ -7,8 +7,6 @@ import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostOne,
   assignedWorkloadHostTwo,
-  instanceOne,
-  instanceTwo,
   regionPortland,
   regionUsWest,
   repeatedScheduleOnRegion,
@@ -21,7 +19,6 @@ import {
   generateClusterName,
   getTrustedComputeCompatibility,
   inheritedScheduleToString,
-  isOSUpdateAvailable,
 } from "./global";
 
 describe("The Utils", () => {
@@ -90,14 +87,6 @@ describe("The Utils", () => {
           siteBoston,
         ),
       ).eq("-");
-    });
-  });
-  describe("isOSUpdateAvailable", () => {
-    it("should return true if update available for os", () => {
-      expect(isOSUpdateAvailable(instanceTwo)).eq(true);
-    });
-    it("should return false if no update available for os", () => {
-      expect(isOSUpdateAvailable(instanceOne)).eq(false);
     });
   });
 

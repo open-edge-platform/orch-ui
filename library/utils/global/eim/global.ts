@@ -228,12 +228,6 @@ export const statusIndicatorToIconStatus = (
   }
 };
 
-export const isOSUpdateAvailable = (
-  instance: infra.InstanceResourceRead | undefined,
-) => {
-  return instance?.osUpdateAvailable;
-};
-
 const getHostProvisionTitles = (
   hostName: string,
   provisioningStatusIndicator?: infra.HostResourceRead["hostStatusIndicator"],

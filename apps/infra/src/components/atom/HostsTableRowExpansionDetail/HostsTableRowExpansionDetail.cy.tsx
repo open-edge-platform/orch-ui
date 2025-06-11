@@ -29,18 +29,18 @@ describe("<HostsTableRowExpansionDetail/>", () => {
           ...hostThree,
           instance: {
             ...hostThree.instance,
-            osUpdateAvailable: "desiredOsName",
+            osUpdateAvailable: "Ubuntu",
             updatePolicy: {
-              name: "desiredOsName",
+              name: "Ubuntu",
               updateSources: [],
               targetOs: {
-                name: "desiredOsName",
+                name: "Ubuntu",
                 sha256: "desiredOsSha256",
                 osType: "OS_TYPE_IMMUTABLE",
               },
             },
             os: {
-              name: "desiredOsName",
+              name: "Ubuntu",
               sha256: "desiredOsSha256",
               osType: "OS_TYPE_IMMUTABLE",
             },
@@ -48,7 +48,7 @@ describe("<HostsTableRowExpansionDetail/>", () => {
         }}
       />,
     );
-    pom.el.osUpdate.should("contain.text", "desiredOsName");
+    pom.el.osUpdate.should("contain.text", "Ubuntu");
   });
 
   it("should show `No Update` when no os is available", () => {
