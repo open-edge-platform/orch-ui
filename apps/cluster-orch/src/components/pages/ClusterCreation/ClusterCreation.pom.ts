@@ -173,9 +173,12 @@ const instanceOne: ModifiedInstance = {
   instanceStatus: "Running",
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
+  updatePolicy: {
+    name: "Update policy",
+    updateSources: ["updateResources"],
+  },
   os: {
     osResourceID: "os-ubuntu",
-    updateSources: [],
     sha256: "",
     repoUrl: "",
   },
