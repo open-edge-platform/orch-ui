@@ -6,6 +6,12 @@
 .location-autocomplete {
   min-width: 30rem;
   margin-right: 0.1rem;
+
+  &__combobox {
+    .spark-combobox-arrow-button {
+      display: none;
+    }
+  }
 }
 
 .highlighted {

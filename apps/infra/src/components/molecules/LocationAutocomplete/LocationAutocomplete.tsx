@@ -70,6 +70,7 @@ export const LocationAutocomplete = ({
         placeholder={placeholder}
         isRequired={isRequired}
         size={InputSize.Large}
+        className="location-autocomplete__combobox"
       >
         {nodes.length > 0 ? (
           nodes.map((node) => {
