@@ -54,4 +54,10 @@ npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
 echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json
 
+echo -e "${CYAN}Generate REMOTE_PROVISIONING_SERVER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}rps/rps.config.json
+
+echo -e "${CYAN}Generate MANAGEMENT_PRSENCE_SERVER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}mps/mps.config.json
+
 npm run library:fix

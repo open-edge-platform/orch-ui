@@ -42,6 +42,8 @@ api:
   metadataBroker: "https://api.kind.internal"
   alertManager: "https://api.kind.internal"
   tenantManager: "https://api.kind.internal"
+  rps: "https://api.kind.internal"
+  mps: "https://api.kind.internal"
 
 # Used to configure the Header title
 header:

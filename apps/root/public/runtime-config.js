@@ -76,6 +76,8 @@ window.__RUNTIME_CONFIG__ = {
     MB: `https://api.${fqdn}`,
     ALERT: `https://api.${fqdn}/`,
     TM: `https://api.${fqdn}/`,
+    RPS: `https://api.${fqdn}/`,
+    MPS: `https://api.${fqdn}/`,
   },
   VERSIONS: {
     orchestrator: "unknown",
