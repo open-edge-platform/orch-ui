@@ -4,25 +4,35 @@
  */
 
 import { omApi } from "@orch-ui/apis";
+import { BaseStore } from "../../base-store";
+import { MockUtils } from "../../mock-utils";
 import { alertDefinitionMocks } from "../data/alert-definitions";
 
-const multipleAlertDefinitions: omApi.AlertDefinition[] = [
-  alertDefinitionMocks.hostConnectionLostAlertDefinition,
-  alertDefinitionMocks.hostErrorAlertDefinition,
-  alertDefinitionMocks.hostCpuUsageAlertDefinition,
-  alertDefinitionMocks.hostRamUsageAlertDefinition,
-  alertDefinitionMocks.deploymentDownAlertDefinition,
-  alertDefinitionMocks.deploymentErrorAlertDefinition,
-  alertDefinitionMocks.clusterDownAlertDefinition,
-  alertDefinitionMocks.clusterErrorAlertDefinition,
-  alertDefinitionMocks.clusterCpuUsageAlertDefinition,
-  alertDefinitionMocks.clusterRamUsageAlertDefinition,
-];
-
-export default class AlertDefinitionStore {
+export default class AlertDefinitionStore extends BaseStore<
+  "id",
+  omApi.AlertDefinition
+> {
   alertDefinitions: omApi.AlertDefinition[];
   constructor() {
-    this.alertDefinitions = multipleAlertDefinitions;
+    super("id", [
+      alertDefinitionMocks.hostConnectionLostAlertDefinition,
+      alertDefinitionMocks.hostErrorAlertDefinition,
+      alertDefinitionMocks.hostCpuUsageAlertDefinition,
+      alertDefinitionMocks.hostRamUsageAlertDefinition,
+      alertDefinitionMocks.deploymentDownAlertDefinition,
+      alertDefinitionMocks.deploymentErrorAlertDefinition,
+      alertDefinitionMocks.clusterDownAlertDefinition,
+      alertDefinitionMocks.clusterErrorAlertDefinition,
+      alertDefinitionMocks.clusterCpuUsageAlertDefinition,
+      alertDefinitionMocks.clusterRamUsageAlertDefinition,
+    ]);
+  }
+
+  convert(body: omApi.AlertDefinition): omApi.AlertDefinition {
+    return {
+      ...body,
+      name: body.id ?? MockUtils.randomString(),
+    };
   }
 
   list(): omApi.AlertDefinition[] {
