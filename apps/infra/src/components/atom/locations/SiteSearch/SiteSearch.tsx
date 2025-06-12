@@ -17,6 +17,7 @@ interface SiteSearchProps {
   placeholder?: string;
   label?: string;
   isRequired?: boolean;
+  defaultInputValue?: string;
   onSiteSelect: (selectedSite: AutocompleteNode | null) => void;
 }
 
@@ -25,6 +26,7 @@ export const SiteSearch = ({
   placeholder = "Select a site",
   label = "Site",
   isRequired = false,
+  defaultInputValue,
 }: SiteSearchProps) => {
   const projectName = SharedStorage.project?.name ?? "";
   const [searchTerm, setSearchTerm] = useState<string | undefined>();
@@ -74,6 +76,7 @@ export const SiteSearch = ({
       placeholder={placeholder}
       label={label}
       isRequired={isRequired}
+      defaultInputValue={defaultInputValue}
     />
   );
 };
