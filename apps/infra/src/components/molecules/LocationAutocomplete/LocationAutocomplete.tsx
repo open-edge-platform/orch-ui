@@ -4,6 +4,7 @@
  */
 
 import { Combobox, Item, Text } from "@spark-design/react";
+import { InputSize } from "@spark-design/tokens";
 import { useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { AutocompleteNode } from "./location-autocomplete";
@@ -11,20 +12,22 @@ import "./LocationAutocomplete.scss";
 
 interface LocationAutocompleteProps {
   nodes: AutocompleteNode[];
-  onNodeSelect?: (selectedNode: AutocompleteNode | null) => void;
   placeholder?: string;
   label?: string;
   isRequired?: boolean;
+  onSelect?: (selectedNode: AutocompleteNode | null) => void;
+  onInputChange?: (value: string) => void;
 }
 
 const dataCy = "location-autocomplete";
 
 export const LocationAutocomplete = ({
   nodes,
-  onNodeSelect,
   placeholder = "Select a location",
   label = "Location",
   isRequired = false,
+  onSelect,
+  onInputChange,
 }: LocationAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -33,32 +36,27 @@ export const LocationAutocomplete = ({
     [nodes],
   );
 
-  const filteredNodes = useMemo(() => {
-    if (!inputValue.trim()) return nodes;
-
-    const lowerCaseInput = inputValue.toLowerCase();
-    return nodes.filter((node) => {
-      if (node.name.toLowerCase().includes(lowerCaseInput)) return true;
-
-      const fullPath = node.path?.join(" | ").toLowerCase() ?? "";
-      return fullPath.includes(lowerCaseInput);
-    });
-  }, [inputValue, nodes]);
-
   const handleSelectionChange = (resourceId: string | null) => {
     let node: AutocompleteNode | undefined;
 
     if (resourceId && nodeMap.has(resourceId)) {
       node = nodeMap.get(resourceId);
       if (node) {
-        setInputValue(node.path?.join(" | ") ?? node.name);
+        setInputValue(node.name);
       }
     } else {
       setInputValue("");
     }
 
-    if (onNodeSelect) {
-      onNodeSelect(node || null);
+    if (onSelect) {
+      onSelect(node || null);
+    }
+  };
+
+  const handleInputChange = (value: string) => {
+    setInputValue(value);
+    if (onInputChange) {
+      onInputChange(value);
     }
   };
 
@@ -66,15 +64,16 @@ export const LocationAutocomplete = ({
     <div className="location-autocomplete" data-cy={dataCy}>
       <Combobox
         label={label}
-        inputValue={inputValue}
-        onInputChange={setInputValue}
+        onInputChange={handleInputChange}
         onSelectionChange={handleSelectionChange}
         menuTrigger="input"
         placeholder={placeholder}
         isRequired={isRequired}
+        size={InputSize.Large}
+        className="location-autocomplete__combobox"
       >
-        {filteredNodes.length > 0 ? (
-          filteredNodes.map((node) => {
+        {nodes.length > 0 ? (
+          nodes.map((node) => {
             const displayText = node.path?.join(" | ") ?? node.name;
             return (
               <Item key={node.resourceId} textValue={displayText}>
