@@ -144,6 +144,7 @@ const HostProvisionEditDrawer = ({
               <Section title="Site">
                 <Flex cols={[8]}>
                   <SiteSearch
+                    defaultInputValue={site?.name}
                     onSiteSelect={(node: AutocompleteNode | null) => {
                       if (node) {
                         setSite({ name: node.name, siteID: node.resourceId });
