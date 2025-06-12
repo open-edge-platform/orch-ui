@@ -51,34 +51,19 @@ const ClusterEditNodeReview = ({
     },
   );
 
-  const data: CombinedNodeHostItem[] = useMemo(() => {
+  const combinedNodeHostsList: CombinedNodeHostItem[] = useMemo(() => {
     if (clusterNodeList?.length === 0) {
       return [];
     }
+
     return clusterNodeList.map((node) => {
       const host = hostsResponse?.hosts?.find(
         (host) => host.resourceId === node.id,
       );
       return host ? { ...host, ...node } : node;
     });
-  }, [clusterNodeList]);
-  // const data: CombinedNodeHostList = [];
+  }, [clusterNodeList, hostsResponse?.hosts]);
 
-  // if (nodesCount > 0) {
-  //   clusterNodeList?.forEach((node) => {
-  //     const host = hostsResponse?.hosts?.find(
-  //       (host) => host.resourceId === node.id,
-  //     );
-  //     if (host) {
-  //       data.push({
-  //         ...host,
-  //         status: node.status,
-  //         role: node.role,
-  //       });
-  //     }
-  //   });
-  // }
-  //================
   // these columns define the nodes in the cluster.
   // They are used to render information about the node
   const columns: TableColumn<CombinedNodeHostItem>[] = [
@@ -121,7 +106,7 @@ const ClusterEditNodeReview = ({
         Hosts
       </Heading>
 
-      {data.length > 0 ? (
+      {combinedNodeHostsList.length > 0 ? (
         // TODO: replace this with ClusterNodesTable with a @orch-ui/components
         // NOTE: ClusterNodesTable doesn't work with affect by addition of row
         //       within same page.
@@ -129,7 +114,7 @@ const ClusterEditNodeReview = ({
           <Table
             variant="minimal"
             columns={columns}
-            data={data}
+            data={combinedNodeHostsList}
             sort={[0, 1, 2, 3]}
             initialSort={{
               column: "Host Name",
