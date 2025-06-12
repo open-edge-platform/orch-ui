@@ -20,7 +20,7 @@ const HostTableRemoteMock = ({
 }: {
   columns: TableColumn<infra.HostResourceRead>[];
   selectedHostIds?: string[];
-  onHostSelect: (host: infra.Host, isSelected: boolean) => void;
+  onHostSelect: (host: infra.HostResource, isSelected: boolean) => void;
 }) => {
   return (
     <Table
@@ -73,7 +73,6 @@ describe("<HostSelection/>", () => {
             nodes: [
               {
                 id: "host-dh38bjw9",
-                name: "host-dh38bjw9",
                 status: {
                   condition: "STATUS_CONDITION_READY",
                 },
@@ -93,7 +92,6 @@ describe("<HostSelection/>", () => {
                     nodes: [
                       {
                         id: "host-dh38bjw9",
-                        name: "host-dh38bjw9",
                         status: {
                           condition: "STATUS_CONDITION_READY",
                         },
@@ -204,7 +202,6 @@ describe("<HostSelection/>", () => {
           nodes: [
             {
               id: "host-dh38bjw9",
-              name: "host-dh38bjw9",
               status: {
                 condition: "STATUS_CONDITION_READY",
               },
@@ -214,7 +211,6 @@ describe("<HostSelection/>", () => {
         configuredClusterNodes={[
           {
             id: "host-dh38bjw9",
-            name: "host-dh38bjw9",
             status: {
               condition: "STATUS_CONDITION_READY",
             },
@@ -233,7 +229,6 @@ describe("<HostSelection/>", () => {
                   nodes: [
                     {
                       id: "host-dh38bjw9",
-                      name: "host-dh38bjw9",
                       status: {
                         condition: "STATUS_CONDITION_READY",
                       },
@@ -243,7 +238,6 @@ describe("<HostSelection/>", () => {
                 configuredClusterNodes={[
                   {
                     id: "host-dh38bjw9",
-                    name: "host-dh38bjw9",
                     status: {
                       condition: "STATUS_CONDITION_READY",
                     },

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { StatusIcon, TableColumn } from "@orch-ui/components";
 import {
   getInfraPath,
@@ -13,7 +13,11 @@ import {
 } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 
-const name: TableColumn<cm.NodeInfo> = {
+export type CombinedNodeHostItem = Partial<infra.HostResourceRead> &
+  cm.NodeInfo;
+export type CombinedNodeHostList = CombinedNodeHostItem[];
+
+const name: TableColumn<CombinedNodeHostItem> = {
   Header: "Host Name",
   accessor: (node) => {
     if (node.name) {
@@ -22,7 +26,7 @@ const name: TableColumn<cm.NodeInfo> = {
       return node.id;
     }
   },
-  Cell: (table: { row: { original: cm.NodeInfo } }) => {
+  Cell: (table: { row: { original: CombinedNodeHostItem } }) => {
     return table.row.original.id ? (
       <Link
         to={getInfraPath(hostDetailsRoute, {
@@ -39,14 +43,14 @@ const name: TableColumn<cm.NodeInfo> = {
   },
 };
 
-const nameWithoutLink: TableColumn<cm.NodeInfo> = {
+const nameWithoutLink: TableColumn<CombinedNodeHostItem> = {
   Header: "Host Name",
   accessor: (node) => node.name || node.id,
 };
 
-const status: TableColumn<cm.NodeInfo> = {
+const status: TableColumn<CombinedNodeHostItem> = {
   Header: "Readiness",
-  accessor: (item: cm.NodeInfo) => nodeStatusToText(item.status),
+  accessor: (item: CombinedNodeHostItem) => nodeStatusToText(item.status),
   Cell: (table: { row: { original: cm.NodeInfo } }) => {
     const row = table.row.original;
     return (
@@ -63,12 +67,12 @@ const guid: TableColumn<cm.NodeInfo> = {
   accessor: (nodes) => nodes.id ?? "-",
 };
 
-const os: TableColumn<cm.NodeInfo> = {
+const os: TableColumn<CombinedNodeHostItem> = {
   Header: "Operating System",
-  accessor: (nodes) => nodes.os ?? "-",
+  accessor: (nodes) => nodes.instance?.os?.name ?? "-",
 };
 
-const role: TableColumn<cm.NodeInfo> = {
+const role: TableColumn<CombinedNodeHostItem> = {
   Header: "Role",
   accessor: (nodes) => {
     let roleUpdate = "";
@@ -88,8 +92,8 @@ const role: TableColumn<cm.NodeInfo> = {
 };
 
 const roleSelect = (
-  popupFn: (node: cm.NodeInfo) => JSX.Element,
-): TableColumn<cm.NodeInfo> => ({
+  popupFn: (node: CombinedNodeHostItem) => JSX.Element,
+): TableColumn<CombinedNodeHostItem> => ({
   Header: "Role",
   textAlign: "left",
   padding: "0",
@@ -97,8 +101,8 @@ const roleSelect = (
 });
 
 const actions = (
-  popupFn: (node: cm.NodeInfo) => JSX.Element,
-): TableColumn<cm.NodeInfo> => ({
+  popupFn: (node: CombinedNodeHostItem) => JSX.Element,
+): TableColumn<CombinedNodeHostItem> => ({
   Header: "Actions",
   textAlign: "center",
   padding: "0",

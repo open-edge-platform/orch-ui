@@ -25,6 +25,34 @@ describe("<ClusterEditNodeReview/>", () => {
     });
   });
 
+  describe("when node/host are available", () => {
+    beforeEach(() => {
+      pom.interceptApis([pom.api.getHost]);
+      cy.mount(
+        <ClusterEditNodeReview
+          clusterNodeList={[
+            {
+              id: "host-provisioned-1",
+              role: "all",
+              status: {
+                condition: "STATUS_CONDITION_READY",
+                reason: "Running",
+              },
+            },
+          ]}
+          onNodeUpdate={cy.stub()}
+        />,
+      );
+    });
+    it("should render component with host details", () => {
+      pom.root.should("exist");
+      pom.waitForApis();
+      pom.table.getCell(1, 1).contains("host-provisioned-1"); // host name fetched from host api response
+      pom.table.getCell(1, 2).contains("Running"); // from node status
+      pom.table.getCell(1, 3).contains("Ubuntu"); // os name etched from host api response
+    });
+  });
+
   describe("when nodes/hosts are available", () => {
     beforeEach(() => {
       cy.mount(
@@ -32,36 +60,25 @@ describe("<ClusterEditNodeReview/>", () => {
           clusterNodeList={[
             {
               id: "host-unassign1",
-              os: "Ubuntu",
-              name: "host-unassign1",
               role: "all",
             },
             {
               id: "host-unassign2",
-              os: "Ubuntu",
-              name: "host-unassign2",
               role: "controlplane",
             },
             {
               id: "host-unassign3",
-              os: "Ubuntu",
-              name: "host-unassign3",
               role: "worker",
             },
             {
               id: "host-unassign4",
-              os: "Ubuntu",
-              name: "host-unassign4",
               role: "",
             },
             {
               id: "host-noname",
-              os: "Ubuntu",
             },
             {
               id: "host-unknown",
-              os: "Ubuntu",
-              name: "host-unknown",
               role: "unknown",
             },
           ]}
@@ -108,8 +125,6 @@ describe("<ClusterEditNodeReview/>", () => {
         "be.calledWith",
         {
           id: "host-unknown",
-          os: "Ubuntu",
-          name: "host-unknown",
           role: "unknown",
         },
         "worker",
