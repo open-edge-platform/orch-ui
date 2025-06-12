@@ -46,7 +46,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
   const [isRegisterHostDrawerOpen, setIsRegisterHostDrawerOpen] =
     useState<boolean>(false);
 
-  const [onboardHost] = infra.useHostServiceRegisterUpdateHostMutation();
+  const [onboardHost] = infra.useHostServicePatchRegisterHostMutation();
 
   const onDelete = () => {
     setDeleteConfirmationOpen(true);

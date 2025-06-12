@@ -12,9 +12,8 @@ const pom = new OsConfigPom();
 describe("<OsConfig/>", () => {
   const os: infra.OperatingSystemResourceRead = {
     resourceId: "currentOsId",
-    name: "currentOsName",
+    name: "Ubuntu",
     sha256: "currentOsSha256",
-    updateSources: [],
     osType: "OS_TYPE_IMMUTABLE",
   };
 
@@ -28,13 +27,17 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
-          desiredOs: {
-            resourceId: "desiredOsId",
-            name: "desiredOsName",
-            sha256: "desiredOsSha256",
+          os: os,
+          osUpdateAvailable: "Ubuntu",
+          updatePolicy: {
+            name: "Ubuntu",
             updateSources: [],
-            osType: "OS_TYPE_IMMUTABLE",
+            targetOs: {
+              resourceId: "ubuntuOsId",
+              name: "Ubuntu",
+              sha256: "desiredOsSha256",
+              osType: "OS_TYPE_IMMUTABLE",
+            },
           },
         }}
       />,
@@ -46,8 +49,7 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
-          desiredOs: os,
+          os: os,
         }}
       />,
     );
@@ -58,15 +60,21 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
+          os: os,
+          osUpdateAvailable: "Ubuntu",
         }}
       />,
     );
     pom.el.osUpdate.should("exist");
-    pom.root.should("contain.text", "currentOsName");
+    pom.root.should("contain.text", "Ubuntu");
   });
   it("should render icon when added", () => {
-    cy.mount(<OsConfig instance={instanceTwo} iconOnly />);
+    cy.mount(
+      <OsConfig
+        instance={{ ...instanceTwo, osUpdateAvailable: "Ubuntu" }}
+        iconOnly
+      />,
+    );
     pom.el.icon.should("be.visible");
   });
 });

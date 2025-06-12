@@ -4,7 +4,6 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { isOSUpdateAvailable } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import "./OsConfig.scss";
 const dataCy = "osConfig";
@@ -15,7 +14,7 @@ export interface OsConfigProps {
 
 export const OsConfig = ({ instance, iconOnly = false }: OsConfigProps) => {
   const cy = { "data-cy": dataCy };
-  const showUpdateAvailable = isOSUpdateAvailable(instance);
+  const showUpdateAvailable = instance?.osUpdateAvailable;
   return (
     <div {...cy} className="os-config">
       {showUpdateAvailable && iconOnly && (
@@ -26,7 +25,7 @@ export const OsConfig = ({ instance, iconOnly = false }: OsConfigProps) => {
           title="OS update available"
         />
       )}
-      {instance?.currentOs?.name ?? <em>(Not set)</em>}
+      {instance?.os?.name ?? <em>(Not set)</em>}
       {showUpdateAvailable && iconOnly === false && (
         <label
           className="os-update"

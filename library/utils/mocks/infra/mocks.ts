@@ -626,7 +626,7 @@ export const handlers = [
     `${baseURL}/compute/hosts/:hostId/register`,
     async (req, res, ctx) => {
       const { resourceId } =
-        req.params as unknown as infra.HostServiceRegisterUpdateHostApiArg;
+        req.params as unknown as infra.HostServicePatchRegisterHostApiArg;
 
       const result = hostStore.get(resourceId);
       const updatedResult: HostMock = {
