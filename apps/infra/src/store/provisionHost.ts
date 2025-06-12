@@ -67,7 +67,7 @@ export const initialState: HostProvisionState = {
   hasHostDefinitionError: false,
 };
 
-type SiteReadWithPath = infra.SiteRead & {
+export type SiteReadWithPath = infra.SiteRead & {
   path?: string[];
 };
 
