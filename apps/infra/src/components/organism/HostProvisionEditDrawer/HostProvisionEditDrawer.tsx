@@ -35,7 +35,9 @@ import {
   selectHostProvisionState,
   setHostData,
 } from "../../../store/provisionHost";
+import SiteSearch from "../../atom/locations/SiteSearch/SiteSearch";
 import { PublicSshKeyDropdown } from "../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
+import { AutocompleteNode } from "../../molecules/LocationAutocomplete/location-autocomplete";
 import OsProfileDropdown from "../OsProfileDropdown/OsProfileDropdown";
 
 const dataCy = "hostProvisionEditDrawer";
@@ -74,6 +76,9 @@ const HostProvisionEditDrawer = ({
   const [showAdvancedOptions, setShowAdvancedOptions] =
     useState<boolean>(false);
 
+  const [site, setSite] = useState<infra.SiteRead | undefined>(
+    host?.site as infra.SiteRead,
+  );
   const [osProfile, setOsProfile] = useState<
     infra.OperatingSystemResourceRead | undefined
   >(host?.instance?.os as infra.OperatingSystemResourceRead);
@@ -136,6 +141,19 @@ const HostProvisionEditDrawer = ({
             />
           ) : host ? (
             <>
+              <Section title="Site">
+                <Flex cols={[8]}>
+                  <SiteSearch
+                    onSiteSelect={(node: AutocompleteNode | null) => {
+                      if (node) {
+                        setSite({ name: node.name, siteID: node.resourceId });
+                      }
+                    }}
+                    isRequired
+                  />
+                </Flex>
+              </Section>
+              <Divider />
               <Section title="Operating System">
                 <Flex cols={[8]}>
                   <OsProfileDropdown
@@ -274,7 +292,7 @@ const HostProvisionEditDrawer = ({
                     setHostData({
                       host: {
                         name: host?.name ?? "",
-                        // site
+                        site,
                         instance: {
                           os: osProfile,
                           osID: osProfile?.resourceId,
