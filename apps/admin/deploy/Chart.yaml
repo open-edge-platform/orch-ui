@@ -4,11 +4,11 @@ apiVersion: v2
 name: orch-ui-admin
 description: Deploy Edge-Native Software Platform UI Admin pods on Kubernetes
 type: application
-version: 2.0.16
+version: 2.0.17-dev
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "2.0.16"
+appVersion: "2.0.17-dev"
 annotations:
   api_observability_monitor: 0.0.5
 dependencies: []
