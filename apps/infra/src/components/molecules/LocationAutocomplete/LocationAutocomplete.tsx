@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Combobox, Item, Text } from "@spark-design/react";
+import { Combobox, IComboboxProps, Item, Text } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
 import { useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { AutocompleteNode } from "./location-autocomplete";
 import "./LocationAutocomplete.scss";
 
-interface LocationAutocompleteProps {
+interface LocationAutocompleteProps extends Omit<IComboboxProps, "children"> {
   nodes: AutocompleteNode[];
   placeholder?: string;
   label?: string;
@@ -28,6 +28,7 @@ export const LocationAutocomplete = ({
   isRequired = false,
   onSelect,
   onInputChange,
+  ...comboboxProps
 }: LocationAutocompleteProps) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -70,6 +71,7 @@ export const LocationAutocomplete = ({
         placeholder={placeholder}
         isRequired={isRequired}
         size={InputSize.Large}
+        {...comboboxProps}
         className="location-autocomplete__combobox"
       >
         {nodes.length > 0 ? (

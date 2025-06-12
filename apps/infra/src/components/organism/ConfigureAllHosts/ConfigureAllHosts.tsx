@@ -77,15 +77,28 @@ const ConfigureAllHosts = () => {
 
   const handleSiteChange = (node: AutocompleteNode | null) => {
     if (node) {
-      dispatch(setCommonSite({ name: node.name, siteID: node.resourceId }));
+      dispatch(
+        setCommonSite({
+          name: node.name,
+          siteID: node.resourceId,
+          path: node.path,
+        }),
+      );
     }
   };
+
+  const sitePath =
+    commonHostData.site?.path?.join(" | ") ?? commonHostData.site?.name;
 
   return (
     <div {...cy} className="configure-all-hosts">
       <Section title="Site">
         <Flex cols={[6]}>
-          <SiteSearch onSiteSelect={handleSiteChange} isRequired />
+          <SiteSearch
+            onSiteSelect={handleSiteChange}
+            isRequired
+            defaultInputValue={sitePath}
+          />
         </Flex>
       </Section>
       <Divider />

@@ -34,7 +34,8 @@ export interface HostProvisionFormState {
 export interface HostProvisionState {
   formStatus: HostProvisionFormState;
   hosts: { [name: string]: HostData };
-  commonHostData: Omit<HostData, "name"> & {
+  commonHostData: Omit<HostData, "name" | "site"> & {
+    site?: SiteReadWithPath;
     clusterTemplateName?: string;
     clusterTemplateVersion?: string;
     vPro?: boolean;
@@ -64,6 +65,10 @@ export const initialState: HostProvisionState = {
   autoProvision: false,
   createCluster: true,
   hasHostDefinitionError: false,
+};
+
+export type SiteReadWithPath = infra.SiteRead & {
+  path?: string[];
 };
 
 const containsHosts = (state: HostProvisionState) => {
@@ -225,7 +230,7 @@ export const provisionHost = createSlice({
         // continue with other properties
       });
     },
-    setCommonSite(state, action: PayloadAction<infra.SiteRead>) {
+    setCommonSite(state, action: PayloadAction<SiteReadWithPath>) {
       state.commonHostData.site = action.payload;
       provisionHost.caseReducers.validateStep(state);
     },
