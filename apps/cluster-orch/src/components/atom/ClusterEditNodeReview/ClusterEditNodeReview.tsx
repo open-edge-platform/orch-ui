@@ -3,10 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { TableColumn } from "@orch-ui/components";
+import { SharedStorage } from "@orch-ui/utils";
 import { Heading, Table } from "@spark-design/react";
-import { NodeTableColumns } from "../../../utils/NodeTableColumns";
+import { useMemo } from "react";
+import {
+  CombinedNodeHostItem,
+  NodeTableColumns,
+} from "../../../utils/NodeTableColumns";
 import NodeRoleDropdown from "../NodeRoleDropdown/NodeRoleDropdown";
 
 const dataCy = "clusterEditNodeReview";
@@ -32,12 +37,55 @@ const ClusterEditNodeReview = ({
 }: ClusterEditNodeReviewProps) => {
   const cy = { "data-cy": dataCy };
 
+  const hostsFilter = clusterNodeList
+    ?.map(({ id }) => `resourceId="${id}"`)
+    .join(" OR ");
+
+  const { data: hostsResponse } = infra.useHostServiceListHostsQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      filter: hostsFilter,
+    },
+    {
+      skip: clusterNodeList?.length === 0,
+    },
+  );
+
+  const data: CombinedNodeHostItem[] = useMemo(() => {
+    if (clusterNodeList?.length === 0) {
+      return [];
+    }
+    return clusterNodeList.map((node) => {
+      const host = hostsResponse?.hosts?.find(
+        (host) => host.resourceId === node.id,
+      );
+      return host ? { ...host, ...node } : node;
+    });
+  }, [clusterNodeList]);
+  // const data: CombinedNodeHostList = [];
+
+  // if (nodesCount > 0) {
+  //   clusterNodeList?.forEach((node) => {
+  //     const host = hostsResponse?.hosts?.find(
+  //       (host) => host.resourceId === node.id,
+  //     );
+  //     if (host) {
+  //       data.push({
+  //         ...host,
+  //         status: node.status,
+  //         role: node.role,
+  //       });
+  //     }
+  //   });
+  // }
+  //================
   // these columns define the nodes in the cluster.
   // They are used to render information about the node
-  const columns: TableColumn<cm.NodeInfo>[] = [
+  const columns: TableColumn<CombinedNodeHostItem>[] = [
     NodeTableColumns.nameWithoutLink,
+    NodeTableColumns.status,
     NodeTableColumns.os,
-    NodeTableColumns.roleSelect((node: cm.NodeInfo) => {
+    NodeTableColumns.roleSelect((node: CombinedNodeHostItem) => {
       // If node is present as part of cluster then disable role edit on it
       const isDisabled =
         configuredClusterNode.find(
@@ -73,7 +121,7 @@ const ClusterEditNodeReview = ({
         Hosts
       </Heading>
 
-      {clusterNodeList.length > 0 ? (
+      {data.length > 0 ? (
         // TODO: replace this with ClusterNodesTable with a @orch-ui/components
         // NOTE: ClusterNodesTable doesn't work with affect by addition of row
         //       within same page.
@@ -81,7 +129,7 @@ const ClusterEditNodeReview = ({
           <Table
             variant="minimal"
             columns={columns}
-            data={clusterNodeList}
+            data={data}
             sort={[0, 1, 2, 3]}
             initialSort={{
               column: "Host Name",
