@@ -16,6 +16,11 @@ const devConfig = {
   module: {
     rules: [
       {
+        test: /\.(ts|tsx)$/,
+        exclude: [/node_modules/, /\.cy\.tsx$/, /\.pom\.ts/],
+        use: ["@jsdevtools/coverage-istanbul-loader", "ts-loader"],
+      },
+      {
         test: /.*\.pom.(ts|tsx)?$/,
         use: [{ loader: "ignore-loader" }],
       },
@@ -57,10 +62,10 @@ const devConfig = {
   plugins: [
     new ModuleFederationPlugin({
       remotes: {
-        Admin: `Admin@http://localhost:8084/remoteEntry.js`,
-        AppOrchUI: `AppOrchUI@http://localhost:8081/remoteEntry.js`,
-        ClusterOrchUI: `ClusterOrchUI@http://localhost:8083/remoteEntry.js`,
-        EimUI: `EimUI@http://localhost:8082/remoteEntry.js`,
+        Admin: "Admin@http://localhost:8084/remoteEntry.js",
+        AppOrchUI: "AppOrchUI@http://localhost:8081/remoteEntry.js",
+        ClusterOrchUI: "ClusterOrchUI@http://localhost:8083/remoteEntry.js",
+        EimUI: "EimUI@http://localhost:8082/remoteEntry.js",
       },
     }),
   ],

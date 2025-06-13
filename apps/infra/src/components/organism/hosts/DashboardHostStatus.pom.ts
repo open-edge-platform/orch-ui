@@ -37,7 +37,7 @@ const hostStore = new HostStore();
 
 const endpoints: CyApiDetails<
   ApiAliases,
-  infra.GetV1ProjectsByProjectNameComputeHostsSummaryApiResponse
+  infra.HostServiceGetHostsSummaryApiResponse
 > = {
   getHostSummary: {
     route,

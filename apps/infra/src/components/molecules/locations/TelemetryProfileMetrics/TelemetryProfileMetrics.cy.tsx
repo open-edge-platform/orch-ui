@@ -20,14 +20,14 @@ describe("<RegionViewMetrics/>", () => {
       .eq(0)
       .should(
         "contain",
-        regionTelemetryMetricsResponse.TelemetryMetricsProfiles[0].metricsGroup
+        regionTelemetryMetricsResponse.telemetryMetricsProfiles[0].metricsGroup
           ?.name,
       );
     pom.el.interval
       .eq(0)
       .should(
         "contain",
-        regionTelemetryMetricsResponse.TelemetryMetricsProfiles[0]
+        regionTelemetryMetricsResponse.telemetryMetricsProfiles[0]
           .metricsInterval,
       );
   });

@@ -66,17 +66,17 @@ mockHostNoHostLabels.metadata = [];
 
 const mockHostNoSite = structuredClone(mockHost);
 mockHostNoSite.site = undefined;
-export const hostNoName: infra.HostRead = {
+export const hostNoName: infra.HostResourceRead = {
   ...mockHost,
   name: "",
 };
 
 // Maintenance Schedule test mock
 const emptyResponse = {
-  SingleSchedules: [],
-  RepeatedSchedules: [],
+  singleSchedules: [],
+  repeatedSchedules: [],
 };
-const schedule123: infra.SingleSchedule2 = {
+const schedule123: infra.SingleScheduleResource = {
   scheduleStatus: "SCHEDULE_STATUS_MAINTENANCE",
   name: "schedule123",
   startSeconds: 1688148856,
@@ -85,13 +85,13 @@ const schedule123: infra.SingleSchedule2 = {
 };
 
 const singleScheduleMock = {
-  SingleSchedules: [schedule123],
-  RepeatedSchedules: [],
+  singleSchedules: [schedule123],
+  repeatedSchedules: [],
 };
 
 const repeatedScheduleMock = {
-  SingleSchedules: [],
-  RepeatedSchedules: [repeatedScheduleOne],
+  singleSchedules: [],
+  repeatedSchedules: [repeatedScheduleOne],
 };
 
 const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
@@ -114,7 +114,7 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
             name: "CurrentOS",
             sha256: "CurrentOSSHA256",
             updateSources: ["CurrentOSUpdateSourceName"],
-            osType: "OPERATING_SYSTEM_TYPE_IMMUTABLE",
+            osType: "OS_TYPE_IMMUTABLE",
           },
           desiredOs: {
             resourceId: "os-desired",

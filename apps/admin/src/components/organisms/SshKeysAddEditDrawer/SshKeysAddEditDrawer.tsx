@@ -28,13 +28,13 @@ interface SshKeysAddEditDrawerProps {
   /** Is the drawer open in current state of UI. */
   isOpen?: boolean;
   /** Initial local account value (used in case of edit) */
-  defaultLocalAccount?: infra.LocalAccountRead;
+  defaultLocalAccount?: infra.LocalAccountResourceRead;
   /** This will be executed when we ckick any of the close button or drawer backdrop.  */
   onHide: () => void;
   /** This will be executed when we click the Add button */
-  onAdd?: (ssh: infra.LocalAccount) => void;
+  onAdd?: (ssh: infra.LocalAccountResource) => void;
   /** This will be executed when we click the Edit button */
-  onEdit?: (ssh: infra.LocalAccountRead) => void;
+  onEdit?: (ssh: infra.LocalAccountResourceRead) => void;
 }
 
 const SshKeysAddEditDrawer = ({
@@ -46,9 +46,9 @@ const SshKeysAddEditDrawer = ({
 }: SshKeysAddEditDrawerProps) => {
   const cy = { "data-cy": dataCy };
 
-  const resetValue: infra.LocalAccount = { username: "", sshKey: "" };
+  const resetValue: infra.LocalAccountResource = { username: "", sshKey: "" };
   const [localAccountWrite, setLocalAccountWrite] =
-    useState<infra.LocalAccount>(defaultLocalAccount ?? resetValue);
+    useState<infra.LocalAccountResource>(defaultLocalAccount ?? resetValue);
   const [isSshValid, setIsSshValid] = useState<boolean>(true);
 
   const {
@@ -56,7 +56,7 @@ const SshKeysAddEditDrawer = ({
     handleSubmit,
     unregister,
     formState: { errors, isValid },
-  } = useForm<infra.LocalAccount>({
+  } = useForm<infra.LocalAccountResource>({
     mode: "all",
     values: localAccountWrite,
   });

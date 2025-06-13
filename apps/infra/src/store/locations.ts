@@ -33,11 +33,11 @@ export enum SearchTypes {
 export interface LocationsState {
   regionId?: string;
   rootId?: string;
-  region?: infra.RegionRead;
-  regionToDelete?: infra.RegionRead;
+  region?: infra.RegionResourceRead;
+  regionToDelete?: infra.RegionResourceRead;
   siteId?: string;
-  site?: infra.SiteRead;
-  siteToDelete?: infra.SiteRead;
+  site?: infra.SiteResourceRead;
+  siteToDelete?: infra.SiteResourceRead;
   maintenanceEntity?: LocationScheduleMaintenanceTargetEntity;
   branches: TreeBranchState[];
   expandedRegionIds: string[];
@@ -69,7 +69,7 @@ export const locations = createSlice({
   reducers: {
     setRegion(
       state: LocationsState,
-      action: PayloadAction<infra.RegionRead | undefined>,
+      action: PayloadAction<infra.RegionResourceRead | undefined>,
     ) {
       state.region = action.payload;
     },
@@ -80,7 +80,7 @@ export const locations = createSlice({
         );
 
       const root = TreeBranchStateUtils.findValid(state.rootId, state.branches);
-      (root?.data as infra.RegionRead).totalSites = action.payload;
+      (root?.data as infra.RegionResourceRead).totalSites = action.payload;
       locations.caseReducers.setRootSiteCounts(state);
     },
     setMaintenanceEntity(
@@ -98,7 +98,7 @@ export const locations = createSlice({
     },
     setRegionToDelete(
       state: LocationsState,
-      action: PayloadAction<infra.RegionRead | undefined>,
+      action: PayloadAction<infra.RegionResourceRead | undefined>,
     ) {
       state.regionId = undefined;
       state.regionToDelete = action.payload;
@@ -155,13 +155,13 @@ export const locations = createSlice({
     },
     setSite(
       state: LocationsState,
-      action: PayloadAction<infra.SiteRead | undefined>,
+      action: PayloadAction<infra.SiteResourceRead | undefined>,
     ) {
       state.site = action.payload;
     },
     setSiteToDelete(
       state: LocationsState,
-      action: PayloadAction<infra.SiteRead | undefined>,
+      action: PayloadAction<infra.SiteResourceRead | undefined>,
     ) {
       state.siteId = undefined;
       state.siteToDelete = action.payload;
@@ -216,7 +216,7 @@ export const locations = createSlice({
     },
     setNodesRoot(
       state: LocationsState,
-      action: PayloadAction<infra.RegionRead[]>,
+      action: PayloadAction<infra.RegionResourceRead[]>,
     ) {
       const regions = action.payload;
       const roots = [...state.branches];
@@ -239,8 +239,8 @@ export const locations = createSlice({
     setNodesBranch(
       state: LocationsState,
       action: PayloadAction<{
-        regions: infra.RegionRead[];
-        sites: infra.SiteRead[];
+        regions: infra.RegionResourceRead[];
+        sites: infra.SiteResourceRead[];
       }>,
     ) {
       const { regionId } = state;
@@ -257,19 +257,21 @@ export const locations = createSlice({
       const root = TreeBranchStateUtils.findRoot(branch, state.branches);
 
       const { children } = branch;
-      const updatedSites: TreeBranchState<infra.RegionRead | infra.SiteRead>[] =
-        TreeBranchStateUtils.createSites(sites);
-      let updatedRegions: TreeBranchState<infra.RegionRead | infra.SiteRead>[] =
-        [];
+      const updatedSites: TreeBranchState<
+        infra.RegionResourceRead | infra.SiteResourceRead
+      >[] = TreeBranchStateUtils.createSites(sites);
+      let updatedRegions: TreeBranchState<
+        infra.RegionResourceRead | infra.SiteResourceRead
+      >[] = [];
       if (children) {
-        regions.forEach((region: infra.RegionRead) => {
+        regions.forEach((region: infra.RegionResourceRead) => {
           const updatedRegion = TreeBranchStateUtils.createRegion(region);
           const existingRegion = children.find(
             (child) => child.id === region.resourceId,
           );
           if (existingRegion) {
             updatedRegion.children =
-              (existingRegion.children as TreeBranchState<infra.RegionRead>[]) ??
+              (existingRegion.children as TreeBranchState<infra.RegionResourceRead>[]) ??
               [];
             updatedRegion.isExpanded = existingRegion.isExpanded;
           }
@@ -286,7 +288,8 @@ export const locations = createSlice({
     setRootSiteCounts(state: LocationsState) {
       if (state.branches.length === 0) return;
       state.rootSiteCounts = state.branches.map((rootNode) => {
-        const { totalSites, resourceId } = rootNode.data as infra.RegionRead;
+        const { totalSites, resourceId } =
+          rootNode.data as infra.RegionResourceRead;
         return { totalSites, resourceId };
       });
     },

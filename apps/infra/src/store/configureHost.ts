@@ -29,7 +29,9 @@ export interface HostConfigFormStatus {
   hasValidationError: boolean;
 }
 
-export type HostData = infra.HostWrite & { region?: infra.RegionRead } & {
+export type HostData = infra.HostResourceWrite & {
+  region?: infra.RegionResourceRead;
+} & {
   serialNumber?: string;
 } & { resourceId?: string } & {
   originalOs?: infra.OperatingSystemResourceRead;
@@ -170,7 +172,7 @@ export const configureHost = createSlice({
     },
     setNewRegisteredHosts(
       state,
-      action: PayloadAction<{ hosts: infra.HostRead[] }>,
+      action: PayloadAction<{ hosts: infra.HostResourceRead[] }>,
     ) {
       const { hosts } = action.payload;
       state.hosts = {};
@@ -184,7 +186,7 @@ export const configureHost = createSlice({
     },
     updateNewRegisteredHost(
       state,
-      action: PayloadAction<{ host: infra.HostRead }>,
+      action: PayloadAction<{ host: infra.HostResourceRead }>,
     ) {
       const { hosts } = state;
       const { host: newHost } = action.payload;
@@ -194,7 +196,10 @@ export const configureHost = createSlice({
         resourceId: newHost.resourceId,
       };
     },
-    setHosts(state, action: PayloadAction<{ hosts: infra.HostRead[] }>) {
+    setHosts(
+      state,
+      action: PayloadAction<{ hosts: infra.HostResourceRead[] }>,
+    ) {
       const { hosts } = state;
       const { hosts: selectedHosts } = action.payload;
 
@@ -205,7 +210,6 @@ export const configureHost = createSlice({
           site: host.site,
           metadata: host.metadata,
           uuid: host.uuid,
-          inheritedMetadata: host.inheritedMetadata,
           instance: host.instance,
           serialNumber: host.serialNumber,
           resourceId: host.resourceId,
@@ -231,7 +235,10 @@ export const configureHost = createSlice({
       host.name = action.payload.name;
       configureHost.caseReducers.validateStep(state);
     },
-    setMetadata(state, action: PayloadAction<{ metadata: infra.Metadata }>) {
+    setMetadata(
+      state,
+      action: PayloadAction<{ metadata: infra.MetadataItem[] }>,
+    ) {
       const { hosts } = state;
       Object.values(hosts).forEach(
         (hd) => (hd.metadata = action.payload.metadata),
@@ -240,7 +247,10 @@ export const configureHost = createSlice({
 
     setSecurity(
       state,
-      action: PayloadAction<{ hostId: string; value: infra.SecurityFeature }>,
+      action: PayloadAction<{
+        hostId: string;
+        value: infra.InstanceResourceRead["securityFeature"];
+      }>,
     ) {
       const id = action.payload.hostId;
       const host = selectHost(state, id);
@@ -301,12 +311,15 @@ export const configureHost = createSlice({
       host.instance!.os = action.payload.os;
       configureHost.caseReducers.validateStep(state);
     },
-    setRegion(state, action: PayloadAction<{ region: infra.RegionRead }>) {
+    setRegion(
+      state,
+      action: PayloadAction<{ region: infra.RegionResourceRead }>,
+    ) {
       const { hosts } = state;
       Object.values(hosts).forEach((hd) => (hd.region = action.payload.region));
       configureHost.caseReducers.validateStep(state);
     },
-    setSite(state, action: PayloadAction<{ site: infra.SiteRead }>) {
+    setSite(state, action: PayloadAction<{ site: infra.SiteResourceRead }>) {
       const { hosts } = state;
 
       Object.values(hosts).forEach((hd) => {
@@ -340,7 +353,10 @@ export const configureHost = createSlice({
     },
     setPublicSshKey(
       state,
-      action: PayloadAction<{ hostId: string; value: infra.LocalAccountRead }>,
+      action: PayloadAction<{
+        hostId: string;
+        value: infra.LocalAccountResourceRead;
+      }>,
     ) {
       const id = action.payload.hostId;
       const host = selectHost(state, id);
@@ -470,7 +486,7 @@ export const selectAreHostsSetSecureDisabled = (state: RootState) =>
 export const getHostWrite = (
   state: RootState,
   hostId: string,
-): infra.HostWrite => {
+): infra.HostResourceWrite => {
   const { name, siteId, uuid, metadata } = selectHost(
     state.configureHost,
     hostId,

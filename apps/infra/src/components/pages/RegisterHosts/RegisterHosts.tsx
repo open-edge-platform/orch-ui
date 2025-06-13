@@ -58,8 +58,7 @@ const RegisterHosts = () => {
   } = useAppSelector(selectHostProvisionState);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
-  const [registerHost] =
-    infra.usePostV1ProjectsByProjectNameComputeHostsRegisterMutation();
+  const [registerHost] = infra.useHostServiceRegisterHostMutation();
 
   return (
     <div {...cy} className={className}>

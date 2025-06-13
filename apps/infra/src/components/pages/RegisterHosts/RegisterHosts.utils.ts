@@ -18,18 +18,17 @@ export const registerHostPost = async (
   hosts: { [id: string]: HostData },
   autoOnboard: boolean,
 ): Promise<number> => {
-  const calls: Promise<infra.HostRead>[] = [];
+  const calls: Promise<infra.HostResourceRead>[] = [];
   Object.keys(hosts).forEach((name) => {
     const host = hosts[name];
-    const payload: infra.PostV1ProjectsByProjectNameComputeHostsRegisterApiArg =
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        hostRegisterInfo: {
-          ...host,
-          uuid: host.uuid || undefined,
-          autoOnboard,
-        },
-      };
+    const payload: infra.HostServiceRegisterHostApiArg = {
+      projectName: SharedStorage.project?.name ?? "",
+      hostRegister: {
+        ...host,
+        uuid: host.uuid || undefined,
+        autoOnboard,
+      },
+    };
 
     calls.push(registerHost(payload).unwrap());
   });

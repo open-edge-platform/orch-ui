@@ -46,7 +46,7 @@ const hostsEndpoints: CyApiDetails<HostsApi> = {
       hosts: [],
       hasNext: false,
       totalElements: 0,
-    } as infra.GetV1ProjectsByProjectNameComputeHostsApiResponse,
+    } as infra.HostServiceListHostsApiResponse,
   },
 };
 
@@ -65,8 +65,8 @@ type SingleSiteApis =
 
 const singleSiteEndpoints: CyApiDetails<
   SingleSiteApis,
-  infra.Site | infra.ProblemDetails,
-  infra.Site
+  infra.SiteResource,
+  infra.SiteResource
 > = {
   createSite: {
     route: route,
@@ -132,7 +132,7 @@ const singleSiteEndpoints: CyApiDetails<
 };
 
 type RegionsApis = "getRegions" | "getRegionsMocked";
-const regionsEndpoints: CyApiDetails<RegionsApis, infra.RegionsList> = {
+const regionsEndpoints: CyApiDetails<RegionsApis, infra.ListRegionsResponse> = {
   getRegions: {
     route: `**v1/projects/${defaultActiveProject.name}/regions?*`,
   },
@@ -205,7 +205,7 @@ class SiteFormPom extends CyPom<Selectors, ApiAliases> {
     this.root.find(`${className} input`).clear().type(value.toString());
   }
   //TODO: need SI support for data- attribute on <TextField />
-  public submit(site: infra.SiteWrite) {
+  public submit(site: infra.SiteResourceWrite) {
     cy.contains("Add New Site").should("be.visible");
     if (!site.name) {
       throw new Error("A name must be specified on Site create");

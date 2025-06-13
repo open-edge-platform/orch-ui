@@ -9,7 +9,7 @@ import GpuPom from "./Gpu.pom";
 
 const pom = new GpuPom();
 describe("<Gpu />", () => {
-  const gpu: infra.HostResourcesGpuRead = {
+  const gpu: infra.HostgpuResourceRead = {
     capabilities: ["capabilities1", "capabilities2"],
     description: "description",
     deviceName: "deviceName",

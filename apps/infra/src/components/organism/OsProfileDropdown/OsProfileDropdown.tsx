@@ -41,7 +41,7 @@ const OsProfileDropdown = ({
     isError,
     isSuccess,
     error,
-  } = infra.useGetV1ProjectsByProjectNameComputeOsQuery(
+  } = infra.useOperatingSystemServiceListOperatingSystemsQuery(
     {
       projectName,
       pageSize,

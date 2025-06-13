@@ -240,7 +240,7 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
       Header: "Cluster Status",
       accessor: (item) =>
         aggregateStatuses(clusterToStatuses(item), "lifecyclePhase").message,
-      apiName: "status",
+      apiName: "lifecyclePhase",
       Cell: (table) => {
         return (
           <AggregatedStatuses<AggregatedStatusesMap>

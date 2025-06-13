@@ -141,10 +141,10 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
     }
   }, [clusterDetail]);
   const { data: firstClusterHost, isSuccess: isFirstHostSuccess } =
-    infra.useGetV1ProjectsByProjectNameComputeHostsAndHostIdQuery(
+    infra.useHostServiceGetHostQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        hostId: clusterFirstHostId ?? "",
+        resourceId: clusterFirstHostId ?? "",
       },
       {
         skip: !isSuccess || !clusterFirstHostId || !SharedStorage.project?.name,
@@ -158,15 +158,14 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
     }
   }, [firstClusterHost]);
 
-  const { data: siteData } =
-    infra.useGetV1ProjectsByProjectNameRegionsAndRegionIdSitesSiteIdQuery(
-      {
-        projectName: SharedStorage.project?.name ?? "",
-        regionId: "*", // Cluster or associated host have no region information
-        siteId: siteId ?? "",
-      },
-      { skip: !siteId || !SharedStorage.project?.name },
-    ); // Host's Site details
+  const { data: siteData } = infra.useSiteServiceGetSiteQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      regionResourceId: "*", // Cluster or associated host have no region information
+      resourceId: siteId ?? "",
+    },
+    { skip: !siteId || !SharedStorage.project?.name },
+  ); // Host's Site details
 
   // we only display metadata that are actually associated with the cluster and are editable by the user
   // If the metadata is also present in site.metadata we mark it as a Site metadata
@@ -189,7 +188,7 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
         md.type = "site";
       }
       if (
-        siteData?.inheritedMetadata?.location?.find(
+        siteData?.inheritedMetadata?.find(
           (rmd) => rmd.key === md.key && rmd.value === md.value,
         )
       ) {
@@ -446,6 +445,7 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
             <DetailedStatuses
               data={clusterToStatuses(clusterDetail)}
               statusFields={clusterStatusFields}
+              showTimestamp
             />
           </Item>
           <Item title={<Text>Hosts</Text>}>
