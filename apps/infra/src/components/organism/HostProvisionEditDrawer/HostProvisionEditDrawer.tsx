@@ -34,6 +34,7 @@ import {
   HostData,
   selectHostProvisionState,
   setHostData,
+  SiteReadWithPath,
 } from "../../../store/provisionHost";
 import SiteSearch from "../../atom/locations/SiteSearch/SiteSearch";
 import { PublicSshKeyDropdown } from "../../atom/PublicSshKeyDropdown/PublicSshKeyDropdown";
@@ -57,28 +58,24 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
 }
 
 interface HostProvisionEditDrawerProps {
-  hostDataName?: string;
+  host?: HostData;
   onClose?: () => void;
 }
 
 const HostProvisionEditDrawer = ({
-  hostDataName,
+  host,
   onClose,
 }: HostProvisionEditDrawerProps) => {
   const cy = { "data-cy": dataCy };
 
-  const { createCluster, hosts } = useAppSelector(selectHostProvisionState);
+  const { createCluster } = useAppSelector(selectHostProvisionState);
   const dispatch = useAppDispatch();
-
-  const host = hostDataName ? hosts[hostDataName] : undefined;
 
   const [loading, setLoading] = useState<boolean>(true);
   const [showAdvancedOptions, setShowAdvancedOptions] =
     useState<boolean>(false);
 
-  const [site, setSite] = useState<infra.SiteRead | undefined>(
-    host?.site as infra.SiteRead,
-  );
+  const [site, setSite] = useState<SiteReadWithPath | undefined>(host?.site);
   const [osProfile, setOsProfile] = useState<
     infra.OperatingSystemResourceRead | undefined
   >(host?.instance?.os as infra.OperatingSystemResourceRead);
@@ -123,7 +120,7 @@ const HostProvisionEditDrawer = ({
   return (
     <div {...cy} className="host-provision-edit-drawer">
       <Drawer
-        show={hostDataName !== undefined}
+        show={host !== undefined}
         backdropClosable={false}
         onHide={() => {
           onClose?.();
@@ -144,10 +141,14 @@ const HostProvisionEditDrawer = ({
               <Section title="Site">
                 <Flex cols={[8]}>
                   <SiteSearch
-                    defaultInputValue={site?.name}
+                    defaultInputValue={site?.path?.join(" | ") ?? site?.name}
                     onSiteSelect={(node: AutocompleteNode | null) => {
                       if (node) {
-                        setSite({ name: node.name, siteID: node.resourceId });
+                        setSite({
+                          name: node.name,
+                          siteID: node.resourceId,
+                          path: node.path,
+                        });
                       }
                     }}
                     isRequired

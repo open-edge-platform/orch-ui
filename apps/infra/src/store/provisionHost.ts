@@ -15,6 +15,7 @@ export enum HostProvisionSteps {
 const totalSteps = Object.keys(HostProvisionSteps).length / 2;
 
 export type HostData = infra.HostWrite & {
+  site?: SiteReadWithPath;
   region?: infra.RegionRead;
   serialNumber?: string;
   resourceId?: string;

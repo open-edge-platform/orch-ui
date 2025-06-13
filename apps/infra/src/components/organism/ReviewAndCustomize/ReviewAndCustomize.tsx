@@ -65,9 +65,7 @@ const ReviewAndCustomize = () => {
   const tableRef = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(true);
 
-  const [hostEditName, setHostEditName] = useState<string | undefined>(
-    undefined,
-  );
+  const [hostToEdit, setHostToEdit] = useState<HostData | undefined>(undefined);
 
   const { hosts, createCluster } = useAppSelector(selectHostProvisionState);
   const dispatch = useAppDispatch();
@@ -110,7 +108,7 @@ const ReviewAndCustomize = () => {
     {
       displayText: "Edit",
       onSelect: () => {
-        setHostEditName(hostData.name);
+        setHostToEdit(hostData);
       },
     },
     {
@@ -223,11 +221,11 @@ const ReviewAndCustomize = () => {
           </div>
         </div>
       </CSSTransition>
-      {hostEditName && (
+      {hostToEdit && (
         <HostProvisionEditDrawer
-          hostDataName={hostEditName}
+          host={hostToEdit}
           onClose={() => {
-            setHostEditName(undefined);
+            setHostToEdit(undefined);
           }}
         />
       )}
