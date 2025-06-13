@@ -12,7 +12,7 @@ import { DropdownSize } from "@spark-design/tokens";
 const dataCy = "publicSshKeyDropdown";
 interface PublicSshKeyDropdownProps {
   selectedPublicKey?: string;
-  onPublicKeySelect?: (account: infra.LocalAccountRead) => void;
+  onPublicKeySelect?: (account: infra.LocalAccountResourceRead) => void;
   onPublicKeyRemove?: () => void;
 }
 export const PublicSshKeyDropdown = ({
@@ -28,7 +28,7 @@ export const PublicSshKeyDropdown = ({
     isLoading,
     isError,
     error,
-  } = infra.useGetV1ProjectsByProjectNameLocalAccountsQuery({
+  } = infra.useLocalAccountServiceListLocalAccountsQuery({
     projectName: SharedStorage.project?.name ?? "",
   });
 

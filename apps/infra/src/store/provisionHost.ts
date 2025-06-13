@@ -14,9 +14,9 @@ export enum HostProvisionSteps {
 }
 const totalSteps = Object.keys(HostProvisionSteps).length / 2;
 
-export type HostData = infra.HostWrite & {
+export type HostData = infra.HostResourceWrite & {
   site?: SiteReadWithPath;
-  region?: infra.RegionRead;
+  region?: infra.RegionResourceWrite;
   serialNumber?: string;
   resourceId?: string;
   templateName?: string;
@@ -41,8 +41,8 @@ export interface HostProvisionState {
     clusterTemplateVersion?: string;
     vPro?: boolean;
     securityFeature?: boolean;
-    publicSshKey?: infra.LocalAccountRead;
-    metadata?: infra.Metadata;
+    publicSshKey?: infra.LocalAccountResourceRead;
+    metadata?: infra.MetadataItem[];
   };
   autoOnboard: boolean;
   autoProvision: boolean;
@@ -68,7 +68,7 @@ export const initialState: HostProvisionState = {
   hasHostDefinitionError: false,
 };
 
-export type SiteReadWithPath = infra.SiteRead & {
+export type SiteReadWithPath = infra.SiteResourceRead & {
   path?: string[];
 };
 
@@ -174,7 +174,7 @@ export const provisionHost = createSlice({
     },
     setHostsBasicData(
       state,
-      action: PayloadAction<{ hosts: infra.HostRead[] }>,
+      action: PayloadAction<{ hosts: infra.HostResourceRead[] }>,
     ) {
       const { hosts } = action.payload;
       state.hosts = {};
@@ -195,7 +195,7 @@ export const provisionHost = createSlice({
     },
     updateRegisteredHost(
       state,
-      action: PayloadAction<{ host: infra.HostRead }>,
+      action: PayloadAction<{ host: infra.HostResourceRead }>,
     ) {
       const { hosts } = state;
       const { host: newHost } = action.payload;
@@ -258,11 +258,11 @@ export const provisionHost = createSlice({
     },
     setCommonPublicSshKey(
       state,
-      action: PayloadAction<infra.LocalAccountRead | undefined>,
+      action: PayloadAction<infra.LocalAccountResourceRead | undefined>,
     ) {
       state.commonHostData.publicSshKey = action.payload;
     },
-    setCommonMetadata(state, action: PayloadAction<infra.Metadata>) {
+    setCommonMetadata(state, action: PayloadAction<infra.MetadataItem[]>) {
       state.commonHostData.metadata = action.payload;
     },
     removeHost(state, action: PayloadAction<string>) {

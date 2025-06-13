@@ -33,7 +33,7 @@ export const SiteSearch = ({
 
   const canSearch = searchTerm !== undefined && searchTerm.length > 0;
 
-  const { data } = infra.useGetV1ProjectsByProjectNameLocationsQuery(
+  const { data } = infra.useLocationServiceListLocationsQuery(
     {
       projectName,
       name: searchTerm,
