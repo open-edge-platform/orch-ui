@@ -15,10 +15,10 @@ export enum HostProvisionSteps {
 const totalSteps = Object.keys(HostProvisionSteps).length / 2;
 
 export type HostData = infra.HostWrite & {
+  site?: SiteReadWithPath;
   region?: infra.RegionRead;
   serialNumber?: string;
   resourceId?: string;
-  os?: infra.OperatingSystemResourceRead;
   templateName?: string;
   templateVersion?: string;
   error?: string;
@@ -36,6 +36,7 @@ export interface HostProvisionState {
   hosts: { [name: string]: HostData };
   commonHostData: Omit<HostData, "name" | "site"> & {
     site?: SiteReadWithPath;
+    os?: infra.OperatingSystemResourceRead;
     clusterTemplateName?: string;
     clusterTemplateVersion?: string;
     vPro?: boolean;
@@ -62,7 +63,7 @@ export const initialState: HostProvisionState = {
     securityFeature: true,
   },
   autoOnboard: true,
-  autoProvision: false,
+  autoProvision: true,
   createCluster: true,
   hasHostDefinitionError: false,
 };
@@ -185,7 +186,7 @@ export const provisionHost = createSlice({
         };
       });
     },
-    setHostData(state, action: PayloadAction<{ host: infra.HostRead }>) {
+    setHostData(state, action: PayloadAction<{ host: HostData }>) {
       const { host } = action.payload;
       state.hosts[host.name] = {
         ...state.hosts[host.name],
@@ -281,6 +282,7 @@ export const {
   setAutoProvisionValue,
   setCreateClusterValue,
   setHostsBasicData,
+  setHostData,
   updateRegisteredHost,
   populateCommonHostData,
   setCommonSite,

@@ -20,6 +20,7 @@ import {
   removeHost,
   selectHostProvisionState,
 } from "../../../store/provisionHost";
+import HostProvisionEditDrawer from "../HostProvisionEditDrawer/HostProvisionEditDrawer";
 import HostReviewDetails from "./HostReviewDetails";
 import "./ReviewAndCustomize.scss";
 
@@ -64,9 +65,7 @@ const ReviewAndCustomize = () => {
   const tableRef = useRef(null);
   const [expanded, setExpanded] = useState<boolean>(true);
 
-  // TODO: attach drawer here
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showEditDrawer, setShowEditDrawer] = useState(false);
+  const [hostToEdit, setHostToEdit] = useState<HostData | undefined>(undefined);
 
   const { hosts, createCluster } = useAppSelector(selectHostProvisionState);
   const dispatch = useAppDispatch();
@@ -109,7 +108,7 @@ const ReviewAndCustomize = () => {
     {
       displayText: "Edit",
       onSelect: () => {
-        setShowEditDrawer(true);
+        setHostToEdit(hostData);
       },
     },
     {
@@ -222,6 +221,14 @@ const ReviewAndCustomize = () => {
           </div>
         </div>
       </CSSTransition>
+      {hostToEdit && (
+        <HostProvisionEditDrawer
+          host={hostToEdit}
+          onClose={() => {
+            setHostToEdit(undefined);
+          }}
+        />
+      )}
     </div>
   );
 };

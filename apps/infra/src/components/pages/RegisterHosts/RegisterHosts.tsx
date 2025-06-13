@@ -49,11 +49,13 @@ const RegisterHosts = () => {
   const className = "register-hosts";
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
-  const { hosts, hasMultiHostValidationError } = useAppSelector(
-    (state) => state.configureHost,
-  );
-  const { hasHostDefinitionError, autoOnboard, autoProvision, createCluster } =
-    useAppSelector(selectHostProvisionState);
+  const {
+    hosts,
+    hasHostDefinitionError,
+    autoOnboard,
+    autoProvision,
+    createCluster,
+  } = useAppSelector(selectHostProvisionState);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] =
@@ -86,9 +88,7 @@ const RegisterHosts = () => {
         </div>
         <div className={`${className}__auto-provision`}>
           <Heading semanticLevel={6}>Provision Automatically</Heading>
-          <p>
-            Hosts will be provisioned automatically once they are onboarded.
-          </p>
+          <p>Hosts will be provisioned once they are onboarded.</p>
           <ToggleSwitch
             data-cy="isAutoProvisioned"
             isSelected={autoProvision}
@@ -169,25 +169,20 @@ const RegisterHosts = () => {
                 }
               }, 20);
             } else {
-              navigate(hostProvisioningRoute);
+              navigate(hostProvisionRoute);
             }
           }}
-          isDisabled={
-            // TODO: remove hasMultiHostValidationError
-            hasHostDefinitionError ||
-            hasMultiHostValidationError ||
-            Object.keys(hosts).length === 0
-          }
+          isDisabled={hasHostDefinitionError || Object.keys(hosts).length === 0}
         >
           {autoProvision ? "Continue" : "Register Hosts"}
         </Button>
 
         <Button
           onPress={() => {
-            navigate(hostProvisionRoute);
+            navigate(hostProvisioningRoute);
           }}
         >
-          new provision
+          old provision
         </Button>
       </ButtonGroup>
     </div>
