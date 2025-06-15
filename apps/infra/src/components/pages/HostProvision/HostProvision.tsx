@@ -29,7 +29,7 @@ import {
 import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import ConfigureAllHosts from "../../organism/ConfigureAllHosts/ConfigureAllHosts";
 import ReviewAndCustomize from "../../organism/ReviewAndCustomize/ReviewAndCustomize";
-import { useProvisioning } from "./host-provision.utilts";
+import { useProvisioning } from "./host-provision.utils";
 import "./HostProvision.scss";
 
 const dataCy = "hostProvision";
