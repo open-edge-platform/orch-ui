@@ -29,6 +29,7 @@ import {
 import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import ConfigureAllHosts from "../../organism/ConfigureAllHosts/ConfigureAllHosts";
 import ReviewAndCustomize from "../../organism/ReviewAndCustomize/ReviewAndCustomize";
+import { useProvisioning } from "./host-provision.utilts";
 import "./HostProvision.scss";
 
 const dataCy = "hostProvision";
@@ -39,6 +40,16 @@ const HostProvision = () => {
 
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
+
+  const { provisionState, isProvisioning, provisionHosts, retryProvisioning } =
+    useProvisioning();
+
+  console.log({
+    provisionState,
+    isProvisioning,
+    provisionHosts,
+    retryProvisioning,
+  });
 
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [showCommonDataDialog, setShowCommonDataDialog] =
@@ -51,7 +62,9 @@ const HostProvision = () => {
     });
 
   const {
+    hosts,
     autoProvision,
+    autoOnboard,
     formStatus: { currentStep, enableNextBtn },
   } = useAppSelector(selectHostProvisionState);
 
@@ -79,7 +92,10 @@ const HostProvision = () => {
     }
   };
 
+  console.log({ hosts });
+
   const handleNext = async () => {
+    console.log({ autoProvision });
     switch (currentStep) {
       case HostProvisionSteps["Configure All Hosts"]:
         dispatch(populateCommonHostData());
@@ -88,6 +104,13 @@ const HostProvision = () => {
       case HostProvisionSteps["Review and Customize"]:
         if (autoProvision) {
           // what is a different flow that does not contain autoProvision?
+          console.log("Auto Provisioning flow");
+          const result = await provisionHosts(
+            Object.values(hosts),
+            autoOnboard,
+          );
+
+          console.log({ result });
         } // else updateHost(); where we update host?
         break;
       default:
