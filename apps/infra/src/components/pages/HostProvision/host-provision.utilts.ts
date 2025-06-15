@@ -170,17 +170,17 @@ export const useProvisioning = () => {
 
         // Step 4: Create cluster - uncomment and implement when ready
 
-        if (createCluster === true) {
-          await executeStep(host.serialNumber, "cluster", () =>
-            createCluster({
-              projectName: SharedStorage.project?.name ?? "",
-              clusterResource: {
-                name: `cluster-${host.name}`,
-                instanceID: instanceResult.resourceId,
-              },
-            }),
-          );
-        }
+        // if (createCluster === true) {
+        //   await executeStep(host.serialNumber, "cluster", () =>
+        //     createCluster({
+        //       projectName: SharedStorage.project?.name ?? "",
+        //       clusterResource: {
+        //         name: `cluster-${host.name}`,
+        //         instanceID: instanceResult.resourceId,
+        //       },
+        //     }),
+        //   );
+        // }
       } catch (error) {
         console.error(`Failed to provision host ${host.name}:`, error);
         // Continue to next host
