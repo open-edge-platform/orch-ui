@@ -41,14 +41,11 @@ const HostProvision = () => {
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
-  const { provisionState, isProvisioning, provisionHosts, retryProvisioning } =
-    useProvisioning();
+  const { provisionState, provisionHosts } = useProvisioning();
 
   console.log({
     provisionState,
-    isProvisioning,
     provisionHosts,
-    retryProvisioning,
   });
 
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
@@ -100,15 +97,12 @@ const HostProvision = () => {
         break;
       case HostProvisionSteps["Review and Customize"]:
         if (autoProvision) {
-          // what is a different flow that does not contain autoProvision?
-          console.log("Auto Provisioning flow");
           const result = await provisionHosts(
             Object.values(hosts),
             autoOnboard,
           );
 
-          console.log({ result });
-          // navigate(hostsRoute);
+          navigate(hostsRoute);
         }
         break;
       default:

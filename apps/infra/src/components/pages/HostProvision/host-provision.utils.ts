@@ -4,6 +4,12 @@ import { useState } from "react";
 import { useAppSelector } from "src/store/hooks";
 import { HostData, selectHostProvisionState } from "src/store/provisionHost";
 
+const INITIAL_PROVISION_STATE = {
+  status: "pending",
+  result: null,
+  error: null,
+};
+
 const useProvisioningState = () => {
   const [provisionState, setProvisionState] = useState({});
   const [isProvisioning, setIsProvisioning] = useState(false);
@@ -19,10 +25,10 @@ const useProvisioningState = () => {
       }
 
       initialState[host.serialNumber] = {
-        register: { status: "pending", result: null, error: null },
-        hostDetails: { status: "pending", result: null, error: null },
-        instance: { status: "pending", result: null, error: null },
-        cluster: { status: "pending", result: null, error: null },
+        register: INITIAL_PROVISION_STATE,
+        hostDetails: INITIAL_PROVISION_STATE,
+        instance: INITIAL_PROVISION_STATE,
+        cluster: INITIAL_PROVISION_STATE,
       };
     });
     setProvisionState(initialState);
@@ -36,13 +42,17 @@ const useProvisioningState = () => {
     result = null,
     error = null,
   ) => {
-    setProvisionState((prev) => ({
-      ...prev,
-      [hostSerialNumber]: {
-        ...prev[hostSerialNumber],
-        [step]: { status, result, error },
-      },
-    }));
+    setProvisionState((prev) => {
+      const host = prev[hostSerialNumber] || {};
+      const newData = {
+        ...prev,
+        [hostSerialNumber]: {
+          ...host,
+          [step]: { status, result, error },
+        },
+      };
+      return newData;
+    });
   };
 
   return {
@@ -61,7 +71,6 @@ export const useProvisioning = () => {
     setIsProvisioning,
     initializeState,
     updateStepStatus,
-    // getStepResult,
   } = useProvisioningState();
 
   const { createCluster } = useAppSelector(selectHostProvisionState);
@@ -73,15 +82,6 @@ export const useProvisioning = () => {
   const [createClusterApi] =
     cm.usePostV2ProjectsByProjectNameClustersMutation();
 
-  console.log({
-    provisionState,
-    isProvisioning,
-    setIsProvisioning,
-    initializeState,
-    updateStepStatus,
-    // getStepResult,
-  });
-
   const executeStep = async (
     serialNumber: string,
     step: string,
@@ -89,21 +89,18 @@ export const useProvisioning = () => {
   ) => {
     const currentStatus = provisionState[serialNumber]?.[step]?.status;
 
-    // If already completed, return the stored result
     if (currentStatus === "completed") {
       return provisionState[serialNumber][step].result;
     }
 
-    // Mark as in progress
     updateStepStatus(serialNumber, step, "inProgress");
 
     try {
-      // Execute the API call directly
       const result = await apiCall();
       updateStepStatus(serialNumber, step, "completed", result);
       return result;
     } catch (error) {
-      updateStepStatus(serialNumber, step, "failed", null, error.message);
+      updateStepStatus(serialNumber, step, "failed", null, error.data.message);
       throw error;
     }
   };
@@ -111,7 +108,6 @@ export const useProvisioning = () => {
   const provisionHosts = async (hosts: HostData[], autoOnboard: boolean) => {
     setIsProvisioning(true);
 
-    // Initialize state if not already done
     if (!provisionState || Object.keys(provisionState).length === 0) {
       initializeState(hosts);
     }
@@ -123,8 +119,7 @@ export const useProvisioning = () => {
       }
 
       try {
-        // Step 1: Register
-        const registerHostResp = await executeStep(
+        const registerHostResp: infra.HostResourceRead = await executeStep(
           host.serialNumber,
           "register",
           () =>
@@ -139,11 +134,10 @@ export const useProvisioning = () => {
             }).unwrap(),
         );
 
-        // Step 2: Host Details
         await executeStep(host.serialNumber, "hostDetails", () =>
           patchHost({
             projectName: SharedStorage.project?.name ?? "",
-            resourceId: registerHostResp.resourceId,
+            resourceId: registerHostResp.resourceId as string,
             hostResource: {
               name: host.name,
               siteId: host.site?.siteID,
@@ -152,7 +146,6 @@ export const useProvisioning = () => {
           }).unwrap(),
         );
 
-        // Step 3: Create instance - uncomment and implement when ready
         await executeStep(host.serialNumber, "instance", () =>
           postInstance({
             projectName: SharedStorage.project?.name ?? "",
@@ -179,14 +172,19 @@ export const useProvisioning = () => {
             combinedClusterLabels[tags.key] = tags.value;
           });
 
+          const nodeSpec: cm.NodeSpec = {
+            id: registerHostResp.resourceId as string,
+            role: "all",
+          };
+
           await executeStep(host.serialNumber, "cluster", () =>
             createClusterApi({
               projectName: SharedStorage.project?.name ?? "",
               clusterSpec: {
-                name: `Cluster-${host.name}`,
+                name: `cluster-${host.name}`,
                 labels: combinedClusterLabels,
-                template: host.templateName,
-                nodes: [],
+                template: `${host.templateName}-${host.templateVersion}`,
+                nodes: [nodeSpec],
               },
             }),
           );
@@ -199,20 +197,6 @@ export const useProvisioning = () => {
 
     setIsProvisioning(false);
 
-    // Compute results from provisionState instead
-    // const successHosts = Object.entries(provisionState).filter(
-    //   ([_, hostState]) =>
-    //     !Object.values(hostState).some((step) => step.status === "failed"),
-    // ).length;
-
-    // const failedHosts = Object.keys(provisionState).length - successHosts;
-
-    // return {
-    //   success: successHosts > 0,
-    //   successCount: successHosts,
-    //   failureCount: failedHosts,
-    // };
-
     return {
       isProvisioningDone: true,
     };
@@ -220,50 +204,6 @@ export const useProvisioning = () => {
 
   return {
     provisionState,
-    isProvisioning,
     provisionHosts,
-    retryProvisioning: provisionHosts,
   };
-};
-
-const REGISTER_HOST_RESP = {
-  biosReleaseDate: "",
-  biosVendor: "",
-  biosVersion: "",
-  cpuArchitecture: "",
-  cpuCapabilities: "",
-  cpuCores: 0,
-  cpuModel: "",
-  cpuSockets: 0,
-  cpuThreads: 0,
-  cpuTopology: "",
-  currentPowerState: "POWER_STATE_UNSPECIFIED",
-  currentState: "HOST_STATE_UNSPECIFIED",
-  desiredPowerState: "POWER_STATE_UNSPECIFIED",
-  desiredState: "HOST_STATE_ONBOARDED",
-  hostGpus: [],
-  hostNics: [],
-  hostStatus: "",
-  hostStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
-  hostStatusTimestamp: 0,
-  hostStorages: [],
-  hostUsbs: [],
-  hostname: "",
-  memoryBytes: "0",
-  metadata: [],
-  name: "june-host-one",
-  note: "",
-  onboardingStatus: "",
-  onboardingStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
-  onboardingStatusTimestamp: 0,
-  productName: "",
-  registrationStatus: "",
-  registrationStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
-  registrationStatusTimestamp: 0,
-  resourceId: "host-9d0f7d78",
-  serialNumber: "03d483ee9011004",
-  timestamps: {
-    createdAt: "2025-06-15T16:38:21.751Z",
-    updatedAt: "2025-06-15T16:38:21.751Z",
-  },
 };
