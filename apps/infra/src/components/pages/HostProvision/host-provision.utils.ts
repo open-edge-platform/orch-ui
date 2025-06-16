@@ -1,4 +1,4 @@
-import { infra } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { useState } from "react";
 import { useAppSelector } from "src/store/hooks";
@@ -69,6 +69,9 @@ export const useProvisioning = () => {
   const [registerHost] = infra.useHostServiceRegisterHostMutation();
   const [patchHost] = infra.useHostServicePatchHostMutation();
   const [postInstance] = infra.useInstanceServiceCreateInstanceMutation();
+  const [getSite] = infra.useLazySiteServiceGetSiteQuery();
+  const [createClusterApi] =
+    cm.usePostV2ProjectsByProjectNameClustersMutation();
 
   console.log({
     provisionState,
@@ -143,44 +146,51 @@ export const useProvisioning = () => {
             resourceId: registerHostResp.resourceId,
             hostResource: {
               name: host.name,
-              siteId: host.siteId,
+              siteId: host.site?.siteID,
               metadata: host.metadata,
             },
           }).unwrap(),
         );
 
         // Step 3: Create instance - uncomment and implement when ready
-        const instanceResult = await executeStep(
-          host.serialNumber,
-          "instance",
-          () =>
-            postInstance({
-              projectName: SharedStorage.project?.name ?? "",
-              instanceResource: {
-                hostID: registerHostResp.resourceId,
-                name: `${host.name}-instance`,
-                osID: host.instance?.osID,
-                securityFeature: host.instance?.securityFeature,
-                kind: "INSTANCE_KIND_METAL",
-              },
-            }).unwrap(),
+        await executeStep(host.serialNumber, "instance", () =>
+          postInstance({
+            projectName: SharedStorage.project?.name ?? "",
+            instanceResource: {
+              hostID: registerHostResp.resourceId,
+              name: `${host.name}-instance`,
+              osID: host.instance?.osID,
+              securityFeature: host.instance?.securityFeature,
+              kind: "INSTANCE_KIND_METAL",
+            },
+          }).unwrap(),
         );
 
-        console.log({ instanceResult });
+        const { data: site } = await getSite({
+          projectName: SharedStorage.project?.name ?? "",
+          regionResourceId: "*",
+          resourceId: host.site?.siteID as string,
+        });
 
-        // Step 4: Create cluster - uncomment and implement when ready
+        if (createCluster === true) {
+          const combinedClusterLabels: { [key: string]: string } = {};
 
-        // if (createCluster === true) {
-        //   await executeStep(host.serialNumber, "cluster", () =>
-        //     createCluster({
-        //       projectName: SharedStorage.project?.name ?? "",
-        //       clusterResource: {
-        //         name: `cluster-${host.name}`,
-        //         instanceID: instanceResult.resourceId,
-        //       },
-        //     }),
-        //   );
-        // }
+          site?.metadata?.forEach((tags) => {
+            combinedClusterLabels[tags.key] = tags.value;
+          });
+
+          await executeStep(host.serialNumber, "cluster", () =>
+            createClusterApi({
+              projectName: SharedStorage.project?.name ?? "",
+              clusterSpec: {
+                name: `Cluster-${host.name}`,
+                labels: combinedClusterLabels,
+                template: host.templateName,
+                nodes: [],
+              },
+            }),
+          );
+        }
       } catch (error) {
         console.error(`Failed to provision host ${host.name}:`, error);
         // Continue to next host

@@ -92,10 +92,7 @@ const HostProvision = () => {
     }
   };
 
-  console.log({ hosts });
-
   const handleNext = async () => {
-    console.log({ autoProvision });
     switch (currentStep) {
       case HostProvisionSteps["Configure All Hosts"]:
         dispatch(populateCommonHostData());
@@ -111,7 +108,8 @@ const HostProvision = () => {
           );
 
           console.log({ result });
-        } // else updateHost(); where we update host?
+          // navigate(hostsRoute);
+        }
         break;
       default:
         dispatch(goToNextStep());
