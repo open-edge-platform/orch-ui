@@ -27,7 +27,7 @@ describe("<ProjectSwitch />", () => {
         pom.interceptApis([pom.api.getProjects]);
         cy.mount(
           <ProjectSwitch
-            isTokenAvailable={true}
+            isTokenAvailable
             padding="1.85rem 0"
             topMargin="5rem"
           />,
