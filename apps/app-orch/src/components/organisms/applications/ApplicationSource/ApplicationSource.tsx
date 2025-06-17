@@ -18,10 +18,7 @@ import {
   setHelmRegistryName,
   setImageRegistryName,
 } from "../../../../store/reducers/application";
-import {
-  chartVersionPattern,
-  namePattern,
-} from "../../../../utils/regexPatterns";
+import { namePattern, versionPattern } from "../../../../utils/regexPatterns";
 import { ApplicationInputs } from "../../../pages/ApplicationCreateEdit/ApplicationCreateEdit";
 import "./ApplicationSource.scss";
 
@@ -122,7 +119,7 @@ const ApplicationSource = ({
   }, [registriesResponse, helmRegistryName, imageRegistryName]);
   useEffect(() => {
     validateVersionFn(
-      chartVersion.length === 0 || chartVersionPattern.test(chartVersion),
+      chartVersion.length === 0 || versionPattern.test(chartVersion),
     );
   }, [chartVersion]);
 
@@ -231,8 +228,7 @@ const ApplicationSource = ({
               isDisabled={!chartName}
               isRequired={true}
               validationState={
-                chartVersion.length === 0 ||
-                chartVersionPattern.test(chartVersion)
+                chartVersion.length === 0 || versionPattern.test(chartVersion)
                   ? "valid"
                   : "invalid"
               }
