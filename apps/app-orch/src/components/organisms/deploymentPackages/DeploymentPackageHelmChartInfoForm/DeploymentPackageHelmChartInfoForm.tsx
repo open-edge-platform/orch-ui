@@ -4,21 +4,28 @@
  */
 
 import { Flex, Textarea } from "@orch-ui/components";
-import { Heading, TextField } from "@spark-design/react";
-import { InputSize } from "@spark-design/tokens";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { useNavigate } from "react-router-dom";
 import {
+  ButtonSize,
+  ButtonVariant,
+  InputSize,
+} from "@spark-design/tokens";
+import {
+  Button,
+  TextField,
+} from "@spark-design/react";
+import {
+   clearDeploymentPackage,
   selectDeploymentPackage,
   setDescription,
-  setDisplayName,
-  setVersion,
+  setHelmChartURL,
+  setPassword,
+  setUsername,
 } from "../../../../store/reducers/deploymentPackage";
 import { getDisplayNameValidationErrorMessage } from "../../../../utils/global";
-import { versionPattern } from "../../../../utils/regexPatterns";
-import {
-  DeploymentPackageCreateMode,
-} from "../DeploymentPackageCreateEdit/DeploymentPackageCreateEdit";
+import "./DeploymentPackageHelmChartInfoForm.scss";
 
 const dataCy = "deploymentPackageGeneralInfoForm";
 
@@ -26,136 +33,175 @@ export type PackageInputs = {
   helmChartURL: string;
   username: string;
   password: string;
+  description: string;
 };
 
 interface DeploymentPackageGeneralInfoFormProps {
   control: Control<PackageInputs, string>;
   errors: FieldErrors<PackageInputs>;
-  mode: DeploymentPackageCreateMode;
 }
 
 const DeploymentPackageHelmChartInfoForm = ({
   control,
   errors,
-  mode,
 }: DeploymentPackageGeneralInfoFormProps) => {
   const cy = { "data-cy": dataCy };
 
   const dispatch = useAppDispatch();
   const { description } = useAppSelector(selectDeploymentPackage);
+   const navigate = useNavigate();
 
-  return (
-    <form {...cy} className="deployment-package-general-info-form">
-      <Heading semanticLevel={5}>Import from Helm Chart</Heading>
-      <Flex cols={[12, 6, 3, 3]}>
+return (
+  <form {...cy} className="deployment-package-import-helm-chart-info-form">
+    <Flex cols={[12]}>
+      <div style={{ paddingBottom: "0.4rem" }}>
+      <Controller
+        name="helmChartURL"
+        control={control}
+        rules={{
+          required: true,
+          maxLength: 70,
+        }}
+        render={({ field, formState }) => (
+          <>
+          <TextField
+            {...field}
+            label="Helm Chart URL *"
+            data-cy="helm-chart-url"
+            maxLength={70}
+            onInput={(e) => {
+              const value = e.currentTarget.value;
+              if (value.length) {
+                dispatch(setHelmChartURL(e.currentTarget.value));
+              }
+            }}
+            errorMessage={
+                  formState.errors.helmChartURL?.type === "required"
+                    ? "Helm Chart URL is required"
+                    : formState.errors.helmChartURL?.type === "maxLength"
+                      ? "Helm Chart URL can't be more than 70 characters"
+                      : null
+                }
+            validationState={
+              errors.helmChartURL && Object.keys(errors.helmChartURL).length > 0
+                ? "invalid"
+                : "valid"
+            }
+            size={InputSize.Large}
+          />
+          {!errors.helmChartURL && <div style={{ minHeight: "1.55rem" }} />}
+            </>
+        )}
+      />
+      </div>
+    </Flex>
+    <Flex cols={[6,  6] }>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", paddingRight: "1.5rem", paddingBottom: "0.45rem" }}>
         <Controller
-          name="helmChartURL"
+          name="username"
           control={control}
           rules={{
-            required: true,
-            maxLength: 40,
-            pattern: new RegExp(
-              /^([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-\s/]*[A-Za-z0-9])$/,
-            ),
+            required: false,
+            maxLength: 30,
           }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Helm Chart URL"
-              data-cy="helm-chart-url"
-              onInput={(e) => {
-                const value = e.currentTarget.value;
-                if (value.length) {
-                  dispatch(setDisplayName(e.currentTarget.value));
-                }
-              }}
-              errorMessage={getDisplayNameValidationErrorMessage(
-                errors.helmChartURL?.type,
-              )}
-              validationState={
-                errors.helmChartURL && Object.keys(errors.helmChartURL).length > 0
-                  ? "invalid"
-                  : "valid"
-              }
-              isDisabled={["update"].includes(mode)}
-              size={InputSize.Large}
-            />
-          )}
-        />
-        <div className="deployment-package-general-info-form__version">
-          <Controller
-            name="username"
-            control={control}
-            rules={{
-              required: true,
-              pattern: versionPattern,
-            }}
-            render={({ field }) => (
+          render={({ field, formState }) => (
+            <>
               <TextField
                 {...field}
                 data-cy="username"
                 label="Username"
+                maxLength={30}                
                 onInput={(e) => {
-                  const value = e.currentTarget.value;
-                  if (value.length && versionPattern.test(value)) {
-                    dispatch(setVersion(e.currentTarget.value));
+                  const value = e.currentTarget.value ?? "";
+                  if (value.length) {
+                    dispatch(setUsername(e.currentTarget.value));
                   }
                 }}
                 errorMessage={
-                  errors.username?.type === "required"
-                    ? "Username is required"
-                    : "Invalid version (ex. 1.0.0 or v0.1.2)" // TODO
+                  formState.errors.username?.type === "maxLength"
+                      ? "Username can't be more than 30 characters"
+                      : null
                 }
                 validationState={
                   errors.username && Object.keys(errors.username).length > 0
                     ? "invalid"
                     : "valid"
                 }
-                isDisabled={["update"].includes(mode)}
                 size={InputSize.Large}
               />
-            )}
-          />
-        </div>
-        <div className="deployment-package-general-info-form__password">
-          <Controller
-            name="password"
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field }) => (
+              {!errors.username && <div style={{ minHeight: "1.3rem" }} />}
+            </>
+          )}
+        />
+      </div>
+      
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", paddingLeft: "1.5rem", paddingBottom: "0.45rem"}}>
+        <Controller
+          name="password"
+          control={control}
+          rules={{
+            required: false,
+            maxLength: 30,
+          }}
+          render={({ field, formState }) => (
+            <>
               <TextField
                 {...field}
                 type="password"
                 data-cy="password"
+                maxLength={30}   
                 label="Password"
+                onInput={(e) => {
+                  const value = e.currentTarget.value ?? "";
+                  if (value.length) {
+                    dispatch(setPassword(e.currentTarget.value));
+                  }
+                }}
                 errorMessage={
-                  errors.password?.type === "required"
-                    ? "Password is required"
-                    : undefined
+                  formState.errors.password?.type === "maxLength"
+                      ? "Password can't be more than 30 characters"
+                      : null
                 }
                 validationState={
                   errors.password && Object.keys(errors.password).length > 0
                     ? "invalid"
                     : "valid"
                 }
-                isDisabled={["update"].includes(mode)}
                 size={InputSize.Large}
               />
-            )}
-          />
-        </div>
-      </Flex>
-      <br />
-      <Textarea
-        dataCy="default-values"
-        label="Default Values"
-        onChange={(e) => dispatch(setDescription(e.currentTarget.value))}
-        value={description}
-      />
-    </form>
-  );
+              {!errors.password && <div style={{ minHeight: "1.3rem" }} />}
+            </>
+          )}
+        />
+      </div>
+    </Flex>
+    <Textarea
+      dataCy="description"
+      label="Description"
+      value={description ?? ""}
+      onChange={(e) => dispatch(setDescription(e.currentTarget.value))}
+    />
+    <div className="deployment-package-import-helm-chart-info-form__footer">
+                <Button
+                  onPress={() => {
+                    navigate("../packages");
+                    dispatch(clearDeploymentPackage());
+                  }}
+                  size={ButtonSize.Large}
+                  variant={ButtonVariant.Secondary}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  data-cy="importButton"
+                  size={ButtonSize.Large}
+                  onPress={() => navigate("../packages")}
+                >
+                  Import
+                </Button>
+              </div>
+  </form>
+);
 };
 
 export default DeploymentPackageHelmChartInfoForm;

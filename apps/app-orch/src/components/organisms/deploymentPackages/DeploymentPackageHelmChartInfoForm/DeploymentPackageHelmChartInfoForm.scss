@@ -1,0 +1,16 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.deployment-package-import-helm-chart-info-form {
+  &__footer {
+    display: flex;
+    margin: 5rem 0;
+    padding: 1rem 0;
+    justify-content: right;
+    gap: 1rem;
+    border-color: var(--spark-drawer-border-color);
+    border-top-style: var(--spark-drawer-footer-border-top-style);
+  }
+}

@@ -13,6 +13,9 @@ export const initialState: catalog.DeploymentPackage = {
   displayName: "",
   description: "",
   version: "",
+  username: "",
+  helmChartURL: "",
+  password: "",  
   applicationReferences: [],
   isDeployed: false,
   isVisible: false,
@@ -62,6 +65,24 @@ export const deploymentPackage = createSlice({
       action: PayloadAction<string>,
     ) {
       state.description = action.payload;
+    },
+    setHelmChartURL(
+      state: catalog.DeploymentPackage,
+      action: PayloadAction<string>,
+    ) {
+      state.helmChartURL = action.payload;
+    },
+    setUsername(
+      state: catalog.DeploymentPackage,
+      action: PayloadAction<string>,
+    ) {
+      state.username = action.payload;
+    },
+    setPassword(
+      state: catalog.DeploymentPackage,
+      action: PayloadAction<string>,
+    ) {
+      state.password = action.payload;
     },
     setApplicationReferences(
       state: catalog.DeploymentPackage,
@@ -162,6 +183,9 @@ export const {
   deleteDeploymentPackageProfile,
   setDefaultProfileName,
   clearProfileData,
+  setHelmChartURL,
+  setUsername,
+  setPassword,
 } = deploymentPackage.actions;
 
 export default deploymentPackage.reducer;
