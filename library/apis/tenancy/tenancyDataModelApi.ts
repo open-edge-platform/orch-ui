@@ -61,7 +61,12 @@ const injectedRtkApi = api
         ListV1ProjectsApiResponse,
         ListV1ProjectsApiArg
       >({
-        query: () => ({ url: `/v1/projects` }),
+        query: (queryArg) => ({
+          url: "/v1/projects",
+          // FIXME this parameter has been manually added,
+          // we need to have it in the openapi specs or it will be overridden everytime we auto-generate the code
+          params: { "member-role": queryArg["member-role"] },
+        }),
         providesTags: ["Project"],
       }),
       deleteV1ProjectsProjectProject: build.mutation<
@@ -205,7 +210,7 @@ export type GetV1OrgsOrgOrgStatusApiArg = {
 };
 export type ListV1ProjectsApiResponse =
   /** status 200 Response returned back after getting project.Project objects */ ProjectProjectList;
-export type ListV1ProjectsApiArg = void;
+export type ListV1ProjectsApiArg = { "member-role"?: boolean };
 export type DeleteV1ProjectsProjectProjectApiResponse = unknown;
 export type DeleteV1ProjectsProjectProjectApiArg = {
   /** Name of the project.Project node */
