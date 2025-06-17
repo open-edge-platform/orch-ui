@@ -30,34 +30,34 @@ echo -e "${CYAN}Generate RTK endpoints APIs${NC}"
 # echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
 # npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
 
-# echo -e "${CYAN}Generate EDGE_INFRA_MANAGER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}infra/infraApis.config.json
+echo -e "${CYAN}Generate EDGE_INFRA_MANAGER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}infra/infraApis.config.json
 
-# echo -e "${CYAN}Generate CLUSTER_MANAGER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}cluster-manager/clusterManagerApis.config.json
+echo -e "${CYAN}Generate CLUSTER_MANAGER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}cluster-manager/clusterManagerApis.config.json
 
-# echo -e "${CYAN}Generate APP_CATALOG RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-catalog/appCatalogApis.config.json
+echo -e "${CYAN}Generate APP_CATALOG RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-catalog/appCatalogApis.config.json
 
-# echo -e "${CYAN}Generate APP_CATALOG_UTILITIES RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-utilities/appUtilitiesApis.config.json
+echo -e "${CYAN}Generate APP_CATALOG_UTILITIES RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-utilities/appUtilitiesApis.config.json
 
-# echo -e "${CYAN}Generate APP_DEPLOYMENT_MGR RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-deploy-mgr/appDeployMgr.config.json
+echo -e "${CYAN}Generate APP_DEPLOYMENT_MGR RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-deploy-mgr/appDeployMgr.config.json
 
-# echo -e "${CYAN}Generate APP_RESOURCE_MGR RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}app-resource-mgr/appResourceMgr.config.json
+echo -e "${CYAN}Generate APP_RESOURCE_MGR RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}app-resource-mgr/appResourceMgr.config.json
 
-# echo -e "${CYAN}Generate METADATA_BROKER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
+echo -e "${CYAN}Generate METADATA_BROKER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}metadata-broker/mdbApis.config.json
 
-# echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json
+echo -e "${CYAN}Generate OBSERVABILITY_MONITOR RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}observabilityMonitor/observabilityMonitor.config.json
 
-echo -e "${CYAN}Generate REMOTE_PROVISIONING_SERVER RTK endpoints APIs${NC}"
-npx @rtk-query/codegen-openapi ${prefix}rps/rps.config.json
+# echo -e "${CYAN}Generate REMOTE_PROVISIONING_SERVER RTK endpoints APIs${NC}"
+# npx @rtk-query/codegen-openapi ${prefix}rps/rps.config.json
 
-echo -e "${CYAN}Generate MANAGEMENT_PRSENCE_SERVER RTK endpoints APIs${NC}"
-npx @rtk-query/codegen-openapi ${prefix}mps/mps.config.json
+# echo -e "${CYAN}Generate MANAGEMENT_PRSENCE_SERVER RTK endpoints APIs${NC}"
+# npx @rtk-query/codegen-openapi ${prefix}mps/mps.config.json
 
 npm run library:fix

@@ -47,7 +47,7 @@ export const RegisterHostDrawer = ({
   const [hostRegisterInfo, setHostRegisterInfo] =
     useState<infra.HostRegister>(formDefault);
   const [registerHost] = infra.useHostServiceRegisterHostMutation();
-  const [updateHost] = infra.useHostServiceRegisterUpdateHostMutation();
+  const [updateHost] = infra.useHostServicePatchRegisterHostMutation();
   const {
     control: registerHostInfoControl,
     formState: { errors: formErrors },
