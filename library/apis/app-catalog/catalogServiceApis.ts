@@ -857,6 +857,9 @@ export type DeploymentPackage = {
   profiles?: DeploymentProfile[];
   /** Version of the deployment package. */
   version: string;
+  username?: string;
+  helmChartURL?: string;
+  password?: string;
 };
 export type DeploymentPackageRead = {
   /** Optional set of application deployment dependencies, expressed as (name, requires) pairs of edges in the deployment order dependency graph. */

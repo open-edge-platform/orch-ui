@@ -22,6 +22,7 @@ import DeploymentPackages from "../components/pages/DeploymentPackages/Deploymen
 import Deployments from "../components/pages/Deployments/Deployments";
 import EditDeployment from "../components/pages/EditDeployment/EditDeployment";
 import SetupDeployment from "../components/pages/SetupDeployment/SetupDeployment";
+import DeploymentPackageImportFromHelmChart from "src/components/pages/DeploymentPackageImportFromHelmChart/DeploymentPackageImportFromHelmChart";
 
 const Admin =
   RuntimeConfig.isEnabled("ADMIN") &&
@@ -41,6 +42,10 @@ export const childRoutes = [
   {
     path: "packages/create",
     element: <DeploymentPackageCreate />,
+  },
+  {
+    path: "packages/import-from-helm-chart",
+    element: <DeploymentPackageImportFromHelmChart/>,
   },
   {
     path: "packages/import",
