@@ -27,6 +27,8 @@ export const createOsResource = (
     osType: osType,
     installedPackages:
       '{"Repo":[{"Name":"libpcre2-32-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"},{"Name":"libpcre2-16-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"}]}',
+    existingCvesUrl:
+      '[{"cve_id":"CVE-2016-5180","priority":"critical","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2021-3672","priority":"medium","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2020-8277","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2022-4904","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]}]',
   };
 };
 
