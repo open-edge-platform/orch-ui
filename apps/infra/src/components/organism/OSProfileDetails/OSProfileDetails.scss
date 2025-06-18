@@ -56,7 +56,7 @@
         grid-column: 1 / 6;
       }
     }
-    &__grid-wrapper>div {
+    &__grid-wrapper > div {
       padding: 0.5rem;
     }
   }
@@ -70,7 +70,7 @@
 
     .spark-tabs.spark-tabs-ghost {
       margin-bottom: 2rem;
-      display: inline-flex
+      display: inline-flex;
     }
   }
 }
