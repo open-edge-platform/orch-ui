@@ -305,6 +305,27 @@ export const handlers = [
       );
     }
   }),
+  rest.get(`${baseURL}/regions/*/sites/:resourceId`, async (req, res, ctx) => {
+    const { resourceId } =
+      req.params as unknown as infra.SiteServiceGetSiteApiArg;
+    const notFoundResponse = {
+      detail: "rpc error: code = NotFound desc = ent: resourceId not found",
+      status: 404,
+    };
+    if (resourceId) {
+      const site = siteStore.getSiteById({ resourceId });
+      if (site) {
+        return res(
+          ctx.status(200),
+          ctx.json<infra.SiteServiceGetSiteApiResponse>(site),
+        );
+      } else {
+        return res(ctx.status(404), ctx.json(notFoundResponse));
+      }
+    } else {
+      return res(ctx.status(404), ctx.json(notFoundResponse));
+    }
+  }),
   rest.post(`${baseURL}/sites`, async (req, res, ctx) => {
     const body = await req.json<infra.SiteResourceWrite>();
     if (body.regionId) {

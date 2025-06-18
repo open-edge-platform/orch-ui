@@ -4,8 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { Item, MessageBanner, Tabs, Text } from "@spark-design/react";
-import { useState } from "react";
+import { MessageBanner, Text } from "@spark-design/react";
 import OsProfileDetailField from "./OsProfileDetailField";
 
 import "./OSProfileDetails.scss";
@@ -85,7 +84,6 @@ const renderPackage = (pkg: Package) => {
 
 const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
   const cy = { "data-cy": dataCy };
-  const [tabIndex, setTabIndex] = useState<number>(0);
 
   const osProfileSecurity =
     os.securityFeature && OSProfileSecurityFeatures[os.securityFeature];
@@ -117,66 +115,36 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
       />
       <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />
-      <OsProfileDetailField
-        label="Kernel Command"
-        value={updatePolicy?.kernelCommand}
-      />
-      {/* TODO */}
-      <div className="tabs-container">
-        <Tabs
-          onSelectionChange={(key) => {
-            const index = key.toString().split(".")[1];
-            setTabIndex(parseInt(index));
-          }}
-        >
-          <Item className="osprofile-tab-item" title="Installed Packages">
-            <div
-              className="installed-packages-content"
-              data-cy="installedPackagesTab"
-            >
-              {installedPackages.length ? (
-                <>
-                  {/* <div className="os-details-installed-packages">
-                  Installed Packages
-                </div> */}
-                  <div className={"installed-packages__grid-wrapper"}>
-                    <div>
-                      <Text style={{ fontWeight: "500" }}>Name</Text>
-                    </div>
-                    <div>
-                      <Text style={{ fontWeight: "500" }}>Version</Text>
-                    </div>
-                    <div>
-                      <Text style={{ fontWeight: "500" }}>Distribution</Text>
-                    </div>
-                    {installedPackages.map((pkg: Package) =>
-                      renderPackage(pkg),
-                    )}
-                  </div>
-                </>
-              ) : !isValidPackage ? (
-                <MessageBanner
-                  messageTitle=""
-                  variant="error"
-                  size="m"
-                  messageBody={
-                    "Invalid JSON format recieved for Installed packages."
-                  }
-                  showIcon
-                  outlined
-                />
-              ) : null}
-            </div>
-          </Item>
+      <OsProfileDetailField label="Kernel Command" value={os.kernelCommand} />
 
-          <Item className="osprofile-tab-item" title="CVE">
-            <div className="cve-content" data-cy="cveTab">
-              CVE
+      {installedPackages.length ? (
+        <>
+          <div className="os-details-installed-packages">
+            Installed Packages
+          </div>
+          <div className={"installed-packages__grid-wrapper"}>
+            <div>
+              <Text style={{ fontWeight: "500" }}>Name</Text>
             </div>
-          </Item>
-        </Tabs>
-      </div>
-      {/* TODO */}
+            <div>
+              <Text style={{ fontWeight: "500" }}>Version</Text>
+            </div>
+            <div>
+              <Text style={{ fontWeight: "500" }}>Distribution</Text>
+            </div>
+            {installedPackages.map((pkg: Package) => renderPackage(pkg))}
+          </div>
+        </>
+      ) : !isValidPackage ? (
+        <MessageBanner
+          messageTitle=""
+          variant="error"
+          size="m"
+          messageBody={"Invalid JSON format recieved for Installed packages."}
+          showIcon
+          outlined
+        />
+      ) : null}
     </div>
   );
 };

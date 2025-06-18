@@ -205,7 +205,8 @@ export type GetV1OrgsOrgOrgStatusApiArg = {
 };
 export type ListV1ProjectsApiResponse =
   /** status 200 Response returned back after getting project.Project objects */ ProjectProjectList;
-export type ListV1ProjectsApiArg = void;
+// FIXME this parameter has been manually added,
+export type ListV1ProjectsApiArg = { "member-role"?: boolean };
 export type DeleteV1ProjectsProjectProjectApiResponse = unknown;
 export type DeleteV1ProjectsProjectProjectApiArg = {
   /** Name of the project.Project node */

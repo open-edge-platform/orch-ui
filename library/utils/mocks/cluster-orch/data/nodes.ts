@@ -33,6 +33,7 @@ export const nodeThree: cm.NodeInfo = {
   id: assignedWorkloadHostThreeId,
   status: {
     condition: "STATUS_CONDITION_READY",
+    reason: "Running",
   },
   role: "controlplane",
 };
@@ -41,6 +42,7 @@ export const nodeFour: cm.NodeInfo = {
   id: assignedWorkloadHostFourId,
   status: {
     condition: "STATUS_CONDITION_READY",
+    reason: "Running",
   },
   role: "all",
 };
@@ -49,6 +51,7 @@ export const nodeFive: cm.NodeInfo = {
   id: provisionedHostOneId,
   status: {
     condition: "STATUS_CONDITION_READY",
+    reason: "Running",
   },
   role: "all",
 };
