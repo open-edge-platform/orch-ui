@@ -135,7 +135,9 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
   const isValidPackage = isInstalledPackages(parsedPackages);
   const installedPackages: Package[] =
     isValidPackage && parsedPackages ? parsedPackages.Repo : [];
-  const fixedCves: Cve[] = os?.fixedCves ? JSON.parse(os.fixedCves) : null;
+  const existingCves: Cve[] = os?.existingCves
+    ? JSON.parse(os.existingCves)
+    : null;
 
   return (
     <div className="os-profile-detail-content" {...cy}>
@@ -217,7 +219,7 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
             <div className="cve-content" data-cy="cveTabRoot">
               <Table
                 columns={CveColumns}
-                data={fixedCves}
+                data={existingCves}
                 sortColumns={[1]}
                 initialSort={{
                   column: "Priority",
