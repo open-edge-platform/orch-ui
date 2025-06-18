@@ -61,7 +61,12 @@ const injectedRtkApi = api
         ListV1ProjectsApiResponse,
         ListV1ProjectsApiArg
       >({
-        query: () => ({ url: `/v1/projects` }),
+        query: (queryArg) => ({
+          url: "/v1/projects",
+          // FIXME this parameter has been manually added,
+          // we need to have it in the openapi specs or it will be overridden everytime we auto-generate the code
+          params: { "member-role": queryArg["member-role"] },
+        }),
         providesTags: ["Project"],
       }),
       deleteV1ProjectsProjectProject: build.mutation<
