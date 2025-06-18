@@ -10,7 +10,7 @@ import {
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { Icon, Text } from "@spark-design/react";
+import { Icon, MessageBanner, Text } from "@spark-design/react";
 import { TextSize } from "@spark-design/tokens";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
@@ -59,7 +59,7 @@ const countDistinctValuesWithLabels = (
     .join(", ");
 };
 
-const ReviewAndCustomize = () => {
+const ReviewAndCustomize = ({ provisionState }) => {
   const cy = { "data-cy": dataCy };
 
   const tableRef = useRef(null);
@@ -70,7 +70,39 @@ const ReviewAndCustomize = () => {
   const { hosts, createCluster } = useAppSelector(selectHostProvisionState);
   const dispatch = useAppDispatch();
 
+  console.log({ provisionState, hosts });
+
   const hostValues = Object.values(hosts);
+  const tableHosts = hostValues.filter((host) => {
+    // Check if this host has a corresponding entry in provisionState
+    if (!host.serialNumber) {
+      return false;
+    }
+
+    const hostState = provisionState[host.serialNumber];
+
+    // Check if any status is not "completed" (meaning there's an issue or pending step)
+    const hasIssues =
+      hostState?.register?.status !== "completed" ||
+      hostState?.hostDetails?.status !== "completed" ||
+      hostState?.instance?.status !== "completed" ||
+      hostState?.cluster?.status !== "completed";
+
+    return hasIssues; // Only include hosts with issues
+  });
+
+  const hostsWithErrors = Object.entries(provisionState || {}).filter(
+    ([serialNumber, hostState]) => {
+      return (
+        hostState.register.status === "failed" ||
+        hostState.hostDetails.status === "failed" ||
+        hostState.instance.status === "failed" ||
+        hostState.cluster.status === "failed"
+      );
+    },
+  );
+
+  console.log({ tableHosts });
 
   const columns: TableColumn<HostData>[] = [
     {
@@ -215,12 +247,32 @@ const ReviewAndCustomize = () => {
           <div className="scrollable-table-container">
             <Table
               columns={columns}
-              data={hostValues}
+              data={tableHosts}
               subRow={(row) => <HostReviewDetails host={row.original} />}
             />
           </div>
         </div>
       </CSSTransition>
+      {hostsWithErrors.map(([serialNumber, hostState]) => {
+        // Find which step has failed
+        const failedSteps = Object.entries(hostState)
+          .filter(([_, stepState]) => stepState.status === "failed")
+          .map(([step, stepState]) => ({
+            step,
+            error: stepState.error,
+          }));
+
+        // For each failed host, display its errors
+        return failedSteps.map((failure, index) => (
+          <MessageBanner
+            key={`${serialNumber}-${failure.step}-${index}`}
+            variant="error"
+            messageTitle={`Error in ${failure.step} for host with serial number ${serialNumber}`}
+            messageBody={failure.error || "Unknown error"}
+            showClose
+          />
+        ));
+      })}
       {hostToEdit && (
         <HostProvisionEditDrawer
           host={hostToEdit}
@@ -234,3 +286,28 @@ const ReviewAndCustomize = () => {
 };
 
 export default ReviewAndCustomize;
+
+// {
+//   "03d483ee9011004": {
+//     "register": {
+//     "status": "failed",
+//     "result": null,
+//     "error": "One or more unique fields of Host cannot be set because they are already in use by other resources."
+//     },
+//     "hostDetails": {
+//     "status": "pending",
+//     "result": null,
+//     "error": null
+//     },
+//     "instance": {
+//     "status": "pending",
+//     "result": null,
+//     "error": null
+//     },
+//     "cluster": {
+//     "status": "pending",
+//     "result": null,
+//     "error": null
+//     }
+//   }
+// }

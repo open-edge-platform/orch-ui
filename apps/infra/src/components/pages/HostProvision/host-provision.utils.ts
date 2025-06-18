@@ -1,17 +1,36 @@
 import { cm, infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
+import { ToastState } from "@spark-design/tokens";
 import { useState } from "react";
-import { useAppSelector } from "src/store/hooks";
+import { useAppDispatch, useAppSelector } from "src/store/hooks";
+import { showToast } from "src/store/notifications";
 import { HostData, selectHostProvisionState } from "src/store/provisionHost";
 
-const INITIAL_PROVISION_STATE = {
+type ProvisionStateItem = {
+  status: "pending" | "inProgress" | "completed" | "failed";
+  result: any;
+  error: any;
+};
+
+type HostProvisionState = {
+  register: ProvisionStateItem;
+  hostDetails: ProvisionStateItem;
+  instance: ProvisionStateItem;
+  cluster: ProvisionStateItem;
+};
+
+type ProvisionState = {
+  [hostSerialNumber: string]: HostProvisionState;
+};
+
+const INITIAL_PROVISION_STATE: ProvisionStateItem = {
   status: "pending",
   result: null,
   error: null,
 };
 
 const useProvisioningState = () => {
-  const [provisionState, setProvisionState] = useState({});
+  const [provisionState, setProvisionState] = useState<ProvisionState>({});
   const [isProvisioning, setIsProvisioning] = useState(false);
 
   const initializeState = (hosts: HostData[]) => {
@@ -51,6 +70,8 @@ const useProvisioningState = () => {
           [step]: { status, result, error },
         },
       };
+
+      console.log({ newData });
       return newData;
     });
   };
@@ -65,6 +86,7 @@ const useProvisioningState = () => {
 };
 
 export const useProvisioning = () => {
+  const dispatch = useAppDispatch();
   const {
     provisionState,
     isProvisioning,
@@ -101,6 +123,7 @@ export const useProvisioning = () => {
       return result;
     } catch (error) {
       updateStepStatus(serialNumber, step, "failed", null, error.data.message);
+
       throw error;
     }
   };
@@ -189,9 +212,24 @@ export const useProvisioning = () => {
             }),
           );
         }
+
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: `Host ${host.name} provisioned successfully.`,
+          }),
+        );
       } catch (error) {
         console.error(`Failed to provision host ${host.name}:`, error);
-        // Continue to next host
+
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message:
+              `Error while provisioning host ${host.name} - ${error.data?.message}` ||
+              `Failed to provision host ${host.name}`,
+          }),
+        );
       }
     }
 

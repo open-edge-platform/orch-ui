@@ -43,10 +43,8 @@ const HostProvision = () => {
 
   const { provisionState, provisionHosts } = useProvisioning();
 
-  console.log({
-    provisionState,
-    provisionHosts,
-  });
+  // console.log({ provisionStateRegister: provisionState.register });
+  // console.log(provisionState);
 
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [showCommonDataDialog, setShowCommonDataDialog] =
@@ -97,12 +95,12 @@ const HostProvision = () => {
         break;
       case HostProvisionSteps["Review and Customize"]:
         if (autoProvision) {
-          const result = await provisionHosts(
+          const provisionResult = await provisionHosts(
             Object.values(hosts),
             autoOnboard,
           );
 
-          navigate(hostsRoute);
+          // navigate(hostsRoute);
         }
         break;
       default:
@@ -131,6 +129,8 @@ const HostProvision = () => {
     );
   }
 
+  const states = Object.values(provisionState);
+
   return (
     <div {...cy} className={className}>
       <Flex cols={[6, 6]}>
@@ -147,7 +147,7 @@ const HostProvision = () => {
           <ConfigureAllHosts />
         )}
         {currentStep === HostProvisionSteps["Review and Customize"] && (
-          <ReviewAndCustomize />
+          <ReviewAndCustomize provisionState={provisionState} />
         )}
       </div>
       <div className={`${className}__btn_container`}>
@@ -203,6 +203,18 @@ const HostProvision = () => {
           }}
         />
       )}
+      {/* {states.map((host) => {
+        if (host.register.status === "failed") {
+          return (
+            <MessageBanner
+              // key={host.serialNumber}
+              variant="error"
+              messageTitle={"Error in registering host number"}
+              messageBody={host.register.error ?? "Unknown error"}
+            />
+          );
+        }
+      })} */}
     </div>
   );
 };
