@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { cm, infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { ToastState } from "@spark-design/tokens";
