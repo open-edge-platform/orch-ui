@@ -60,4 +60,17 @@
       padding: 0.5rem;
     }
   }
+
+  .tabs-container {
+    margin-top: 2rem;
+
+    .osprofile-tab-item {
+      font-size: 1rem;
+    }
+
+    .spark-tabs.spark-tabs-ghost {
+      margin-bottom: 2rem;
+      display: inline-flex;
+    }
+  }
 }
