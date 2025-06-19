@@ -7,13 +7,13 @@ import { cm, infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
 import { ToastState } from "@spark-design/tokens";
 import { useState } from "react";
-import { showToast } from "src/store/notifications";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { showToast } from "../../../store/notifications";
 import {
   HostData,
   removeHost,
   selectHostProvisionState,
-} from "src/store/provisionHost";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+} from "../../../store/provisionHost";
 
 type ProvisionStateItem = {
   status: "pending" | "inProgress" | "completed" | "failed";
