@@ -4,7 +4,11 @@ import { ToastState } from "@spark-design/tokens";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { showToast } from "src/store/notifications";
-import { HostData, selectHostProvisionState } from "src/store/provisionHost";
+import {
+  HostData,
+  removeHost,
+  selectHostProvisionState,
+} from "src/store/provisionHost";
 
 type ProvisionStateItem = {
   status: "pending" | "inProgress" | "completed" | "failed";
@@ -31,7 +35,6 @@ const INITIAL_PROVISION_STATE: ProvisionStateItem = {
 
 const useProvisioningState = () => {
   const [provisionState, setProvisionState] = useState<ProvisionState>({});
-  const [isProvisioning, setIsProvisioning] = useState(false);
 
   const initializeState = (hosts: HostData[]) => {
     const initialState = {};
@@ -71,15 +74,12 @@ const useProvisioningState = () => {
         },
       };
 
-      console.log({ newData });
       return newData;
     });
   };
 
   return {
     provisionState,
-    isProvisioning,
-    setIsProvisioning,
     initializeState,
     updateStepStatus,
   };
@@ -87,13 +87,8 @@ const useProvisioningState = () => {
 
 export const useProvisioning = () => {
   const dispatch = useAppDispatch();
-  const {
-    provisionState,
-    isProvisioning,
-    setIsProvisioning,
-    initializeState,
-    updateStepStatus,
-  } = useProvisioningState();
+  const { provisionState, initializeState, updateStepStatus } =
+    useProvisioningState();
 
   const { createCluster } = useAppSelector(selectHostProvisionState);
 
@@ -122,15 +117,13 @@ export const useProvisioning = () => {
       updateStepStatus(serialNumber, step, "completed", result);
       return result;
     } catch (error) {
-      updateStepStatus(serialNumber, step, "failed", null, error.data.message);
+      updateStepStatus(serialNumber, step, "failed", null, error.data?.message);
 
       throw error;
     }
   };
 
   const provisionHosts = async (hosts: HostData[], autoOnboard: boolean) => {
-    setIsProvisioning(true);
-
     if (!provisionState || Object.keys(provisionState).length === 0) {
       initializeState(hosts);
     }
@@ -219,6 +212,8 @@ export const useProvisioning = () => {
             message: `Host ${host.name} provisioned successfully.`,
           }),
         );
+
+        dispatch(removeHost(host.name));
       } catch (error) {
         console.error(`Failed to provision host ${host.name}:`, error);
 
@@ -232,8 +227,6 @@ export const useProvisioning = () => {
         );
       }
     }
-
-    setIsProvisioning(false);
 
     return {
       isProvisioningDone: true,

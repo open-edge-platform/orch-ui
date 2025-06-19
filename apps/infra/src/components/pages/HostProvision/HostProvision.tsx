@@ -41,10 +41,7 @@ const HostProvision = () => {
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
-  const { provisionState, provisionHosts } = useProvisioning();
-
-  // console.log({ provisionStateRegister: provisionState.register });
-  // console.log(provisionState);
+  const { provisionHosts } = useProvisioning();
 
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [showCommonDataDialog, setShowCommonDataDialog] =
@@ -95,12 +92,8 @@ const HostProvision = () => {
         break;
       case HostProvisionSteps["Review and Customize"]:
         if (autoProvision) {
-          const provisionResult = await provisionHosts(
-            Object.values(hosts),
-            autoOnboard,
-          );
-
-          // navigate(hostsRoute);
+          await provisionHosts(Object.values(hosts), autoOnboard);
+          navigate(hostsRoute);
         }
         break;
       default:
@@ -129,8 +122,6 @@ const HostProvision = () => {
     );
   }
 
-  const states = Object.values(provisionState);
-
   return (
     <div {...cy} className={className}>
       <Flex cols={[6, 6]}>
@@ -147,7 +138,7 @@ const HostProvision = () => {
           <ConfigureAllHosts />
         )}
         {currentStep === HostProvisionSteps["Review and Customize"] && (
-          <ReviewAndCustomize provisionState={provisionState} />
+          <ReviewAndCustomize />
         )}
       </div>
       <div className={`${className}__btn_container`}>

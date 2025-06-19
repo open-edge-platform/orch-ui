@@ -4,6 +4,7 @@
  */
 
 import {
+  cmSlice,
   enhancedInfraSlice,
   mbApi,
   mpsSlice,
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   [tmSlice.reducerPath]: tmSlice.reducer,
   [rpsSlice.reducerPath]: rpsSlice.reducer,
   [mpsSlice.reducerPath]: mpsSlice.reducer,
+  [cmSlice.reducerPath]: cmSlice.reducer,
 });
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {
@@ -53,7 +55,8 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         .concat(mbApi.metadataBroker.middleware)
         .concat(tmSlice.middleware)
         .concat(rpsSlice.middleware)
-        .concat(mpsSlice.middleware),
+        .concat(mpsSlice.middleware)
+        .concat(cmSlice.middleware),
     preloadedState,
   });
 };
@@ -69,7 +72,8 @@ export const store = configureStore({
       .concat(mbApi.metadataBroker.middleware)
       .concat(tmSlice.middleware)
       .concat(rpsSlice.middleware)
-      .concat(mpsSlice.middleware),
+      .concat(mpsSlice.middleware)
+      .concat(cmSlice.middleware),
 });
 
 setupListeners(store.dispatch);
