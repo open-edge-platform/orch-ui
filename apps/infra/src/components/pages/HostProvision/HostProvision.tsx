@@ -194,18 +194,6 @@ const HostProvision = () => {
           }}
         />
       )}
-      {/* {states.map((host) => {
-        if (host.register.status === "failed") {
-          return (
-            <MessageBanner
-              // key={host.serialNumber}
-              variant="error"
-              messageTitle={"Error in registering host number"}
-              messageBody={host.register.error ?? "Unknown error"}
-            />
-          );
-        }
-      })} */}
     </div>
   );
 };
