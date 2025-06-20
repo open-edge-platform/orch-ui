@@ -34,11 +34,13 @@ const AutoPropertiesMessageBanner = () => {
     selectHostProvisionState,
   );
 
+  const message = getMessage(autoOnboard, autoProvision, createCluster);
+
   return (
     <div {...cy} className="auto-properties-message-banner">
       <MessageBanner
         variant="info"
-        messageBody={getMessage(autoOnboard, autoProvision, createCluster)}
+        messageBody={message}
         messageTitle=""
         size="s"
         showIcon

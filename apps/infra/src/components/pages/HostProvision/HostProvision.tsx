@@ -29,6 +29,7 @@ import {
 import HostRegistrationAndProvisioningCancelDialog from "../../molecules/HostRegistrationAndProvisioningCancelDialog/HostRegistrationAndProvisioningCancelDialog";
 import ConfigureAllHosts from "../../organism/ConfigureAllHosts/ConfigureAllHosts";
 import ReviewAndCustomize from "../../organism/ReviewAndCustomize/ReviewAndCustomize";
+import { useProvisioning } from "./host-provision.utils";
 import "./HostProvision.scss";
 
 const dataCy = "hostProvision";
@@ -39,6 +40,8 @@ const HostProvision = () => {
 
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
+
+  const { provisionHosts } = useProvisioning();
 
   const [showContinueDialog, setShowContinueDialog] = useState<boolean>(false);
   const [showCommonDataDialog, setShowCommonDataDialog] =
@@ -51,7 +54,9 @@ const HostProvision = () => {
     });
 
   const {
+    hosts,
     autoProvision,
+    autoOnboard,
     formStatus: { currentStep, enableNextBtn },
   } = useAppSelector(selectHostProvisionState);
 
@@ -87,8 +92,9 @@ const HostProvision = () => {
         break;
       case HostProvisionSteps["Review and Customize"]:
         if (autoProvision) {
-          // what is a different flow that does not contain autoProvision?
-        } // else updateHost(); where we update host?
+          await provisionHosts(Object.values(hosts), autoOnboard);
+          navigate(hostsRoute);
+        }
         break;
       default:
         dispatch(goToNextStep());
