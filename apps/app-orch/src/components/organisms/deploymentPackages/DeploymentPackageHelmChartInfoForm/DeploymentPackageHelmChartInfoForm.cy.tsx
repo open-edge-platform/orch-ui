@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { useForm } from "react-hook-form";
 import DeploymentPackageHelmChartInfoForm, { PackageInputs } from "./DeploymentPackageHelmChartInfoForm";
 import DeploymentPackageHelmChartInfoFormPom from "./DeploymentPackageHelmChartInfoForm.pom";
