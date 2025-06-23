@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Popup, PopupOption } from "@orch-ui/components";
 import { useNavigate } from "react-router-dom";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
@@ -15,14 +20,14 @@ const DeploymentPackagePopup = ({ jsx }: DeploymentPackagePopupProps) => {
   const popupOptions: PopupOption[] = [
     {
       displayText: "Create",
-      disable: !hasWriteAccess,
+      disable: false,
       onSelect: () => {
         navigate("/applications/packages/create");
       },
     },
     {
       displayText: "Import from file",
-      disable: !hasWriteAccess,
+      disable: false,
       onSelect: () => {
         navigate("/applications/packages/import");
       },

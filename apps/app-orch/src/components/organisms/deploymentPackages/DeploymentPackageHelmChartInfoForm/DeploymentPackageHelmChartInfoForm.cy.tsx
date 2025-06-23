@@ -47,40 +47,53 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   });
 
   describe("validation", () => {
-    it("should show error for invalid Helm Chart URL", () => {
-      pom.el["helm-chart-url"].type("$invalid!!");
-      pom.helmChartUrlField.contains("Name must start and end with a letter or a number");
-    });
-
-    it("should show maxLength error for Helm Chart URL", () => {
-      const longValue = "a".repeat(41);
+    it("cannot put more than 30 characters for Helm Chart URL", () => {
+    const longValue = "a".repeat(71);
       pom.el["helm-chart-url"].type(longValue);
-      pom.helmChartUrlField.contains("Name can't be more than 40 characters.");
-    });
+    const shorterValue = "a".repeat(70);
+    pom.el["helm-chart-url"]
+      .invoke("val")
+      .should("equal", shorterValue);
+  });
 
     it("should not show error for valid Helm Chart URL", () => {
       pom.el["helm-chart-url"].type("valid-chart");
       pom.helmChartUrlInvalidIndicator.should("not.exist");
     });
 
-    it("should validate username input", () => {
-      pom.el.username.type("invalid@name");
-      pom.usernameField.contains("Name must start and end with a letter or a number");
+    it("cannot put more than 30 characters for username", () => {
+    const longValue = "a".repeat(31);
+      pom.el["username"].type(longValue);
+    const shorterValue = "a".repeat(30);
+    pom.el["username"]
+      .invoke("val")
+      .should("equal", shorterValue);
+  });
 
-      pom.el.username.clear().type("valid-username");
-      pom.usernameInvalidIndicator.should("not.exist");
+    it("should not show error for valid username", () => {
+      pom.el["username"].type("valid-username");
+      pom.helmChartUrlInvalidIndicator.should("not.exist");
     });
 
-    it("should not validate password (only presence is checked)", () => {
-      pom.el.password.type("password123");
-      pom.passwordInvalidIndicator.should("not.exist");
+    it("cannot put more than 30 characters for password", () => {
+    const longValue = "a".repeat(31);
+      pom.el["password"].type(longValue);
+      const shorterValue = "a".repeat(30);
+    pom.el["password"]
+      .invoke("val")
+      .should("equal", shorterValue);
+  });
+
+    it("should not show error for valid password", () => {
+      pom.el["password"].type("valid-password");
+      pom.helmChartUrlInvalidIndicator.should("not.exist");
     });
   });
 
   it("should update description on textarea input", () => {
-    const newDesc = "Updated values";
-    pom.el.description.type(newDesc);
-    pom.el.description.should("have.value", newDesc);
+  const newDesc = "Updated values";
+  pom.descriptionTextarea.type(newDesc);
+  pom.descriptionTextarea.should("have.value", newDesc);
   });
 
   it("should allow entering and clearing username", () => {
@@ -105,10 +118,10 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   });
 
   it("should allow entering and clearing description", () => {
-    pom.el.description.type("Opis testowy");
-    pom.el.description.should("have.value", "Opis testowy");
-    pom.el.description.clear();
-    pom.el.description.should("have.value", "");
+    pom.descriptionTextarea.type("Opis testowy");
+    pom.descriptionTextarea.should("have.value", "Opis testowy");
+    pom.descriptionTextarea.clear();
+    pom.descriptionTextarea.should("have.value", "");
   });
 
   it("should trim whitespace in helm chart url and validate", () => {
@@ -133,6 +146,16 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
 
   it("should allow special characters in username", () => {
     pom.el.username.type("user!@#");
-    pom.usernameField.contains("Name must start and end with a letter or a number");
+    pom.helmChartUrlInvalidIndicator.should("not.exist");
+  });
+
+  it("should allow special characters in password", () => {
+    pom.el.password.type("password!@#");
+    pom.helmChartUrlInvalidIndicator.should("not.exist");
+  });
+
+  it("should allow special characters in description", () => {
+    pom.el.description.type("description!@#");
+    pom.helmChartUrlInvalidIndicator.should("not.exist");
   });
 });

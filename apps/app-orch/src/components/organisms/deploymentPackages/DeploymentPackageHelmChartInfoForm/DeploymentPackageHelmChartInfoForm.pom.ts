@@ -31,6 +31,10 @@ class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
   get passwordInvalidIndicator() {
     return this.passwordField.find(".spark-fieldtext-wrapper-is-invalid");
   }
+
+  get descriptionTextarea() {
+  return this.el.description.find("textarea");
+}
 }
 
 export default DeploymentPackageHelmChartInfoFormPom;

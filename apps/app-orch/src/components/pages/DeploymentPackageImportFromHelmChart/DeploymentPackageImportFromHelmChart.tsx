@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
@@ -19,9 +24,6 @@ import {
 
 const dataCy = "deploymentPackageImportFromHelmChart";
 
-export type DeploymentPackageCreateMode = "add" | "update" | "clone";
-
-
 interface ApplicationFormProps {
   control: Control<PackageInputs, string>;
 }
@@ -34,7 +36,7 @@ const DeploymentPackageImportFromHelmChart = () => {
 
   const {
     control,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<PackageInputs>({
     mode: "all",
     defaultValues: {
