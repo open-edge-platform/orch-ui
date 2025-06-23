@@ -4,9 +4,11 @@
  */
 
 import { useForm } from "react-hook-form";
-import DeploymentPackageHelmChartInfoForm, { PackageInputs } from "./DeploymentPackageHelmChartInfoForm";
-import DeploymentPackageHelmChartInfoFormPom from "./DeploymentPackageHelmChartInfoForm.pom";
 import { setupStore } from "../../../../store";
+import DeploymentPackageHelmChartInfoForm, {
+  PackageInputs,
+} from "./DeploymentPackageHelmChartInfoForm";
+import DeploymentPackageHelmChartInfoFormPom from "./DeploymentPackageHelmChartInfoForm.pom";
 
 const WrapperComponent = () => {
   const {
@@ -22,7 +24,9 @@ const WrapperComponent = () => {
     },
   });
 
-  return <DeploymentPackageHelmChartInfoForm control={control} errors={errors} />;
+  return (
+    <DeploymentPackageHelmChartInfoForm control={control} errors={errors} />
+  );
 };
 
 const pom = new DeploymentPackageHelmChartInfoFormPom();
@@ -31,12 +35,12 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   beforeEach(() => {
     const store = setupStore({
       deploymentPackage: {
-          description: "",
-          applicationReferences: [],
-          artifacts: [],
-          extensions: [],
-          name: "",
-          version: ""
+        description: "",
+        applicationReferences: [],
+        artifacts: [],
+        extensions: [],
+        name: "",
+        version: "",
       },
     });
     cy.mount(<WrapperComponent />, {
@@ -53,13 +57,11 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
 
   describe("validation", () => {
     it("cannot put more than 30 characters for Helm Chart URL", () => {
-    const longValue = "a".repeat(71);
+      const longValue = "a".repeat(71);
       pom.el["helm-chart-url"].type(longValue);
-    const shorterValue = "a".repeat(70);
-    pom.el["helm-chart-url"]
-      .invoke("val")
-      .should("equal", shorterValue);
-  });
+      const shorterValue = "a".repeat(70);
+      pom.el["helm-chart-url"].invoke("val").should("equal", shorterValue);
+    });
 
     it("should not show error for valid Helm Chart URL", () => {
       pom.el["helm-chart-url"].type("valid-chart");
@@ -67,13 +69,11 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
     });
 
     it("cannot put more than 30 characters for username", () => {
-    const longValue = "a".repeat(31);
+      const longValue = "a".repeat(31);
       pom.el["username"].type(longValue);
-    const shorterValue = "a".repeat(30);
-    pom.el["username"]
-      .invoke("val")
-      .should("equal", shorterValue);
-  });
+      const shorterValue = "a".repeat(30);
+      pom.el["username"].invoke("val").should("equal", shorterValue);
+    });
 
     it("should not show error for valid username", () => {
       pom.el["username"].type("valid-username");
@@ -81,13 +81,11 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
     });
 
     it("cannot put more than 30 characters for password", () => {
-    const longValue = "a".repeat(31);
+      const longValue = "a".repeat(31);
       pom.el["password"].type(longValue);
       const shorterValue = "a".repeat(30);
-    pom.el["password"]
-      .invoke("val")
-      .should("equal", shorterValue);
-  });
+      pom.el["password"].invoke("val").should("equal", shorterValue);
+    });
 
     it("should not show error for valid password", () => {
       pom.el["password"].type("valid-password");
@@ -96,9 +94,9 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   });
 
   it("should update description on textarea input", () => {
-  const newDesc = "Updated values";
-  pom.descriptionTextarea.type(newDesc);
-  pom.descriptionTextarea.should("have.value", newDesc);
+    const newDesc = "Updated values";
+    pom.descriptionTextarea.type(newDesc);
+    pom.descriptionTextarea.should("have.value", newDesc);
   });
 
   it("should allow entering and clearing username", () => {

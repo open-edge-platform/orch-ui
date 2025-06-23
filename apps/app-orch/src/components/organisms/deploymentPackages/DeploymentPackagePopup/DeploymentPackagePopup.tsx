@@ -4,9 +4,9 @@
  */
 
 import { Popup, PopupOption } from "@orch-ui/components";
-import { useNavigate } from "react-router-dom";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
+import { useNavigate } from "react-router-dom";
 
 export interface DeploymentPackagePopupProps {
   jsx?: React.ReactNode;
@@ -49,7 +49,11 @@ const DeploymentPackagePopup = ({ jsx }: DeploymentPackagePopupProps) => {
             <button className="spark-button spark-button-action spark-button-size-l">
               <span className="spark-button-content">
                 Deployment Packages Actions
-                <Icon className="pa-1 mb-1" icon="chevron-down" style={{ marginLeft: "0.5rem" }}/>
+                <Icon
+                  className="pa-1 mb-1"
+                  icon="chevron-down"
+                  style={{ marginLeft: "0.5rem" }}
+                />
               </span>
             </button>
           )

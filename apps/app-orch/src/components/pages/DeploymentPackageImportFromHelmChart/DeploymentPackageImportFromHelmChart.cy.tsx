@@ -15,7 +15,10 @@ describe("<DeploymentPackageImportFromHelmChart />", () => {
 
   it("renders title and subtitle correctly", () => {
     pom.title.should("contain.text", "Import from Helm Chart");
-    pom.subTitle.should("contain.text", "Provide Helm Chart details to import a deployment");
+    pom.subTitle.should(
+      "contain.text",
+      "Provide Helm Chart details to import a deployment",
+    );
   });
 
   it("displays input fields and allows typing", () => {
@@ -31,5 +34,5 @@ describe("<DeploymentPackageImportFromHelmChart />", () => {
   it("shows required error for helmChartURL when cleared", () => {
     pom.helmChartUrl.type(" ").clear();
     cy.contains("Helm Chart URL is required").should("be.visible");
-    });
+  });
 });

@@ -6,6 +6,7 @@
 import { PageNotFound, SquareSpinner } from "@orch-ui/components";
 import { RuntimeConfig } from "@orch-ui/utils";
 import React, { Suspense } from "react";
+import DeploymentPackageImportFromHelmChart from "src/components/pages/DeploymentPackageImportFromHelmChart/DeploymentPackageImportFromHelmChart";
 import DashboardDeploymentsStatus from "../components/organisms/deployments/DashboardDeploymentsStatus/DashboardDeploymentsStatus";
 import ApplicationCreateEdit from "../components/pages/ApplicationCreateEdit/ApplicationCreateEdit";
 import ApplicationDetails from "../components/pages/ApplicationDetails/ApplicationDetails";
@@ -22,7 +23,6 @@ import DeploymentPackages from "../components/pages/DeploymentPackages/Deploymen
 import Deployments from "../components/pages/Deployments/Deployments";
 import EditDeployment from "../components/pages/EditDeployment/EditDeployment";
 import SetupDeployment from "../components/pages/SetupDeployment/SetupDeployment";
-import DeploymentPackageImportFromHelmChart from "src/components/pages/DeploymentPackageImportFromHelmChart/DeploymentPackageImportFromHelmChart";
 
 const Admin =
   RuntimeConfig.isEnabled("ADMIN") &&
@@ -45,7 +45,7 @@ export const childRoutes = [
   },
   {
     path: "packages/import-from-helm-chart",
-    element: <DeploymentPackageImportFromHelmChart/>,
+    element: <DeploymentPackageImportFromHelmChart />,
   },
   {
     path: "packages/import",

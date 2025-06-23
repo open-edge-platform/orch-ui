@@ -4,23 +4,20 @@
  */
 
 import { setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
+import { Heading } from "@spark-design/react";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { Control } from "react-hook-form";
-import {
-  selectDeploymentPackage,
-} from "../../../store/reducers/deploymentPackage";
+import { Control, useForm } from "react-hook-form";
+import DeploymentPackageHelmChartInfoForm, {
+  PackageInputs,
+} from "src/components/organisms/deploymentPackages/DeploymentPackageHelmChartInfoForm/DeploymentPackageHelmChartInfoForm";
 import {
   deploymentPackageBreadcrumb,
   homeBreadcrumb,
   importDeploymentPackageFromHelmChartBreadcrumb,
   packagesNavItem,
 } from "../../../routes/const";
-import DeploymentPackageHelmChartInfoForm, { PackageInputs } from "src/components/organisms/deploymentPackages/DeploymentPackageHelmChartInfoForm/DeploymentPackageHelmChartInfoForm";
-import {
-  Heading,
-} from "@spark-design/react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { selectDeploymentPackage } from "../../../store/reducers/deploymentPackage";
 
 const dataCy = "deploymentPackageImportFromHelmChart";
 
@@ -52,7 +49,7 @@ const DeploymentPackageImportFromHelmChart = () => {
       deploymentPackageBreadcrumb,
       importDeploymentPackageFromHelmChartBreadcrumb,
     ],
-    []
+    [],
   );
 
   useEffect(() => {
@@ -63,16 +60,18 @@ const DeploymentPackageImportFromHelmChart = () => {
   return (
     <div {...cy} className="deployment-package-import-from-helm-chart">
       <Heading semanticLevel={1} size="l" data-cy="title">
-              Import from Helm Chart
+        Import from Helm Chart
       </Heading>
-      <Heading semanticLevel={2} size="xs" data-cy="subTitle" style={{ marginBottom: "3rem" }}>
-              Provide Helm Chart details to import a deployment
+      <Heading
+        semanticLevel={2}
+        size="xs"
+        data-cy="subTitle"
+        style={{ marginBottom: "3rem" }}
+      >
+        Provide Helm Chart details to import a deployment
       </Heading>
-      
-      <DeploymentPackageHelmChartInfoForm
-        control={control}
-        errors={errors}
-      />
+
+      <DeploymentPackageHelmChartInfoForm control={control} errors={errors} />
     </div>
   );
 };

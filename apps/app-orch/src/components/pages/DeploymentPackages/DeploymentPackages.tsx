@@ -3,16 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  Ribbon,
-  setActiveNavItem,
-  setBreadcrumb,
-} from "@orch-ui/components";
+import { Ribbon, setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
-import { Heading, Item, Tabs, Text, } from "@spark-design/react";
+import { Heading, Item, Tabs, Text } from "@spark-design/react";
 import { HeaderSize } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import DeploymentPackagePopup from "src/components/organisms/deploymentPackages/DeploymentPackagePopup/DeploymentPackagePopup";
 import {
   deploymentPackageBreadcrumb,
   homeBreadcrumb,
@@ -21,8 +18,6 @@ import {
 import { useAppDispatch } from "../../../store/hooks";
 import DeploymentPackagesTable from "../../organisms/deploymentPackages/DeploymentPackageTable/DeploymentPackageTable";
 import "./DeploymentPackages.scss";
-import DeploymentPackagePopup from "src/components/organisms/deploymentPackages/DeploymentPackagePopup/DeploymentPackagePopup";
-
 
 const dataCy = "deploymentPackages";
 
@@ -69,7 +64,9 @@ const DeploymentPackages = () => {
             });
           }}
           defaultValue={searchParams.get("searchTerm") ?? ""}
-          customButtons={tabIndex === 0 ? <DeploymentPackagePopup /> : undefined}
+          customButtons={
+            tabIndex === 0 ? <DeploymentPackagePopup /> : undefined
+          }
         />
       </div>
 

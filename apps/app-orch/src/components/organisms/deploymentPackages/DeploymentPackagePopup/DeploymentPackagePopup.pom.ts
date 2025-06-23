@@ -5,7 +5,11 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = ["Create", "Import from file", "Import Helm Chart"] as const;
+const dataCySelectors = [
+  "Create",
+  "Import from file",
+  "Import Helm Chart",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackagePopupPom extends CyPom<Selectors> {

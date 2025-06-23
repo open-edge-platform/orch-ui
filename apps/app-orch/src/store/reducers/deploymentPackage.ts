@@ -15,7 +15,7 @@ export const initialState: catalog.DeploymentPackage = {
   version: "",
   username: "",
   helmChartURL: "",
-  password: "",  
+  password: "",
   applicationReferences: [],
   isDeployed: false,
   isVisible: false,
