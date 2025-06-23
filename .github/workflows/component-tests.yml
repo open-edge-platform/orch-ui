@@ -1,0 +1,76 @@
+---
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+name: Component Tests
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    types: [labeled]
+  schedule:
+    - cron: "0 0 * * *"  # Run every day at midnight
+  issue_comment:
+    types: [created]
+  workflow_dispatch:   # Run on manual trigger
+    inputs:
+      run-component-tests:
+        description: 'Run component tests'
+        required: true
+        type: boolean
+        default: false
+      emf-branch:
+        description: 'The branch, tag or SHA to checkout EMF'
+        required: true
+        type: string
+        default: 'main'
+
+permissions:
+  contents: read
+
+jobs:
+  component-tests:
+    name: Deploy Orchestrator and Run Component Tests
+    # yamllint disable rule:line-length
+    if: |
+      ${{ inputs.run-component-tests || github.event_name == 'schedule' || github.event.label.name == 'component-tests' || (contains(github.event.comment.body, '/component-tests') && github.event.issue.pull_request) }}
+    # yamllint enable rule:line-length
+    runs-on: ubuntu-24.04-16core-64GB
+    timeout-minutes: 60
+    env:
+      ORCH_DEFAULT_PASSWORD: ${{ secrets.ORCH_DEFAULT_PASSWORD }}
+
+    steps:
+      - name: Deploy Orchestrator
+        uses: open-edge-platform/edge-manageability-framework/.github/actions/deploy_kind@hotfix/gha_kind  # yamllint disable-line rule:line-length
+        with:
+          orch_version: ${{ inputs.emf-branch || 'main' }}
+          orch_password: ${{ secrets.ORCH_DEFAULT_PASSWORD }}
+          docker_username: ${{ secrets.SYS_DOCKERHUB_USERNAME }}
+          docker_password: ${{ secrets.SYS_DOCKERHUB_RO }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deployment_type: "minimal"
+      - name: Setup Sample Org and Project with default users
+        id: default-mt-setup
+        run: mage tenantUtils:createDefaultMtSetup
+      - name: Checkout UI repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: open-edge-platform/orch-ui
+          path: orch-ui
+          persist-credentials: false
+      - name: Cache npm dependencies
+        uses: actions/setup-node@v4.2.0
+        with:
+          cache: "npm"
+          cache-dependency-path: orch-ui/package-lock.json
+      - name: Install UI test deps
+        working-directory: orch-ui
+        shell: bash
+        run: npm ci
+      # TODO do we manually invoke the tests here or we use the GHA defined in EMF?
+      # Or do we move that in this repo?
+      - name: Run Admin Cypress tests
+        working-directory: orch-ui/tests
+        shell: bash
+        run: |
+          npx cypress run --e2e \
+            -s "cypress/e2e/admin/non-org-admin-smoke.cy.ts,cypress/e2e/admin/org-admin-smoke.cy.ts"
