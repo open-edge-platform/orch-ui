@@ -37,14 +37,20 @@ describe("<DeploymentPackagePopup />", () => {
         },
         {
           path: "/applications/packages/import-from-helm-chart",
-          element: <div id="pathname">/applications/packages/import-from-helm-chart</div>,
+          element: (
+            <div id="pathname">
+              /applications/packages/import-from-helm-chart
+            </div>
+          ),
         },
       ],
     });
   });
 
   it("renders popup trigger", () => {
-    pom.trigger.should("exist").and("contain.text", "Deployment Packages Actions");
+    pom.trigger
+      .should("exist")
+      .and("contain.text", "Deployment Packages Actions");
   });
 
   it("displays all options when opened", () => {
@@ -69,7 +75,10 @@ describe("<DeploymentPackagePopup />", () => {
   it("navigates correctly when Import Helm Chart is clicked", () => {
     pom.trigger.click();
     pom.el["Import Helm Chart"].click();
-    cy.get("#pathname").should("contain", "/applications/packages/import-from-helm-chart");
+    cy.get("#pathname").should(
+      "contain",
+      "/applications/packages/import-from-helm-chart",
+    );
   });
 
   it("closes the popup after clicking an option", () => {

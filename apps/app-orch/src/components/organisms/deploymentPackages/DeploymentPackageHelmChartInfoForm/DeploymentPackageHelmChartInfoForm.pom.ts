@@ -5,7 +5,12 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = ["helm-chart-url", "username", "password", "description"] as const;
+const dataCySelectors = [
+  "helm-chart-url",
+  "username",
+  "password",
+  "description",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
@@ -14,7 +19,9 @@ class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
   }
 
   get helmChartUrlField() {
-    return this.el["helm-chart-url"].parentsUntil(".spark-text-field-container");
+    return this.el["helm-chart-url"].parentsUntil(
+      ".spark-text-field-container",
+    );
   }
 
   get helmChartUrlInvalidIndicator() {
@@ -38,8 +45,8 @@ class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
   }
 
   get descriptionTextarea() {
-  return this.el.description.find("textarea");
-}
+    return this.el.description.find("textarea");
+  }
 }
 
 export default DeploymentPackageHelmChartInfoFormPom;
