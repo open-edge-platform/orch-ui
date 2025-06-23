@@ -55,3 +55,48 @@ describe("<ClusterList/>", () => {
       });
   });
 });
+
+describe("<ClusterList/> - Sorting by Status", () => {
+  beforeEach(() => {
+    pom.interceptApis([pom.api.clusterMocked]);
+    cy.mount(
+      <ClusterList
+        onSelect={cy.stub().as("onSelectStub")}
+        onShowDetails={cy.stub().as("onShowDetailsStub")}
+        isForm={true}
+      />,
+    );
+    pom.waitForApis();
+  });
+
+  it("should sort by lifecyclePhase when clicking on the Status column header", () => {
+    cy.get("th:contains('Status') .caret.caret-up").click({ force: true });
+    cy.wait(`@${pom.api.clusterMocked}`).then(({ request }) => {
+      expect(request.url).to.include("orderBy=lifecyclePhase");
+      expect(request.url).to.include("asc");
+    });
+
+    cy.get("th:contains('Status') .caret.caret-down").click({ force: true });
+    cy.wait(`@${pom.api.clusterMocked}`).then(({ request }) => {
+      expect(request.url).to.include("orderBy=lifecyclePhase");
+      expect(request.url).to.include("desc");
+    });
+  });
+
+  it("should NOT sort by a wrong field when clicking Status column", () => {
+    cy.get("th:contains('Status') .caret.caret-up").click({ force: true });
+    cy.get(`@${pom.api.clusterMocked}`)
+      .its("request.url")
+      .then((url: string) => {
+        expect(url).not.to.include("orderBy=status");
+        expect(url).not.to.include("orderBy=name");
+      });
+  });
+
+  it("should not trigger sort if Status column is missing", () => {
+    cy.get("th:contains('Status')").invoke("remove");
+    cy.get("th:contains('Status') .caret.caret-up").should("not.exist");
+    cy.get("body").click();
+    cy.get(`@${pom.api.clusterMocked}`).should("exist");
+  });
+});

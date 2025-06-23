@@ -110,9 +110,9 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["HostService"],
       }),
-      hostServiceRegisterUpdateHost: build.mutation<
-        HostServiceRegisterUpdateHostApiResponse,
-        HostServiceRegisterUpdateHostApiArg
+      hostServicePatchRegisterHost: build.mutation<
+        HostServicePatchRegisterHostApiResponse,
+        HostServicePatchRegisterHostApiArg
       >({
         query: (queryArg) => ({
           url: `/v1/projects/${queryArg.projectName}/compute/hosts/${queryArg.resourceId}/register`,
@@ -1107,9 +1107,9 @@ export type HostServiceOnboardHostApiArg = {
   /** unique projectName for the resource */
   projectName: string;
 };
-export type HostServiceRegisterUpdateHostApiResponse =
+export type HostServicePatchRegisterHostApiResponse =
   /** status 200 Success */ HostResourceRead;
-export type HostServiceRegisterUpdateHostApiArg = {
+export type HostServicePatchRegisterHostApiArg = {
   resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
@@ -2017,28 +2017,35 @@ export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg =
     /** The telemetry_metrics_profile to create. */
     telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
+export type StatusIndication =
+  | "STATUS_INDICATION_UNSPECIFIED"
+  | "STATUS_INDICATION_ERROR"
+  | "STATUS_INDICATION_IN_PROGRESS"
+  | "STATUS_INDICATION_IDLE";
 export type BaremetalControllerKind =
   | "BAREMETAL_CONTROLLER_KIND_UNSPECIFIED"
   | "BAREMETAL_CONTROLLER_KIND_NONE"
   | "BAREMETAL_CONTROLLER_KIND_IPMI"
   | "BAREMETAL_CONTROLLER_KIND_VPRO"
   | "BAREMETAL_CONTROLLER_KIND_PDU";
+export type AmtState =
+  | "AMT_STATE_UNSPECIFIED"
+  | "AMT_STATE_PROVISIONED"
+  | "AMT_STATE_UNPROVISIONED"
+  | "AMT_STATE_DISCONNECTED";
 export type PowerState =
   | "POWER_STATE_UNSPECIFIED"
-  | "POWER_STATE_ERROR"
   | "POWER_STATE_ON"
-  | "POWER_STATE_OFF";
+  | "POWER_STATE_OFF"
+  | "POWER_STATE_SLEEP"
+  | "POWER_STATE_HIBERNATE"
+  | "POWER_STATE_RESET";
 export type HostState =
   | "HOST_STATE_UNSPECIFIED"
   | "HOST_STATE_DELETED"
   | "HOST_STATE_ONBOARDED"
   | "HOST_STATE_UNTRUSTED"
   | "HOST_STATE_REGISTERED";
-export type StatusIndication =
-  | "STATUS_INDICATION_UNSPECIFIED"
-  | "STATUS_INDICATION_ERROR"
-  | "STATUS_INDICATION_IN_PROGRESS"
-  | "STATUS_INDICATION_IDLE";
 export type OsProviderKind =
   | "OS_PROVIDER_KIND_UNSPECIFIED"
   | "OS_PROVIDER_KIND_INFRA"
@@ -2060,14 +2067,21 @@ export type OperatingSystemResource = {
   /** The OS resource's CPU architecture. */
   architecture?: string;
   description?: string;
+  /** URL of the file containing information about the existing CVEs on the Operating System. */
+  existingCvesUrl?: string;
+  /** URL of the file containing information about the CVEs that have been fixed by this OS Resource version. */
+  fixedCvesUrl?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
   /** The URL repository of the OS image. */
   imageUrl?: string;
-  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information. */
-  installedPackages?: string;
-  /** The OS resource's kernel Command Line Options. */
+  /** (IMMUTABLE) The URL of the OS manifest which contains install packages details. This will be used to fill the installed_packages field
+     for the advance use case to allow manual creation of OSProfiles when supported from backend. */
+  installedPackagesUrl?: string;
+  /** Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The OS resource's kernel Command Line Options. */
   kernelCommand?: string;
+  /** Opaque JSON field storing metadata associated to this OS resource. */
+  metadata?: string;
   /** The OS resource's name. */
   name?: string;
   osProvider?: OsProviderKind;
@@ -2080,22 +2094,35 @@ export type OperatingSystemResource = {
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
   timestamps?: Timestamps;
-  /** The list of OS resource update sources.
+  /** Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The list of OS resource update sources.
      Should be in 'DEB822 Source Format' for Debian style OSs */
-  updateSources: string[];
+  updateSources?: string[];
 };
 export type OperatingSystemResourceRead = {
   /** The OS resource's CPU architecture. */
   architecture?: string;
   description?: string;
+  /** The CVEs that are currently present on the Operating System, encoded as a JSON list. */
+  existingCves?: string;
+  /** URL of the file containing information about the existing CVEs on the Operating System. */
+  existingCvesUrl?: string;
+  /** The CVEs that have been fixed by this OS Resource version, encoded as a JSON list. */
+  fixedCves?: string;
+  /** URL of the file containing information about the CVEs that have been fixed by this OS Resource version. */
+  fixedCvesUrl?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
   /** The URL repository of the OS image. */
   imageUrl?: string;
-  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information. */
+  /** List of installed packages, encoded as a JSON list. */
   installedPackages?: string;
-  /** The OS resource's kernel Command Line Options. */
+  /** (IMMUTABLE) The URL of the OS manifest which contains install packages details. This will be used to fill the installed_packages field
+     for the advance use case to allow manual creation of OSProfiles when supported from backend. */
+  installedPackagesUrl?: string;
+  /** Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The OS resource's kernel Command Line Options. */
   kernelCommand?: string;
+  /** Opaque JSON field storing metadata associated to this OS resource. */
+  metadata?: string;
   /** The OS resource's name. */
   name?: string;
   osProvider?: OsProviderKind;
@@ -2118,9 +2145,9 @@ export type OperatingSystemResourceRead = {
   /** SHA256 checksum of the OS resource in hexadecimal representation. */
   sha256: string;
   timestamps?: Timestamps;
-  /** The list of OS resource update sources.
+  /** Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The list of OS resource update sources.
      Should be in 'DEB822 Source Format' for Debian style OSs */
-  updateSources: string[];
+  updateSources?: string[];
 };
 export type InstanceState =
   | "INSTANCE_STATE_UNSPECIFIED"
@@ -2146,6 +2173,50 @@ export type LocalAccountResourceRead = {
   /** Username provided by admin */
   username: string;
 };
+export type UpdatePolicy =
+  | "UPDATE_POLICY_UNSPECIFIED"
+  | "UPDATE_POLICY_LATEST"
+  | "UPDATE_POLICY_TARGET";
+export type OsUpdatePolicy = {
+  /** User-provided, human-readable description. */
+  description?: string;
+  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+     Applies only to Mutable OSes. */
+  installPackages?: string;
+  /** The OS resource's kernel Command Line Options.
+     Applies only to Mutable OSes. */
+  kernelCommand?: string;
+  /** User-provided, human-readable name. */
+  name: string;
+  targetOs?: OperatingSystemResource;
+  timestamps?: Timestamps;
+  updatePolicy?: UpdatePolicy;
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs.
+     Applies only to Mutable OSes. */
+  updateSources?: string[];
+};
+export type OsUpdatePolicyRead = {
+  /** User-provided, human-readable description. */
+  description?: string;
+  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+     Applies only to Mutable OSes. */
+  installPackages?: string;
+  /** The OS resource's kernel Command Line Options.
+     Applies only to Mutable OSes. */
+  kernelCommand?: string;
+  /** User-provided, human-readable name. */
+  name: string;
+  /** resource ID, generated by the inventory on Create. */
+  resourceId?: string;
+  targetOs?: OperatingSystemResourceRead;
+  timestamps?: Timestamps;
+  updatePolicy?: UpdatePolicy;
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs.
+     Applies only to Mutable OSes. */
+  updateSources?: string[];
+};
 export type InstanceResource = {
   currentOs?: OperatingSystemResource;
   currentState?: InstanceState;
@@ -2162,6 +2233,7 @@ export type InstanceResource = {
   securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
   trustedAttestationStatusIndicator?: StatusIndication;
+  updatePolicy?: OsUpdatePolicy;
   updateStatusIndicator?: StatusIndication;
 };
 export type WorkloadMemberKind =
@@ -2240,6 +2312,8 @@ export type InstanceResourceRead = {
   currentState?: InstanceState;
   desiredOs?: OperatingSystemResourceRead;
   desiredState?: InstanceState;
+  /** The CVEs that are currently present on the Instance, encoded as a JSON list. */
+  existingCves?: string;
   host?: HostResource;
   /** Deprecated, The instance's unique identifier. Alias of resourceID. */
   instanceID?: string;
@@ -2255,6 +2329,8 @@ export type InstanceResourceRead = {
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResourceRead;
+  /** Details about OS Updates available for this Instance. If empty, there are no updates available. */
+  osUpdateAvailable?: string;
   /** textual message that describes the provisioning status of Instance. Set by RMs only. */
   provisioningStatus?: string;
   provisioningStatusIndicator?: StatusIndication;
@@ -2262,6 +2338,8 @@ export type InstanceResourceRead = {
   provisioningStatusTimestamp?: number;
   /** Resource ID, generated on Create. */
   resourceId?: string;
+  /** The packages available on the Instance at runtime, represented as a JSON list. */
+  runtimePackages?: string;
   securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
   /** textual message that describes the trusted_attestation status of Instance. Set by RMs only. */
@@ -2269,9 +2347,10 @@ export type InstanceResourceRead = {
   trustedAttestationStatusIndicator?: StatusIndication;
   /** UTC timestamp when trusted_attestation_status was last changed. Set by RMs only. */
   trustedAttestationStatusTimestamp?: number;
+  updatePolicy?: OsUpdatePolicyRead;
   /** textual message that describes the update status of Instance. Set by RMs only. */
   updateStatus?: string;
-  /** JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change. */
+  /** Deprecated, will be removed in EMF v3.2.0, use OSUpdateRun instead. JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change. */
   updateStatusDetail?: string;
   updateStatusIndicator?: StatusIndication;
   /** UTC timestamp when update_status was last changed. Set by RMs only. */
@@ -2295,12 +2374,14 @@ export type InstanceResourceWrite = {
   /** The instance's human-readable name. */
   name?: string;
   os?: OperatingSystemResource;
-  /** The unique identifier of OS resource that must be installed on the instance. */
+  /** The unique identifier of OS resource that must be installed on the instance. The field is used to drive the day0 operations, and immutable once set the first time. */
   osID?: string;
+  osUpdatePolicyID?: string;
   provisioningStatusIndicator?: StatusIndication;
   securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
   trustedAttestationStatusIndicator?: StatusIndication;
+  updatePolicy?: OsUpdatePolicy;
   updateStatusIndicator?: StatusIndication;
 };
 export type MetadataItem = {
@@ -2309,6 +2390,10 @@ export type MetadataItem = {
   /** The metadata value. */
   value: string;
 };
+export type PowerCommandPolicy =
+  | "POWER_COMMAND_POLICY_UNSPECIFIED"
+  | "POWER_COMMAND_POLICY_IMMEDIATE"
+  | "POWER_COMMAND_POLICY_ORDERED";
 export type ProviderKind =
   | "PROVIDER_KIND_UNSPECIFIED"
   | "PROVIDER_KIND_BAREMETAL";
@@ -2459,9 +2544,12 @@ export type SiteResourceWrite = {
   timestamps?: Timestamps;
 };
 export type HostResource = {
+  amtStatusIndicator?: StatusIndication;
   bmcKind?: BaremetalControllerKind;
+  currentAmtState?: AmtState;
   currentPowerState?: PowerState;
   currentState?: HostState;
+  desiredAmtState?: AmtState;
   desiredPowerState?: PowerState;
   desiredState?: HostState;
   hostStatusIndicator?: StatusIndication;
@@ -2471,6 +2559,8 @@ export type HostResource = {
   /** The host name. */
   name: string;
   onboardingStatusIndicator?: StatusIndication;
+  powerCommandPolicy?: PowerCommandPolicy;
+  powerStatusIndicator?: StatusIndication;
   provider?: ProviderResource;
   registrationStatusIndicator?: StatusIndication;
   site?: SiteResource;
@@ -2597,6 +2687,13 @@ export type HostusbResourceRead = {
   timestamps?: Timestamps;
 };
 export type HostResourceRead = {
+  /** coming from device introspection */
+  amtSku?: string;
+  /** coming from device introspection. Set only by the DM RM. */
+  amtStatus?: string;
+  amtStatusIndicator?: StatusIndication;
+  /** UTC timestamp when amt_status was last changed. Set by DM and OM RM only. */
+  amtStatusTimestamp?: number;
   /** BIOS Release Date. */
   biosReleaseDate?: string;
   /** BIOS Vendor. */
@@ -2620,8 +2717,10 @@ export type HostResourceRead = {
   cpuThreads?: number;
   /** JSON field storing the CPU topology, refer to HDA/HRM docs for the JSON schema. */
   cpuTopology?: string;
+  currentAmtState?: AmtState;
   currentPowerState?: PowerState;
   currentState?: HostState;
+  desiredAmtState?: AmtState;
   desiredPowerState?: PowerState;
   desiredState?: HostState;
   /** Back-reference to attached host GPU resources. */
@@ -2655,6 +2754,14 @@ export type HostResourceRead = {
   onboardingStatusIndicator?: StatusIndication;
   /** UTC timestamp when onboarding_status was last changed. Set by RMs only. */
   onboardingStatusTimestamp?: number;
+  powerCommandPolicy?: PowerCommandPolicy;
+  /** UTC timestamp when the host was powered on. Set by DM RM only. */
+  powerOnTime?: number;
+  /** textual message that describes the runtime status of Host power. Set by DM RM only. */
+  powerStatus?: string;
+  powerStatusIndicator?: StatusIndication;
+  /** UTC timestamp when power_status was last changed. Set by DM RM only. */
+  powerStatusTimestamp?: number;
   /** System Product Name. */
   productName?: string;
   provider?: ProviderResourceRead;
@@ -2673,9 +2780,12 @@ export type HostResourceRead = {
   uuid?: string;
 };
 export type HostResourceWrite = {
+  amtStatusIndicator?: StatusIndication;
   bmcKind?: BaremetalControllerKind;
+  currentAmtState?: AmtState;
   currentPowerState?: PowerState;
   currentState?: HostState;
+  desiredAmtState?: AmtState;
   desiredPowerState?: PowerState;
   desiredState?: HostState;
   hostStatusIndicator?: StatusIndication;
@@ -2685,6 +2795,8 @@ export type HostResourceWrite = {
   /** The host name. */
   name: string;
   onboardingStatusIndicator?: StatusIndication;
+  powerCommandPolicy?: PowerCommandPolicy;
+  powerStatusIndicator?: StatusIndication;
   provider?: ProviderResource;
   registrationStatusIndicator?: StatusIndication;
   site?: SiteResourceWrite;
@@ -2754,8 +2866,10 @@ export type DeleteHostResponse = object;
 export type InvalidateHostResponse = object;
 export type OnboardHostResponse = object;
 export type HostRegister = {
-  /** Flag ot signal to automatically onboard the host. */
+  /** Flag to signal to automatically onboard the host. */
   autoOnboard?: boolean;
+  /** Flag to signal to enable vPRO on the host. */
+  enableVpro?: boolean;
   /** The host name. */
   name?: string;
   /** The host serial number. */
@@ -3399,7 +3513,7 @@ export const {
   useHostServiceUpdateHostMutation,
   useHostServiceInvalidateHostMutation,
   useHostServiceOnboardHostMutation,
-  useHostServiceRegisterUpdateHostMutation,
+  useHostServicePatchRegisterHostMutation,
   useHostServiceRegisterHostMutation,
   useHostServiceGetHostsSummaryQuery,
   useInstanceServiceListInstancesQuery,

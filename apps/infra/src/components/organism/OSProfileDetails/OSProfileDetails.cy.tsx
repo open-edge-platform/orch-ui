@@ -12,7 +12,16 @@ const pom = new OSProfileDetailsPom();
 describe("<OSProfileDetails/>", () => {
   describe("OS profile details", () => {
     beforeEach(() => {
-      cy.mount(<OSProfileDetails os={osUbuntu} />);
+      cy.mount(
+        <OSProfileDetails
+          os={osUbuntu}
+          updatePolicy={{
+            name: "Ubuntu",
+            kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+            updateSources: ["deb https://files.edgeorch.net orchui release"],
+          }}
+        />,
+      );
     });
 
     it("should contain titles", () => {
@@ -45,11 +54,20 @@ describe("<OSProfileDetails/>", () => {
           "deb https://files.edgeorch.net orchui release",
         );
     });
+    it("should render tabs", () => {
+      cy.mount(<OSProfileDetails os={osTb} />);
+
+      pom.getTab("Installed Packages").should("exist");
+      pom.el.installedPackagesRoot.should("be.visible");
+
+      pom.getTab("Cves").should("exist").click();
+      pom.el.cveTabRoot.should("be.visible");
+    });
     it("should not render installed packages list if empty", () => {
       cy.mount(
         <OSProfileDetails os={{ ...osUbuntu, ...{ installedPackages: "" } }} />,
       );
-      pom.root.should("not.contain.text", "Installed Packages");
+      pom.el.installedPackagesRoot.should("not.exist");
     });
     it("should render an error message if data format is invalid ", () => {
       cy.mount(
@@ -63,7 +81,7 @@ describe("<OSProfileDetails/>", () => {
           }}
         />,
       );
-      pom.root.should("not.contain.text", "Installed Packages");
+      pom.el.installedPackagesRoot.should("not.exist");
       pom.root.should(
         "contain.text",
         "Invalid JSON format recieved for Installed packages.",
@@ -79,6 +97,20 @@ describe("<OSProfileDetails/>", () => {
       pom.root.should("contain.text", "libpcre2-32-0");
       pom.root.should("contain.text", "10.42-3");
       pom.root.should("contain.text", "tmv3");
+    });
+
+    it("should render cve list in table", () => {
+      cy.mount(<OSProfileDetails os={osTb} />);
+      pom.getTab("Cves").should("exist").click();
+      pom.table.root.should("exist");
+
+      pom.table.getColumnHeader(0).contains("Cve Id");
+      pom.table.getColumnHeader(1).contains("Priority");
+      pom.table.getColumnHeader(2).contains("Affected Packages");
+
+      pom.table.getCell(1, 1).contains("CVE-2016-5180");
+      pom.table.getCell(1, 2).contains("critical");
+      pom.table.getCell(1, 3).contains("fluent-bit-3.1.9-11.emt3.x86_64");
     });
   });
 });

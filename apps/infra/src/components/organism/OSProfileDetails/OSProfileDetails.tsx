@@ -4,7 +4,9 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { MessageBanner, Text } from "@spark-design/react";
+import { Table, TableColumn } from "@orch-ui/components";
+import { Item, MessageBanner, Tabs, Text } from "@spark-design/react";
+import { useState } from "react";
 import OsProfileDetailField from "./OsProfileDetailField";
 
 import "./OSProfileDetails.scss";
@@ -24,6 +26,7 @@ export const OSProfileSecurityFeatures: {
 
 interface OSProfileDetailsProps {
   os: infra.OperatingSystemResourceRead;
+  updatePolicy?: infra.OsUpdatePolicyRead | undefined;
 }
 /**
  * Represents a OS package with its name, version, and distribution.
@@ -35,6 +38,15 @@ export interface Package {
 }
 interface InstalledPackages {
   Repo: Package[];
+}
+
+export interface Cve {
+  /** Unique identifier for the CVE in the format CVE-YYYY-NNNNN */
+  cve_id: string;
+  /** Severity level of the vulnerability (e.g., "critical", "high", "medium", "low") */
+  priority: "critical" | "high" | "medium" | "low" | string;
+  /** Array of package names affected by this vulnerability */
+  affected_packages: string[];
 }
 
 /**
@@ -81,8 +93,40 @@ const renderPackage = (pkg: Package) => {
   );
 };
 
-const OSProfileDetails = ({ os }: OSProfileDetailsProps) => {
+const CveColumns: TableColumn<Cve>[] = [
+  {
+    Header: "Cve Id",
+    apiName: "cve_id",
+    accessor: (item) => {
+      if (item.cve_id) {
+        return item.cve_id;
+      }
+    },
+  },
+  {
+    Header: "Priority",
+    apiName: "priority",
+    accessor: (item) => {
+      if (item.priority) {
+        return item.priority;
+      }
+    },
+  },
+  {
+    Header: "Affected Packages",
+    apiName: "affected_packages",
+    accessor: (item) => {
+      if (item.affected_packages) {
+        return item.affected_packages.join();
+      }
+    },
+  },
+];
+
+const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
   const cy = { "data-cy": dataCy };
+  const [tabIndex, setTabIndex] = useState<number>(0);
+
   const osProfileSecurity =
     os.securityFeature && OSProfileSecurityFeatures[os.securityFeature];
   const parsedPackages = os?.installedPackages
@@ -91,6 +135,9 @@ const OSProfileDetails = ({ os }: OSProfileDetailsProps) => {
   const isValidPackage = isInstalledPackages(parsedPackages);
   const installedPackages: Package[] =
     isValidPackage && parsedPackages ? parsedPackages.Repo : [];
+  const existingCves: Cve[] = os?.existingCves
+    ? JSON.parse(os.existingCves)
+    : null;
 
   return (
     <div className="os-profile-detail-content" {...cy}>
@@ -105,40 +152,84 @@ const OSProfileDetails = ({ os }: OSProfileDetailsProps) => {
       <div className="os-details-advanced-settings">Advanced Settings</div>
       <OsProfileDetailField
         label="Update Sources"
-        value={os.updateSources?.join()}
+        value={
+          updatePolicy?.updateSources
+            ? updatePolicy?.updateSources?.join()
+            : "-"
+        }
       />
       <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />
-      <OsProfileDetailField label="Kernel Command" value={os.kernelCommand} />
+      <OsProfileDetailField
+        label="Kernel Command"
+        value={updatePolicy?.kernelCommand}
+      />
 
-      {installedPackages.length ? (
-        <>
-          <div className="os-details-installed-packages">
-            Installed Packages
-          </div>
-          <div className={"installed-packages__grid-wrapper"}>
-            <div>
-              <Text style={{ fontWeight: "500" }}>Name</Text>
+      <div className="os-details-installed-packages">System Overview</div>
+
+      <div className="tabs-container">
+        <Tabs
+          onSelectionChange={(key) => {
+            const index = key.toString().split(".")[1];
+            setTabIndex(parseInt(index));
+          }}
+          selectedKey={`$.${tabIndex.toString()}`}
+        >
+          <Item className="osprofile-tab-item" title="Installed Packages">
+            <div
+              className="installed-packages-content"
+              data-cy="installedPackagesTab"
+            >
+              {installedPackages.length ? (
+                <>
+                  <div
+                    data-cy="installedPackagesRoot"
+                    className={"installed-packages__grid-wrapper"}
+                  >
+                    <div>
+                      <Text style={{ fontWeight: "500" }}>Name</Text>
+                    </div>
+                    <div>
+                      <Text style={{ fontWeight: "500" }}>Version</Text>
+                    </div>
+                    <div>
+                      <Text style={{ fontWeight: "500" }}>Distribution</Text>
+                    </div>
+                    {installedPackages.map((pkg: Package) =>
+                      renderPackage(pkg),
+                    )}
+                  </div>
+                </>
+              ) : !isValidPackage ? (
+                <MessageBanner
+                  messageTitle=""
+                  variant="error"
+                  size="m"
+                  messageBody={
+                    "Invalid JSON format recieved for Installed packages."
+                  }
+                  showIcon
+                  outlined
+                />
+              ) : null}
             </div>
-            <div>
-              <Text style={{ fontWeight: "500" }}>Version</Text>
+          </Item>
+
+          <Item className="osprofile-tab-item" title="Cves">
+            <div className="cve-content" data-cy="cveTabRoot">
+              <Table
+                columns={CveColumns}
+                data={existingCves}
+                sortColumns={[1]}
+                initialSort={{
+                  column: "Priority",
+                  direction: "asc",
+                }}
+              />
             </div>
-            <div>
-              <Text style={{ fontWeight: "500" }}>Distribution</Text>
-            </div>
-            {installedPackages.map((pkg: Package) => renderPackage(pkg))}
-          </div>
-        </>
-      ) : !isValidPackage ? (
-        <MessageBanner
-          messageTitle=""
-          variant="error"
-          size="m"
-          messageBody={"Invalid JSON format recieved for Installed packages."}
-          showIcon
-          outlined
-        />
-      ) : null}
+          </Item>
+        </Tabs>
+      </div>
     </div>
   );
 };

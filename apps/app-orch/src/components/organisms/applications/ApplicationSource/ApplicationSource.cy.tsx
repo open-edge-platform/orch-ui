@@ -8,6 +8,10 @@ import { ApplicationInputs } from "../../../pages/ApplicationCreateEdit/Applicat
 import ApplicationSource from "./ApplicationSource";
 import ApplicationSourcePom from "./ApplicationSource.pom";
 
+// Add tests for various versionPattern values
+const validVersions = ["1.0.0", "v0.1.2", "0.0.1"];
+const invalidVersions = ["1", "abc", "1.0", "1.0.0.0", "v"];
+
 let pom: ApplicationSourcePom;
 describe("<ApplicationSource />", () => {
   it("should render form items correctly", () => {
@@ -39,5 +43,44 @@ describe("<ApplicationSource />", () => {
 
     pom.selectChartName(pom.chartName.resources[0].chartName);
     pom.selectChartVersion(pom.chartVersion.resources[0].versions?.[0] ?? "");
+  });
+  describe("verify chart versions", () => {
+    beforeEach(() => {
+      pom = new ApplicationSourcePom("appSourceForm");
+      pom.interceptApis([pom.api.registry]);
+      const FormWrapper = () => {
+        const { control } = useForm<ApplicationInputs>({
+          mode: "all",
+        });
+        const validateVersionFn = () => {};
+        return (
+          <ApplicationSource
+            control={control}
+            validateVersionFn={validateVersionFn}
+          />
+        );
+      };
+      cy.mount(<FormWrapper />);
+      pom.waitForApis();
+      cy.wait(500);
+
+      pom.selectHelmRegistryName(pom.registry.resources[0].name);
+      pom.selectChartName(pom.chartName.resources[0].chartName);
+    });
+    validVersions.forEach((version) => {
+      it(`should accept valid versionPattern: "${version}"`, () => {
+        // Type version and check for valid state
+
+        pom.el.chartVersionCombobox.first().type(version);
+        cy.contains("Invalid version").should("not.exist");
+      });
+    });
+
+    invalidVersions.forEach((version) => {
+      it(`should reject invalid versionPattern: "${version}"`, () => {
+        pom.el.chartVersionCombobox.first().type(version);
+        cy.contains("Invalid version").should("exist");
+      });
+    });
   });
 });

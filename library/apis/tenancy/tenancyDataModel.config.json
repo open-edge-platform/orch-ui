@@ -1,5 +1,5 @@
 {
-  "schemaFile": "./tenancy-datamodel/build/openapi/infra-host.com.json",
+  "schemaFile": "../../@orch-utils/tenancy-api-mapping/openapispecs/generated/orch-utils.tenancy-datamodel.openapi.yaml",
   "apiFile": "./apiSlice.ts",
   "apiImport": "tdmApi",
   "outputFile": "./tenancyDataModelApi.ts",
