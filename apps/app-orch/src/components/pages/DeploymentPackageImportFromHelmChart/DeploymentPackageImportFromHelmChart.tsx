@@ -21,10 +21,6 @@ import { selectDeploymentPackage } from "../../../store/reducers/deploymentPacka
 
 const dataCy = "deploymentPackageImportFromHelmChart";
 
-interface ApplicationFormProps {
-  control: Control<PackageInputs, string>;
-}
-
 const DeploymentPackageImportFromHelmChart = () => {
   const cy = { "data-cy": dataCy };
 

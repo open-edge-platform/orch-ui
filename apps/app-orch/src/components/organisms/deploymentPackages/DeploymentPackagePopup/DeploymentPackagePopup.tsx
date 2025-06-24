@@ -15,8 +15,6 @@ export interface DeploymentPackagePopupProps {
 const DeploymentPackagePopup = ({ jsx }: DeploymentPackagePopupProps) => {
   const navigate = useNavigate();
 
-  const hasWriteAccess = checkAuthAndRole([Role.CATALOG_WRITE]);
-
   const popupOptions: PopupOption[] = [
     {
       displayText: "Create",
