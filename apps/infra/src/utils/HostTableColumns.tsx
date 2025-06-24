@@ -7,11 +7,11 @@ import { infra } from "@orch-ui/apis";
 import { aggregateStatuses, TableColumn } from "@orch-ui/components";
 import { getInfraPath, hostDetailsRoute, hostToStatuses } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
-import { HostData } from "src/store/provisionHost";
 import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost";
 import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
+import { HostData } from "../store/provisionHost";
 
 const _name = (): TableColumn<infra.HostResourceRead> => {
   return {
