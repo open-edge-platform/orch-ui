@@ -57,7 +57,8 @@ describe("<DeploymentPackagePopup />", () => {
     pom.trigger.click();
     pom.el.Create.should("exist");
     pom.el["Import Helm Chart"].should("exist");
-    pom.el["Import Helm Chart"].should("exist");
+    pom.el["Create"].should("exist");
+    pom.el["Import from file"].should("exist");
   });
 
   it("navigates correctly when Create is clicked", () => {
