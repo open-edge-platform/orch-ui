@@ -6,7 +6,7 @@
 import { setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
 import { Heading } from "@spark-design/react";
 import { useEffect, useMemo } from "react";
-import { Control, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import DeploymentPackageHelmChartInfoForm, {
   PackageInputs,
 } from "src/components/organisms/deploymentPackages/DeploymentPackageHelmChartInfoForm/DeploymentPackageHelmChartInfoForm";

@@ -4,7 +4,6 @@
  */
 
 import { Popup, PopupOption } from "@orch-ui/components";
-import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useNavigate } from "react-router-dom";
 
