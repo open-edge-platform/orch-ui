@@ -155,6 +155,13 @@ export const provisionHost = createSlice({
     reset() {
       return initialState;
     },
+    setHostErrorMessage(
+      state,
+      action: PayloadAction<{ hostName: string; message: string }>,
+    ) {
+      const { hostName, message } = action.payload;
+      state.hosts[hostName].error = message;
+    },
     setValidationError(state, action: PayloadAction<boolean>) {
       state.formStatus.hasValidationError = action.payload;
       provisionHost.caseReducers.validateStep(state);
@@ -277,6 +284,7 @@ export const {
   setShowAdvancedOptions,
   reset,
   setValidationError,
+  setHostErrorMessage,
   setHostDefinitionError,
   setAutoOnboardValue,
   setAutoProvisionValue,

@@ -15,7 +15,6 @@ import {
 } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
-import { selectContainsHosts } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   goToNextStep,
@@ -23,6 +22,7 @@ import {
   HostProvisionSteps,
   populateCommonHostData,
   reset,
+  selectContainsHosts,
   selectHostProvisionState,
   selectNoChangesInHosts,
 } from "../../../store/provisionHost";

@@ -6,7 +6,6 @@
 import { infra } from "@orch-ui/apis";
 import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
-  hostProvisioningRoute,
   hostProvisionRoute,
   hostsRoute,
   useInfraNavigate,
@@ -22,11 +21,6 @@ import {
   ButtonSize,
   ButtonVariant,
 } from "@spark-design/tokens";
-import {
-  setAutoOnboardValue as setAutoOnboardValueHost,
-  setAutoProvisionValue as setAutoProvisionValueHost,
-  setCreateClusterValue as setCreateClusterValueHost,
-} from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setMessageBanner } from "../../../store/notifications";
 import {
@@ -76,8 +70,6 @@ const RegisterHosts = () => {
             data-cy="isAutoOnboarded"
             isSelected={autoOnboard}
             onChange={(value) => {
-              // TODO: remove
-              dispatch(setAutoOnboardValueHost(value));
               dispatch(setAutoOnboardValue(value));
             }}
             className={`${className}__auto-onboard-switch`}
@@ -92,8 +84,6 @@ const RegisterHosts = () => {
             data-cy="isAutoProvisioned"
             isSelected={autoProvision}
             onChange={(value) => {
-              // TODO: remove
-              dispatch(setAutoProvisionValueHost(value));
               dispatch(setAutoProvisionValue(value));
             }}
             className={`${className}__auto-provision-switch`}
@@ -108,8 +98,6 @@ const RegisterHosts = () => {
             data-cy="createCluster"
             isSelected={createCluster}
             onChange={(value) => {
-              // TODO: remove
-              dispatch(setCreateClusterValueHost(value));
               dispatch(setCreateClusterValue(value));
             }}
             isDisabled={!autoOnboard || !autoProvision}
@@ -174,14 +162,6 @@ const RegisterHosts = () => {
           isDisabled={hasHostDefinitionError || Object.keys(hosts).length === 0}
         >
           {autoProvision ? "Continue" : "Register Hosts"}
-        </Button>
-
-        <Button
-          onPress={() => {
-            navigate(hostProvisioningRoute);
-          }}
-        >
-          old provision
         </Button>
       </ButtonGroup>
     </div>
