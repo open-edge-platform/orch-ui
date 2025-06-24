@@ -5,7 +5,6 @@
 
 import "./src/components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost.cy.tsx";
 import "./src/components/atom/GenericHostPopup/GenericHostPopup.cy.tsx";
-import "./src/components/atom/HostConfigReview/HostConfigReview.cy.tsx";
 import "./src/components/atom/HostLink/HostLink.cy.tsx";
 import "./src/components/atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail.cy.tsx";
 import "./src/components/atom/HostStatusPopover/HostStatusPopover.cy.tsx";
