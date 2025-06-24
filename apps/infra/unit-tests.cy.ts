@@ -67,7 +67,6 @@ import "./src/components/organism/ScheduleMaintenanceList/ScheduleMaintenanceLis
 import "./src/components/organism/SingleScheduleMaintenanceForm/SingleScheduleMaintenanceForm.cy.tsx";
 import "./src/components/organism/TelemetryLogsForm/TelemetryLogsForm.cy.tsx";
 import "./src/components/organism/TelemetryMetricsForm/TelemetryMetricsForm.cy.tsx";
-import "./src/components/pages/HostConfig/HostConfig.cy.tsx";
 import "./src/components/pages/HostDetails/HostDetails.cy.tsx";
 import "./src/components/pages/HostEdit.cy.tsx";
 import "./src/components/pages/Hosts/Hosts.cy.tsx";
