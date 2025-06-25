@@ -35,11 +35,8 @@ import "./src/components/organism/hostConfigure/AddHostLabels/AddHostLabels.cy.t
 import "./src/components/organism/hostConfigure/AddSshPublicKey/AddSshPublicKey.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalOsDropdown/GlobalOsDropdown.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalSecuritySwitch/GlobalSecuritySwitch.cy.tsx";
-import "./src/components/organism/hostConfigure/HostDetails/HostDetails.cy.tsx";
-import "./src/components/organism/hostConfigure/HostsDetails/HostsDetails.cy.tsx";
 import "./src/components/organism/hostConfigure/RegionSite/RegionSite.cy.tsx";
 import "./src/components/organism/hostConfigure/RegionSiteSelectTree/RegionSiteSelectTree.cy.tsx";
-import "./src/components/organism/hostConfigure/SecuritySwitch/SecuritySwitch.cy.tsx";
 import "./src/components/organism/HostProvisionEditDrawer/HostProvisionEditDrawer.cy.tsx";
 import "./src/components/organism/hosts/DashboardHostStatus.cy.tsx";
 import "./src/components/organism/hosts/DashboardUnallocatedHosts.cy.tsx";
