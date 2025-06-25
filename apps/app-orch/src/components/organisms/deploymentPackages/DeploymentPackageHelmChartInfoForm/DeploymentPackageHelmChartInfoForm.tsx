@@ -31,11 +31,13 @@ export type PackageInputs = {
 interface DeploymentPackageGeneralInfoFormProps {
   control: Control<PackageInputs, string>;
   errors: FieldErrors<PackageInputs>;
+  handleImport: () => void;
 }
 
 const DeploymentPackageHelmChartInfoForm = ({
   control,
   errors,
+  handleImport,
 }: DeploymentPackageGeneralInfoFormProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -190,7 +192,7 @@ const DeploymentPackageHelmChartInfoForm = ({
         <Button
           data-cy="importButton"
           size={ButtonSize.Large}
-          onPress={() => navigate("../packages")}
+          onPress={() => handleImport()}
         >
           Import
         </Button>
