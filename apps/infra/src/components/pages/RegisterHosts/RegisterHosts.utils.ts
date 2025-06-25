@@ -8,8 +8,8 @@ import { SharedStorage } from "@orch-ui/utils";
 import {
   HostData,
   setHostErrorMessage,
-  updateNewRegisteredHost,
-} from "../../../store/configureHost";
+  updateRegisteredHost,
+} from "../../../store/provisionHost";
 
 export const registerHostPost = async (
   dispatch,
@@ -45,7 +45,7 @@ export const registerHostPost = async (
             }),
           );
         } else {
-          await dispatch(updateNewRegisteredHost({ host: response.value }));
+          dispatch(updateRegisteredHost({ host: response.value }));
           registeredCount++;
         }
       });

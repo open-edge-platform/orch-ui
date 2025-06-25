@@ -22,6 +22,7 @@ export interface FlexProps
   wrap?: FlexWrap;
   align?: FlexAlign;
   justify?: FlexJustify;
+  gap?: number | string;
   children: ReactNode;
   dataCy?: string;
   className?: string;
@@ -35,6 +36,7 @@ export const Flex = ({
   wrap = "wrap",
   align = "middle",
   justify = "start",
+  gap = 0,
   dataCy: _dataCy = dataCy,
   className: _className = "",
   ...rest
@@ -46,6 +48,9 @@ export const Flex = ({
     <div
       {...cy}
       className={`${className} ${className}--${wrap} ${className}--align-${align} ${className}--justify-${justify} ${_className}`.trim()}
+      style={
+        { gap: `${gap}rem`, "--flex-gap": `${gap}rem` } as React.CSSProperties
+      }
     >
       {React.Children.map(
         childrenElements,

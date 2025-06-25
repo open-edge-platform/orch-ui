@@ -5,28 +5,42 @@
 
 import { MessageBanner } from "@spark-design/react";
 import { useAppSelector } from "../../../store/hooks";
+import { selectHostProvisionState } from "../../../store/provisionHost";
 import { AutoPropertiesMessages } from "./AutoPropertiesMessages";
 const dataCy = "autoPropertiesMessageBanner";
 
+const getMessage = (
+  autoOnboard: boolean,
+  autoProvision: boolean,
+  createCluster: boolean,
+) => {
+  if (autoOnboard && autoProvision && createCluster) {
+    return AutoPropertiesMessages.CreateCluster;
+  } else if (autoOnboard && autoProvision) {
+    return AutoPropertiesMessages.BothSelected;
+  } else if (autoOnboard && !autoProvision) {
+    return AutoPropertiesMessages.OnboardOnly;
+  } else if (!autoOnboard && autoProvision) {
+    return AutoPropertiesMessages.ProvisionOnly;
+  } else {
+    return AutoPropertiesMessages.NoneSelected;
+  }
+};
+
 const AutoPropertiesMessageBanner = () => {
   const cy = { "data-cy": dataCy };
-  const { autoOnboard, autoProvision } = useAppSelector(
-    (state) => state.configureHost,
+
+  const { autoOnboard, autoProvision, createCluster } = useAppSelector(
+    selectHostProvisionState,
   );
+
+  const message = getMessage(autoOnboard, autoProvision, createCluster);
 
   return (
     <div {...cy} className="auto-properties-message-banner">
       <MessageBanner
-        messageBody={(() => {
-          if (autoOnboard && autoProvision)
-            return AutoPropertiesMessages.BothSelected;
-          else if (autoOnboard && !autoProvision)
-            return AutoPropertiesMessages.OnboardOnly;
-          else if (!autoOnboard && autoProvision)
-            return AutoPropertiesMessages.ProvisionOnly;
-          else return AutoPropertiesMessages.NoneSelected;
-        })()}
         variant="info"
+        messageBody={message}
         messageTitle=""
         size="s"
         showIcon

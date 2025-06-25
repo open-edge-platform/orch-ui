@@ -5,7 +5,6 @@
 
 import "./src/components/atom/ClusterNameAssociatedToHost/ClusterNameAssociatedToHost.cy.tsx";
 import "./src/components/atom/GenericHostPopup/GenericHostPopup.cy.tsx";
-import "./src/components/atom/HostConfigReview/HostConfigReview.cy.tsx";
 import "./src/components/atom/HostLink/HostLink.cy.tsx";
 import "./src/components/atom/HostsTableRowExpansionDetail/HostsTableRowExpansionDetail.cy.tsx";
 import "./src/components/atom/HostStatusPopover/HostStatusPopover.cy.tsx";
@@ -36,11 +35,9 @@ import "./src/components/organism/hostConfigure/AddHostLabels/AddHostLabels.cy.t
 import "./src/components/organism/hostConfigure/AddSshPublicKey/AddSshPublicKey.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalOsDropdown/GlobalOsDropdown.cy.tsx";
 import "./src/components/organism/hostConfigure/GlobalSecuritySwitch/GlobalSecuritySwitch.cy.tsx";
-import "./src/components/organism/hostConfigure/HostDetails/HostDetails.cy.tsx";
-import "./src/components/organism/hostConfigure/HostsDetails/HostsDetails.cy.tsx";
 import "./src/components/organism/hostConfigure/RegionSite/RegionSite.cy.tsx";
 import "./src/components/organism/hostConfigure/RegionSiteSelectTree/RegionSiteSelectTree.cy.tsx";
-import "./src/components/organism/hostConfigure/SecuritySwitch/SecuritySwitch.cy.tsx";
+import "./src/components/organism/HostProvisionEditDrawer/HostProvisionEditDrawer.cy.tsx";
 import "./src/components/organism/hosts/DashboardHostStatus.cy.tsx";
 import "./src/components/organism/hosts/DashboardUnallocatedHosts.cy.tsx";
 import "./src/components/organism/hosts/DeauthorizeHostStandalone/DeauthorizeHostStandalone.cy.tsx";
@@ -67,7 +64,6 @@ import "./src/components/organism/ScheduleMaintenanceList/ScheduleMaintenanceLis
 import "./src/components/organism/SingleScheduleMaintenanceForm/SingleScheduleMaintenanceForm.cy.tsx";
 import "./src/components/organism/TelemetryLogsForm/TelemetryLogsForm.cy.tsx";
 import "./src/components/organism/TelemetryMetricsForm/TelemetryMetricsForm.cy.tsx";
-import "./src/components/pages/HostConfig/HostConfig.cy.tsx";
 import "./src/components/pages/HostDetails/HostDetails.cy.tsx";
 import "./src/components/pages/HostEdit.cy.tsx";
 import "./src/components/pages/Hosts/Hosts.cy.tsx";

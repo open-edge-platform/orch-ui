@@ -17,6 +17,7 @@ export const hostDetailsRoute = "host/:id";
 export const hostEditRoute = "host/:id/edit";
 export const hostRegisterRoute = "register-hosts";
 export const hostProvisioningRoute = "hosts/set-up-provisioning";
+export const hostProvisionRoute = "hosts/provision";
 export const clusterTemplateRoute = "cluster-templates";
 export const clusterTemplateDetailRoute =
   "cluster-templates/:templateName/:templateVersion/view";
@@ -38,6 +39,7 @@ export const allHostRoutes = [
   hostEditRoute,
   hostRegisterRoute,
   hostProvisioningRoute,
+  hostProvisionRoute,
 ] as const;
 export const allLocationRoutes = [
   locationRoute,

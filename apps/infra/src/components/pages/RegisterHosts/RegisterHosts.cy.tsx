@@ -8,8 +8,27 @@ import RegisterHostsPom from "./RegisterHosts.pom";
 
 const pom = new RegisterHostsPom();
 describe("<RegisterHosts/>", () => {
-  it("should render component", () => {
+  beforeEach(() => {
     cy.mount(<RegisterHosts />);
+  });
+
+  it("should render component", () => {
     pom.root.should("exist");
+  });
+
+  it("create cluster option is enabled by default", () => {
+    pom.el.createCluster.should("not.be.disabled");
+  });
+
+  it("create cluster option is disabled when provision is off", () => {
+    // turn off auto onboard
+    pom.el.isAutoProvisioned.parent().find("span").click();
+    pom.el.createCluster.should("be.disabled");
+  });
+
+  it("create cluster option is disabled when onboard is off", () => {
+    // turn off auto provision
+    pom.el.isAutoOnboarded.parent().find("span").click();
+    pom.el.createCluster.should("be.disabled");
   });
 });

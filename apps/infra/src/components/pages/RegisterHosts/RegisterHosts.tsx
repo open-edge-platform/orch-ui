@@ -6,7 +6,7 @@
 import { infra } from "@orch-ui/apis";
 import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
-  hostProvisioningRoute,
+  hostProvisionRoute,
   hostsRoute,
   useInfraNavigate,
 } from "@orch-ui/utils";
@@ -21,18 +21,22 @@ import {
   ButtonSize,
   ButtonVariant,
 } from "@spark-design/tokens";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { setMessageBanner } from "../../../store/notifications";
 import {
   reset,
+  selectHostProvisionState,
   selectUnregisteredHosts,
   setAutoOnboardValue,
   setAutoProvisionValue,
-} from "../../../store/configureHost";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setMessageBanner } from "../../../store/notifications";
+  setCreateClusterValue,
+} from "../../../store/provisionHost";
 import AutoPropertiesMessageBanner from "../../molecules/AutoPropertiesMessageBanner/AutoPropertiesMessageBanner";
 import AddHostsForm from "../../organism/AddHostsForm/AddHostsForm";
 import "./RegisterHosts.scss";
 import { registerHostPost } from "./RegisterHosts.utils";
+
 const dataCy = "registerHosts";
 
 const RegisterHosts = () => {
@@ -40,11 +44,20 @@ const RegisterHosts = () => {
   const className = "register-hosts";
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
-  const { autoOnboard, autoProvision, hosts, hasMultiHostValidationError } =
-    useAppSelector((state) => state.configureHost);
+  const {
+    hosts,
+    hasHostDefinitionError,
+    autoOnboard,
+    autoProvision,
+    createCluster,
+  } = useAppSelector(selectHostProvisionState);
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] = infra.useHostServiceRegisterHostMutation();
+
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   return (
     <div {...cy} className={className}>
@@ -54,7 +67,7 @@ const RegisterHosts = () => {
         each host in the respective fields
       </p>
       <AddHostsForm />
-      <Flex cols={[6]}>
+      <Flex cols={[4]} align="start">
         <div className={`${className}__auto-onboard`}>
           <Heading semanticLevel={6}>Onboard Automatically</Heading>
           <p>Hosts will be onboarded once they connect</p>
@@ -71,9 +84,7 @@ const RegisterHosts = () => {
         </div>
         <div className={`${className}__auto-provision`}>
           <Heading semanticLevel={6}>Provision Automatically</Heading>
-          <p>
-            Hosts will be provisioned automatically once they are onboarded.
-          </p>
+          <p>Hosts will be provisioned once they are onboarded.</p>
           <ToggleSwitch
             data-cy="isAutoProvisioned"
             isSelected={autoProvision}
@@ -85,7 +96,23 @@ const RegisterHosts = () => {
             <label>Provision Automatically</label>
           </ToggleSwitch>
         </div>
+        <div className={`${className}__create-cluster`}>
+          <Heading semanticLevel={6}>Create Single-host Clusters</Heading>
+          <p>Each host will be assigned to a new cluster.</p>
+          <ToggleSwitch
+            data-cy="createCluster"
+            isSelected={createCluster}
+            onChange={(value) => {
+              dispatch(setCreateClusterValue(value));
+            }}
+            isDisabled={!autoOnboard || !autoProvision}
+            className={`${className}__auto-provision-switch`}
+          >
+            <label>Create Single-host Clusters</label>
+          </ToggleSwitch>
+        </div>
       </Flex>
+
       <AutoPropertiesMessageBanner />
       <ButtonGroup
         align={ButtonGroupAlignment.End}
@@ -122,8 +149,8 @@ const RegisterHosts = () => {
                   setMessageBanner({
                     icon: "check-circle",
                     text: allSucceeded
-                      ? "All hosts registered sucessfully."
-                      : `Sucessfully registered ${successCount} out of ${totalCount} host(s)`,
+                      ? "All hosts registered successfully."
+                      : `Successfully registered ${successCount} out of ${totalCount} host(s)`,
                     title: "Hosts Registered",
                     variant: MessageBannerAlertState.Success,
                   }),
@@ -134,12 +161,10 @@ const RegisterHosts = () => {
                 }
               }, 20);
             } else {
-              navigate(hostProvisioningRoute);
+              navigate(hostProvisionRoute);
             }
           }}
-          isDisabled={
-            hasMultiHostValidationError || Object.keys(hosts).length === 0
-          }
+          isDisabled={hasHostDefinitionError || Object.keys(hosts).length === 0}
         >
           {autoProvision ? "Continue" : "Register Hosts"}
         </Button>

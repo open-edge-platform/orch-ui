@@ -4,6 +4,7 @@
  */
 
 import {
+  cmSlice,
   enhancedInfraSlice,
   mbApi,
   mpsSlice,
@@ -23,11 +24,13 @@ import hostFilterBuilderReducer from "./hostFilterBuilder";
 import hostStatusReducer from "./hostStatus";
 import locationsReducer from "./locations";
 import notificationStatusReducer from "./notifications";
+import provisionHostReducer from "./provisionHost";
 
 const rootReducer = combineReducers({
   notificationStatusList: notificationStatusReducer,
   hostStatusList: hostStatusReducer,
-  configureHost: configureHostReducer,
+  configureHost: configureHostReducer, // TODO: remove
+  provisionHost: provisionHostReducer,
   locations: locationsReducer,
   hostFilterBuilder: hostFilterBuilderReducer,
   [enhancedInfraSlice.miEnhancedApi.reducerPath]:
@@ -37,6 +40,7 @@ const rootReducer = combineReducers({
   [tmSlice.reducerPath]: tmSlice.reducer,
   [rpsSlice.reducerPath]: rpsSlice.reducer,
   [mpsSlice.reducerPath]: mpsSlice.reducer,
+  [cmSlice.reducerPath]: cmSlice.reducer,
 });
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {
@@ -51,7 +55,8 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         .concat(mbApi.metadataBroker.middleware)
         .concat(tmSlice.middleware)
         .concat(rpsSlice.middleware)
-        .concat(mpsSlice.middleware),
+        .concat(mpsSlice.middleware)
+        .concat(cmSlice.middleware),
     preloadedState,
   });
 };
@@ -67,7 +72,8 @@ export const store = configureStore({
       .concat(mbApi.metadataBroker.middleware)
       .concat(tmSlice.middleware)
       .concat(rpsSlice.middleware)
-      .concat(mpsSlice.middleware),
+      .concat(mpsSlice.middleware)
+      .concat(cmSlice.middleware),
 });
 
 setupListeners(store.dispatch);

@@ -11,7 +11,7 @@ import ClusterNameAssociatedToHost from "../components/atom/ClusterNameAssociate
 import { HostStatusPopover } from "../components/atom/HostStatusPopover/HostStatusPopover";
 import { OsConfig } from "../components/atom/OsConfig/OsConfig";
 import SiteCell from "../components/atom/SiteCell/SiteCell";
-import { HostData } from "../store/configureHost";
+import { HostData } from "../store/provisionHost";
 
 const _name = (): TableColumn<infra.HostResourceRead> => {
   return {

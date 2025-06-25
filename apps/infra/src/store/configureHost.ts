@@ -5,7 +5,6 @@
 
 import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isValidHostName } from "../components/organism/hostConfigure/HostDetails/HostDetails";
 import { RootState } from "./store";
 
 export const ROOT_REGIONS: string = "null";
@@ -42,6 +41,7 @@ export interface HostConfigForm {
   hosts: { [id: string]: HostData };
   autoOnboard: boolean;
   autoProvision: boolean;
+  createCluster: boolean;
   hasMultiHostValidationError;
 }
 
@@ -59,6 +59,7 @@ export const initialState: HostConfigForm = {
   hosts: {},
   autoOnboard: true,
   autoProvision: false,
+  createCluster: true,
 };
 
 const containsHosts = (state: HostConfigForm) => {
@@ -78,6 +79,14 @@ const containsUniqueHostNames = (state: HostConfigForm) => {
   const { hosts } = state;
   const names = Object.values(hosts).map((host) => host.name);
   return names.length === new Set(names).size;
+};
+
+const validNameRegex = /^[a-zA-Z-_0-9./: ]{1,20}$/;
+
+export const isValidHostName = (name?: string) => {
+  return (
+    name != undefined && name.trim().length > 0 && validNameRegex.test(name)
+  );
 };
 
 export const validateStep = (state: HostConfigForm) => {
@@ -149,6 +158,7 @@ export const configureHost = createSlice({
     resetMultiHostForm(state) {
       state.autoOnboard = false;
       state.autoProvision = false;
+      state.createCluster = false;
       state.formStatus = {
         currentStep: HostConfigSteps["Select Site"],
         enableNextBtn: false,
@@ -345,6 +355,9 @@ export const configureHost = createSlice({
     setAutoProvisionValue(state, action: PayloadAction<boolean>) {
       state.autoProvision = action.payload;
     },
+    setCreateClusterValue(state, action: PayloadAction<boolean>) {
+      state.createCluster = action.payload;
+    },
     setPublicSshKey(
       state,
       action: PayloadAction<{
@@ -397,6 +410,7 @@ export const {
   setMultiHostValidationError,
   setAutoOnboardValue,
   setAutoProvisionValue,
+  setCreateClusterValue,
   setPublicSshKey,
   unSetPublicSshKey,
 } = configureHost.actions;

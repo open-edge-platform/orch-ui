@@ -5,7 +5,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 LICENSE="/*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2025 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 "

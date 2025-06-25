@@ -164,6 +164,49 @@ export const handlers = [
       }),
     );
   }),
+  rest.get(
+    `${baseURL}/locations?name=te&showRegions=true&showSites=true`,
+    async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        // this needs to be generated based on existing regions and sites
+        ctx.json({
+          nodes: [
+            {
+              name: "london",
+              parentId: "region-21edbec1",
+              resourceId: "site-9961663d",
+              type: "RESOURCE_KIND_SITE",
+            },
+            {
+              name: "new york",
+              parentId: "region-bd98695b",
+              resourceId: "site-0571b414",
+              type: "RESOURCE_KIND_SITE",
+            },
+            {
+              name: "subregion-one",
+              parentId: "region-43779f56",
+              resourceId: "region-21edbec1",
+              type: "RESOURCE_KIND_REGION",
+            },
+            {
+              name: "region-one",
+              parentId: "",
+              resourceId: "region-43779f56",
+              type: "RESOURCE_KIND_REGION",
+            },
+            {
+              name: "us-east",
+              parentId: "",
+              resourceId: "region-bd98695b",
+              type: "RESOURCE_KIND_REGION",
+            },
+          ],
+        }),
+      );
+    },
+  ),
   // region
   rest.get(`${baseURL}/regions`, async (req, res, ctx) => {
     const filter = req.url.searchParams.get("filter");
