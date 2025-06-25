@@ -19,30 +19,32 @@ const sshPom = new PublicSshKeyDropdownPom();
 const expansionPanelPom = new ExpansionPanelPom();
 const metadataFormPom = new MetadataFormPom();
 
+const testHost = {
+  name: "Test Host",
+  instance: {
+    os: {
+      resourceId: "os-ubuntu",
+      name: "Ubuntu",
+      sha256: "sha",
+      updateSources: [],
+    } as infra.OperatingSystemResourceRead,
+    osID: "os-ubuntu",
+    securityFeature:
+      "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION" as infra.SecurityFeature,
+    localAccountID: "2",
+  },
+  metadata: [{ key: "env", value: "production" }],
+};
+
 describe("<HostProvisionEditDrawer/>", () => {
-  xit("should load data into the drawer and save changes back to host", () => {
+  it("should load data into the drawer and save changes back to host", () => {
     // Setup store
     const store = setupStore({
       provisionHost: {
         ...initialState,
         createCluster: false,
         hosts: {
-          "Test Host": {
-            name: "Test Host",
-            instance: {
-              os: {
-                resourceId: "os-ubuntu",
-                name: "Ubuntu",
-                sha256: "sha",
-                updateSources: [],
-              } as infra.OperatingSystemResourceRead,
-              osID: "os-ubuntu",
-              securityFeature:
-                "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
-              localAccountID: "2",
-            },
-            metadata: [{ key: "env", value: "production" }],
-          },
+          "Test Host": testHost,
         },
       },
     });
@@ -55,9 +57,21 @@ describe("<HostProvisionEditDrawer/>", () => {
     sshPom.interceptApis([sshPom.api.getLocalAccounts]);
 
     // Mount the component with the store
-    cy.mount(<HostProvisionEditDrawer hostDataName="Test Host" />, {
-      reduxStore: store,
-    });
+    cy.mount(
+      <HostProvisionEditDrawer
+        host={{
+          name: testHost.name,
+          instance: {
+            securityFeature: testHost.instance.securityFeature,
+            os: testHost.instance.os,
+          },
+          metadata: testHost.metadata,
+        }}
+      />,
+      {
+        reduxStore: store,
+      },
+    );
 
     osPom.waitForApis();
     sshPom.waitForApis();
