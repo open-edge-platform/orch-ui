@@ -14,7 +14,7 @@ import {
   SquareSpinner,
   UploadButton,
 } from "@orch-ui/components";
-import { checkSize, returnYaml, SharedStorage } from "@orch-ui/utils";
+import { checkSize, returnYamlOrTar, SharedStorage } from "@orch-ui/utils";
 import {
   Button,
   Heading,
@@ -70,7 +70,7 @@ const DeploymentPackageImport = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSizeError(!checkSize([...e.target.files], 4));
-      setFiles([...files, ...returnYaml([...e.target.files])]);
+      setFiles([...files, ...returnYamlOrTar([...e.target.files])]);
     }
   };
 
@@ -161,7 +161,7 @@ const DeploymentPackageImport = () => {
                       <UploadButton
                         text="Browse folder"
                         onChange={handleFileChange}
-                        accept=".yaml"
+                        accept=".yaml,.tar.gz"
                         dataCy="uploadButtonEmpty"
                       />
                     ),
@@ -182,7 +182,7 @@ const DeploymentPackageImport = () => {
             <div className="deployment-package-import-files">
               <UploadButton
                 onChange={handleFileChange}
-                accept=".yaml"
+                accept=".yaml,.tar.gz"
                 dataCy="uploadButtonList"
               />
               <div className="upload-files">

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { returnYaml } from "@orch-ui/utils";
+import { returnYamlOrTar } from "@orch-ui/utils";
 import { DragEvent } from "react";
 
 export interface DragDropProps {
@@ -54,7 +54,8 @@ export const DragDrop = ({
           Promise.all(getFilesPromises([...entries]))
             .then((files: File[]) => {
               if (handleError) handleError(files);
-              if (setFiles) setFiles([...currentFiles, ...returnYaml(files)]);
+              if (setFiles)
+                setFiles([...currentFiles, ...returnYamlOrTar(files)]);
             })
             .catch(() => {
               throw new Error("File not uploaded correctly");
@@ -64,7 +65,8 @@ export const DragDrop = ({
         const { files } = e.dataTransfer;
         if (files.length > 0) {
           if (handleError) handleError([...files]);
-          if (setFiles) setFiles([...currentFiles, ...returnYaml([...files])]);
+          if (setFiles)
+            setFiles([...currentFiles, ...returnYamlOrTar([...files])]);
         }
       }
     }

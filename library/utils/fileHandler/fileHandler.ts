@@ -3,18 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const returnYaml = (
+export const returnYamlOrTar = (
   items: File[],
-  types: string[] = ["yaml"],
+  types: string[] = ["yaml", "tar.gz"],
 ): File[] => {
   const result: File[] = [];
-  items.map((item) => {
-    if (
-      types.indexOf(item.name.split(".")[item.name.split(".").length - 1]) >= 0
-    ) {
+
+  items.forEach((item) => {
+    const fileName = item.name.toLowerCase();
+
+    if (types.some((type) => fileName.endsWith(`.${type}`))) {
       result.push(item);
     }
   });
+
   return result;
 };
 
