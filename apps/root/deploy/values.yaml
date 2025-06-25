@@ -33,17 +33,7 @@ mfe:
   cluster_orch: true
   admin: true
 
-api:
-  catalog: "https://api.kind.internal"
-  appDeploymentManger: "https://api.kind.internal"
-  appResourceManger: "https://api.kind.internal"
-  infraManager: "https://api.kind.internal"
-  clusterOrch: "https://api.kind.internal"
-  metadataBroker: "https://api.kind.internal"
-  alertManager: "https://api.kind.internal"
-  tenantManager: "https://api.kind.internal"
-  rps: "https://api.kind.internal"
-  mps: "https://api.kind.internal"
+api: "https://api.kind.internal"
 
 # Used to configure the Header title
 header:
