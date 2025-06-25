@@ -5,7 +5,6 @@
 
 import { infra } from "@orch-ui/apis";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isValidHostName } from "../components/organism/hostConfigure/HostDetails/HostDetails";
 import { RootState } from "./store";
 
 export const ROOT_REGIONS: string = "null";
@@ -80,6 +79,14 @@ const containsUniqueHostNames = (state: HostConfigForm) => {
   const { hosts } = state;
   const names = Object.values(hosts).map((host) => host.name);
   return names.length === new Set(names).size;
+};
+
+const validNameRegex = /^[a-zA-Z-_0-9./: ]{1,20}$/;
+
+export const isValidHostName = (name?: string) => {
+  return (
+    name != undefined && name.trim().length > 0 && validNameRegex.test(name)
+  );
 };
 
 export const validateStep = (state: HostConfigForm) => {

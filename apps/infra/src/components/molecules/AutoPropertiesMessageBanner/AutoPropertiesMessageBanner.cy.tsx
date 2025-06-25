@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// import { initialState } from "../../../store/configureHost";
 import { initialState } from "apps/infra/src/store/provisionHost";
 import { setupStore } from "../../../store/store";
 import AutoPropertiesMessageBanner from "./AutoPropertiesMessageBanner";

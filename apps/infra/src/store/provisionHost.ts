@@ -120,8 +120,6 @@ const validateStep = (state: HostProvisionState) => {
 
       const noComponentsErrors = !state.formStatus.hasValidationError;
 
-      // add other validations as needed
-
       state.formStatus.enableNextBtn =
         hasSite && hasOs && hasClusterTemplate && noComponentsErrors;
       break;
@@ -235,7 +233,6 @@ export const provisionHost = createSlice({
         host.instance.localAccountID =
           state.commonHostData.publicSshKey?.resourceId;
         host.metadata = state.commonHostData.metadata;
-        // continue with other properties
       });
     },
     setCommonSite(state, action: PayloadAction<SiteReadWithPath>) {
