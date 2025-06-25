@@ -11,6 +11,8 @@ export interface DeploymentPackagePopupProps {
   jsx?: React.ReactNode;
 }
 
+export const PACKAGES_BASE_PATH = "/applications/packages";
+
 const DeploymentPackagePopup = ({ jsx }: DeploymentPackagePopupProps) => {
   const navigate = useNavigate();
 
@@ -19,21 +21,21 @@ const DeploymentPackagePopup = ({ jsx }: DeploymentPackagePopupProps) => {
       displayText: "Create",
       disable: false,
       onSelect: () => {
-        navigate("/applications/packages/create");
+        navigate(`${PACKAGES_BASE_PATH}/create`);
       },
     },
     {
       displayText: "Import from file",
       disable: false,
       onSelect: () => {
-        navigate("/applications/packages/import");
+        navigate(`${PACKAGES_BASE_PATH}/import`);
       },
     },
     {
       displayText: "Import Helm Chart",
       disable: false,
       onSelect: () => {
-        navigate("/applications/packages/import-from-helm-chart");
+        navigate(`${PACKAGES_BASE_PATH}/import-from-helm-chart`);
       },
     },
   ];

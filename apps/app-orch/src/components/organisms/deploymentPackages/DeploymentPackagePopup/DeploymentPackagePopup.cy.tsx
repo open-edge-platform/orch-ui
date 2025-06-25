@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import DeploymentPackagePopup from "./DeploymentPackagePopup";
+import DeploymentPackagePopup, {
+  PACKAGES_BASE_PATH,
+} from "./DeploymentPackagePopup";
 import DeploymentPackagePopupPom from "./DeploymentPackagePopup.pom";
 
 const pom = new DeploymentPackagePopupPom();
@@ -28,18 +30,18 @@ describe("<DeploymentPackagePopup />", () => {
           ),
         },
         {
-          path: "/applications/packages/create",
-          element: <div id="pathname">/applications/packages/create</div>,
+          path: `${PACKAGES_BASE_PATH}/create`,
+          element: <div id="pathname">{`${PACKAGES_BASE_PATH}/create`}</div>,
         },
         {
-          path: "/applications/packages/import",
-          element: <div id="pathname">/applications/packages/import</div>,
+          path: `${PACKAGES_BASE_PATH}/import`,
+          element: <div id="pathname">{`${PACKAGES_BASE_PATH}/import`}</div>,
         },
         {
-          path: "/applications/packages/import-from-helm-chart",
+          path: `${PACKAGES_BASE_PATH}/import-from-helm-chart`,
           element: (
             <div id="pathname">
-              /applications/packages/import-from-helm-chart
+              {`${PACKAGES_BASE_PATH}/import-from-helm-chart`}
             </div>
           ),
         },
@@ -64,13 +66,13 @@ describe("<DeploymentPackagePopup />", () => {
   it("navigates correctly when Create is clicked", () => {
     pom.trigger.click();
     pom.el.Create.click();
-    cy.get("#pathname").should("contain", "/applications/packages/create");
+    cy.get("#pathname").should("contain", `${PACKAGES_BASE_PATH}/create`);
   });
 
   it("navigates correctly when Import from file is clicked", () => {
     pom.trigger.click();
     pom.el["Import from file"].click();
-    cy.get("#pathname").should("contain", "/applications/packages/import");
+    cy.get("#pathname").should("contain", `${PACKAGES_BASE_PATH}/import`);
   });
 
   it("navigates correctly when Import Helm Chart is clicked", () => {
@@ -78,7 +80,7 @@ describe("<DeploymentPackagePopup />", () => {
     pom.el["Import Helm Chart"].click();
     cy.get("#pathname").should(
       "contain",
-      "/applications/packages/import-from-helm-chart",
+      `${PACKAGES_BASE_PATH}/import-from-helm-chart`,
     );
   });
 

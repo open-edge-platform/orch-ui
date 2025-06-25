@@ -64,7 +64,7 @@ const DeploymentPackageHelmChartInfoForm = ({
                   onInput={(e) => {
                     const value = e.currentTarget.value;
                     if (value.length) {
-                      dispatch(setHelmChartURL(e.currentTarget.value));
+                      dispatch(setHelmChartURL(value));
                     }
                   }}
                   errorMessage={
@@ -91,15 +91,7 @@ const DeploymentPackageHelmChartInfoForm = ({
         </div>
       </Flex>
       <Flex cols={[6, 6]}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.25rem",
-            paddingRight: "1.5rem",
-            paddingBottom: "0.45rem",
-          }}
-        >
+        <div className="deployment-package-import-helm-chart-info-form__field-group--left">
           <Controller
             name="username"
             control={control}
@@ -117,7 +109,7 @@ const DeploymentPackageHelmChartInfoForm = ({
                   onInput={(e) => {
                     const value = e.currentTarget.value ?? "";
                     if (value.length) {
-                      dispatch(setUsername(e.currentTarget.value));
+                      dispatch(setUsername(value));
                     }
                   }}
                   errorMessage={
@@ -138,15 +130,7 @@ const DeploymentPackageHelmChartInfoForm = ({
           />
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.25rem",
-            paddingLeft: "1.5rem",
-            paddingBottom: "0.45rem",
-          }}
-        >
+        <div className="deployment-package-import-helm-chart-info-form__field-group--right">
           <Controller
             name="password"
             control={control}
@@ -165,7 +149,7 @@ const DeploymentPackageHelmChartInfoForm = ({
                   onInput={(e) => {
                     const value = e.currentTarget.value ?? "";
                     if (value.length) {
-                      dispatch(setPassword(e.currentTarget.value));
+                      dispatch(setPassword(value));
                     }
                   }}
                   errorMessage={

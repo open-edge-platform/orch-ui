@@ -13,4 +13,20 @@
     border-color: var(--spark-drawer-border-color);
     border-top-style: var(--spark-drawer-footer-border-top-style);
   }
+
+  &__field-group--left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-right: 1.5rem;
+    padding-bottom: 0.45rem;
+  }
+
+  &__field-group--right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 1.5rem;
+    padding-bottom: 0.45rem;
+  }
 }
