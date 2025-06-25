@@ -88,6 +88,8 @@ const DeploymentPackageImportFromHelmChart = () => {
         control={control}
         errors={errors}
         handleImport={handleImport}
+        toggleAuthSwitch={(value) => setIncludeAuth(value)}
+        includeAuth={includeAuth}
       />
     </div>
   );

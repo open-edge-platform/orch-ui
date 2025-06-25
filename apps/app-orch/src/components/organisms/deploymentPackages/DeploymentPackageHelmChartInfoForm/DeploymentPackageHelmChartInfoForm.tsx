@@ -4,8 +4,18 @@
  */
 
 import { Flex, Textarea } from "@orch-ui/components";
-import { Button, TextField } from "@spark-design/react";
-import { ButtonSize, ButtonVariant, InputSize } from "@spark-design/tokens";
+import {
+  Button,
+  FieldLabel,
+  TextField,
+  ToggleSwitch,
+} from "@spark-design/react";
+import {
+  ButtonSize,
+  ButtonVariant,
+  FieldLabelSize,
+  InputSize,
+} from "@spark-design/tokens";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
@@ -31,22 +41,27 @@ export type PackageInputs = {
 interface DeploymentPackageGeneralInfoFormProps {
   control: Control<PackageInputs, string>;
   errors: FieldErrors<PackageInputs>;
+  includeAuth: boolean;
   handleImport: () => void;
+  toggleAuthSwitch: (boolean) => void;
 }
 
 const DeploymentPackageHelmChartInfoForm = ({
   control,
   errors,
   handleImport,
+  toggleAuthSwitch,
+  includeAuth = false,
 }: DeploymentPackageGeneralInfoFormProps) => {
   const cy = { "data-cy": dataCy };
-
+  const className = "deployment-package-import-helm-chart-info-form";
+  console.log("control:", control);
   const dispatch = useAppDispatch();
   const { description } = useAppSelector(selectDeploymentPackage);
   const navigate = useNavigate();
 
   return (
-    <form {...cy} className="deployment-package-import-helm-chart-info-form">
+    <form {...cy} className={className}>
       <Flex cols={[12]}>
         <div style={{ paddingBottom: "0.4rem" }}>
           <Controller
@@ -92,6 +107,16 @@ const DeploymentPackageHelmChartInfoForm = ({
           />
         </div>
       </Flex>
+      <ToggleSwitch
+        data-cy="includeAuth"
+        isSelected={includeAuth}
+        onChange={(value) => {
+          toggleAuthSwitch(value);
+        }}
+        className={`${className}__auto-onboard-switch`}
+      >
+        <FieldLabel size={FieldLabelSize.Large}>Include Auth</FieldLabel>
+      </ToggleSwitch>
       <Flex cols={[6, 6]}>
         <div className="deployment-package-import-helm-chart-info-form__field-group--left">
           <Controller
@@ -108,6 +133,7 @@ const DeploymentPackageHelmChartInfoForm = ({
                   data-cy="username"
                   label="Username"
                   maxLength={30}
+                  isDisabled={!includeAuth}
                   onInput={(e) => {
                     const value = e.currentTarget.value ?? "";
                     if (value.length) {
@@ -148,6 +174,7 @@ const DeploymentPackageHelmChartInfoForm = ({
                   data-cy="password"
                   maxLength={30}
                   label="Password"
+                  isDisabled={!includeAuth}
                   onInput={(e) => {
                     const value = e.currentTarget.value ?? "";
                     if (value.length) {
