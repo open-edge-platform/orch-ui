@@ -180,15 +180,19 @@ export class RuntimeConfig {
     if (env.REACT_MOCK_API === "true" || process.env.test) {
       return window.location.origin;
     }
-    const urls = window.__RUNTIME_CONFIG__?.API;
-    if (!urls) {
-      throw new Error("API Server configuration is missing from RuntimeConfig");
-    }
-    if (!urls[server] || urls[server] === undefined) {
-      throw new Error(
-        `${server} Server configuration is missing from RuntimeConfig`,
-      );
-    }
-    return urls[server] as string;
+
+    console.log({ apiUrl: window.__RUNTIME_CONFIG__?.API });
+
+    return window.__RUNTIME_CONFIG__?.API as string; // need to fix the type
+    // const urls = window.__RUNTIME_CONFIG__?.API;
+    // if (!urls) {
+    //   throw new Error("API Server configuration is missing from RuntimeConfig");
+    // }
+    // if (!urls[server] || urls[server] === undefined) {
+    //   throw new Error(
+    //     `${server} Server configuration is missing from RuntimeConfig`,
+    //   );
+    // }
+    // return urls[server] as string;
   }
 }
