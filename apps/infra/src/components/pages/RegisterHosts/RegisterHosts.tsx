@@ -21,6 +21,7 @@ import {
   ButtonSize,
   ButtonVariant,
 } from "@spark-design/tokens";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setMessageBanner } from "../../../store/notifications";
 import {
@@ -53,6 +54,10 @@ const RegisterHosts = () => {
   const unregisteredHosts = useAppSelector(selectUnregisteredHosts);
 
   const [registerHost] = infra.useHostServiceRegisterHostMutation();
+
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   return (
     <div {...cy} className={className}>
