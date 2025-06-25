@@ -203,6 +203,26 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["CatalogService"],
       }),
+      catalogServiceImport: build.mutation<
+        CatalogServiceImportApiResponse,
+        CatalogServiceImportApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v3/projects/${queryArg.projectName}/catalog/import`,
+          method: "POST",
+          params: {
+            url: queryArg.url,
+            username: queryArg.username,
+            authToken: queryArg.authToken,
+            chartValues: queryArg.chartValues,
+            includeAuth: queryArg.includeAuth,
+            generateDefaultValues: queryArg.generateDefaultValues,
+            generateDefaultParameters: queryArg.generateDefaultParameters,
+            namespace: queryArg["namespace"],
+          },
+        }),
+        invalidatesTags: ["CatalogService"],
+      }),
       catalogServiceListRegistries: build.query<
         CatalogServiceListRegistriesApiResponse,
         CatalogServiceListRegistriesApiArg
@@ -454,6 +474,28 @@ export type CatalogServiceUpdateDeploymentPackageApiArg = {
   /** unique projectName for the resource */
   projectName: string;
   deploymentPackage: DeploymentPackage;
+};
+export type CatalogServiceImportApiResponse =
+  /** status 200 OK */ ImportResponse;
+export type CatalogServiceImportApiArg = {
+  /** Required URL of Helm Chart to import */
+  url?: string;
+  /** Optional username for downloading from the URL */
+  username?: string;
+  /** Optional authentication token or password for downloading from the URL */
+  authToken?: string;
+  /** Optional raw byte value containing the chart values as raw YAML bytes. */
+  chartValues?: string;
+  /** If true and a username/auth_token is specified then they will be included in the generated Registry object. */
+  includeAuth?: boolean;
+  /** If true and chart_values is not set, then the values.yaml will be extracted and used to generate default profile values. */
+  generateDefaultValues?: boolean;
+  /** Generates default parameters from the values, from chart_values or from generate_default_values as appropriate. */
+  generateDefaultParameters?: boolean;
+  /** Optional namespace */
+  namespace?: string;
+  /** unique projectName for the resource */
+  projectName: string;
 };
 export type CatalogServiceListRegistriesApiResponse =
   /** status 200 OK */ ListRegistriesResponseRead;
@@ -930,6 +972,10 @@ export type GetDeploymentPackageResponse = {
 export type GetDeploymentPackageResponseRead = {
   deploymentPackage: DeploymentPackageRead;
 };
+export type ImportResponse = {
+  /** Any error messages encountered either during chart parsing or entity creation or update. */
+  errorMessages?: string[];
+};
 export type Registry = {
   /** Optional type of the API used to obtain inventory of the articles hosted by the registry. */
   apiType?: string;
@@ -1044,6 +1090,7 @@ export const {
   useCatalogServiceGetDeploymentPackageQuery,
   useLazyCatalogServiceGetDeploymentPackageQuery,
   useCatalogServiceUpdateDeploymentPackageMutation,
+  useCatalogServiceImportMutation,
   useCatalogServiceListRegistriesQuery,
   useLazyCatalogServiceListRegistriesQuery,
   useCatalogServiceCreateRegistryMutation,
