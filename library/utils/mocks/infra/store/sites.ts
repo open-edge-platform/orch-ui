@@ -259,6 +259,15 @@ export class SiteStore extends BaseStore<
     return this.resources;
   }
 
+  getSiteById(params?: {
+    resourceId: string | null;
+  }): infra.SiteResourceRead | undefined {
+    if (params?.resourceId != null) {
+      return this.resources.find((r) => r.resourceId === params.resourceId);
+    }
+    return undefined;
+  }
+
   convert(body: infra.SiteResourceWrite, id?: string): infra.SiteResourceRead {
     const randomString = StoreUtils.randomString();
     const siteID = id ?? `site-${randomString}`;

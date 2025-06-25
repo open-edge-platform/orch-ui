@@ -79,7 +79,7 @@ const HostSelection = ({
               onRemoveLastNode(true);
             } else {
               setOpenModal(true);
-              setDeletedHostName(node.name);
+              setDeletedHostName(node.id);
               setRemovedRowSelect(node);
             }
           }}
