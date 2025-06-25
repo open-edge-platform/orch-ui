@@ -34,14 +34,25 @@ describe("<DeploymentPackages />", () => {
       pom.el.packagesTabContent.should("not.exist");
     });
 
-    it("should render Import Deployment Package button", () => {
-      pom.root.contains("Import Deployment Package").click();
-      pom.getPath().should("contain", "applications/packages/import");
+    it("navigates correctly when Create is clicked", () => {
+      pom.trigger.click();
+      pom.el.Create.click();
+      cy.get("#pathname").should("contain", "/applications/packages/create");
     });
 
-    it("should render Create Deployment Package button", () => {
-      pom.root.contains("Create Deployment Package").click();
-      pom.getPath().should("contain", "applications/packages/create");
+    it("navigates correctly when Import from file is clicked", () => {
+      pom.trigger.click();
+      pom.el["Import from file"].click();
+      cy.get("#pathname").should("contain", "/applications/packages/import");
+    });
+
+    it("navigates correctly when Import Helm Chart is clicked", () => {
+      pom.trigger.click();
+      pom.el["Import Helm Chart"].click();
+      cy.get("#pathname").should(
+        "contain",
+        "/applications/packages/import-from-helm-chart",
+      );
     });
 
     it("should load table with mocked data", () => {
