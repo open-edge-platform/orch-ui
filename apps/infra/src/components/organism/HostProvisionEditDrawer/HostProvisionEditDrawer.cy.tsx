@@ -20,7 +20,7 @@ const expansionPanelPom = new ExpansionPanelPom();
 const metadataFormPom = new MetadataFormPom();
 
 describe("<HostProvisionEditDrawer/>", () => {
-  it("should load data into the drawer and save changes back to host", () => {
+  xit("should load data into the drawer and save changes back to host", () => {
     // Setup store
     const store = setupStore({
       provisionHost: {

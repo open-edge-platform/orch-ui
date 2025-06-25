@@ -8,10 +8,6 @@ import { Button, Icon, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import {
-  setMultiHostValidationError,
-  setNewRegisteredHosts,
-} from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   setHostDefinitionError,
@@ -67,12 +63,6 @@ const AddHostsForm = () => {
 
   const dispatchNewHosts = () => {
     const { hosts } = getValues();
-    // TODO: remove
-    dispatch(
-      setNewRegisteredHosts({
-        hosts: hosts.filter((host) => host.name !== ""),
-      }),
-    );
     dispatch(
       setHostsBasicData({
         hosts: hosts.filter((host) => host.name !== ""),
@@ -90,8 +80,6 @@ const AddHostsForm = () => {
   const hasErrors = Object.keys(errors).length > 0;
   //Need to constantly check this to alert outside world (
   useEffect(() => {
-    // TODO: remove
-    dispatch(setMultiHostValidationError(hasErrors));
     dispatch(setHostDefinitionError(hasErrors));
   }, [hasErrors]);
 
@@ -129,8 +117,6 @@ const AddHostsForm = () => {
     ]).then(() => {
       const hasErrors = Object.keys(errors).length > 0;
       if (hasErrors) {
-        // TODO: remove
-        dispatch(setMultiHostValidationError(true));
         dispatch(setHostDefinitionError(true));
         return;
       }

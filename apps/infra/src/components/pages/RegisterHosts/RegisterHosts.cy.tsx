@@ -16,23 +16,19 @@ describe("<RegisterHosts/>", () => {
     pom.root.should("exist");
   });
 
-  it("create cluster option is disabled when provision or onboard is off", () => {
-    // both off
-    pom.el.isAutoOnboarded.parent().find("span").click();
-    pom.el.createCluster.should("be.disabled");
+  it("create cluster option is enabled by default", () => {
+    pom.el.createCluster.should("not.be.disabled");
+  });
 
-    // onboard on
-    pom.el.isAutoOnboarded.parent().find("span").click();
-    pom.el.createCluster.should("be.disabled");
-
-    // provision on
-    pom.el.isAutoOnboarded.parent().find("span").click();
+  it("create cluster option is disabled when provision is off", () => {
+    // turn off auto onboard
     pom.el.isAutoProvisioned.parent().find("span").click();
     pom.el.createCluster.should("be.disabled");
   });
 
-  it("create cluster option is enabled when both provision and onboard are on", () => {
-    pom.el.isAutoProvisioned.parent().find("span").click();
-    pom.el.createCluster.should("not.be.disabled");
+  it("create cluster option is disabled when onboard is off", () => {
+    // turn off auto provision
+    pom.el.isAutoOnboarded.parent().find("span").click();
+    pom.el.createCluster.should("be.disabled");
   });
 });
