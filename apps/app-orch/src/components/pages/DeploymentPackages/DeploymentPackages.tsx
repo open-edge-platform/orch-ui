@@ -3,17 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  RbacRibbonButton,
-  Ribbon,
-  setActiveNavItem,
-  setBreadcrumb,
-} from "@orch-ui/components";
+import { Ribbon, setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
 import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Heading, Item, Tabs, Text } from "@spark-design/react";
-import { ButtonSize, ButtonVariant, HeaderSize } from "@spark-design/tokens";
+import { HeaderSize } from "@spark-design/tokens";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import DeploymentPackagePopup from "src/components/organisms/deploymentPackages/DeploymentPackagePopup/DeploymentPackagePopup";
 import {
   deploymentPackageBreadcrumb,
   homeBreadcrumb,
@@ -28,7 +24,6 @@ const dataCy = "deploymentPackages";
 const DeploymentPackages = () => {
   const cy = { "data-cy": dataCy };
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const breadcrumb = useMemo(
@@ -70,44 +65,7 @@ const DeploymentPackages = () => {
           }}
           defaultValue={searchParams.get("searchTerm") ?? ""}
           customButtons={
-            tabIndex === 0 ? (
-              <>
-                <RbacRibbonButton
-                  name="import"
-                  size={ButtonSize.Large}
-                  variant={ButtonVariant.Primary}
-                  text="Import Deployment Package"
-                  disabled={!checkAuthAndRole([Role.CATALOG_WRITE])}
-                  onPress={() => {
-                    navigate("/applications/packages/import");
-                  }}
-                  tooltip={
-                    checkAuthAndRole([Role.CATALOG_WRITE])
-                      ? ""
-                      : "The users with 'View Only' access can mostly view the data and do few of the Add/Edit operations."
-                  }
-                  tooltipIcon="lock"
-                />
-                <RbacRibbonButton
-                  name="create"
-                  size={ButtonSize.Large}
-                  variant={ButtonVariant.Action}
-                  text="Create Deployment Package"
-                  disabled={!checkAuthAndRole([Role.CATALOG_WRITE])}
-                  onPress={() => {
-                    navigate("/applications/packages/create");
-                  }}
-                  tooltip={
-                    checkAuthAndRole([Role.CATALOG_WRITE])
-                      ? ""
-                      : "The users with 'View Only' access can mostly view the data and do few of the Add/Edit operations."
-                  }
-                  tooltipIcon="lock"
-                />
-              </>
-            ) : (
-              <></>
-            )
+            tabIndex === 0 ? <DeploymentPackagePopup /> : undefined
           }
         />
       </div>

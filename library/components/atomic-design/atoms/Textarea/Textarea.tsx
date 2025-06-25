@@ -35,7 +35,7 @@ export const Textarea = ({
   dataCy = "textarea",
 }: TextareaProps) => (
   <div className="textarea" data-cy={dataCy} style={style}>
-    {label && <FieldLabel>{label}</FieldLabel>}
+    {label && <FieldLabel size="l">{label}</FieldLabel>}
     {description && <Text size={TextSize.Small}>{description}</Text>}
     <textarea
       className="textarea__input spark-input spark-input-outline spark-focus spark-focus-within spark-focus-snap"
