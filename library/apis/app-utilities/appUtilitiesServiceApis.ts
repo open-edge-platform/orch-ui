@@ -16,6 +16,15 @@ const injectedRtkApi = api
         }),
         providesTags: ["CatalogService"],
       }),
+      catalogServiceDownloadDeploymentPackage: build.query<
+        CatalogServiceDownloadDeploymentPackageApiResponse,
+        CatalogServiceDownloadDeploymentPackageApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v3/projects/${queryArg.projectName}/catalog/deployment_packages/${queryArg.deploymentPackageName}/versions/${queryArg.version}/download`,
+        }),
+        providesTags: ["CatalogService"],
+      }),
       catalogServiceBulkCatalogUpload: build.mutation<
         CatalogServiceBulkCatalogUploadApiResponse,
         CatalogServiceBulkCatalogUploadApiArg
@@ -41,6 +50,15 @@ export type CatalogServiceGetRegistryChartsApiArg = {
   /** unique projectName for the resource */
   projectName: string;
 };
+export type CatalogServiceDownloadDeploymentPackageApiResponse = unknown;
+export type CatalogServiceDownloadDeploymentPackageApiArg = {
+  /** Name of the DeploymentPackage. */
+  deploymentPackageName: string;
+  /** Version of the DeploymentPackage. */
+  version: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
 export type CatalogServiceBulkCatalogUploadApiResponse = /** status 200 OK */ {
   errorMessages?: string[];
   sessionID?: string;
@@ -56,5 +74,7 @@ export type CatalogServiceBulkCatalogUploadApiArg = {
 export const {
   useCatalogServiceGetRegistryChartsQuery,
   useLazyCatalogServiceGetRegistryChartsQuery,
+  useCatalogServiceDownloadDeploymentPackageQuery,
+  useLazyCatalogServiceDownloadDeploymentPackageQuery,
   useCatalogServiceBulkCatalogUploadMutation,
 } = injectedRtkApi;

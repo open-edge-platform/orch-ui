@@ -6,8 +6,11 @@ export const addTagTypes = [
   "ScheduleService",
   "WorkloadService",
   "WorkloadMemberService",
+  "CustomConfigService",
   "LocalAccountService",
   "LocationService",
+  "OSUpdatePolicy",
+  "OSUpdateRun",
   "ProviderService",
   "RegionService",
   "SiteService",
@@ -415,6 +418,51 @@ const injectedRtkApi = api
         }),
         providesTags: ["WorkloadMemberService"],
       }),
+      customConfigServiceListCustomConfigs: build.query<
+        CustomConfigServiceListCustomConfigsApiResponse,
+        CustomConfigServiceListCustomConfigsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/customConfigs`,
+          params: {
+            orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+          },
+        }),
+        providesTags: ["CustomConfigService"],
+      }),
+      customConfigServiceCreateCustomConfig: build.mutation<
+        CustomConfigServiceCreateCustomConfigApiResponse,
+        CustomConfigServiceCreateCustomConfigApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/customConfigs`,
+          method: "POST",
+          body: queryArg.customConfigResource,
+        }),
+        invalidatesTags: ["CustomConfigService"],
+      }),
+      customConfigServiceDeleteCustomConfig: build.mutation<
+        CustomConfigServiceDeleteCustomConfigApiResponse,
+        CustomConfigServiceDeleteCustomConfigApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/customConfigs/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["CustomConfigService"],
+      }),
+      customConfigServiceGetCustomConfig: build.query<
+        CustomConfigServiceGetCustomConfigApiResponse,
+        CustomConfigServiceGetCustomConfigApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/customConfigs/${queryArg.resourceId}`,
+        }),
+        providesTags: ["CustomConfigService"],
+      }),
       localAccountServiceListLocalAccounts: build.query<
         LocalAccountServiceListLocalAccountsApiResponse,
         LocalAccountServiceListLocalAccountsApiArg
@@ -473,6 +521,85 @@ const injectedRtkApi = api
           },
         }),
         providesTags: ["LocationService"],
+      }),
+      osUpdatePolicyListOsUpdatePolicy: build.query<
+        OsUpdatePolicyListOsUpdatePolicyApiResponse,
+        OsUpdatePolicyListOsUpdatePolicyApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-policies`,
+          params: {
+            orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+          },
+        }),
+        providesTags: ["OSUpdatePolicy"],
+      }),
+      osUpdatePolicyCreateOsUpdatePolicy: build.mutation<
+        OsUpdatePolicyCreateOsUpdatePolicyApiResponse,
+        OsUpdatePolicyCreateOsUpdatePolicyApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-policies`,
+          method: "POST",
+          body: queryArg.osUpdatePolicy,
+        }),
+        invalidatesTags: ["OSUpdatePolicy"],
+      }),
+      osUpdatePolicyDeleteOsUpdatePolicy: build.mutation<
+        OsUpdatePolicyDeleteOsUpdatePolicyApiResponse,
+        OsUpdatePolicyDeleteOsUpdatePolicyApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-policies/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["OSUpdatePolicy"],
+      }),
+      osUpdatePolicyGetOsUpdatePolicy: build.query<
+        OsUpdatePolicyGetOsUpdatePolicyApiResponse,
+        OsUpdatePolicyGetOsUpdatePolicyApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-policies/${queryArg.resourceId}`,
+        }),
+        providesTags: ["OSUpdatePolicy"],
+      }),
+      osUpdateRunListOsUpdateRun: build.query<
+        OsUpdateRunListOsUpdateRunApiResponse,
+        OsUpdateRunListOsUpdateRunApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-runs`,
+          params: {
+            orderBy: queryArg.orderBy,
+            filter: queryArg.filter,
+            pageSize: queryArg.pageSize,
+            offset: queryArg.offset,
+          },
+        }),
+        providesTags: ["OSUpdateRun"],
+      }),
+      osUpdateRunDeleteOsUpdateRun: build.mutation<
+        OsUpdateRunDeleteOsUpdateRunApiResponse,
+        OsUpdateRunDeleteOsUpdateRunApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-runs/${queryArg.resourceId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["OSUpdateRun"],
+      }),
+      osUpdateRunGetOsUpdateRun: build.query<
+        OsUpdateRunGetOsUpdateRunApiResponse,
+        OsUpdateRunGetOsUpdateRunApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.projectName}/os-update-runs/${queryArg.resourceId}`,
+        }),
+        providesTags: ["OSUpdateRun"],
       }),
       providerServiceListProviders: build.query<
         ProviderServiceListProvidersApiResponse,
@@ -1400,6 +1527,47 @@ export type WorkloadMemberServiceGetWorkloadMemberApiArg = {
   /** unique workloadResourceId for the resource */
   workloadResourceId: string;
 };
+export type CustomConfigServiceListCustomConfigsApiResponse =
+  /** status 200 Success */ ListCustomConfigsResponseRead;
+export type CustomConfigServiceListCustomConfigsApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type CustomConfigServiceCreateCustomConfigApiResponse =
+  /** status 200 Success */ CustomConfigResourceRead;
+export type CustomConfigServiceCreateCustomConfigApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** The custom configuration to create. */
+  customConfigResource: CustomConfigResource;
+};
+export type CustomConfigServiceDeleteCustomConfigApiResponse =
+  /** status 200 Success */ DeleteCustomConfigResponse;
+export type CustomConfigServiceDeleteCustomConfigApiArg = {
+  /** Name of the customconfig to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type CustomConfigServiceGetCustomConfigApiResponse =
+  /** status 200 Success */ CustomConfigResourceRead;
+export type CustomConfigServiceGetCustomConfigApiArg = {
+  /** Name of the requested custom configuration. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
 export type LocalAccountServiceListLocalAccountsApiResponse =
   /** status 200 Success */ ListLocalAccountsResponseRead;
 export type LocalAccountServiceListLocalAccountsApiArg = {
@@ -1450,6 +1618,80 @@ export type LocationServiceListLocationsApiArg = {
   showSites?: boolean;
   /** Return region locations */
   showRegions?: boolean;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OsUpdatePolicyListOsUpdatePolicyApiResponse =
+  /** status 200 Success */ ListOsUpdatePolicyResponseRead;
+export type OsUpdatePolicyListOsUpdatePolicyApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OsUpdatePolicyCreateOsUpdatePolicyApiResponse =
+  /** status 200 Success */ OsUpdatePolicyRead;
+export type OsUpdatePolicyCreateOsUpdatePolicyApiArg = {
+  /** unique projectName for the resource */
+  projectName: string;
+  /** The OS Update policy to create. */
+  osUpdatePolicy: OsUpdatePolicyWrite;
+};
+export type OsUpdatePolicyDeleteOsUpdatePolicyApiResponse =
+  /** status 200 Success */ DeleteOsUpdatePolicyResponse;
+export type OsUpdatePolicyDeleteOsUpdatePolicyApiArg = {
+  /** Name of the OS Update Policy to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OsUpdatePolicyGetOsUpdatePolicyApiResponse =
+  /** status 200 Success */ OsUpdatePolicyRead;
+export type OsUpdatePolicyGetOsUpdatePolicyApiArg = {
+  /** Name of the requested os. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OsUpdateRunListOsUpdateRunApiResponse =
+  /** status 200 Success */ ListOsUpdateRunResponseRead;
+export type OsUpdateRunListOsUpdateRunApiArg = {
+  /** Optional comma separated list of fields to specify a sorting order.
+     See https://google.aip.dev/132 for details. */
+  orderBy?: string;
+  /** Optional filter to return only item of interest.
+     See https://google.aip.dev/160 for details. */
+  filter?: string;
+  /** Defines the amount of items to be contained in a single page.
+     Default of 20. */
+  pageSize?: number;
+  /** Index of the first item to return. This allows skipping items. */
+  offset?: number;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OsUpdateRunDeleteOsUpdateRunApiResponse =
+  /** status 200 Success */ DeleteOsUpdateRunResponse;
+export type OsUpdateRunDeleteOsUpdateRunApiArg = {
+  /** Name of the os update run to be deleted. */
+  resourceId: string;
+  /** unique projectName for the resource */
+  projectName: string;
+};
+export type OsUpdateRunGetOsUpdateRunApiResponse =
+  /** status 200 Success */ OsUpdateRunRead;
+export type OsUpdateRunGetOsUpdateRunApiArg = {
+  /** Name of the requested os. */
+  resourceId: string;
   /** unique projectName for the resource */
   projectName: string;
 };
@@ -2039,7 +2281,8 @@ export type PowerState =
   | "POWER_STATE_OFF"
   | "POWER_STATE_SLEEP"
   | "POWER_STATE_HIBERNATE"
-  | "POWER_STATE_RESET";
+  | "POWER_STATE_RESET"
+  | "POWER_STATE_POWER_CYCLE";
 export type HostState =
   | "HOST_STATE_UNSPECIFIED"
   | "HOST_STATE_DELETED"
@@ -2067,9 +2310,9 @@ export type OperatingSystemResource = {
   /** The OS resource's CPU architecture. */
   architecture?: string;
   description?: string;
-  /** URL of the file containing information about the existing CVEs on the Operating System. */
+  /** (IMMUTABLE) URL of the file containing information about the existing CVEs on the Operating System. */
   existingCvesUrl?: string;
-  /** URL of the file containing information about the CVEs that have been fixed by this OS Resource version. */
+  /** (IMMUTABLE) URL of the file containing information about the CVEs that have been fixed by this OS Resource version. */
   fixedCvesUrl?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
@@ -2080,7 +2323,7 @@ export type OperatingSystemResource = {
   installedPackagesUrl?: string;
   /** Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The OS resource's kernel Command Line Options. */
   kernelCommand?: string;
-  /** Opaque JSON field storing metadata associated to this OS resource. */
+  /** Opaque JSON field storing metadata associated to this OS resource. Expected to be a JSON object with string keys and values, or an empty string. */
   metadata?: string;
   /** The OS resource's name. */
   name?: string;
@@ -2104,11 +2347,11 @@ export type OperatingSystemResourceRead = {
   description?: string;
   /** The CVEs that are currently present on the Operating System, encoded as a JSON list. */
   existingCves?: string;
-  /** URL of the file containing information about the existing CVEs on the Operating System. */
+  /** (IMMUTABLE) URL of the file containing information about the existing CVEs on the Operating System. */
   existingCvesUrl?: string;
   /** The CVEs that have been fixed by this OS Resource version, encoded as a JSON list. */
   fixedCves?: string;
-  /** URL of the file containing information about the CVEs that have been fixed by this OS Resource version. */
+  /** (IMMUTABLE) URL of the file containing information about the CVEs that have been fixed by this OS Resource version. */
   fixedCvesUrl?: string;
   /** A unique identifier of the OS image that can be retrieved from the running OS. */
   imageId?: string;
@@ -2121,7 +2364,7 @@ export type OperatingSystemResourceRead = {
   installedPackagesUrl?: string;
   /** Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The OS resource's kernel Command Line Options. */
   kernelCommand?: string;
-  /** Opaque JSON field storing metadata associated to this OS resource. */
+  /** Opaque JSON field storing metadata associated to this OS resource. Expected to be a JSON object with string keys and values, or an empty string. */
   metadata?: string;
   /** The OS resource's name. */
   name?: string;
@@ -2217,6 +2460,27 @@ export type OsUpdatePolicyRead = {
      Applies only to Mutable OSes. */
   updateSources?: string[];
 };
+export type OsUpdatePolicyWrite = {
+  /** User-provided, human-readable description. */
+  description?: string;
+  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+     Applies only to Mutable OSes. */
+  installPackages?: string;
+  /** The OS resource's kernel Command Line Options.
+     Applies only to Mutable OSes. */
+  kernelCommand?: string;
+  /** User-provided, human-readable name. */
+  name: string;
+  targetOs?: OperatingSystemResource;
+  /** The unique identifier of target OS will be associated with the OS Update policy. */
+  targetOsId?: string;
+  timestamps?: Timestamps;
+  updatePolicy?: UpdatePolicy;
+  /** The list of OS resource update sources.
+     Should be in 'DEB822 Source Format' for Debian style OSs.
+     Applies only to Mutable OSes. */
+  updateSources?: string[];
+};
 export type InstanceResource = {
   currentOs?: OperatingSystemResource;
   currentState?: InstanceState;
@@ -2235,6 +2499,26 @@ export type InstanceResource = {
   trustedAttestationStatusIndicator?: StatusIndication;
   updatePolicy?: OsUpdatePolicy;
   updateStatusIndicator?: StatusIndication;
+};
+export type CustomConfigResource = {
+  /** Config content */
+  config: string;
+  /** (OPTIONAL) Config description */
+  description?: string;
+  /** Config provided by admin */
+  name: string;
+  timestamps?: Timestamps;
+};
+export type CustomConfigResourceRead = {
+  /** Config content */
+  config: string;
+  /** (OPTIONAL) Config description */
+  description?: string;
+  /** Config provided by admin */
+  name: string;
+  /** resource identifier */
+  resourceId?: string;
+  timestamps?: Timestamps;
 };
 export type WorkloadMemberKind =
   | "WORKLOAD_MEMBER_KIND_UNSPECIFIED"
@@ -2310,6 +2594,8 @@ export type WorkloadMemberWrite = {
 export type InstanceResourceRead = {
   currentOs?: OperatingSystemResourceRead;
   currentState?: InstanceState;
+  /** The list of custom config associated with the instance. */
+  customConfig?: CustomConfigResourceRead[];
   desiredOs?: OperatingSystemResourceRead;
   desiredState?: InstanceState;
   /** The CVEs that are currently present on the Instance, encoded as a JSON list. */
@@ -2361,6 +2647,8 @@ export type InstanceResourceRead = {
 export type InstanceResourceWrite = {
   currentOs?: OperatingSystemResource;
   currentState?: InstanceState;
+  /** The list of custom config associated with the instance. */
+  customConfigID?: string[];
   desiredOs?: OperatingSystemResource;
   desiredState?: InstanceState;
   host?: HostResource;
@@ -2381,7 +2669,7 @@ export type InstanceResourceWrite = {
   securityFeature?: SecurityFeature;
   timestamps?: Timestamps;
   trustedAttestationStatusIndicator?: StatusIndication;
-  updatePolicy?: OsUpdatePolicy;
+  updatePolicy?: OsUpdatePolicyWrite;
   updateStatusIndicator?: StatusIndication;
 };
 export type MetadataItem = {
@@ -3152,6 +3440,23 @@ export type ListWorkloadMembersResponseWrite = {
   workloadMembers: WorkloadMemberWrite[];
 };
 export type DeleteWorkloadMemberResponse = object;
+export type ListCustomConfigsResponse = {
+  /** Sorted and filtered list of customconfigs. */
+  customConfigs: CustomConfigResource[];
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListCustomConfigsResponseRead = {
+  /** Sorted and filtered list of customconfigs. */
+  customConfigs: CustomConfigResourceRead[];
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteCustomConfigResponse = object;
 export type ListLocalAccountsResponse = {
   /** Inform if there are more elements */
   hasNext: boolean;
@@ -3192,6 +3497,93 @@ export type ListLocationsResponse = {
   /** (OPTIONAL) Count of items in the entire list, regardless of pagination. */
   totalElements?: number;
 };
+export type ListOsUpdatePolicyResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of OS Update Policies. */
+  osUpdatePolicies: OsUpdatePolicy[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListOsUpdatePolicyResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of OS Update Policies. */
+  osUpdatePolicies: OsUpdatePolicyRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListOsUpdatePolicyResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of OS Update Policies. */
+  osUpdatePolicies: OsUpdatePolicyWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteOsUpdatePolicyResponse = object;
+export type OsUpdateRun = {
+  appliedPolicy?: OsUpdatePolicy;
+  endTime?: GoogleProtobufTimestamp;
+  instance?: InstanceResource;
+  startTime?: GoogleProtobufTimestamp;
+  statusIndicator?: StatusIndication;
+  statusTimestamp?: GoogleProtobufTimestamp;
+  timestamps?: Timestamps;
+};
+export type OsUpdateRunRead = {
+  appliedPolicy?: OsUpdatePolicyRead;
+  /** Human-readable description. */
+  description?: string;
+  endTime?: GoogleProtobufTimestamp;
+  instance?: InstanceResourceRead;
+  /** Human-readable name. */
+  name?: string;
+  /** resource ID, generated by the inventory on Create. */
+  resourceId?: string;
+  startTime?: GoogleProtobufTimestamp;
+  /** Short message that describes what happened during the OS Update. */
+  status?: string;
+  /** Details about what happened during the OS Update. */
+  statusDetails?: string;
+  statusIndicator?: StatusIndication;
+  statusTimestamp?: GoogleProtobufTimestamp;
+  timestamps?: Timestamps;
+};
+export type OsUpdateRunWrite = {
+  appliedPolicy?: OsUpdatePolicyWrite;
+  endTime?: GoogleProtobufTimestamp;
+  instance?: InstanceResourceWrite;
+  startTime?: GoogleProtobufTimestamp;
+  statusIndicator?: StatusIndication;
+  statusTimestamp?: GoogleProtobufTimestamp;
+  timestamps?: Timestamps;
+};
+export type ListOsUpdateRunResponse = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of os update runs. */
+  osUpdateRuns: OsUpdateRun[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListOsUpdateRunResponseRead = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of os update runs. */
+  osUpdateRuns: OsUpdateRunRead[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type ListOsUpdateRunResponseWrite = {
+  /** Inform if there are more elements */
+  hasNext: boolean;
+  /** Sorted and filtered list of os update runs. */
+  osUpdateRuns: OsUpdateRunWrite[];
+  /** Count of items in the entire list, regardless of pagination. */
+  totalElements: number;
+};
+export type DeleteOsUpdateRunResponse = object;
 export type ListProvidersResponse = {
   /** Inform if there are more elements */
   hasNext: boolean;
@@ -3540,11 +3932,22 @@ export const {
   useWorkloadMemberServiceCreateWorkloadMemberMutation,
   useWorkloadMemberServiceDeleteWorkloadMemberMutation,
   useWorkloadMemberServiceGetWorkloadMemberQuery,
+  useCustomConfigServiceListCustomConfigsQuery,
+  useCustomConfigServiceCreateCustomConfigMutation,
+  useCustomConfigServiceDeleteCustomConfigMutation,
+  useCustomConfigServiceGetCustomConfigQuery,
   useLocalAccountServiceListLocalAccountsQuery,
   useLocalAccountServiceCreateLocalAccountMutation,
   useLocalAccountServiceDeleteLocalAccountMutation,
   useLocalAccountServiceGetLocalAccountQuery,
   useLocationServiceListLocationsQuery,
+  useOsUpdatePolicyListOsUpdatePolicyQuery,
+  useOsUpdatePolicyCreateOsUpdatePolicyMutation,
+  useOsUpdatePolicyDeleteOsUpdatePolicyMutation,
+  useOsUpdatePolicyGetOsUpdatePolicyQuery,
+  useOsUpdateRunListOsUpdateRunQuery,
+  useOsUpdateRunDeleteOsUpdateRunMutation,
+  useOsUpdateRunGetOsUpdateRunQuery,
   useProviderServiceListProvidersQuery,
   useProviderServiceCreateProviderMutation,
   useProviderServiceDeleteProviderMutation,
