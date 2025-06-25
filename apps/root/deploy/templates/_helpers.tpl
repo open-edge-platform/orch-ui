@@ -92,18 +92,7 @@ window.__RUNTIME_CONFIG__ = {
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }},
     ADMIN: {{ .Values.mfe.admin | quote }}
   },
-  API: {
-    CATALOG: {{ .Values.api.catalog | quote }},
-    ADM: {{ .Values.api.appDeploymentManger | quote }},
-    ARM: {{ .Values.api.appResourceManger | quote }},
-    INFRA: {{ .Values.api.infraManager | quote }},
-    CO: {{ .Values.api.clusterOrch | quote }},
-    MB: {{ .Values.api.metadataBroker | quote }},
-    ALERT: {{ .Values.api.alertManager | quote }},
-    TM: {{ .Values.api.tenantManager | quote }},
-    RPS: {{ .Values.api.rps | quote }},
-    MPS: {{ .Values.api.mps | quote }},
-  },
+  API: {{ .Values.api | quote }},
   VERSIONS: {
     orchestrator: {{ .Values.versions.orchestrator | quote }},
   },
