@@ -153,7 +153,7 @@ const DeploymentPackageHelmChartInfoForm = () => {
 
       <Heading semanticLevel={6}>Advanced Settings</Heading>
       <AdvancedSettingsToggle
-        message="Allow users to override selected profile values at deployment time?"
+        message="Allow users to set advanced options?"
         value={advancedSettings}
         onChange={(value) => {
           setAdvancedSettings(value);
