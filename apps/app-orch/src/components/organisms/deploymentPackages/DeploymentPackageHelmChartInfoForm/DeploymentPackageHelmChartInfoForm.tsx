@@ -103,6 +103,7 @@ const DeploymentPackageHelmChartInfoForm = () => {
     if (deploymentPackage.username && deploymentPackage.password) {
       dpPayload.username = deploymentPackage.username;
       dpPayload.authToken = deploymentPackage.password;
+      dpPayload.includeAuth = true;
     }
 
     importDeploymentPackage(dpPayload);
