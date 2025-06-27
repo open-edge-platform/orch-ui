@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { checkSize, returnYamlOrTar } from "./fileHandler";
+import { checkSize, filterFilesByExtension } from "./fileHandler";
 
 describe("File handler", () => {
-  describe("returnYamlOrTar", () => {
+  describe("filterFilesByExtension", () => {
     it("should return only yaml file", () => {
       const fileBytes = new Uint8Array();
       const file1 = new File([fileBytes], "test.yaml");
       const file2 = new File([fileBytes], "test.test");
-      expect(returnYamlOrTar([file1, file2])).to.deep.equal([file1]);
+      expect(filterFilesByExtension([file1, file2])).to.deep.equal([file1]);
     });
   });
 

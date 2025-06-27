@@ -14,7 +14,11 @@ import {
   SquareSpinner,
   UploadButton,
 } from "@orch-ui/components";
-import { checkSize, returnYamlOrTar, SharedStorage } from "@orch-ui/utils";
+import {
+  checkSize,
+  filterFilesByExtension,
+  SharedStorage,
+} from "@orch-ui/utils";
 import {
   Button,
   Heading,
@@ -70,7 +74,7 @@ const DeploymentPackageImport = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSizeError(!checkSize([...e.target.files], 4));
-      setFiles([...files, ...returnYamlOrTar([...e.target.files])]);
+      setFiles([...files, ...filterFilesByExtension([...e.target.files])]);
     }
   };
 
