@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { catalog, CatalogKinds } from "@orch-ui/apis";
+import { appUtilities, catalog, CatalogKinds } from "@orch-ui/apis";
 import {
   ApiError,
   columnApiNameToDisplayName,
@@ -77,6 +77,35 @@ const DeploymentPackageTable = ({
 
   const [pollingInterval, setPollingInterval] = useState<number>(API_INTERVAL);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+
+  const [downloadPackage] =
+    appUtilities.useLazyCatalogServiceDownloadDeploymentPackageQuery();
+
+  const handleDownload = (name, version) => {
+    downloadPackage({
+      projectName: SharedStorage.project?.name ?? "",
+      deploymentPackageName: name,
+      version: version,
+    })
+      .unwrap()
+      .then((blob) => {
+        console.log("Blob received:", blob);
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.style.display = "none"; // Optional: Hide the element
+        a.href = url;
+        a.download = `${name}-${version}.tar.gz`; // Ensure name and version are defined
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a); // Remove the element after clicking
+
+        window.URL.revokeObjectURL(url); // Revoke the URL to free resources
+      })
+      .catch((error) => {
+        console.error("Download failed", error);
+      });
+  };
 
   const columns: TableColumn<catalog.DeploymentPackageRead>[] = [
     {
@@ -232,6 +261,19 @@ const DeploymentPackageTable = ({
           if (deploymentPackage) {
             dispatch(setDeploymentPackage(deploymentPackage));
             navigate(`../packages/edit/${name}/version/${version}`);
+          }
+        },
+      },
+      {
+        displayText: "Export",
+        onSelect: () => {
+          const deploymentPackage = data?.deploymentPackages?.find(
+            (deploymentPackage) =>
+              deploymentPackage.name === name &&
+              deploymentPackage.version === version,
+          );
+          if (deploymentPackage) {
+            handleDownload(name, version);
           }
         },
       },

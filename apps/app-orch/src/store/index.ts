@@ -5,6 +5,7 @@
 
 import {
   adm,
+  appUtilities,
   arm,
   catalog,
   cm,
@@ -41,6 +42,8 @@ const rootReducer = combineReducers({
   toast: toastReducer,
   setupDeployment: setupDeploymentReducer,
   [catalog.catalogServiceApis.reducerPath]: catalog.catalogServiceApis.reducer,
+  [appUtilities.appUtilitiesServiceApis.reducerPath]:
+    appUtilities.appUtilitiesServiceApis.reducer,
   [appDeploymentManager.reducerPath]: appDeploymentManager.reducer,
   [appResourceManager.reducerPath]: appResourceManager.reducer,
   [mbApi.metadataBroker.reducerPath]: mbApi.metadataBroker.reducer,
@@ -62,6 +65,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         .concat(cm.clusterManagerApis.middleware)
         .concat(miApi.miEnhancedApi.middleware)
         .concat(catalog.catalogServiceApis.middleware)
+        .concat(appUtilities.appUtilitiesServiceApis.middleware)
         .concat(appDeploymentManager.middleware)
         .concat(appResourceManager.middleware)
         .concat(mbApi.metadataBroker.middleware)
@@ -74,12 +78,17 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: true,
+      serializableCheck: {
+        ignoredPaths: [
+          "appUtilities.appUtilitiesServiceApis.queries.catalogServiceDownloadDeploymentPackage",
+        ],
+      },
       immutableCheck: true,
     })
       .concat(cm.clusterManagerApis.middleware)
       .concat(miApi.miEnhancedApi.middleware)
       .concat(catalog.catalogServiceApis.middleware)
+      .concat(appUtilities.appUtilitiesServiceApis.middleware)
       .concat(appDeploymentManager.middleware)
       .concat(appResourceManager.middleware)
       .concat(mbApi.metadataBroker.middleware)
