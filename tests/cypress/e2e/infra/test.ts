@@ -1,0 +1,67 @@
+export const sessionKey =
+  "oidc.user:https://keycloak.orch-10-114-181-86.espdqa.infra-host.com/realms/master:webui-client";
+export const sessionValue = `{
+    "id_token": "eyJhbGciOiJQUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWV1k2VlRWcnNxQkYwVWZ1bC1NV1JuSTZrUVpWZy16blJ2OG9HNG1TNzBFIn0.eyJleHAiOjE3NTEzMDY2NjQsImlhdCI6MTc1MTMwMzA2NCwiYXV0aF90aW1lIjoxNzUxMjk3MDEwLCJqdGkiOiI3MWRlYzZhOS1iNzJhLTRhZTEtYjgxOC0xZmU2NTI5YTg0ZjkiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLm9yY2gtMTAtMTE0LTE4MS04Ni5lc3BkcWEuaW5mcmEtaG9zdC5jb20vcmVhbG1zL21hc3RlciIsImF1ZCI6IndlYnVpLWNsaWVudCIsInN1YiI6IjY1ZWJhMmZlLTA0ZjgtNDM5ZS1hM2UwLWJhYWQ5ODBiOWYxOCIsInR5cCI6IklEIiwiYXpwIjoid2VidWktY2xpZW50Iiwic2lkIjoiZTA2YzMwNjYtZjZlOC00MDRlLTk0MDMtNGE3MzY1ZWVhMmVjIiwiYXRfaGFzaCI6ImVMZkthdWRodXV0Z0VsNDBvcFc4bkRHbG53TElKTWdVYkN1SUVRRG9JcE0iLCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwiZW1haWxfdmVyaWZpZWQiOnRydWUsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJhY2NvdW50L3ZpZXctcHJvZmlsZSIsImExOGQ5Y2QyLTBmYjUtNDIyYy04NjQyLWRhZWM1N2E5N2FmM19wcm9qZWN0LWRlbGV0ZS1yb2xlIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X2NsLXRwbC1yIiwiYTE4ZDljZDItMGZiNS00MjJjLTg2NDItZGFlYzU3YTk3YWYzX3Byb2plY3QtcmVhZC1yb2xlIiwiYTE4ZDljZDItMGZiNS00MjJjLTg2NDItZGFlYzU3YTk3YWYzX3Byb2plY3QtdXBkYXRlLXJvbGUiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2F0LXIiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2wtdHBsLXJ3IiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X3JlZy1hIiwib2ZmbGluZV9hY2Nlc3MiLCJycy1wcm94eS1yIiwidW1hX2F1dGhvcml6YXRpb24iLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2wtciIsIjU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9pbS1yIiwiYTE4ZDljZDItMGZiNS00MjJjLTg2NDItZGFlYzU3YTk3YWYzXzU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9tIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X2FscnQtciIsIjU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9lbi1hZ2VudC1ydyIsImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X3JlZy1yIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X3RjLXIiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfZW4tb2IiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfYWxydC1ydyIsIjU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9jYXQtcnciLCJycy1hY2Nlc3MtciIsImExOGQ5Y2QyLTBmYjUtNDIyYy04NjQyLWRhZWM1N2E5N2FmM19wcm9qZWN0LXdyaXRlLXJvbGUiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfYW8tcnciLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2wtcnciLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfaW0tcnciLCJhY2NvdW50L21hbmFnZS1hY2NvdW50Il19LCJuYW1lIjoic2FtcGxlLW9yZy1hZG1pbiBzYW1wbGUtb3JnLWFkbWluIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2FtcGxlLW9yZy1hZG1pbiIsImdpdmVuX25hbWUiOiJzYW1wbGUtb3JnLWFkbWluIiwiZmFtaWx5X25hbWUiOiJzYW1wbGUtb3JnLWFkbWluIiwiZW1haWwiOiJzYW1wbGUtb3JnLWFkbWluQHNhbXBsZS1vcmcuY29tIn0.lEUH6ttxqXuPdHA8C3-sln9mil6l6pmNlVYdbraUW1u8HIR1Xiu9JA40XNpQPJZrxY7RvryKIdG1PCqqWYKEr8EE_QIwx3vSjJfjPVIriabLRWPWL84l3oX2Hfo1DKi8NlcQnN7v1aX3LPFeJ0NI0WNMH6ZXYS2Dz7aNQmw6a7Xn4r7y5Vou3HcYbxZqF92Ok79bw8enOF--N_8bY55uxtnMUyZZz-1NWeQfsynZtSk6mUgpHQU1RG_q3W9WjR-oy1iaBDYuBczLhJiPXJkQB-2gvFwghANlP0a4ItewvDX2BHNyf9JPNN6xrJ5iPAigwv-vFhJIPsEYuA01n9WL30xYfWRIPA5EBNl3I8hxtFyOj5wAFQwXefx406h9bJdIWcgAhJt3S01iiF9yoh_zHxK_qJBzjCEzbd1GKYUNhakKlfXZcGn_0Djt8xjWBMvS3SxV6WpazvzXdMu542ONRRhfgjnQ4NtzRChx7hkqkGnfwM1v2aneRPTSpssihJ13FhnN7x-1VRNKDnSvftaJLMRG3kEIFKyvK-sC9v3KGoUPWBcTsWMSmGiRdIJRc2F5xojsc-fgiGYMUmoI4gvuiuqsyZ71iBd0O109MEwIV_DnITkuxujmxkiqWySAbBvwgIGrejzYQc5RHYZ9JfVYoa_kOPCBbavEI_RK_yHa3aU",
+    "session_state": "e06c3066-f6e8-404e-9403-4a7365eea2ec",
+    "access_token": "eyJhbGciOiJQUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWV1k2VlRWcnNxQkYwVWZ1bC1NV1JuSTZrUVpWZy16blJ2OG9HNG1TNzBFIn0.eyJleHAiOjE3NTEzMDY2NjQsImlhdCI6MTc1MTMwMzA2NCwiYXV0aF90aW1lIjoxNzUxMjk3MDEwLCJqdGkiOiJjYzM4ZDJkMy01ZWFhLTQ0NDEtYjk5OC01ZDFiYjY3ZmFmMjQiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLm9yY2gtMTAtMTE0LTE4MS04Ni5lc3BkcWEuaW5mcmEtaG9zdC5jb20vcmVhbG1zL21hc3RlciIsInN1YiI6IjY1ZWJhMmZlLTA0ZjgtNDM5ZS1hM2UwLWJhYWQ5ODBiOWYxOCIsInR5cCI6IkJlYXJlciIsImF6cCI6IndlYnVpLWNsaWVudCIsInNpZCI6ImUwNmMzMDY2LWY2ZTgtNDA0ZS05NDAzLTRhNzM2NWVlYTJlYyIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJhY2NvdW50L3ZpZXctcHJvZmlsZSIsImExOGQ5Y2QyLTBmYjUtNDIyYy04NjQyLWRhZWM1N2E5N2FmM19wcm9qZWN0LWRlbGV0ZS1yb2xlIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X2NsLXRwbC1yIiwiYTE4ZDljZDItMGZiNS00MjJjLTg2NDItZGFlYzU3YTk3YWYzX3Byb2plY3QtcmVhZC1yb2xlIiwiYTE4ZDljZDItMGZiNS00MjJjLTg2NDItZGFlYzU3YTk3YWYzX3Byb2plY3QtdXBkYXRlLXJvbGUiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2F0LXIiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2wtdHBsLXJ3IiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X3JlZy1hIiwib2ZmbGluZV9hY2Nlc3MiLCJycy1wcm94eS1yIiwidW1hX2F1dGhvcml6YXRpb24iLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2wtciIsIjU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9pbS1yIiwiYTE4ZDljZDItMGZiNS00MjJjLTg2NDItZGFlYzU3YTk3YWYzXzU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9tIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X2FscnQtciIsIjU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9lbi1hZ2VudC1ydyIsImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X3JlZy1yIiwiNTRhMGQ4ZTctM2EwOS00ZTBkLWIyNjgtNmI0NjA2OTIxNjI5X3RjLXIiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfZW4tb2IiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfYWxydC1ydyIsIjU0YTBkOGU3LTNhMDktNGUwZC1iMjY4LTZiNDYwNjkyMTYyOV9jYXQtcnciLCJycy1hY2Nlc3MtciIsImExOGQ5Y2QyLTBmYjUtNDIyYy04NjQyLWRhZWM1N2E5N2FmM19wcm9qZWN0LXdyaXRlLXJvbGUiLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfYW8tcnciLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfY2wtcnciLCI1NGEwZDhlNy0zYTA5LTRlMGQtYjI2OC02YjQ2MDY5MjE2MjlfaW0tcnciLCJhY2NvdW50L21hbmFnZS1hY2NvdW50Il19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSByb2xlcyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoic2FtcGxlLW9yZy1hZG1pbiBzYW1wbGUtb3JnLWFkbWluIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2FtcGxlLW9yZy1hZG1pbiIsImdpdmVuX25hbWUiOiJzYW1wbGUtb3JnLWFkbWluIiwiZmFtaWx5X25hbWUiOiJzYW1wbGUtb3JnLWFkbWluIiwiZW1haWwiOiJzYW1wbGUtb3JnLWFkbWluQHNhbXBsZS1vcmcuY29tIn0.TrnsfMdVF4FbAN3PKUBpTD3z4CfqA_tRPaT_Dwt8XLposW6A9z4tlE4zkGB7OUUNTSw3PtA3T4aNBxD7R4ezZkoGguhaCDBiQRTmH2UlHEUKgiV3QEfPPxYfgzBcCRFliV0oafKrM80ZiQYTjzNE_q98VphQH-Vk7h_KexiKEUlwHzJQVIgR_G9mfHN65GJ0de1EthmgjT58mD4zGE1acrewq48YJQXvbEt-kcsNqHb5bbvsf2Sa2DgmOCOh8XaeDq5z_A6bDLhYLEHyEVwsawPKhSspUQesy0_mJeQOGbJwxfVQDcFyIlF0Ku_eKSzviw7hYF_RlspVurV8Lv-GQBGIlF8vvBsJJPlMpZVvOr634T8zoi2wA2KLF7zwbnG_ndjY_Lh0xY8s-dCXI5Cd27hopGm2ncLun6iQcSQ0VjW9WzGJm3UqP6sNCvP5GAw5Tj6EDR_zasR8KzS9aCMqYGn9Px3kpocjrpVp5ZIRQAFWR5Dev_cB0RYI1f94wZ3JBB2i2JLmlWd1Fjx6UXlQy55_kqH9SeyenFHhiUieCQlupg2idWIRZ7OaYgLKTmrMqBNBYdn3dlbYE31NYBHDD8auYFAqsh3rblM9-vhuSy5GYm3rqg9ygv-Q-0VUcm6milRzekL55aVl5-iusuZMwSESg6CK8JfyswHFY1EAs_Q",
+    "refresh_token": "eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0MDBhMjM2My0xZTVmLTRmZTQtYTA0Yy01NWFmMWJjMTA2YmIifQ.eyJleHAiOjE3NTEzMDg0NjQsImlhdCI6MTc1MTMwMzA2NCwianRpIjoiNTQ0YTViMGMtNmMwNy00ZDgwLWEwZWEtNTJiZDNjZGU4NTkwIiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay5vcmNoLTEwLTExNC0xODEtODYuZXNwZHFhLmluZnJhLWhvc3QuY29tL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJodHRwczovL2tleWNsb2FrLm9yY2gtMTAtMTE0LTE4MS04Ni5lc3BkcWEuaW5mcmEtaG9zdC5jb20vcmVhbG1zL21hc3RlciIsInN1YiI6IjY1ZWJhMmZlLTA0ZjgtNDM5ZS1hM2UwLWJhYWQ5ODBiOWYxOCIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJ3ZWJ1aS1jbGllbnQiLCJzaWQiOiJlMDZjMzA2Ni1mNmU4LTQwNGUtOTQwMy00YTczNjVlZWEyZWMiLCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIHJvbGVzIGJhc2ljIn0.dAUJOBX_YgdtUD-FOMYUzDYnJcwJh5JpJyRZ-03jn0gkIGqo4-BLyaGVCe3vdw1uzF-ZCAtA2CkQ1-UJUPmwrA",
+    "token_type": "Bearer",
+    "scope": "openid email profile roles",
+    "profile": {
+        "exp": 1751306664,
+        "iat": 1751303064,
+        "iss": "https://keycloak.orch-10-114-181-86.espdqa.infra-host.com/realms/master",
+        "aud": "webui-client",
+        "sub": "65eba2fe-04f8-439e-a3e0-baad980b9f18",
+        "typ": "ID",
+        "sid": "e06c3066-f6e8-404e-9403-4a7365eea2ec",
+        "resource_access": {
+            "account": {
+                "roles": [
+                    "manage-account",
+                    "manage-account-links",
+                    "view-profile"
+                ]
+            }
+        },
+        "email_verified": true,
+        "realm_access": {
+            "roles": [
+                "account/view-profile",
+                "a18d9cd2-0fb5-422c-8642-daec57a97af3_project-delete-role",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_cl-tpl-r",
+                "a18d9cd2-0fb5-422c-8642-daec57a97af3_project-read-role",
+                "a18d9cd2-0fb5-422c-8642-daec57a97af3_project-update-role",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_cat-r",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_cl-tpl-rw",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_reg-a",
+                "offline_access",
+                "rs-proxy-r",
+                "uma_authorization",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_cl-r",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_im-r",
+                "a18d9cd2-0fb5-422c-8642-daec57a97af3_54a0d8e7-3a09-4e0d-b268-6b4606921629_m",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_alrt-r",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_en-agent-rw",
+                "default-roles-master",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_reg-r",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_tc-r",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_en-ob",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_alrt-rw",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_cat-rw",
+                "rs-access-r",
+                "a18d9cd2-0fb5-422c-8642-daec57a97af3_project-write-role",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_ao-rw",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_cl-rw",
+                "54a0d8e7-3a09-4e0d-b268-6b4606921629_im-rw",
+                "account/manage-account"
+            ]
+        },
+        "name": "sample-org-admin sample-org-admin",
+        "preferred_username": "sample-org-admin",
+        "given_name": "sample-org-admin",
+        "family_name": "sample-org-admin",
+        "email": "sample-org-admin@sample-org.com"
+    },
+    "expires_at": 1751306664
+}`;
