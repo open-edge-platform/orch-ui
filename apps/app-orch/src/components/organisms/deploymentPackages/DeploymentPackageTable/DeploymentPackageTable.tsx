@@ -21,6 +21,7 @@ import {
 import {
   API_INTERVAL,
   Direction,
+  downloadBlobFile,
   getFilter,
   getOrder,
   Operator,
@@ -89,15 +90,7 @@ const DeploymentPackageTable = ({
     })
       .unwrap()
       .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.style.display = "none"; // Optional: Hide the element
-        a.href = url;
-        a.download = `${name}-${version}.tar.gz`; // Ensure name and version are defined
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a); // Remove the element after clicking
-        window.URL.revokeObjectURL(url); // Revoke the URL to free resources
+        downloadBlobFile(blob, `${name}-${version}.tar.gz`);
         dispatch(
           setProps({
             ...toastProps,
