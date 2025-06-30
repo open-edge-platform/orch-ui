@@ -78,11 +78,7 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredPaths: [
-          "appUtilities.appUtilitiesServiceApis.queries.catalogServiceDownloadDeploymentPackage",
-        ],
-      },
+      serializableCheck: true,
       immutableCheck: true,
     })
       .concat(cm.clusterManagerApis.middleware)
