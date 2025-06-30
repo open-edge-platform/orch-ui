@@ -89,9 +89,7 @@ const DeploymentPackageTable = ({
     })
       .unwrap()
       .then((blob) => {
-        console.log("Blob received:", blob);
         const url = window.URL.createObjectURL(blob);
-
         const a = document.createElement("a");
         a.style.display = "none"; // Optional: Hide the element
         a.href = url;
@@ -99,11 +97,26 @@ const DeploymentPackageTable = ({
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a); // Remove the element after clicking
-
         window.URL.revokeObjectURL(url); // Revoke the URL to free resources
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Success,
+            message: "Deployment Package Exported Successfully",
+            visibility: ToastVisibility.Show,
+          }),
+        );
       })
-      .catch((error) => {
-        console.error("Download failed", error);
+      .catch((err) => {
+        const errorObj = parseError(err);
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Danger,
+            message: errorObj.data,
+            visibility: ToastVisibility.Show,
+          }),
+        );
       });
   };
 
