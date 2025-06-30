@@ -71,6 +71,10 @@ export const createDeploymentBreadcrumb = getBreadcrumbItem(
   "Setup a Deployment",
   "/applications/deployments/setup-deployment",
 );
+export const importDeploymentPackageFromHelmChartBreadcrumb = getBreadcrumbItem(
+  "Import Deployment Package from Helm Chart",
+  "/applications/deployments/import-from-helm-chart",
+);
 
 export const deploymentDetailsSitesBreadcrumb = (
   deploymentName: string,
