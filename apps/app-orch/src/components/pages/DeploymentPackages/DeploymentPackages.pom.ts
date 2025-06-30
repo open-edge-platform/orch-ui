@@ -10,6 +10,9 @@ const dataCySelectors = [
   "title",
   "packagesTabContent",
   "extensionsTabContent",
+  "Create",
+  "Import from file",
+  "Import Helm Chart",
 ] as const;
 
 type Selectors = (typeof dataCySelectors)[number];
@@ -25,6 +28,9 @@ class DeploymentPackagesPom extends CyPom<Selectors> {
     this.importButtonPom = new RbacRibbonButtonPom("ribbonButtonimport");
     this.createButtonPom = new RbacRibbonButtonPom("ribbonButtoncreate");
     this.ribbonPom = new RibbonPom();
+  }
+  get trigger() {
+    return cy.get("[data-cy='deploymentPackagePopup']");
   }
 }
 
