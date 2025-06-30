@@ -2,42 +2,23 @@
  * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
-
 import { setActiveNavItem, setBreadcrumb } from "@orch-ui/components";
 import { Heading } from "@spark-design/react";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import DeploymentPackageHelmChartInfoForm, {
-  PackageInputs,
-} from "src/components/organisms/deploymentPackages/DeploymentPackageHelmChartInfoForm/DeploymentPackageHelmChartInfoForm";
+import DeploymentPackageHelmChartInfoForm from "src/components/organisms/deploymentPackages/DeploymentPackageHelmChartInfoForm/DeploymentPackageHelmChartInfoForm";
 import {
   deploymentPackageBreadcrumb,
   homeBreadcrumb,
   importDeploymentPackageFromHelmChartBreadcrumb,
   packagesNavItem,
 } from "../../../routes/const";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectDeploymentPackage } from "../../../store/reducers/deploymentPackage";
+import { useAppDispatch } from "../../../store/hooks";
 
 const dataCy = "deploymentPackageImportFromHelmChart";
 
 const DeploymentPackageImportFromHelmChart = () => {
   const cy = { "data-cy": dataCy };
-
   const dispatch = useAppDispatch();
-  const deploymentPackage = useAppSelector(selectDeploymentPackage);
-
-  const {
-    control,
-    formState: { errors },
-  } = useForm<PackageInputs>({
-    mode: "all",
-    defaultValues: {
-      helmChartURL: deploymentPackage.helmChartURL,
-      username: deploymentPackage.username,
-      password: deploymentPackage.password,
-    },
-  });
 
   const breadcrumb = useMemo(
     () => [
@@ -67,7 +48,7 @@ const DeploymentPackageImportFromHelmChart = () => {
         Provide Helm Chart details to import a deployment
       </Heading>
 
-      <DeploymentPackageHelmChartInfoForm control={control} errors={errors} />
+      <DeploymentPackageHelmChartInfoForm />
     </div>
   );
 };
