@@ -23,11 +23,7 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/v3/projects/${queryArg.projectName}/catalog/deployment_packages/${queryArg.deploymentPackageName}/versions/${queryArg.version}/download`,
           responseHandler: (response) => response.blob(),
-          extraOptions: {
-            skipCache: true, // Prevent caching the response in Redux state
-          },
         }),
-        keepUnusedDataFor: 0, // Don't keep data after it's used
         providesTags: ["CatalogService"],
       }),
       catalogServiceBulkCatalogUpload: build.mutation<
