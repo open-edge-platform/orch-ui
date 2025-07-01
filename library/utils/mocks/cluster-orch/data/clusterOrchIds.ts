@@ -126,6 +126,11 @@ export const clusterTemplateFiveV5Info = {
   version: "v3.5.2",
 };
 
+export const clusterTemplateSixInfo = {
+  id: "m-g-ljmy921r",
+  version: "v2.0.2",
+};
+
 export const clusterTemplateOneName = "5G Template1";
 export const clusterTemplateOneId = "r-p-n98bt7tm";
 
@@ -140,3 +145,6 @@ export const clusterTemplateFourId = "m-c-i48qdv94";
 
 export const clusterTemplateFiveName = "5G Template5";
 export const clusterTemplateFiveId = "m-d-ljmy921f";
+
+export const clusterTemplateSixName = "privileged";
+export const clusterTemplateSixId = "m-g-ljmy921r";

@@ -5,7 +5,7 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = [] as const;
+const dataCySelectors = ["next"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class HostProvisionPom extends CyPom<Selectors> {

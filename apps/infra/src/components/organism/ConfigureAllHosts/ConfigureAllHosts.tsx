@@ -58,7 +58,6 @@ const ConfigureAllHosts = () => {
   const {
     commonHostData,
     createCluster,
-    kubernetesVersion,
     formStatus: { showAdvancedOptions },
   } = useAppSelector(selectHostProvisionState);
 
@@ -119,7 +118,6 @@ const ConfigureAllHosts = () => {
           <Flex cols={[4]} gap="2">
             {ClusterTemplatesDropdownRemote && (
               <ClusterTemplatesDropdownRemote
-                kubernetesVersion={kubernetesVersion}
                 clusterTemplateName={commonHostData.clusterTemplateName}
                 onSelectionChange={(value: string) => {
                   dispatch(setCommonClusterTemplateName(value));

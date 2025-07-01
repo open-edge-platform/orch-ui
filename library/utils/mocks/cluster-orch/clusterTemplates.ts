@@ -18,6 +18,8 @@ import {
   clusterTemplateOneV1Info,
   clusterTemplateOneV2Info,
   clusterTemplateOneV3Info,
+  clusterTemplateSixInfo,
+  clusterTemplateSixName,
   clusterTemplateThreeName,
   clusterTemplateThreeV1Info,
   clusterTemplateTwoName,
@@ -411,6 +413,17 @@ const clusterTemplateFiveV4: cm.TemplateInfo = {
   },
 };
 
+const clusterTemplateSix: cm.TemplateInfo = {
+  name: clusterTemplateSixName,
+  version: clusterTemplateSixInfo.version,
+  controlplaneprovidertype: "rke2",
+  infraprovidertype: "docker",
+  kubernetesVersion: "v1.35.36",
+  clusterconfiguration: {
+    rke2: undefined,
+  },
+};
+
 export const templates: cm.TemplateInfoList = {
   templateInfoList: [
     clusterTemplateOneV1,
@@ -418,6 +431,7 @@ export const templates: cm.TemplateInfoList = {
     clusterTemplateTwoV1,
     clusterTemplateThreeV1,
     clusterTemplateFourV1,
+    clusterTemplateSix,
   ],
 };
 

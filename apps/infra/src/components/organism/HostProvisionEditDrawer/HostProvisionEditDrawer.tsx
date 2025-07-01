@@ -207,9 +207,6 @@ const HostProvisionEditDrawer = ({
                       <ToggleSwitch
                         name="vpro"
                         isSelected={false}
-                        onChange={() => {
-                          // TODO: how to handle vPro
-                        }}
                         size={ToggleSwitchSize.Large}
                       >
                         Disabled
