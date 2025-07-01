@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { returnYaml } from "@orch-ui/utils";
+import { filterFilesByExtension } from "@orch-ui/utils";
 import { DragEvent } from "react";
 
 export interface DragDropProps {
@@ -13,6 +13,7 @@ export interface DragDropProps {
   setFiles?: (files: File[]) => void;
   handleError?: (files: File[]) => void;
   handleSingleFile?: (event: any) => void;
+  acceptedFileTypes?: string[];
 }
 
 export const DragDrop = ({
@@ -22,6 +23,7 @@ export const DragDrop = ({
   children,
   handleSingleFile,
   dataCy = "dragDropArea",
+  acceptedFileTypes = ["yaml"],
 }: DragDropProps) => {
   const getFilesPromises = (fileEntries: FileSystemFileEntry[]) => {
     const fileEntryPromises: Promise<File>[] = [];
@@ -54,7 +56,11 @@ export const DragDrop = ({
           Promise.all(getFilesPromises([...entries]))
             .then((files: File[]) => {
               if (handleError) handleError(files);
-              if (setFiles) setFiles([...currentFiles, ...returnYaml(files)]);
+              if (setFiles)
+                setFiles([
+                  ...currentFiles,
+                  ...filterFilesByExtension(files, acceptedFileTypes),
+                ]);
             })
             .catch(() => {
               throw new Error("File not uploaded correctly");
@@ -64,7 +70,11 @@ export const DragDrop = ({
         const { files } = e.dataTransfer;
         if (files.length > 0) {
           if (handleError) handleError([...files]);
-          if (setFiles) setFiles([...currentFiles, ...returnYaml([...files])]);
+          if (setFiles)
+            setFiles([
+              ...currentFiles,
+              ...filterFilesByExtension([...files], acceptedFileTypes),
+            ]);
         }
       }
     }
