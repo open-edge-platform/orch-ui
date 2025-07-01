@@ -14,7 +14,11 @@ import {
   SquareSpinner,
   UploadButton,
 } from "@orch-ui/components";
-import { checkSize, returnYaml, SharedStorage } from "@orch-ui/utils";
+import {
+  checkSize,
+  filterFilesByExtension,
+  SharedStorage,
+} from "@orch-ui/utils";
 import {
   Button,
   Heading,
@@ -70,7 +74,10 @@ const DeploymentPackageImport = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSizeError(!checkSize([...e.target.files], 4));
-      setFiles([...files, ...returnYaml([...e.target.files])]);
+      setFiles([
+        ...files,
+        ...filterFilesByExtension([...e.target.files], ["yaml", "tar.gz"]),
+      ]);
     }
   };
 
@@ -148,6 +155,7 @@ const DeploymentPackageImport = () => {
         handleError={(files) => {
           setSizeError(!checkSize(files, 4));
         }}
+        acceptedFileTypes={["yaml", "tar.gz"]}
       >
         <>
           {files.length === 0 ? (
@@ -161,8 +169,9 @@ const DeploymentPackageImport = () => {
                       <UploadButton
                         text="Browse folder"
                         onChange={handleFileChange}
-                        accept=".yaml"
+                        accept=".yaml,.tar.gz"
                         dataCy="uploadButtonEmpty"
+                        type="file"
                       />
                     ),
                   },
@@ -182,7 +191,7 @@ const DeploymentPackageImport = () => {
             <div className="deployment-package-import-files">
               <UploadButton
                 onChange={handleFileChange}
-                accept=".yaml"
+                accept=".yaml,.tar.gz"
                 dataCy="uploadButtonList"
               />
               <div className="upload-files">
