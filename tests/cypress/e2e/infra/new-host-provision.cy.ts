@@ -197,5 +197,21 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       cy.url().should("contain", "infrastructure/hosts");
     });
+
+    // afterEach(() => {
+    //   // If we are using a serial number skip deletion until after the `verify-host` test
+    //   if (serialNumber) return;
+
+    //   instanceHosts.forEach((resourceId) => {
+    //     deleteHostInstanceViaApi(activeProject, resourceId);
+    //   });
+    //   provisionedHosts.forEach((resourceId) => {
+    //     deleteHostViaApi(activeProject, resourceId);
+    //   });
+    //   if (siteId) deleteSiteViaApi(activeProject, regionId, siteId);
+    //   if (regionId) deleteRegionViaApi(activeProject, regionId);
+    //   netLog.save("infra_provision-host");
+    //   netLog.clear();
+    // });
   });
 });
