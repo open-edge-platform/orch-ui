@@ -74,7 +74,10 @@ const DeploymentPackageImport = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSizeError(!checkSize([...e.target.files], 4));
-      setFiles([...files, ...filterFilesByExtension([...e.target.files])]);
+      setFiles([
+        ...files,
+        ...filterFilesByExtension([...e.target.files], ["yaml", "tar.gz"]),
+      ]);
     }
   };
 
@@ -152,6 +155,7 @@ const DeploymentPackageImport = () => {
         handleError={(files) => {
           setSizeError(!checkSize(files, 4));
         }}
+        acceptedFileTypes={["yaml", "tar.gz"]}
       >
         <>
           {files.length === 0 ? (

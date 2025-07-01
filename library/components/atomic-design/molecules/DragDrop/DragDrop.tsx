@@ -13,6 +13,7 @@ export interface DragDropProps {
   setFiles?: (files: File[]) => void;
   handleError?: (files: File[]) => void;
   handleSingleFile?: (event: any) => void;
+  acceptedFileTypes?: string[];
 }
 
 export const DragDrop = ({
@@ -22,6 +23,7 @@ export const DragDrop = ({
   children,
   handleSingleFile,
   dataCy = "dragDropArea",
+  acceptedFileTypes = ["yaml"],
 }: DragDropProps) => {
   const getFilesPromises = (fileEntries: FileSystemFileEntry[]) => {
     const fileEntryPromises: Promise<File>[] = [];
@@ -55,7 +57,10 @@ export const DragDrop = ({
             .then((files: File[]) => {
               if (handleError) handleError(files);
               if (setFiles)
-                setFiles([...currentFiles, ...filterFilesByExtension(files)]);
+                setFiles([
+                  ...currentFiles,
+                  ...filterFilesByExtension(files, acceptedFileTypes),
+                ]);
             })
             .catch(() => {
               throw new Error("File not uploaded correctly");
@@ -66,7 +71,10 @@ export const DragDrop = ({
         if (files.length > 0) {
           if (handleError) handleError([...files]);
           if (setFiles)
-            setFiles([...currentFiles, ...filterFilesByExtension([...files])]);
+            setFiles([
+              ...currentFiles,
+              ...filterFilesByExtension([...files], acceptedFileTypes),
+            ]);
         }
       }
     }

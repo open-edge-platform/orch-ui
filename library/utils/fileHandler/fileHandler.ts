@@ -5,7 +5,7 @@
 
 export const filterFilesByExtension = (
   items: File[],
-  types: string[] = ["yaml", "tar.gz"],
+  types: string[] = ["yaml"],
 ): File[] => {
   const result: File[] = [];
 
