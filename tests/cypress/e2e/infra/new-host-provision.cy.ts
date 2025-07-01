@@ -6,21 +6,24 @@
 import { AddHostsFormPom, RegisterHostsPom } from "@orch-ui/infra-poms";
 import { SiDropdown } from "@orch-ui/poms";
 import { EIM_USER } from "@orch-ui/tests";
-import {
-  clusterTemplateOneName,
-  clusterTemplateOneV1Info,
-} from "@orch-ui/utils";
+import { clusterTemplateSixInfo, clusterTemplateSixName } from "@orch-ui/utils";
 import ClusterTemplateDropdownPom from "../../../../apps/cluster-orch/src/components/atom/ClusterTemplatesDropdown/ClusterTemplatesDropdown.pom";
 import LocationAutocompletePom from "../../../../apps/infra/src/components/molecules/LocationAutocomplete/LocationAutocomplete.pom";
 import OsProfileDropdownPom from "../../../../apps/infra/src/components/organism/OsProfileDropdown/OsProfileDropdown.pom";
 import HostProvisionPom from "../../../../apps/infra/src/components/pages/HostProvision/HostProvision.pom";
 import { NetworkLog } from "../../support/network-logs";
-import { createRegionViaAPi, createSiteViaApi } from "../helpers";
+import {
+  createRegionViaAPi,
+  createSiteViaApi,
+  deleteHostInstanceViaApi,
+  deleteHostViaApi,
+  deleteRegionViaApi,
+  deleteSiteViaApi,
+} from "../helpers";
 import {
   isTestProvisionHostData,
   TestProvisionHostData,
 } from "../helpers/eimTestProvisionHostData";
-import { sessionKey, sessionValue } from "./test";
 
 describe(`Infra smoke: the ${EIM_USER.username}`, () => {
   const netLog = new NetworkLog();
@@ -39,9 +42,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     serialNumber: string,
     activeProject: string,
     regionId: string,
-    siteId: string,
-    provisionedHosts: string[] = [],
-    instanceHosts: string[] = [];
+    siteId: string;
+
+  const provisionedHosts: string[] = [],
+    instanceHosts: string[] = [],
+    clusters: string[] = [];
 
   before(() => {
     const provisionHostDataFile =
@@ -66,15 +71,19 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
     beforeEach(() => {
       netLog.intercept();
 
-      // cy.login(EIM_USER);
+      // comment these 3 lines when testing locally
+      cy.login(EIM_USER);
+      cy.visit("/");
+      cy.currentProject().then((p) => (activeProject = p));
 
-      cy.window().then((window) => {
-        window.sessionStorage.setItem(sessionKey, sessionValue);
-        cy.reload();
+      // uncomment this for local testing
+      // cy.window().then((window) => {
+      // window.sessionStorage.setItem(sessionKey, sessionValue);
+      //   cy.reload();
 
-        cy.visit("/");
-        cy.currentProject().then((p) => (activeProject = p));
-      });
+      //   cy.visit("/");
+      //   cy.currentProject().then((p) => (activeProject = p));
+      // });
     });
 
     it("should go through the K3s Provisioning Flow", () => {
@@ -113,6 +122,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         clusterTemplateDropdownPom.api.getTemplatesSuccess,
       ]);
 
+      // Comment this code for local testing and manually create region and site
       createRegionViaAPi(activeProject, testProvisionHostData.region).then(
         (rid) => {
           regionId = rid;
@@ -152,8 +162,9 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       locationAutocompletePom.combobox.type("c");
       cy.wait(1000);
       locationAutocompletePom.combobox.type("y");
-      // locationAutocompletePom.combobox.select("California | los angeles");
-      cy.get(".spark-popover").contains("California | los angeles").click();
+      cy.get(".spark-popover")
+        .contains("cypress-region | cypress-site")
+        .click();
 
       osProfileDropdownPom.dropdown.openDropdown(osProfileDropdownPom.root);
       osProfileDropdownPom.dropdown.selectFirstListItemValue();
@@ -161,14 +172,14 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       clusterTemplateDropdown.selectDropdownValue(
         clusterTemplateDropdown.root,
         "clusterTemplateDropdown",
-        clusterTemplateOneName,
-        clusterTemplateOneName,
+        clusterTemplateSixName,
+        clusterTemplateSixName,
       );
       clusterTemplateVersionDropdown.selectDropdownValue(
         clusterTemplateVersionDropdown.root,
         "clusterTemplateVersionDropdown",
-        clusterTemplateOneV1Info.version,
-        clusterTemplateOneV1Info.version,
+        clusterTemplateSixInfo.version,
+        clusterTemplateSixInfo.version,
       );
 
       cy.wait(1000);
@@ -191,27 +202,29 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       });
 
       cy.wait("@createCluster").then((interception) => {
-        expect(interception.response?.statusCode).to.equal(200);
-        instanceHosts.push(interception.response?.body.resourceId);
+        expect(interception.response?.statusCode).to.equal(201);
+        clusters.push(interception.response?.body.resourceId);
       });
 
       cy.url().should("contain", "infrastructure/hosts");
     });
 
-    // afterEach(() => {
-    //   // If we are using a serial number skip deletion until after the `verify-host` test
-    //   if (serialNumber) return;
+    // Comment this code for local testing
+    afterEach(() => {
+      // If we are using a serial number skip deletion until after the `verify-host` test
+      if (serialNumber) return;
 
-    //   instanceHosts.forEach((resourceId) => {
-    //     deleteHostInstanceViaApi(activeProject, resourceId);
-    //   });
-    //   provisionedHosts.forEach((resourceId) => {
-    //     deleteHostViaApi(activeProject, resourceId);
-    //   });
-    //   if (siteId) deleteSiteViaApi(activeProject, regionId, siteId);
-    //   if (regionId) deleteRegionViaApi(activeProject, regionId);
-    //   netLog.save("infra_provision-host");
-    //   netLog.clear();
-    // });
+      instanceHosts.forEach((resourceId) => {
+        deleteHostInstanceViaApi(activeProject, resourceId);
+      });
+      provisionedHosts.forEach((resourceId) => {
+        deleteHostViaApi(activeProject, resourceId);
+      });
+      if (siteId) deleteSiteViaApi(activeProject, regionId, siteId);
+      if (regionId) deleteRegionViaApi(activeProject, regionId);
+
+      netLog.save("infra_new-provision-host");
+      netLog.clear();
+    });
   });
 });
