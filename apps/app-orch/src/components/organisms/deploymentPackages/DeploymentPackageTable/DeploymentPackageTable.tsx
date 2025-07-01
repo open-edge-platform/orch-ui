@@ -101,11 +101,12 @@ const DeploymentPackageTable = ({
         );
       })
       .catch((err) => {
+        const errorObj = parseError(err);
         dispatch(
           setProps({
             ...toastProps,
             state: ToastState.Danger,
-            message: "Deployment Package Export Failed",
+            message: errorObj.data,
             visibility: ToastVisibility.Show,
           }),
         );
@@ -272,14 +273,7 @@ const DeploymentPackageTable = ({
       {
         displayText: "Export",
         onSelect: () => {
-          const deploymentPackage = data?.deploymentPackages?.find(
-            (deploymentPackage) =>
-              deploymentPackage.name === name &&
-              deploymentPackage.version === version,
-          );
-          if (deploymentPackage) {
-            handleDownload(name, version);
-          }
+          handleDownload(name, version);
         },
       },
       {
