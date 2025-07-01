@@ -3,31 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useForm } from "react-hook-form";
 import { setupStore } from "../../../../store";
-import DeploymentPackageHelmChartInfoForm, {
-  PackageInputs,
-} from "./DeploymentPackageHelmChartInfoForm";
+import DeploymentPackageHelmChartInfoForm from "./DeploymentPackageHelmChartInfoForm";
 import DeploymentPackageHelmChartInfoFormPom from "./DeploymentPackageHelmChartInfoForm.pom";
-
-const WrapperComponent = () => {
-  const {
-    control,
-    formState: { errors },
-  } = useForm<PackageInputs>({
-    mode: "all",
-    defaultValues: {
-      helmChartURL: "",
-      username: "",
-      password: "",
-      description: "",
-    },
-  });
-
-  return (
-    <DeploymentPackageHelmChartInfoForm control={control} errors={errors} />
-  );
-};
 
 const pom = new DeploymentPackageHelmChartInfoFormPom();
 
@@ -35,7 +13,6 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   beforeEach(() => {
     const store = setupStore({
       deploymentPackage: {
-        description: "",
         applicationReferences: [],
         artifacts: [],
         extensions: [],
@@ -43,16 +20,16 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
         version: "",
       },
     });
-    cy.mount(<WrapperComponent />, {
+    cy.mount(<DeploymentPackageHelmChartInfoForm />, {
       reduxStore: store,
     });
+    pom.advSettingsPom.el.advSettingsTrue.click({ force: true });
   });
 
   it("should render all fields with empty default values", () => {
     pom.el["helm-chart-url"].should("have.value", "");
     pom.el.username.should("have.value", "");
     pom.el.password.should("have.value", "");
-    pom.el.description.should("have.value", "");
   });
 
   describe("validation", () => {
@@ -93,12 +70,6 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
     });
   });
 
-  it("should update description on textarea input", () => {
-    const newDesc = "Updated values";
-    pom.descriptionTextarea.type(newDesc);
-    pom.descriptionTextarea.should("have.value", newDesc);
-  });
-
   it("should allow entering and clearing username", () => {
     pom.el.username.type("testuser");
     pom.el.username.should("have.value", "testuser");
@@ -118,13 +89,6 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
     pom.el["helm-chart-url"].should("have.value", "my-helm-chart");
     pom.el["helm-chart-url"].clear();
     pom.el["helm-chart-url"].should("have.value", "");
-  });
-
-  it("should allow entering and clearing description", () => {
-    pom.descriptionTextarea.type("Opis testowy");
-    pom.descriptionTextarea.should("have.value", "Opis testowy");
-    pom.descriptionTextarea.clear();
-    pom.descriptionTextarea.should("have.value", "");
   });
 
   it("should trim whitespace in helm chart url and validate", () => {
@@ -154,11 +118,6 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
 
   it("should allow special characters in password", () => {
     pom.el.password.type("password!@#");
-    pom.helmChartUrlInvalidIndicator.should("not.exist");
-  });
-
-  it("should allow special characters in description", () => {
-    pom.el.description.type("description!@#");
     pom.helmChartUrlInvalidIndicator.should("not.exist");
   });
 });

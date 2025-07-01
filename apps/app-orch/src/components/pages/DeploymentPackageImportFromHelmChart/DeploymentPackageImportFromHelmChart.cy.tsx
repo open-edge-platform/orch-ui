@@ -23,6 +23,7 @@ describe("<DeploymentPackageImportFromHelmChart />", () => {
 
   it("displays input fields and allows typing", () => {
     pom.helmChartUrl.type("https://example.com/chart");
+    pom.advSettingsPom.el.advSettingsTrue.click({ force: true });
     pom.username.type("my-user");
     pom.password.type("my-pass");
 

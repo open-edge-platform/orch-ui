@@ -22,6 +22,7 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({
           url: `/v3/projects/${queryArg.projectName}/catalog/deployment_packages/${queryArg.deploymentPackageName}/versions/${queryArg.version}/download`,
+          responseHandler: (response) => response.blob(), //TODO: add it from enhancedApiSlice
         }),
         providesTags: ["CatalogService"],
       }),

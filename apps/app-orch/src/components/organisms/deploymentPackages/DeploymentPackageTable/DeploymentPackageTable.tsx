@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { catalog, CatalogKinds } from "@orch-ui/apis";
+import { appUtilities, catalog, CatalogKinds } from "@orch-ui/apis";
 import {
   ApiError,
   columnApiNameToDisplayName,
@@ -21,6 +21,7 @@ import {
 import {
   API_INTERVAL,
   Direction,
+  downloadBlobFile,
   getFilter,
   getOrder,
   Operator,
@@ -77,6 +78,40 @@ const DeploymentPackageTable = ({
 
   const [pollingInterval, setPollingInterval] = useState<number>(API_INTERVAL);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+
+  const [downloadPackage] =
+    appUtilities.useLazyCatalogServiceDownloadDeploymentPackageQuery();
+
+  const handleDownload = (name, version) => {
+    downloadPackage({
+      projectName: SharedStorage.project?.name ?? "",
+      deploymentPackageName: name,
+      version: version,
+    })
+      .unwrap()
+      .then((blob) => {
+        downloadBlobFile(blob, `${name}-${version}.tar.gz`);
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Success,
+            message: "Deployment Package Exported Successfully",
+            visibility: ToastVisibility.Show,
+          }),
+        );
+      })
+      .catch((err) => {
+        const errorObj = parseError(err);
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Danger,
+            message: errorObj.data,
+            visibility: ToastVisibility.Show,
+          }),
+        );
+      });
+  };
 
   const columns: TableColumn<catalog.DeploymentPackageRead>[] = [
     {
@@ -233,6 +268,12 @@ const DeploymentPackageTable = ({
             dispatch(setDeploymentPackage(deploymentPackage));
             navigate(`../packages/edit/${name}/version/${version}`);
           }
+        },
+      },
+      {
+        displayText: "Export",
+        onSelect: () => {
+          handleDownload(name, version);
         },
       },
       {

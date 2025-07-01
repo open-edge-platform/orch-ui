@@ -3,19 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AdvancedSettingsTogglePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
-
-const dataCySelectors = [
-  "helm-chart-url",
-  "username",
-  "password",
-  "description",
-] as const;
+const dataCySelectors = ["helm-chart-url", "username", "password"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
+  public advSettingsPom: AdvancedSettingsTogglePom;
   constructor(public rootCy = "deploymentPackageGeneralInfoForm") {
     super(rootCy, [...dataCySelectors]);
+    this.advSettingsPom = new AdvancedSettingsTogglePom();
   }
 
   get helmChartUrlField() {
@@ -42,10 +39,6 @@ class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
 
   get passwordInvalidIndicator() {
     return this.passwordField.find(".spark-fieldtext-wrapper-is-invalid");
-  }
-
-  get descriptionTextarea() {
-    return this.el.description.find("textarea");
   }
 }
 

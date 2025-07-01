@@ -5,9 +5,22 @@
 
 import { catalog } from "@orch-ui/apis";
 import { AdvancedSettingsToggle, Flex } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
-import { Button, FieldLabel, Heading, TextField } from "@spark-design/react";
-import { ButtonSize, ButtonVariant, InputSize } from "@spark-design/tokens";
+import { parseError, SharedStorage } from "@orch-ui/utils";
+import {
+  Button,
+  FieldLabel,
+  Heading,
+  TextField,
+  ToastProps,
+} from "@spark-design/react";
+import {
+  ButtonSize,
+  ButtonVariant,
+  InputSize,
+  ToastPosition,
+  ToastState,
+  ToastVisibility,
+} from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +32,7 @@ import {
   setPassword,
   setUsername,
 } from "../../../../store/reducers/deploymentPackage";
+import { setProps } from "../../../../store/reducers/toast";
 import "./DeploymentPackageHelmChartInfoForm.scss";
 
 const dataCy = "deploymentPackageGeneralInfoForm";
@@ -38,6 +52,13 @@ const DeploymentPackageHelmChartInfoForm = () => {
     username: "",
     password: "",
   });
+
+  const toastProps: ToastProps = {
+    state: ToastState.Success,
+    visibility: ToastVisibility.Hide,
+    duration: 3000,
+    position: ToastPosition.TopRight,
+  };
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -82,16 +103,20 @@ const DeploymentPackageHelmChartInfoForm = () => {
     }
   }, [username, password]);
 
+  const resetAdvancedSettings = () => {
+    clearErrors(["username", "password"]);
+    // Reset form values if settings are disabled
+    setValue("username", "");
+    setValue("password", "");
+    // Also update the Redux state
+    dispatch(setUsername(""));
+    dispatch(setPassword(""));
+  };
+
   // Clear validation errors when advanced settings are toggled off
   useEffect(() => {
     if (!advancedSettings) {
-      clearErrors(["username", "password"]);
-      // Reset form values if settings are disabled
-      setValue("username", "");
-      setValue("password", "");
-      // Also update the Redux state
-      dispatch(setUsername(""));
-      dispatch(setPassword(""));
+      resetAdvancedSettings();
     }
   }, [advancedSettings]);
 
@@ -106,7 +131,32 @@ const DeploymentPackageHelmChartInfoForm = () => {
       dpPayload.includeAuth = true;
     }
 
-    importDeploymentPackage(dpPayload);
+    importDeploymentPackage(dpPayload)
+      .unwrap()
+      .then(() => {
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Success,
+            message: "Deployment Package Imported Successfully",
+            visibility: ToastVisibility.Show,
+          }),
+        );
+        resetAdvancedSettings();
+        dispatch(setHelmChartURL(""));
+      })
+      .catch((err) => {
+        dispatch(
+          setProps({
+            ...toastProps,
+            state: ToastState.Danger,
+            message: `Error: ${parseError(err).data}`,
+            visibility: ToastVisibility.Show,
+          }),
+        );
+        resetAdvancedSettings();
+        dispatch(setHelmChartURL(""));
+      });
     navigate("../packages");
   };
 
