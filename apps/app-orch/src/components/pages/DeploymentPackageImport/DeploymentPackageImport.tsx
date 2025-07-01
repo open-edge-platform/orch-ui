@@ -171,6 +171,7 @@ const DeploymentPackageImport = () => {
                         onChange={handleFileChange}
                         accept=".yaml,.tar.gz"
                         dataCy="uploadButtonEmpty"
+                        type="file"
                       />
                     ),
                   },
