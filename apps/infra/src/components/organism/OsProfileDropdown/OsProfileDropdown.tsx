@@ -17,20 +17,22 @@ interface OsProfileDropdownProps {
   // the OS assigned to the Host, if any
   hostOs?: infra.OperatingSystemResourceRead;
   value?: string;
+  isRequired?: boolean;
+  label?: string;
   pageSize?: number;
   onSelectionChange?: (
     os: infra.OperatingSystemResourceRead | undefined,
     effect: boolean,
   ) => void;
-  hideLabel?: boolean;
 }
 
 const OsProfileDropdown = ({
   hostOs,
   value,
+  isRequired = true,
+  label,
   pageSize = 100,
   onSelectionChange,
-  hideLabel = false,
 }: OsProfileDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
   const {
@@ -75,11 +77,11 @@ const OsProfileDropdown = ({
     <div data-cy="osProfileDropdown" className="os-profile-dropdown">
       {osExists && (
         <Dropdown
-          label={hideLabel ? "" : "Operating System Profile"}
+          label={label ?? ""}
           name="osProfile"
           data-cy="osProfile"
           placeholder={singleHostConfig ? "Select OS Profile" : ""}
-          size={DropdownSize.Medium}
+          size={DropdownSize.Large}
           selectedKey={value}
           isDisabled={value === "" && !singleHostConfig}
           onSelectionChange={(e) =>
@@ -88,7 +90,7 @@ const OsProfileDropdown = ({
               false,
             )
           }
-          isRequired
+          isRequired={isRequired}
         >
           {osResources.map((os) => (
             <Item key={os.resourceId} aria-label={os.name}>
@@ -101,7 +103,7 @@ const OsProfileDropdown = ({
         <TextField
           data-cy="preselectedOsProfile"
           size={InputSize.Medium}
-          label={hideLabel ? "" : "Operating System Profile"}
+          label={label ?? ""}
           isDisabled
           value={hostOs.name}
         />

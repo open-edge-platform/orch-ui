@@ -9,7 +9,7 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item } from "@spark-design/react";
 import { useEffect, useState } from "react";
 
-interface ClusterTemplatesDropdownProps {
+export interface ClusterTemplatesDropdownProps {
   pageSize?: number;
   onSelectionChange?: (value: string) => void;
   clusterTemplateName?: string;
