@@ -101,12 +101,11 @@ const DeploymentPackageTable = ({
         );
       })
       .catch((err) => {
-        const errorObj = parseError(err);
         dispatch(
           setProps({
             ...toastProps,
             state: ToastState.Danger,
-            message: errorObj.data,
+            message: "Deployment Package Export Failed",
             visibility: ToastVisibility.Show,
           }),
         );
