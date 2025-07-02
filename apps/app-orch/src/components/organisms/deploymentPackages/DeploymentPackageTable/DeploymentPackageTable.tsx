@@ -90,7 +90,7 @@ const DeploymentPackageTable = ({
     })
       .unwrap()
       .then((blob) => {
-        downloadBlobFile(blob, `${name}-${version}.tar.gz`);
+        downloadBlobFile(blob as Blob, `${name}-${version}.tar.gz`);
         dispatch(
           setProps({
             ...toastProps,
