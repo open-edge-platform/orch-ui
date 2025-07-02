@@ -9,7 +9,6 @@ import { useState } from "react";
 import { useAppSelector } from "../../../store/hooks";
 import { LifeCycleState } from "../../../store/hostFilterBuilder";
 import { setupStore } from "../../../store/store";
-import { HostConfigPom } from "../../pages/HostConfig/HostConfig.pom";
 
 import { siteBostonId } from "@orch-ui/utils";
 import HostsTable from "./HostsTable";
@@ -19,7 +18,6 @@ const pom = new HostsTablePom();
 const ribbonPom = new RibbonPom("table");
 const emptyPom = new EmptyPom();
 const apiErrorPom = new ApiErrorPom();
-const hostConfigPom = new HostConfigPom();
 interface TestComponentProps {
   selectable: boolean;
 }
@@ -211,18 +209,6 @@ describe("<HostsTable/>", () => {
 
       pom.el.selectedHostsBanner.should("not.exist");
       pom.getHostCheckboxByName("Host 0").should("not.be.checked");
-    });
-
-    it("should allow user to provision the hosts", () => {
-      hostConfigPom.interceptApis([
-        hostConfigPom.api.patchComputeHostsAndHostId,
-      ]);
-
-      pom.getHostCheckboxByName("Host 0").click();
-      pom.getHostCheckboxByName("Host 0").should("be.checked");
-
-      pom.el.provisionBtn.click();
-      cy.get("#pathname").contains("/hosts/set-up-provisioning");
     });
   });
 

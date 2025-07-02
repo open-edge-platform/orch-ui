@@ -84,7 +84,14 @@ export {
   PopoverProps
 } from "./atomic-design/atoms/Popover/Popover";
 export { ContextSwitcher } from "./atomic-design/atoms/ContextSwitcher/ContextSwitcher";
-
+export {
+  ExpansionPanel,
+  ExpansionPanelProps
+} from "./atomic-design/atoms/ExpansionPanel/ExpansionPanel";
+export {
+  Section,
+  SectionProps
+} from "./atomic-design/atoms/Section/Section";
 /************************** Molecules *****************************************/
 export { CodeSample } from "./atomic-design/molecules/CodeSample/CodeSample";
 export { DragDrop } from "./atomic-design/molecules/DragDrop/DragDrop";
@@ -183,7 +190,7 @@ export { SortDirection } from "./atomic-design/organisms/Table/TableHeaderCell";
 export { Tree, TreeProps } from "./atomic-design/organisms/Tree/Tree";
 export { TreeUtils } from "./atomic-design/organisms/Tree/Tree.utils";
 export {
-  CheckboxSelectionList, 
+  CheckboxSelectionList,
   CheckboxSelectionOption,
 } from "./atomic-design/organisms/CheckboxSelectionList/CheckboxSelectionList";
 export {
@@ -253,4 +260,5 @@ export { HeaderItemPom } from "./atomic-design/templates/HeaderItem/HeaderItem.p
 export { MessageBannerPom } from "./atomic-design/molecules/MessageBanner/MessageBanner.pom";
 export { ReactHookFormComboboxPom } from "./atomic-design/molecules/ReactHookFormCombobox/ReactHookFormCombobox.pom";
 export { ReactHookFormNumberFieldPom } from "./atomic-design/molecules/ReactHookFormNumberField/ReactHookFormNumberField.pom";
+export { ExpansionPanelPom } from "./atomic-design/atoms/ExpansionPanel/ExpansionPanel.pom";
 /* devblock:end */

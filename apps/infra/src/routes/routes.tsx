@@ -16,7 +16,7 @@ import {
   clusterManagementRoute,
   hostDetailsRoute,
   hostEditRoute,
-  hostProvisioningRoute,
+  hostProvisionRoute,
   hostRegisterRoute,
   hostsRoute,
   locationRoute,
@@ -34,8 +34,8 @@ import Hosts from "../components/pages/Hosts/Hosts";
 import RegionForm from "../components/pages/region/RegionForm";
 import SiteForm from "../components/pages/site/SiteForm";
 
-import { HostConfig } from "../components/pages/HostConfig/HostConfig";
 import HostEdit from "../components/pages/HostEdit";
+import HostProvision from "../components/pages/HostProvision/HostProvision";
 import { Locations } from "../components/pages/Locations/Locations";
 import RegisterHosts from "../components/pages/RegisterHosts/RegisterHosts";
 
@@ -94,8 +94,8 @@ export const createChildRoutes = () => {
       element: <Hosts />,
     },
     {
-      path: hostProvisioningRoute,
-      element: <HostConfig />,
+      path: hostProvisionRoute,
+      element: <HostProvision />,
     },
     {
       path: hostRegisterRoute,
