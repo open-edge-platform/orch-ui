@@ -6,9 +6,10 @@
 import { ConfirmationDialog } from "@orch-ui/components";
 import { hostsRoute, useInfraNavigate } from "@orch-ui/utils";
 import { ButtonVariant } from "@spark-design/tokens";
-import { reset } from "../../../store/configureHost";
 import { useAppDispatch } from "../../../store/hooks";
+import { reset } from "../../../store/provisionHost";
 const dataCy = "hostRegistrationAndProvisioningCancelDialog";
+
 interface HostRegistrationAndProvisioningCancelDialogProps {
   isOpen: boolean;
   onClose: () => void;
