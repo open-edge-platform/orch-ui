@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm, catalog } from "@orch-ui/apis";
+import { adm, catalog, cm } from "@orch-ui/apis";
+import Chainable = Cypress.Chainable;
 
 // --- Interfaces ---
 export interface RegistryChart {
@@ -13,10 +14,14 @@ export interface RegistryChart {
 export interface TestData {
   registry?: Partial<catalog.Registry>;
   registryChart?: RegistryChart;
-  application?: catalog.Application;
+  application: catalog.Application;
   applicationProfile?: catalog.Profile;
-  deploymentPackage?: catalog.DeploymentPackage;
-  deployments?: adm.Deployment;
+  deploymentPackage: catalog.DeploymentPackage;
+  deployments: adm.Deployment;
+  region: string;
+  site: string;
+  hostName: string;
+  cluster: cm.ClusterSpec;
 }
 
 // --- Interface Type Checking (for `data/*.json` use) ---
@@ -65,6 +70,15 @@ export function isDeploymentTestDataPresent(arg: any) {
   return "deployments" in arg; // && isDeployment(arg.deployment);
 }
 
+export function isClusterCreateTestDataPresent(testData) {
+  return (
+    "region" in testData &&
+    "site" in testData &&
+    "hostName" in testData &&
+    "cluster" in testData
+  );
+}
+
 // --- Helper Functions ---
 /** get Deployments navigation button */
 export function getDeploymentsMFETab() {
@@ -76,5 +90,97 @@ export function getDeploymentsMFETab() {
 
 /** get sidebar option by name */
 export function getSidebarTabByName(tabName: string) {
-  return cy.dataCy("sidebar").contains(tabName).should("be.visible");
+  return cy
+    .dataCy("sidebar", { timeout: 10 * 1000 })
+    .contains(tabName)
+    .should("be.visible");
 }
+
+export const createRegistryViaApi = (
+  project: string,
+  registry: Partial<catalog.Registry>,
+): Chainable => {
+  return cy
+    .authenticatedRequest<Partial<catalog.Registry>>({
+      method: "POST",
+      url: `/v3/projects/${project}/catalog/registries`,
+      body: registry,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
+export const deleteRegistryViaApi = (
+  project: string,
+  registryName: string,
+): Chainable => {
+  return cy
+    .authenticatedRequest({
+      method: "DELETE",
+      url: `/v3/projects/${project}/catalog/registries/${registryName}`,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
+export const createApplicationViaApi = (
+  project: string,
+  application: catalog.Application,
+): Chainable => {
+  return cy
+    .authenticatedRequest<catalog.Application>({
+      method: "POST",
+      url: `/v3/projects/${project}/catalog/applications`,
+      body: application,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
+export const createDeploymentPackageViaApi = (
+  project: string,
+  deploymentPackage: catalog.DeploymentPackage,
+): Chainable => {
+  return cy
+    .authenticatedRequest<catalog.DeploymentPackage>({
+      method: "POST",
+      url: `/v3/projects/${project}/catalog/deployment_packages`,
+      body: deploymentPackage,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
+export const deleteApplicationViaApi = (
+  project: string,
+  applicationName: string,
+  version: string,
+): Chainable => {
+  return cy
+    .authenticatedRequest<catalog.Application>({
+      method: "DELETE",
+      url: `/v3/projects/${project}/catalog/applications/${applicationName}/versions/${version}`,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
+
+export const deleteDeploymentPackageViaApi = (
+  project: string,
+  deploymentPackageName: string,
+  version: string,
+): Chainable => {
+  return cy
+    .authenticatedRequest<catalog.DeploymentPackage>({
+      method: "DELETE",
+      url: `/v3/projects/${project}/catalog/deployment_packages/${deploymentPackageName}/versions/${version}`,
+    })
+    .then((response) => {
+      expect(response.status).to.equal(200);
+    });
+};
