@@ -3,22 +3,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { PopupPom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = [
-  "Create",
-  "Import from file",
-  "Import Helm Chart",
-] as const;
+const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackagePopupPom extends CyPom<Selectors> {
+  public popupPom: PopupPom;
   constructor(public rootCy = "deploymentPackagePopup") {
     super(rootCy, [...dataCySelectors]);
+    this.popupPom = new PopupPom();
   }
 
-  get trigger() {
-    return cy.get("[data-cy='popup-trigger']");
+  public openPopUp() {
+    this.popupPom.root.should("be.visible");
+    this.popupPom.root.click();
+  }
+
+  public clickMenuOption(option: string) {
+    this.openPopUp();
+    cy.contains(option).click();
   }
 }
 
