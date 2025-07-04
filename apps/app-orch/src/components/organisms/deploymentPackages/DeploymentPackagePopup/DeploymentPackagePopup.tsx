@@ -4,6 +4,7 @@
  */
 
 import { Popup, PopupOption } from "@orch-ui/components";
+import { checkAuthAndRole, Role } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,21 +20,21 @@ const DeploymentPackagePopup = ({ jsx }: DeploymentPackagePopupProps) => {
   const popupOptions: PopupOption[] = [
     {
       displayText: "Create",
-      disable: false,
+      disable: !checkAuthAndRole([Role.CATALOG_WRITE]),
       onSelect: () => {
         navigate(`${PACKAGES_BASE_PATH}/create`);
       },
     },
     {
       displayText: "Import from file",
-      disable: false,
+      disable: !checkAuthAndRole([Role.CATALOG_WRITE]),
       onSelect: () => {
         navigate(`${PACKAGES_BASE_PATH}/import`);
       },
     },
     {
       displayText: "Import Helm Chart",
-      disable: false,
+      disable: !checkAuthAndRole([Role.CATALOG_WRITE]),
       onSelect: () => {
         navigate(`${PACKAGES_BASE_PATH}/import-from-helm-chart`);
       },
