@@ -183,9 +183,18 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
     });
     describe("on create deployment package", () => {
       it("should not be able to create", () => {
-        pom.deploymentPackagesPom.createButtonPom.el.button.should(
+        pom.deploymentPackagePopupPom.openPopUp();
+        cy.contains("Create").should(
           "have.class",
-          "spark-button-disabled",
+          "popup__option-item-disable",
+        );
+        cy.contains("Import from file").should(
+          "have.class",
+          "popup__option-item-disable",
+        );
+        cy.contains("Import Helm Chart").should(
+          "have.class",
+          "popup__option-item-disable",
         );
       });
     });
