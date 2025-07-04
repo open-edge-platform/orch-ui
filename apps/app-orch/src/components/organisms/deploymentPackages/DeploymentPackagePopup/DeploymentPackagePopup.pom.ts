@@ -18,12 +18,12 @@ class DeploymentPackagePopupPom extends CyPom<Selectors> {
 
   public openPopUp() {
     this.popupPom.root.should("be.visible");
-    this.popupPom.root.click();
+    this.popupPom.root.click({ force: true });
   }
 
   public clickMenuOption(option: string) {
     this.openPopUp();
-    cy.contains(option).click();
+    cy.contains(option).click({ force: true });
   }
 }
 
