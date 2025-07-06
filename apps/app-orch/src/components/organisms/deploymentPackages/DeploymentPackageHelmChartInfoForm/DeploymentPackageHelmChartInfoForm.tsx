@@ -175,7 +175,7 @@ const DeploymentPackageHelmChartInfoForm = () => {
             render={({ field, formState }) => (
               <TextField
                 {...field}
-                data-cy="helm-chart-url"
+                data-cy="helmChartUrl"
                 maxLength={70}
                 onInput={(e) => {
                   const value = e.currentTarget.value;

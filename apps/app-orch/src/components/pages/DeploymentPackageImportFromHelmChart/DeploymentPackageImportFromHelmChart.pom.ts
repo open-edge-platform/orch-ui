@@ -5,7 +5,7 @@
 
 import { AdvancedSettingsTogglePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
-const dataCySelectors = ["helm-chart-url", "username", "password"] as const;
+const dataCySelectors = ["helmChartUrl", "username", "password"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageImportFromHelmChartPom extends CyPom<Selectors> {
