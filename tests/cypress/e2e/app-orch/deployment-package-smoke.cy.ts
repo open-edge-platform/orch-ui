@@ -38,8 +38,8 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
     cy.login(user);
-      cy.visit("/");
-      getDeploymentsMFETab().click();
+    cy.visit("/");
+    getDeploymentsMFETab().click();
   };
 
   /** Prereq: Add Application Registry, Application */
