@@ -8,6 +8,7 @@ import {
   ApplicationCreateEditPom,
   ApplicationsPom,
   DeploymentPackageCreatePom,
+  DeploymentPackagePopupPom,
   DeploymentPackagesPom,
   DeploymentsPom,
 } from "@orch-ui/app-orch-poms";
@@ -23,6 +24,7 @@ class AppOrchPom extends CyPom<Selectors> {
   public deploymentPackagesPom: DeploymentPackagesPom;
   public deploymentPackageCreatePom: DeploymentPackageCreatePom;
   public deploymentsPom: DeploymentsPom;
+  public deploymentPackagePopupPom: DeploymentPackagePopupPom;
   // public setupDeploymentPom: SetupDeploymentPom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
@@ -33,6 +35,7 @@ class AppOrchPom extends CyPom<Selectors> {
     this.deploymentPackagesPom = new DeploymentPackagesPom();
     this.deploymentPackageCreatePom = new DeploymentPackageCreatePom();
     this.deploymentsPom = new DeploymentsPom();
+    this.deploymentPackagePopupPom = new DeploymentPackagePopupPom();
     // this.setupDeploymentPom = new SetupDeploymentPom();
   }
 
