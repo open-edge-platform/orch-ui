@@ -27,11 +27,19 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   let testData: TestData;
   let registryNameId: string;
 
+  //tar file to import to create DP.Its placed inder cypress/fixtures
+  const fileNameToImport = "dp-wordpress-25.0.0.tar.gz";
+  const fileImportedDpName = "wordpress";
+
+  //helm URL to import to create DP
+  const helmUrlToImport = "oci://registry-1.docker.io/bitnamicharts/drupal"; //helm URL for test
+  const helmUrlImportedDpName = "drupal";
+
   /** Get to Applications SidebarTab */
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
     cy.login(user);
-    cy.visit("/");
-    getDeploymentsMFETab().click();
+      cy.visit("/");
+      getDeploymentsMFETab().click();
   };
 
   /** Prereq: Add Application Registry, Application */
@@ -124,6 +132,7 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
         .join("-");
     });
     it("should create a deployment package", () => {
+      cy.waitForPageTransition();
       pom.deploymentPackagePopupPom.openPopUp();
       pom.deploymentPackagePopupPom.clickMenuOption("Create");
       cy.waitForPageTransition();
@@ -170,6 +179,58 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
     it("should delete a deployment package", () => {
       pom.removeDeploymentPackage(displayName);
       pom.deploymentPackagesPom.root.should("not.contain.text", displayName);
+    });
+    it("should create a deployment package by importing from a file", () => {
+      cy.waitForPageTransition();
+      pom.deploymentPackagePopupPom.openPopUp();
+      pom.deploymentPackagePopupPom.clickMenuOption("Import from file");
+      cy.waitForPageTransition();
+      pom.deploymentPackageImportPom.uploadButtonEmpty.uploadSingleFile(
+        // test file from fixtures directory, extracted from oci://registry-1.docker.io/bitnamicharts/wordpress:25.0.0
+        `cypress/fixtures/${fileNameToImport}`,
+      );
+      pom.deploymentPackageImportPom.el.importButton.should("be.visible");
+      pom.deploymentPackageImportPom.el.importButton.click();
+      cy.url({ timeout: 5000 }).should("not.contain", "import");
+      pom.deploymentPackagesPom.deploymentPackageTable.root.should(
+        "be.visible",
+      );
+      pom.deploymentPackagesPom.deploymentPackageTable.tableUtils
+        .getRowBySearchText(fileImportedDpName, { timeout: 60000 }) // Give it up to 60 seconds
+        .should("be.visible")
+        .should("contain.text", fileImportedDpName);
+    });
+    it("should delete a deployment package imported from file", () => {
+      pom.removeDeploymentPackage(fileImportedDpName);
+      pom.deploymentPackagesPom.root.should(
+        "not.contain.text",
+        fileImportedDpName,
+      );
+    });
+    it("should create a deployment package by importing from a helm URL", () => {
+      cy.waitForPageTransition();
+      pom.deploymentPackagePopupPom.openPopUp();
+      pom.deploymentPackagePopupPom.clickMenuOption("Import Helm Chart");
+      cy.waitForPageTransition();
+      pom.deploymentPackageHelmChartInfoFormPom.el.helmChartUrl.type(
+        helmUrlToImport,
+      );
+      pom.deploymentPackageHelmChartInfoFormPom.el.importButton.click();
+      cy.url({ timeout: 5000 }).should("not.contain", "import");
+      pom.deploymentPackagesPom.deploymentPackageTable.root.should(
+        "be.visible",
+      );
+      pom.deploymentPackagesPom.deploymentPackageTable.tableUtils
+        .getRowBySearchText(helmUrlImportedDpName, { timeout: 60000 }) // Give it up to 60 seconds
+        .should("be.visible")
+        .should("contain.text", helmUrlImportedDpName);
+    });
+    it("should delete a deployment package imported from Helm URL", () => {
+      pom.removeDeploymentPackage(helmUrlImportedDpName);
+      pom.deploymentPackagesPom.root.should(
+        "not.contain.text",
+        helmUrlImportedDpName,
+      );
     });
 
     // TODO: describe for Deployment Package clone
