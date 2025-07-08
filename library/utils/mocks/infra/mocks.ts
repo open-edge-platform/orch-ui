@@ -22,6 +22,8 @@ import {
   TelemetryLogsProfilesStore,
   TelemetryMetricsGroupListStore,
   TelemetryMetricsProfilesStore,
+  VproDetailsStore,
+  VproGeneralSettingsStore,
 } from "./store";
 import { WorkloadStore } from "./store/workload";
 
@@ -44,6 +46,8 @@ export const telemetrylogsProfilesStore = new TelemetryLogsProfilesStore();
 export const osResourceStore = new OsResourceStore();
 export const instanceStore = new InstanceStore();
 export const workloadStore = new WorkloadStore();
+export const vproDetailsStore = new VproDetailsStore();
+export const vproGeneralSettingsStore = new VproGeneralSettingsStore();
 
 // Mock: Dynamic Table Rendering (Ex: HeartBeat, Polling change)
 const IS_MOCK_RANDOMIZE_ENABLED = true;
@@ -1183,5 +1187,43 @@ export const handlers = [
     }
 
     return res(ctx.status(502));
+  }),
+
+  // VPro details endpoints
+  rest.get(`${baseURL}/dm/devices/:guid`, async (req, res, ctx) => {
+    const { guid } = req.params as { guid: string };
+    const vproDetails = vproDetailsStore.getDeviceByGuid(guid);
+    console.log("vproDetails:", vproDetails);
+    if (vproDetails) {
+      return res(ctx.status(200), ctx.json(vproDetails), ctx.delay(delay));
+    }
+
+    return res(
+      ctx.status(404),
+      ctx.json({
+        detail:
+          "rpc error: code = NotFound desc = ent: vPro details not found for host",
+        status: 404,
+      }),
+    );
+  }),
+
+  rest.get(`${baseURL}/dm/amt/generalSettings/:guid`, async (req, res, ctx) => {
+    const { guid } = req.params as { guid: string };
+    const vproDetails =
+      vproGeneralSettingsStore.getGeneralSettingsByGuid(/* guid */);
+    console.log("vproDetails:", vproDetails);
+    if (vproDetails) {
+      return res(ctx.status(200), ctx.json(vproDetails), ctx.delay(delay));
+    }
+
+    return res(
+      ctx.status(404),
+      ctx.json({
+        detail:
+          "rpc error: code = NotFound desc = ent: vPro details not found for host",
+        status: 404,
+      }),
+    );
   }),
 ];

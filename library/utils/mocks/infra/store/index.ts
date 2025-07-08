@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export * from "./device";
+export * from "./generalSettings";
 export * from "./hosts";
 export * from "./instances";
 export * from "./locations";
