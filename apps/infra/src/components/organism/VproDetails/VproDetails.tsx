@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { infra, mps } from "@orch-ui/apis";
-import { ApiError, Flex } from "@orch-ui/components";
+import { ApiError } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
+import VproDetailItem from "./VproDetailItem";
 import "./VproDetails.scss";
 
 const dataCy = "vproDetails";
@@ -32,7 +33,7 @@ const VproDetails = ({ host }: VproDetailsProps) => {
     { projectName, guid },
     { skip: !projectName || !guid },
   );
-  console.log("deviceData:", deviceData);
+
   const {
     data: amtSettingsData,
     isLoading: isAmtSettingsLoading,
@@ -54,87 +55,60 @@ const VproDetails = ({ host }: VproDetailsProps) => {
   return (
     <div {...cy} className="vpro-details">
       {/* MPS device information */}
+      <div className="vpro-details-header">Device Details</div>
       {deviceData && (
         <>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Connection Status</Text>
-            <Text className="vpro-details-value">
-              {deviceData.connectionStatus ? "Connected" : "Disconnected"}
-            </Text>
-          </Flex>
-
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Friendly Name</Text>
-            <Text className="vpro-details-value">
-              {deviceData.friendlyName ?? "N/A"}
-            </Text>
-          </Flex>
-
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">DNS Suffix</Text>
-            <Text className="vpro-details-value">
-              {deviceData.dnsSuffix ?? "N/A"}
-            </Text>
-          </Flex>
+          <VproDetailItem
+            label="Connection Status"
+            value={deviceData.connectionStatus}
+          />
+          <VproDetailItem
+            label="Friendly Name"
+            value={deviceData.friendlyName}
+          />
+          <VproDetailItem label="DNS Suffix" value={deviceData.dnsSuffix} />
         </>
       )}
       {deviceData?.deviceInfo && (
         <>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">IP Address</Text>
-            <Text className="vpro-details-value">
-              {deviceData.deviceInfo.ipAddress ?? "N/A"}
-            </Text>
-          </Flex>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Current Mode</Text>
-            <Text className="vpro-details-value">
-              {deviceData.deviceInfo.currentMode ?? "N/A"}
-            </Text>
-          </Flex>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Firmware Version</Text>
-            <Text className="vpro-details-value">
-              {deviceData.deviceInfo.fwVersion ?? "N/A"}
-            </Text>
-          </Flex>
-
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Firmware Sku</Text>
-            <Text className="vpro-details-value">
-              {deviceData.deviceInfo.fwSku ?? "N/A"}
-            </Text>
-          </Flex>
-
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Firmware build</Text>
-            <Text className="vpro-details-value">
-              {deviceData.deviceInfo.fwBuild ?? "N/A"}
-            </Text>
-          </Flex>
+          <VproDetailItem
+            label="IP Address"
+            value={deviceData.deviceInfo.ipAddress}
+          />
+          <VproDetailItem
+            label="Current Mode"
+            value={deviceData.deviceInfo.currentMode}
+          />
+          <VproDetailItem
+            label="Firmware Version"
+            value={deviceData.deviceInfo.fwVersion}
+          />
+          <VproDetailItem
+            label="Firmware Sku"
+            value={deviceData.deviceInfo.fwSku}
+          />
+          <VproDetailItem
+            label="Firmware build"
+            value={deviceData.deviceInfo.fwBuild}
+          />
         </>
       )}
       {/* AMT general settings information */}
+      <div className="vpro-details-header">AMT General Settings</div>
       {amtSettingsData?.Body && (
         <>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">AMT Host Name</Text>
-            <Text className="vpro-details-value">
-              {amtSettingsData.Body.HostName ?? "N/A"}
-            </Text>
-          </Flex>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Domain Name</Text>
-            <Text className="vpro-details-value">
-              {amtSettingsData.Body.DomainName ?? "N/A"}
-            </Text>
-          </Flex>
-          <Flex className="vpro-detail-container" cols={[4, 8]}>
-            <Text className="vpro-details-label">Digest Realm</Text>
-            <Text className="vpro-details-value">
-              {amtSettingsData.Body.DigestRealm ?? "N/A"}
-            </Text>
-          </Flex>
+          <VproDetailItem
+            label="AMT Host Name"
+            value={amtSettingsData.Body.HostName}
+          />
+          <VproDetailItem
+            label="Domain Name"
+            value={amtSettingsData.Body.DomainName}
+          />
+          <VproDetailItem
+            label="Digest Realm"
+            value={amtSettingsData.Body.DigestRealm}
+          />
         </>
       )}
       {(isDeviceLoading || isAmtSettingsLoading) && (
