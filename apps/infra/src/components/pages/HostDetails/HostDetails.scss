@@ -35,8 +35,14 @@
   &__header {
     display: flex;
     align-items: center;
-    .host-details-actions {
-      margin-left: auto;
+    justify-content: space-between;
+    .right-side {
+      display: flex;
+
+      .turn-on {
+        margin-right: 1rem;
+        gap: 0.5rem
+      }
     }
   }
 

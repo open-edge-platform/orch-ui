@@ -10,6 +10,8 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
+  Status,
+  StatusIcon,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -26,6 +28,7 @@ import {
 } from "@orch-ui/utils";
 import {
   Button,
+  ButtonGroup,
   Drawer,
   Heading,
   Icon,
@@ -34,6 +37,7 @@ import {
   Text,
 } from "@spark-design/react";
 import {
+  ButtonSize,
   ButtonVariant,
   MessageBannerAlertState,
   TextSize,
@@ -300,6 +304,14 @@ const HostDetails: React.FC = () => {
     }) ?? []),
   ];
 
+  const powerInfo = {
+    indicatorIcon:
+      host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+        ? Status.Ready
+        : Status.Unknown,
+    message: host.powerStatus ?? "Unknown",
+  };
+
   return (
     <div className={cssSelectorIhd} data-cy={dataCyIhd}>
       {/* HostDetails Heading */}
@@ -307,22 +319,86 @@ const HostDetails: React.FC = () => {
         <Heading semanticLevel={1} size="l" data-cy={`${dataCyIhd}Header`}>
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
-        <HostDetailsActions
-          basePath="../"
-          host={host}
-          jsx={
-            <button
-              className="spark-button spark-button-action spark-button-size-l spark-focus-visible spark-focus-visible-self spark-focus-visible-snap"
-              type="button"
+        <div className="right-side">
+          <ButtonGroup className="turn-on">
+            <Button
+              size={ButtonSize.Large}
+              variant={ButtonVariant.Secondary}
+              endSlot={
+                <Icon
+                  icon="play"
+                  style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
+                />
+              }
+              isDisabled={
+                host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+              }
+              // onPress={handleCancel}
             >
-              <span className="spark-button-content">
-                Host Actions
-                <Icon className="pa-1 mb-1" icon="chevron-down" />
-              </span>
-            </button>
-          }
-        />
+              Start
+            </Button>
+            <Button
+              data-cy="prev"
+              size={ButtonSize.Large}
+              variant={ButtonVariant.Secondary}
+              endSlot={
+                <Icon
+                  icon="redo"
+                  style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
+                />
+              }
+              isDisabled={
+                host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
+              }
+              // onPress={handlePrev}
+            >
+              Restart
+            </Button>
+            <Button
+              data-cy="prev"
+              size={ButtonSize.Large}
+              variant={ButtonVariant.Secondary}
+              endSlot={
+                <Icon
+                  icon="square"
+                  style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
+                />
+              }
+              isDisabled={
+                host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
+              }
+              // onPress={handlePrev}
+            >
+              Stop
+            </Button>
+          </ButtonGroup>
+          <HostDetailsActions
+            basePath="../"
+            host={host}
+            jsx={
+              <button
+                className="spark-button spark-button-action spark-button-size-l spark-focus-visible spark-focus-visible-self spark-focus-visible-snap"
+                type="button"
+              >
+                <span className="spark-button-content">
+                  Host Actions
+                  <Icon className="pa-1 mb-1" icon="chevron-down" />
+                </span>
+              </button>
+            }
+          />
+        </div>
       </div>
+
+      <Flex cols={[12]}>
+        <Text size={TextSize.Large}>
+          Power: &nbsp;
+          <StatusIcon
+            status={powerInfo.indicatorIcon}
+            text={powerInfo.message}
+          />
+        </Text>
+      </Flex>
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>
