@@ -17,6 +17,7 @@ import HostDetailsTabPom from "../../organism/hosts/HostDetailsTab/HostDetailsTa
 const metadataRoute = "**/v1/projects/**/metadata";
 const dataCySelectors = [
   "infraHostDetailsHeader",
+  "infraHostDetailsPowerStatus",
   "infraHostDetailsSite",
   "infraHostDetailsMaintenanceBanner",
   "infraHostDetailsHostDescriptionTable",
