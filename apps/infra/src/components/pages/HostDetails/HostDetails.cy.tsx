@@ -58,6 +58,16 @@ describe("HostDetails", () => {
       pom.el.provider.should("have.text", mockHost.provider?.name);
     });
 
+    it("should display the vPro-related buttons", () => {
+      pom.el.infraHostDetailsStartBtn.should("exist");
+      pom.el.infraHostDetailsRestartBtn.should("exist");
+      pom.el.infraHostDetailsStopBtn.should("exist");
+      pom.el.infraHostDetailsStartBtn.should(
+        "have.class",
+        "spark-button-disabled",
+      );
+    });
+
     it("should render inherited", () => {
       const inheritedMetadataLength =
         (siteRestaurantTwo.metadata?.length ?? 0) +

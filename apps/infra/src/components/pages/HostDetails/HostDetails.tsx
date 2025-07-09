@@ -328,28 +328,29 @@ const HostDetails: React.FC = () => {
               isDisabled={
                 host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
               }
+              data-cy={`${dataCyIhd}StartBtn`}
             >
               Start
             </Button>
             <Button
-              data-cy="prev"
               size={ButtonSize.Large}
               variant={ButtonVariant.Secondary}
               endSlot={<Icon icon="redo" />}
               isDisabled={
                 host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
               }
+              data-cy={`${dataCyIhd}RestartBtn`}
             >
               Restart
             </Button>
             <Button
-              data-cy="prev"
               size={ButtonSize.Large}
               variant={ButtonVariant.Secondary}
               endSlot={<Icon icon="square" />}
               isDisabled={
                 host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
               }
+              data-cy={`${dataCyIhd}StopBtn`}
             >
               Stop
             </Button>
