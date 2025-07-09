@@ -319,21 +319,15 @@ const HostDetails: React.FC = () => {
         <Heading semanticLevel={1} size="l" data-cy={`${dataCyIhd}Header`}>
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
-        <div className="right-side">
-          <ButtonGroup className="turn-on">
+        <div className="primary-actions">
+          <ButtonGroup className="button-group">
             <Button
               size={ButtonSize.Large}
               variant={ButtonVariant.Secondary}
-              endSlot={
-                <Icon
-                  icon="play"
-                  style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
-                />
-              }
+              endSlot={<Icon icon="play" />}
               isDisabled={
                 host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
               }
-              // onPress={handleCancel}
             >
               Start
             </Button>
@@ -341,16 +335,10 @@ const HostDetails: React.FC = () => {
               data-cy="prev"
               size={ButtonSize.Large}
               variant={ButtonVariant.Secondary}
-              endSlot={
-                <Icon
-                  icon="redo"
-                  style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
-                />
-              }
+              endSlot={<Icon icon="redo" />}
               isDisabled={
                 host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
               }
-              // onPress={handlePrev}
             >
               Restart
             </Button>
@@ -358,16 +346,10 @@ const HostDetails: React.FC = () => {
               data-cy="prev"
               size={ButtonSize.Large}
               variant={ButtonVariant.Secondary}
-              endSlot={
-                <Icon
-                  icon="square"
-                  style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
-                />
-              }
+              endSlot={<Icon icon="square" />}
               isDisabled={
                 host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
               }
-              // onPress={handlePrev}
             >
               Stop
             </Button>

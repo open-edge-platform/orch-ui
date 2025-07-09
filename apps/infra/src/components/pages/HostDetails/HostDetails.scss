@@ -36,12 +36,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .right-side {
+
+    .primary-actions {
       display: flex;
 
-      .turn-on {
+      .button-group {
         margin-right: 1rem;
-        gap: 0.5rem
+        gap: 0.5rem;
+
+        .spark-icon {
+          font-size: 1rem;
+          margin-left: 0.5rem;
+        }
       }
     }
   }
