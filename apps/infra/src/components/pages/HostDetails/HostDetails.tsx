@@ -123,6 +123,12 @@ const HostDetails: React.FC = () => {
   useEffect(() => {
     if (!hostQuery.isLoading && !hostQuery.isError && hostQuery.data && id) {
       setHost(hostQuery.data);
+      // using this as mock data because MSW is giving issues. TODO: Delete when we fully release vpro
+      // setHost({
+      //   ...hostQuery.data,
+      //   powerStatusIndicator: "STATUS_INDICATION_IDLE",
+      //   powerStatus: "Running",
+      // });
     }
     if (hostQuery.isError) {
       const e = parseError(hostQuery.error);
@@ -139,6 +145,12 @@ const HostDetails: React.FC = () => {
       uuid
     ) {
       setHost(hostsQuery.data.hosts[0]);
+      // using this as mock data
+      // setHost({
+      //   ...hostsQuery.data.hosts[0],
+      //   powerStatusIndicator: "STATUS_INDICATION_IDLE",
+      //   powerStatus: "Running",
+      // });
     }
     if (hostsQuery.isError && hostsQuery.error) {
       const e = parseError(hostsQuery.error);
