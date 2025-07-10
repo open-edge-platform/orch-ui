@@ -250,9 +250,9 @@ export const provisionHost = createSlice({
       state.kubernetesVersion =
         (
           JSON.parse(action.payload.metadata ?? "{}") as {
-            kubernetesVersion?: string;
+            "kubernetes-version"?: string;
           }
-        ).kubernetesVersion ?? "";
+        )["kubernetes-version"] ?? "";
 
       if (changed) {
         delete state.commonHostData["clusterTemplateName"];

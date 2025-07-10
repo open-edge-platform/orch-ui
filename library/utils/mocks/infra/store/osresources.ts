@@ -42,7 +42,7 @@ export const osTb = createOsResource(
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetesVersion":"v1.28.0"}',
+  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export const osTbUpdate = createOsResource(
@@ -53,7 +53,7 @@ export const osTbUpdate = createOsResource(
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetesVersion":"v1.28.0"}',
+  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export const osUbuntu = createOsResource(
@@ -64,7 +64,7 @@ export const osUbuntu = createOsResource(
   "Ubuntu-x86_profile",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetesVersion":"v1.30.0"}',
+  '{"kubernetes-version":"v1.30.0"}',
 );
 
 export const osRedHat = createOsResource(
@@ -75,7 +75,7 @@ export const osRedHat = createOsResource(
   "Redhat-x86_profile",
   "SECURITY_FEATURE_NONE",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetesVersion":"v1.32.0"}',
+  '{"kubernetes-version":"v1.32.0"}',
 );
 
 export class OsResourceStore extends BaseStore<
