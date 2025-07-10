@@ -64,7 +64,7 @@ const VproDetails = ({ host }: VproDetailsProps) => {
               <div className="connection-status">
                 <StatusIcon
                   status={
-                    deviceData.connectionStatus ? Status.Ready : Status.Ready
+                    deviceData.connectionStatus ? Status.Ready : Status.NotReady
                   }
                   text={
                     deviceData.connectionStatus ? "Connected" : "Not Connected"
