@@ -3,34 +3,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-.vpro-details {
+.vpro-details-container {
     width: 100%;
 
-    .vpro-details-label {
-        font-weight: 500;
-        font-size: 1rem;
-        color: var(--spark-color-theme-light-gray900);
-    }
-
-    .vpro-details-value {
-        font-weight: 400;
-        color: var(--spark-color-theme-light-gray900);
-        word-break: break-all;
-    }
-
-    .vpro-detail-container {
-        font-size: 0.625rem;
-        margin-top: 1rem;
-
-        & div:first-child {
-            max-width: 220px;
-        }
-    }
-
-    .vpro-details-header {
+    .section-header {
         font-size: 1.25rem;
         font-weight: 400;
         color: var(--spark-color-black);
         margin: 1.6rem auto;
+    }
+
+    .item-container {
+        font-size: 0.625rem;
+        margin-top: 1rem;
+
+        &>div:first-child {
+            max-width: 220px;
+        }
+
+        .label {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--spark-color-theme-light-gray900);
+        }
+
+        .value {
+            font-weight: 400;
+            color: var(--spark-color-theme-light-gray900);
+            word-break: break-all;
+        }
     }
 }

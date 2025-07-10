@@ -125,7 +125,7 @@ describe("<VproDetails/>", () => {
     pom.waitForApis();
     // Basic details should still appear
     pom.getDetailValueByLabel("Connection Status").should("exist");
-    pom.getDetailValueByLabel("Friendly Name").should("exist");
+    pom.getDetailValueByLabel("Display Name").should("exist");
 
     // But no device info details
     cy.contains("IP Address").should("not.exist");

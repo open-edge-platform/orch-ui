@@ -16,9 +16,9 @@ const VproDetailItem = ({ label, value }: VproDetailItemProps) => {
     typeof value === "boolean" ? (value ? "Connected" : "Disconnected") : value;
 
   return (
-    <Flex className="vpro-detail-container" cols={[4, 8]}>
-      <Text className="vpro-details-label">{label}</Text>
-      <Text className="vpro-details-value">{displayValue ?? "N/A"}</Text>
+    <Flex className="item-container" cols={[4, 8]}>
+      <Text className="label">{label}</Text>
+      <Text className="value">{displayValue ?? "N/A"}</Text>
     </Flex>
   );
 };

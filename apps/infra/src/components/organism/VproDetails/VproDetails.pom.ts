@@ -65,9 +65,9 @@ class VproDetailsPom extends CyPom<Selectors, ApiAliases> {
    */
   getDetailValueByLabel(label: string) {
     return this.root
-      .contains(".vpro-details-label", label)
-      .parents(".vpro-detail-container") // Go up to the container
-      .find(".vpro-details-value"); // Find the value span
+      .contains(".label", label)
+      .parents(".item-container") // Go up to the container
+      .find(".value"); // Find the value span
   }
 
   /**
@@ -79,7 +79,7 @@ class VproDetailsPom extends CyPom<Selectors, ApiAliases> {
       "contain",
       "Connected",
     );
-    this.getDetailValueByLabel("Friendly Name").should(
+    this.getDetailValueByLabel("Display Name").should(
       "contain",
       device.friendlyName,
     );

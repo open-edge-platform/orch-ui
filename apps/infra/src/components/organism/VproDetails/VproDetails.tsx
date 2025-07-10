@@ -53,9 +53,9 @@ const VproDetails = ({ host }: VproDetailsProps) => {
     return <ApiError error={amtSettingsError} />;
   }
   return (
-    <div {...cy} className="vpro-details">
+    <div {...cy} className="vpro-details-container">
       {/* MPS device information */}
-      <div className="vpro-details-header">Device Details</div>
+      <div className="section-header">Device Details</div>
       {deviceData && (
         <>
           <VproDetailItem
@@ -63,7 +63,7 @@ const VproDetails = ({ host }: VproDetailsProps) => {
             value={deviceData.connectionStatus}
           />
           <VproDetailItem
-            label="Friendly Name"
+            label="Display Name"
             value={deviceData.friendlyName}
           />
           <VproDetailItem label="DNS Suffix" value={deviceData.dnsSuffix} />
@@ -94,7 +94,7 @@ const VproDetails = ({ host }: VproDetailsProps) => {
         </>
       )}
       {/* AMT general settings information */}
-      <div className="vpro-details-header">AMT General Settings</div>
+      <div className="section-header">AMT General Settings</div>
       {amtSettingsData?.Body && (
         <>
           <VproDetailItem
