@@ -84,7 +84,7 @@ const VproDetails = ({ host }: VproDetailsProps) => {
             value={deviceData.deviceInfo.fwVersion}
           />
           <VproDetailItem
-            label="Firmware Sku"
+            label="Firmware SKU"
             value={deviceData.deviceInfo.fwSku}
           />
           <VproDetailItem
