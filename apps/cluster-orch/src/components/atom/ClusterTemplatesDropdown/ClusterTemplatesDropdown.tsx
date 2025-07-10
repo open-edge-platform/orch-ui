@@ -14,11 +14,13 @@ export interface ClusterTemplatesDropdownProps {
   onSelectionChange?: (value: string) => void;
   clusterTemplateName?: string;
   isDisabled?: boolean;
+  kubernetesVersion?: string;
 }
 const ClusterTemplatesDropdown = ({
   onSelectionChange,
   clusterTemplateName,
   isDisabled,
+  kubernetesVersion,
 }: ClusterTemplatesDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
   const {
@@ -27,7 +29,10 @@ const ClusterTemplatesDropdown = ({
     isLoading: isTemplateLoading,
     isError: isTemplateError,
     error,
-  } = cm.useGetV2ProjectsByProjectNameTemplatesQuery({ projectName });
+  } = cm.useGetV2ProjectsByProjectNameTemplatesQuery({
+    projectName,
+    filter: kubernetesVersion ? `kubernetesVersion=${kubernetesVersion}` : "",
+  });
 
   const [templateNames, setTemplateNames] = useState<string[]>();
 
