@@ -8,11 +8,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { generateName } from "../../utils/global";
 import { RootState } from "../index";
 
-export const initialState: catalog.DeploymentPackage = {
+export interface ExtendedDeploymentPackage extends catalog.DeploymentPackage {
+  username?: string;
+  helmChartURL?: string;
+  password?: string;
+}
+
+export const initialState: ExtendedDeploymentPackage = {
   name: "",
   displayName: "",
   description: "",
   version: "",
+  username: "",
+  helmChartURL: "",
+  password: "",
   applicationReferences: [],
   isDeployed: false,
   isVisible: false,
@@ -34,7 +43,7 @@ export const deploymentPackage = createSlice({
   initialState,
   reducers: {
     setDeploymentPackage(
-      state: catalog.DeploymentPackage,
+      state: ExtendedDeploymentPackage,
       action: PayloadAction<catalog.DeploymentPackage>,
     ) {
       state = { ...action.payload };
@@ -62,6 +71,24 @@ export const deploymentPackage = createSlice({
       action: PayloadAction<string>,
     ) {
       state.description = action.payload;
+    },
+    setHelmChartURL(
+      state: ExtendedDeploymentPackage,
+      action: PayloadAction<string>,
+    ) {
+      state.helmChartURL = action.payload;
+    },
+    setUsername(
+      state: ExtendedDeploymentPackage,
+      action: PayloadAction<string>,
+    ) {
+      state.username = action.payload;
+    },
+    setPassword(
+      state: ExtendedDeploymentPackage,
+      action: PayloadAction<string>,
+    ) {
+      state.password = action.payload;
     },
     setApplicationReferences(
       state: catalog.DeploymentPackage,
@@ -162,6 +189,9 @@ export const {
   deleteDeploymentPackageProfile,
   setDefaultProfileName,
   clearProfileData,
+  setHelmChartURL,
+  setUsername,
+  setPassword,
 } = deploymentPackage.actions;
 
 export default deploymentPackage.reducer;

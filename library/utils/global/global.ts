@@ -221,3 +221,15 @@ export const clearAllStorage = () => {
   // Clear sessionStorage
   sessionStorage.clear();
 };
+
+export const downloadBlobFile = (blob: Blob, fileName: string) => {
+  const url = window.URL.createObjectURL(blob);
+  const anchorElement = document.createElement("a");
+  anchorElement.style.display = "none";
+  anchorElement.setAttribute("href", url);
+  anchorElement.setAttribute("download", fileName);
+  document.body.appendChild(anchorElement);
+  anchorElement.click();
+  document.body.removeChild(anchorElement); // Remove the element after clicking
+  window.URL.revokeObjectURL(url); // Revoke the URL to free resources
+};
