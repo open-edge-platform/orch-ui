@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { infra, mps } from "@orch-ui/apis";
-import { ApiError } from "@orch-ui/components";
+import { ApiError, Status, StatusIcon } from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import VproDetailItem from "./VproDetailItem";
@@ -60,8 +60,20 @@ const VproDetails = ({ host }: VproDetailsProps) => {
         <>
           <VproDetailItem
             label="Connection Status"
-            value={deviceData.connectionStatus}
+            value={
+              <div className="connection-status">
+                <StatusIcon
+                  status={
+                    deviceData.connectionStatus ? Status.Ready : Status.Ready
+                  }
+                  text={
+                    deviceData.connectionStatus ? "Connected" : "Not Connected"
+                  }
+                />
+              </div>
+            }
           />
+
           <VproDetailItem
             label="Display Name"
             value={deviceData.friendlyName}

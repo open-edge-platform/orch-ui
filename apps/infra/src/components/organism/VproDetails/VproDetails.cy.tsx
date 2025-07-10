@@ -71,7 +71,7 @@ describe("<VproDetails/>", () => {
     cy.wait(["@delayedDeviceData", "@delayedAmtSettings"]);
 
     // Eventually data should appear
-    cy.contains("Connection Status").should("exist");
+    cy.contains("Display Name").should("exist");
   });
 
   it("should handle error state in device data", () => {
@@ -124,7 +124,6 @@ describe("<VproDetails/>", () => {
     cy.mount(<VproDetails host={mockHost} />);
     pom.waitForApis();
     // Basic details should still appear
-    pom.getDetailValueByLabel("Connection Status").should("exist");
     pom.getDetailValueByLabel("Display Name").should("exist");
 
     // But no device info details

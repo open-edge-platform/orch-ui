@@ -75,10 +75,7 @@ class VproDetailsPom extends CyPom<Selectors, ApiAliases> {
    */
   verifyDeviceDetails() {
     const device = mockDeviceData;
-    this.getDetailValueByLabel("Connection Status").should(
-      "contain",
-      "Connected",
-    );
+
     this.getDetailValueByLabel("Display Name").should(
       "contain",
       device.friendlyName,

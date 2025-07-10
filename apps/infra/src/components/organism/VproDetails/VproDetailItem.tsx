@@ -4,10 +4,11 @@
  */
 import { Flex } from "@orch-ui/components";
 import { Text } from "@spark-design/react";
+import React from "react";
 
 interface VproDetailItemProps {
   label: string;
-  value: string | boolean | undefined;
+  value: string | boolean | undefined | React.ReactNode;
 }
 
 const VproDetailItem = ({ label, value }: VproDetailItemProps) => {
@@ -18,7 +19,11 @@ const VproDetailItem = ({ label, value }: VproDetailItemProps) => {
   return (
     <Flex className="item-container" cols={[4, 8]}>
       <Text className="label">{label}</Text>
-      <Text className="value">{displayValue ?? "N/A"}</Text>
+      {React.isValidElement(displayValue) ? (
+        <>{displayValue}</>
+      ) : (
+        <Text className="value">{displayValue ?? "N/A"}</Text>
+      )}
     </Flex>
   );
 };
