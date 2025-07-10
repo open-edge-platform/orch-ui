@@ -83,7 +83,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     },
     {
       id: 8,
-      title: "vPro details",
+      title: "vPro Details",
     },
   ];
 
