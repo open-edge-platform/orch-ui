@@ -8,6 +8,9 @@ import {
   ApplicationCreateEditPom,
   ApplicationsPom,
   DeploymentPackageCreatePom,
+  DeploymentPackageHelmChartInfoFormPom,
+  DeploymentPackageImportFromHelmChartPom,
+  DeploymentPackageImportPom,
   DeploymentPackagePopupPom,
   DeploymentPackagesPom,
   DeploymentsPom,
@@ -25,6 +28,9 @@ class AppOrchPom extends CyPom<Selectors> {
   public deploymentPackageCreatePom: DeploymentPackageCreatePom;
   public deploymentsPom: DeploymentsPom;
   public deploymentPackagePopupPom: DeploymentPackagePopupPom;
+  public deploymentPackageImportFromHelmChartPom: DeploymentPackageImportFromHelmChartPom;
+  public deploymentPackageImportPom: DeploymentPackageImportPom;
+  public deploymentPackageHelmChartInfoFormPom: DeploymentPackageHelmChartInfoFormPom;
   // public setupDeploymentPom: SetupDeploymentPom;
   constructor(public rootCy: string) {
     super(rootCy, [...dataCySelectors]);
@@ -36,6 +42,12 @@ class AppOrchPom extends CyPom<Selectors> {
     this.deploymentPackageCreatePom = new DeploymentPackageCreatePom();
     this.deploymentsPom = new DeploymentsPom();
     this.deploymentPackagePopupPom = new DeploymentPackagePopupPom();
+    // this.uploadButtonPom = new UploadButtonPom();
+    this.deploymentPackageImportPom = new DeploymentPackageImportPom();
+    this.deploymentPackageImportFromHelmChartPom =
+      new DeploymentPackageImportFromHelmChartPom();
+    this.deploymentPackageHelmChartInfoFormPom =
+      new DeploymentPackageHelmChartInfoFormPom();
     // this.setupDeploymentPom = new SetupDeploymentPom();
   }
 
