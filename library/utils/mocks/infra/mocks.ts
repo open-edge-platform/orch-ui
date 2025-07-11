@@ -1209,10 +1209,7 @@ export const handlers = [
   }),
 
   rest.get(`${baseURL}/dm/amt/generalSettings/:guid`, async (req, res, ctx) => {
-    const { guid } = req.params as { guid: string };
-    const vproDetails =
-      vproGeneralSettingsStore.getGeneralSettingsByGuid(/* guid */);
-    console.log("vproDetails:", vproDetails);
+    const vproDetails = vproGeneralSettingsStore.getGeneralSettingsByGuid();
     if (vproDetails) {
       return res(ctx.status(200), ctx.json(vproDetails), ctx.delay(delay));
     }
