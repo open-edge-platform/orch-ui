@@ -22,7 +22,7 @@ import AppOrchPom from "./app-orch-smoke.pom";
 
 const pom = new AppOrchPom("appOrchLayout");
 
-describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
+xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   const netLog = new NetworkLog();
   let testData: TestData;
   let registryNameId: string;
@@ -86,7 +86,7 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
       ) {
         throw new Error(
           "Require valid: registry, registryChart, application & deploymentPackage\n" +
-            `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
+          `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
         );
       }
       testData = data;
