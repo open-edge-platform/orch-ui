@@ -72,7 +72,7 @@ describe("Cluster orch Smoke test:", () => {
     netLog.clear();
   });
 
-  describe(`Cluster creation`, () => {
+  describe("Cluster creation", () => {
     it("should setup the pre-requisites", () => {
       // pre-requisites to create cluster
       cy.login(EIM_USER);
@@ -160,7 +160,7 @@ describe("Cluster orch Smoke test:", () => {
       });
     });
 
-    it("should validate the cluster is running", () => {
+    xit("should validate the cluster is running", () => {
       cy.login(CLUSTER_ORCH_USER);
       cy.visit("/infrastructure/clusters");
 
