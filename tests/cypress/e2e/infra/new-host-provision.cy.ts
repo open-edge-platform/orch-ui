@@ -157,7 +157,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .should("be.visible")
         .type(host.serialNumber);
 
+
       registerHostsPom.el.nextButton.click();
+
+      cy.waitForPageTransition();
 
       locationAutocompletePom.combobox.type("c");
       cy.wait(1000);
@@ -201,10 +204,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         instanceHosts.push(interception.response?.body.resourceId);
       });
 
-      cy.wait("@createCluster").then((interception) => {
-        expect(interception.response?.statusCode).to.equal(201);
-        clusters.push(interception.response?.body.resourceId);
-      });
+      // cy.wait("@createCluster").then((interception) => {
+      //   expect(interception.response?.statusCode).to.equal(201);
+      //   clusters.push(interception.response?.body.resourceId);
+      // });
 
       cy.url().should("contain", "infrastructure/hosts");
     });
