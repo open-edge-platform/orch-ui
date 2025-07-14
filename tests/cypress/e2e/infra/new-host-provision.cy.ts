@@ -157,7 +157,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .should("be.visible")
         .type(host.serialNumber);
 
+
       registerHostsPom.el.nextButton.click();
+
+      cy.waitForPageTransition();
 
       locationAutocompletePom.combobox.type("c");
       cy.wait(1000);
