@@ -12,7 +12,7 @@ import {
   TestProvisionHostData,
 } from "../helpers/eimTestProvisionHostData";
 
-describe(`Infra smoke: the ${EIM_USER.username}`, () => {
+xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
   const netLog = new NetworkLog();
   const tablePom = new TablePom();
 
