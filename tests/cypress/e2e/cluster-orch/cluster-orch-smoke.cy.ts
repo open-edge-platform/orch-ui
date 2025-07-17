@@ -27,7 +27,7 @@ interface TestData {
   clusterName: string;
 }
 
-xdescribe("Cluster orch Smoke test:", () => {
+describe("Cluster orch Smoke test:", () => {
   const netLog = new NetworkLog();
   const infraPom = new InfraPom("eim");
   const tablePom = new TablePom();

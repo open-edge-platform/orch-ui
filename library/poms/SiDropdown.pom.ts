@@ -37,6 +37,14 @@ export class SiDropdown<T extends string, U extends string = ""> extends CyPom<
     });
   }
 
+  public selectDropdownValueByLabel(el: Cy, name: string, label: string) {
+    el.first().within(() => {
+      this.cyGetByAttr("select", { name }).select(label, {
+        force: true,
+      });
+    });
+  }
+
   public getDropdownValue(el: Cy, name: string, label: string, val = "") {
     el.first().within(() => {
       this.cyGetByAttr("select", { name }).should("have.value", val);
