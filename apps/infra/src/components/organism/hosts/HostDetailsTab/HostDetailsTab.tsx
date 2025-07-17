@@ -21,6 +21,7 @@ import {
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
+import VproDetails from "../../../organism/VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
@@ -79,6 +80,10 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     {
       id: 7,
       title: "Host Labels",
+    },
+    {
+      id: 8,
+      title: "vPro Details",
     },
   ];
 
@@ -227,6 +232,9 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       {currentOs && (
         <OSProfileDetails os={currentOs} updatePolicy={updatePolicy} />
       )}
+    </Item>,
+    <Item title={tabItems[7].title}>
+      <VproDetails host={host} />
     </Item>,
   ];
 
