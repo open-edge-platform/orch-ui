@@ -160,7 +160,7 @@ describe("Cluster orch Smoke test:", () => {
       });
     });
 
-    xit("should validate the cluster is running", () => {
+    it("should validate the cluster is running", () => {
       cy.login(CLUSTER_ORCH_USER);
       cy.visit("/infrastructure/clusters");
 

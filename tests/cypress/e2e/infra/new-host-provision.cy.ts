@@ -114,6 +114,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         url: `/v1/projects/${activeProject}/locations`,
       }).as("getLocations");
 
+      cy.intercept({
+        method: "GET",
+        url: `/v1/projects/${activeProject}/compute/os*`,
+      }).as("getOsResources");
+
       osProfileDropdownPom.interceptApis([
         osProfileDropdownPom.api.getOSResources,
       ]);
@@ -167,6 +172,19 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.get(".spark-popover")
         .contains("cypress-region | cypress-site")
         .click();
+
+      cy.wait("@getOsResources").then((interception) => {
+        console.log({ interception });
+        const osResourcesResponse = interception.response?.body;
+        console.log({ osResourcesResponse });
+        console.log("resources", osResourcesResponse?.OperatingSystemResources);
+        const ubuntuProfile =
+          osResourcesResponse?.OperatingSystemResources.find(
+            (os) => os.name === "Ubuntu 22.04.5 LTS",
+          );
+
+        console.log({ ubuntuProfile });
+      });
 
       osProfileDropdownPom.dropdown.openDropdown(osProfileDropdownPom.root);
       osProfileDropdownPom.dropdown.selectDropdownValueByLabel(
