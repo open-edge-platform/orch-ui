@@ -184,6 +184,8 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
           );
 
         console.log({ ubuntuProfile });
+        cy.log("getOsResourcesInterceptionResponse", interception);
+        cy.log("osResourcesResponse", osResourcesResponse);
       });
 
       osProfileDropdownPom.dropdown.openDropdown(osProfileDropdownPom.root);
