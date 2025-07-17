@@ -23,6 +23,7 @@ class DeploymentPackagePopupPom extends CyPom<Selectors> {
 
   public clickMenuOption(option: string) {
     this.openPopUp();
+    cy.wait(1000);
     cy.contains(option).click({ force: true });
   }
 }
