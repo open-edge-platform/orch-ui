@@ -14,20 +14,30 @@ export interface ClusterTemplatesDropdownProps {
   onSelectionChange?: (value: string) => void;
   clusterTemplateName?: string;
   isDisabled?: boolean;
+  kubernetesVersion?: string;
 }
 const ClusterTemplatesDropdown = ({
   onSelectionChange,
   clusterTemplateName,
   isDisabled,
+  kubernetesVersion,
 }: ClusterTemplatesDropdownProps) => {
   const projectName = SharedStorage.project?.name ?? "";
+  const templatesParam: cm.GetV2ProjectsByProjectNameTemplatesApiArg = {
+    projectName,
+  };
+  if (kubernetesVersion) {
+    // Apply the filter to the query
+    templatesParam.filter = `kubernetesVersion=${kubernetesVersion}`;
+  }
+  console.log("kubernetesVersion", kubernetesVersion);
   const {
     data: clusterTemplates,
     isSuccess: isTemplateSuccess,
     isLoading: isTemplateLoading,
     isError: isTemplateError,
     error,
-  } = cm.useGetV2ProjectsByProjectNameTemplatesQuery({ projectName });
+  } = cm.useGetV2ProjectsByProjectNameTemplatesQuery(templatesParam);
 
   const [templateNames, setTemplateNames] = useState<string[]>();
 
