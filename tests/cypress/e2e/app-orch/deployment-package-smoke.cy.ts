@@ -22,7 +22,7 @@ import AppOrchPom from "./app-orch-smoke.pom";
 
 const pom = new AppOrchPom("appOrchLayout");
 
-xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
+describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   const netLog = new NetworkLog();
   let testData: TestData;
   let registryNameId: string;
@@ -86,7 +86,7 @@ xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
       ) {
         throw new Error(
           "Require valid: registry, registryChart, application & deploymentPackage\n" +
-          `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
+            `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
         );
       }
       testData = data;
@@ -124,7 +124,8 @@ xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
         .join("-");
     });
     it("should create a deployment package", () => {
-      pom.deploymentPackagePopupPom.openPopUp();
+      // pom.deploymentPackagePopupPom.openPopUp();
+      cy.waitForPageTransition();
       pom.deploymentPackagePopupPom.clickMenuOption("Create");
       cy.waitForPageTransition();
       // Fill Deployment Package Creation form flow
