@@ -135,7 +135,6 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
         .join("-");
     });
     it("should create a deployment package", () => {
-      // pom.deploymentPackagePopupPom.openPopUp();
       cy.waitForPageTransition();
       cy.wait(3000);
       pom.deploymentPackagePopupPom.clickMenuOption("Create");

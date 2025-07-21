@@ -173,21 +173,6 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .contains("cypress-region | cypress-site")
         .click();
 
-      cy.wait("@getOsResources").then((interception) => {
-        console.log({ interception });
-        const osResourcesResponse = interception.response?.body;
-        console.log({ osResourcesResponse });
-        console.log("resources", osResourcesResponse?.OperatingSystemResources);
-        const ubuntuProfile =
-          osResourcesResponse?.OperatingSystemResources.find(
-            (os) => os.name === "Ubuntu 22.04.5 LTS",
-          );
-
-        console.log({ ubuntuProfile });
-        cy.log("getOsResourcesInterceptionResponse", interception);
-        cy.log("osResourcesResponse", osResourcesResponse);
-      });
-
       osProfileDropdownPom.dropdown.openDropdown(osProfileDropdownPom.root);
       osProfileDropdownPom.dropdown.selectDropdownValueByLabel(
         osProfileDropdownPom.dropdown.root,
