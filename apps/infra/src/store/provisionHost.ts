@@ -22,6 +22,7 @@ export type HostData = infra.HostResourceWrite & {
   templateName?: string;
   templateVersion?: string;
   error?: string;
+  enableVpro?: boolean;
 };
 
 export interface HostProvisionFormState {
@@ -59,7 +60,7 @@ export const initialState: HostProvisionState = {
   },
   hosts: {},
   commonHostData: {
-    vPro: true,
+    vPro: false,
     securityFeature: true,
   },
   autoOnboard: true,
@@ -230,6 +231,8 @@ export const provisionHost = createSlice({
         host.instance.securityFeature = state.commonHostData.securityFeature
           ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
           : "SECURITY_FEATURE_NONE";
+
+        host.enableVpro = state.commonHostData.vPro;
         host.instance.localAccountID =
           state.commonHostData.publicSshKey?.resourceId;
         host.metadata = state.commonHostData.metadata;
@@ -338,6 +341,7 @@ export const selectNoChangesInHosts = (state: RootState) =>
         host.instance?.securityFeature,
         commonData.securityFeature,
       ) &&
+      host.enableVpro === commonData.vPro &&
       host.instance?.localAccountID === commonData.publicSshKey?.resourceId &&
       isEqual(host.metadata ?? [], commonData.metadata ?? []);
 

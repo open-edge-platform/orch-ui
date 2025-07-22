@@ -150,6 +150,7 @@ export const useProvisioning = () => {
                 name: host.name,
                 serialNumber: host.serialNumber || undefined,
                 uuid: host.uuid || undefined,
+                enableVpro: host.enableVpro,
               },
               projectName: SharedStorage.project?.name ?? "",
             }).unwrap(),

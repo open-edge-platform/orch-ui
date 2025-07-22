@@ -88,6 +88,10 @@ const HostProvisionEditDrawer = ({
   const [securityFeature, setSecurityFeature] = useState<
     NonNullable<HostData["instance"]>["securityFeature"] | undefined
   >(host?.instance?.securityFeature);
+
+  const [enableVpro, setEnableVpro] = useState<boolean | undefined>(
+    host?.enableVpro,
+  );
   const [publicSshKey, setPublicSshKey] = useState<string | undefined>(
     host?.instance?.localAccountID,
   );
@@ -200,16 +204,14 @@ const HostProvisionEditDrawer = ({
                   <Flex cols={[6]} gap="2" align="start">
                     <div>
                       <Heading semanticLevel={6}>vPro</Heading>
-                      <p>
-                        Enable vPro for lorem ipsum dolorem, remote management
-                        with enhanced security. Lorem minimum HW requirements.
-                      </p>
+                      <p>Enable vPro</p>
                       <ToggleSwitch
                         name="vpro"
-                        isSelected={false}
+                        isSelected={enableVpro}
                         size={ToggleSwitchSize.Large}
+                        onChange={(isSelected) => setEnableVpro(isSelected)}
                       >
-                        Disabled
+                        {enableVpro ? "Enabled" : "Disabled"}
                       </ToggleSwitch>
                     </div>
                     <div>
@@ -301,6 +303,7 @@ const HostProvisionEditDrawer = ({
                         templateName,
                         templateVersion,
                         metadata,
+                        enableVpro,
                       },
                     }),
                   );
