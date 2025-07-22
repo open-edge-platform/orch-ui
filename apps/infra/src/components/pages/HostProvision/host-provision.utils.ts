@@ -71,15 +71,13 @@ const useProvisioningState = () => {
   ) => {
     setProvisionState((prev) => {
       const host = prev[hostSerialNumber] || {};
-      const newData = {
+      return {
         ...prev,
         [hostSerialNumber]: {
           ...host,
           [step]: { status, result, error },
         },
       };
-
-      return newData;
     });
   };
 
@@ -194,7 +192,7 @@ export const useProvisioning = () => {
           });
 
           const nodeSpec: cm.NodeSpec = {
-            id: registerHostResp.resourceId as string,
+            id: registerHostResp.uuid as string,
             role: "all",
           };
 
