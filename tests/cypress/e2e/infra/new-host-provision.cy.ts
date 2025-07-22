@@ -25,7 +25,7 @@ import {
   TestProvisionHostData,
 } from "../helpers/eimTestProvisionHostData";
 
-xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
+describe(`Infra smoke: the ${EIM_USER.username}`, () => {
   const netLog = new NetworkLog();
   const addHostsFormPom = new AddHostsFormPom();
   const registerHostsPom = new RegisterHostsPom();
@@ -78,7 +78,7 @@ xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       // uncomment this for local testing
       // cy.window().then((window) => {
-      // window.sessionStorage.setItem(sessionKey, sessionValue);
+      //   window.sessionStorage.setItem(sessionKey, sessionValue);
       //   cy.reload();
 
       //   cy.visit("/");
@@ -113,6 +113,11 @@ xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
         method: "GET",
         url: `/v1/projects/${activeProject}/locations`,
       }).as("getLocations");
+
+      cy.intercept({
+        method: "GET",
+        url: `/v1/projects/${activeProject}/compute/os*`,
+      }).as("getOsResources");
 
       osProfileDropdownPom.interceptApis([
         osProfileDropdownPom.api.getOSResources,
@@ -157,7 +162,6 @@ xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .should("be.visible")
         .type(host.serialNumber);
 
-
       registerHostsPom.el.nextButton.click();
 
       cy.waitForPageTransition();
@@ -170,7 +174,11 @@ xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .click();
 
       osProfileDropdownPom.dropdown.openDropdown(osProfileDropdownPom.root);
-      osProfileDropdownPom.dropdown.selectFirstListItemValue();
+      osProfileDropdownPom.dropdown.selectDropdownValueByLabel(
+        osProfileDropdownPom.dropdown.root,
+        "osProfile",
+        "Ubuntu 22.04.5 LTS",
+      );
 
       clusterTemplateDropdown.selectDropdownValue(
         clusterTemplateDropdown.root,
