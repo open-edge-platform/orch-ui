@@ -31,6 +31,17 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
     cy.login(user);
     cy.visit("/");
+
+    // uncomment this for local testing
+    // cy.window().then((window) => {
+    //   window.sessionStorage.setItem(sessionKey, sessionValue);
+    //   cy.reload();
+
+    //   cy.visit("/");
+    //   // cy.currentProject().then((p) => (activeProject = p));
+    //   getDeploymentsMFETab().click();
+    // });
+
     getDeploymentsMFETab().click();
   };
 
@@ -124,7 +135,8 @@ describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
         .join("-");
     });
     it("should create a deployment package", () => {
-      pom.deploymentPackagePopupPom.openPopUp();
+      cy.waitForPageTransition();
+      cy.wait(3000);
       pom.deploymentPackagePopupPom.clickMenuOption("Create");
       cy.waitForPageTransition();
       // Fill Deployment Package Creation form flow

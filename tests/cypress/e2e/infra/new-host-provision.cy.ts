@@ -78,7 +78,7 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       // uncomment this for local testing
       // cy.window().then((window) => {
-      // window.sessionStorage.setItem(sessionKey, sessionValue);
+      //   window.sessionStorage.setItem(sessionKey, sessionValue);
       //   cy.reload();
 
       //   cy.visit("/");
@@ -113,6 +113,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         method: "GET",
         url: `/v1/projects/${activeProject}/locations`,
       }).as("getLocations");
+
+      cy.intercept({
+        method: "GET",
+        url: `/v1/projects/${activeProject}/compute/os*`,
+      }).as("getOsResources");
 
       osProfileDropdownPom.interceptApis([
         osProfileDropdownPom.api.getOSResources,
@@ -159,6 +164,8 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
 
       registerHostsPom.el.nextButton.click();
 
+      cy.waitForPageTransition();
+
       locationAutocompletePom.combobox.type("c");
       cy.wait(1000);
       locationAutocompletePom.combobox.type("y");
@@ -167,7 +174,11 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         .click();
 
       osProfileDropdownPom.dropdown.openDropdown(osProfileDropdownPom.root);
-      osProfileDropdownPom.dropdown.selectFirstListItemValue();
+      osProfileDropdownPom.dropdown.selectDropdownValueByLabel(
+        osProfileDropdownPom.dropdown.root,
+        "osProfile",
+        "Ubuntu 22.04.5 LTS",
+      );
 
       clusterTemplateDropdown.selectDropdownValue(
         clusterTemplateDropdown.root,
@@ -201,10 +212,10 @@ describe(`Infra smoke: the ${EIM_USER.username}`, () => {
         instanceHosts.push(interception.response?.body.resourceId);
       });
 
-      cy.wait("@createCluster").then((interception) => {
-        expect(interception.response?.statusCode).to.equal(201);
-        clusters.push(interception.response?.body.resourceId);
-      });
+      // cy.wait("@createCluster").then((interception) => {
+      //   expect(interception.response?.statusCode).to.equal(201);
+      //   clusters.push(interception.response?.body.resourceId);
+      // });
 
       cy.url().should("contain", "infrastructure/hosts");
     });

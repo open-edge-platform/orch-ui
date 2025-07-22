@@ -45,12 +45,27 @@ describe("HostDetails", () => {
 
     it("should display the Host information", () => {
       pom.el.infraHostDetailsHeader.contains(mockHost.name);
+      pom.el.infraHostDetailsPowerStatus.find(".icon-ready").should("exist");
+      pom.el.infraHostDetailsPowerStatus.should(
+        "contain.text",
+        mockHost.powerStatus,
+      );
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
       pom.el.osProfiles.should("have.text", mockHost.instance?.os?.name);
       pom.el.site.should("have.text", "Restaurant 02");
       pom.el.trustedCompute.should("contain.text", "Not compatible");
       pom.el.provider.should("have.text", mockHost.provider?.name);
+    });
+
+    it("should display the vPro-related buttons", () => {
+      pom.el.infraHostDetailsStartBtn.should("exist");
+      pom.el.infraHostDetailsRestartBtn.should("exist");
+      pom.el.infraHostDetailsStopBtn.should("exist");
+      pom.el.infraHostDetailsStartBtn.should(
+        "have.class",
+        "spark-button-disabled",
+      );
     });
 
     it("should render inherited", () => {

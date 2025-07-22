@@ -16,6 +16,10 @@ const devConfig = {
   module: {
     rules: [
       {
+        test: /.*\.pom.(ts|tsx)?$/,
+        use: [{ loader: "ignore-loader" }],
+      },
+      {
         test: /\.(ts|tsx)$/,
         exclude: [/node_modules/, /\.cy\.tsx$/, /\.pom\.ts/],
         use: ["@jsdevtools/coverage-istanbul-loader", "ts-loader"],

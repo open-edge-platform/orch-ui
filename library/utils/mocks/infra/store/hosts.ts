@@ -187,6 +187,8 @@ export const assignedWorkloadHostOne: HostMock = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  powerStatusIndicator: "STATUS_INDICATION_IDLE",
+  powerStatus: "On",
 };
 
 export const assignedWorkloadHostTwo: HostMock = {
@@ -214,6 +216,8 @@ export const assignedWorkloadHostTwo: HostMock = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  powerStatusIndicator: "STATUS_INDICATION_IDLE",
+  powerStatus: "On",
 };
 
 export const assignedWorkloadHostThree: HostMock = {
@@ -297,6 +301,8 @@ export const provisionedHostThree: HostMock = {
   hostStatus: "Error",
   hostStatusTimestamp: 123123,
   currentState: "HOST_STATE_ONBOARDED",
+  powerStatusIndicator: "STATUS_INDICATION_UNSPECIFIED",
+  powerStatus: "Off",
 };
 
 // Unconfigured Hosts

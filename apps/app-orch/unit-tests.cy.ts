@@ -72,6 +72,7 @@ import "./src/components/pages/DeploymentPackageCreate/DeploymentPackageCreate.c
 import "./src/components/pages/DeploymentPackageDetails/DeploymentPackageDetails.cy.tsx";
 import "./src/components/pages/DeploymentPackageEdit/DeploymentPackageEdit.cy.tsx";
 import "./src/components/pages/DeploymentPackageImport/DeploymentPackageImport.cy.tsx";
+import "./src/components/pages/DeploymentPackageImportFromHelmChart/DeploymentPackageImportFromHelmChart.cy.tsx";
 import "./src/components/pages/DeploymentPackages/DeploymentPackages.cy.tsx";
 import "./src/components/pages/Deployments/Deployments.cy.tsx";
 import "./src/components/pages/EditDeployment/EditDeployment.cy.tsx";
