@@ -22,7 +22,7 @@ import AppOrchPom from "./app-orch-smoke.pom";
 
 const pom = new AppOrchPom("appOrchLayout");
 
-xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
+describe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   const netLog = new NetworkLog();
   let testData: TestData;
   let registryNameId: string;
@@ -31,6 +31,17 @@ xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
   const initPageByUser = (user = APP_ORCH_READWRITE_USER) => {
     cy.login(user);
     cy.visit("/");
+
+    // uncomment this for local testing
+    // cy.window().then((window) => {
+    //   window.sessionStorage.setItem(sessionKey, sessionValue);
+    //   cy.reload();
+
+    //   cy.visit("/");
+    //   // cy.currentProject().then((p) => (activeProject = p));
+    //   getDeploymentsMFETab().click();
+    // });
+
     getDeploymentsMFETab().click();
   };
 
@@ -86,7 +97,7 @@ xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
       ) {
         throw new Error(
           "Require valid: registry, registryChart, application & deploymentPackage\n" +
-          `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
+            `Invalid test data in ${dataFile}: ${JSON.stringify(data)}`,
         );
       }
       testData = data;
@@ -124,7 +135,8 @@ xdescribe("APP_ORCH E2E: Deployment Package Smoke tests", () => {
         .join("-");
     });
     it("should create a deployment package", () => {
-      pom.deploymentPackagePopupPom.openPopUp();
+      cy.waitForPageTransition();
+      cy.wait(3000);
       pom.deploymentPackagePopupPom.clickMenuOption("Create");
       cy.waitForPageTransition();
       // Fill Deployment Package Creation form flow

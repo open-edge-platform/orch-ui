@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TablePom } from "@orch-ui/components";
+import { ContextSwitcherPom, TablePom } from "@orch-ui/components";
 import { EIM_USER } from "@orch-ui/tests";
+import { LifeCycleState } from "apps/infra/src/store/hostFilterBuilder";
 import { NetworkLog } from "../../support/network-logs";
 import { getHostsViaApi, getRegionViaAPi, getSiteViaApi } from "../helpers";
 import {
@@ -12,9 +13,10 @@ import {
   TestProvisionHostData,
 } from "../helpers/eimTestProvisionHostData";
 
-xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
+describe(`Infra smoke: the ${EIM_USER.username}`, () => {
   const netLog = new NetworkLog();
   const tablePom = new TablePom();
+  const contextSwitcherPom = new ContextSwitcherPom();
 
   let testVerifyHostData: TestProvisionHostData,
     serialNumber: string,
@@ -49,6 +51,15 @@ xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.login(EIM_USER);
       cy.visit("/");
       cy.currentProject().then((p) => (activeProject = p));
+
+      // uncomment this for local testing
+      // cy.window().then((window) => {
+      //   window.sessionStorage.setItem(sessionKey, sessionValue);
+      //   cy.reload();
+
+      //   cy.visit("/");
+      //   cy.currentProject().then((p) => (activeProject = p));
+      // });
     });
 
     it("should see a host in provisioned state", () => {
@@ -87,6 +98,7 @@ xdescribe(`Infra smoke: the ${EIM_USER.username}`, () => {
       cy.dataCy("aside", { timeout: 10 * 1000 })
         .contains("button", "Hosts")
         .click();
+      contextSwitcherPom.getTabButton(LifeCycleState.All).click();
 
       testVerifyHostData.hosts.forEach((host) => {
         tablePom.search(host.serialNumber);
