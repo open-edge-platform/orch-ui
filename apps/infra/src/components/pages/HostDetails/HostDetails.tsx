@@ -119,6 +119,8 @@ const HostDetails: React.FC = () => {
     },
   ); // Host's Site details
 
+  const [patchHost] = infra.useHostServicePatchHostMutation();
+
   // Below useEffects will set the host/site data to display
   useEffect(() => {
     if (!hostQuery.isLoading && !hostQuery.isError && hostQuery.data && id) {
@@ -312,6 +314,39 @@ const HostDetails: React.FC = () => {
     message: host.powerStatus ?? "Unknown",
   };
 
+  const handleStartPress = () => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredPowerState: "POWER_STATE_ON",
+      },
+    }).unwrap();
+  };
+
+  const handleStopPress = () => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredPowerState: "POWER_STATE_OFF",
+      },
+    }).unwrap();
+  };
+
+  const handleRestartPress = () => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredPowerState: "POWER_STATE_RESET",
+      },
+    }).unwrap();
+  };
+
   return (
     <div className={cssSelectorIhd} data-cy={dataCyIhd}>
       {/* HostDetails Heading */}
@@ -320,41 +355,47 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <div className="primary-actions">
-          <ButtonGroup className="button-group">
-            <Button
-              size={ButtonSize.Large}
-              variant={ButtonVariant.Secondary}
-              endSlot={<Icon icon="play" />}
-              isDisabled={
-                host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
-              }
-              data-cy={`${dataCyIhd}StartBtn`}
-            >
-              Start
-            </Button>
-            <Button
-              size={ButtonSize.Large}
-              variant={ButtonVariant.Secondary}
-              endSlot={<Icon icon="redo" />}
-              isDisabled={
-                host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
-              }
-              data-cy={`${dataCyIhd}RestartBtn`}
-            >
-              Restart
-            </Button>
-            <Button
-              size={ButtonSize.Large}
-              variant={ButtonVariant.Secondary}
-              endSlot={<Icon icon="square" />}
-              isDisabled={
-                host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
-              }
-              data-cy={`${dataCyIhd}StopBtn`}
-            >
-              Stop
-            </Button>
-          </ButtonGroup>
+          {host.amtSku !== "Unknown" && (
+            <ButtonGroup className="button-group">
+              <Button
+                size={ButtonSize.Large}
+                variant={ButtonVariant.Secondary}
+                endSlot={<Icon icon="play" />}
+                isDisabled={
+                  host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+                }
+                data-cy={`${dataCyIhd}StartBtn`}
+                onPress={handleStartPress}
+              >
+                Start
+              </Button>
+              <Button
+                size={ButtonSize.Large}
+                variant={ButtonVariant.Secondary}
+                endSlot={<Icon icon="redo" />}
+                isDisabled={
+                  host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
+                }
+                data-cy={`${dataCyIhd}RestartBtn`}
+                onPress={handleRestartPress}
+              >
+                Restart
+              </Button>
+              <Button
+                size={ButtonSize.Large}
+                variant={ButtonVariant.Secondary}
+                endSlot={<Icon icon="square" />}
+                isDisabled={
+                  host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
+                }
+                data-cy={`${dataCyIhd}StopBtn`}
+                onPress={handleStopPress}
+              >
+                Stop
+              </Button>
+            </ButtonGroup>
+          )}
+
           <HostDetailsActions
             basePath="../"
             host={host}
