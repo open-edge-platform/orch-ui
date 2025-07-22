@@ -22,7 +22,7 @@ import {
   checkAuthAndRole,
   Direction,
   getOrder,
-  hostProvisioningRoute,
+  hostProvisionRoute,
   Role,
   SharedStorage,
   useInfraNavigate,
@@ -220,7 +220,7 @@ const HostsTable = ({
       dispatch(reset());
       // store the current Host in Redux, so we don't have to fetch it again
       dispatch(setHosts({ hosts: selectedHosts }));
-      navigate(hostProvisioningRoute);
+      navigate(hostProvisionRoute);
     }
   };
 

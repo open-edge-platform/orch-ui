@@ -6,7 +6,7 @@
 import { PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
-  hostProvisioningRoute,
+  hostProvisionRoute,
   Role,
   useInfraNavigate,
 } from "@orch-ui/utils";
@@ -36,7 +36,7 @@ const OnboardedHostPopup = (props: OnboardedHostPopupProps) => {
     // store the current Host in Redux, so we don't have to fetch it again
     dispatch(setHosts({ hosts: [host] }));
 
-    navigate(hostProvisioningRoute);
+    navigate(hostProvisionRoute);
   };
 
   const onboardedHostPopup: PopupOption[] = [
