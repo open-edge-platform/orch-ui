@@ -27,7 +27,7 @@ interface TestData {
   clusterName: string;
 }
 
-xdescribe("Cluster orch Smoke test:", () => {
+describe("Cluster orch Smoke test:", () => {
   const netLog = new NetworkLog();
   const infraPom = new InfraPom("eim");
   const tablePom = new TablePom();
@@ -160,7 +160,7 @@ xdescribe("Cluster orch Smoke test:", () => {
       });
     });
 
-    xit("should validate the cluster is running", () => {
+    it("should validate the cluster is running", () => {
       cy.login(CLUSTER_ORCH_USER);
       cy.visit("/infrastructure/clusters");
 
