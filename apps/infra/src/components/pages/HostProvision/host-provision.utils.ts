@@ -148,6 +148,7 @@ export const useProvisioning = () => {
                 name: host.name,
                 serialNumber: host.serialNumber || undefined,
                 uuid: host.uuid || undefined,
+                enableVpro: host.enableVpro,
               },
               projectName: SharedStorage.project?.name ?? "",
             }).unwrap(),
@@ -174,6 +175,7 @@ export const useProvisioning = () => {
               osID: host.instance?.osID,
               securityFeature: host.instance?.securityFeature,
               kind: "INSTANCE_KIND_METAL",
+              localAccountID: host.instance?.localAccountID,
             },
           }).unwrap(),
         );
