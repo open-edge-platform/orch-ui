@@ -51,7 +51,7 @@ const OsProfileDropdown = ({
     },
   );
 
-  const hosts = useAppSelector(selectHosts);
+  const hosts = useAppSelector(selectHosts); // TODO: is valid selection ?
   const singleHostConfig = Object.keys(hosts).length === 1;
   const osExists = isSuccess && osResources && osResources?.length != 0;
 

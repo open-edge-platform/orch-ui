@@ -287,7 +287,7 @@ const HostsTable = ({
             className="hosts-action-btn"
             data-cy="provisionBtn"
             onPress={() => {
-              provisionHosts();
+              provisionHosts(); //TODO:update and use provisionHost.ts
             }}
           >
             Provision

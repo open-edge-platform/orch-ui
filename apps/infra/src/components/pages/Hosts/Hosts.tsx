@@ -15,13 +15,13 @@ import { Button, Heading } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { reset } from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   buildFilter,
   LifeCycleState,
   setLifeCycleState,
 } from "../../../store/hostFilterBuilder";
+import { reset } from "../../../store/provisionHost";
 import HostSearchFilters from "../../organism/HostSearchFilters/HostSearchFilters";
 import HostsTable from "../../organism/HostsTable/HostsTable";
 import { RegisterHostDrawer } from "../../organism/RegisterHostDrawer/RegisterHostDrawer";
