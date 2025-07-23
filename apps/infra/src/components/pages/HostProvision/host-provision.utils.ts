@@ -177,6 +177,7 @@ export const useProvisioning = () => {
               osID: host.instance?.osID,
               securityFeature: host.instance?.securityFeature,
               kind: "INSTANCE_KIND_METAL",
+              localAccountID: host.instance?.localAccountID,
             },
           }).unwrap(),
         );
