@@ -10,8 +10,17 @@ import {
   Role,
   useInfraNavigate,
 } from "@orch-ui/utils";
-import { reset, setHosts } from "../../../store/configureHost";
+import {
+  reset as resetConfigureHost,
+  setHosts as setHostsToConfigure,
+} from "../../../store/configureHost";
 import { useAppDispatch } from "../../../store/hooks";
+import {
+  reset,
+  setCreateClusterValue,
+  setHostData,
+  setRegisterHostValue,
+} from "../../../store/provisionHost";
 import GenericHostPopup, {
   GenericHostPopupProps,
 } from "../../atom/GenericHostPopup/GenericHostPopup";
@@ -31,11 +40,18 @@ const OnboardedHostPopup = (props: OnboardedHostPopupProps) => {
   const dispatch = useAppDispatch();
 
   const onProvision = () => {
+    //TODO: remove stale redux references
     // reset the HostConfig form
-    dispatch(reset());
+    dispatch(resetConfigureHost());
     // store the current Host in Redux, so we don't have to fetch it again
-    dispatch(setHosts({ hosts: [host] }));
+    dispatch(setHostsToConfigure({ hosts: [host] }));
 
+    dispatch(reset());
+    // do not allow creating cluster from onboarded step
+    dispatch(setCreateClusterValue(false));
+    // do not invoke register api from onboarded step
+    dispatch(setRegisterHostValue(false));
+    dispatch(setHostData({ host: host }));
     navigate(hostProvisionRoute);
   };
 

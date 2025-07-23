@@ -29,7 +29,10 @@ import {
 } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { useEffect } from "react";
-import { reset, setHosts } from "../../../store/configureHost";
+import {
+  reset as resetConfigureHost,
+  setHosts as setHostsToConfigure,
+} from "../../../store/configureHost";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   LifeCycleState,
@@ -39,6 +42,12 @@ import {
   setSiteId,
   setWorkloadMemberId,
 } from "../../../store/hostFilterBuilder";
+import {
+  reset,
+  setCreateClusterValue,
+  setHostData,
+  setRegisterHostValue,
+} from "../../../store/provisionHost";
 import {
   showErrorMessageBanner,
   showSuccessMessageBanner,
@@ -216,10 +225,22 @@ const HostsTable = ({
 
   const provisionHosts = () => {
     if (selectedHosts) {
-      // reset the HostConfig form
+      // reset the provisioning form
       dispatch(reset());
+      // do not allow creating cluster from onboarded step
+      dispatch(setCreateClusterValue(false));
+      // do not invoke register api from onboarded step
+      dispatch(setRegisterHostValue(false));
+
+      //TODO: cleanup stale storage in reducer
+      dispatch(resetConfigureHost());
       // store the current Host in Redux, so we don't have to fetch it again
-      dispatch(setHosts({ hosts: selectedHosts }));
+      dispatch(setHostsToConfigure({ hosts: selectedHosts }));
+
+      for (const host of selectedHosts) {
+        // set host data to be configured in provisionHost reducer
+        dispatch(setHostData({ host: host }));
+      }
       navigate(hostProvisionRoute);
     }
   };

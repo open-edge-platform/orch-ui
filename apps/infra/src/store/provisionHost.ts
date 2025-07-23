@@ -45,6 +45,7 @@ export interface HostProvisionState {
     metadata?: infra.MetadataItem[];
   };
   autoOnboard: boolean;
+  registerHost: boolean;
   autoProvision: boolean;
   createCluster: boolean;
   hasHostDefinitionError: boolean;
@@ -63,6 +64,7 @@ export const initialState: HostProvisionState = {
     securityFeature: true,
   },
   autoOnboard: true,
+  registerHost: true,
   autoProvision: true,
   createCluster: true,
   hasHostDefinitionError: false,
@@ -173,6 +175,9 @@ export const provisionHost = createSlice({
     },
     setAutoProvisionValue(state, action: PayloadAction<boolean>) {
       state.autoProvision = action.payload;
+    },
+    setRegisterHostValue(state, action: PayloadAction<boolean>) {
+      state.registerHost = action.payload;
     },
     setCreateClusterValue(state, action: PayloadAction<boolean>) {
       state.createCluster = action.payload;
@@ -299,6 +304,7 @@ export const {
   setCommonPublicSshKey,
   setCommonMetadata,
   removeHost,
+  setRegisterHostValue,
 } = provisionHost.actions;
 
 // selectors
