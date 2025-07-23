@@ -60,6 +60,8 @@ const HostProvision = () => {
     formStatus: { currentStep, enableNextBtn },
   } = useAppSelector(selectHostProvisionState);
 
+  console.log({ hosts });
+
   const containsHosts = useAppSelector(selectContainsHosts);
   const containsChangedHosts = !useAppSelector(selectNoChangesInHosts);
 

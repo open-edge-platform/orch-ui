@@ -6,11 +6,18 @@
 import { PopupOption } from "@orch-ui/components";
 import {
   checkAuthAndRole,
-  hostProvisioningRoute,
+  newHostProvisioningRoute,
   Role,
   useInfraNavigate,
 } from "@orch-ui/utils";
-import { reset, setHosts } from "../../../store/configureHost";
+// import { reset, setHosts } from "../../../store/configureHost";
+import {
+  reset,
+  setAutoOnboardValue,
+  setAutoProvisionValue,
+  setCreateClusterValue,
+  setHostsBasicData,
+} from "src/store/provisionHost";
 import { useAppDispatch } from "../../../store/hooks";
 import GenericHostPopup, {
   GenericHostPopupProps,
@@ -31,12 +38,25 @@ const OnboardedHostPopup = (props: OnboardedHostPopupProps) => {
   const dispatch = useAppDispatch();
 
   const onProvision = () => {
+    console.log("onProvision called with host", host);
     // reset the HostConfig form
-    dispatch(reset());
-    // store the current Host in Redux, so we don't have to fetch it again
-    dispatch(setHosts({ hosts: [host] }));
+    // dispatch(reset());
+    // // store the current Host in Redux, so we don't have to fetch it again
+    // dispatch(setHosts({ hosts: [host] }));
 
-    navigate(hostProvisioningRoute);
+    dispatch(reset());
+    dispatch(
+      setHostsBasicData({
+        hosts: [host],
+      }),
+    );
+
+    dispatch(setAutoOnboardValue(false));
+    dispatch(setAutoProvisionValue(true));
+    dispatch(setCreateClusterValue(false));
+
+    // navigate(hostProvisioningRoute);
+    navigate(newHostProvisioningRoute);
   };
 
   const onboardedHostPopup: PopupOption[] = [

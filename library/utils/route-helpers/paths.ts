@@ -17,6 +17,7 @@ export const hostDetailsRoute = "host/:id";
 export const hostEditRoute = "host/:id/edit";
 export const hostRegisterRoute = "register-hosts";
 export const hostProvisioningRoute = "hosts/set-up-provisioning";
+export const newHostProvisioningRoute = "hosts/provision";
 export const hostProvisionRoute = "hosts/provision";
 export const clusterTemplateRoute = "cluster-templates";
 export const clusterTemplateDetailRoute =
