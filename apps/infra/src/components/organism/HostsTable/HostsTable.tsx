@@ -225,17 +225,17 @@ const HostsTable = ({
 
   const provisionHosts = () => {
     if (selectedHosts) {
+      //TODO: cleanup stale storage in reducer
+      dispatch(resetConfigureHost());
+      // store the current Host in Redux, so we don't have to fetch it again
+      dispatch(setHostsToConfigure({ hosts: selectedHosts }));
+
       // reset the provisioning form
       dispatch(reset());
       // do not allow creating cluster from onboarded step
       dispatch(setCreateClusterValue(false));
       // do not invoke register api from onboarded step
       dispatch(setRegisterHostValue(false));
-
-      //TODO: cleanup stale storage in reducer
-      dispatch(resetConfigureHost());
-      // store the current Host in Redux, so we don't have to fetch it again
-      dispatch(setHostsToConfigure({ hosts: selectedHosts }));
 
       for (const host of selectedHosts) {
         // set host data to be configured in provisionHost reducer
