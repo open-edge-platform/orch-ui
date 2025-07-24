@@ -20,7 +20,7 @@ describe("<HostRegistrationAndProvisioningCancelDialog/>", () => {
   });
 
   it("should return to the hosts page on cancel", () => {
-    const route = "/hosts/set-up-provisioning";
+    const route = "/hosts/provision";
     cy.mount(<div />, {
       routerProps: { initialEntries: [route] },
       routerRule: [
