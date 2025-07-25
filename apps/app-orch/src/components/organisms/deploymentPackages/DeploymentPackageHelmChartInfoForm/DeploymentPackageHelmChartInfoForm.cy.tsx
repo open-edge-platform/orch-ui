@@ -27,7 +27,7 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   });
 
   it("should render all fields with empty default values", () => {
-    pom.el["helm-chart-url"].should("have.value", "");
+    pom.el["helmChartUrl"].should("have.value", "");
     pom.el.username.should("have.value", "");
     pom.el.password.should("have.value", "");
   });
@@ -35,13 +35,13 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   describe("validation", () => {
     it("cannot put more than 70 characters for Helm Chart URL", () => {
       const longValue = "a".repeat(71);
-      pom.el["helm-chart-url"].type(longValue);
+      pom.el["helmChartUrl"].type(longValue);
       const shorterValue = "a".repeat(70);
-      pom.el["helm-chart-url"].invoke("val").should("equal", shorterValue);
+      pom.el["helmChartUrl"].invoke("val").should("equal", shorterValue);
     });
 
     it("should not show error for valid Helm Chart URL", () => {
-      pom.el["helm-chart-url"].type("valid-chart");
+      pom.el["helmChartUrl"].type("valid-chart");
       pom.helmChartUrlInvalidIndicator.should("not.exist");
     });
 
@@ -85,15 +85,15 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   });
 
   it("should allow entering and clearing helm chart url", () => {
-    pom.el["helm-chart-url"].type("my-helm-chart");
-    pom.el["helm-chart-url"].should("have.value", "my-helm-chart");
-    pom.el["helm-chart-url"].clear();
-    pom.el["helm-chart-url"].should("have.value", "");
+    pom.el["helmChartUrl"].type("my-helm-chart");
+    pom.el["helmChartUrl"].should("have.value", "my-helm-chart");
+    pom.el["helmChartUrl"].clear();
+    pom.el["helmChartUrl"].should("have.value", "");
   });
 
   it("should trim whitespace in helm chart url and validate", () => {
-    pom.el["helm-chart-url"].type("  validchart  ");
-    pom.el["helm-chart-url"].should("have.value", "  validchart  ");
+    pom.el["helmChartUrl"].type("  validchart  ");
+    pom.el["helmChartUrl"].should("have.value", "  validchart  ");
     pom.helmChartUrlInvalidIndicator.should("not.exist");
   });
 
