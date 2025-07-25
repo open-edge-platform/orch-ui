@@ -22,6 +22,7 @@ export type HostData = infra.HostResourceWrite & {
   templateName?: string;
   templateVersion?: string;
   error?: string;
+  enableVpro?: boolean;
 };
 
 export interface HostProvisionFormState {
@@ -45,6 +46,7 @@ export interface HostProvisionState {
     metadata?: infra.MetadataItem[];
   };
   autoOnboard: boolean;
+  registerHost: boolean;
   autoProvision: boolean;
   createCluster: boolean;
   hasHostDefinitionError: boolean;
@@ -59,10 +61,11 @@ export const initialState: HostProvisionState = {
   },
   hosts: {},
   commonHostData: {
-    vPro: true,
+    vPro: false,
     securityFeature: true,
   },
   autoOnboard: true,
+  registerHost: true,
   autoProvision: true,
   createCluster: true,
   hasHostDefinitionError: false,
@@ -174,6 +177,9 @@ export const provisionHost = createSlice({
     setAutoProvisionValue(state, action: PayloadAction<boolean>) {
       state.autoProvision = action.payload;
     },
+    setRegisterHostValue(state, action: PayloadAction<boolean>) {
+      state.registerHost = action.payload;
+    },
     setCreateClusterValue(state, action: PayloadAction<boolean>) {
       state.createCluster = action.payload;
     },
@@ -230,6 +236,8 @@ export const provisionHost = createSlice({
         host.instance.securityFeature = state.commonHostData.securityFeature
           ? "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
           : "SECURITY_FEATURE_NONE";
+
+        host.enableVpro = state.commonHostData.vPro;
         host.instance.localAccountID =
           state.commonHostData.publicSshKey?.resourceId;
         host.metadata = state.commonHostData.metadata;
@@ -299,6 +307,7 @@ export const {
   setCommonPublicSshKey,
   setCommonMetadata,
   removeHost,
+  setRegisterHostValue,
 } = provisionHost.actions;
 
 // selectors
@@ -338,6 +347,7 @@ export const selectNoChangesInHosts = (state: RootState) =>
         host.instance?.securityFeature,
         commonData.securityFeature,
       ) &&
+      host.enableVpro === commonData.vPro &&
       host.instance?.localAccountID === commonData.publicSshKey?.resourceId &&
       isEqual(host.metadata ?? [], commonData.metadata ?? []);
 
