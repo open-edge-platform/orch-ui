@@ -74,7 +74,25 @@ AUTH: {{ .Values.global.auth.enabled | quote }},
   SESSION_TIMEOUT: {{ .Values.global.session_timeout | quote }},
   OBSERVABILITY_URL: {{ .Values.global.observability.url | quote }},
   TITLE: {{ .Values.header.title | quote }},
-  DOCUMENTATION_URL: {{ .Values.header.documentationUrl | quote }},
+  
+  {{/* Calculate documentation URL based on version */}}
+  {{- $version := .Values.versions.orchestrator -}}
+  {{- $docVersion := "main" -}}
+  {{/* Extract major.minor from version if it exists */}}
+  {{- if $version -}}
+    {{- if hasPrefix "v" $version -}}
+      {{- $version = trimPrefix "v" $version -}}
+    {{- end -}}
+    {{- $versionParts := splitList "-" $version -}}
+    {{- if $versionParts -}}
+      {{- $numbers := splitList "." (index $versionParts 0) -}}
+      {{- if ge (len $numbers) 2 -}}
+        {{- $docVersion = printf "%s.%s" (index $numbers 0) (index $numbers 1) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  DOCUMENTATION_URL: {{ printf "https://docs.openedgeplatform.intel.com/edge-manage-docs/%s" $docVersion | quote }},
   DOCUMENTATION: [
       {{- range .Values.header.documentation }}
         { src: "{{ .src }}", dest: "{{ .dest }}" },

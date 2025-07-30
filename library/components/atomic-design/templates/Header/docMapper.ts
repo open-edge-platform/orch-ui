@@ -13,8 +13,9 @@ export const getDocsForUrl = (url: string) => {
   const urlParts = url.substring(1).split("/");
 
   const docsUrl = stripTrailingSlash(RuntimeConfig.documentationUrl);
+  console.log("docsUrl:", docsUrl);
   let docsMapper = RuntimeConfig.documentation;
-
+  console.log("docsMapper:", docsMapper);
   // looking for matches part (url segment) by part
   // takes browser url, e.g. /test/aa/bb/cc and test against mapper values, segment by segment
   // if values from the same segment index from url and mapper key are different we dont grab this mapping
