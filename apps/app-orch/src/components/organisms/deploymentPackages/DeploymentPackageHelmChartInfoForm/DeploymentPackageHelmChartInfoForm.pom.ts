@@ -5,7 +5,12 @@
 
 import { AdvancedSettingsTogglePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
-const dataCySelectors = ["helm-chart-url", "username", "password"] as const;
+const dataCySelectors = [
+  "helmChartUrl",
+  "username",
+  "password",
+  "importButton",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
@@ -16,9 +21,7 @@ class DeploymentPackageHelmChartInfoFormPom extends CyPom<Selectors> {
   }
 
   get helmChartUrlField() {
-    return this.el["helm-chart-url"].parentsUntil(
-      ".spark-text-field-container",
-    );
+    return this.el["helmChartUrl"].parentsUntil(".spark-text-field-container");
   }
 
   get helmChartUrlInvalidIndicator() {
