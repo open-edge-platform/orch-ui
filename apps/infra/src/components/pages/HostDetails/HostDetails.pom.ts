@@ -125,6 +125,21 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
           os: {
             name: "Ubuntu",
             sha256: "OSSHA256",
+            updateSources: ["OSUpdateSourceName"],
+          },
+          // data for backward compatibility
+          currentOs: {
+            resourceId: "os-current",
+            name: "CurrentOS",
+            sha256: "CurrentOSSHA256",
+            updateSources: ["CurrentOSUpdateSourceName"],
+            osType: "OS_TYPE_IMMUTABLE",
+          },
+          desiredOs: {
+            resourceId: "os-desired",
+            name: "DesiredOS",
+            sha256: "DesiredOSSHA256",
+            updateSources: ["DesiredOSUpdateSourceName"],
           },
         },
       },

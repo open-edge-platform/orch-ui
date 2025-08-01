@@ -228,6 +228,17 @@ export const statusIndicatorToIconStatus = (
   }
 };
 
+export const isOSUpdateAvailable = (
+  instance: infra.InstanceResourceRead | undefined,
+) => {
+  const desiredOsId = instance?.desiredOs?.resourceId;
+  const currentOs = instance?.currentOs;
+  return (
+    currentOs?.osType === "OS_TYPE_IMMUTABLE" &&
+    currentOs?.resourceId !== desiredOsId
+  );
+};
+
 const getHostProvisionTitles = (
   hostName: string,
   provisioningStatusIndicator?: infra.HostResourceRead["hostStatusIndicator"],
