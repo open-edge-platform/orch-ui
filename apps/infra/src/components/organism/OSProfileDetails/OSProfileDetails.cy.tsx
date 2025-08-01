@@ -15,11 +15,12 @@ describe("<OSProfileDetails/>", () => {
       cy.mount(
         <OSProfileDetails
           os={osUbuntu}
-          updatePolicy={{
-            name: "Ubuntu",
-            kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
-            updateSources: ["deb https://files.edgeorch.net orchui release"],
-          }}
+          /* TODO: uncomment this data post 3.1 */
+          // updatePolicy={{
+          //   name: "Ubuntu",
+          //   kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+          //   updateSources: ["deb https://files.edgeorch.net orchui release"],
+          // }}
         />,
       );
     });

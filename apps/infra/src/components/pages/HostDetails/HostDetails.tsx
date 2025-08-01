@@ -22,6 +22,7 @@ import {
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
+  isOSUpdateAvailable,
   parseError,
   Role,
   SharedStorage,
@@ -435,7 +436,8 @@ const HostDetails: React.FC = () => {
               idle: () => getCustomStatusOnIdleAggregation(host),
             }}
           />
-          {host?.instance?.osUpdateAvailable && (
+          {(isOSUpdateAvailable(host?.instance) ||
+            host?.instance?.osUpdateAvailable) && (
             <label className="update-available" data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
@@ -493,12 +495,18 @@ const HostDetails: React.FC = () => {
             </tr>
             <tr>
               <td>OS</td>
-              <td data-cy="osProfiles">{host?.instance?.os?.name ?? "-"}</td>
+              <td data-cy="osProfiles">
+                {host?.instance?.os?.name ??
+                  host?.instance?.currentOs?.name ??
+                  "-"}
+              </td>
             </tr>
             <tr>
               <td>Updates</td>
               <td data-cy="desiredOsProfiles">
-                {host?.instance?.osUpdateAvailable ?? "-"}
+                {host?.instance?.osUpdateAvailable ??
+                  host?.instance?.desiredOs?.name ??
+                  "-"}{" "}
               </td>
             </tr>
             {host.site && (
