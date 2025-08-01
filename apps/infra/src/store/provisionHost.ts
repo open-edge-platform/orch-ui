@@ -50,6 +50,7 @@ export interface HostProvisionState {
   autoProvision: boolean;
   createCluster: boolean;
   hasHostDefinitionError: boolean;
+  kubernetesVersion: string;
 }
 
 export const initialState: HostProvisionState = {
@@ -69,6 +70,7 @@ export const initialState: HostProvisionState = {
   autoProvision: true,
   createCluster: true,
   hasHostDefinitionError: false,
+  kubernetesVersion: "",
 };
 
 export type SiteReadWithPath = infra.SiteResourceRead & {
@@ -251,11 +253,24 @@ export const provisionHost = createSlice({
       state,
       action: PayloadAction<infra.OperatingSystemResourceRead>,
     ) {
+      const changed = state.commonHostData?.os?.name !== action.payload.name;
       state.commonHostData.os = action.payload;
+      state.kubernetesVersion =
+        (
+          JSON.parse(action.payload.metadata ?? "{}") as {
+            "kubernetes-version"?: string;
+          }
+        )["kubernetes-version"] ?? "";
+
+      if (changed) {
+        delete state.commonHostData["clusterTemplateName"];
+        delete state.commonHostData["clusterTemplateVersion"];
+      }
       provisionHost.caseReducers.validateStep(state);
     },
     setCommonClusterTemplateName(state, action: PayloadAction<string>) {
       state.commonHostData.clusterTemplateName = action.payload;
+      delete state.commonHostData["clusterTemplateVersion"];
       provisionHost.caseReducers.validateStep(state);
     },
     setCommonClusterTemplateVersion(state, action: PayloadAction<string>) {
