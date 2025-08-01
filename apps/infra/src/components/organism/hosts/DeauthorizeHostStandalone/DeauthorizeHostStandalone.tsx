@@ -45,7 +45,7 @@ const DeauthorizeHostStandalone = ({
   setDeauthorizeConfirmationOpen,
 }: DeauthorizeHostStandaloneProps) => {
   const cy = { "data-cy": dataCy };
-  const [deauthorizeReason, setDeauthorizeReason] = useState<string>();
+  const [deauthorizeReason, setDeauthorizeReason] = useState<string>("");
   const { control: controlDeauthBasicInfo } = useForm<DeauthInputs>({
     mode: "all",
   });
@@ -71,10 +71,12 @@ const DeauthorizeHostStandalone = ({
         render={({ field }) => (
           <TextField
             {...field}
-            label="Deauthorize reason (Optional)"
+            label="Reason for deauthorization"
             data-cy="reason"
             onInput={(e) => {
-              setDeauthorizeReason(e.currentTarget.value);
+              const value = e.currentTarget.value;
+              setDeauthorizeReason(value);
+              field.onChange(value);
             }}
             size={InputSize.Large}
             className="text-field-align"
@@ -109,6 +111,9 @@ const DeauthorizeHostStandalone = ({
       content={deauthDialogContent}
       isOpen={isDeauthConfirmationOpen}
       confirmBtnVariant={ButtonVariant.Alert}
+      confirmBtnDisabled={
+        !deauthorizeReason || deauthorizeReason.trim().length === 0
+      }
       confirmCb={() => deauthorizeHostFn(deauthorizeReason ?? "")}
       confirmBtnText="Deauthorize"
       cancelCb={() => setDeauthorizeConfirmationOpen(false)}

@@ -45,6 +45,10 @@ export interface ConfirmationDialogProps {
    */
   confirmBtnVariant?: ButtonVariant;
   /**
+   * Whether the confirm button is disabled
+   */
+  confirmBtnDisabled?: boolean;
+  /**
    * Callback invoked when the cancel button is clicked
    */
   cancelCb?: () => void;
@@ -100,6 +104,7 @@ export const ConfirmationDialog = ({
   confirmCb,
   confirmBtnText = "Confirm",
   confirmBtnVariant = ButtonVariant.Action,
+  confirmBtnDisabled = false,
   cancelCb,
   cancelBtnText = "Cancel",
   cancelBtnVariant = ButtonVariant.Secondary,
@@ -151,6 +156,7 @@ export const ConfirmationDialog = ({
                 <Button
                   className="cd-button"
                   variant={confirmBtnVariant}
+                  isDisabled={confirmBtnDisabled}
                   onPress={() => {
                     if (confirmCb) confirmCb();
                     close();
