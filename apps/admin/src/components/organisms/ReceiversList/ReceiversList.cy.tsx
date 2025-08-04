@@ -14,5 +14,7 @@ describe("<ReceiversList/>", () => {
     pom.waitForApis();
     pom.root.should("exist");
     pom.table.root.contains("LastNameB, FirstNameB");
+    pom.table.root.contains("firstnamee.lastnamee@domain.com");
+    pom.table.root.should("not.contain.text", "firstnamee.lastnamee@domain.com>");
   });
 });
