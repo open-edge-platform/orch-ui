@@ -47,6 +47,8 @@ export const hostOne: infra.HostResourceRead = {
       repoUrl: "repoUrl",
       sha256:
         "09f6e5d55cd9741a026c0388d4905b7492749feedbffc741e65aab35fc38430d",
+      kernelCommand: "kernelCommand",
+      updateSources: ["updateResources"],
     },
     workloadMembers: [
       {

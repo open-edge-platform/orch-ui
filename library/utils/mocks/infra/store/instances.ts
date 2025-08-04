@@ -56,6 +56,7 @@ export const instanceOne: enhancedInfraSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   currentState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
+  currentOs: osUbuntu,
   securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   workloadMembers: [
     {
@@ -399,6 +400,8 @@ export class InstanceStore extends BaseStore<
       provisioningStatusTimestamp: currentTime,
       host: host ?? (body.host as infra.HostResourceRead),
       os: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
+      currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
+      desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
       updatePolicy: {
         targetOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
         name: "",

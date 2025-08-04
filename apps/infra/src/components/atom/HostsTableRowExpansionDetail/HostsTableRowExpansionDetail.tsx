@@ -46,6 +46,8 @@ const HostsTableRowExpansionDetail = ({
           <div className={`${className}__content`} data-cy="osUpdate">
             {host.instance?.osUpdateAvailable ? (
               host.instance?.osUpdateAvailable
+            ) : host.instance?.desiredOs?.name ? (
+              host.instance?.desiredOs?.name
             ) : (
               <em>(No Update)</em>
             )}
