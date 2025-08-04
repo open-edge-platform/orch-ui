@@ -21,7 +21,7 @@ import {
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
-import VproDetails from "../../../organism/VproDetails/VproDetails";
+import VproDetails from "../../VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
@@ -81,10 +81,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       id: 7,
       title: "Host Labels",
     },
-    {
-      id: 8,
-      title: "vPro Details",
-    },
+    ...(host.amtSku !== "Unknown"
+      ? [
+          {
+            id: 8,
+            title: "vPro Details",
+          },
+        ]
+      : []),
   ];
 
   const itemList = [
@@ -233,10 +237,15 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
         <OSProfileDetails os={currentOs} updatePolicy={updatePolicy} />
       )}
     </Item>,
-    <Item title={tabItems[7].title}>
-      <VproDetails host={host} />
-    </Item>,
   ];
+
+  if (host.amtSku !== "Unknown") {
+    itemList.push(
+      <Item title="vPro Details">
+        <VproDetails host={host} />
+      </Item>,
+    );
+  }
 
   if (
     host.site &&

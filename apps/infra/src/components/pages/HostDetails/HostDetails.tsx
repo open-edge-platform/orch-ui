@@ -415,15 +415,17 @@ const HostDetails: React.FC = () => {
         </div>
       </div>
 
-      <Flex cols={[12]}>
-        <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
-          Power: &nbsp;
-          <StatusIcon
-            status={powerInfo.indicatorIcon}
-            text={powerInfo.message}
-          />
-        </Text>
-      </Flex>
+      {host.amtSku !== "Unknown" && (
+        <Flex cols={[12]}>
+          <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
+            Power: &nbsp;
+            <StatusIcon
+              status={powerInfo.indicatorIcon}
+              text={powerInfo.message}
+            />
+          </Text>
+        </Flex>
+      )}
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>
