@@ -62,7 +62,7 @@ export const initialState: HostProvisionState = {
   hosts: {},
   commonHostData: {
     vPro: false,
-    securityFeature: true,
+    securityFeature: false,
   },
   autoOnboard: true,
   registerHost: true,
