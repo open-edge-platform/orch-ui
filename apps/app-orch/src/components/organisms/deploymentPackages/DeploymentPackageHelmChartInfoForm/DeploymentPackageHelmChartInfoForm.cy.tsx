@@ -33,10 +33,10 @@ describe("<DeploymentPackageHelmChartInfoForm />", () => {
   });
 
   describe("validation", () => {
-    it("cannot put more than 70 characters for Helm Chart URL", () => {
-      const longValue = "a".repeat(71);
+    it("cannot put more than 1000 characters for Helm Chart URL", () => {
+      const longValue = "a".repeat(1001);
       pom.el["helmChartUrl"].type(longValue);
-      const shorterValue = "a".repeat(70);
+      const shorterValue = "a".repeat(1000);
       pom.el["helmChartUrl"].invoke("val").should("equal", shorterValue);
     });
 

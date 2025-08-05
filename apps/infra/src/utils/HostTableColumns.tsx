@@ -133,7 +133,8 @@ const status: TableColumn<infra.HostResourceRead> = {
 
 const os: TableColumn<infra.HostResourceRead> = {
   Header: "Operating System",
-  accessor: (host) => host.instance?.os?.name ?? "-",
+  accessor: (host) =>
+    host.instance?.os?.name ?? host.instance?.currentOs?.name ?? "-",
   Cell: (table: { row: { original: infra.HostResourceRead } }) => {
     return <OsConfig instance={table.row.original.instance} iconOnly />;
   },

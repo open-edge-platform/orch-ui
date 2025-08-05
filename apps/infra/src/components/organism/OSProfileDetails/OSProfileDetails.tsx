@@ -139,6 +139,17 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
     ? JSON.parse(os.existingCves)
     : null;
 
+  const getUpdateSources = () => {
+    if (updatePolicy?.updateSources) {
+      return updatePolicy?.updateSources?.join();
+    }
+    // for backward compatibility
+    if (os.updateSources) {
+      return os.updateSources.join();
+    }
+    return "-";
+  };
+
   return (
     <div className="os-profile-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
@@ -150,19 +161,12 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
       />
       <OsProfileDetailField label="Architecture" value={os.architecture} />
       <div className="os-details-advanced-settings">Advanced Settings</div>
-      <OsProfileDetailField
-        label="Update Sources"
-        value={
-          updatePolicy?.updateSources
-            ? updatePolicy?.updateSources?.join()
-            : "-"
-        }
-      />
+      <OsProfileDetailField label="Update Sources" value={getUpdateSources()} />
       <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />
       <OsProfileDetailField
         label="Kernel Command"
-        value={updatePolicy?.kernelCommand}
+        value={updatePolicy?.kernelCommand || os.kernelCommand}
       />
 
       <div className="os-details-installed-packages">System Overview</div>

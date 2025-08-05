@@ -21,20 +21,20 @@ const HostReviewDetails = ({ host }: HostReviewDetailsProps) => {
     <div className="host-review-details">
       <Flex cols={[2, 4]} align="start">
         <b>Serial number</b>
-        <Text>{host.serialNumber}</Text>
+        <Text>{host.serialNumber || "-"}</Text>
         <b>Security</b>
         <Text>
           Secure Boot and Full Disk Encryption:{" "}
           {isSbfde(host) ? "Enabled" : "Disabled"}
         </Text>
         <b>UUID</b>
-        <Text>{host.uuid}</Text>
+        <Text>{host.uuid || "-"}</Text>
         <div></div>
-        <Text>vPro:</Text>
+        <Text>vPro: {host.enableVpro ? "Enabled" : "Disabled"}</Text>
         <div></div>
         <div></div>
         <div></div>
-        <Text>SSH Key: {host.instance?.localAccountID}</Text>
+        <Text>SSH Key: {host.instance?.localAccountID || "-"}</Text>
         <div></div>
         <div></div>
         <b>Trusted Compute</b>

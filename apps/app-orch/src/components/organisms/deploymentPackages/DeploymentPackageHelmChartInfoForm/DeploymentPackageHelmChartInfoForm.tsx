@@ -170,13 +170,13 @@ const DeploymentPackageHelmChartInfoForm = () => {
             control={control}
             rules={{
               required: true,
-              maxLength: 70,
+              maxLength: 1000,
             }}
             render={({ field, formState }) => (
               <TextField
                 {...field}
                 data-cy="helmChartUrl"
-                maxLength={70}
+                maxLength={1000}
                 onInput={(e) => {
                   const value = e.currentTarget.value;
                   dispatch(setHelmChartURL(value));
@@ -185,7 +185,7 @@ const DeploymentPackageHelmChartInfoForm = () => {
                   formState.errors.helmChartURL?.type === "required"
                     ? "Helm Chart URL is required"
                     : formState.errors.helmChartURL?.type === "maxLength"
-                      ? "Helm Chart URL can't be more than 70 characters"
+                      ? "Helm Chart URL can't be more than 1000 characters"
                       : null
                 }
                 validationState={

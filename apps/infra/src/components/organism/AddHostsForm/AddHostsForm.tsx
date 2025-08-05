@@ -178,6 +178,11 @@ const AddHostsForm = () => {
                     },
                   }}
                   onChange={() => {
+                    // Trigger validation for serial number and uuid when name changes
+                    trigger([
+                      `hosts.${index}.serialNumber`,
+                      `hosts.${index}.uuid`,
+                    ]);
                     dispatchNewHosts();
                   }}
                 />
@@ -193,19 +198,18 @@ const AddHostsForm = () => {
                   maxLength={20}
                   inputsProperty={`hosts.${index}.serialNumber`}
                   onChange={() => {
-                    trigger(`hosts.${index}.uuid`);
+                    trigger([`hosts.${index}.name`, `hosts.${index}.uuid`]);
                     dispatchNewHosts();
                   }}
                   validate={{
                     noMaxLengthExceeded: checkLength,
                     require: (value: string) => {
-                      if (value === "") {
-                        const row = getValues(`hosts.${index}`);
-                        return (
-                          row.uuid !== "" || ErrorMessages.RequireSerialNumber
-                        );
-                      }
-                      return true;
+                      const row = getValues(`hosts.${index}`);
+                      return (
+                        value !== "" ||
+                        row.uuid !== "" ||
+                        ErrorMessages.RequireSerialNumber
+                      );
                     },
                     format: (value: string) => {
                       if (value === "") return true;
@@ -233,18 +237,20 @@ const AddHostsForm = () => {
                   value={field.uuid}
                   inputsProperty={`hosts.${index}.uuid`}
                   onChange={() => {
-                    trigger(`hosts.${index}.serialNumber`);
+                    trigger([
+                      `hosts.${index}.name`,
+                      `hosts.${index}.serialNumber`,
+                    ]);
                     dispatchNewHosts();
                   }}
                   validate={{
                     require: (value: string) => {
-                      if (value === "") {
-                        const row = getValues(`hosts.${index}`);
-                        return (
-                          row.serialNumber !== "" || ErrorMessages.RequireUuid
-                        );
-                      }
-                      return true;
+                      const row = getValues(`hosts.${index}`);
+                      return (
+                        value !== "" ||
+                        row.serialNumber !== "" ||
+                        ErrorMessages.RequireUuid
+                      );
                     },
                     format: (value: string) => {
                       if (value === "") return true;
