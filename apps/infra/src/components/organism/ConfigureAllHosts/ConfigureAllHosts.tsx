@@ -153,10 +153,7 @@ const ConfigureAllHosts = () => {
           <Flex cols={[6]} gap="2" align="start">
             <div>
               <Heading semanticLevel={6}>vPro</Heading>
-              <p>
-                Enable vPro for lorem ipsum dolorem, remote management with
-                enhanced security. Lorem minimum HW requirements.
-              </p>
+              <p>Enable vPro</p>
               <ToggleSwitch
                 name="vpro"
                 isSelected={commonHostData.vPro}

@@ -22,6 +22,7 @@ import {
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
+  isOSUpdateAvailable,
   parseError,
   Role,
   SharedStorage,
@@ -118,6 +119,8 @@ const HostDetails: React.FC = () => {
       skip: !SharedStorage.project?.name,
     },
   ); // Host's Site details
+
+  const [patchHost] = infra.useHostServicePatchHostMutation();
 
   // Below useEffects will set the host/site data to display
   useEffect(() => {
@@ -312,6 +315,39 @@ const HostDetails: React.FC = () => {
     message: host.powerStatus ?? "Unknown",
   };
 
+  const handleStartPress = () => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredPowerState: "POWER_STATE_ON",
+      },
+    }).unwrap();
+  };
+
+  const handleStopPress = () => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredPowerState: "POWER_STATE_OFF",
+      },
+    }).unwrap();
+  };
+
+  const handleRestartPress = () => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredPowerState: "POWER_STATE_RESET",
+      },
+    }).unwrap();
+  };
+
   return (
     <div className={cssSelectorIhd} data-cy={dataCyIhd}>
       {/* HostDetails Heading */}
@@ -320,41 +356,47 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <div className="primary-actions">
-          <ButtonGroup className="button-group">
-            <Button
-              size={ButtonSize.Large}
-              variant={ButtonVariant.Secondary}
-              endSlot={<Icon icon="play" />}
-              isDisabled={
-                host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
-              }
-              data-cy={`${dataCyIhd}StartBtn`}
-            >
-              Start
-            </Button>
-            <Button
-              size={ButtonSize.Large}
-              variant={ButtonVariant.Secondary}
-              endSlot={<Icon icon="redo" />}
-              isDisabled={
-                host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
-              }
-              data-cy={`${dataCyIhd}RestartBtn`}
-            >
-              Restart
-            </Button>
-            <Button
-              size={ButtonSize.Large}
-              variant={ButtonVariant.Secondary}
-              endSlot={<Icon icon="square" />}
-              isDisabled={
-                host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
-              }
-              data-cy={`${dataCyIhd}StopBtn`}
-            >
-              Stop
-            </Button>
-          </ButtonGroup>
+          {host.amtSku !== "Unknown" && (
+            <ButtonGroup className="button-group">
+              <Button
+                size={ButtonSize.Large}
+                variant={ButtonVariant.Secondary}
+                endSlot={<Icon icon="play" />}
+                isDisabled={
+                  host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+                }
+                data-cy={`${dataCyIhd}StartBtn`}
+                onPress={handleStartPress}
+              >
+                Start
+              </Button>
+              <Button
+                size={ButtonSize.Large}
+                variant={ButtonVariant.Secondary}
+                endSlot={<Icon icon="redo" />}
+                isDisabled={
+                  host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
+                }
+                data-cy={`${dataCyIhd}RestartBtn`}
+                onPress={handleRestartPress}
+              >
+                Restart
+              </Button>
+              <Button
+                size={ButtonSize.Large}
+                variant={ButtonVariant.Secondary}
+                endSlot={<Icon icon="square" />}
+                isDisabled={
+                  host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
+                }
+                data-cy={`${dataCyIhd}StopBtn`}
+                onPress={handleStopPress}
+              >
+                Stop
+              </Button>
+            </ButtonGroup>
+          )}
+
           <HostDetailsActions
             basePath="../"
             host={host}
@@ -373,15 +415,17 @@ const HostDetails: React.FC = () => {
         </div>
       </div>
 
-      <Flex cols={[12]}>
-        <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
-          Power: &nbsp;
-          <StatusIcon
-            status={powerInfo.indicatorIcon}
-            text={powerInfo.message}
-          />
-        </Text>
-      </Flex>
+      {host.amtSku !== "Unknown" && (
+        <Flex cols={[12]}>
+          <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
+            Power: &nbsp;
+            <StatusIcon
+              status={powerInfo.indicatorIcon}
+              text={powerInfo.message}
+            />
+          </Text>
+        </Flex>
+      )}
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>
@@ -394,7 +438,8 @@ const HostDetails: React.FC = () => {
               idle: () => getCustomStatusOnIdleAggregation(host),
             }}
           />
-          {host?.instance?.osUpdateAvailable && (
+          {(isOSUpdateAvailable(host?.instance) ||
+            host?.instance?.osUpdateAvailable) && (
             <label className="update-available" data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
@@ -452,12 +497,18 @@ const HostDetails: React.FC = () => {
             </tr>
             <tr>
               <td>OS</td>
-              <td data-cy="osProfiles">{host?.instance?.os?.name ?? "-"}</td>
+              <td data-cy="osProfiles">
+                {host?.instance?.os?.name ??
+                  host?.instance?.currentOs?.name ??
+                  "-"}
+              </td>
             </tr>
             <tr>
               <td>Updates</td>
               <td data-cy="desiredOsProfiles">
-                {host?.instance?.osUpdateAvailable ?? "-"}
+                {host?.instance?.osUpdateAvailable ??
+                  host?.instance?.desiredOs?.name ??
+                  "-"}{" "}
               </td>
             </tr>
             {host.site && (

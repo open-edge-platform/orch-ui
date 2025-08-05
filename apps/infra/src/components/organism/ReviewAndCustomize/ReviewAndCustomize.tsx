@@ -174,7 +174,13 @@ const ReviewAndCustomize = () => {
             <div className="hosts-overview-details">
               <div></div>
               <div>
-                <Text size={TextSize.Small}>vPRO : </Text>
+                <Text size={TextSize.Small}>
+                  vPRO :{" "}
+                  {countDistinctValuesWithLabels(hostValues, "enableVpro", {
+                    true: "Enabled",
+                    false: "Disabled",
+                  })}
+                </Text>
               </div>
               <div>
                 <Text size={TextSize.Small}>

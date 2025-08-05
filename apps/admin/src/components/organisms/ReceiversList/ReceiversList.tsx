@@ -118,7 +118,7 @@ const ReceiversList = ({ isOpen = false, setIsOpen }: ReceiversListProps) => {
       // in both cases, for name cell we should show userInfo[0], so check needed
       const name = userInfo[0].trim();
       const email = userInfo[1]
-        ? userInfo[1].trim().replace(">", "")
+        ? userInfo[1].trim().replace(/>/g, "")
         : emails[i];
       users.push({
         name: name,

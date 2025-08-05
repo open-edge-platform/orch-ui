@@ -95,9 +95,11 @@ export const useProvisioning = () => {
   const { provisionState, initializeState, updateStepStatus } =
     useProvisioningState();
 
-  const { createCluster } = useAppSelector(selectHostProvisionState);
+  const { createCluster, registerHost } = useAppSelector(
+    selectHostProvisionState,
+  );
 
-  const [registerHost] = infra.useHostServiceRegisterHostMutation();
+  const [registerHostApi] = infra.useHostServiceRegisterHostMutation();
   const [patchHost] = infra.useHostServicePatchHostMutation();
   const [postInstance] = infra.useInstanceServiceCreateInstanceMutation();
   const [getSite] = infra.useLazySiteServiceGetSiteQuery();
@@ -139,26 +141,31 @@ export const useProvisioning = () => {
         continue;
       }
 
+      // Entire host is received if the call is triggerred from Onboarded tab.
+      // Register host payload is received if call is triggered from provision tab
+      let registerHostResp: infra.HostResourceRead | undefined = host;
       try {
-        const registerHostResp: infra.HostResourceRead = await executeStep(
-          host.serialNumber,
-          "register",
-          () =>
-            registerHost({
-              hostRegister: {
-                autoOnboard,
-                name: host.name,
-                serialNumber: host.serialNumber || undefined,
-                uuid: host.uuid || undefined,
-              },
-              projectName: SharedStorage.project?.name ?? "",
-            }).unwrap(),
-        );
+        if (registerHost) {
+          registerHostResp = await executeStep(
+            host.serialNumber,
+            "register",
+            () =>
+              registerHostApi({
+                hostRegister: {
+                  autoOnboard,
+                  name: host.name,
+                  serialNumber: host.serialNumber || undefined,
+                  uuid: host.uuid || undefined,
+                },
+                projectName: SharedStorage.project?.name ?? "",
+              }).unwrap(),
+          );
+        }
 
         await executeStep(host.serialNumber, "hostDetails", () =>
           patchHost({
             projectName: SharedStorage.project?.name ?? "",
-            resourceId: registerHostResp.resourceId as string,
+            resourceId: registerHostResp?.resourceId as string,
             hostResource: {
               name: host.name,
               siteId: host.site?.siteID,
@@ -171,11 +178,12 @@ export const useProvisioning = () => {
           postInstance({
             projectName: SharedStorage.project?.name ?? "",
             instanceResource: {
-              hostID: registerHostResp.resourceId,
+              hostID: registerHostResp?.resourceId,
               name: `${host.name}-instance`,
               osID: host.instance?.osID,
               securityFeature: host.instance?.securityFeature,
               kind: "INSTANCE_KIND_METAL",
+              localAccountID: host.instance?.localAccountID,
             },
           }).unwrap(),
         );
@@ -194,7 +202,7 @@ export const useProvisioning = () => {
           });
 
           const nodeSpec: cm.NodeSpec = {
-            id: registerHostResp.resourceId as string,
+            id: registerHostResp?.resourceId as string,
             role: "all",
           };
 
