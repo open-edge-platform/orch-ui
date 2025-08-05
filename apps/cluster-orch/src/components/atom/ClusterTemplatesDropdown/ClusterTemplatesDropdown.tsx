@@ -30,16 +30,22 @@ const ClusterTemplatesDropdown = ({
     // Apply the filter to the query
     templatesParam.filter = `kubernetesVersion=${kubernetesVersion}`;
   }
-  console.log("kubernetesVersion", kubernetesVersion);
+
   const {
     data: clusterTemplates,
     isSuccess: isTemplateSuccess,
     isLoading: isTemplateLoading,
     isError: isTemplateError,
     error,
+    refetch,
   } = cm.useGetV2ProjectsByProjectNameTemplatesQuery(templatesParam);
 
   const [templateNames, setTemplateNames] = useState<string[]>();
+
+  // Add useEffect to trigger refetch when kubernetesVersion changes
+  useEffect(() => {
+    refetch();
+  }, [kubernetesVersion, refetch]);
 
   useEffect(() => {
     if (!clusterTemplates) return;
