@@ -153,6 +153,7 @@ export const useProvisioning = () => {
               registerHostApi({
                 hostRegister: {
                   autoOnboard,
+                  enableVpro: host.enableVpro,
                   name: host.name,
                   serialNumber: host.serialNumber || undefined,
                   uuid: host.uuid || undefined,
