@@ -26,7 +26,6 @@ export const OSProfileSecurityFeatures: {
 
 interface OSProfileDetailsProps {
   os: infra.OperatingSystemResourceRead;
-  updatePolicy?: infra.OsUpdatePolicyRead | undefined;
 }
 /**
  * Represents a OS package with its name, version, and distribution.
@@ -123,7 +122,7 @@ const CveColumns: TableColumn<Cve>[] = [
   },
 ];
 
-const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
+const OSProfileDetails = ({ os }: OSProfileDetailsProps) => {
   const cy = { "data-cy": dataCy };
   const [tabIndex, setTabIndex] = useState<number>(0);
 
@@ -139,17 +138,6 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
     ? JSON.parse(os.existingCves)
     : null;
 
-  const getUpdateSources = () => {
-    if (updatePolicy?.updateSources) {
-      return updatePolicy?.updateSources?.join();
-    }
-    // for backward compatibility
-    if (os.updateSources) {
-      return os.updateSources.join();
-    }
-    return "-";
-  };
-
   return (
     <div className="os-profile-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
@@ -161,13 +149,13 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
       />
       <OsProfileDetailField label="Architecture" value={os.architecture} />
       <div className="os-details-advanced-settings">Advanced Settings</div>
-      <OsProfileDetailField label="Update Sources" value={getUpdateSources()} />
+      <OsProfileDetailField
+        label="Update Sources"
+        value={os.updateSources?.join()}
+      />
       <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />
-      <OsProfileDetailField
-        label="Kernel Command"
-        value={updatePolicy?.kernelCommand || os.kernelCommand}
-      />
+      <OsProfileDetailField label="Kernel Command" value={os.kernelCommand} />
 
       <div className="os-details-installed-packages">System Overview</div>
 

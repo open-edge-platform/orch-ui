@@ -113,20 +113,6 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
         ...mockHost,
         instance: {
           ...mockHost.instance,
-          osUpdateAvailable: "Ubuntu",
-          updatePolicy: {
-            updateSources: ["UbuntuUpdateSourceName"],
-            targetHost: {
-              resourceId: "os-desired",
-              name: "Ubuntu",
-              sha256: "UbuntuSSHA256",
-            },
-          },
-          os: {
-            name: "Ubuntu",
-            sha256: "OSSHA256",
-            updateSources: ["OSUpdateSourceName"],
-          },
           // data for backward compatibility
           currentOs: {
             resourceId: "os-current",
@@ -140,6 +126,11 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
             name: "DesiredOS",
             sha256: "DesiredOSSHA256",
             updateSources: ["DesiredOSUpdateSourceName"],
+          },
+          os: {
+            name: "OS",
+            sha256: "OSSHA256",
+            updateSources: ["OSUpdateSourceName"],
           },
         },
       },
