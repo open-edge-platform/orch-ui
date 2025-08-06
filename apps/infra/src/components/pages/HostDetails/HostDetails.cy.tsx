@@ -56,6 +56,7 @@ describe("HostDetails", () => {
         "have.text",
         mockHost.instance?.os?.name || mockHost.instance?.currentOs?.name,
       );
+      pom.el.osProfiles.should("have.text", mockHost.instance?.currentOs?.name);
       pom.el.site.should("have.text", "Restaurant 02");
       pom.el.trustedCompute.should("contain.text", "Not compatible");
       pom.el.provider.should("have.text", mockHost.provider?.name);
@@ -183,12 +184,14 @@ describe("HostDetails", () => {
     });
 
     it("show OS field", () => {
-      pom.getHostDescriptionValueByKey("OS").should("contain.text", "Ubuntu");
+      pom
+        .getHostDescriptionValueByKey("OS")
+        .should("contain.text", "CurrentOS");
     });
     it("show Updates field", () => {
       pom
         .getHostDescriptionValueByKey("Updates")
-        .should("contain.text", "Ubuntu");
+        .should("contain.text", "DesiredOS");
     });
 
     it("show `OS update available` under the Hostname", () => {

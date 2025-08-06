@@ -40,8 +40,7 @@ const ClusterSummaryRemote = RuntimeConfig.isEnabled("CLUSTER_ORCH")
 
 const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
   const { host, onShowCategoryDetails } = props;
-  const currentOs = host.instance?.os || host.instance?.currentOs; // currentOs is used for backward compatibility
-  const updatePolicy = host.instance?.updatePolicy;
+  const currentOs = host.instance?.currentOs;
   const storageDisplayValue = humanFileSize(
     host.hostStorages?.reduce((total: number, s) => {
       return total + parseInt(s.capacityBytes ?? "0");
@@ -233,9 +232,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       )}
     </Item>,
     <Item title={tabItems[4].title}>
-      {currentOs && (
-        <OSProfileDetails os={currentOs} updatePolicy={updatePolicy} />
-      )}
+      {currentOs && <OSProfileDetails os={currentOs} />}
     </Item>,
   ];
 
