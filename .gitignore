@@ -29,6 +29,7 @@ lib
 tests/cypress-mochawesome-reporter.log
 apps/**/*.tgz
 temp_release_notes.txt
+ci/
 
 #python
 __pycache__
