@@ -31,6 +31,7 @@ const endpoints: CyApiDetails<
             os: {
               name: "linux",
               sha256: "sha",
+              updateSources: [],
             },
           },
         },
@@ -52,6 +53,7 @@ const endpoints: CyApiDetails<
             os: {
               name: "linux",
               sha256: "sha",
+              updateSources: [],
             },
             securityFeature:
               "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",

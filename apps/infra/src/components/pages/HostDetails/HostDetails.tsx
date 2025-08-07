@@ -438,8 +438,7 @@ const HostDetails: React.FC = () => {
               idle: () => getCustomStatusOnIdleAggregation(host),
             }}
           />
-          {(isOSUpdateAvailable(host?.instance) ||
-            host?.instance?.osUpdateAvailable) && (
+          {isOSUpdateAvailable(host?.instance) && (
             <label className="update-available" data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
@@ -498,17 +497,13 @@ const HostDetails: React.FC = () => {
             <tr>
               <td>OS</td>
               <td data-cy="osProfiles">
-                {host?.instance?.os?.name ??
-                  host?.instance?.currentOs?.name ??
-                  "-"}
+                {host?.instance?.currentOs?.name ?? "-"}
               </td>
             </tr>
             <tr>
               <td>Updates</td>
               <td data-cy="desiredOsProfiles">
-                {host?.instance?.osUpdateAvailable ??
-                  host?.instance?.desiredOs?.name ??
-                  "-"}{" "}
+                {host?.instance?.desiredOs?.name ?? "-"}
               </td>
             </tr>
             {host.site && (
