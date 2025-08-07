@@ -4,18 +4,14 @@
 ---
 name: Post-Merge Admin
 
-# on:
-#   push:
-#     branches:
-#       - main
-#       - release-*
-#     paths:
-#       - 'apps/admin/**'
-#   workflow_dispatch:
-
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - main
+      - release-*
+    paths:
+      - 'apps/admin/**'
+  workflow_dispatch:
 
 permissions: {}
 
