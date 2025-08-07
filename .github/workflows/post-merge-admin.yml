@@ -4,16 +4,14 @@
 ---
 name: Post-Merge Admin
 
-# on:
-#   push:
-#     branches:
-#       - main
-#       - release-*
-#     paths:
-#       - 'apps/admin/**'
-#   workflow_dispatch:
-
-on: pull_request
+on:
+  push:
+    branches:
+      - main
+      - release-*
+    paths:
+      - 'apps/admin/**'
+  workflow_dispatch:
 
 permissions: {}
 
@@ -37,7 +35,6 @@ jobs:
       prefix_tag_separator: "/"
       project_folder: apps/admin
       orch_ci_repo_ref: main
-      run_version_dev: true
     secrets:
       SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
       COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
