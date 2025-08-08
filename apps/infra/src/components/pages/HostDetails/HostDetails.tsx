@@ -22,6 +22,7 @@ import {
   getTrustedComputeCompatibility,
   HostGenericStatuses,
   hostToStatuses,
+  isOSUpdateAvailable,
   parseError,
   Role,
   SharedStorage,
@@ -414,15 +415,17 @@ const HostDetails: React.FC = () => {
         </div>
       </div>
 
-      <Flex cols={[12]}>
-        <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
-          Power: &nbsp;
-          <StatusIcon
-            status={powerInfo.indicatorIcon}
-            text={powerInfo.message}
-          />
-        </Text>
-      </Flex>
+      {host.amtSku !== "Unknown" && (
+        <Flex cols={[12]}>
+          <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
+            Power: &nbsp;
+            <StatusIcon
+              status={powerInfo.indicatorIcon}
+              text={powerInfo.message}
+            />
+          </Text>
+        </Flex>
+      )}
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>
@@ -435,7 +438,7 @@ const HostDetails: React.FC = () => {
               idle: () => getCustomStatusOnIdleAggregation(host),
             }}
           />
-          {host?.instance?.osUpdateAvailable && (
+          {isOSUpdateAvailable(host?.instance) && (
             <label className="update-available" data-cy="osUpdateAvailable">
               <Icon icon={"alert-triangle"} className={"warning-icon"} /> OS
               update available
@@ -493,12 +496,14 @@ const HostDetails: React.FC = () => {
             </tr>
             <tr>
               <td>OS</td>
-              <td data-cy="osProfiles">{host?.instance?.os?.name ?? "-"}</td>
+              <td data-cy="osProfiles">
+                {host?.instance?.currentOs?.name ?? "-"}
+              </td>
             </tr>
             <tr>
               <td>Updates</td>
               <td data-cy="desiredOsProfiles">
-                {host?.instance?.osUpdateAvailable ?? "-"}
+                {host?.instance?.desiredOs?.name ?? "-"}
               </td>
             </tr>
             {host.site && (

@@ -214,6 +214,12 @@ const HostEdit = () => {
   );
 
   const updateHostEdits = () => {
+    // delete id from metadata pairs before passing in payload
+    const updatedMetadataPairs = metadataPairs.map(({ key, value }) => ({
+      key,
+      value,
+    }));
+
     // UPDATE HOST
     if (host && host.resourceId) {
       Promise.all([
@@ -226,12 +232,12 @@ const HostEdit = () => {
             siteId: selectedSite?.siteID,
             currentPowerState: host.currentPowerState,
             desiredPowerState: host.desiredPowerState,
-            metadata: metadataPairs,
+            metadata: updatedMetadataPairs,
           },
         }).unwrap(),
         updateMetadata({
           projectName: SharedStorage.project?.name ?? "",
-          metadataList: { metadata: metadataPairs },
+          metadataList: { metadata: updatedMetadataPairs },
         }).unwrap(),
       ])
         .then(() => {

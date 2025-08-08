@@ -12,16 +12,7 @@ const pom = new OSProfileDetailsPom();
 describe("<OSProfileDetails/>", () => {
   describe("OS profile details", () => {
     beforeEach(() => {
-      cy.mount(
-        <OSProfileDetails
-          os={osUbuntu}
-          updatePolicy={{
-            name: "Ubuntu",
-            kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
-            updateSources: ["deb https://files.edgeorch.net orchui release"],
-          }}
-        />,
-      );
+      cy.mount(<OSProfileDetails os={osUbuntu} />);
     });
 
     it("should contain titles", () => {
