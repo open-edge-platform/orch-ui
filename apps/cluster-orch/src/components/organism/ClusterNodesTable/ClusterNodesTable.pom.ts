@@ -33,6 +33,11 @@ const endpoints: CyApiDetails<
               sha256: "sha",
               updateSources: [],
             },
+            currentOs: {
+              name: "linux",
+              sha256: "sha",
+              updateSources: [],
+            },
           },
         },
       ],
