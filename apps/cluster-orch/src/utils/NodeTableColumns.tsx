@@ -69,7 +69,7 @@ const guid: TableColumn<cm.NodeInfo> = {
 
 const os: TableColumn<CombinedNodeHostItem> = {
   Header: "Operating System",
-  accessor: (nodes) => nodes.instance?.os?.name ?? "-",
+  accessor: (nodes) => nodes.instance?.currentOs?.name ?? "-",
 };
 
 const role: TableColumn<CombinedNodeHostItem> = {

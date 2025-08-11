@@ -123,7 +123,7 @@ const ClusterNodesTable = ({
     readinessType === "cluster" ? statusCluster : statusHost,
     {
       Header: "Operating System",
-      accessor: (node) => node.instance?.os?.name ?? "-",
+      accessor: (node) => node.instance?.currentOs?.name ?? "-",
     },
     {
       Header: "Trusted Compute",
