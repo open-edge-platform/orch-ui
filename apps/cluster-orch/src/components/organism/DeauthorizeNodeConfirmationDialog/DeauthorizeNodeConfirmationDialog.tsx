@@ -117,10 +117,12 @@ const DeauthorizeNodeConfirmationDialog = ({
         render={({ field }) => (
           <TextField
             {...field}
-            label="Deauthorize reason (Optional)"
+            label="Reason for deauthorization"
             data-cy="reason"
             onInput={(e) => {
-              setDeauthorizeReason(e.currentTarget.value);
+              const value = e.currentTarget.value;
+              setDeauthorizeReason(value);
+              field.onChange(value);
             }}
             size={InputSize.Large}
             className="text-field-align"
@@ -151,6 +153,9 @@ const DeauthorizeNodeConfirmationDialog = ({
       cancelCb={() => setDeauthorizeConfirmationOpen(false)}
       buttonPlacement="left-reverse"
       size={ModalSize.Medium}
+      confirmBtnDisabled={
+        !deauthorizeReason || deauthorizeReason.trim().length === 0
+      }
     />
   ) : (
     <></>

@@ -34,6 +34,7 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
       );
 
       pom.interceptApis([pom.api.putClusterNode]);
+      pom.el.reason.type("sample-deauthorize-reason");
       cy.get(".spark-modal-footer").contains("Deauthorize").click();
 
       cy.get(`@${pom.api.putClusterNode}`)
@@ -45,6 +46,12 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
         });
 
       cy.get("#pathname").contains("/infrastructure/hosts");
+    });
+
+    it("should enable the Deauthorize button only if a valid deauthorization reason is provided", () => {
+      cyGet("confirmBtn").should("have.attr", "aria-disabled", "true");
+      pom.el.reason.type("sample-deauthorize-reason");
+      cyGet("confirmBtn").should("have.attr", "aria-disabled", "false");
     });
   });
 
@@ -62,6 +69,9 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
           setErrorInfo={() => {}}
         />,
       );
+
+      pom.el.reason.type("sample-deauthorize-reason");
+
       cyGet("confirmBtn").click();
       cy.get("@deauthorizeHostStub").should("have.been.called");
     });
