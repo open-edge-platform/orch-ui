@@ -140,25 +140,62 @@ export const deleteHostInstanceFn = (
     );
   };
 
+  const unprovisionAmtStatusFn = () => {
+    return dispatch(
+      infra.infra.endpoints.hostServicePatchHost.initiate({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: host.resourceId as string,
+        hostResource: {
+          name: host.name,
+          desiredAmtState: "AMT_STATE_UNPROVISIONED",
+        },
+      }),
+    );
+  };
+
   try {
     if (host.instance) {
-      promise = deleteInstanceFn()
-        .unwrap()
-        .then(deleteHostFn)
-        .catch(() => {
-          dispatch(
-            setMessageBanner({
-              icon: "cross-circle",
-              title: "Error",
-              variant: MessageBannerAlertState.Error,
-              text: "Failed to delete host !",
-            }),
-          );
-        });
+      if (host.amtSku !== "Unknown") {
+        promise = unprovisionAmtStatusFn()
+          .unwrap()
+          .then(deleteInstanceFn)
+          .then(deleteHostFn)
+          .catch(() => {
+            dispatch(
+              setMessageBanner({
+                icon: "cross-circle",
+                title: "Error",
+                variant: MessageBannerAlertState.Error,
+                text: "Failed to delete host !",
+              }),
+            );
+          });
+      } else {
+        promise = deleteInstanceFn()
+          .unwrap()
+          .then(deleteHostFn)
+          .catch(() => {
+            dispatch(
+              setMessageBanner({
+                icon: "cross-circle",
+                title: "Error",
+                variant: MessageBannerAlertState.Error,
+                text: "Failed to delete host !",
+              }),
+            );
+          });
+      }
     } else {
-      promise = deleteHostFn()
-        .unwrap()
-        .then((data) => ({ data }));
+      if (host.amtSku !== "Unknown") {
+        promise = unprovisionAmtStatusFn()
+          .unwrap()
+          .then(deleteHostFn)
+          .then((data) => ({ data }));
+      } else {
+        promise = deleteHostFn()
+          .unwrap()
+          .then((data) => ({ data }));
+      }
     }
     setErrorInfo();
   } catch (e) {
