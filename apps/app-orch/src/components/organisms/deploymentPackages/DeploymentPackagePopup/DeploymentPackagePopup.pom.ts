@@ -17,13 +17,17 @@ class DeploymentPackagePopupPom extends CyPom<Selectors> {
   }
 
   public openPopUp() {
-    this.popupPom.root.should("be.visible");
-    this.popupPom.root.click({ force: true });
+    this.root.within(() => {
+      this.popupPom.root.should("be.visible");
+      this.popupPom.root.click({ force: true });
+    });
   }
 
   public clickMenuOption(option: string) {
     this.openPopUp();
-    cy.contains(option, { timeout: 30000 }).click({ force: true });
+    this.root.within(() => {
+      cy.contains(option, { timeout: 30000 }).click({ force: true });
+    });
   }
 }
 

@@ -153,6 +153,7 @@ export const useProvisioning = () => {
               registerHostApi({
                 hostRegister: {
                   autoOnboard,
+                  enableVpro: host.enableVpro,
                   name: host.name,
                   serialNumber: host.serialNumber || undefined,
                   uuid: host.uuid || undefined,
@@ -170,6 +171,9 @@ export const useProvisioning = () => {
               name: host.name,
               siteId: host.site?.siteID,
               metadata: host.metadata,
+              ...(host.enableVpro && {
+                desiredAmtState: "AMT_STATE_PROVISIONED",
+              }),
             },
           }).unwrap(),
         );
