@@ -6,13 +6,55 @@
 import { RuntimeConfig, stripTrailingSlash } from "@orch-ui/utils";
 
 /**
+ * Extracts major.minor version from orchestrator version string
+ * @param {string} version - Version string like "v3.0.1-dev-b21fb28"
+ * @returns {string} - Major.minor version like "3.0" or "main" if invalid
+ */
+function extractDocumentationVersion(version: string) {
+  let docVersion = "main";
+
+  if (!version) {
+    return docVersion;
+  }
+
+  // Remove "v" prefix if present
+  let cleanVersion = version;
+  if (version.startsWith("v")) {
+    cleanVersion = version.substring(1);
+  }
+
+  // Split by "-" to separate version from metadata
+  const versionParts = cleanVersion.split("-");
+
+  if (versionParts.length > 0) {
+    // Split the version numbers by "."
+    const numbers = versionParts[0].split(".");
+
+    // Check if we have at least major and minor version
+    if (numbers.length >= 2) {
+      docVersion = `${numbers[0]}.${numbers[1]}`;
+    }
+  }
+
+  return docVersion;
+}
+
+/**
  * Method to transform from url to doc link
  * @param url - pathname without search params (location.pathname)
  */
 export const getDocsForUrl = (url: string) => {
+  // this is where documentation is hoisted and same value is received
+  // ...in documentationUrl but concatenated with `/main`
+  const docHost = "https://docs.openedgeplatform.intel.com/edge-manage-docs";
   const urlParts = url.substring(1).split("/");
-
-  const docsUrl = stripTrailingSlash(RuntimeConfig.documentationUrl);
+  let docVersion;
+  if (window.__RUNTIME_CONFIG__.VERSIONS.orchestrator) {
+    docVersion = extractDocumentationVersion(
+      window.__RUNTIME_CONFIG__.VERSIONS.orchestrator,
+    );
+  }
+  let docsUrl = stripTrailingSlash(RuntimeConfig.documentationUrl);
   let docsMapper = RuntimeConfig.documentation;
 
   // looking for matches part (url segment) by part
@@ -56,7 +98,11 @@ export const getDocsForUrl = (url: string) => {
     ];
   }
 
-  // when mapper contains only one entry, we are ready to read the docs address
+  if (docsUrl.includes(docHost) && docVersion) {
+    // concatenating the release version with docsUrl
+    docsUrl = `${docHost}/${docVersion}`;
+  }
+
   if (docsMapper.length === 1) {
     return `${docsUrl}${docsMapper[0].dest}`;
   }
