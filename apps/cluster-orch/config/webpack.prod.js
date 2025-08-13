@@ -5,6 +5,7 @@
 const { merge } = require("webpack-merge");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const commonConfig = require("./webpack.common");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const mode = "production";
 const prodConfig = {
@@ -34,6 +35,14 @@ const prodConfig = {
           },
         ],
       },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader, // Replace style-loader
+          "css-loader",
+          "sass-loader",
+        ],
+      },
     ],
   },
   output: {
@@ -50,6 +59,9 @@ const prodConfig = {
         EimUI: "EimUI@/mfe/infrastructure/remoteEntry.js",
         Admin: "Admin@/mfe/admin/remoteEntry.js",
       },
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
     }),
   ],
 };
