@@ -20,19 +20,22 @@ function extractDocumentationVersion(version: string) {
   // Remove "v" prefix if present
   let cleanVersion = version;
   if (version.startsWith("v")) {
-    cleanVersion = version.substring(1);
+    cleanVersion = version.substring(1); // removes "v" prefix
+  } else {
+    // if orchestrator version is received other than "v" format return default
+    return docVersion;
   }
 
   // Split by "-" to separate version from metadata
-  const versionParts = cleanVersion.split("-");
+  const versionParts = cleanVersion.split("-"); //returns [3.0.1, dev, b21fb28]
 
   if (versionParts.length > 0) {
     // Split the version numbers by "."
-    const numbers = versionParts[0].split(".");
+    const numbers = versionParts[0].split("."); //returns [3, 0, 1]
 
     // Check if we have at least major and minor version
     if (numbers.length >= 2) {
-      docVersion = `${numbers[0]}.${numbers[1]}`;
+      docVersion = `${numbers[0]}.${numbers[1]}`; // returns `3.0`
     }
   }
 
@@ -49,14 +52,16 @@ export const getDocsForUrl = (url: string) => {
   const docHost = "https://docs.openedgeplatform.intel.com/edge-manage-docs";
   const urlParts = url.substring(1).split("/");
   let docVersion;
-  if (RuntimeConfig.getComponentVersion("orchestrator")) {
+  if (
+    window.__RUNTIME_CONFIG__?.VERSIONS.orchestrator &&
+    RuntimeConfig.getComponentVersion("orchestrator")
+  ) {
     docVersion = extractDocumentationVersion(
       RuntimeConfig.getComponentVersion("orchestrator"),
     );
   }
   let docsUrl = stripTrailingSlash(RuntimeConfig.documentationUrl);
   let docsMapper = RuntimeConfig.documentation;
-  console.log("docVersion:", docVersion);
   // looking for matches part (url segment) by part
   // takes browser url, e.g. /test/aa/bb/cc and test against mapper values, segment by segment
   // if values from the same segment index from url and mapper key are different we dont grab this mapping
@@ -73,7 +78,6 @@ export const getDocsForUrl = (url: string) => {
           [urlParts[index], "*"].includes(part),
       ),
   );
-  console.log("docsMapper", docsMapper);
   // if we get more than one match it means that we get match against static address and segment with path parameter
   // e.g. /test/aa/bb and /test/*/bb or /test/aa/*
   // then we need to pick key with the least number of path parameters (*)
@@ -97,7 +101,6 @@ export const getDocsForUrl = (url: string) => {
       )!,
     ];
   }
-  console.log("docsUrl:", docsUrl);
   if (docsUrl.includes(docHost) && docVersion) {
     // concatenating the release version with docsUrl
     docsUrl = `${docHost}/${docVersion}`;
@@ -106,7 +109,6 @@ export const getDocsForUrl = (url: string) => {
   if (docsMapper.length === 1) {
     return `${docsUrl}${docsMapper[0].dest}`;
   }
-  console.log("RuntimeConfig.documentation:", RuntimeConfig.documentation);
   // default option
   const defaultDocsAddress =
     RuntimeConfig.documentation[0]?.dest ?? `${window.location.origin}/docs`;

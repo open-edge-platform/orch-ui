@@ -54,6 +54,32 @@ const testCases = [
   },
 ];
 
+const createTestConfig = (
+  overrides: Partial<IRuntimeConfig> = {},
+): IRuntimeConfig => ({
+  DOCUMENTATION_URL:
+    "https://docs.openedgeplatform.intel.com/edge-manage-docs/main",
+  DOCUMENTATION: [
+    {
+      src: "/dashboard",
+      dest: "/user_guide/monitor_deployments/index.html",
+    },
+  ],
+  AUTH: "false",
+  KC_URL: "",
+  KC_REALM: "",
+  KC_CLIENT_ID: "",
+  TITLE: "",
+  SESSION_TIMEOUT: 1800,
+  OBSERVABILITY_URL: "",
+  MFE: {},
+  API: {},
+  VERSIONS: {
+    orchestrator: "v3.1.0-dev-f478801",
+  },
+  ...overrides,
+});
+
 describe("test mapping url to docs link", () => {
   beforeEach(() => {
     const cfg: IRuntimeConfig = {
@@ -135,5 +161,49 @@ describe("test no mapping", () => {
     };
     window.__RUNTIME_CONFIG__ = cfg;
     expect(getDocsForUrl("/random")).to.equal("http://localhost:8000/docs");
+  });
+});
+
+describe("doc URL tests for orchestrator versions", () => {
+  it("Should construct URL with release version 3.1", () => {
+    window.__RUNTIME_CONFIG__ = createTestConfig({
+      VERSIONS: {
+        orchestrator: "v3.1.0-dev-f478801",
+      },
+    });
+    expect(getDocsForUrl("/dashboard")).to.equal(
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/3.1/user_guide/monitor_deployments/index.html",
+    );
+  });
+
+  it("Should construct URL with release version 3.0", () => {
+    window.__RUNTIME_CONFIG__ = createTestConfig({
+      VERSIONS: {
+        orchestrator: "v3.0.0-dev-f478801",
+      },
+    });
+    expect(getDocsForUrl("/dashboard")).to.equal(
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/3.0/user_guide/monitor_deployments/index.html",
+    );
+  });
+
+  it("Should construct URL with mainline doc version if orchestrator version is not available", () => {
+    window.__RUNTIME_CONFIG__ = createTestConfig({
+      VERSIONS: {},
+    });
+    expect(getDocsForUrl("/dashboard")).to.equal(
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/monitor_deployments/index.html",
+    );
+  });
+
+  it("Should construct URL with mainline doc version if orchestrator version is received in unknown format", () => {
+    window.__RUNTIME_CONFIG__ = createTestConfig({
+      VERSIONS: {
+        orchestrator: "3.0.0",
+      },
+    });
+    expect(getDocsForUrl("/dashboard")).to.equal(
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/monitor_deployments/index.html",
+    );
   });
 });
