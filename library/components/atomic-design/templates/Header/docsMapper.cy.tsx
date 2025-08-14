@@ -101,7 +101,9 @@ describe("test mapping url to docs link", () => {
       OBSERVABILITY_URL: "",
       MFE: {},
       API: {},
-      VERSIONS: {},
+      VERSIONS: {
+        orchestrator: "v3.1.0-dev-f478801",
+      },
     };
     window.__RUNTIME_CONFIG__ = cfg;
   });
@@ -127,7 +129,9 @@ describe("test no mapping", () => {
       OBSERVABILITY_URL: "",
       MFE: {},
       API: {},
-      VERSIONS: {},
+      VERSIONS: {
+        orchestrator: "v3.1.0-dev-f478801",
+      },
     };
     window.__RUNTIME_CONFIG__ = cfg;
     expect(getDocsForUrl("/random")).to.equal("http://localhost:8000/docs");

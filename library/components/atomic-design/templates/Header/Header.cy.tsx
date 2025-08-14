@@ -26,7 +26,7 @@ const runtimeConfig: IRuntimeConfig = {
     ADMIN: undefined,
   },
   API: {},
-  VERSIONS: { v: undefined },
+  VERSIONS: { v: undefined, orchestrator: "v3.1.0-dev-f478801" },
   DOCUMENTATION: [],
 };
 
@@ -87,7 +87,9 @@ describe("<Header/>", () => {
       OBSERVABILITY_URL: "",
       MFE: {},
       API: {},
-      VERSIONS: {},
+      VERSIONS: {
+        orchestrator: "v3.1.0-dev-f478801",
+      },
     };
     window.__RUNTIME_CONFIG__ = cfg;
     cy.mount(
