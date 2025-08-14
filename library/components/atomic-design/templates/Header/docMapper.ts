@@ -101,9 +101,21 @@ export const getDocsForUrl = (url: string) => {
       )!,
     ];
   }
-  if (docsUrl.includes(docHost) && docVersion) {
-    // concatenating the release version with docsUrl
-    docsUrl = `${docHost}/${docVersion}`;
+
+  try {
+    const docsUrlObj = new URL(docsUrl);
+    const docHostObj = new URL(docHost);
+    // fail safe check to ensure documentation host
+    if (
+      docsUrlObj.host === docHostObj.host &&
+      docsUrlObj.protocol === docHostObj.protocol &&
+      docVersion
+    ) {
+      // concatenating the release version with docsUrl
+      docsUrl = `${docHost}/${docVersion}`;
+    }
+  } catch (e) {
+    // fallback: do nothing, keep docsUrl as is
   }
 
   if (docsMapper.length === 1) {
