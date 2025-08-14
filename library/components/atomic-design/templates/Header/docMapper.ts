@@ -49,14 +49,14 @@ export const getDocsForUrl = (url: string) => {
   const docHost = "https://docs.openedgeplatform.intel.com/edge-manage-docs";
   const urlParts = url.substring(1).split("/");
   let docVersion;
-  if (window.__RUNTIME_CONFIG__.VERSIONS.orchestrator) {
+  if (RuntimeConfig.getComponentVersion("orchestrator")) {
     docVersion = extractDocumentationVersion(
-      window.__RUNTIME_CONFIG__.VERSIONS.orchestrator,
+      RuntimeConfig.getComponentVersion("orchestrator"),
     );
   }
   let docsUrl = stripTrailingSlash(RuntimeConfig.documentationUrl);
   let docsMapper = RuntimeConfig.documentation;
-
+  console.log("docVersion:", docVersion);
   // looking for matches part (url segment) by part
   // takes browser url, e.g. /test/aa/bb/cc and test against mapper values, segment by segment
   // if values from the same segment index from url and mapper key are different we dont grab this mapping
@@ -73,7 +73,7 @@ export const getDocsForUrl = (url: string) => {
           [urlParts[index], "*"].includes(part),
       ),
   );
-
+  console.log("docsMapper", docsMapper);
   // if we get more than one match it means that we get match against static address and segment with path parameter
   // e.g. /test/aa/bb and /test/*/bb or /test/aa/*
   // then we need to pick key with the least number of path parameters (*)
@@ -97,7 +97,7 @@ export const getDocsForUrl = (url: string) => {
       )!,
     ];
   }
-
+  console.log("docsUrl:", docsUrl);
   if (docsUrl.includes(docHost) && docVersion) {
     // concatenating the release version with docsUrl
     docsUrl = `${docHost}/${docVersion}`;
@@ -106,7 +106,7 @@ export const getDocsForUrl = (url: string) => {
   if (docsMapper.length === 1) {
     return `${docsUrl}${docsMapper[0].dest}`;
   }
-
+  console.log("RuntimeConfig.documentation:", RuntimeConfig.documentation);
   // default option
   const defaultDocsAddress =
     RuntimeConfig.documentation[0]?.dest ?? `${window.location.origin}/docs`;
