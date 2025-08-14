@@ -44,6 +44,9 @@ describe("<OSProfileDetails/>", () => {
           "contain.text",
           "deb https://files.edgeorch.net orchui release",
         );
+      pom.root
+        .should("contain.text", "Repository URL")
+        .should("contain.text", "http://archive.ubuntu.com/ubuntu");
     });
     it("should render tabs", () => {
       cy.mount(<OSProfileDetails os={osTb} />);

@@ -40,6 +40,7 @@ export const hostOne: infra.HostResourceRead = {
       architecture: "x86_64",
       name: "os-ubuntu",
       repoUrl: "repoUrl",
+      imageUrl: "repoUrl",
       sha256:
         "09f6e5d55cd9741a026c0388d4905b7492749feedbffc741e65aab35fc38430d",
       kernelCommand: "kernelCommand",
