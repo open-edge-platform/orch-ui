@@ -11,7 +11,6 @@ import {
   Flex,
   MetadataDisplay,
   Status,
-  StatusIcon,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -415,7 +414,7 @@ const HostDetails: React.FC = () => {
         </div>
       </div>
 
-      {host.amtSku !== "Unknown" && (
+      {/* {host.amtSku !== "Unknown" && (
         <Flex cols={[12]}>
           <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
             Power: &nbsp;
@@ -425,7 +424,7 @@ const HostDetails: React.FC = () => {
             />
           </Text>
         </Flex>
-      )}
+      )} */}
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>
