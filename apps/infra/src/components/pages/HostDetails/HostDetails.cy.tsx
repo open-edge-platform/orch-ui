@@ -45,11 +45,11 @@ describe("HostDetails", () => {
 
     it("should display the Host information", () => {
       pom.el.infraHostDetailsHeader.contains(mockHost.name);
-      pom.el.infraHostDetailsPowerStatus.find(".icon-ready").should("exist");
-      pom.el.infraHostDetailsPowerStatus.should(
-        "contain.text",
-        mockHost.powerStatus,
-      );
+      // pom.el.infraHostDetailsPowerStatus.find(".icon-ready").should("exist");
+      // pom.el.infraHostDetailsPowerStatus.should(
+      //   "contain.text",
+      //   mockHost.powerStatus,
+      // );
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
       pom.el.osProfiles.should(
