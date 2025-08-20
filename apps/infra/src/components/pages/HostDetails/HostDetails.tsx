@@ -10,7 +10,6 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
-  Status,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -306,13 +305,13 @@ const HostDetails: React.FC = () => {
     }) ?? []),
   ];
 
-  const powerInfo = {
-    indicatorIcon:
-      host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
-        ? Status.Ready
-        : Status.Unknown,
-    message: host.powerStatus ?? "Unknown",
-  };
+  // const powerInfo = {
+  //   indicatorIcon:
+  //     host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+  //       ? Status.Ready
+  //       : Status.Unknown,
+  //   message: host.powerStatus ?? "Unknown",
+  // };
 
   const handleStartPress = () => {
     patchHost({
