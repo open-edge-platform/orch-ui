@@ -140,6 +140,7 @@ const ClusterTemplatesList = ({
 
       {doTemplatesExist && (
         <Table
+          key={templates?.templateInfoList?.length}
           columns={columns}
           data={templates?.templateInfoList}
           canSearch
