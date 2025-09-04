@@ -153,7 +153,7 @@ const OSProfileDetails = ({ os }: OSProfileDetailsProps) => {
         label="Update Sources"
         value={os.updateSources?.join()}
       />
-      <OsProfileDetailField label="Repository URL" value={os.repoUrl} />
+      <OsProfileDetailField label="Repository URL" value={os.imageUrl} />
       <OsProfileDetailField label="sha256" value={os.sha256} />
       <OsProfileDetailField label="Kernel Command" value={os.kernelCommand} />
 

@@ -214,6 +214,7 @@ export const provisionedInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   desiredState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
+  currentOs: osUbuntu,
 };
 
 export const provisionedInstanceTwo: enhancedInfraSlice.InstanceReadModified = {

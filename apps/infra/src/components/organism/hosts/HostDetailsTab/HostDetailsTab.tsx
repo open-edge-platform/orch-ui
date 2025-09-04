@@ -21,7 +21,6 @@ import {
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
-import VproDetails from "../../VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
@@ -80,14 +79,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       id: 7,
       title: "Host Labels",
     },
-    ...(host.amtSku !== "Unknown"
-      ? [
-          {
-            id: 8,
-            title: "vPro Details",
-          },
-        ]
-      : []),
+    // ...(host.amtSku !== "Unknown"
+    //   ? [
+    //       {
+    //         id: 8,
+    //         title: "vPro Details",
+    //       },
+    //     ]
+    //   : []),
   ];
 
   const itemList = [
@@ -181,7 +180,7 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
           <b>UUID</b>
           <div>{host.uuid ?? "N/A"}</div>
           <b>OS</b>
-          <div>{host.instance?.os?.name ?? "N/A"}</div>
+          <div>{host.instance?.currentOs?.name ?? "N/A"}</div>
           <b>Bios Vendor</b>
           <div>{host.biosVendor ?? "N/A"}</div>
           <b>Product Name</b>
@@ -236,13 +235,13 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     </Item>,
   ];
 
-  if (host.amtSku !== "Unknown") {
-    itemList.push(
-      <Item title="vPro Details">
-        <VproDetails host={host} />
-      </Item>,
-    );
-  }
+  // if (host.amtSku !== "Unknown") {
+  //   itemList.push(
+  //     <Item title="vPro Details">
+  //       <VproDetails host={host} />
+  //     </Item>,
+  //   );
+  // }
 
   if (
     host.site &&

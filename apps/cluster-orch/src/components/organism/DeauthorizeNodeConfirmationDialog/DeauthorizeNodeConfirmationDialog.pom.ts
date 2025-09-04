@@ -6,7 +6,7 @@
 import { cm } from "@orch-ui/apis";
 import { CyApiDetails, CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = [] as const;
+const dataCySelectors = ["reason"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 type ApiAliases = "putClusterNode";
