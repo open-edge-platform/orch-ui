@@ -9,7 +9,7 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item, MessageBanner, TextField } from "@spark-design/react";
 import { DropdownSize, InputSize } from "@spark-design/tokens";
 import { useEffect } from "react";
-import { selectHosts } from "../../../store/configureHost";
+import { selectHosts } from "src/store/provisionHost";
 import { useAppSelector } from "../../../store/hooks";
 import "./OsProfileDropdown.scss";
 
@@ -80,7 +80,7 @@ const OsProfileDropdown = ({
           label={label ?? ""}
           name="osProfile"
           data-cy="osProfile"
-          placeholder={singleHostConfig ? "Select OS Profile" : ""}
+          placeholder="Select OS Profile"
           size={DropdownSize.Large}
           selectedKey={value}
           isDisabled={value === "" && !singleHostConfig}
