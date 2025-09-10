@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm, eim } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import {
   Flex,
   MetadataDisplay,
@@ -12,7 +12,6 @@ import {
 } from "@orch-ui/components";
 import {
   generateMetadataPair,
-  hostProviderStatusToString,
   RuntimeConfig,
   SharedStorage,
 } from "@orch-ui/utils";
@@ -75,7 +74,7 @@ const ClusterDetailsDrawer = ({
       [] as string[],
     ) ?? [];
 
-  const columns: TableColumn<eim.HostRead>[] = [
+  const columns: TableColumn<infra.HostResourceRead>[] = [
     {
       Header: "Host Name",
       apiName: "name",
@@ -83,8 +82,7 @@ const ClusterDetailsDrawer = ({
     },
     {
       Header: "Status",
-      accessor: (item: eim.HostRead) => hostProviderStatusToString(item),
-      Cell: (table: { row: { original: eim.HostRead } }) => (
+      Cell: (table: { row: { original: infra.HostResourceRead } }) => (
         <Suspense fallback={<SquareSpinner />}>
           {__AggregateHostStatus ? (
             <__AggregateHostStatus

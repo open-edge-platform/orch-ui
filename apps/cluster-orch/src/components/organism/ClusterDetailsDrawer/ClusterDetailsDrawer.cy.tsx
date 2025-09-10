@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { eim } from "@orch-ui/apis";
+import { infra } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { clusterOne, nodeOne, nodeTwo } from "@orch-ui/utils";
 import { HostsTableProps } from "apps/infra/src/components/organism/HostsTable/HostsTable";
@@ -12,7 +12,7 @@ import ClusterDetailsDrawer from "./ClusterDetailsDrawer";
 import ClusterDetailsDrawerPom from "./ClusterDetailsDrawer.pom";
 
 const HostsTableMock = (props: HostsTableProps) => {
-  const columns: TableColumn<eim.HostRead>[] = [
+  const columns: TableColumn<infra.HostResourceRead>[] = [
     {
       Header: "Host Name",
       accessor: "name",

@@ -189,7 +189,7 @@ const TelemetryLogsForm = ({
                     const selectedKey = key?.toString() ?? "";
                     setValue(`systemLogPairs.${index}.logLevel`, selectedKey);
                     setSelectedLogLevel(
-                      selectedKey as eim.TelemetrySeverityLevel,
+                      selectedKey as TelemetryLogLevel,
                     );
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);
