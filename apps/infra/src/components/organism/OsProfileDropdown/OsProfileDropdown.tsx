@@ -86,7 +86,9 @@ const OsProfileDropdown = ({
           isDisabled={value === "" && !singleHostConfig}
           onSelectionChange={(e) => {
             const selectedKey = e?.toString() ?? "";
-            const selectedOs = osResources.find((os) => selectedKey === os.resourceId);
+            const selectedOs = osResources.find(
+              (os) => selectedKey === os.resourceId,
+            );
             onSelectionChange?.(selectedOs, false);
           }}
           isRequired={isRequired}

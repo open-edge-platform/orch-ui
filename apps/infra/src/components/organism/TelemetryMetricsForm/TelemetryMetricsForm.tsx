@@ -167,11 +167,13 @@ const TelemetryMetricsForm = ({
                       }, 100);
                     }}
                   >
-                    {metricsResponse?.telemetryMetricsGroups.map((metricgroup) => (
-                      <Item key={metricgroup.telemetryMetricsGroupId}>
-                        {metricgroup.name}
-                      </Item>
-                    ))}
+                    {metricsResponse?.telemetryMetricsGroups?.map(
+                      (metricgroup) => (
+                        <Item key={metricgroup.telemetryMetricsGroupId}>
+                          {metricgroup.name}
+                        </Item>
+                      ),
+                    )}
                   </Dropdown>
                 );
               }}
