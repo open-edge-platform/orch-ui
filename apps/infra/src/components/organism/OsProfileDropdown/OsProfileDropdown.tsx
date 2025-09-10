@@ -9,8 +9,8 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item, MessageBanner, TextField } from "@spark-design/react";
 import { DropdownSize, InputSize } from "@spark-design/tokens";
 import { useEffect } from "react";
-import { selectHosts } from "src/store/provisionHost";
 import { useAppSelector } from "../../../store/hooks";
+import { selectHosts } from "../../../store/provisionHost";
 import "./OsProfileDropdown.scss";
 
 interface OsProfileDropdownProps {
