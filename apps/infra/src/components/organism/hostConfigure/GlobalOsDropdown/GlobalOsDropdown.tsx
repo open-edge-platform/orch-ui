@@ -63,6 +63,7 @@ export const GlobalOsDropdown = ({
         selectedKey={value}
         onSelectionChange={(key) => {
           const selectedKey = key?.toString() ?? "";
+          onSelectionChange?.(selectedKey);
         }}
         isRequired
       >

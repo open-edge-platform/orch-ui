@@ -124,7 +124,10 @@ const TelemetryLogsForm = ({
               name={`systemLogPairs.${index}.logSource`}
               control={control}
               rules={{
-                required: { value: true, message: "Metric type is required" },
+                required: {
+                  value: true,
+                  message: "Metric type is required",
+                },
                 validate: {
                   noDuplicate: (value: string) => checkValidation(index, value),
                 },
@@ -149,8 +152,9 @@ const TelemetryLogsForm = ({
                       setValue(path, selectedKey);
                       setTimeout(() => {
                         trigger(path);
-                        if (getSystemLogPairs()[index].logLevel !== "")
+                        if (getSystemLogPairs()[index].logLevel !== "") {
                           onUpdate(getSystemLogPairs());
+                        }
                       }, 100);
                     }}
                   >
@@ -183,23 +187,17 @@ const TelemetryLogsForm = ({
                   onSelectionChange={(key) => {
                     const selectedKey = key?.toString() ?? "";
                     setValue(`systemLogPairs.${index}.logLevel`, selectedKey);
-                    setSelectedLogLevel(
-                      selectedKey as TelemetryLogLevel,
-                    );
+                    setSelectedLogLevel(selectedKey as TelemetryLogLevel);
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);
                     setSourceExists(false);
                   }}
                 >
-                  {
-                    <Item key="TELEMETRY_SEVERITY_LEVEL_CRITICAL">
-                      CRITICAL
-                    </Item>
-                  }
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_ERROR">ERROR</Item>}
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_WARN">WARN</Item>}
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_INFO">INFO</Item>}
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_DEBUG">DEBUG</Item>}
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_CRITICAL">CRITICAL</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_ERROR">ERROR</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_WARN">WARN</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_INFO">INFO</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_DEBUG">DEBUG</Item>
                 </Dropdown>
               )}
             />
