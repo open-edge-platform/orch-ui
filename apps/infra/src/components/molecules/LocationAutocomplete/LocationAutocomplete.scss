@@ -6,9 +6,23 @@
 .location-autocomplete {
   margin-right: 0.1rem;
 
+  &__input-wrapper {
+    position: relative;
+  }
+
+  &__icon {
+    position: absolute;
+    left: 1rem;
+    top: 59%;
+  }
+
   &__combobox {
     .spark-combobox-arrow-button {
       display: none;
+    }
+
+    input {
+      padding-left: 2.5rem !important;
     }
   }
 }

@@ -39,7 +39,7 @@ export const clusterTemplateOneV1: cm.TemplateInfo = {
   description: "example description 1",
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.30.0",
   clusterconfiguration: {
     rke2: {
       apiVersion: "provisioning.cattle.io/v1",
@@ -177,7 +177,7 @@ export const clusterTemplateOneV2: cm.TemplateInfo = {
   description: "Lorem ipsum dolor sit amet",
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.30.0",
   clusterconfiguration: {
     rke2: {
       status: "disabled",
@@ -212,7 +212,7 @@ const clusterTemplateOneV3: cm.TemplateInfo = {
   version: clusterTemplateOneV3Info.version,
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.30.0",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -248,7 +248,7 @@ export const clusterTemplateTwoV1: cm.TemplateInfo = {
   description: "Vivamus aliquam dolor nec aliquet",
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.30.0",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -283,7 +283,7 @@ const clusterTemplateTwoV2: cm.TemplateInfo = {
   version: clusterTemplateTwoV2Info.version,
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.30.0",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -319,7 +319,7 @@ const clusterTemplateThreeV1: cm.TemplateInfo = {
   description: "Etiam tristique sollicitudin rutrum",
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.30.0",
   clusterconfiguration: {
     rke2: {
       status: "active",
@@ -354,7 +354,7 @@ const clusterTemplateFourV1: cm.TemplateInfo = {
   version: clusterTemplateFourV1Info.version,
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.32.0",
   clusterconfiguration: {
     rke2: undefined,
   },
@@ -364,7 +364,7 @@ const clusterTemplateFourV2: cm.TemplateInfo = {
   version: clusterTemplateFourV2Info.version,
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.32.0",
   clusterconfiguration: {
     rke2: undefined,
   },
@@ -376,7 +376,7 @@ const clusterTemplateFiveV1: cm.TemplateInfo = {
   description: "Aenean rutrum condimentum purus",
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.32.0",
   clusterconfiguration: {
     rke2: undefined,
   },
@@ -386,7 +386,7 @@ const clusterTemplateFiveV2: cm.TemplateInfo = {
   version: clusterTemplateFiveV2Info.version,
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.32.0",
   clusterconfiguration: {
     rke2: undefined,
   },
@@ -397,7 +397,7 @@ const clusterTemplateFiveV3: cm.TemplateInfo = {
   description: "Praesent ligula felis",
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.32.0",
   clusterconfiguration: {
     rke2: undefined,
   },
@@ -407,7 +407,7 @@ const clusterTemplateFiveV4: cm.TemplateInfo = {
   version: clusterTemplateFiveV4Info.version,
   controlplaneprovidertype: "rke2",
   infraprovidertype: "docker",
-  kubernetesVersion: "v1.35.36",
+  kubernetesVersion: "v1.32.0",
   clusterconfiguration: {
     rke2: undefined,
   },
