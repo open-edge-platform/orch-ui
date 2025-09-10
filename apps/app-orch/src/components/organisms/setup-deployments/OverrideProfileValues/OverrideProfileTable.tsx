@@ -63,6 +63,7 @@ const OverrideProfileTable = ({
             applicationName: ar.name,
             version: ar.version,
           },
+          { forceRefetch: true }, // as its only get call forceRefetch is used, as opposed to invalidateTags which would refetch all the resources
         ),
       );
     });
