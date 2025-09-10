@@ -17,6 +17,10 @@
   }
 
   &__combobox {
+    .spark-combobox-arrow-button {
+      display: none;
+    }
+
     input {
       padding-left: 40px !important;
     }
