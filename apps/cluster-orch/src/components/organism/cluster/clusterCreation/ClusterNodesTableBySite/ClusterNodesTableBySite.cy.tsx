@@ -76,9 +76,7 @@ const mockSite: infra.SiteResourceRead = {
     name: "Region A",
     metadata: [{ key: "region", value: "Region a" }],
   },
-  inheritedMetadata: [
-    { key: "region", value: "Region a" },
-  ],
+  inheritedMetadata: [{ key: "region", value: "Region a" }],
   metadata: [{ key: "site", value: "Site a" }],
 };
 

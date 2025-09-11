@@ -33,9 +33,9 @@ const HostsTableMock = (props: HostsTableProps) => {
         ]}
       />
       <div data-cy="test-uuid">
-        {props.filters?.byUuids?.sort().join(",") || 
-         props.filters?.byHostIds?.sort().join(",") || 
-         "no-ids"}
+        {props.filters?.byUuids?.sort().join(",") ||
+          props.filters?.byHostIds?.sort().join(",") ||
+          "no-ids"}
       </div>
     </>
   );
