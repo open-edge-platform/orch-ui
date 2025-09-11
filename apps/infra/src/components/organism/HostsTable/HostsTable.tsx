@@ -36,6 +36,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   LifeCycleState,
+  setFiltersByHostIds,
+  setFiltersByUuids,
   setHasWorkload,
   setLifeCycleState,
   setSearchTerm,
@@ -65,6 +67,8 @@ export interface HostsTableProps {
   /** API filters */
   filters?: infra.HostServiceGetHostApiArg & {
     workloadMemberId?: string | undefined;
+    byUuids?: string[];
+    byHostIds?: string[];
   };
   hasWorkload?: boolean;
   /** hide only Deauthorized Hosts (default: false) */
@@ -166,9 +170,16 @@ const HostsTable = ({
   }, [hasWorkload]);
 
   useEffect(() => {
-    dispatch(setWorkloadMemberId(filters?.workloadMemberId));
-    /* Add more dispatch if you have more filters here ... */
-  }, [filter]);
+    if (filters) {
+      dispatch(setWorkloadMemberId(filters.workloadMemberId));
+      if (filters.byUuids) {
+        dispatch(setFiltersByUuids(filters.byUuids));
+      } else if (filters.byHostIds) {
+        dispatch(setFiltersByHostIds(filters.byHostIds));
+      }
+      /* Add more dispatch if you have more filters here ... */
+    }
+  }, [filters]);
 
   const { data, isSuccess, isError, isLoading, error } =
     infra.useHostServiceListHostsQuery(

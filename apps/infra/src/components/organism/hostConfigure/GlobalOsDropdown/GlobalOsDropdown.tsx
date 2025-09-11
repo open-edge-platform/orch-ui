@@ -61,7 +61,10 @@ export const GlobalOsDropdown = ({
         placeholder="Select OS Profile"
         size={DropdownSize.Medium}
         selectedKey={value}
-        onSelectionChange={(key) => onSelectionChange?.(key.toString())}
+        onSelectionChange={(key) => {
+          const selectedKey = key?.toString() ?? "";
+          onSelectionChange?.(selectedKey);
+        }}
         isRequired
       >
         {osResources.map((os) => {

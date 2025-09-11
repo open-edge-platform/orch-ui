@@ -318,4 +318,59 @@ describe("<HostsTable/>", () => {
         expect(match && match.length > 0).to.eq(true);
       });
   });
+
+  it("should filter hosts by uuid list", () => {
+    pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+    cy.mount(
+      <HostsTable
+        category={LifeCycleState.Provisioned}
+        siteId={siteBostonId}
+        filters={{
+          byUuids: [
+            "550e8400-e29b-41d4-a716-44665544001",
+            "550e8400-e29b-41d4-a716-44665544005",
+          ],
+        }}
+      />,
+      {
+        reduxStore: setupStore(),
+      },
+    );
+    pom.waitForApis();
+    cy.get(`@${pom.api.getHostsListSuccessPage1Total10}`)
+      .its("request.url")
+      .then((url: string) => {
+        const match = url.match(
+          encodeURLQuery(
+            'uuid="550e8400-e29b-41d4-a716-44665544001" OR uuid="550e8400-e29b-41d4-a716-44665544005"',
+          ),
+        );
+        expect(match && match.length > 0).to.eq(true);
+      });
+  });
+
+  it("should filter hosts by resourceId list", () => {
+    pom.interceptApis([pom.api.getHostsListSuccessPage1Total10]);
+    cy.mount(
+      <HostsTable
+        category={LifeCycleState.Provisioned}
+        siteId={siteBostonId}
+        filters={{
+          byHostIds: ["host-12345", "host-67890"],
+        }}
+      />,
+      {
+        reduxStore: setupStore(),
+      },
+    );
+    pom.waitForApis();
+    cy.get(`@${pom.api.getHostsListSuccessPage1Total10}`)
+      .its("request.url")
+      .then((url: string) => {
+        const match = url.match(
+          encodeURLQuery('resourceId="host-12345" OR resourceId="host-67890"'),
+        );
+        expect(match && match.length > 0).to.eq(true);
+      });
+  });
 });

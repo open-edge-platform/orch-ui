@@ -57,7 +57,8 @@ const RegionsDropdown = ({
           size={DropdownSize.Large}
           selectedKey={value}
           onSelectionChange={(e) => {
-            const region = regions.find((r) => e.toString() === r.resourceId);
+            const selectedKey = e?.toString() ?? "";
+            const region = regions.find((r) => selectedKey === r.resourceId);
             return region && onSelectionChange?.(region);
           }}
           isRequired
