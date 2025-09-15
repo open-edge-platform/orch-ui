@@ -9,8 +9,8 @@ import { SharedStorage } from "@orch-ui/utils";
 import { Dropdown, Item, MessageBanner, TextField } from "@spark-design/react";
 import { DropdownSize, InputSize } from "@spark-design/tokens";
 import { useEffect } from "react";
-import { selectHosts } from "../../../store/configureHost";
 import { useAppSelector } from "../../../store/hooks";
+import { selectHosts } from "../../../store/provisionHost";
 import "./OsProfileDropdown.scss";
 
 interface OsProfileDropdownProps {
@@ -80,16 +80,17 @@ const OsProfileDropdown = ({
           label={label ?? ""}
           name="osProfile"
           data-cy="osProfile"
-          placeholder={singleHostConfig ? "Select OS Profile" : ""}
+          placeholder="Select OS Profile"
           size={DropdownSize.Large}
           selectedKey={value}
           isDisabled={value === "" && !singleHostConfig}
-          onSelectionChange={(e) =>
-            onSelectionChange?.(
-              osResources.find((os) => e.toString() === os.resourceId),
-              false,
-            )
-          }
+          onSelectionChange={(e) => {
+            const selectedKey = e?.toString() ?? "";
+            const selectedOs = osResources.find(
+              (os) => selectedKey === os.resourceId,
+            );
+            onSelectionChange?.(selectedOs, false);
+          }}
           isRequired={isRequired}
         >
           {osResources.map((os) => (

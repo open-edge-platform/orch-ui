@@ -14,7 +14,7 @@ describe("<ClusterList/>", () => {
       <ClusterList
         onSelect={cy.stub().as("onSelectStub")}
         onShowDetails={cy.stub().as("onShowDetailsStub")}
-        isForm={true}
+        canSelectRows
       />,
     );
     pom.waitForApis();
