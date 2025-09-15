@@ -25,7 +25,7 @@ const HostTableRemoteMock = ({
 }: {
   columns: TableColumn<infra.HostResourceRead>[];
   selectedHosts?: infra.HostResourceRead[];
-  onHostSelect: (host: infra.Host, isSelected: boolean) => void;
+  onHostSelect: (host: infra.HostResource, isSelected: boolean) => void;
   onDataLoad?: (hosts: infra.HostResourceRead[]) => void;
   mockHosts?: infra.HostResourceRead[];
 }) => {
@@ -76,9 +76,7 @@ const mockSite: infra.SiteResourceRead = {
     name: "Region A",
     metadata: [{ key: "region", value: "Region a" }],
   },
-  inheritedMetadata: {
-    location: [{ key: "region", value: "Region a" }],
-  },
+  inheritedMetadata: [{ key: "region", value: "Region a" }],
   metadata: [{ key: "site", value: "Site a" }],
 };
 
