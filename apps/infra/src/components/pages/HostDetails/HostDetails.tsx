@@ -10,6 +10,8 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
+  Status,
+  StatusIcon,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -305,13 +307,13 @@ const HostDetails: React.FC = () => {
     }) ?? []),
   ];
 
-  // const powerInfo = {
-  //   indicatorIcon:
-  //     host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
-  //       ? Status.Ready
-  //       : Status.Unknown,
-  //   message: host.powerStatus ?? "Unknown",
-  // };
+  const powerInfo = {
+    indicatorIcon:
+      host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+        ? Status.Ready
+        : Status.Unknown,
+    message: host.powerStatus ?? "Unknown",
+  };
 
   const handleStartPress = () => {
     patchHost({
@@ -354,7 +356,7 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <div className="primary-actions">
-          {host.amtSku !== "Unknown" && (
+          {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
             <ButtonGroup className="button-group">
               <Button
                 size={ButtonSize.Large}
@@ -413,7 +415,7 @@ const HostDetails: React.FC = () => {
         </div>
       </div>
 
-      {/* {host.amtSku !== "Unknown" && (
+      {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
         <Flex cols={[12]}>
           <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
             Power: &nbsp;
@@ -423,7 +425,7 @@ const HostDetails: React.FC = () => {
             />
           </Text>
         </Flex>
-      )} */}
+      )}
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>
