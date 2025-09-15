@@ -123,6 +123,7 @@ export const getDisplayNameValidationErrorMessage = (
   return nameDefaultErrorMsg;
 };
 
+/** @deprecated refer to `generateMetadataPair()` in `@orch-ui/utils` */
 export const generateMetadataPair = (labels?: any): MetadataPair[] => {
   const result: MetadataPair[] = [];
   if (labels) {

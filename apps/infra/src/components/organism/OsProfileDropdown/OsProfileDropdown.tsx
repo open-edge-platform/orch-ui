@@ -84,12 +84,13 @@ const OsProfileDropdown = ({
           size={DropdownSize.Large}
           selectedKey={value}
           isDisabled={value === "" && !singleHostConfig}
-          onSelectionChange={(e) =>
-            onSelectionChange?.(
-              osResources.find((os) => e.toString() === os.resourceId),
-              false,
-            )
-          }
+          onSelectionChange={(e) => {
+            const selectedKey = e?.toString() ?? "";
+            const selectedOs = osResources.find(
+              (os) => selectedKey === os.resourceId,
+            );
+            onSelectionChange?.(selectedOs, false);
+          }}
           isRequired={isRequired}
         >
           {osResources.map((os) => (
