@@ -7,4 +7,9 @@
   .spark-dropdown-is-disabled .spark-button-disabled {
     height: 1.975rem;
   }
+
+  // Ensure consistent height with other Large input components (40px)
+  .spark-dropdown .spark-button {
+    min-height: 2rem;
+  }
 }

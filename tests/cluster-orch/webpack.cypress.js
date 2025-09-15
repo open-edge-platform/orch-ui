@@ -41,6 +41,8 @@ module.exports = {
     alias: {
       //TEMP: need this so that @spark-design's react version is not picked up
       react: path.resolve(__dirname, "../../node_modules/react"),
+      // Alias for infra components
+      "apps/infra/src/components/organism/HostsTable/HostsTable": path.resolve(__dirname, "../../apps/infra/src/components/organism/HostsTable/HostsTable.tsx"),
     },
     plugins: [
       new TsconfigPathsPlugin({
