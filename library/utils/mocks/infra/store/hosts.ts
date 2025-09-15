@@ -280,6 +280,7 @@ export const provisionedHostOne: HostMock = {
   name: provisionedHostOneId,
   instance: provisionedInstanceOne,
   currentState: "HOST_STATE_ONBOARDED",
+  amtSku: "Unknown",
 };
 
 export const provisionedHostTwo: HostMock = {
@@ -326,6 +327,7 @@ export const onboardedHostOne: HostMock = {
   serialNumber: onboardedHostOneSerial,
   desiredState: "HOST_STATE_ONBOARDED",
   currentState: "HOST_STATE_ONBOARDED",
+  amtSku: "Unknown",
 };
 
 export const onboardedHostTwo: HostMock = {

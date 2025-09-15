@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { infra } from "@orch-ui/apis";
 import { Button, Dropdown, Icon, Item, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
@@ -129,7 +124,10 @@ const TelemetryLogsForm = ({
               name={`systemLogPairs.${index}.logSource`}
               control={control}
               rules={{
-                required: { value: true, message: "Metric type is required" },
+                required: {
+                  value: true,
+                  message: "Metric type is required",
+                },
                 validate: {
                   noDuplicate: (value: string) => checkValidation(index, value),
                 },
@@ -150,11 +148,13 @@ const TelemetryLogsForm = ({
                     validationState={valid ? "valid" : "invalid"}
                     errorMessage={error?.message}
                     onSelectionChange={(key) => {
-                      setValue(path, key.toString());
+                      const selectedKey = key?.toString() ?? "";
+                      setValue(path, selectedKey);
                       setTimeout(() => {
                         trigger(path);
-                        if (getSystemLogPairs()[index].logLevel !== "")
+                        if (getSystemLogPairs()[index].logLevel !== "") {
                           onUpdate(getSystemLogPairs());
+                        }
                       }, 100);
                     }}
                   >
@@ -184,28 +184,20 @@ const TelemetryLogsForm = ({
                   key={`systemLogPairs.${index}.logLevel`}
                   defaultSelectedKey={pairs[index]?.logLevel ?? ""}
                   label=""
-                  //isDisabled={!sourceExists || !valid}
-                  //disabledMessage="Please select log Source"
                   onSelectionChange={(key) => {
-                    setValue(
-                      `systemLogPairs.${index}.logLevel`,
-                      key.toString(),
-                    );
-                    setSelectedLogLevel(key.toString() as TelemetryLogLevel);
+                    const selectedKey = key?.toString() ?? "";
+                    setValue(`systemLogPairs.${index}.logLevel`, selectedKey);
+                    setSelectedLogLevel(selectedKey as TelemetryLogLevel);
                     onUpdate(getSystemLogPairs());
                     setLogLevelExists(true);
                     setSourceExists(false);
                   }}
                 >
-                  {
-                    <Item key="TELEMETRY_SEVERITY_LEVEL_CRITICAL">
-                      CRITICAL
-                    </Item>
-                  }
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_ERROR">ERROR</Item>}
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_WARN">WARN</Item>}
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_INFO">INFO</Item>}
-                  {<Item key="TELEMETRY_SEVERITY_LEVEL_DEBUG">DEBUG</Item>}
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_CRITICAL">CRITICAL</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_ERROR">ERROR</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_WARN">WARN</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_INFO">INFO</Item>
+                  <Item key="TELEMETRY_SEVERITY_LEVEL_DEBUG">DEBUG</Item>
                 </Dropdown>
               )}
             />

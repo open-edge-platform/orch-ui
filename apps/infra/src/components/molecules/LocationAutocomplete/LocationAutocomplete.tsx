@@ -3,7 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Combobox, IComboboxProps, Item, Text } from "@spark-design/react";
+import {
+  Combobox,
+  IComboboxProps,
+  Icon,
+  Item,
+  Text,
+} from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
 import { useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
@@ -63,38 +69,41 @@ export const LocationAutocomplete = ({
 
   return (
     <div className="location-autocomplete" data-cy={dataCy}>
-      <Combobox
-        label={label}
-        onInputChange={handleInputChange}
-        onSelectionChange={handleSelectionChange}
-        menuTrigger="input"
-        placeholder={placeholder}
-        isRequired={isRequired}
-        size={InputSize.Large}
-        {...comboboxProps}
-        className="location-autocomplete__combobox"
-        data-cy="locationCombobox"
-      >
-        {nodes.length > 0 ? (
-          nodes.map((node) => {
-            const displayText = node.path?.join(" | ") ?? node.name;
-            return (
-              <Item key={node.resourceId} textValue={displayText}>
-                <Highlighter
-                  highlightClassName="highlighted"
-                  searchWords={[inputValue.trim()]}
-                  autoEscape={true}
-                  textToHighlight={displayText}
-                />
-              </Item>
-            );
-          })
-        ) : (
-          <Item key="no-results">
-            <Text>No locations found</Text>
-          </Item>
-        )}
-      </Combobox>
+      <div className="location-autocomplete__input-wrapper">
+        <Icon icon="magnifier" className="location-autocomplete__icon" />
+        <Combobox
+          label={label}
+          onInputChange={handleInputChange}
+          onSelectionChange={handleSelectionChange}
+          menuTrigger="input"
+          placeholder={placeholder}
+          isRequired={isRequired}
+          size={InputSize.Large}
+          {...comboboxProps}
+          className="location-autocomplete__combobox"
+          data-cy="locationCombobox"
+        >
+          {nodes.length > 0 ? (
+            nodes.map((node) => {
+              const displayText = node.path?.join(" | ") ?? node.name;
+              return (
+                <Item key={node.resourceId} textValue={displayText}>
+                  <Highlighter
+                    highlightClassName="highlighted"
+                    searchWords={[inputValue.trim()]}
+                    autoEscape={true}
+                    textToHighlight={displayText}
+                  />
+                </Item>
+              );
+            })
+          ) : (
+            <Item key="no-results">
+              <Text>No locations found</Text>
+            </Item>
+          )}
+        </Combobox>
+      </div>
     </div>
   );
 };

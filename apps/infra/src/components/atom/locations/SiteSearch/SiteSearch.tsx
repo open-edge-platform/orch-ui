@@ -23,7 +23,7 @@ interface SiteSearchProps {
 
 export const SiteSearch = ({
   onSiteSelect,
-  placeholder = "Select a site",
+  placeholder = "Search",
   label = "Site",
   isRequired = false,
   defaultInputValue,

@@ -28,6 +28,7 @@ import "./src/components/organism/ClusterList/ClusterList.cy.tsx";
 import "./src/components/organism/ClusterNodesTable/ClusterNodesTable.cy.tsx";
 import "./src/components/organism/ClusterSummary/ClusterSummary.cy.tsx";
 import "./src/components/organism/ClusterTemplatesList/ClusterTemplatesList.cy.tsx";
+import "./src/components/organism/ClusterDetailsDrawer/ClusterDetailsDrawer.cy.tsx";
 import "./src/components/organism/DeauthorizeNodeConfirmationDialog/DeauthorizeNodeConfirmationDialog.cy.tsx";
 import "./src/components/pages/AddToClusterDrawer/AddToClusterDrawer.cy.tsx";
 import "./src/components/pages/ClusterCreation/ClusterCreation.cy.tsx";

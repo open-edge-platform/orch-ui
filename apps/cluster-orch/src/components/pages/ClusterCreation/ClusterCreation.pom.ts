@@ -178,6 +178,7 @@ const instanceOne: ModifiedInstance = {
     updateSources: [],
     sha256: "",
     repoUrl: "",
+    imageUrl: "",
   },
   workloadMembers: [],
   host: {
