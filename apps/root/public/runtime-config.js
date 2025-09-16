@@ -10,29 +10,29 @@ const fqdn = "orch-10-114-181-230.espdqa.infra-host.com";
 
 // common documentation URLs
 const documentationUrls = [
-  { src: "/dashboard", dest: "/user_guide/monitor_deployments/index.html" },// works with 3.0,3.1
-  { src: "/applications/deployments", dest: "/user_guide/package_software/deployments.html" },// Not changed
-  { src: "/applications/deployment/*", dest: "/user_guide/package_software/deployment_details.html" },// Not changed
-  { src: "/applications/deployment/*/cluster/*", dest: "/user_guide/package_software/deployment_details.html" },// Not changed
-  { src: "/applications/setup-deployment", dest: "/user_guide/package_software/setup_deploy.html" },//TODO: unused route
-  { src: "/applications/packages", dest: "/user_guide/package_software/deploy_packages.html" },//Not changed
-  { src: "/applications/packages/create", dest: "/user_guide/package_software/add_deploy_pack.html" },//Not changed
-  { src: "/applications/packages/import", dest: "/user_guide/package_software/import_deployment.html" },//Not changed
-  { src: "/applications/package/*", dest: "/user_guide/package_software/deploy_pack_details.html" },// TODO: is this required ?
-  { src: "/applications/packages/edit/*/*/*", dest: "/user_guide/package_software/edit_deploy_pack.html" },//Not changed
-  { src: "/applications/packages/clone/*/*/*", dest: "/user_guide/package_software/clone_applications.html" },//Not changed
-  { src: "/applications/applications/apps", dest: "/user_guide/package_software/applications.html" },//Not changed
-  { src: "/applications/applications/add", dest: "/user_guide/package_software/add_applications.html" },//Not changed
-  { src: "/applications/applications/edit/*/*/*", dest: "/user_guide/package_software/edit_application.html" },//Not changed
-  { src: "/applications/application/*/*/*", dest: "/user_guide/package_software/app_details.html" },//Not changed
-  { src: "/applications/applications/extensions", dest: "/user_guide/package_software/extensions/deploy_extension_package.html" },//Not changed
-  { src: "/applications/applications/registries", dest: "/user_guide/package_software/registry.html" },//Not changed
-  { src: "/infrastructure/host/*", dest: "/user_guide/set_up_edge_infra/active_host_details.html" },//unused
-  { src: "/infrastructure/host/*/edit", dest: "/user_guide/set_up_edge_infra/edit_host.html" },//Not changed
-  { src: "/infrastructure/regions/new", dest: "/user_guide/set_up_edge_infra/location/add_region.html" },// Not changed
-  { src: "/infrastructure/regions/*", dest: "/user_guide/set_up_edge_infra/location/view_region_detail.html" },//Not changed
-  { src: "/infrastructure/regions/*/sites/new", dest: "/user_guide/set_up_edge_infra/location/add_site.html" }, //Not changed
-  { src: "/admin/os-profiles", dest: "/shared/shared_os_profile.html" },//Not changed
+  { src: "/dashboard", dest: "/user_guide/monitor_deployments/index.html" },
+  { src: "/applications/deployments", dest: "/user_guide/package_software/deployments.html" },
+  { src: "/applications/deployment/*", dest: "/user_guide/package_software/deployment_details.html" },
+  { src: "/applications/deployment/*/cluster/*", dest: "/user_guide/package_software/deployment_details.html" },
+  { src: "/applications/setup-deployment", dest: "/user_guide/package_software/setup_deploy.html" },
+  { src: "/applications/packages", dest: "/user_guide/package_software/deploy_packages.html" },
+  { src: "/applications/packages/create", dest: "/user_guide/package_software/add_deploy_pack.html" },
+  { src: "/applications/packages/import", dest: "/user_guide/package_software/import_deployment.html" },
+  { src: "/applications/package/*", dest: "/user_guide/package_software/deploy_pack_details.html" },
+  { src: "/applications/packages/edit/*/*/*", dest: "/user_guide/package_software/edit_deploy_pack.html" },
+  { src: "/applications/packages/clone/*/*/*", dest: "/user_guide/package_software/clone_applications.html" },
+  { src: "/applications/applications/apps", dest: "/user_guide/package_software/applications.html" },
+  { src: "/applications/applications/add", dest: "/user_guide/package_software/add_applications.html" },
+  { src: "/applications/applications/edit/*/*/*", dest: "/user_guide/package_software/edit_application.html" },
+  { src: "/applications/application/*/*/*", dest: "/user_guide/package_software/app_details.html" },
+  { src: "/applications/applications/extensions", dest: "/user_guide/package_software/extensions/deploy_extension_package.html" },
+  { src: "/applications/applications/registries", dest: "/user_guide/package_software/registry.html" },
+  { src: "/infrastructure/host/*", dest: "/user_guide/set_up_edge_infra/active_host_details.html" },
+  { src: "/infrastructure/host/*/edit", dest: "/user_guide/set_up_edge_infra/edit_host.html" },
+  { src: "/infrastructure/regions/new", dest: "/user_guide/set_up_edge_infra/location/add_region.html" },
+  { src: "/infrastructure/regions/*", dest: "/user_guide/set_up_edge_infra/location/view_region_detail.html" },
+  { src: "/infrastructure/regions/*/sites/new", dest: "/user_guide/set_up_edge_infra/location/add_site.html" },
+  { src: "/admin/os-profiles", dest: "/shared/shared_os_profile.html" },
 ];
 
 const v3_0_docs = [
