@@ -13,7 +13,7 @@ import {
   StorageItems,
 } from "@orch-ui/utils";
 import { Icon, MessageBanner } from "@spark-design/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "../../atoms/ApiError/ApiError";
 import { Modal } from "../../atoms/Modal/Modal";
@@ -82,7 +82,7 @@ export const ProjectSwitch = ({
   };
   // Get List of all projects from the user
   const {
-    data: projectSwitchOptions,
+    data: unsortedProjectSwitchOptions,
     isSuccess,
     isLoading,
     isError,
@@ -97,6 +97,18 @@ export const ProjectSwitch = ({
       skip: !isTokenAvailable,
     },
   );
+
+  const projectSwitchOptions = useMemo(() => {
+    return unsortedProjectSwitchOptions
+      ? [...unsortedProjectSwitchOptions].sort((a, b) => {
+          const nameA =
+            (a.spec?.description || a.name || "").toLowerCase() || "";
+          const nameB =
+            (b.spec?.description || b.name || "").toLowerCase() || "";
+          return nameA.localeCompare(nameB);
+        })
+      : [];
+  }, [unsortedProjectSwitchOptions]);
 
   useEffect(() => {
     // Decide active project
