@@ -62,16 +62,6 @@ describe("HostDetails", () => {
       pom.el.provider.should("have.text", mockHost.provider?.name);
     });
 
-    it("should display the vPro-related buttons", () => {
-      pom.el.infraHostDetailsStartBtn.should("exist");
-      pom.el.infraHostDetailsRestartBtn.should("exist");
-      pom.el.infraHostDetailsStopBtn.should("exist");
-      pom.el.infraHostDetailsStartBtn.should(
-        "have.class",
-        "spark-button-disabled",
-      );
-    });
-
     it("should render inherited", () => {
       const inheritedMetadataLength =
         (siteRestaurantTwo.metadata?.length ?? 0) +
@@ -96,6 +86,44 @@ describe("HostDetails", () => {
         .click();
       cy.get("#pathname").contains(`host/${mockHost.resourceId}/edit`);
     });
+  });
+
+  describe("vPro UI", () => {
+    const testAmtState = (state: "AMT Provisioned" | "AMT Unprovisioned") => {
+      const isAmtProvisioned = state === "AMT Provisioned";
+      const apiMock = isAmtProvisioned
+        ? "hostWithAmtProvisioned"
+        : "hostWithAmtUnprovisioned";
+
+      describe(`when the current AMT state is ${state}`, () => {
+        beforeEach(() => {
+          pom.interceptApis([pom.api[apiMock], pom.api.siteSuccess]);
+          cy.mount(<HostDetails />, {
+            runtimeConfig,
+            routerProps: { initialEntries: [`/host/${mockHost.resourceId}`] },
+            routerRule: [{ path: "/host/:id", element: <HostDetails /> }],
+          });
+          pom.waitForApis();
+        });
+
+        it(`should ${isAmtProvisioned ? "" : "not "}display the vPro-related buttons`, () => {
+          const assertion = isAmtProvisioned ? "exist" : "not.exist";
+          pom.el.infraHostDetailsStartBtn.should(assertion);
+          pom.el.infraHostDetailsRestartBtn.should(assertion);
+          pom.el.infraHostDetailsStopBtn.should(assertion);
+
+          if (isAmtProvisioned) {
+            pom.el.infraHostDetailsStartBtn.should(
+              "have.class",
+              "spark-button-disabled",
+            );
+          }
+        });
+      });
+    };
+
+    testAmtState("AMT Provisioned");
+    testAmtState("AMT Unprovisioned");
   });
 
   describe("when the Host is correctly loaded with no host name", () => {

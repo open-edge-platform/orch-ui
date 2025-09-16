@@ -171,6 +171,7 @@ export const useProvisioning = () => {
               name: host.name,
               siteId: host.site?.siteID,
               metadata: host.metadata,
+              desiredPowerState: "POWER_STATE_ON",
               // ...(host.enableVpro && {
               //   desiredAmtState: "AMT_STATE_PROVISIONED",
               // }),
