@@ -6,8 +6,8 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 ///<reference path="../index.d.ts"/>
 
-// type DocsSource = { src: string; dest: string }[];
-type DocsSource = { [version: string]: { src: string; dest: string }[] };
+type DocItem = { src: string; dest: string }[];
+type DocsSource = { [version: string]: DocItem };
 
 export interface IRuntimeConfig {
   AUTH: string;
@@ -59,9 +59,7 @@ export class RuntimeConfig {
     );
   }
 
-  public static documentation(
-    version: string = "main",
-  ): { src: string; dest: string }[] {
+  public static documentation(version: string = "main"): DocItem {
     const docs = window.__RUNTIME_CONFIG__?.DOCUMENTATION;
 
     if (!docs) {
