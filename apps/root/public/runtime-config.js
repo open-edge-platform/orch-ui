@@ -82,7 +82,10 @@ window.__RUNTIME_CONFIG__ = {
       ...documentationUrls,
       ...v3_1_docs
     ],
-    "main": [ // main is pointing to latest release URLs
+    //default
+    "main": [
+      // main is pointing to latest release URLs.
+      // Whenever documentation URL changes update main which acts as default to contain latest release URLs
       ...documentationUrls,
       ...v3_1_docs
     ]

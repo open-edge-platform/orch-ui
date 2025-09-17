@@ -60,9 +60,15 @@ export class RuntimeConfig {
   }
 
   public static documentation(
-    version: string,
+    version: string = "main",
   ): { src: string; dest: string }[] {
-    return window.__RUNTIME_CONFIG__?.DOCUMENTATION?.[version] ?? [];
+    const docs = window.__RUNTIME_CONFIG__?.DOCUMENTATION;
+
+    if (!docs) {
+      return [];
+    }
+
+    return docs[version] ?? docs["main"] ?? [];
   }
 
   /**
