@@ -100,8 +100,10 @@ describe("RuntimeConfig", () => {
       { src: "src", dest: "dest" },
     ]);
 
-    // Test with non-existent version (should return empty array)
-    expect(RuntimeConfig.documentation("9.9")).to.deep.equal([]);
+    // Test with non-existent version (should fallback to "main")
+    expect(RuntimeConfig.documentation("9.9")).to.deep.equal([
+      { src: "src", dest: "dest" },
+    ]);
   });
 
   describe("with INFRA standalone configuration", () => {
