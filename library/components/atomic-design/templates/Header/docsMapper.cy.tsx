@@ -59,12 +59,20 @@ const createTestConfig = (
 ): IRuntimeConfig => ({
   DOCUMENTATION_URL:
     "https://docs.openedgeplatform.intel.com/edge-manage-docs/main",
-  DOCUMENTATION: [
-    {
-      src: "/dashboard",
-      dest: "/user_guide/monitor_deployments/index.html",
-    },
-  ],
+  DOCUMENTATION: {
+    "3.1": [
+      {
+        src: "/dashboard",
+        dest: "/user_guide/monitor_deployments/index.html",
+      },
+    ],
+    main: [
+      {
+        src: "/dashboard",
+        dest: "/user_guide/monitor_deployments/index.html",
+      },
+    ],
+  },
   AUTH: "false",
   KC_URL: "",
   KC_REALM: "",
@@ -84,40 +92,42 @@ describe("test mapping url to docs link", () => {
   beforeEach(() => {
     const cfg: IRuntimeConfig = {
       DOCUMENTATION_URL: "https://test.com/",
-      DOCUMENTATION: [
-        {
-          src: "/dashboard",
-          dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
-        },
-        {
-          src: "/applications/deployment/*",
-          dest: "/docs/content/dev_guide/package_software/deployment_details.html",
-        },
-        {
-          src: "/applications/deployment/*/cluster/*",
-          dest: "/docs/content/dev_guide/package_software/deployment_details_2.html",
-        },
-        {
-          src: "/infrastructure/unconfigured-host/*",
-          dest: "/docs/content/dev_guide/set_up_edge_infra/onboard_host_details.html",
-        },
-        {
-          src: "/infrastructure/unconfigured-host/configure",
-          dest: "/docs/content/dev_guide/set_up_edge_infra/configure_host.html",
-        },
-        {
-          src: "/infrastructure/regions/new",
-          dest: "/docs/content/dev_guide/set_up_edge_infra/location/add_region.html",
-        },
-        {
-          src: "/infrastructure/regions/*",
-          dest: "/docs/content/dev_guide/set_up_edge_infra/location/view_region_detail.html",
-        },
-        {
-          src: "/infrastructure/regions/*/sites/new",
-          dest: "/docs/content/dev_guide/set_up_edge_infra/location/add_site.html",
-        },
-      ],
+      DOCUMENTATION: {
+        "3.1": [
+          {
+            src: "/dashboard",
+            dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
+          },
+          {
+            src: "/applications/deployment/*",
+            dest: "/docs/content/dev_guide/package_software/deployment_details.html",
+          },
+          {
+            src: "/applications/deployment/*/cluster/*",
+            dest: "/docs/content/dev_guide/package_software/deployment_details_2.html",
+          },
+          {
+            src: "/infrastructure/unconfigured-host/*",
+            dest: "/docs/content/dev_guide/set_up_edge_infra/onboard_host_details.html",
+          },
+          {
+            src: "/infrastructure/unconfigured-host/configure",
+            dest: "/docs/content/dev_guide/set_up_edge_infra/configure_host.html",
+          },
+          {
+            src: "/infrastructure/regions/new",
+            dest: "/docs/content/dev_guide/set_up_edge_infra/location/add_region.html",
+          },
+          {
+            src: "/infrastructure/regions/*",
+            dest: "/docs/content/dev_guide/set_up_edge_infra/location/view_region_detail.html",
+          },
+          {
+            src: "/infrastructure/regions/*/sites/new",
+            dest: "/docs/content/dev_guide/set_up_edge_infra/location/add_site.html",
+          },
+        ],
+      },
       AUTH: "false",
       KC_URL: "",
       KC_REALM: "",
@@ -145,7 +155,10 @@ describe("test no mapping", () => {
   it("default link", () => {
     const cfg: IRuntimeConfig = {
       DOCUMENTATION_URL: "",
-      DOCUMENTATION: [],
+      DOCUMENTATION: {
+        "3.1": [],
+        main: [],
+      },
       AUTH: "false",
       KC_URL: "",
       KC_REALM: "",
@@ -178,6 +191,20 @@ describe("doc URL tests for orchestrator versions", () => {
 
   it("Should construct URL with release version 3.0", () => {
     window.__RUNTIME_CONFIG__ = createTestConfig({
+      DOCUMENTATION: {
+        "3.0": [
+          {
+            src: "/dashboard",
+            dest: "/user_guide/monitor_deployments/index.html",
+          },
+        ],
+        main: [
+          {
+            src: "/dashboard",
+            dest: "/user_guide/monitor_deployments/index.html",
+          },
+        ],
+      },
       VERSIONS: {
         orchestrator: "v3.0.0-dev-f478801",
       },

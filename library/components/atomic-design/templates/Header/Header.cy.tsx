@@ -27,7 +27,20 @@ const runtimeConfig: IRuntimeConfig = {
   },
   API: {},
   VERSIONS: { v: undefined, orchestrator: "v3.1.0-dev-f478801" },
-  DOCUMENTATION: [],
+  DOCUMENTATION: {
+    "3.1": [
+      {
+        src: "/dashboard",
+        dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
+      },
+    ],
+    main: [
+      {
+        src: "/dashboard",
+        dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
+      },
+    ],
+  },
 };
 
 window.__RUNTIME_CONFIG__ = runtimeConfig;
@@ -72,12 +85,20 @@ describe("<Header/>", () => {
   it("correctly displays the documentation link", () => {
     const cfg: IRuntimeConfig = {
       DOCUMENTATION_URL: "https://test.com/",
-      DOCUMENTATION: [
-        {
-          src: "/dashboard",
-          dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
-        },
-      ],
+      DOCUMENTATION: {
+        "3.1": [
+          {
+            src: "/dashboard",
+            dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
+          },
+        ],
+        main: [
+          {
+            src: "/dashboard",
+            dest: "/docs/content/dev_guide/monitor_deployments/monitor_deployment.html",
+          },
+        ],
+      },
       AUTH: "false",
       KC_URL: "",
       KC_REALM: "",

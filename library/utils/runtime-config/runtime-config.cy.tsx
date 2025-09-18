@@ -15,7 +15,10 @@ const runtimeConfig: IRuntimeConfig = {
   SESSION_TIMEOUT: 1000,
   TITLE: "test-title",
   DOCUMENTATION_URL: "doc-link",
-  DOCUMENTATION: [{ src: "src", dest: "dest" }],
+  DOCUMENTATION: {
+    main: [{ src: "src", dest: "dest" }],
+    "3.1": [{ src: "src", dest: "dest" }],
+  },
   API: {
     CATALOG: "CATALOG",
     ADM: "ADM",
@@ -77,7 +80,28 @@ describe("RuntimeConfig", () => {
   });
 
   it("should return the documentation mappings", () => {
-    expect(RuntimeConfig.documentation).to.deep.equal([
+    // Update the test config to use version-based structure
+    const configWithVersionedDocs: IRuntimeConfig = {
+      ...runtimeConfig,
+      DOCUMENTATION: {
+        main: [{ src: "src", dest: "dest" }],
+        "3.1": [{ src: "src", dest: "dest" }],
+      },
+    };
+    window.__RUNTIME_CONFIG__ = configWithVersionedDocs;
+
+    // Test the method with a version parameter
+    expect(RuntimeConfig.documentation("main")).to.deep.equal([
+      { src: "src", dest: "dest" },
+    ]);
+
+    // Test with version "3.1"
+    expect(RuntimeConfig.documentation("3.1")).to.deep.equal([
+      { src: "src", dest: "dest" },
+    ]);
+
+    // Test with non-existent version (should fallback to "main")
+    expect(RuntimeConfig.documentation("9.9")).to.deep.equal([
       { src: "src", dest: "dest" },
     ]);
   });
