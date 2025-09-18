@@ -35,13 +35,18 @@ export type ProvisionedHostPopupProps = Omit<
   host: infra.HostResourceRead;
   onDeauthorizeHostWithoutWorkload?: (hostId: string) => void;
   onScheduleMaintenance?: (targetEntity: infra.HostResourceRead) => void;
+  onToggleVpro?: (boolean) => void;
 };
 
 /** This will show all available host actions within popup menu (active/configured, i.e, assigned/unassigned host only) */
 const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
   const cy = { "data-cy": dataCy };
-  const { host, onDeauthorizeHostWithoutWorkload, onScheduleMaintenance } =
-    props;
+  const {
+    host,
+    onDeauthorizeHostWithoutWorkload,
+    onScheduleMaintenance,
+    onToggleVpro,
+  } = props;
 
   const navigate = useInfraNavigate();
 
@@ -95,6 +100,24 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
       onSelect: () => onScheduleMaintenance && onScheduleMaintenance(host),
     },
+    ...(host.amtSku !== "Unknown" &&
+    host.currentAmtState !== "AMT_STATE_PROVISIONED"
+      ? [
+          {
+            displayText: "Activate vPro",
+            onSelect: () => onToggleVpro && onToggleVpro(true),
+          },
+        ]
+      : []),
+    ...(host.amtSku !== "Unknown" &&
+    host.currentAmtState === "AMT_STATE_PROVISIONED"
+      ? [
+          {
+            displayText: "De-Activate vPro",
+            onSelect: () => onToggleVpro && onToggleVpro(false),
+          },
+        ]
+      : []),
   ];
 
   // Graphana: add Dashboard access
