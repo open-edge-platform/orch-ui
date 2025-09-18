@@ -21,7 +21,7 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   clearCluster,
@@ -47,7 +47,8 @@ export interface ClusterEditProps {
 const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
   const cy = { "data-cy": dataCy };
   const { clusterName } = useParams<urlParams>() as urlParams;
-  const navigate = useInfraNavigate();
+  const navigate = useNavigate();
+  const infraNavigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
   //initial nodes
@@ -341,7 +342,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
           variant={ButtonVariant.Secondary}
           onPress={() => {
             dispatch(clearCluster());
-            navigate(clusterManagementRoute);
+            navigate(-1);
           }}
         >
           Cancel
@@ -387,7 +388,7 @@ const ClusterEdit = ({ HostsTableRemote }: ClusterEditProps) => {
         onHide={() => {
           if (onReqSuccess()) {
             setSuccessVisibility(ToastVisibility.Hide);
-            navigate(clusterManagementRoute);
+            infraNavigate(clusterManagementRoute);
           }
           if (onReqError()) {
             setErrorVisibility(ToastVisibility.Hide);
