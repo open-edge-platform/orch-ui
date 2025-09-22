@@ -51,7 +51,7 @@ export const getDocsForUrl = (url: string) => {
   // ...in documentationUrl but concatenated with `/main`
   const docHost = "https://docs.openedgeplatform.intel.com/edge-manage-docs";
   const urlParts = url.substring(1).split("/");
-  let docVersion;
+  let docVersion = "main";
   if (
     window.__RUNTIME_CONFIG__?.VERSIONS.orchestrator &&
     RuntimeConfig.getComponentVersion("orchestrator")
@@ -61,7 +61,7 @@ export const getDocsForUrl = (url: string) => {
     );
   }
   let docsUrl = stripTrailingSlash(RuntimeConfig.documentationUrl);
-  let docsMapper = RuntimeConfig.documentation;
+  let docsMapper = RuntimeConfig.documentation(docVersion);
   // looking for matches part (url segment) by part
   // takes browser url, e.g. /test/aa/bb/cc and test against mapper values, segment by segment
   // if values from the same segment index from url and mapper key are different we dont grab this mapping
@@ -123,6 +123,7 @@ export const getDocsForUrl = (url: string) => {
   }
   // default option
   const defaultDocsAddress =
-    RuntimeConfig.documentation[0]?.dest ?? `${window.location.origin}/docs`;
+    RuntimeConfig.documentation(docVersion)[0]?.dest ??
+    `${window.location.origin}/docs`;
   return `${docsUrl}${defaultDocsAddress}`;
 };
