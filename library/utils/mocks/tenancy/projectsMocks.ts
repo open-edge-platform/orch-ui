@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { rest } from "msw";
+import { http , delay} from "msw"
 import { AdminProject } from "../../global/admin/global";
 import { RuntimeConfig } from "../../runtime-config/runtime-config";
 import OrganizationStore from "./data/organizations";
@@ -19,17 +19,18 @@ interface ProjectParam {
   project: string;
 }
 export const handlers = [
-  rest.get(`${baseUrl}/${projectUrlPrefix}/projects`, (_, res, ctx) =>
-    res(ctx.status(200), ctx.json(projectStore.list()), ctx.delay(2000)),
+  http.get(`${baseUrl}/${projectUrlPrefix}/projects`, async (_, res, ctx) {
+  await delay(500); es(ctx.status(200), ctx.json(projectStore.list()), ctx.delay(2000)),
   ),
-  rest.get(`${baseUrl}/${projectUrlPrefix}/orgs`, (_, res, ctx) =>
-    res(ctx.status(200), ctx.json(organizationStore.list()), ctx.delay(2000)),
+  http.get(`${baseUrl}/${projectUrlPrefix}/orgs`, async (_, res, ctx) {
+  await delay(500); es(ctx.status(200), ctx.json(organizationStore.list()), ctx.delay(2000)),
   ),
-  rest.put(
+  http.put(
     `${baseUrl}/${projectUrlPrefix}/projects/:project`,
-    async (req, res, ctx) => {
-      const { project: projectId } = req.params as unknown as ProjectParam;
-      const body = await req.json<AdminProject>();
+    async (req, res, ctx) {
+  await delay(500); 
+      const { project: projectId } = params as unknown as ProjectParam;
+      const body = await req.json<any, AdminProject>();
 
       if (projectStore.get(projectId)) {
         const updatedProject = projectStore.put(projectId, body);
@@ -45,24 +46,22 @@ export const handlers = [
         );
       } else {
         const addedProject = projectStore.post(body);
-        return res(
-          ctx.status(200),
-          ctx.json(
-            addedProject ?? {
+        return HttpResponse.json(
+addedProject ?? {
               status: 400,
               data: { message: "error in updating project" },
             },
-          ),
-          ctx.delay(2000),
-        );
+{status: 200,
+});
       }
     },
   ),
-  rest.patch(
+  http.patch(
     `${baseUrl}/${projectUrlPrefix}/projects/:project`,
-    async (req, res, ctx) => {
-      const { project: projectId } = req.params as unknown as ProjectParam;
-      const body = await req.json<AdminProject>();
+    async (req, res, ctx) {
+  await delay(500); 
+      const { project: projectId } = params as unknown as ProjectParam;
+      const body = await req.json<any, AdminProject>();
       const existingProject = projectStore.get(projectId);
 
       if (existingProject) {
@@ -79,33 +78,32 @@ export const handlers = [
         }
       }
 
-      return res(
-        ctx.status(200),
-        ctx.json({
+      return HttpResponse.json(
+{
           status: 400,
           data: { message: "error in patch on project" },
-        }),
-        ctx.delay(2000),
-      );
+        },
+{status: 200,
+});
     },
   ),
-  rest.delete(
+  http.delete(
     `${baseUrl}/${projectUrlPrefix}/projects/:project`,
-    async (req, res, ctx) => {
-      const { project: projectId } = req.params as unknown as ProjectParam;
+    async (req, res, ctx) {
+  await delay(500); 
+      const { project: projectId } = params as unknown as ProjectParam;
       const deleteProject = projectStore.delete(projectId);
       if (deleteProject) {
         return res(ctx.status(200), ctx.json("success"), ctx.delay(2000));
       }
 
-      return res(
-        ctx.status(200),
-        ctx.json({
+      return HttpResponse.json(
+{
           status: 400,
           data: { message: "error in patch on project" },
-        }),
-        ctx.delay(2000),
-      );
+        },
+{status: 200,
+});
     },
   ),
 ];

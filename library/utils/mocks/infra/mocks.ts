@@ -5,7 +5,7 @@
 
 import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { GenericStatus } from "@orch-ui/components";
-import { rest } from "msw";
+import { http , HttpResponse} from "msw"
 import { SharedStorage } from "../..";
 import { SearchResult } from "../../../../apps/infra/src/store/locations";
 import { osUbuntuId } from "./data";
@@ -119,10 +119,10 @@ const randomizeInstanceHostList = (
 
 export const handlers = [
   //locations
-  rest.get(`${baseURL}/locations-api`, async (req, res, ctx) => {
+  http.get(`${baseURL}/locations-api`, async async (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json<{ nodes: SearchResult[]; totalElements: number }>({
+      ctx.json<any, { nodes: SearchResult[]; totalElements: number }>({
         nodes: [
           { resourceId: "region-1", name: "root-region-1" },
           { resourceId: "region-2", name: "root-region-2" },
@@ -168,9 +168,9 @@ export const handlers = [
       }),
     );
   }),
-  rest.get(
+  http.get(
     `${baseURL}/locations?name=te&showRegions=true&showSites=true`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       return res(
         ctx.status(200),
         // this needs to be generated based on existing regions and sites
@@ -212,9 +212,9 @@ export const handlers = [
     },
   ),
   // region
-  rest.get(`${baseURL}/regions`, async (req, res, ctx) => {
-    const filter = req.url.searchParams.get("filter");
-    const isTotalSitesShown = req.url.searchParams.get("showTotalSites");
+  http.get(`${baseURL}/regions`, async async (req, res, ctx) => {
+    const filter = new URL(req.url).searchParams.get("filter");
+    const isTotalSitesShown = new URL(req.url).searchParams.get("showTotalSites");
     let parent, regionId;
     if (filter) {
       if (filter.match(/NOT has\(parentRegion\)/)) {
@@ -247,15 +247,15 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.RegionServiceListRegionsApiResponse>({
+      ctx.json<any, infra.RegionServiceListRegionsApiResponse>({
         hasNext: false,
         regions: list,
         totalElements: list.length,
       }),
     );
   }),
-  rest.post(`${baseURL}/regions`, async (req, res, ctx) => {
-    const body = await req.json<infra.RegionResourceWrite>();
+  http.post(`${baseURL}/regions`, async async (req, res, ctx) => {
+    const body = await req.json<any, infra.RegionResourceWrite>();
 
     if (body.parentId) {
       body.parentRegion = regionStore.get(body.parentId);
@@ -268,14 +268,14 @@ export const handlers = [
       ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
     );
   }),
-  rest.get(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.RegionServiceGetRegionApiArg;
+  http.get(`${baseURL}/regions/:resourceId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.RegionServiceGetRegionApiArg;
     const region = regionStore.get(resourceId);
 
     if (region) {
       return res(
         ctx.status(200),
-        ctx.json<infra.RegionServiceGetRegionApiResponse>(region),
+        ctx.json<any, infra.RegionServiceGetRegionApiResponse>(region),
       );
     }
     return res(
@@ -287,8 +287,8 @@ export const handlers = [
     );
   }),
 
-  rest.delete(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
+  http.delete(`${baseURL}/regions/:regionId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.RegionServiceDeleteRegionApiArg;
 
     const sites = siteStore.list({ regionId: resourceId });
     if (sites.length > 0) {
@@ -313,9 +313,9 @@ export const handlers = [
     const deleteResult = regionStore.delete(resourceId);
     return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
   }),
-  rest.put(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
-    const body = await req.json<infra.RegionResourceWrite>();
+  http.put(`${baseURL}/regions/:resourceId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.RegionServiceDeleteRegionApiArg;
+    const body = await req.json<any, infra.RegionResourceWrite>();
     const r = regionStore.put(resourceId, body);
     if (!r) return res(ctx.status(500));
     return res(
@@ -323,20 +323,22 @@ export const handlers = [
       ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
     );
   }),
-  rest.patch(`${baseURL}/regions/:regionId`, async (_, res, ctx) => {
-    return res(ctx.status(502));
+  http.patch(`${baseURL}/regions/:regionId`, async () => {
+    return HttpResponse.text(
+{status: 502,
+});
   }),
 
   // site
-  rest.get(`${baseURL}/regions/:resourceId/sites`, async (req, res, ctx) => {
+  http.get(`${baseURL}/regions/:resourceId/sites`, async async (req, res, ctx) => {
     const { resourceId } =
-      req.params as unknown as infra.SiteServiceListSitesApiArg;
+      params as unknown as infra.SiteServiceListSitesApiArg;
 
     if (resourceId) {
       const sites = siteStore.list({ regionId: resourceId });
       return res(
         ctx.status(200),
-        ctx.json<infra.SiteServiceListSitesApiResponse>({
+        ctx.json<any, infra.SiteServiceListSitesApiResponse>({
           hasNext: false,
           sites: sites,
           totalElements: Math.min(sites.length, 10),
@@ -352,9 +354,9 @@ export const handlers = [
       );
     }
   }),
-  rest.get(`${baseURL}/regions/*/sites/:resourceId`, async (req, res, ctx) => {
+  http.get(`${baseURL}/regions/*/sites/:resourceId`, async async (req, res, ctx) => {
     const { resourceId } =
-      req.params as unknown as infra.SiteServiceGetSiteApiArg;
+      params as unknown as infra.SiteServiceGetSiteApiArg;
     const notFoundResponse = {
       detail: "rpc error: code = NotFound desc = ent: resourceId not found",
       status: 404,
@@ -364,7 +366,7 @@ export const handlers = [
       if (site) {
         return res(
           ctx.status(200),
-          ctx.json<infra.SiteServiceGetSiteApiResponse>(site),
+          ctx.json<any, infra.SiteServiceGetSiteApiResponse>(site),
         );
       } else {
         return res(ctx.status(404), ctx.json(notFoundResponse));
@@ -373,8 +375,8 @@ export const handlers = [
       return res(ctx.status(404), ctx.json(notFoundResponse));
     }
   }),
-  rest.post(`${baseURL}/sites`, async (req, res, ctx) => {
-    const body = await req.json<infra.SiteResourceWrite>();
+  http.post(`${baseURL}/sites`, async async (req, res, ctx) => {
+    const body = await req.json<any, infra.SiteResourceWrite>();
     if (body.regionId) {
       body.region = regionStore.get(body.regionId);
     }
@@ -385,13 +387,13 @@ export const handlers = [
       ctx.json<infra.SiteServiceUpdateSiteApiResponse>(r),
     );
   }),
-  rest.get(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.SiteServiceGetSiteApiArg;
+  http.get(`${baseURL}/sites/:siteId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.SiteServiceGetSiteApiArg;
     const site = siteStore.get(resourceId);
     if (site) {
       return res(
         ctx.status(200),
-        ctx.json<infra.SiteServiceGetSiteApiResponse>(site),
+        ctx.json<any, infra.SiteServiceGetSiteApiResponse>(site),
       );
     }
     return res(
@@ -402,10 +404,10 @@ export const handlers = [
       }),
     );
   }),
-  rest.put(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
+  http.put(`${baseURL}/sites/:resourceId`, async async (req, res, ctx) => {
     const { resourceId } =
-      req.params as unknown as infra.SiteServiceUpdateSiteApiArg;
-    const body = await req.json<infra.SiteResourceWrite>();
+      params as unknown as infra.SiteServiceUpdateSiteApiArg;
+    const body = await req.json<any, infra.SiteResourceWrite>();
     const s = siteStore.put(resourceId, body);
     if (!s) return res(ctx.status(500));
     return res(
@@ -413,29 +415,29 @@ export const handlers = [
       ctx.json<infra.SiteServiceUpdateSiteApiResponse>(s),
     );
   }),
-  rest.delete(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.SiteServiceDeleteSiteApiArg;
+  http.delete(`${baseURL}/sites/:resourceId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.SiteServiceDeleteSiteApiArg;
     const deleteResult = siteStore.delete(resourceId);
     return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
   }),
 
   // host
-  rest.get(`${baseURL}/compute/hosts/summary`, async (req, res, ctx) => {
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/compute/hosts/summary`, async async (req, res, ctx) => {
+    const filter = new URL(req.url).searchParams.get("filter");
 
     return res(
       ctx.status(200),
-      ctx.json<infra.HostServiceGetHostsSummaryApiResponse>(
+      ctx.json<any, infra.HostServiceGetHostsSummaryApiResponse>(
         hostStore.getSummary(filter),
       ),
     );
   }),
 
-  rest.get(`${baseURL}/localAccounts`, async (req, res, ctx) => {
+  http.get(`${baseURL}/localAccounts`, async async (req, res, ctx) => {
     const localAccounts = instanceStore.getLocalAccounts();
     return res(
       ctx.status(200),
-      ctx.json<infra.LocalAccountServiceListLocalAccountsApiResponse>({
+      ctx.json<any, infra.LocalAccountServiceListLocalAccountsApiResponse>({
         hasNext: false,
         localAccounts,
         totalElements: localAccounts.length,
@@ -444,11 +446,11 @@ export const handlers = [
     );
   }),
 
-  rest.get(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
-    const siteID = req.url.searchParams.get("siteID");
-    const deviceUuid = req.url.searchParams.get("uuid");
-    const metadataString = req.url.searchParams.get("metadata");
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/compute/hosts`, async async (req, res, ctx) => {
+    const siteID = new URL(req.url).searchParams.get("siteID");
+    const deviceUuid = new URL(req.url).searchParams.get("uuid");
+    const metadataString = new URL(req.url).searchParams.get("metadata");
+    const filter = new URL(req.url).searchParams.get("filter");
     let hosts = hostStore.list({
       siteID,
       deviceUuid,
@@ -501,7 +503,7 @@ export const handlers = [
     }
     return res(
       ctx.status(200),
-      ctx.json<infra.HostServiceListHostsApiResponse>({
+      ctx.json<any, infra.HostServiceListHostsApiResponse>({
         hasNext: false,
         hosts,
         totalElements: hosts.length,
@@ -509,10 +511,10 @@ export const handlers = [
       ctx.delay(delay),
     );
   }),
-  rest.put(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
+  http.put(`${baseURL}/compute/hosts/:resourceId`, async async (req, res, ctx) => {
     const { resourceId } =
-      req.params as unknown as infra.HostServiceUpdateHostApiArg;
-    const body = await req.json<infra.HostResourceWrite>();
+      params as unknown as infra.HostServiceUpdateHostApiArg;
+    const body = await req.json<any, infra.HostResourceWrite>();
     if (!resourceId || !body) {
       return res(
         ctx.status(400),
@@ -562,9 +564,9 @@ export const handlers = [
       ctx.json<infra.HostServiceUpdateHostApiResponse>(host),
     );
   }),
-  rest.post(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
+  http.post(`${baseURL}/compute/hosts`, async async (req, res, ctx) => {
     const { hostResource } =
-      await req.json<infra.HostServiceCreateHostApiArg>();
+      await req.json<any, infra.HostServiceCreateHostApiArg>();
     const host = hostStore.post(hostResource as HostMock);
     if (!host) throw new Error("infra.Host POST was unsuccessful");
     return res(
@@ -572,10 +574,10 @@ export const handlers = [
       ctx.json<infra.HostServiceCreateHostApiResponse>(host),
     );
   }),
-  rest.patch(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
+  http.patch(`${baseURL}/compute/hosts/:resourceId`, async async (req, res, ctx) => {
     const { resourceId } =
-      req.params as unknown as infra.HostServiceUpdateHostApiArg;
-    const hostPatchUpdate = await req.json<infra.HostResourceWrite>();
+      params as unknown as infra.HostServiceUpdateHostApiArg;
+    const hostPatchUpdate = await req.json<any, infra.HostResourceWrite>();
 
     const host = hostStore.get(resourceId);
     if (host) {
@@ -607,13 +609,13 @@ export const handlers = [
       }),
     );
   }),
-  rest.get(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.HostServiceGetHostApiArg;
+  http.get(`${baseURL}/compute/hosts/:resourceId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.HostServiceGetHostApiArg;
     const host = hostStore.get(resourceId);
     if (host) {
       return res(
         ctx.status(200),
-        ctx.json<infra.HostServiceGetHostApiResponse>(host),
+        ctx.json<any, infra.HostServiceGetHostApiResponse>(host),
       );
     }
 
@@ -625,10 +627,10 @@ export const handlers = [
       }),
     );
   }),
-  rest.put(
+  http.put(
     `${baseURL}/compute/hosts/:hostId/invalidate`,
-    async (req, res, ctx) => {
-      const { hostId } = req.params as { hostId: string };
+    async async (req, res, ctx) => {
+      const { hostId } = params as { hostId: string };
       const body = await req.json();
       const note = body.note;
       const deauthResult = hostStore.deauthorizeHost(hostId, true, note);
@@ -649,9 +651,9 @@ export const handlers = [
       return res(ctx.status(200), ctx.json(undefined));
     },
   ),
-  rest.delete(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
+  http.delete(`${baseURL}/compute/hosts/:hostId`, async async (req, res, ctx) => {
     const { resourceId } =
-      req.params as unknown as infra.HostServiceDeleteHostApiArg;
+      params as unknown as infra.HostServiceDeleteHostApiArg;
     const host = hostStore.delete(resourceId);
     if (host) {
       return res(ctx.status(200));
@@ -667,9 +669,9 @@ export const handlers = [
   }),
 
   //Register related
-  rest.post(`${baseURL}/compute/hosts/register`, async (req, res, ctx) => {
+  http.post(`${baseURL}/compute/hosts/register`, async async (req, res, ctx) => {
     const hostRegisterInfo =
-      (await req.json<infra.HostServiceRegisterHostApiArg>()) as infra.HostRegister;
+      (await req.json<any, infra.HostServiceRegisterHostApiArg>()) as infra.HostRegister;
     hostStore.registerHost({
       ...hostRegisterInfo,
       name: hostRegisterInfo.name ?? "default",
@@ -690,11 +692,11 @@ export const handlers = [
     );
   }),
 
-  rest.patch(
+  http.patch(
     `${baseURL}/compute/hosts/:hostId/register`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as unknown as infra.HostServicePatchRegisterHostApiArg;
+        params as unknown as infra.HostServicePatchRegisterHostApiArg;
 
       const result = hostStore.get(resourceId);
       const updatedResult: HostMock = {
@@ -713,9 +715,9 @@ export const handlers = [
   ),
 
   // instance
-  rest.get(`${baseURL}/compute/instances`, async (req, res, ctx) => {
-    const hostId = req.url.searchParams.get("hostID");
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/compute/instances`, async async (req, res, ctx) => {
+    const hostId = new URL(req.url).searchParams.get("hostID");
+    const filter = new URL(req.url).searchParams.get("filter");
 
     let instances = instanceStore.list({
       hostId,
@@ -731,7 +733,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.InstanceServiceListInstancesApiResponse>({
+      ctx.json<any, infra.InstanceServiceListInstancesApiResponse>({
         hasNext: false,
         instances,
         totalElements: instances.length,
@@ -739,8 +741,8 @@ export const handlers = [
       ctx.delay(delay),
     );
   }),
-  rest.post(`${baseURL}/compute/instances`, async (req, res, ctx) => {
-    const body = req.body as infra.InstanceResourceWrite;
+  http.post(`${baseURL}/compute/instances`, async async (req, res, ctx) => {
+    const body = await request.clone().json();
 
     const { name, kind, hostID, osID, securityFeature } = body;
 
@@ -765,7 +767,7 @@ export const handlers = [
 
         return res(
           ctx.status(200),
-          ctx.json<infra.InstanceServiceCreateInstanceApiResponse>(newInstance),
+          ctx.json<any, infra.InstanceServiceCreateInstanceApiResponse>(newInstance),
         );
       }
     }
@@ -775,11 +777,11 @@ export const handlers = [
       ctx.json({ data: "infra.Host/OS not found!", status: "404" }),
     );
   }),
-  rest.delete(
+  http.delete(
     `${baseURL}/compute/instances/:instanceId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.InstanceServiceDeleteInstanceApiArg;
+        params as infra.InstanceServiceDeleteInstanceApiArg;
       const deleteResult = instanceStore.delete(resourceId);
 
       return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
@@ -787,8 +789,8 @@ export const handlers = [
   ),
 
   // workload
-  rest.get(`${baseURL}/workloads/:workloadId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.WorkloadServiceGetWorkloadApiArg;
+  http.get(`${baseURL}/workloads/:workloadId`, async async (req, res, ctx) => {
+    const { resourceId } = params as infra.WorkloadServiceGetWorkloadApiArg;
     const workload = workloadStore.get(resourceId);
 
     if (!workload) {
@@ -804,16 +806,16 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.WorkloadServiceGetWorkloadApiResponse>(workload),
+      ctx.json<any, infra.WorkloadServiceGetWorkloadApiResponse>(workload),
     );
   }),
 
   // schedules
-  rest.get(`${baseURL}/schedules`, async (req, res, ctx) => {
-    const hostId = req.url.searchParams.get("hostID");
-    const siteId = req.url.searchParams.get("siteID");
-    const regionId = req.url.searchParams.get("regionID");
-    const unixEpoch = req.url.searchParams.get("unix_epoch"); // current time
+  http.get(`${baseURL}/schedules`, async async (req, res, ctx) => {
+    const hostId = new URL(req.url).searchParams.get("hostID");
+    const siteId = new URL(req.url).searchParams.get("siteID");
+    const regionId = new URL(req.url).searchParams.get("regionID");
+    const unixEpoch = new URL(req.url).searchParams.get("unix_epoch"); // current time
     let schedulesList = singleScheduleStore.list();
     let repeatedScheduleList = repeatedScheduleStore.list();
 
@@ -848,7 +850,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.ScheduleServiceListSchedulesApiResponse>({
+      ctx.json<any, infra.ScheduleServiceListSchedulesApiResponse>({
         hasNext: false,
         singleSchedules: schedulesList,
         repeatedSchedules: repeatedScheduleList,
@@ -856,8 +858,8 @@ export const handlers = [
       }),
     );
   }),
-  rest.post(`${baseURL}/schedules/single`, async (req, res, ctx) => {
-    const singleSchedule = req.body as infra.SingleScheduleResourceWrite;
+  http.post(`${baseURL}/schedules/single`, async async (req, res, ctx) => {
+    const singleSchedule = await request.clone().json();
     const result = singleScheduleStore.post({
       ...singleSchedule,
       targetHost: singleSchedule.targetHostId
@@ -873,14 +875,14 @@ export const handlers = [
     if (result) {
       return res(
         ctx.status(200),
-        ctx.json<infra.ScheduleServiceCreateSingleScheduleApiResponse>(result),
+        ctx.json<any, infra.ScheduleServiceCreateSingleScheduleApiResponse>(result),
       );
     }
     return res(ctx.status(404));
   }),
 
-  rest.post(`${baseURL}/schedules/repeated`, async (req, res, ctx) => {
-    const repeatedSchedule = req.body as infra.RepeatedScheduleResourceWrite;
+  http.post(`${baseURL}/schedules/repeated`, async async (req, res, ctx) => {
+    const repeatedSchedule = await request.clone().json();
     const result = repeatedScheduleStore.post({
       ...repeatedSchedule,
       targetHost: repeatedSchedule.targetHostId
@@ -896,7 +898,7 @@ export const handlers = [
     if (result) {
       return res(
         ctx.status(200),
-        ctx.json<infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
+        ctx.json<any, infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
           result,
         ),
       );
@@ -904,12 +906,12 @@ export const handlers = [
     return res(ctx.status(404));
   }),
 
-  rest.put(
+  http.put(
     `${baseURL}/schedules/single/:singleScheduleId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as unknown as infra.ScheduleServicePatchSingleScheduleApiArg;
-      const singleSchedule = req.body as infra.SingleScheduleResourceWrite;
+        params as unknown as infra.ScheduleServicePatchSingleScheduleApiArg;
+      const singleSchedule = await request.clone().json();
       const result = singleScheduleStore.put(resourceId, {
         ...singleSchedule,
         targetHost: singleSchedule.targetHostId
@@ -919,7 +921,7 @@ export const handlers = [
       if (result) {
         return res(
           ctx.status(200),
-          ctx.json<infra.ScheduleServiceCreateSingleScheduleApiResponse>(
+          ctx.json<any, infra.ScheduleServiceCreateSingleScheduleApiResponse>(
             result,
           ),
         );
@@ -927,12 +929,12 @@ export const handlers = [
       return res(ctx.status(404));
     },
   ),
-  rest.put(
+  http.put(
     `${baseURL}/schedules/repeated/:repeatedScheduleId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as unknown as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
-      const repeatedSchedule = req.body as infra.RepeatedScheduleResourceWrite;
+        params as unknown as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
+      const repeatedSchedule = await request.clone().json();
       const result = repeatedScheduleStore.put(resourceId, {
         ...repeatedSchedule,
         targetHost: repeatedSchedule.targetHostId
@@ -942,7 +944,7 @@ export const handlers = [
       if (result) {
         return res(
           ctx.status(200),
-          ctx.json<infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
+          ctx.json<any, infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
             result,
           ),
         );
@@ -951,31 +953,31 @@ export const handlers = [
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/schedules/single/:singleScheduleId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.ScheduleServiceDeleteSingleScheduleApiArg;
+        params as infra.ScheduleServiceDeleteSingleScheduleApiArg;
       const result = singleScheduleStore.delete(resourceId);
       return res(ctx.status(result ? 200 : 404), ctx.json(undefined));
     },
   ),
-  rest.delete(
+  http.delete(
     `${baseURL}/schedules/repeated/:repeatedScheduleId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
+        params as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
       const result = repeatedScheduleStore.delete(resourceId);
       return res(ctx.status(result ? 200 : 404), ctx.json(undefined));
     },
   ),
 
   // os resource
-  rest.get(`${baseURL}/compute/os`, async (req, res, ctx) => {
+  http.get(`${baseURL}/compute/os`, async async (req, res, ctx) => {
     const list = osResourceStore.list();
     return res(
       ctx.status(200),
-      ctx.json<infra.OperatingSystemServiceListOperatingSystemsApiResponse>({
+      ctx.json<any, infra.OperatingSystemServiceListOperatingSystemsApiResponse>({
         hasNext: false,
         OperatingSystemResources: list,
         totalElements: list.length,
@@ -984,11 +986,11 @@ export const handlers = [
   }),
 
   // telemetry
-  rest.get(`${baseURL}/telemetry/groups/metrics`, async (req, res, ctx) => {
+  http.get(`${baseURL}/telemetry/groups/metrics`, async async (req, res, ctx) => {
     const metricsgroups = telemetryMetricsStore.list();
     return res(
       ctx.status(200),
-      ctx.json<infra.TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse>(
+      ctx.json<any, infra.TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse>(
         {
           telemetryMetricsGroups: metricsgroups,
           hasNext: false,
@@ -997,11 +999,11 @@ export const handlers = [
       ),
     );
   }),
-  rest.get(`${baseURL}/telemetry/groups/logs`, async (req, res, ctx) => {
+  http.get(`${baseURL}/telemetry/groups/logs`, async async (req, res, ctx) => {
     const loggroups = telemetryLogsStore.list();
     return res(
       ctx.status(200),
-      ctx.json<infra.TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse>(
+      ctx.json<any, infra.TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse>(
         {
           telemetryLogsGroups: loggroups,
           hasNext: false,
@@ -1011,24 +1013,24 @@ export const handlers = [
     );
   }),
 
-  rest.get(
+  http.get(
     `${baseURL}/telemetry/groups/logs/:telemetryLogsGroupId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg;
+        params as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg;
       const loggroups = telemetryLogsStore.get(resourceId);
       if (loggroups) {
         return res(
           ctx.status(200),
-          ctx.json<infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse>(
+          ctx.json<any, infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse>(
             loggroups,
           ),
         );
       }
     },
   ),
-  rest.get(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
-    const url = new URL(req.url);
+  http.get(`${baseURL}/telemetry/profiles/metrics`, async async (req, res, ctx) => {
+    const url = new URL(new URL(req.url));
     let metricProfiles: infra.TelemetryMetricsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
@@ -1045,7 +1047,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse>(
+      ctx.json<any, infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse>(
         {
           telemetryMetricsProfiles: metricProfiles,
           hasNext: false,
@@ -1055,8 +1057,8 @@ export const handlers = [
     );
   }),
 
-  rest.get(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
-    const url = new URL(req.url);
+  http.get(`${baseURL}/telemetry/profiles/logs`, async async (req, res, ctx) => {
+    const url = new URL(new URL(req.url));
     let logProfiles: infra.TelemetryLogsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
@@ -1072,7 +1074,7 @@ export const handlers = [
     }
     return res(
       ctx.status(200),
-      ctx.json<infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse>(
+      ctx.json<any, infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse>(
         {
           telemetryLogsProfiles: logProfiles,
           hasNext: false,
@@ -1082,8 +1084,8 @@ export const handlers = [
     );
   }),
 
-  rest.post(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryMetricsProfileResource>();
+  http.post(`${baseURL}/telemetry/profiles/metrics`, async async (req, res, ctx) => {
+    const body = await req.json<any, infra.TelemetryMetricsProfileResource>();
     const profileRead = telemetryMetricsProfilesStore.create(body);
     if (!profileRead) return res(ctx.status(500));
     return res(
@@ -1093,8 +1095,8 @@ export const handlers = [
       ),
     );
   }),
-  rest.post(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryLogsProfileResource>();
+  http.post(`${baseURL}/telemetry/profiles/logs`, async async (req, res, ctx) => {
+    const body = await req.json<any, infra.TelemetryLogsProfileResource>();
     //const p = telemetrylogsProfilesStore.post(body);
     const profileRead = telemetrylogsProfilesStore.create(body);
     if (!profileRead) return await res(ctx.status(500));
@@ -1106,12 +1108,12 @@ export const handlers = [
     );
   }),
 
-  rest.put(
+  http.put(
     `${baseURL}/telemetry/profiles/metrics/:telemetryMetricsProfileId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg;
-      const body = await req.json<infra.TelemetryMetricsProfileResource>();
+        params as infra.TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg;
+      const body = await req.json<any, infra.TelemetryMetricsProfileResource>();
       const p = telemetryMetricsProfilesStore.put(resourceId, body);
       if (!p) return await res(ctx.status(500));
       return res(
@@ -1123,12 +1125,12 @@ export const handlers = [
     },
   ),
 
-  rest.put(
+  http.put(
     `${baseURL}/telemetry/profiles/logs/:resourceId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg;
-      const body = await req.json<infra.TelemetryLogsProfileResource>();
+        params as infra.TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg;
+      const body = await req.json<any, infra.TelemetryLogsProfileResource>();
       const p = telemetrylogsProfilesStore.put(resourceId, body);
       if (!p) return res(ctx.status(500));
       return res(
@@ -1140,33 +1142,33 @@ export const handlers = [
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/telemetry/profiles/metrics/:resourceId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg;
+        params as infra.TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg;
       const deleteResult = telemetryMetricsProfilesStore.delete(resourceId);
       return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/telemetry/profiles/logs/:resourceId`,
-    async (req, res, ctx) => {
+    async async (req, res, ctx) => {
       const { resourceId } =
-        req.params as infra.TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg;
+        params as infra.TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg;
       const deleteResult = telemetrylogsProfilesStore.delete(resourceId);
       return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
     },
   ),
 
-  rest.get(`${baseURL}/providers`, async (req, res, ctx) => {
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/providers`, async async (req, res, ctx) => {
+    const filter = new URL(req.url).searchParams.get("filter");
 
     if (filter?.match(/name="infra_onboarding"/)) {
       return res(
         ctx.status(200),
-        ctx.json<infra.ProviderServiceListProvidersApiResponse>({
+        ctx.json<any, infra.ProviderServiceListProvidersApiResponse>({
           hasNext: false,
           providers: [
             {
@@ -1190,8 +1192,8 @@ export const handlers = [
   }),
 
   // VPro details endpoints
-  rest.get(`${baseURL}/dm/devices/:guid`, async (req, res, ctx) => {
-    const { guid } = req.params as { guid: string };
+  http.get(`${baseURL}/dm/devices/:guid`, async async (req, res, ctx) => {
+    const { guid } = params as { guid: string };
     const vproDetails = vproDetailsStore.getDeviceByGuid(guid);
     console.log("vproDetails:", vproDetails);
     if (vproDetails) {
@@ -1208,7 +1210,7 @@ export const handlers = [
     );
   }),
 
-  rest.get(`${baseURL}/dm/amt/generalSettings/:guid`, async (req, res, ctx) => {
+  http.get(`${baseURL}/dm/amt/generalSettings/:guid`, async async (req, res, ctx) => {
     const vproDetails = vproGeneralSettingsStore.getGeneralSettingsByGuid();
     if (vproDetails) {
       return res(ctx.status(200), ctx.json(vproDetails), ctx.delay(delay));
