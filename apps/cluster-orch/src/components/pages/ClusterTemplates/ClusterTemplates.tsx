@@ -49,7 +49,7 @@ export const ClusterTemplates = () => {
     state: ToastState.Success,
     visibility: ToastVisibility.Hide,
     position: ToastPosition.TopRight,
-    duration: 4000,
+    duration: 10000,
   };
 
   const [toastPros, setToastProps] = useState<ToastProps>();
