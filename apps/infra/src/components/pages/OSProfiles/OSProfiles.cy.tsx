@@ -34,7 +34,7 @@ describe("<OSProfiles/>", () => {
     cy.mount(<OSProfiles />);
     pom.waitForApis();
     pom.osProfilesTablePom
-      .getCell(1, 3)
+      .getCell(2, 3)
       .contains(
         OSProfileSecurityFeatures[
           "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION"
