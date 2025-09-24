@@ -354,6 +354,12 @@ const RegionForm: React.FC = () => {
       delete data.parentId;
       delete data.parentRegion;
     }
+
+    if (!parentRegion) {
+      delete data.parentId;
+      delete data.parentRegion;
+    }
+
     if (parentRegionId) {
       data.parentId =
         regions?.find((r) => r.resourceId === parentRegion)?.resourceId ||
