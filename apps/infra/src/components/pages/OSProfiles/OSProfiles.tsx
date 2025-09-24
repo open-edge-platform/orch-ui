@@ -54,6 +54,7 @@ const OSProfiles = () => {
         columns={columns}
         data={osProfiles?.OperatingSystemResources}
         canSearch
+        sortColumns={[0]}
         isLoading={isLoading}
       />
     );
