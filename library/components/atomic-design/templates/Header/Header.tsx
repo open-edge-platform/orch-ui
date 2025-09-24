@@ -84,9 +84,10 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
         dataCy="profile"
         options={[
           {
-            displayText: user?.profile?.name
-              ? user.profile.name
-              : (user?.profile?.preferred_username ?? ""),
+            displayText:
+              user?.profile?.preferred_username ||
+              user?.profile.given_name ||
+              "",
             disable: true,
             onSelect: () => {},
           },
