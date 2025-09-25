@@ -4,7 +4,7 @@
  */
 
 import { arm } from "@orch-ui/apis";
-import { http , delay} from "msw"
+import { delay, http, HttpResponse } from "msw";
 import { appEndpoints, vms, vmWithVnc, vncAddress } from "./data/vms";
 
 const baseURLPrefix = "/v1/projects/:projectName/resource";
@@ -12,47 +12,37 @@ const baseURLPrefix = "/v1/projects/:projectName/resource";
 export const handlers = [
   http.get(
     `${baseURLPrefix}/endpoints/applications/:appId/clusters/:clusterId`,
-    () => {
-      const { appId } =
-        params as arm.EndpointsServiceListAppEndpointsApiArg;
-      return HttpResponse.text(
-{status: 200,
-});
+    ({ params }) => {
+      const { appId } = params as arm.EndpointsServiceListAppEndpointsApiArg;
+      console.log("Fetching endpoints for app:", appId);
+      return HttpResponse.json(appEndpoints[appId], { status: 200 });
     },
   ),
   http.get(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId`,
-    () => {
-      const { appId } =
-        params as arm.AppWorkloadServiceListAppWorkloadsApiArg;
+    ({ params }) => {
+      const { appId } = params as arm.AppWorkloadServiceListAppWorkloadsApiArg;
       if (Object.keys(vms).indexOf(appId) === -1) {
-        return HttpResponse.text(
-{status: 400,
-});
+        return HttpResponse.json(
+          { error: "Application not found" },
+          { status: 400 },
+        );
       }
-      return HttpResponse.text(
-{status: 200,
-});
+      return HttpResponse.json(vms[appId], { status: 200 });
     },
   ),
   http.get(
     `${baseURLPrefix}/workloads/virtual-machines/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId`,
-    async (req, res, ctx) {
-  await delay(500); 
-      return HttpResponse.json(
-{ virtualMachine: vmWithVnc },
-{status: 200,
-});
+    async () => {
+      await delay(500);
+      return HttpResponse.json({ virtualMachine: vmWithVnc }, { status: 200 });
     },
   ),
   http.get(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId/vnc`,
-    async (req, res, ctx) {
-  await delay(500); 
-      return HttpResponse.json(
-{ address: vncAddress },
-{status: 200,
-});
+    async () => {
+      await delay(500);
+      return HttpResponse.json({ address: vncAddress }, { status: 200 });
     },
   ),
   http.put(
@@ -60,16 +50,14 @@ export const handlers = [
     () => {
       const success = Math.random() < 0.8;
       return success
-        ? HttpResponse.text(
-{status: 204,
-})
+        ? HttpResponse.json(null, { status: 204 })
         : HttpResponse.json(
-{
+            {
               code: 422,
               message: "couldn't perform required operation",
             },
-{status: 422,
-});
+            { status: 422 },
+          );
     },
   ),
   http.put(
@@ -77,16 +65,14 @@ export const handlers = [
     () => {
       const success = Math.random() < 0.8;
       return success
-        ? HttpResponse.text(
-{status: 204,
-})
+        ? HttpResponse.json(null, { status: 204 })
         : HttpResponse.json(
-{
+            {
               code: 422,
               message: "couldn't perform required operation",
             },
-{status: 422,
-});
+            { status: 422 },
+          );
     },
   ),
   http.put(
@@ -94,16 +80,14 @@ export const handlers = [
     () => {
       const success = Math.random() < 0.8;
       return success
-        ? HttpResponse.text(
-{status: 204,
-})
+        ? HttpResponse.json(null, { status: 204 })
         : HttpResponse.json(
-{
+            {
               code: 422,
               message: "couldn't perform required operation",
             },
-{status: 422,
-});
+            { status: 422 },
+          );
     },
   ),
   http.put(
@@ -111,16 +95,14 @@ export const handlers = [
     () => {
       const success = Math.random() < 0.8;
       return success
-        ? HttpResponse.text(
-{status: 204,
-})
+        ? HttpResponse.json(null, { status: 204 })
         : HttpResponse.json(
-{
+            {
               code: 422,
               message: "couldn't perform required operation",
             },
-{status: 422,
-});
+            { status: 422 },
+          );
     },
   ),
 ];
