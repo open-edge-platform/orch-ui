@@ -117,4 +117,46 @@ describe("<ProvisionedHostPopup />", () => {
       cy.get("@onDeauthorizeWithoutWorkloadStub").should("be.called");
     });
   });
+
+  describe("Provisioned host with vPro capabilities", () => {
+    it("should show the Activate vPro option when AMT state is not provisioned", () => {
+      const props: ProvisionedHostPopupProps = {
+        host: {
+          ...provisionedHostOne,
+          instance: {
+            ...hostOne.instance,
+            workloadMembers: undefined,
+          },
+          amtSku: "sample-sku",
+          currentAmtState: "AMT_STATE_UNSPECIFIED",
+        },
+      };
+      cy.mount(<ProvisionedHostPopup {...props} />);
+      pom.root.click();
+
+      pom.hostPopupPom
+        .getActionPopupBySearchText("Activate vPro")
+        .should("exist");
+    });
+
+    it("should show the De-Activate vPro option when AMT state is provisioned", () => {
+      const props: ProvisionedHostPopupProps = {
+        host: {
+          ...provisionedHostOne,
+          instance: {
+            ...hostOne.instance,
+            workloadMembers: undefined,
+          },
+          amtSku: "sample-sku",
+          currentAmtState: "AMT_STATE_PROVISIONED",
+        },
+      };
+      cy.mount(<ProvisionedHostPopup {...props} />);
+      pom.root.click();
+
+      pom.hostPopupPom
+        .getActionPopupBySearchText("De-Activate vPro")
+        .should("exist");
+    });
+  });
 });
