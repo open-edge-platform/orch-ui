@@ -22,7 +22,7 @@ import { store } from "./store/store";
 import "@spark-design/css/components/ledge-flex/index.css";
 
 /* devblock:start */
-import { setupWorker } from "msw";
+import { setupWorker } from "msw/browser";
 /* devblock:end */
 // start the mocks server if we are in development mode
 // NOTE that this is needed as the bootstrap.tsx is not called when loading the MFEs inside the container app
