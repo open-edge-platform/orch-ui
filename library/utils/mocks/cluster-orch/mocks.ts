@@ -16,8 +16,7 @@ const projectName = SharedStorage.project?.name;
 const cts = new ClusterTemplatesStore();
 export const clusterTemplateHandlers = [
   http.get(`/v2/projects/${projectName}/templates`, ({ request }) => {
-    const req = request;
-    const filter = new URL(req.url).searchParams.get("filter");
+    const filter = new URL(request.url).searchParams.get("filter");
     let templates = cts.list();
 
     if (filter) {
@@ -55,9 +54,8 @@ export const clusterTemplateHandlers = [
     },
   ),
   http.post(`/v2/projects/${projectName}/templates`, async ({ request }) => {
-    const req = request;
     const templateInfo =
-      (await req.json()) as cm.PostV2ProjectsByProjectNameTemplatesApiArg["templateInfo"];
+      (await request.json()) as cm.PostV2ProjectsByProjectNameTemplatesApiArg["templateInfo"];
     if (!templateInfo || !templateInfo.version) {
       return HttpResponse.json(
         {
@@ -74,12 +72,11 @@ export const clusterTemplateHandlers = [
   http.put(
     `/v2/projects/${projectName}/templates/:name/default`,
     async ({ request, params }) => {
-      const req = request;
       const { name } =
         params as unknown as cm.PutV2ProjectsByProjectNameTemplatesAndNameDefaultApiArg;
 
       const body =
-        (await req.json()) as cm.PutV2ProjectsByProjectNameTemplatesAndNameDefaultApiArg["defaultTemplateInfo"];
+        (await request.json()) as cm.PutV2ProjectsByProjectNameTemplatesAndNameDefaultApiArg["defaultTemplateInfo"];
 
       cts.setDefault(name, body.version);
 
@@ -113,9 +110,8 @@ const cs = new ClusterStore();
 
 export const clusterHandlers = [
   http.get(`/v2/projects/${projectName}/clusters`, ({ request }) => {
-    const req = request;
     const clusters = cs.list();
-    const url = new URL(req.url);
+    const url = new URL(request.url);
     const offset = parseInt(url.searchParams.get("offset") || "0") || 0;
     const pageSize = parseInt(url.searchParams.get("pageSize") || "10") || 10;
     const orderBy = url.searchParams.get("orderBy") || undefined;
@@ -149,8 +145,7 @@ export const clusterHandlers = [
 
   //post cluster
   http.post(`/v2/projects/${projectName}/clusters`, async ({ request }) => {
-    const req = request;
-    const body = (await req.json()) as cm.ClusterSpec;
+    const body = (await request.json()) as cm.ClusterSpec;
     const r = cs.post(body);
     if (!r) return HttpResponse.json(null, { status: 500 });
     return HttpResponse.json(r.name ?? "", { status: 200 });
@@ -160,10 +155,9 @@ export const clusterHandlers = [
   http.put(
     `/v2/projects/${projectName}/clusters/:name/nodes`,
     async ({ request, params }) => {
-      const req = request;
       const { name } =
         params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
-      const body = (await req.json()) as cm.ClusterSpec;
+      const body = (await request.json()) as cm.ClusterSpec;
 
       const matchedCluster = cs.get(name);
 
@@ -189,10 +183,9 @@ export const clusterHandlers = [
   http.put(
     `/v2/projects/${projectName}/clusters/:name/template`,
     async ({ request, params }) => {
-      const req = request;
       const { name } =
         params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
-      const body = (await req.json()) as cm.ClusterTemplateInfo;
+      const body = (await request.json()) as cm.ClusterTemplateInfo;
       const r = cs.put(name, body);
       if (!r) return HttpResponse.json(null, { status: 500 });
       return HttpResponse.json(r, { status: 200 });
@@ -203,10 +196,9 @@ export const clusterHandlers = [
   http.put(
     `/v2/projects/${projectName}/clusters/:name/labels`,
     async ({ request, params }) => {
-      const req = request;
       const { name } =
         params as cm.GetV2ProjectsByProjectNameClustersAndNameApiArg;
-      const body = (await req.json()) as cm.ClusterLabels;
+      const body = (await request.json()) as cm.ClusterLabels;
       const r = cs.put(name, body);
       if (!r) return HttpResponse.json(null, { status: 500 });
       return HttpResponse.json(r, { status: 200 });
@@ -251,10 +243,9 @@ export const clusterHandlers = [
   http.put(
     `/v2/projects/${projectName}/clusters/:name/nodes`,
     async ({ request, params }) => {
-      const req = request;
       const { name } =
         params as unknown as cm.PutV2ProjectsByProjectNameClustersAndNameNodesApiArg;
-      const nodeSpecs = (await req.json()) as cm.NodeSpec[];
+      const nodeSpecs = (await request.json()) as cm.NodeSpec[];
       const cluster = cs.get(name);
       if (cluster && cluster.name) {
         cs.put(cluster.name, {

@@ -3,37 +3,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { http , HttpResponse} from "msw"
+import { http, HttpResponse } from "msw";
 import { baseURL } from "../base-url";
 import AlertDefinitionStore from "../store/alert-definitions";
 
 const alertDefinitionStore = new AlertDefinitionStore();
 
 export const handlers = [
-  http.get(
-    `${baseURL}/alerts/definitions/:alertDefinitionID`,
-    () => {
-      const { alertDefinitionID } = params as { alertDefinitionID: string };
-      const alert = alertDefinitionStore.get(alertDefinitionID);
-      if (!alert) {
-        return HttpResponse.json(
-{ error: "Alert definition not found" },
-{status: 404,
-});
-      }
+  http.get(`${baseURL}/alerts/definitions/:alertDefinitionID`, ({ params }) => {
+    const { alertDefinitionID } = params as { alertDefinitionID: string };
+    const alert = alertDefinitionStore.get(alertDefinitionID);
+    if (!alert) {
       return HttpResponse.json(
-alert,
-{status: 200,
-});
-    },
-  ),
+        { error: "Alert definition not found" },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json(alert, { status: 200 });
+  }),
 
   http.put(
     `${baseURL}/alerts/definitions/:alertDefinitionID`,
-    async ({request}) => {
- let req = request;
+    async ({ request, params }) => {
       const { alertDefinitionID } = params as { alertDefinitionID: string };
-      const { values } = (await req.json()) as {
+      const { values } = (await request.json()) as {
         values: {
           threshold: string;
           duration: string;
@@ -46,20 +39,17 @@ alert,
 
         if (!updated) {
           return HttpResponse.json(
-{ error: "Alert definition not found" },
-{status: 404,
-});
+            { error: "Alert definition not found" },
+            { status: 404 },
+          );
         }
 
-        return HttpResponse.json(
-updated,
-{status: 200,
-});
+        return HttpResponse.json(updated, { status: 200 });
       } catch (err) {
         return HttpResponse.json(
-{ error: "Internal server error" },
-{status: 500,
-});
+          { error: "Internal server error" },
+          { status: 500 },
+        );
       }
     },
   ),

@@ -135,5 +135,14 @@
   "sideEffects": [
     "**/*.scss",
     "**/cypress/support/*"
-  ]
+  ],
+  "msw": {
+    "workerDirectory": [
+      "apps\\cluster-orch\\public",
+      "apps\\admin\\public",
+      "apps\\app-orch\\public",
+      "apps\\infra\\public",
+      "apps\\root\\public"
+    ]
+  }
 }
