@@ -5,9 +5,8 @@
 
 import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { GenericStatus } from "@orch-ui/components";
-import { rest } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import { SharedStorage } from "../..";
-import { SearchResult } from "../../../../apps/infra/src/store/locations";
 import { osUbuntuId } from "./data";
 import {
   HostMock,
@@ -29,7 +28,7 @@ import { WorkloadStore } from "./store/workload";
 
 const baseURL = `/v1/projects/${SharedStorage.project?.name ?? ""}`;
 
-const delay = 1 * 1000;
+const mockDelay = 1 * 1000;
 
 export const regionStore = new RegionStore();
 const siteStore = new SiteStore();
@@ -119,10 +118,9 @@ const randomizeInstanceHostList = (
 
 export const handlers = [
   //locations
-  rest.get(`${baseURL}/locations-api`, async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<{ nodes: SearchResult[]; totalElements: number }>({
+  http.get(`${baseURL}/locations-api`, async () => {
+    return HttpResponse.json(
+      {
         nodes: [
           { resourceId: "region-1", name: "root-region-1" },
           { resourceId: "region-2", name: "root-region-2" },
@@ -165,16 +163,15 @@ export const handlers = [
           },
         ],
         totalElements: 733,
-      }),
+      },
+      { status: 200 },
     );
   }),
-  rest.get(
+  http.get(
     `${baseURL}/locations?name=te&showRegions=true&showSites=true`,
-    async (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        // this needs to be generated based on existing regions and sites
-        ctx.json({
+    async () => {
+      return HttpResponse.json(
+        {
           nodes: [
             {
               name: "london",
@@ -207,14 +204,16 @@ export const handlers = [
               type: "RESOURCE_KIND_REGION",
             },
           ],
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
   // region
-  rest.get(`${baseURL}/regions`, async (req, res, ctx) => {
-    const filter = req.url.searchParams.get("filter");
-    const isTotalSitesShown = req.url.searchParams.get("showTotalSites");
+  http.get(`${baseURL}/regions`, async ({ request }) => {
+    const url = new URL(request.url);
+    const filter = url.searchParams.get("filter");
+    const isTotalSitesShown = url.searchParams.get("showTotalSites");
     let parent, regionId;
     if (filter) {
       if (filter.match(/NOT has\(parentRegion\)/)) {
@@ -245,116 +244,106 @@ export const handlers = [
       }));
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json<infra.RegionServiceListRegionsApiResponse>({
+    return HttpResponse.json(
+      {
         hasNext: false,
         regions: list,
         totalElements: list.length,
-      }),
+      },
+      { status: 200 },
     );
   }),
-  rest.post(`${baseURL}/regions`, async (req, res, ctx) => {
-    const body = await req.json<infra.RegionResourceWrite>();
+  http.post(`${baseURL}/regions`, async ({ request }) => {
+    const body = (await request.json()) as infra.RegionResourceWrite;
 
     if (body.parentId) {
       body.parentRegion = regionStore.get(body.parentId);
     }
 
     const r = regionStore.post(body);
-    if (!r) return res(ctx.status(500));
-    return res(
-      ctx.status(200),
-      ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
-    );
+    if (!r) return HttpResponse.json(null, { status: 500 });
+    return HttpResponse.json(r, { status: 200 });
   }),
-  rest.get(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.RegionServiceGetRegionApiArg;
+  http.get(`${baseURL}/regions/:resourceId`, async ({ params }) => {
+    const { resourceId } = params as infra.RegionServiceGetRegionApiArg;
     const region = regionStore.get(resourceId);
 
     if (region) {
-      return res(
-        ctx.status(200),
-        ctx.json<infra.RegionServiceGetRegionApiResponse>(region),
-      );
+      return HttpResponse.json(region, { status: 200 });
     }
-    return res(
-      ctx.status(404),
-      ctx.json({
+    return HttpResponse.json(
+      {
         detail: "rpc error: code = NotFound desc = ent: region not found",
         status: 404,
-      }),
+      },
+      { status: 404 },
     );
   }),
 
-  rest.delete(`${baseURL}/regions/:regionId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
+  http.delete(`${baseURL}/regions/:regionId`, async ({ params }) => {
+    const { resourceId } = params as infra.RegionServiceDeleteRegionApiArg;
 
     const sites = siteStore.list({ regionId: resourceId });
     if (sites.length > 0) {
-      return res(
-        ctx.status(412),
-        ctx.json({
+      return HttpResponse.json(
+        {
           message: "the region has relations with site and cannot be deleted",
-        }),
+        },
+        { status: 412 },
       );
     }
 
     const region = regionStore.get(resourceId);
     if (region?.parentRegion) {
-      return res(
-        ctx.status(412),
-        ctx.json({
+      return HttpResponse.json(
+        {
           message: "the region has relations with region and cannot be deleted",
-        }),
+        },
+        { status: 412 },
       );
     }
 
     const deleteResult = regionStore.delete(resourceId);
-    return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
+    return HttpResponse.json(undefined, { status: deleteResult ? 200 : 404 });
   }),
-  rest.put(`${baseURL}/regions/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.RegionServiceDeleteRegionApiArg;
-    const body = await req.json<infra.RegionResourceWrite>();
+  http.put(`${baseURL}/regions/:resourceId`, async ({ request, params }) => {
+    const { resourceId } = params as infra.RegionServiceDeleteRegionApiArg;
+    const body = (await request.json()) as infra.RegionResourceWrite;
     const r = regionStore.put(resourceId, body);
-    if (!r) return res(ctx.status(500));
-    return res(
-      ctx.status(200),
-      ctx.json<infra.RegionServiceUpdateRegionApiResponse>(r),
-    );
+    if (!r) return HttpResponse.json(null, { status: 500 });
+    return HttpResponse.json(r, { status: 200 });
   }),
-  rest.patch(`${baseURL}/regions/:regionId`, async (_, res, ctx) => {
-    return res(ctx.status(502));
+  http.patch(`${baseURL}/regions/:regionId`, async () => {
+    return HttpResponse.json(null, { status: 502 });
   }),
 
   // site
-  rest.get(`${baseURL}/regions/:resourceId/sites`, async (req, res, ctx) => {
+  http.get(`${baseURL}/regions/:resourceId/sites`, async ({ params }) => {
     const { resourceId } =
-      req.params as unknown as infra.SiteServiceListSitesApiArg;
+      params as unknown as infra.SiteServiceListSitesApiArg;
 
     if (resourceId) {
       const sites = siteStore.list({ regionId: resourceId });
-      return res(
-        ctx.status(200),
-        ctx.json<infra.SiteServiceListSitesApiResponse>({
+      return HttpResponse.json(
+        {
           hasNext: false,
           sites: sites,
           totalElements: Math.min(sites.length, 10),
-        }),
+        },
+        { status: 200 },
       );
     } else {
-      return res(
-        ctx.status(404),
-        ctx.json({
+      return HttpResponse.json(
+        {
           detail: "rpc error: code = NotFound desc = ent: regionId not found",
           status: 404,
-        }),
+        },
+        { status: 404 },
       );
     }
   }),
-  rest.get(`${baseURL}/regions/*/sites/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } =
-      req.params as unknown as infra.SiteServiceGetSiteApiArg;
+  http.get(`${baseURL}/regions/*/sites/:resourceId`, async ({ params }) => {
+    const { resourceId } = params as unknown as infra.SiteServiceGetSiteApiArg;
     const notFoundResponse = {
       detail: "rpc error: code = NotFound desc = ent: resourceId not found",
       status: 404,
@@ -362,93 +351,78 @@ export const handlers = [
     if (resourceId) {
       const site = siteStore.getSiteById({ resourceId });
       if (site) {
-        return res(
-          ctx.status(200),
-          ctx.json<infra.SiteServiceGetSiteApiResponse>(site),
-        );
+        return HttpResponse.json(site, { status: 200 });
       } else {
-        return res(ctx.status(404), ctx.json(notFoundResponse));
+        return HttpResponse.json(notFoundResponse, { status: 404 });
       }
     } else {
-      return res(ctx.status(404), ctx.json(notFoundResponse));
+      return HttpResponse.json(notFoundResponse, { status: 404 });
     }
   }),
-  rest.post(`${baseURL}/sites`, async (req, res, ctx) => {
-    const body = await req.json<infra.SiteResourceWrite>();
+  http.post(`${baseURL}/sites`, async ({ request }) => {
+    const body = (await request.json()) as infra.SiteResourceWrite;
     if (body.regionId) {
       body.region = regionStore.get(body.regionId);
     }
     const r = siteStore.post(body);
-    if (!r) return res(ctx.status(500));
-    return res(
-      ctx.status(200),
-      ctx.json<infra.SiteServiceUpdateSiteApiResponse>(r),
-    );
+    if (!r) return HttpResponse.json(null, { status: 500 });
+    return HttpResponse.json(r, { status: 200 });
   }),
-  rest.get(`${baseURL}/sites/:siteId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.SiteServiceGetSiteApiArg;
+  http.get(`${baseURL}/sites/:siteId`, async ({ params }) => {
+    const { resourceId } = params as infra.SiteServiceGetSiteApiArg;
     const site = siteStore.get(resourceId);
     if (site) {
-      return res(
-        ctx.status(200),
-        ctx.json<infra.SiteServiceGetSiteApiResponse>(site),
-      );
+      return HttpResponse.json(site, { status: 200 });
     }
-    return res(
-      ctx.status(404),
-      ctx.json({
+    return HttpResponse.json(
+      {
         detail: "rpc error: code = NotFound desc = ent: site not found",
         status: 404,
-      }),
+      },
+      { status: 404 },
     );
   }),
-  rest.put(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
+  http.put(`${baseURL}/sites/:resourceId`, async ({ request, params }) => {
     const { resourceId } =
-      req.params as unknown as infra.SiteServiceUpdateSiteApiArg;
-    const body = await req.json<infra.SiteResourceWrite>();
+      params as unknown as infra.SiteServiceUpdateSiteApiArg;
+    const body = (await request.json()) as infra.SiteResourceWrite;
     const s = siteStore.put(resourceId, body);
-    if (!s) return res(ctx.status(500));
-    return res(
-      ctx.status(200),
-      ctx.json<infra.SiteServiceUpdateSiteApiResponse>(s),
-    );
+    if (!s) return HttpResponse.json(null, { status: 500 });
+    return HttpResponse.json(s, { status: 200 });
   }),
-  rest.delete(`${baseURL}/sites/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.SiteServiceDeleteSiteApiArg;
+  http.delete(`${baseURL}/sites/:resourceId`, async ({ params }) => {
+    const { resourceId } = params as infra.SiteServiceDeleteSiteApiArg;
     const deleteResult = siteStore.delete(resourceId);
-    return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
+    return HttpResponse.json(undefined, { status: deleteResult ? 200 : 404 });
   }),
 
   // host
-  rest.get(`${baseURL}/compute/hosts/summary`, async (req, res, ctx) => {
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/compute/hosts/summary`, async ({ request }) => {
+    const url = new URL(request.url);
+    const filter = url.searchParams.get("filter");
 
-    return res(
-      ctx.status(200),
-      ctx.json<infra.HostServiceGetHostsSummaryApiResponse>(
-        hostStore.getSummary(filter),
-      ),
-    );
+    return HttpResponse.json(hostStore.getSummary(filter), { status: 200 });
   }),
 
-  rest.get(`${baseURL}/localAccounts`, async (req, res, ctx) => {
+  http.get(`${baseURL}/localAccounts`, async () => {
     const localAccounts = instanceStore.getLocalAccounts();
-    return res(
-      ctx.status(200),
-      ctx.json<infra.LocalAccountServiceListLocalAccountsApiResponse>({
+    await delay(mockDelay);
+    return HttpResponse.json(
+      {
         hasNext: false,
         localAccounts,
         totalElements: localAccounts.length,
-      }),
-      ctx.delay(delay),
+      },
+      { status: 200 },
     );
   }),
 
-  rest.get(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
-    const siteID = req.url.searchParams.get("siteID");
-    const deviceUuid = req.url.searchParams.get("uuid");
-    const metadataString = req.url.searchParams.get("metadata");
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/compute/hosts`, async ({ request }) => {
+    const url = new URL(request.url);
+    const siteID = url.searchParams.get("siteID");
+    const deviceUuid = url.searchParams.get("uuid");
+    const metadataString = url.searchParams.get("metadata");
+    const filter = url.searchParams.get("filter");
     let hosts = hostStore.list({
       siteID,
       deviceUuid,
@@ -461,9 +435,9 @@ export const handlers = [
         /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/,
       )
     ) {
-      return res(
-        ctx.status(400),
-        ctx.json({ message: "parameter UUID has wrong format" }),
+      return HttpResponse.json(
+        { message: "parameter UUID has wrong format" },
+        { status: 400 },
       );
     }
 
@@ -499,142 +473,140 @@ export const handlers = [
     if (hosts.length > 0) {
       hosts = randomizeHostList(hosts);
     }
-    return res(
-      ctx.status(200),
-      ctx.json<infra.HostServiceListHostsApiResponse>({
+    await delay(mockDelay);
+    return HttpResponse.json(
+      {
         hasNext: false,
         hosts,
         totalElements: hosts.length,
-      }),
-      ctx.delay(delay),
+      },
+      { status: 200 },
     );
   }),
-  rest.put(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } =
-      req.params as unknown as infra.HostServiceUpdateHostApiArg;
-    const body = await req.json<infra.HostResourceWrite>();
-    if (!resourceId || !body) {
-      return res(
-        ctx.status(400),
-        ctx.json({
-          detail:
-            "rpc error: code = badRequest desc = ent: hostId or hostRequest not supplied",
-          status: 400,
-        }),
-      );
-    }
+  http.put(
+    `${baseURL}/compute/hosts/:resourceId`,
+    async ({ request, params }) => {
+      const { resourceId } =
+        params as unknown as infra.HostServiceUpdateHostApiArg;
+      const body = (await request.json()) as infra.HostResourceWrite;
+      if (!resourceId || !body) {
+        return HttpResponse.json(
+          {
+            detail:
+              "rpc error: code = badRequest desc = ent: hostId or hostRequest not supplied",
+            status: 400,
+          },
+          { status: 400 },
+        );
+      }
 
-    const processError = async () => {
-      return res(
-        ctx.status(500),
-        ctx.json({
-          detail:
-            "rpc error: code = ProcessErr desc = ent: host not found or updated",
-          status: 500,
-        }),
-      );
-    };
+      const processError = async () => {
+        return HttpResponse.json(
+          {
+            detail:
+              "rpc error: code = ProcessErr desc = ent: host not found or updated",
+            status: 500,
+          },
+          { status: 500 },
+        );
+      };
 
-    let host: infra.HostResourceRead | void = hostStore.get(resourceId);
-    if (host) {
-      try {
-        host = hostStore.put(resourceId, { ...host, ...body } as HostMock);
-        const instanceMatchList = instanceStore.list({ hostId: resourceId });
-        const instance =
-          instanceMatchList.length > 0 ? instanceMatchList[0] : undefined;
-        if (instance && host) {
-          instanceStore.put(instance.instanceID!, {
-            ...instance,
-            host: host as infra.HostResourceRead,
-          });
+      let host: infra.HostResourceRead | void = hostStore.get(resourceId);
+      if (host) {
+        try {
+          host = hostStore.put(resourceId, { ...host, ...body } as HostMock);
+          const instanceMatchList = instanceStore.list({ hostId: resourceId });
+          const instance =
+            instanceMatchList.length > 0 ? instanceMatchList[0] : undefined;
+          if (instance && host) {
+            instanceStore.put(instance.instanceID!, {
+              ...instance,
+              host: host as infra.HostResourceRead,
+            });
+          }
+        } catch {
+          return await processError();
         }
-      } catch {
+      }
+
+      if (!host) {
         return await processError();
       }
-    }
 
-    if (!host) {
-      return await processError();
-    }
-
-    return res(
-      ctx.status(200),
-      ctx.json<infra.HostServiceUpdateHostApiResponse>(host),
-    );
-  }),
-  rest.post(`${baseURL}/compute/hosts`, async (req, res, ctx) => {
+      return HttpResponse.json(host, { status: 200 });
+    },
+  ),
+  http.post(`${baseURL}/compute/hosts`, async ({ request }) => {
     const { hostResource } =
-      await req.json<infra.HostServiceCreateHostApiArg>();
+      (await request.json()) as infra.HostServiceCreateHostApiArg;
     const host = hostStore.post(hostResource as HostMock);
     if (!host) throw new Error("infra.Host POST was unsuccessful");
-    return res(
-      ctx.status(200),
-      ctx.json<infra.HostServiceCreateHostApiResponse>(host),
-    );
+    return HttpResponse.json(host, { status: 200 });
   }),
-  rest.patch(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } =
-      req.params as unknown as infra.HostServiceUpdateHostApiArg;
-    const hostPatchUpdate = await req.json<infra.HostResourceWrite>();
+  http.patch(
+    `${baseURL}/compute/hosts/:resourceId`,
+    async ({ request, params }) => {
+      const { resourceId } =
+        params as unknown as infra.HostServiceUpdateHostApiArg;
+      const hostPatchUpdate = (await request.json()) as infra.HostResourceWrite;
 
-    const host = hostStore.get(resourceId);
-    if (host) {
-      const patchedHost = { ...host, ...hostPatchUpdate } as HostMock;
-      hostStore.put(resourceId, patchedHost);
-      if (host.instance?.instanceID) {
-        const instance = instanceStore.get(host.instance.instanceID);
+      const host = hostStore.get(resourceId);
+      if (host) {
+        const patchedHost = { ...host, ...hostPatchUpdate } as HostMock;
+        hostStore.put(resourceId, patchedHost);
+        if (host.instance?.instanceID) {
+          const instance = instanceStore.get(host.instance.instanceID);
 
-        if (instance && instance.instanceID) {
-          instanceStore.put(instance.instanceID, {
-            ...instance,
-            // instance is only defined up to first-level
-            host: { ...host, site: hostPatchUpdate.site, instance: undefined },
-          });
+          if (instance && instance.instanceID) {
+            instanceStore.put(instance.instanceID, {
+              ...instance,
+              // instance is only defined up to first-level
+              host: {
+                ...host,
+                site: hostPatchUpdate.site,
+                instance: undefined,
+              },
+            });
+          }
         }
+
+        return HttpResponse.json(host, { status: 200 });
       }
 
-      return res(
-        ctx.status(200),
-        ctx.json<infra.HostServiceUpdateHostApiResponse>(host),
+      return HttpResponse.json(
+        {
+          detail: `response has an error: cannot update host to ${resourceId}`,
+          status: 500,
+        },
+        { status: 500 },
       );
-    }
-
-    return res(
-      ctx.status(500),
-      ctx.json({
-        detail: `response has an error: cannot update host to ${resourceId}`,
-        status: 500,
-      }),
-    );
-  }),
-  rest.get(`${baseURL}/compute/hosts/:resourceId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.HostServiceGetHostApiArg;
+    },
+  ),
+  http.get(`${baseURL}/compute/hosts/:resourceId`, async ({ params }) => {
+    const { resourceId } = params as infra.HostServiceGetHostApiArg;
     const host = hostStore.get(resourceId);
     if (host) {
-      return res(
-        ctx.status(200),
-        ctx.json<infra.HostServiceGetHostApiResponse>(host),
-      );
+      return HttpResponse.json(host, { status: 200 });
     }
 
-    return res(
-      ctx.status(404),
-      ctx.json({
+    return HttpResponse.json(
+      {
         detail: "rpc error: code = NotFound desc = ent: hosts not found",
         status: 404,
-      }),
+      },
+      { status: 404 },
     );
   }),
-  rest.put(
+  http.put(
     `${baseURL}/compute/hosts/:hostId/invalidate`,
-    async (req, res, ctx) => {
-      const { hostId } = req.params as { hostId: string };
-      const body = await req.json();
-      const note = body.note;
-      const deauthResult = hostStore.deauthorizeHost(hostId, true, note);
+    async ({ request, params }) => {
+      const { hostId } = params as { hostId: string };
+      const body = (await request.json()) as { note?: string };
+      const note = body?.note;
+      const deauthResult = hostStore.deauthorizeHost(hostId, true, note || "");
 
       if (!deauthResult) {
-        return res(ctx.status(404));
+        return HttpResponse.json(null, { status: 404 });
       }
 
       const instances = instanceStore.list({ hostId });
@@ -642,59 +614,54 @@ export const handlers = [
       if (instances && instances.length > 0 && host) {
         instanceStore.put(instances[0].instanceID!, {
           ...instances[0],
-          host: { ...host },
+          host,
         });
       }
 
-      return res(ctx.status(200), ctx.json(undefined));
+      return HttpResponse.json(null, { status: 200 });
     },
   ),
-  rest.delete(`${baseURL}/compute/hosts/:hostId`, async (req, res, ctx) => {
+  http.delete(`${baseURL}/compute/hosts/:hostId`, async ({ params }) => {
     const { resourceId } =
-      req.params as unknown as infra.HostServiceDeleteHostApiArg;
+      params as unknown as infra.HostServiceDeleteHostApiArg;
     const host = hostStore.delete(resourceId);
     if (host) {
-      return res(ctx.status(200));
+      return HttpResponse.json(null, { status: 200 });
     }
 
-    return res(
-      ctx.status(404),
-      ctx.json({
+    return HttpResponse.json(
+      {
         detail: "rpc error: code = NotFound desc = ent: hosts not found",
         status: 404,
-      }),
+      },
+      { status: 404 },
     );
   }),
 
   //Register related
-  rest.post(`${baseURL}/compute/hosts/register`, async (req, res, ctx) => {
-    const hostRegisterInfo =
-      (await req.json<infra.HostServiceRegisterHostApiArg>()) as infra.HostRegister;
+  http.post(`${baseURL}/compute/hosts/register`, async ({ request }) => {
+    const hostRegisterInfo = (await request.json()) as infra.HostRegister;
     hostStore.registerHost({
       ...hostRegisterInfo,
       name: hostRegisterInfo.name ?? "default",
       timestamps: { createdAt: new Date().toISOString() },
     });
 
-    return res(
-      ctx.status(hostRegisterInfo.name === "fail" ? 500 : 200),
-      ctx.json<
-        infra.HostServiceRegisterHostApiResponse & {
-          message?: string;
-        }
-      >({
+    return HttpResponse.json(
+      {
         name: hostRegisterInfo.name ?? "default",
         resourceId: hostRegisterInfo.name ?? "default",
         message: hostRegisterInfo.name === "fail" ? "failed" : undefined,
-      }),
+      },
+      { status: hostRegisterInfo.name === "fail" ? 500 : 200 },
     );
   }),
 
-  rest.patch(
+  http.patch(
     `${baseURL}/compute/hosts/:hostId/register`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as unknown as infra.HostServicePatchRegisterHostApiArg;
+        params as unknown as infra.HostServicePatchRegisterHostApiArg;
 
       const result = hostStore.get(resourceId);
       const updatedResult: HostMock = {
@@ -708,14 +675,15 @@ export const handlers = [
 
       hostStore.put(resourceId, updatedResult);
 
-      return res(ctx.status(200));
+      return HttpResponse.json(null, { status: 200 });
     },
   ),
 
   // instance
-  rest.get(`${baseURL}/compute/instances`, async (req, res, ctx) => {
-    const hostId = req.url.searchParams.get("hostID");
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/compute/instances`, async ({ request }) => {
+    const url = new URL(request.url);
+    const hostId = url.searchParams.get("hostID");
+    const filter = url.searchParams.get("filter");
 
     let instances = instanceStore.list({
       hostId,
@@ -729,18 +697,24 @@ export const handlers = [
       ) as enhancedInfraSlice.InstanceReadModified[];
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json<infra.InstanceServiceListInstancesApiResponse>({
+    await delay(mockDelay);
+    return HttpResponse.json(
+      {
         hasNext: false,
         instances,
         totalElements: instances.length,
-      }),
-      ctx.delay(delay),
+      },
+      { status: 200 },
     );
   }),
-  rest.post(`${baseURL}/compute/instances`, async (req, res, ctx) => {
-    const body = req.body as infra.InstanceResourceWrite;
+  http.post(`${baseURL}/compute/instances`, async ({ request }) => {
+    const body = (await request.json()) as {
+      name: string;
+      kind: string;
+      hostID: string;
+      osID: string;
+      securityFeature?: string;
+    };
 
     const { name, kind, hostID, osID, securityFeature } = body;
 
@@ -751,9 +725,9 @@ export const handlers = [
       if (host && os) {
         const newInstance: infra.InstanceResourceRead = {
           instanceID: (Math.random() + 1).toString(36).substring(7),
-          kind,
+          kind: kind as any,
           name,
-          securityFeature,
+          securityFeature: securityFeature as any,
           instanceStatusIndicator: "STATUS_INDICATION_IDLE",
           instanceStatus: "Running",
           instanceStatusTimestamp: 1717761389,
@@ -763,57 +737,52 @@ export const handlers = [
 
         instanceStore.post(newInstance);
 
-        return res(
-          ctx.status(200),
-          ctx.json<infra.InstanceServiceCreateInstanceApiResponse>(newInstance),
-        );
+        return HttpResponse.json(newInstance, { status: 200 });
       }
     }
 
-    return res(
-      ctx.status(404),
-      ctx.json({ data: "infra.Host/OS not found!", status: "404" }),
+    return HttpResponse.json(
+      { data: "infra.Host/OS not found!", status: "404" },
+      { status: 404 },
     );
   }),
-  rest.delete(
+  http.delete(
     `${baseURL}/compute/instances/:instanceId`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as infra.InstanceServiceDeleteInstanceApiArg;
+        params as infra.InstanceServiceDeleteInstanceApiArg;
       const deleteResult = instanceStore.delete(resourceId);
 
-      return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
+      return HttpResponse.json(undefined, { status: deleteResult ? 200 : 404 });
     },
   ),
 
   // workload
-  rest.get(`${baseURL}/workloads/:workloadId`, async (req, res, ctx) => {
-    const { resourceId } = req.params as infra.WorkloadServiceGetWorkloadApiArg;
+  http.get(`${baseURL}/workloads/:workloadId`, async ({ params }) => {
+    const { resourceId } = params as infra.WorkloadServiceGetWorkloadApiArg;
     const workload = workloadStore.get(resourceId);
 
     if (!workload) {
-      return res(
-        ctx.status(400),
-        ctx.json({
+      return HttpResponse.json(
+        {
           detail:
             "rpc error: code = badRequest desc = ent: workloadId not supplied",
           status: 400,
-        }),
+        },
+        { status: 400 },
       );
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json<infra.WorkloadServiceGetWorkloadApiResponse>(workload),
-    );
+    return HttpResponse.json(workload, { status: 200 });
   }),
 
   // schedules
-  rest.get(`${baseURL}/schedules`, async (req, res, ctx) => {
-    const hostId = req.url.searchParams.get("hostID");
-    const siteId = req.url.searchParams.get("siteID");
-    const regionId = req.url.searchParams.get("regionID");
-    const unixEpoch = req.url.searchParams.get("unix_epoch"); // current time
+  http.get(`${baseURL}/schedules`, async ({ request }) => {
+    const url = new URL(request.url);
+    const hostId = url.searchParams.get("hostID");
+    const siteId = url.searchParams.get("siteID");
+    const regionId = url.searchParams.get("regionID");
+    const unixEpoch = url.searchParams.get("unix_epoch"); // current time
     let schedulesList = singleScheduleStore.list();
     let repeatedScheduleList = repeatedScheduleStore.list();
 
@@ -846,18 +815,18 @@ export const handlers = [
       );
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json<infra.ScheduleServiceListSchedulesApiResponse>({
+    return HttpResponse.json(
+      {
         hasNext: false,
         singleSchedules: schedulesList,
         repeatedSchedules: repeatedScheduleList,
         totalElements: schedulesList.length + repeatedScheduleList.length,
-      }),
+      },
+      { status: 200 },
     );
   }),
-  rest.post(`${baseURL}/schedules/single`, async (req, res, ctx) => {
-    const singleSchedule = req.body as infra.SingleScheduleResourceWrite;
+  http.post(`${baseURL}/schedules/single`, async ({ request }) => {
+    const singleSchedule = (await request.json()) as any;
     const result = singleScheduleStore.post({
       ...singleSchedule,
       targetHost: singleSchedule.targetHostId
@@ -871,16 +840,13 @@ export const handlers = [
         : undefined,
     });
     if (result) {
-      return res(
-        ctx.status(200),
-        ctx.json<infra.ScheduleServiceCreateSingleScheduleApiResponse>(result),
-      );
+      return HttpResponse.json(result, { status: 200 });
     }
-    return res(ctx.status(404));
+    return HttpResponse.json(null, { status: 404 });
   }),
 
-  rest.post(`${baseURL}/schedules/repeated`, async (req, res, ctx) => {
-    const repeatedSchedule = req.body as infra.RepeatedScheduleResourceWrite;
+  http.post(`${baseURL}/schedules/repeated`, async ({ request }) => {
+    const repeatedSchedule = (await request.json()) as any;
     const result = repeatedScheduleStore.post({
       ...repeatedSchedule,
       targetHost: repeatedSchedule.targetHostId
@@ -894,22 +860,17 @@ export const handlers = [
         : undefined,
     });
     if (result) {
-      return res(
-        ctx.status(200),
-        ctx.json<infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
-          result,
-        ),
-      );
+      return HttpResponse.json(result, { status: 200 });
     }
-    return res(ctx.status(404));
+    return HttpResponse.json(null, { status: 404 });
   }),
 
-  rest.put(
+  http.put(
     `${baseURL}/schedules/single/:singleScheduleId`,
-    async (req, res, ctx) => {
+    async ({ request, params }) => {
       const { resourceId } =
-        req.params as unknown as infra.ScheduleServicePatchSingleScheduleApiArg;
-      const singleSchedule = req.body as infra.SingleScheduleResourceWrite;
+        params as unknown as infra.ScheduleServicePatchSingleScheduleApiArg;
+      const singleSchedule = (await request.json()) as any;
       const result = singleScheduleStore.put(resourceId, {
         ...singleSchedule,
         targetHost: singleSchedule.targetHostId
@@ -917,22 +878,17 @@ export const handlers = [
           : undefined,
       });
       if (result) {
-        return res(
-          ctx.status(200),
-          ctx.json<infra.ScheduleServiceCreateSingleScheduleApiResponse>(
-            result,
-          ),
-        );
+        return HttpResponse.json(result, { status: 200 });
       }
-      return res(ctx.status(404));
+      return HttpResponse.json(null, { status: 404 });
     },
   ),
-  rest.put(
+  http.put(
     `${baseURL}/schedules/repeated/:repeatedScheduleId`,
-    async (req, res, ctx) => {
+    async ({ request, params }) => {
       const { resourceId } =
-        req.params as unknown as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
-      const repeatedSchedule = req.body as infra.RepeatedScheduleResourceWrite;
+        params as unknown as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
+      const repeatedSchedule = (await request.json()) as any;
       const result = repeatedScheduleStore.put(resourceId, {
         ...repeatedSchedule,
         targetHost: repeatedSchedule.targetHostId
@@ -940,95 +896,85 @@ export const handlers = [
           : undefined,
       });
       if (result) {
-        return res(
-          ctx.status(200),
-          ctx.json<infra.ScheduleServiceCreateRepeatedScheduleApiResponse>(
-            result,
-          ),
-        );
+        return HttpResponse.json(result, { status: 200 });
       }
-      return res(ctx.status(404));
+      return HttpResponse.json(null, { status: 404 });
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/schedules/single/:singleScheduleId`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as infra.ScheduleServiceDeleteSingleScheduleApiArg;
+        params as infra.ScheduleServiceDeleteSingleScheduleApiArg;
       const result = singleScheduleStore.delete(resourceId);
-      return res(ctx.status(result ? 200 : 404), ctx.json(undefined));
+      return HttpResponse.json(null, { status: result ? 200 : 404 });
     },
   ),
-  rest.delete(
+  http.delete(
     `${baseURL}/schedules/repeated/:repeatedScheduleId`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
+        params as infra.ScheduleServiceDeleteRepeatedScheduleApiArg;
       const result = repeatedScheduleStore.delete(resourceId);
-      return res(ctx.status(result ? 200 : 404), ctx.json(undefined));
+      return HttpResponse.json(null, { status: result ? 200 : 404 });
     },
   ),
 
   // os resource
-  rest.get(`${baseURL}/compute/os`, async (req, res, ctx) => {
+  http.get(`${baseURL}/compute/os`, async () => {
     const list = osResourceStore.list();
-    return res(
-      ctx.status(200),
-      ctx.json<infra.OperatingSystemServiceListOperatingSystemsApiResponse>({
+    return HttpResponse.json(
+      {
         hasNext: false,
         OperatingSystemResources: list,
         totalElements: list.length,
-      }),
+      },
+      { status: 200 },
     );
   }),
 
   // telemetry
-  rest.get(`${baseURL}/telemetry/groups/metrics`, async (req, res, ctx) => {
+  http.get(`${baseURL}/telemetry/groups/metrics`, async () => {
     const metricsgroups = telemetryMetricsStore.list();
-    return res(
-      ctx.status(200),
-      ctx.json<infra.TelemetryMetricsGroupServiceListTelemetryMetricsGroupsApiResponse>(
-        {
-          telemetryMetricsGroups: metricsgroups,
-          hasNext: false,
-          totalElements: metricsgroups.length,
-        },
-      ),
+    return HttpResponse.json(
+      {
+        telemetryMetricsGroups: metricsgroups,
+        hasNext: false,
+        totalElements: metricsgroups.length,
+      },
+      { status: 200 },
     );
   }),
-  rest.get(`${baseURL}/telemetry/groups/logs`, async (req, res, ctx) => {
+  http.get(`${baseURL}/telemetry/groups/logs`, async () => {
     const loggroups = telemetryLogsStore.list();
-    return res(
-      ctx.status(200),
-      ctx.json<infra.TelemetryLogsGroupServiceListTelemetryLogsGroupsApiResponse>(
-        {
-          telemetryLogsGroups: loggroups,
-          hasNext: false,
-          totalElements: loggroups.length,
-        },
-      ),
+    return HttpResponse.json(
+      {
+        telemetryLogsGroups: loggroups,
+        hasNext: false,
+        totalElements: loggroups.length,
+      },
+      { status: 200 },
     );
   }),
 
-  rest.get(
+  http.get(
     `${baseURL}/telemetry/groups/logs/:telemetryLogsGroupId`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg;
+        params as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiArg;
       const loggroups = telemetryLogsStore.get(resourceId);
       if (loggroups) {
-        return res(
-          ctx.status(200),
-          ctx.json<infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse>(
-            loggroups,
-          ),
+        return HttpResponse.json(
+          loggroups as infra.TelemetryLogsGroupServiceGetTelemetryLogsGroupApiResponse,
+          { status: 200 },
         );
       }
+      return HttpResponse.json({}, { status: 404 });
     },
   ),
-  rest.get(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
-    const url = new URL(req.url);
+  http.get(`${baseURL}/telemetry/profiles/metrics`, async ({ request }) => {
+    const url = new URL(request.url);
     let metricProfiles: infra.TelemetryMetricsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
@@ -1043,20 +989,18 @@ export const handlers = [
         .filter((profiles) => profiles.targetSite === siteId);
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json<infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse>(
-        {
-          telemetryMetricsProfiles: metricProfiles,
-          hasNext: false,
-          totalElements: metricProfiles.length,
-        },
-      ),
+    return HttpResponse.json(
+      {
+        telemetryMetricsProfiles: metricProfiles,
+        hasNext: false,
+        totalElements: metricProfiles.length,
+      },
+      { status: 200 },
     );
   }),
 
-  rest.get(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
-    const url = new URL(req.url);
+  http.get(`${baseURL}/telemetry/profiles/logs`, async ({ request }) => {
+    const url = new URL(request.url);
     let logProfiles: infra.TelemetryLogsProfileResourceRead[] = [];
 
     if (url.searchParams.has("regionId")) {
@@ -1070,103 +1014,98 @@ export const handlers = [
         .list()
         .filter((profiles) => profiles.targetSite === siteId);
     }
-    return res(
-      ctx.status(200),
-      ctx.json<infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse>(
-        {
-          telemetryLogsProfiles: logProfiles,
-          hasNext: false,
-          totalElements: logProfiles.length,
-        },
-      ),
+    return HttpResponse.json(
+      {
+        telemetryLogsProfiles: logProfiles,
+        hasNext: false,
+        totalElements: logProfiles.length,
+      } as infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse,
+      { status: 200 },
     );
   }),
 
-  rest.post(`${baseURL}/telemetry/profiles/metrics`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryMetricsProfileResource>();
+  http.post(`${baseURL}/telemetry/profiles/metrics`, async ({ request }) => {
+    const body =
+      (await request.json()) as infra.TelemetryMetricsProfileResource;
     const profileRead = telemetryMetricsProfilesStore.create(body);
-    if (!profileRead) return res(ctx.status(500));
-    return res(
-      ctx.status(200),
-      ctx.json<infra.TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse>(
-        profileRead,
-      ),
+    if (!profileRead) return HttpResponse.json({}, { status: 500 });
+    return HttpResponse.json(
+      profileRead as infra.TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiResponse,
+      { status: 200 },
     );
   }),
-  rest.post(`${baseURL}/telemetry/profiles/logs`, async (req, res, ctx) => {
-    const body = await req.json<infra.TelemetryLogsProfileResource>();
+  http.post(`${baseURL}/telemetry/profiles/logs`, async ({ request }) => {
+    const body = (await request.json()) as infra.TelemetryLogsProfileResource;
     //const p = telemetrylogsProfilesStore.post(body);
     const profileRead = telemetrylogsProfilesStore.create(body);
-    if (!profileRead) return await res(ctx.status(500));
-    return res(
-      ctx.status(201),
-      ctx.json<infra.TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse>(
-        profileRead,
-      ),
+    if (!profileRead) return HttpResponse.json({}, { status: 500 });
+    return HttpResponse.json(
+      profileRead as infra.TelemetryLogsProfileServiceCreateTelemetryLogsProfileApiResponse,
+      { status: 201 },
     );
   }),
 
-  rest.put(
+  http.put(
     `${baseURL}/telemetry/profiles/metrics/:telemetryMetricsProfileId`,
-    async (req, res, ctx) => {
+    async ({ request, params }) => {
       const { resourceId } =
-        req.params as infra.TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg;
-      const body = await req.json<infra.TelemetryMetricsProfileResource>();
+        params as infra.TelemetryMetricsProfileServiceGetTelemetryMetricsProfileApiArg;
+      const body =
+        (await request.json()) as infra.TelemetryMetricsProfileResource;
       const p = telemetryMetricsProfilesStore.put(resourceId, body);
-      if (!p) return await res(ctx.status(500));
-      return res(
-        ctx.status(200),
-        ctx.json<infra.TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse>(
-          p,
-        ),
+      if (!p) return HttpResponse.json({}, { status: 500 });
+      return HttpResponse.json(
+        p as infra.TelemetryMetricsProfileServiceUpdateTelemetryMetricsProfileApiResponse,
+        { status: 200 },
       );
     },
   ),
 
-  rest.put(
+  http.put(
     `${baseURL}/telemetry/profiles/logs/:resourceId`,
-    async (req, res, ctx) => {
+    async ({ request, params }) => {
       const { resourceId } =
-        req.params as infra.TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg;
-      const body = await req.json<infra.TelemetryLogsProfileResource>();
+        params as infra.TelemetryLogsProfileServiceGetTelemetryLogsProfileApiArg;
+      const body = (await request.json()) as infra.TelemetryLogsProfileResource;
       const p = telemetrylogsProfilesStore.put(resourceId, body);
-      if (!p) return res(ctx.status(500));
-      return res(
-        ctx.status(200),
-        ctx.json<infra.TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse>(
-          p,
-        ),
+      if (!p) return HttpResponse.json({}, { status: 500 });
+      return HttpResponse.json(
+        p as infra.TelemetryLogsProfileServiceUpdateTelemetryLogsProfileApiResponse,
+        { status: 200 },
       );
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/telemetry/profiles/metrics/:resourceId`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as infra.TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg;
+        params as infra.TelemetryMetricsProfileServiceDeleteTelemetryMetricsProfileApiArg;
       const deleteResult = telemetryMetricsProfilesStore.delete(resourceId);
-      return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
+      return HttpResponse.json(undefined as any, {
+        status: deleteResult ? 200 : 404,
+      });
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/telemetry/profiles/logs/:resourceId`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { resourceId } =
-        req.params as infra.TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg;
+        params as infra.TelemetryLogsProfileServiceDeleteTelemetryLogsProfileApiArg;
       const deleteResult = telemetrylogsProfilesStore.delete(resourceId);
-      return res(ctx.status(deleteResult ? 200 : 404), ctx.json(undefined));
+      return HttpResponse.json(undefined as any, {
+        status: deleteResult ? 200 : 404,
+      });
     },
   ),
 
-  rest.get(`${baseURL}/providers`, async (req, res, ctx) => {
-    const filter = req.url.searchParams.get("filter");
+  http.get(`${baseURL}/providers`, async ({ request }) => {
+    const filter = new URL(request.url).searchParams.get("filter");
 
     if (filter?.match(/name="infra_onboarding"/)) {
-      return res(
-        ctx.status(200),
-        ctx.json<infra.ProviderServiceListProvidersApiResponse>({
+      return HttpResponse.json(
+        {
           hasNext: false,
           providers: [
             {
@@ -1182,45 +1121,48 @@ export const handlers = [
             },
           ],
           totalElements: 0,
-        }),
+        } as infra.ProviderServiceListProvidersApiResponse,
+        { status: 200 },
       );
     }
 
-    return res(ctx.status(502));
+    return HttpResponse.json({}, { status: 502 });
   }),
 
   // VPro details endpoints
-  rest.get(`${baseURL}/dm/devices/:guid`, async (req, res, ctx) => {
-    const { guid } = req.params as { guid: string };
+  http.get(`${baseURL}/dm/devices/:guid`, async ({ params }) => {
+    const { guid } = params as { guid: string };
     const vproDetails = vproDetailsStore.getDeviceByGuid(guid);
     console.log("vproDetails:", vproDetails);
     if (vproDetails) {
-      return res(ctx.status(200), ctx.json(vproDetails), ctx.delay(delay));
+      await delay(1000);
+      return HttpResponse.json(vproDetails as any, { status: 200 });
     }
 
-    return res(
-      ctx.status(404),
-      ctx.json({
+    return HttpResponse.json(
+      {
         detail:
           "rpc error: code = NotFound desc = ent: vPro details not found for host",
         status: 404,
-      }),
+      },
+      { status: 404 },
     );
   }),
 
-  rest.get(`${baseURL}/dm/amt/generalSettings/:guid`, async (req, res, ctx) => {
+  http.get(`${baseURL}/dm/amt/generalSettings/:guid`, async () => {
     const vproDetails = vproGeneralSettingsStore.getGeneralSettingsByGuid();
     if (vproDetails) {
-      return res(ctx.status(200), ctx.json(vproDetails), ctx.delay(delay));
+      await delay(1000);
+      return HttpResponse.json(vproDetails as any, { status: 200 });
     }
 
-    return res(
-      ctx.status(404),
-      ctx.json({
+    return HttpResponse.json(
+      {
         detail:
           "rpc error: code = NotFound desc = ent: vPro details not found for host",
         status: 404,
-      }),
+      },
+      { status: 404 },
     );
   }),
 ];

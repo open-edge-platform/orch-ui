@@ -17,7 +17,7 @@ import Routes from "./routes";
 import { store } from "./store";
 
 /* devblock:start */
-import { setupWorker } from "msw";
+import { setupWorker } from "msw/browser";
 // eslint-disable-next-line no-duplicate-imports
 import { clusterOrchHandlers, metadataBrokerHandler } from "@orch-ui/utils";
 

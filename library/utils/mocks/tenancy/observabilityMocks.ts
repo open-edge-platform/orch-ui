@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import AlertStore from "../../mocks_new/admin/store/alerts";
 import { SharedStorage } from "../../shared-storage/shared-storage";
 import AlertDefinitionStore from "./data/alertDefinitions";
@@ -21,41 +21,34 @@ const projectName = SharedStorage.project?.name;
 
 // alerts
 export const handlers = [
-  rest.get(`${baseURL}/projects/${projectName}/alerts`, (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ alerts: as.list() }));
+  http.get(`${baseURL}/projects/${projectName}/alerts`, () => {
+    return HttpResponse.json({ alerts: as.list() }, { status: 200 });
   }),
-  rest.get(
-    `${baseURL}/projects/${projectName}/alerts/definitions`,
-    (_, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ alertDefinitions: ads.list() }));
-    },
-  ),
-  rest.get(
-    `${baseURL}/projects/${projectName}/alerts/receivers`,
-    (_, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ receivers: rs.list() }));
-    },
-  ),
-  rest.get(
+  http.get(`${baseURL}/projects/${projectName}/alerts/definitions`, () => {
+    return HttpResponse.json({ alertDefinitions: ads.list() }, { status: 200 });
+  }),
+  http.get(`${baseURL}/projects/${projectName}/alerts/receivers`, () => {
+    return HttpResponse.json({ receivers: rs.list() }, { status: 200 });
+  }),
+  http.get(
     `${baseURL}/projects/${projectName}/alerts/definitions/:alertDefinitionId/template`,
-    (req, res, ctx) => {
-      const { alertDefinitionId } = req.params;
-      return res(
-        ctx.status(200),
-        ctx.json(adts.get(alertDefinitionId as string)),
-      );
+    ({ params }) => {
+      const { alertDefinitionId } = params;
+      return HttpResponse.json(adts.get(alertDefinitionId as string), {
+        status: 200,
+      });
     },
   ),
-  rest.patch(
+  http.patch(
     `${baseURL}/projects/${projectName}/alerts/receivers/:receiverId`,
-    (_, res, ctx) => {
-      return res(ctx.status(204));
+    () => {
+      return HttpResponse.json(null, { status: 204 });
     },
   ),
-  rest.patch(
+  http.patch(
     `${baseURL}/projects/${projectName}/alerts/definitions/:alertDefinitionId`,
-    (_, res, ctx) => {
-      return res(ctx.status(503));
+    () => {
+      return HttpResponse.json(null, { status: 503 });
     },
   ),
 ];
