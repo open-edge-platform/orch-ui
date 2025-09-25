@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm } from "@orch-ui/apis";
+import { adm, tm } from "@orch-ui/apis";
 import { delay, http, HttpResponse } from "msw";
 import {
   DeploymentClustersStore,
@@ -22,27 +22,25 @@ export const handlers = [
   http.get(`${baseURLPrefix}/networks`, () => {
     return HttpResponse.json(
       [
-        [
-          {
-            name: "Network one",
-            spec: {
-              description: "first network",
-            },
+        {
+          name: "Network one",
+          spec: {
+            description: "first network",
           },
-          {
-            name: "Network two",
-            spec: {
-              description: "second network",
-            },
+        },
+        {
+          name: "Network two",
+          spec: {
+            description: "second network",
           },
-          {
-            name: "Network three",
-            spec: {
-              description: "third network",
-            },
+        },
+        {
+          name: "Network three",
+          spec: {
+            description: "third network",
           },
-        ],
-      ],
+        },
+      ] as tm.ListV1ProjectsProjectProjectNetworksApiResponse,
       { status: 200 },
     );
   }),
