@@ -14,7 +14,6 @@ export const handlers = [
     `${baseURLPrefix}/endpoints/applications/:appId/clusters/:clusterId`,
     ({ params }) => {
       const { appId } = params as arm.EndpointsServiceListAppEndpointsApiArg;
-      console.log("Fetching endpoints for app:", appId);
       return HttpResponse.json(appEndpoints[appId], { status: 200 });
     },
   ),
