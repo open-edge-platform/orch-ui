@@ -20,7 +20,31 @@ const uiStore = new UiExtensionsStore();
 export const handlers = [
   // this get definition could belong to Tenant mock; api definition does not have type for network object
   http.get(`${baseURLPrefix}/networks`, () => {
-    return HttpResponse.json([], { status: 200 });
+    return HttpResponse.json(
+      [
+        [
+          {
+            name: "Network one",
+            spec: {
+              description: "first network",
+            },
+          },
+          {
+            name: "Network two",
+            spec: {
+              description: "second network",
+            },
+          },
+          {
+            name: "Network three",
+            spec: {
+              description: "third network",
+            },
+          },
+        ],
+      ],
+      { status: 200 },
+    );
   }),
   http.get(`${baseURLPrefix}/appdeployment/deployments`, ({ request }) => {
     const metadataString = new URL(request.url).searchParams.get("labels");
@@ -70,7 +94,10 @@ export const handlers = [
     async ({ request }) => {
       const deployment = (await request.json()) as adm.Deployment;
       const created = ds.post(deployment);
-      return HttpResponse.json(created, { status: 200 });
+      return HttpResponse.json(
+        { deploymentId: created.deployId ?? "" },
+        { status: 200 },
+      );
     },
   ),
   http.get(
