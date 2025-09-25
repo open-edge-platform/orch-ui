@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { http , delay} from "msw"
+import { delay, http, HttpResponse } from "msw";
 import { AdminProject } from "../../global";
 import { RuntimeConfig } from "../../runtime-config/runtime-config";
 import OrganizationStore from "./data/organizations";
@@ -20,49 +20,48 @@ interface ProjectParam {
   project: string;
 }
 export const handlers = [
-  http.get(`${baseUrl}/${projectUrlPrefix}/projects`, async (_, res, ctx) {
-  await delay(500); es(ctx.status(200), ctx.json(projectStore.list()), ctx.delay(2000)),
-  ),
-  http.get(`${baseUrl}/${projectUrlPrefix}/orgs`, async (_, res, ctx) {
-  await delay(500); es(ctx.status(200), ctx.json(organizationStore.list()), ctx.delay(2000)),
-  ),
+  http.get(`${baseUrl}/${projectUrlPrefix}/projects`, async () => {
+    await delay(2000);
+    return HttpResponse.json(projectStore.list(), { status: 200 });
+  }),
+  http.get(`${baseUrl}/${projectUrlPrefix}/orgs`, async () => {
+    await delay(2000);
+    return HttpResponse.json(organizationStore.list(), { status: 200 });
+  }),
   http.put(
     `${baseUrl}/${projectUrlPrefix}/projects/:project`,
-    async (req, res, ctx) {
-  await delay(500); 
+    async ({ request, params }) => {
+      await delay(2000);
       const { project: projectId } = params as unknown as ProjectParam;
-      const body = await req.json<any, AdminProject>();
+      const body = (await request.json()) as AdminProject;
 
       if (projectStore.get(projectId)) {
         const updatedProject = projectStore.put(projectId, body);
-        return res(
-          ctx.status(200),
-          ctx.json(
-            updatedProject ?? {
-              status: 400,
-              data: { message: "error in updating project" },
-            },
-          ),
-          ctx.delay(2000),
+        return HttpResponse.json(
+          updatedProject ?? {
+            status: 400,
+            data: { message: "error in updating project" },
+          },
+          { status: 200 },
         );
       } else {
         const addedProject = projectStore.post(body);
         return HttpResponse.json(
-addedProject ?? {
-              status: 400,
-              data: { message: "error in updating project" },
-            },
-{status: 200,
-});
+          addedProject ?? {
+            status: 400,
+            data: { message: "error in updating project" },
+          },
+          { status: 200 },
+        );
       }
     },
   ),
   http.patch(
     `${baseUrl}/${projectUrlPrefix}/projects/:project`,
-    async (req, res, ctx) {
-  await delay(500); 
+    async ({ request, params }) => {
+      await delay(2000);
       const { project: projectId } = params as unknown as ProjectParam;
-      const body = await req.json<any, AdminProject>();
+      const body = (await request.json()) as AdminProject;
       const existingProject = projectStore.get(projectId);
 
       if (existingProject) {
@@ -71,40 +70,36 @@ addedProject ?? {
           ...body,
         });
         if (patchedProject) {
-          return res(
-            ctx.status(200),
-            ctx.json(patchedProject),
-            ctx.delay(2000),
-          );
+          return HttpResponse.json(patchedProject, { status: 200 });
         }
       }
 
       return HttpResponse.json(
-{
+        {
           status: 400,
           data: { message: "error in patch on project" },
         },
-{status: 200,
-});
+        { status: 200 },
+      );
     },
   ),
   http.delete(
     `${baseUrl}/${projectUrlPrefix}/projects/:project`,
-    async (req, res, ctx) {
-  await delay(500); 
+    async ({ params }) => {
+      await delay(2000);
       const { project: projectId } = params as unknown as ProjectParam;
       const deleteProject = projectStore.delete(projectId);
       if (deleteProject) {
-        return res(ctx.status(200), ctx.json("success"), ctx.delay(2000));
+        return HttpResponse.json("success", { status: 200 });
       }
 
       return HttpResponse.json(
-{
+        {
           status: 400,
-          data: { message: "error in patch on project" },
+          data: { message: "error in deleting project" },
         },
-{status: 200,
-});
+        { status: 200 },
+      );
     },
   ),
 ];
