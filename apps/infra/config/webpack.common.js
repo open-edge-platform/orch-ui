@@ -54,6 +54,8 @@ module.exports = {
         "./SiteCellRemote": "./src/components/atom/SiteCell/SiteCellRemote",
         "./HostLink": "./src/components/atom/HostLink/HostLinkRemote",
         "./OSProfiles": "./src/components/pages/OSProfiles/OSProfilesRemote",
+        "./OsUpdatePolicy":
+          "./src/components/pages/OsUpdatePolicy/OsUpdatePolicyRemote",
         "./AggregateHostStatus":
           "./src/components/atom/AggregateHostStatus/AggregateHostStatusRemote",
         "./RegionSiteTree":
