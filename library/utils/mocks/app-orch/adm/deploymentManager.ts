@@ -4,7 +4,7 @@
  */
 
 import { adm, tm } from "@orch-ui/apis";
-import { rest } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import {
   DeploymentClustersStore,
   DeploymentsStore,
@@ -19,10 +19,9 @@ const uiStore = new UiExtensionsStore();
 
 export const handlers = [
   // this get definition could belong to Tenant mock; api definition does not have type for network object
-  rest.get(`${baseURLPrefix}/networks`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<tm.ListV1ProjectsProjectProjectNetworksApiResponse>([
+  http.get(`${baseURLPrefix}/networks`, () => {
+    return HttpResponse.json(
+      [
         {
           name: "Network one",
           spec: {
@@ -41,11 +40,12 @@ export const handlers = [
             description: "third network",
           },
         },
-      ]),
+      ] as tm.ListV1ProjectsProjectProjectNetworksApiResponse,
+      { status: 200 },
     );
   }),
-  rest.get(`${baseURLPrefix}/appdeployment/deployments`, (req, res, ctx) => {
-    const metadataString = req.url.searchParams.get("labels");
+  http.get(`${baseURLPrefix}/appdeployment/deployments`, ({ request }) => {
+    const metadataString = new URL(request.url).searchParams.get("labels");
     let deployments = ds.list();
     if (metadataString) {
       deployments = deployments.filter((deployment) => {
@@ -70,9 +70,9 @@ export const handlers = [
       });
     }
 
-    const url = new URL(req.url);
-    const offset = parseInt(url.searchParams.get("offset")!) || 0;
-    const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
+    const url = new URL(request.url);
+    const offset = parseInt(url.searchParams.get("offset") || "0") || 0;
+    const pageSize = parseInt(url.searchParams.get("pageSize") || "10") || 10;
     const orderBy = url.searchParams.get("orderBy") || undefined;
     const filter = url.searchParams.get("filter") || "";
 
@@ -82,86 +82,82 @@ export const handlers = [
         : ds.filter(filter, deployments);
     const sort = ds.sort(orderBy, list);
     const page = sort.slice(offset, offset + pageSize);
-    return res(
-      ctx.status(200),
-      ctx.json<adm.DeploymentServiceListDeploymentsApiResponse>({
-        deployments: page,
-        totalElements: deployments.length,
-      }),
+    return HttpResponse.json(
+      { deployments: page, totalElements: deployments.length },
+      { status: 200 },
     );
   }),
-  rest.post(
+  http.post(
     `${baseURLPrefix}/appdeployment/deployments`,
-    async (req, res, ctx) => {
-      const deployment = await req.json<adm.Deployment>();
+    async ({ request }) => {
+      const deployment = (await request.json()) as adm.Deployment;
       const created = ds.post(deployment);
-      return res(
-        ctx.status(200),
-        ctx.json<adm.DeploymentServiceCreateDeploymentApiResponse>({
-          deploymentId: created.deployId ?? "",
-        }),
+      return HttpResponse.json(
+        { deploymentId: created.deployId ?? "" },
+        { status: 200 },
       );
     },
   ),
-  rest.get(
+  http.get(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
-    (req, res, ctx) => {
-      const { deplId } = req.params as adm.DeploymentServiceGetDeploymentApiArg;
+    ({ params }) => {
+      const { deplId } = params as adm.DeploymentServiceGetDeploymentApiArg;
       const deployment = ds.get(deplId);
       if (deployment) {
-        return res(
-          ctx.status(200),
-          ctx.json<adm.DeploymentServiceGetDeploymentApiResponse>({
-            deployment,
-          }),
-        );
+        return HttpResponse.json(deployment, { status: 200 });
       }
 
       // TODO what is the correct format for a 404 in ADM?
-      return res(ctx.status(404));
+      return HttpResponse.json(
+        { error: "Deployment not found" },
+        { status: 404 },
+      );
     },
   ),
-  rest.put(
+  http.put(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
-    async (req, res, ctx) => {
-      const { deplId } = req.params as adm.DeploymentServiceGetDeploymentApiArg;
+    async ({ params, request }) => {
+      const { deplId } = params as adm.DeploymentServiceGetDeploymentApiArg;
       const currentDeployment = ds.get(deplId);
 
       if (!currentDeployment) {
-        return res(ctx.status(404));
+        return HttpResponse.json(
+          { error: "Deployment not found" },
+          { status: 404 },
+        );
       }
 
-      const deploymentReq = await req.json<adm.Deployment>();
+      const deploymentReq = (await request.json()) as adm.Deployment;
       const deployment = ds.put(deplId, {
         ...currentDeployment,
         ...deploymentReq,
       });
 
       if (deployment) {
-        return res(
-          ctx.status(200),
-          ctx.json<adm.DeploymentServiceGetDeploymentApiResponse>({
-            deployment,
-          }),
-        );
+        return HttpResponse.json(deployment, { status: 200 });
       }
-      return res(ctx.status(404));
+      return HttpResponse.json(
+        { error: "Deployment not found" },
+        { status: 404 },
+      );
     },
   ),
-  rest.delete(
+  http.delete(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
-    (req, res, ctx) => {
-      const { deplId } =
-        req.params as adm.DeploymentServiceDeleteDeploymentApiArg;
+    ({ params }) => {
+      const { deplId } = params as adm.DeploymentServiceDeleteDeploymentApiArg;
       const deleted = ds.delete(deplId);
       if (deleted) {
-        return res(ctx.status(201));
+        return HttpResponse.json(null, { status: 201 });
       }
-      return res(ctx.status(404));
+      return HttpResponse.json(
+        { error: "Deployment not found" },
+        { status: 404 },
+      );
     },
   ),
-  rest.get(`${baseURLPrefix}/summary/deployments_status`, (req, res, ctx) => {
-    const metadataString = req.url.searchParams.get("labels");
+  http.get(`${baseURLPrefix}/summary/deployments_status`, ({ request }) => {
+    const metadataString = new URL(request.url).searchParams.get("labels");
     let deployments = ds.list();
     if (metadataString) {
       deployments = deployments.filter((deployment) => {
@@ -213,20 +209,15 @@ export const handlers = [
       });
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json<adm.DeploymentServiceGetDeploymentsStatusApiResponse>(
-        deploymentStat,
-      ),
-    );
+    return HttpResponse.json(deploymentStat, { status: 200 });
   }),
-  rest.get(
+  http.get(
     `${baseURLPrefix}/appdeployment/deployments/:deplId/clusters`,
-    (req, res, ctx) => {
+    ({ request }) => {
       const clusters = dcs.list();
-      const url = new URL(req.url);
-      const offset = parseInt(url.searchParams.get("offset")!) || 0;
-      const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
+      const url = new URL(request.url);
+      const offset = parseInt(url.searchParams.get("offset") || "0") || 0;
+      const pageSize = parseInt(url.searchParams.get("pageSize") || "10") || 10;
       const orderBy = url.searchParams.get("orderBy") || undefined;
       const filter = url.searchParams.get("filter") || "";
 
@@ -237,37 +228,24 @@ export const handlers = [
       const sort = dcs.sort(orderBy, list);
       const page = sort.slice(offset, offset + pageSize);
 
-      return res(
-        ctx.status(200),
-        ctx.json<adm.DeploymentServiceListDeploymentClustersApiResponse>({
-          clusters: page,
-          totalElements: 6,
-        }),
+      return HttpResponse.json(
+        { clusters: page, totalElements: 6 },
+        { status: 200 },
       );
     },
   ),
 
   // TODO: UI Extensions after below api is added to open api schema
-  rest.get("/deployment.orchestrator.apis/v1/ui_extensions", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<adm.ListUiExtensionsResponse>({
-        uiExtensions: uiStore.list(),
-      }),
-    );
+  http.get("/deployment.orchestrator.apis/v1/ui_extensions", () => {
+    return HttpResponse.json({ uiExtensions: uiStore.list() }, { status: 200 });
   }),
 
-  rest.get(
-    `${baseURLPrefix}/deployments/clusters/:clusterId`,
-    (_, res, ctx) => {
-      const simulateError = Math.floor(Math.random() * 100) % 2 === 1;
-      return res(
-        ctx.status(simulateError ? 500 : 200),
-        ctx.json<adm.DeploymentServiceListDeploymentsPerClusterApiResponse>(
-          deploymentsPerCluster,
-        ),
-        ctx.delay(1000),
-      );
-    },
-  ),
+  http.get(`${baseURLPrefix}/deployments/clusters/:clusterId`, async () => {
+    await delay(500);
+    const simulateError = Math.floor(Math.random() * 100) % 2 === 1;
+    return HttpResponse.json(
+      simulateError ? { error: "Server error" } : deploymentsPerCluster,
+      { status: simulateError ? 500 : 200 },
+    );
+  }),
 ];
