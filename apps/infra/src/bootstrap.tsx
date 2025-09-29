@@ -27,7 +27,7 @@ import Routes from "./routes";
 import { store } from "./store/store";
 
 /* devblock:start */
-import { setupWorker } from "msw";
+import { setupWorker } from "msw/browser";
 /* devblock:end */
 // start the mocks server if we are in development mode
 //Note: had to 'clear site data' from the Storage section in Edge for mock to work.
