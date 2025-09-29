@@ -4,116 +4,103 @@
  */
 
 import { arm } from "@orch-ui/apis";
-import { rest } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import { appEndpoints, vms, vmWithVnc, vncAddress } from "./data/vms";
 
 const baseURLPrefix = "/v1/projects/:projectName/resource";
 
 export const handlers = [
-  rest.get(
+  http.get(
     `${baseURLPrefix}/endpoints/applications/:appId/clusters/:clusterId`,
-    (req, res, ctx) => {
-      const { appId } =
-        req.params as arm.EndpointsServiceListAppEndpointsApiArg;
-      return res(
-        ctx.status(200),
-        ctx.json<arm.EndpointsServiceListAppEndpointsApiResponse>(
-          appEndpoints[appId],
-        ),
-      );
+    ({ params }) => {
+      const { appId } = params as arm.EndpointsServiceListAppEndpointsApiArg;
+      return HttpResponse.json(appEndpoints[appId], { status: 200 });
     },
   ),
-  rest.get(
+  http.get(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId`,
-    (req, res, ctx) => {
-      const { appId } =
-        req.params as arm.AppWorkloadServiceListAppWorkloadsApiArg;
+    ({ params }) => {
+      const { appId } = params as arm.AppWorkloadServiceListAppWorkloadsApiArg;
       if (Object.keys(vms).indexOf(appId) === -1) {
-        return res(ctx.status(400));
+        return HttpResponse.json(
+          { error: "Application not found" },
+          { status: 400 },
+        );
       }
-      return res(
-        ctx.status(200),
-        ctx.json<arm.AppWorkloadServiceListAppWorkloadsApiResponse>(vms[appId]),
-      );
+      return HttpResponse.json(vms[appId], { status: 200 });
     },
   ),
-  rest.get(
+  http.get(
     `${baseURLPrefix}/workloads/virtual-machines/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId`,
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ virtualMachine: vmWithVnc }),
-        ctx.delay(3000),
-      );
+    async () => {
+      await delay(500);
+      return HttpResponse.json({ virtualMachine: vmWithVnc }, { status: 200 });
     },
   ),
-  rest.get(
+  http.get(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId/vnc`,
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ address: vncAddress }),
-        ctx.delay(3000),
-      );
+    async () => {
+      await delay(500);
+      return HttpResponse.json({ address: vncAddress }, { status: 200 });
     },
   ),
-  rest.put(
+  http.put(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId/restart`,
-    (_, res, ctx) => {
+    () => {
       const success = Math.random() < 0.8;
       return success
-        ? res(ctx.status(204))
-        : res(
-            ctx.status(422),
-            ctx.json({
+        ? HttpResponse.json(null, { status: 204 })
+        : HttpResponse.json(
+            {
               code: 422,
               message: "couldn't perform required operation",
-            }),
+            },
+            { status: 422 },
           );
     },
   ),
-  rest.put(
+  http.put(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId/start`,
-    (_, res, ctx) => {
+    () => {
       const success = Math.random() < 0.8;
       return success
-        ? res(ctx.status(204))
-        : res(
-            ctx.status(422),
-            ctx.json({
+        ? HttpResponse.json(null, { status: 204 })
+        : HttpResponse.json(
+            {
               code: 422,
               message: "couldn't perform required operation",
-            }),
+            },
+            { status: 422 },
           );
     },
   ),
-  rest.put(
+  http.put(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId/virtual-machines/:virtualMachineId/stop`,
-    (_, res, ctx) => {
+    () => {
       const success = Math.random() < 0.8;
       return success
-        ? res(ctx.status(204))
-        : res(
-            ctx.status(422),
-            ctx.json({
+        ? HttpResponse.json(null, { status: 204 })
+        : HttpResponse.json(
+            {
               code: 422,
               message: "couldn't perform required operation",
-            }),
+            },
+            { status: 422 },
           );
     },
   ),
-  rest.put(
+  http.put(
     `${baseURLPrefix}/workloads/pods/clusters/:clusterId/namespaces/:namespace/pods/:podName/delete`,
-    (_, res, ctx) => {
+    () => {
       const success = Math.random() < 0.8;
       return success
-        ? res(ctx.status(204))
-        : res(
-            ctx.status(422),
-            ctx.json({
+        ? HttpResponse.json(null, { status: 204 })
+        : HttpResponse.json(
+            {
               code: 422,
               message: "couldn't perform required operation",
-            }),
+            },
+            { status: 422 },
           );
     },
   ),

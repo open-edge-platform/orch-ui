@@ -25,7 +25,7 @@ import {
   deploymentManager,
   metadataBrokerHandler,
 } from "@orch-ui/utils";
-import { setupWorker } from "msw";
+import { setupWorker } from "msw/browser";
 
 const runMocks = async () => {
   const worker = setupWorker(
