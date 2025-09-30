@@ -97,8 +97,8 @@ const site: TableColumn<infra.HostResourceRead> = {
   Cell: (table: { row: { original: infra.HostResourceRead } }) => {
     return (
       <SiteCell
-        siteId={table.row.original.site?.region?.resourceId}
-        regionId={table.row.original.site?.region?.resourceId}
+        siteId={table.row.original.site?.siteID}
+        regionId={table.row.original.site?.region?.resourceId || "*"}
       />
     );
   },
@@ -114,7 +114,7 @@ const siteWithCustomBasePath = (
       <SiteCell
         siteId={table.row.original.site?.siteID}
         basePath={basePath}
-        regionId={table.row.original.site?.region?.resourceId}
+        regionId={table.row.original.site?.region?.resourceId || "*"}
       />
     );
   },
