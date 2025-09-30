@@ -130,8 +130,8 @@ const Layout = () => {
       checkAuthAndRole([Role.INFRA_MANAGER_READ, Role.INFRA_MANAGER_WRITE])
     ) {
       items.push(osProfilesNavItem);
-      items.push(sshNavItem);
       items.push(osUpdatePolicyNavItem);
+      items.push(sshNavItem);
     }
 
     items.push(aboutNavItem);
