@@ -6,17 +6,22 @@
 import { infra } from "@orch-ui/apis";
 import {
   ApiError,
+  Empty,
   MessageBannerAlertState,
   Popup,
+  RbacRibbonButton,
   Table,
   TableColumn,
   TableLoader,
 } from "@orch-ui/components";
-import { parseError, SharedStorage } from "@orch-ui/utils";
+import { hasRole, parseError, Role, SharedStorage } from "@orch-ui/utils";
 import { Heading, Icon, Text } from "@spark-design/react";
+import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setMessageBanner } from "../../../store/notifications";
+import CreateOsUpdatePolicyDrawer from "./CreateOsUpdatePolicyDrawer";
 import OsUpdatePolicyDetailsDrawer from "./OsUpdatePolicyDrawer";
 
 import "./OsUpdatePolicy.scss";
@@ -26,13 +31,17 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
   const cy = { "data-cy": dataCy };
   const className = "o-s-profiles";
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
+  const [showCreateOsPolicyDrawer, setShowCreateOsPolicyDrawer] =
+    useState<boolean>(false);
   const [selectedOsUpdatePolicy, setSelectedOsUpdatePolicy] = useState<
     infra.OsUpdatePolicyRead | undefined
   >();
 
   const {
     data: osUpdatePolicy,
+    isSuccess,
     isLoading,
     isError,
     error,
@@ -72,6 +81,21 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
       });
   };
 
+  const addOsUpdatePolicyButton = (
+    <RbacRibbonButton
+      name="addOsUpdatePolicy"
+      size={ButtonSize.Large}
+      variant={ButtonVariant.Action}
+      text="Add OS Update Policy"
+      onPress={() => {
+        setShowCreateOsPolicyDrawer(true);
+      }}
+      disabled={!hasRole([Role.INFRA_MANAGER_WRITE])}
+      tooltip={""}
+      tooltipIcon="lock"
+    />
+  );
+
   const getContent = () => {
     if (isLoading) {
       return (
@@ -79,17 +103,34 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
           <TableLoader />
         </div>
       );
+    } else if (isSuccess && osUpdatePolicy.totalElements === 0) {
+      return (
+        <Empty
+          title="No OS update policies are available here."
+          icon="information-circle"
+          actions={[
+            {
+              name: "Create OS Update Policy",
+              disable: !hasRole([Role.INFRA_MANAGER_WRITE]),
+              action: () => {
+                setShowCreateOsPolicyDrawer(true);
+              },
+            },
+          ]}
+        />
+      );
+    } else {
+      return (
+        <Table
+          columns={columns}
+          data={osUpdatePolicy?.osUpdatePolicies}
+          canSearch
+          sortColumns={[0]}
+          isLoading={isLoading}
+          actionsJsx={addOsUpdatePolicyButton}
+        />
+      );
     }
-
-    return (
-      <Table
-        columns={columns}
-        data={osUpdatePolicy?.osUpdatePolicies}
-        canSearch
-        sortColumns={[0]}
-        isLoading={isLoading}
-      />
-    );
   };
 
   if (isError) {
@@ -138,7 +179,7 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
       },
     },
   ];
-  console.log("selectedOsUpdatePolicy", selectedOsUpdatePolicy);
+
   return (
     <div {...cy} className={className}>
       <Heading semanticLevel={1} size="l" data-cy="title">
@@ -152,6 +193,13 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
           showDrawer={showDrawer}
           selectedOsUpdatePolicy={selectedOsUpdatePolicy}
           setShowDrawer={setShowDrawer}
+        />
+      )}
+
+      {showCreateOsPolicyDrawer && (
+        <CreateOsUpdatePolicyDrawer
+          showDrawer={showCreateOsPolicyDrawer}
+          setShowDrawer={setShowCreateOsPolicyDrawer}
         />
       )}
     </div>

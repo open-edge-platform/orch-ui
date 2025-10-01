@@ -52,7 +52,6 @@ const OsUpdatePolicyDetails = ({
   osUpdatePolicy,
 }: OsUpdatePolicyDetailsProps) => {
   const cy = { "data-cy": dataCy };
-  const [tabIndex, setTabIndex] = useState<number>(0);
 
   return (
     <div className="os-update-policy-detail-content" {...cy}>
