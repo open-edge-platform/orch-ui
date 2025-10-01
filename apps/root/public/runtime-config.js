@@ -6,7 +6,7 @@
 // SPDX-FileCopyrightText: (C) 2022 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 
-const fqdn = "kind.internal";
+const fqdn = "orch-10-114-181-26.espdqa.infra-host.com";
 
 // common documentation URLs
 const documentationUrls = [
