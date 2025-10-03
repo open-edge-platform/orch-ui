@@ -44,6 +44,8 @@ type ApiAliases =
   | "hostEmptySite"
   | "hostNotFound"
   | "hostUpdate"
+  | "hostWithAmtProvisioned"
+  | "hostWithAmtUnprovisioned"
   | "siteSuccess"
   | "siteNotFound"
   | "postMetadata"
@@ -70,6 +72,17 @@ mockHostNoHostLabels.metadata = [];
 
 const mockHostNoSite = structuredClone(mockHost);
 mockHostNoSite.site = undefined;
+
+const mockHostWithAmtProvisioned = {
+  ...mockHost,
+  currentAmtState: "AMT_STATE_PROVISIONED" as const,
+};
+
+const mockHostWithAmtUnprovisioned = {
+  ...mockHost,
+  currentAmtState: "AMT_STATE_UNPROVISIONED" as const,
+};
+
 export const hostNoName: infra.HostResourceRead = {
   ...mockHost,
   name: "",
@@ -163,6 +176,14 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
       method: "PUT",
       route: route,
       response: mockHost,
+    },
+    hostWithAmtProvisioned: {
+      route: route,
+      response: mockHostWithAmtProvisioned,
+    },
+    hostWithAmtUnprovisioned: {
+      route: route,
+      response: mockHostWithAmtUnprovisioned,
     },
     // Metadata mock
     getMetadata: {

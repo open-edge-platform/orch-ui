@@ -172,7 +172,7 @@ const ReviewAndCustomize = () => {
               </div>
             </div>
             <div className="hosts-overview-details">
-              <div></div>
+              {/* <div></div>
               <div>
                 <Text size={TextSize.Small}>
                   vPRO :{" "}
@@ -181,7 +181,7 @@ const ReviewAndCustomize = () => {
                     false: "Disabled",
                   })}
                 </Text>
-              </div>
+              </div> */}
               <div>
                 <Text size={TextSize.Small}>
                   Secure Boot and Full Disk Encryption :{" "}

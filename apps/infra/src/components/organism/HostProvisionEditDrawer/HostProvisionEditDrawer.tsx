@@ -89,9 +89,9 @@ const HostProvisionEditDrawer = ({
     NonNullable<HostData["instance"]>["securityFeature"] | undefined
   >(host?.instance?.securityFeature);
 
-  const [enableVpro, setEnableVpro] = useState<boolean | undefined>(
-    host?.enableVpro,
-  );
+  // const [enableVpro, setEnableVpro] = useState<boolean | undefined>(
+  //   host?.enableVpro,
+  // );
   const [publicSshKey, setPublicSshKey] = useState<string | undefined>(
     host?.instance?.localAccountID,
   );
@@ -202,7 +202,7 @@ const HostProvisionEditDrawer = ({
               >
                 <Section title="Security options">
                   <Flex cols={[6]} gap="2" align="start">
-                    <div>
+                    {/* <div>
                       <Heading semanticLevel={6}>vPro</Heading>
                       <p>Enable vPro</p>
                       <ToggleSwitch
@@ -213,7 +213,7 @@ const HostProvisionEditDrawer = ({
                       >
                         {enableVpro ? "Enabled" : "Disabled"}
                       </ToggleSwitch>
-                    </div>
+                    </div> */}
                     <div>
                       <Heading semanticLevel={6}>
                         Secure Boot and Full Disk Encryption
@@ -303,7 +303,7 @@ const HostProvisionEditDrawer = ({
                         templateName,
                         templateVersion,
                         metadata,
-                        enableVpro,
+                        // enableVpro,
                       },
                     }),
                   );
