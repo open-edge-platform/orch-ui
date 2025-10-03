@@ -280,7 +280,6 @@ export default function ClusterList({ hasPermission }: ClusterListProps) {
               title="Delete Cluster"
               subTitle={`This action will delete ${clusterToDelete} and return its hosts to unassigned state.`}
               content="Are you sure you want to delete the cluster?"
-              buttonPlacement="left-reverse"
               isOpen={true}
               confirmCb={() =>
                 clusterToDelete && deleteClusterFn(clusterToDelete)

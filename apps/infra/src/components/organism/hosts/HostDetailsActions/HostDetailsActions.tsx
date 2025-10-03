@@ -134,7 +134,6 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
           }"?`}
           content="This will permanently remove the host from the system and cannot be undone."
           isOpen={deleteConfirmationOpen}
-          buttonPlacement="left-reverse"
           confirmCb={() => {
             deleteHostInstanceFn(dispatch, host);
             if (basePath) navigate(hostsRoute);

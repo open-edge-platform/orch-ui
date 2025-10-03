@@ -333,7 +333,6 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
                   title="Delete Cluster"
                   subTitle={`This action will delete ${clusterDetail.name} and return its hosts to unassigned state.`}
                   content="Are you sure you want to delete the cluster?"
-                  buttonPlacement="left-reverse"
                   isOpen={true}
                   confirmCb={() =>
                     clusterDetail.name && deleteClusterFn(clusterDetail.name)

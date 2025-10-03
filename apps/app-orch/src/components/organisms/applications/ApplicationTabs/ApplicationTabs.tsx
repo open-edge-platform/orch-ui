@@ -241,7 +241,6 @@ const ApplicationTabs = ({ hasPermission = false }: ApplicationTabsProps) => {
             : ""
         } application.`}
         content="Are you sure you want to proceed?"
-        buttonPlacement="left-reverse"
         isOpen
         confirmCb={() => {
           if (appToDelete) {
