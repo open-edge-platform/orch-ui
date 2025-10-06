@@ -100,7 +100,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
       onSelect: () => onScheduleMaintenance && onScheduleMaintenance(host),
     },
-    ...(host.amtSku !== "Unknown" &&
+    ...(host.amtSku === "AMTSKU_AMT" &&
     host.currentAmtState !== "AMT_STATE_PROVISIONED"
       ? [
           {
@@ -109,7 +109,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
           },
         ]
       : []),
-    ...(host.amtSku !== "Unknown" &&
+    ...(host.amtSku === "AMTSKU_AMT" &&
     host.currentAmtState === "AMT_STATE_PROVISIONED"
       ? [
           {
