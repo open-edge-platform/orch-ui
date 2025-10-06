@@ -4,31 +4,31 @@
  */
 
 import { mbApi } from "@orch-ui/apis";
-import { rest } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import MetadataStore from "./metadata";
 
 const baseURL = "/resource.orchui-u.apis";
 const metadataStore = new MetadataStore();
 export const handlers = [
-  rest.post(`${baseURL}/v1/projects/**/metadata`, async (req, res, ctx) => {
-    const apiResult = await req.json<mbApi.MetadataList>();
+  http.post(`${baseURL}/v1/projects/**/metadata`, async ({ request }) => {
+    await delay(500);
+    const apiResult = (await request.json()) as mbApi.MetadataList;
     metadataStore.post(apiResult);
 
-    return res(
-      ctx.status(200),
-      ctx.json<mbApi.MetadataServiceCreateOrUpdateMetadataApiResponse>({
+    return HttpResponse.json<mbApi.MetadataServiceCreateOrUpdateMetadataApiResponse>(
+      {
         metadata: metadataStore.list(),
-      }),
-      ctx.delay(500),
+      },
+      { status: 200 },
     );
   }),
-  rest.get(`${baseURL}/v1/projects/**/metadata`, (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<mbApi.MetadataServiceGetMetadataApiResponse>({
+  http.get(`${baseURL}/v1/projects/**/metadata`, async () => {
+    await delay(500);
+    return HttpResponse.json<mbApi.MetadataServiceGetMetadataApiResponse>(
+      {
         metadata: metadataStore.list(),
-      }),
-      ctx.delay(500),
+      },
+      { status: 200 },
     );
   }),
 ];

@@ -22,7 +22,7 @@ import { store } from "./store";
 // We have to ignore the error below as this is in devblock there will be a build error
 /* eslint-disable no-duplicate-imports */
 import { observabilityHandlers, tenantManagerHandlers } from "@orch-ui/utils";
-import { setupWorker } from "msw";
+import { setupWorker } from "msw/browser";
 
 const runMocks = async () => {
   const worker = setupWorker(

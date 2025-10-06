@@ -8,7 +8,7 @@ import {
   CatalogKinds,
   CatalogUploadDeploymentPackageResponse,
 } from "@orch-ui/apis";
-import { rest } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import { ApplicationsStore } from "./applications";
 import { ChartStore } from "./charts";
 import { DeploymentPackagesStore } from "./packages";
@@ -25,10 +25,10 @@ const cs = new ChartStore();
 
 export const handlers = [
   // applications
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/applications`,
-    (req, res, ctx) => {
-      const url = new URL(req.url);
+    ({ request }) => {
+      const url = new URL(request.url);
       const offset = parseInt(url.searchParams.get("offset")!) || 0;
       const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
       const orderBy = url.searchParams.get("orderBy") || undefined;
@@ -40,107 +40,107 @@ export const handlers = [
         as.filter(filter, apps).length === 0 ? apps : as.filter(filter, apps);
       const sort = as.sort(orderBy, list);
       const page = sort.slice(offset, offset + pageSize);
-      return res(
-        ctx.status(200),
-        ctx.json<catalog.ListApplicationsResponse>({
+      return HttpResponse.json<catalog.ListApplicationsResponse>(
+        {
           applications: page,
           totalElements: apps.length,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
 
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/applications/:applicationName`,
-    (req, res, ctx) => {
+    ({ params }) => {
       const { applicationName } =
-        req.params as catalog.CatalogServiceGetApplicationVersionsApiArg;
+        params as catalog.CatalogServiceGetApplicationVersionsApiArg;
       const result = as.getVersions(applicationName);
       if (!result) {
-        return res(ctx.status(404), ctx.json(null));
+        return HttpResponse.json(null, { status: 404 });
       }
-      return res(
-        ctx.status(200),
-        ctx.json<catalog.GetApplicationVersionsResponse>({
+      return HttpResponse.json<catalog.GetApplicationVersionsResponse>(
+        {
           application: result,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
 
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/applications/:applicationName/versions/:version`,
-    (req, res, ctx) => {
+    ({ params }) => {
       const { version, applicationName } =
-        req.params as catalog.CatalogServiceGetApplicationApiArg;
+        params as catalog.CatalogServiceGetApplicationApiArg;
 
       const result = as.get(applicationName, version);
       if (!result) {
-        return res(ctx.status(404), ctx.json(null));
+        return HttpResponse.json(null, { status: 404 });
       }
-      return res(
-        ctx.status(200),
-        ctx.json<catalog.GetApplicationResponse>({
+      return HttpResponse.json<catalog.GetApplicationResponse>(
+        {
           application: result,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
 
-  rest.post(
+  http.post(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/applications`,
-    async (req, res, ctx) => {
-      const application = await req.json<catalog.Application>();
+    async ({ request }) => {
+      const application = (await request.json()) as catalog.Application;
       application.kind = "KIND_NORMAL";
       const created = as.post(application);
       if (created)
-        return res(
-          ctx.status(201),
-          ctx.json<catalog.CatalogServiceCreateApplicationApiResponse>({
+        return HttpResponse.json<catalog.CatalogServiceCreateApplicationApiResponse>(
+          {
             application: created,
-          }),
+          },
+          { status: 201 },
         );
 
-      return res(ctx.status(500));
+      return HttpResponse.json(null, { status: 500 });
     },
   ),
 
-  rest.put(
+  http.put(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/applications/:applicationName/versions/:version`,
-    async (req, res, ctx) => {
+    async ({ request, params }) => {
       const { applicationName, version } =
-        req.params as unknown as catalog.CatalogServiceUpdateApplicationApiArg;
-      const application = await req.json<catalog.Application>();
+        params as unknown as catalog.CatalogServiceUpdateApplicationApiArg;
+      const application = (await request.json()) as catalog.Application;
       application.kind = "KIND_NORMAL";
       const edited = as.put(applicationName, version, application);
-      if (edited) return res(ctx.status(200), ctx.json({}));
+      if (edited) return HttpResponse.json({}, { status: 200 });
 
-      return res(ctx.status(404), ctx.json({}));
+      return HttpResponse.json({}, { status: 404 });
     },
   ),
 
-  rest.delete(
+  http.delete(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/applications/:applicationName/versions/:version`,
-    (req, res, ctx) => {
+    ({ params }) => {
       const { applicationName, version } =
-        req.params as catalog.CatalogServiceDeleteApplicationApiArg;
+        params as catalog.CatalogServiceDeleteApplicationApiArg;
 
       if (as.delete(applicationName, version)) {
-        return res(ctx.status(200), ctx.json({}));
+        return HttpResponse.json({}, { status: 200 });
       } else {
-        return res(
-          ctx.status(404),
-          ctx.json({ code: 5, message: "status 404 Not Found", details: [] }),
+        return HttpResponse.json(
+          { code: 5, message: "status 404 Not Found", details: [] },
+          { status: 404 },
         );
       }
     },
   ),
 
   // composite applications (packages)
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/deployment_packages`,
-    (req, res, ctx) => {
-      const url = new URL(req.url);
+    ({ request }) => {
+      const url = new URL(request.url);
       const offset = parseInt(url.searchParams.get("offset")!) || 0;
       const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
       const orderBy = url.searchParams.get("orderBy") || undefined;
@@ -152,83 +152,82 @@ export const handlers = [
       const list = dps.filter(filter, pkgs);
       const sort = dps.sort(orderBy, list);
       const page = sort.slice(offset, offset + pageSize);
-      return res(
-        ctx.status(200),
-        ctx.json<catalog.ListDeploymentPackagesResponse>({
+      return HttpResponse.json<catalog.ListDeploymentPackagesResponse>(
+        {
           deploymentPackages: page,
           totalElements: 19,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
 
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/deployment_packages/:deploymentPackageName/versions`,
-    (req, res, ctx) => {
+    ({ params }) => {
       const { deploymentPackageName } =
-        req.params as catalog.CatalogServiceGetDeploymentPackageVersionsApiArg;
+        params as catalog.CatalogServiceGetDeploymentPackageVersionsApiArg;
       const caList = dps.getVersions(deploymentPackageName);
 
       // App catalog returns (200, []) (an empty list) if composite app name is not found
-      return res(
-        ctx.status(200),
-        ctx.json<catalog.GetDeploymentPackageVersionsResponse>({
+      return HttpResponse.json<catalog.GetDeploymentPackageVersionsResponse>(
+        {
           deploymentPackages: caList,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
-  rest.delete(
+  http.delete(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/deployment_packages/:deploymentPackageName/versions/:version`,
-    (req, res, ctx) => {
+    ({ params }) => {
       const { deploymentPackageName, version } =
-        req.params as catalog.CatalogServiceDeleteDeploymentPackageApiArg;
+        params as catalog.CatalogServiceDeleteDeploymentPackageApiArg;
 
       if (dps.delete(deploymentPackageName, version)) {
-        return res(ctx.status(200), ctx.json({}));
+        return HttpResponse.json({}, { status: 200 });
       } else {
-        return res(ctx.status(404), ctx.json({}));
+        return HttpResponse.json({}, { status: 404 });
       }
     },
   ),
 
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/deployment_packages/:deploymentPackageName/versions/:version`,
-    (req, res, ctx) => {
+    ({ params }) => {
       const { version, deploymentPackageName } =
-        req.params as catalog.CatalogServiceGetDeploymentPackageApiArg;
+        params as catalog.CatalogServiceGetDeploymentPackageApiArg;
       const result = dps.get(deploymentPackageName, version);
       if (!result) {
-        return res(ctx.status(404), ctx.json(null));
+        return HttpResponse.json(null, { status: 404 });
       }
-      return res(
-        ctx.status(200),
-        ctx.json<catalog.CatalogServiceGetDeploymentPackageApiResponse>({
+      return HttpResponse.json<catalog.CatalogServiceGetDeploymentPackageApiResponse>(
+        {
           deploymentPackage: result,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
-  rest.post(
+  http.post(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/deployment_packages`,
-    async (req, res, ctx) => {
-      const ca = await req.json<catalog.DeploymentPackage>();
+    async ({ request }) => {
+      const ca = (await request.json()) as catalog.DeploymentPackage;
       ca.kind = "KIND_NORMAL";
       const created = dps.post(ca);
-      return res(
-        ctx.status(201),
-        ctx.json<catalog.CreateDeploymentPackageResponse>({
+      return HttpResponse.json<catalog.CreateDeploymentPackageResponse>(
+        {
           deploymentPackage: created,
-        }),
+        },
+        { status: 201 },
       );
     },
   ),
   // Upload deployment package
-  rest.post(`${baseURL}/${catalogPrefix}/upload`, async (req, res, ctx) => {
-    return res(
-      ctx.status(500),
-      ctx.delay(3000),
-      ctx.json<CatalogUploadDeploymentPackageResponse>({
+  http.post(`${baseURL}/${catalogPrefix}/upload`, async () => {
+    await delay(3000);
+    return HttpResponse.json<CatalogUploadDeploymentPackageResponse>(
+      {
         responses: [
           {
             sessionId: "896a6684-fa4d-49bc-95b2-26372117dc2a",
@@ -242,15 +241,16 @@ export const handlers = [
             ],
           },
         ],
-      }),
+      },
+      { status: 500 },
     );
   }),
 
   // registries
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/registries`,
-    (req, res, ctx) => {
-      const url = new URL(req.url);
+    async ({ request }) => {
+      const url = new URL(request.url);
       const offset = parseInt(url.searchParams.get("offset")!) || 0;
       const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
       const filter = url.searchParams.get("filter");
@@ -260,116 +260,97 @@ export const handlers = [
       const page =
         list.length <= pageSize ? list : list.slice(offset, offset + pageSize);
 
-      return res(
-        ctx.status(200),
-        ctx.delay(500),
-        ctx.json<catalog.ListRegistriesResponse>({
+      await delay(500);
+      return HttpResponse.json<catalog.ListRegistriesResponse>(
+        {
           registries: page,
           totalElements: list.length,
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
-  rest.post(
+  http.post(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/registries`,
-    async (req, res, ctx) => {
-      const body = await req.json<catalog.Registry>();
+    async ({ request }) => {
+      const body = (await request.json()) as catalog.Registry;
       const registry = rs.post(body);
       if (registry) {
-        return res(
-          ctx.status(200),
-          ctx.json<catalog.CatalogServiceCreateRegistryApiResponse>({
+        return HttpResponse.json<catalog.CatalogServiceCreateRegistryApiResponse>(
+          {
             registry,
-          }),
+          },
+          { status: 200 },
         );
       }
-      return res(ctx.status(500));
+      return HttpResponse.json(null, { status: 500 });
     },
   ),
-  rest.put(
+  http.put(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/registries/:registryName`,
-    async (req, res, ctx) => {
+    async ({ request, params }) => {
       const { registryName } =
-        req.params as unknown as catalog.CatalogServiceUpdateRegistryApiArg;
-      const registry = await req.json<catalog.Registry>();
+        params as unknown as catalog.CatalogServiceUpdateRegistryApiArg;
+      const registry = (await request.json()) as catalog.Registry;
       const success = rs.put(registryName, registry);
       if (success) {
-        return res(ctx.status(200), ctx.json({}));
+        return HttpResponse.json({}, { status: 200 });
       }
-      return res(ctx.status(500));
+      return HttpResponse.json(null, { status: 500 });
     },
   ),
-  rest.delete(
+  http.delete(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/registries/:registryName`,
-    async (req, res, ctx) => {
+    async ({ params }) => {
       const { registryName } =
-        req.params as catalog.CatalogServiceDeleteRegistryApiArg;
+        params as catalog.CatalogServiceDeleteRegistryApiArg;
       const success = rs.delete(registryName);
       if (success) {
-        return res(ctx.status(200), ctx.json({}));
+        return HttpResponse.json({}, { status: 200 });
       }
-      return res(ctx.status(500));
+      return HttpResponse.json(null, { status: 500 });
     },
   ),
 
   // charts
-  rest.get(`${baseURL}/${catalogPrefix}/charts`, (req, res, ctx) => {
-    const registryName = req.url.searchParams.get("registry") as string;
-    const chartName = req.url.searchParams.get("chart") as string;
+  http.get(`${baseURL}/${catalogPrefix}/charts`, async ({ request }) => {
+    const registryName = new URL(request.url).searchParams.get(
+      "registry",
+    ) as string;
+    const chartName = new URL(request.url).searchParams.get("chart") as string;
 
     if (registryName && chartName) {
-      return res(
-        ctx.status(200),
-        ctx.delay(500),
-        ctx.json<string[]>(cs.listVersion(registryName, chartName)),
+      await delay(500);
+      return HttpResponse.json<string[]>(
+        cs.listVersion(registryName, chartName),
+        { status: 200 },
       );
     } else if (registryName) {
-      return res(
-        ctx.status(200),
-        ctx.delay(500),
-        ctx.json<string[]>(cs.listChart(registryName)),
-      );
+      await delay(500);
+      return HttpResponse.json<string[]>(cs.listChart(registryName), {
+        status: 200,
+      });
     }
   }),
 
-  rest.get(
+  http.get(
     `${baseURL}/${versionPrefix}/projects/:projectName/catalog/registries/:registryName`,
-    (req, res, ctx) => {
+    async ({ request, params }) => {
       const { registryName } =
-        req.params as unknown as catalog.CatalogServiceGetRegistryApiArg;
-      const url = new URL(req.url);
+        params as unknown as catalog.CatalogServiceGetRegistryApiArg;
+      const url = new URL(request.url);
       const offset = parseInt(url.searchParams.get("offset")!) || 0;
       const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
       const list = rs.filter(registryName);
       const page =
         list.length <= pageSize ? list : list.slice(offset, offset + pageSize);
-      return res(
-        ctx.status(200),
-        ctx.delay(500),
-        ctx.json<catalog.GetRegistryResponse>({
-          registry: page[0],
-        }),
-      );
-    },
-  ),
 
-  rest.get(
-    `${baseURL}/${versionPrefix}/projects/:projectName/catalog/registries/:registryName`,
-    (req, res, ctx) => {
-      const { registryName } =
-        req.params as unknown as catalog.CatalogServiceGetRegistryApiArg;
-      const url = new URL(req.url);
-      const offset = parseInt(url.searchParams.get("offset")!) || 0;
-      const pageSize = parseInt(url.searchParams.get("pageSize")!) || 10;
-      const list = rs.filter(registryName);
-      const page =
-        list.length <= pageSize ? list : list.slice(offset, offset + pageSize);
-      return res(
-        ctx.status(200),
-        ctx.delay(500),
-        ctx.json<catalog.GetRegistryResponse>({
+      await delay(500);
+      return HttpResponse.json<catalog.GetRegistryResponse>(
+        {
           registry: page[0],
-        }),
+        },
+        { status: 200 },
       );
     },
   ),
