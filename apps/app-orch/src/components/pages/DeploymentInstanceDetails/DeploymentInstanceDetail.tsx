@@ -161,27 +161,18 @@ const DeploymentInstanceDetail = () => {
     applicationReady: cluster.status?.summary?.running ?? 0,
     applicationTotal: cluster.status?.summary?.total ?? 0,
   };
-  const metadata: TypedMetadata[] =
-    deployment &&
-    deployment.deployment.targetClusters &&
-    deployment.deployment.targetClusters.length > 0
-      ? Object.keys(
-          deployment.deployment &&
-            deployment.deployment.targetClusters.length > 0 &&
-            deployment.deployment.targetClusters[0].labels &&
-            deployment.deployment.targetClusters[0].labels
-            ? deployment.deployment.targetClusters[0].labels
-            : {},
-        ).map((k) => ({
-          key: k,
-          value:
-            deployment.deployment.targetClusters &&
-            deployment.deployment.targetClusters.length > 0 &&
-            deployment.deployment.targetClusters[0].labels
-              ? deployment.deployment.targetClusters[0].labels[k]
-              : "",
-        }))
-      : [];
+
+  const currentCluster = deployment?.deployment.targetClusters?.find(
+    (tc) => tc.clusterId === name,
+  );
+
+  const metadata: TypedMetadata[] = currentCluster?.labels
+    ? Object.entries(currentCluster.labels).map(([key, value]) => ({
+        key,
+        value,
+      }))
+    : [];
+
   return (
     <div
       className="deployment-instance-details"
