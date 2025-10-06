@@ -179,25 +179,16 @@ const DeploymentDetails = ({
   ];
 
   // Getting metadata for a deployment: These fields may vary and are taken upon package deploy
-  // Note: In this version, each key-value pairs in metadata is same across all apps/vm in a deployment.
-  // Hence, we are assuming the deployment metadata is same as the first app/vm metadata within that deployment.
-  const metadataKeyValuePairs: MetadataPair[] = Object.keys(
-    apiDeployment &&
-      apiDeployment.deployment.targetClusters &&
-      apiDeployment.deployment.targetClusters.length > 0 &&
-      apiDeployment.deployment.targetClusters[0].labels
-      ? apiDeployment.deployment.targetClusters[0].labels
-      : {},
-  ).map((k) => ({
-    key: k,
-    value:
-      apiDeployment &&
-      apiDeployment.deployment.targetClusters &&
-      apiDeployment.deployment.targetClusters.length > 0 &&
-      apiDeployment.deployment.targetClusters[0].labels
-        ? apiDeployment.deployment.targetClusters[0].labels[k]
-        : "",
-  }));
+  // Collect labels from all target clusters (preserving duplicates)
+  const metadataKeyValuePairs: MetadataPair[] =
+    apiDeployment?.deployment.targetClusters?.flatMap((cluster) =>
+      cluster.labels
+        ? Object.entries(cluster.labels).map(([key, value]) => ({
+            key,
+            value,
+          }))
+        : [],
+    ) ?? [];
 
   const deleteHostFn = async () => {
     try {
