@@ -19,19 +19,16 @@ import { Heading, Icon, Text } from "@spark-design/react";
 import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setMessageBanner } from "../../../store/notifications";
 import CreateOsUpdatePolicyDrawer from "./CreateOsUpdatePolicyDrawer";
 import OsUpdatePolicyDetailsDrawer from "./OsUpdatePolicyDrawer";
 
 import "./OsUpdatePolicy.scss";
 const dataCy = "osUpdatePolicy";
-interface OsUpdatePolicyProps {}
-const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
+const OsUpdatePolicy = () => {
   const cy = { "data-cy": dataCy };
   const className = "o-s-profiles";
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [showCreateOsPolicyDrawer, setShowCreateOsPolicyDrawer] =
     useState<boolean>(false);
@@ -45,6 +42,7 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
     isLoading,
     isError,
     error,
+    refetch,
   } = infra.useOsUpdatePolicyListOsUpdatePolicyQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
@@ -86,7 +84,7 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
       name="addOsUpdatePolicy"
       size={ButtonSize.Large}
       variant={ButtonVariant.Action}
-      text="Add OS Update Policy"
+      text="Add Update Policy"
       onPress={() => {
         setShowCreateOsPolicyDrawer(true);
       }}
@@ -200,6 +198,7 @@ const OsUpdatePolicy = ({}: OsUpdatePolicyProps) => {
         <CreateOsUpdatePolicyDrawer
           showDrawer={showCreateOsPolicyDrawer}
           setShowDrawer={setShowCreateOsPolicyDrawer}
+          onPolicyCreated={() => refetch()}
         />
       )}
     </div>
