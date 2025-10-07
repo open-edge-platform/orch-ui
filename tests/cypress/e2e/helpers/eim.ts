@@ -236,6 +236,7 @@ export const unconfigureHostViaApi = (project: string, hostId: string) => {
       "powerStatus",
       "powerStatusIndicator",
       "powerStatusTimestamp",
+      "userLvmSize"
     ];
 
     _.forEach(readOnlyProps, (prop) => {
