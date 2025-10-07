@@ -325,7 +325,6 @@ export const ScheduleMaintenanceList = ({
           confirmCb={() => deleteMaintenance(maintenanceOnDelete)}
           confirmBtnText="Delete"
           cancelCb={() => setMaintenanceOnDelete(undefined)}
-          buttonPlacement="left-reverse"
           size={ModalSize.Medium}
         />
       )}
