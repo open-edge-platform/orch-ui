@@ -19,6 +19,7 @@ import {
   ButtonSize,
   ButtonVariant,
   DropdownSize,
+  ToastState,
 } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -31,6 +32,7 @@ interface OsUpdatePolicyDrawerProps {
   showDrawer: boolean;
   setShowDrawer: (show: boolean) => void;
   onPolicyCreated?: () => void; // Callback to refresh the parent table
+  showToast: (message: string, state: ToastState) => void; // Toast notification function
 }
 
 interface CreateOsUpdatePolicyFormData {
@@ -50,8 +52,10 @@ const CreateOsUpdatePolicyDrawer = ({
   showDrawer,
   setShowDrawer,
   onPolicyCreated,
+  showToast,
 }: OsUpdatePolicyDrawerProps) => {
   const cy = { "data-cy": dataCy };
+
   const projectName = SharedStorage.project?.name ?? "";
 
   // Default form values
@@ -163,13 +167,16 @@ const CreateOsUpdatePolicyDrawer = ({
         onPolicyCreated();
       }
 
-      // TODO: Add success notification/toast
-      // dispatch(showToast({ message: "OS Update Policy created successfully!", state: ToastState.Success }));
+      // Show success notification
+      showToast("OS Update Policy created successfully!", ToastState.Success);
     } catch (error) {
       console.error("Failed to create OS Update Policy:", error);
 
-      // TODO: Add error notification/toast
-      // dispatch(showToast({ message: `Failed to create OS Update Policy: ${error}`, state: ToastState.Danger }));
+      // Show error notification
+      showToast(
+        `Failed to create OS Update Policy: ${error}`,
+        ToastState.Danger,
+      );
     }
   };
 
