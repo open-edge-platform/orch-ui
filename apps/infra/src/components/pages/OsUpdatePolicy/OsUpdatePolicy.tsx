@@ -7,7 +7,6 @@ import { infra } from "@orch-ui/apis";
 import {
   ApiError,
   Empty,
-  MessageBannerAlertState,
   Popup,
   RbacRibbonButton,
   Table,
@@ -15,11 +14,15 @@ import {
   TableLoader,
 } from "@orch-ui/components";
 import { hasRole, parseError, Role, SharedStorage } from "@orch-ui/utils";
-import { Heading, Icon, Text } from "@spark-design/react";
-import { ButtonSize, ButtonVariant } from "@spark-design/tokens";
+import { Heading, Icon, Text, Toast, ToastProps } from "@spark-design/react";
+import {
+  ButtonSize,
+  ButtonVariant,
+  ToastPosition,
+  ToastState,
+  ToastVisibility,
+} from "@spark-design/tokens";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setMessageBanner } from "../../../store/notifications";
 import CreateOsUpdatePolicyDrawer from "./CreateOsUpdatePolicyDrawer";
 import OsUpdatePolicyDetailsDrawer from "./OsUpdatePolicyDrawer";
 
@@ -28,7 +31,31 @@ const dataCy = "osUpdatePolicy";
 const OsUpdatePolicy = () => {
   const cy = { "data-cy": dataCy };
   const className = "o-s-profiles";
-  const dispatch = useDispatch();
+
+  // Toast state management
+  const [toastProps, setToastProps] = useState<ToastProps>({
+    state: ToastState.Success,
+    visibility: ToastVisibility.Hide,
+    duration: 3000,
+    position: ToastPosition.TopRight,
+    canClose: true,
+  });
+
+  const showToast = (message: string, state: ToastState) => {
+    setToastProps({
+      ...toastProps,
+      message,
+      state,
+      visibility: ToastVisibility.Show,
+    });
+  };
+
+  const hideToast = () => {
+    setToastProps({
+      ...toastProps,
+      visibility: ToastVisibility.Hide,
+    });
+  };
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [showCreateOsPolicyDrawer, setShowCreateOsPolicyDrawer] =
     useState<boolean>(false);
@@ -58,23 +85,15 @@ const OsUpdatePolicy = () => {
     })
       .unwrap()
       .then(() => {
-        dispatch(
-          setMessageBanner({
-            icon: "check-circle",
-            text: "OS Update Policy has been deleted.",
-            title: "Deletion Succeeded",
-            variant: MessageBannerAlertState.Success,
-          }),
+        showToast(
+          "OS Update Policy has been deleted successfully.",
+          ToastState.Success,
         );
       })
       .catch((error) => {
-        dispatch(
-          setMessageBanner({
-            icon: "alert-triangle",
-            text: parseError(error).data,
-            title: "Deletion Failed",
-            variant: MessageBannerAlertState.Error,
-          }),
+        showToast(
+          `Failed to delete OS Update Policy: ${parseError(error).data}`,
+          ToastState.Danger,
         );
       });
   };
@@ -199,8 +218,11 @@ const OsUpdatePolicy = () => {
           showDrawer={showCreateOsPolicyDrawer}
           setShowDrawer={setShowCreateOsPolicyDrawer}
           onPolicyCreated={() => refetch()}
+          showToast={showToast}
         />
       )}
+
+      <Toast {...toastProps} onHide={hideToast} />
     </div>
   );
 };
