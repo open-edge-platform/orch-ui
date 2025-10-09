@@ -151,7 +151,6 @@ const DeauthorizeNodeConfirmationDialog = ({
       confirmCb={removeNodeFn}
       confirmBtnText="Deauthorize"
       cancelCb={() => setDeauthorizeConfirmationOpen(false)}
-      buttonPlacement="left-reverse"
       size={ModalSize.Medium}
       confirmBtnDisabled={
         !deauthorizeReason || deauthorizeReason.trim().length === 0

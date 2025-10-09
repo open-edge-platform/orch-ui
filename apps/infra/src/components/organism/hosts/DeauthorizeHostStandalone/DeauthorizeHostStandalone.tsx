@@ -117,7 +117,6 @@ const DeauthorizeHostStandalone = ({
       confirmCb={() => deauthorizeHostFn(deauthorizeReason ?? "")}
       confirmBtnText="Deauthorize"
       cancelCb={() => setDeauthorizeConfirmationOpen(false)}
-      buttonPlacement="left-reverse"
       size={ModalSize.Medium}
     />
   ) : (
