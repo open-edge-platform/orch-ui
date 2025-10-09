@@ -127,7 +127,7 @@ describe("<ProvisionedHostPopup />", () => {
             ...hostOne.instance,
             workloadMembers: undefined,
           },
-          amtSku: "AMTSKU_AMT",
+          amtSku: "AMT_SKU_AMT",
           currentAmtState: "AMT_STATE_UNSPECIFIED",
         },
       };
@@ -147,7 +147,7 @@ describe("<ProvisionedHostPopup />", () => {
             ...hostOne.instance,
             workloadMembers: undefined,
           },
-          amtSku: "AMTSKU_AMT",
+          amtSku: "AMT_SKU_AMT",
           currentAmtState: "AMT_STATE_PROVISIONED",
         },
       };
