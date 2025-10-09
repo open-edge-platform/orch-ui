@@ -84,6 +84,8 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       (m) => m.kind === "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
     );
 
+  console.log("provisioned host actions", { host });
+
   const provisionedHostPopup: PopupOption[] = [
     {
       displayText: "Edit",

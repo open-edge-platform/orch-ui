@@ -103,6 +103,8 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
     { skip: !host.instance?.resourceId },
   );
 
+  console.log("general host actions", { host });
+
   const getHostPopup = () => {
     if (host.instance) {
       // if its a provisioned host (with/without assigned workload/cluster)
