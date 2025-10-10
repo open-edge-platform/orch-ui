@@ -25,7 +25,6 @@ export type RegisteredHostPopupProps = Omit<
 const RegisteredHostPopup = (props: RegisteredHostPopupProps) => {
   const cy = { "data-cy": dataCy };
   const { host, onEdit, onOnboard } = props;
-  console.log("registered host actions", { host });
   const [showErrorDrawer, setShowErrorDrawer] = useState<boolean>(false);
 
   const registeredHostPopup: PopupOption[] = [];

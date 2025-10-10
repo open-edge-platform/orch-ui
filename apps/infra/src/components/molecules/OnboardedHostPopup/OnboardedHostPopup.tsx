@@ -36,8 +36,6 @@ const OnboardedHostPopup = (props: OnboardedHostPopupProps) => {
   const cy = { "data-cy": dataCy };
   const { host } = props;
 
-  console.log("onboarded host actions", { host });
-
   const navigate = useInfraNavigate();
   const dispatch = useAppDispatch();
 
