@@ -86,10 +86,16 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
     })
       .unwrap()
       .then(() => {
-        showSuccessMessageBanner(dispatch, "Request sent to activate vPro.");
+        showSuccessMessageBanner(
+          dispatch,
+          `Request sent to ${on ? "activate" : "deactivate"} vPro.`
+        );
       })
       .catch(() => {
-        showErrorMessageBanner(dispatch, "Failed to activate vPro.");
+        showErrorMessageBanner(
+          dispatch,
+          `Failed to ${on ? "activate" : "deactivate"} vPro.`
+        );
       });
   };
 
