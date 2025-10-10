@@ -13,6 +13,7 @@ import {
   HostStore,
   InstanceStore,
   OsResourceStore,
+  OsUpdatePolicyStore,
   RegionStore,
   RepeatedScheduleStore,
   SingleSchedule2Store,
@@ -43,6 +44,7 @@ export const telemetryMetricsProfilesStore =
   new TelemetryMetricsProfilesStore();
 export const telemetrylogsProfilesStore = new TelemetryLogsProfilesStore();
 export const osResourceStore = new OsResourceStore();
+export const osUpdatePolicyStore = new OsUpdatePolicyStore();
 export const instanceStore = new InstanceStore();
 export const workloadStore = new WorkloadStore();
 export const vproDetailsStore = new VproDetailsStore();
@@ -928,6 +930,18 @@ export const handlers = [
       {
         hasNext: false,
         OperatingSystemResources: list,
+        totalElements: list.length,
+      },
+      { status: 200 },
+    );
+  }),
+
+  http.get(`${baseURL}/os-update-policies`, async () => {
+    const list = osUpdatePolicyStore.list();
+    return HttpResponse.json(
+      {
+        hasNext: false,
+        osUpdatePolicies: list,
         totalElements: list.length,
       },
       { status: 200 },

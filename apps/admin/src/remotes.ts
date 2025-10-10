@@ -10,3 +10,4 @@ declare module "EimUI/HostLink";
 declare module "EimUI/OSProfiles";
 declare module "EimUI/HostsTable";
 declare module "EimUI/AggregateHostStatus";
+declare module "EimUI/OsUpdatePolicy";

@@ -29,6 +29,7 @@ type RemoteComponent = LazyExoticComponent<ComponentType<any>> | null;
 let ClusterTemplates: RemoteComponent = null;
 let ClusterTemplateDetails: RemoteComponent = null;
 let OSProfiles: RemoteComponent = null;
+let OsUpdatePolicy: RemoteComponent = null;
 
 if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
   ClusterTemplates = React.lazy(
@@ -41,6 +42,7 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
 
 if (RuntimeConfig.isEnabled("INFRA")) {
   OSProfiles = React.lazy(async () => await import("EimUI/OSProfiles"));
+  OsUpdatePolicy = React.lazy(async () => await import("EimUI/OsUpdatePolicy"));
 }
 
 const isProjectAdmin = hasRole([
@@ -77,6 +79,10 @@ const getHomeRoute = () => {
 
   if (OSProfiles && hasInfraPermission) {
     return "/admin/os-profiles";
+  }
+
+  if (OsUpdatePolicy && hasInfraPermission) {
+    return "/admin/os-update-policy";
   }
 
   return "/admin/about";
@@ -167,6 +173,15 @@ if (RuntimeConfig.isEnabled("INFRA")) {
     childRoutes.push({
       path: "os-profiles",
       element: <OSProfiles />,
+    });
+  }
+}
+
+if (RuntimeConfig.isEnabled("INFRA")) {
+  if (OsUpdatePolicy) {
+    childRoutes.push({
+      path: "os-update-policy",
+      element: <OsUpdatePolicy />,
     });
   }
 }
