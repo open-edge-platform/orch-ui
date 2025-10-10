@@ -236,9 +236,8 @@ const HostDetails: React.FC = () => {
     /** message shown on failed maintenance action */
     const failMessage = {
       messageTitle: "Maintenance Mode Failure",
-      messageBody: `Failed to deactivate maintenance mode for ${
-        host.name || "Host"
-      }`,
+      messageBody: `Failed to deactivate maintenance mode for ${host.name || "Host"
+        }`,
       variant: MessageBannerAlertState.Success,
       showMessage: true,
     };
@@ -257,9 +256,8 @@ const HostDetails: React.FC = () => {
           dispatch(
             showMessageNotification({
               messageTitle: "Deactivated Maintenance Mode",
-              messageBody: `${
-                host.name || "Host"
-              } is now out of maintenance mode`,
+              messageBody: `${host.name || "Host"
+                } is now out of maintenance mode`,
               variant: MessageBannerAlertState.Success,
               showMessage: true,
             }),
@@ -290,8 +288,8 @@ const HostDetails: React.FC = () => {
   const sitesFiltered =
     sitesQuery && sitesQuery.data && sitesQuery.data.sites
       ? sitesQuery.data.sites.filter(
-          (siteQuery) => siteQuery.resourceId === host.site?.resourceId,
-        )
+        (siteQuery) => siteQuery.resourceId === host.site?.resourceId,
+      )
       : null;
   /** site details with verified existence */
   const site =
@@ -409,7 +407,7 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <div className="primary-actions">
-          {host.currentAmtState !== "AMT_STATE_PROVISIONED" && (
+          {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
             <ButtonGroup className="button-group">
               <Button
                 size={ButtonSize.Large}
@@ -573,12 +571,12 @@ const HostDetails: React.FC = () => {
             )}
             {(host.provider?.providerVendor === "PROVIDER_VENDOR_LENOVO_LOCA" ||
               host.provider?.providerVendor ===
-                "PROVIDER_VENDOR_LENOVO_LXCA") && (
-              <tr>
-                <td>Provider</td>
-                <td data-cy="provider">{host.provider.name}</td>
-              </tr>
-            )}
+              "PROVIDER_VENDOR_LENOVO_LXCA") && (
+                <tr>
+                  <td>Provider</td>
+                  <td data-cy="provider">{host.provider.name}</td>
+                </tr>
+              )}
           </table>
         </div>
         {host.site && (
