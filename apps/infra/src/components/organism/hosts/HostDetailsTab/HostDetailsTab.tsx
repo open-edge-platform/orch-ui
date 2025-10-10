@@ -25,6 +25,7 @@ import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
 import "./HostDetailsTab.scss";
+import VproDetails from "../../VproDetails/VproDetails";
 
 interface HostDetailsTabProps {
   host: infra.HostResourceRead;
@@ -79,14 +80,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       id: 7,
       title: "Host Labels",
     },
-    // ...(host.amtSku !== "Unknown"
-    //   ? [
-    //       {
-    //         id: 8,
-    //         title: "vPro Details",
-    //       },
-    //     ]
-    //   : []),
+    ...(host.currentAmtState === "AMT_STATE_PROVISIONED"
+      ? [
+        {
+          id: 8,
+          title: "vPro Details",
+        },
+      ]
+      : []),
   ];
 
   const itemList = [
@@ -235,14 +236,6 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     </Item>,
   ];
 
-  // if (host.amtSku !== "Unknown") {
-  //   itemList.push(
-  //     <Item title="vPro Details">
-  //       <VproDetails host={host} />
-  //     </Item>,
-  //   );
-  // }
-
   if (
     host.site &&
     host.instance?.workloadMembers?.find(
@@ -271,6 +264,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       </div>
     </Item>,
   );
+
+  if (host.currentAmtState === "AMT_STATE_PROVISIONED") {
+    itemList.push(
+      <Item title="vPro Details">
+        <VproDetails host={host} />
+      </Item>,
+    );
+  }
 
   return (
     <div className="infra-host-resources" data-cy={dataCy}>
