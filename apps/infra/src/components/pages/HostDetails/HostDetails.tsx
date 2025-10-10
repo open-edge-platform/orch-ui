@@ -42,6 +42,7 @@ import {
   ButtonVariant,
   MessageBannerAlertState,
   TextSize,
+  ToastState,
 } from "@spark-design/tokens";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -53,6 +54,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import {
   setErrorInfo,
   showMessageNotification,
+  showToast,
 } from "../../../store/notifications";
 import HostDetailsActions from "../../organism/hosts/HostDetailsActions/HostDetailsActions";
 import HostDetailsTab from "../../organism/hosts/HostDetailsTab/HostDetailsTab";
@@ -234,8 +236,9 @@ const HostDetails: React.FC = () => {
     /** message shown on failed maintenance action */
     const failMessage = {
       messageTitle: "Maintenance Mode Failure",
-      messageBody: `Failed to deactivate maintenance mode for ${host.name || "Host"
-        }`,
+      messageBody: `Failed to deactivate maintenance mode for ${
+        host.name || "Host"
+      }`,
       variant: MessageBannerAlertState.Success,
       showMessage: true,
     };
@@ -254,8 +257,9 @@ const HostDetails: React.FC = () => {
           dispatch(
             showMessageNotification({
               messageTitle: "Deactivated Maintenance Mode",
-              messageBody: `${host.name || "Host"
-                } is now out of maintenance mode`,
+              messageBody: `${
+                host.name || "Host"
+              } is now out of maintenance mode`,
               variant: MessageBannerAlertState.Success,
               showMessage: true,
             }),
@@ -286,8 +290,8 @@ const HostDetails: React.FC = () => {
   const sitesFiltered =
     sitesQuery && sitesQuery.data && sitesQuery.data.sites
       ? sitesQuery.data.sites.filter(
-        (siteQuery) => siteQuery.resourceId === host.site?.resourceId,
-      )
+          (siteQuery) => siteQuery.resourceId === host.site?.resourceId,
+        )
       : null;
   /** site details with verified existence */
   const site =
@@ -321,7 +325,24 @@ const HostDetails: React.FC = () => {
         name: host.name,
         desiredPowerState: "POWER_STATE_ON",
       },
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: "Start Request Sent",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message: "Start Request Failed",
+          }),
+        );
+      });
   };
 
   const handleStopPress = () => {
@@ -332,7 +353,24 @@ const HostDetails: React.FC = () => {
         name: host.name,
         desiredPowerState: "POWER_STATE_OFF",
       },
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: "Stop Request Sent",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message: "Stop Request Failed",
+          }),
+        );
+      });
   };
 
   const handleRestartPress = () => {
@@ -343,7 +381,24 @@ const HostDetails: React.FC = () => {
         name: host.name,
         desiredPowerState: "POWER_STATE_RESET",
       },
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: "Restart Request Sent",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message: "Restart Request Failed",
+          }),
+        );
+      });
   };
 
   return (
@@ -354,15 +409,13 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <div className="primary-actions">
-          {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
+          {host.currentAmtState !== "AMT_STATE_PROVISIONED" && (
             <ButtonGroup className="button-group">
               <Button
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Secondary}
                 endSlot={<Icon icon="play" />}
-                isDisabled={
-                  host.currentPowerState !== "POWER_STATE_OFF"
-                }
+                isDisabled={host.currentPowerState !== "POWER_STATE_OFF"}
                 data-cy={`${dataCyIhd}StartBtn`}
                 onPress={handleStartPress}
               >
@@ -372,9 +425,7 @@ const HostDetails: React.FC = () => {
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Secondary}
                 endSlot={<Icon icon="redo" />}
-                isDisabled={
-                  host.currentPowerState === "POWER_STATE_OFF"
-                }
+                isDisabled={host.currentPowerState === "POWER_STATE_OFF"}
                 data-cy={`${dataCyIhd}RestartBtn`}
                 onPress={handleRestartPress}
               >
@@ -384,9 +435,7 @@ const HostDetails: React.FC = () => {
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Secondary}
                 endSlot={<Icon icon="square" />}
-                isDisabled={
-                  host.currentPowerState === "POWER_STATE_OFF"
-                }
+                isDisabled={host.currentPowerState === "POWER_STATE_OFF"}
                 data-cy={`${dataCyIhd}StopBtn`}
                 onPress={handleStopPress}
               >
@@ -524,12 +573,12 @@ const HostDetails: React.FC = () => {
             )}
             {(host.provider?.providerVendor === "PROVIDER_VENDOR_LENOVO_LOCA" ||
               host.provider?.providerVendor ===
-              "PROVIDER_VENDOR_LENOVO_LXCA") && (
-                <tr>
-                  <td>Provider</td>
-                  <td data-cy="provider">{host.provider.name}</td>
-                </tr>
-              )}
+                "PROVIDER_VENDOR_LENOVO_LXCA") && (
+              <tr>
+                <td>Provider</td>
+                <td data-cy="provider">{host.provider.name}</td>
+              </tr>
+            )}
           </table>
         </div>
         {host.site && (
