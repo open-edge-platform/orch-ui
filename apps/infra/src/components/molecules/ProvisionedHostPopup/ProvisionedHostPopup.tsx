@@ -67,9 +67,9 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       setDeauthorizeHostConfirmationDialogRemote(
         RuntimeConfig.isEnabled("CLUSTER_ORCH")
           ? React.lazy(
-            async () =>
-              await import("ClusterOrchUI/DeauthorizeNodeConfirmationDialog"),
-          )
+              async () =>
+                await import("ClusterOrchUI/DeauthorizeNodeConfirmationDialog"),
+            )
           : null,
       );
     }
@@ -101,22 +101,22 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       onSelect: () => onScheduleMaintenance && onScheduleMaintenance(host),
     },
     ...((host.amtSku === "AMT_SKU_AMT" || host.amtSku === "AMT_SKU_ISM") &&
-      host.currentAmtState !== "AMT_STATE_PROVISIONED"
+    host.currentAmtState !== "AMT_STATE_PROVISIONED"
       ? [
-        {
-          displayText: "Activate vPro",
-          onSelect: () => onToggleVpro && onToggleVpro(true),
-        },
-      ]
+          {
+            displayText: "Activate vPro",
+            onSelect: () => onToggleVpro && onToggleVpro(true),
+          },
+        ]
       : []),
     ...((host.amtSku === "AMT_SKU_AMT" || host.amtSku === "AMT_SKU_ISM") &&
-      host.currentAmtState === "AMT_STATE_PROVISIONED"
+    host.currentAmtState === "AMT_STATE_PROVISIONED"
       ? [
-        {
-          displayText: "De-Activate vPro",
-          onSelect: () => onToggleVpro && onToggleVpro(false),
-        },
-      ]
+          {
+            displayText: "De-Activate vPro",
+            onSelect: () => onToggleVpro && onToggleVpro(false),
+          },
+        ]
       : []),
   ];
 
@@ -126,8 +126,9 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     provisionedHostPopup.push({
       displayText: "View Metrics",
       onSelect() {
-        const url = `${getObservabilityUrl()}/d/edgenode_host/edge-node?orgId=1&refresh=30s&var-hostId=${host.resourceId
-          }&var-projectId=${project.uID}&var-projectName=${project.name}`;
+        const url = `${getObservabilityUrl()}/d/edgenode_host/edge-node?orgId=1&refresh=30s&var-hostId=${
+          host.resourceId
+        }&var-projectId=${project.uID}&var-projectName=${project.name}`;
         window.open(url, "_newtab");
       },
       disable: false,

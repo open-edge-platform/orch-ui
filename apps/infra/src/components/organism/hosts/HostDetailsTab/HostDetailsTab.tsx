@@ -21,11 +21,11 @@ import {
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
+import VproDetails from "../../VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
 import "./HostDetailsTab.scss";
-import VproDetails from "../../VproDetails/VproDetails";
 
 interface HostDetailsTabProps {
   host: infra.HostResourceRead;
@@ -82,11 +82,11 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     },
     ...(host.currentAmtState === "AMT_STATE_PROVISIONED"
       ? [
-        {
-          id: 8,
-          title: "vPro Details",
-        },
-      ]
+          {
+            id: 8,
+            title: "vPro Details",
+          },
+        ]
       : []),
   ];
 

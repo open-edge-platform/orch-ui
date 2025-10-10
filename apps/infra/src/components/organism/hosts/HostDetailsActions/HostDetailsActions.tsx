@@ -88,13 +88,13 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
       .then(() => {
         showSuccessMessageBanner(
           dispatch,
-          `Request sent to ${on ? "activate" : "deactivate"} vPro.`
+          `Request sent to ${on ? "activate" : "deactivate"} vPro.`,
         );
       })
       .catch(() => {
         showErrorMessageBanner(
           dispatch,
-          `Failed to ${on ? "activate" : "deactivate"} vPro.`
+          `Failed to ${on ? "activate" : "deactivate"} vPro.`,
         );
       });
   };
@@ -157,8 +157,9 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
       {deleteConfirmationOpen && (
         <ConfirmationDialog
           title="Confirm Host Deletion"
-          subTitle={`Are you sure you want to delete Host "${host.name || host.resourceId
-            }"?`}
+          subTitle={`Are you sure you want to delete Host "${
+            host.name || host.resourceId
+          }"?`}
           content="This will permanently remove the host from the system and cannot be undone."
           isOpen={deleteConfirmationOpen}
           confirmCb={() => {
