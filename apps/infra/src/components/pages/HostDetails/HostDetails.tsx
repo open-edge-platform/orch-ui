@@ -10,6 +10,8 @@ import {
   Empty,
   Flex,
   MetadataDisplay,
+  Status,
+  StatusIcon,
   TrustedCompute,
   TypedMetadata,
 } from "@orch-ui/components";
@@ -40,6 +42,7 @@ import {
   ButtonVariant,
   MessageBannerAlertState,
   TextSize,
+  ToastState,
 } from "@spark-design/tokens";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,6 +54,7 @@ import { useAppDispatch } from "../../../store/hooks";
 import {
   setErrorInfo,
   showMessageNotification,
+  showToast,
 } from "../../../store/notifications";
 import HostDetailsActions from "../../organism/hosts/HostDetailsActions/HostDetailsActions";
 import HostDetailsTab from "../../organism/hosts/HostDetailsTab/HostDetailsTab";
@@ -305,13 +309,13 @@ const HostDetails: React.FC = () => {
     }) ?? []),
   ];
 
-  // const powerInfo = {
-  //   indicatorIcon:
-  //     host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
-  //       ? Status.Ready
-  //       : Status.Unknown,
-  //   message: host.powerStatus ?? "Unknown",
-  // };
+  const powerInfo = {
+    indicatorIcon:
+      host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
+        ? Status.Ready
+        : Status.Unknown,
+    message: host.powerStatus ?? "Unknown",
+  };
 
   const handleStartPress = () => {
     patchHost({
@@ -321,7 +325,24 @@ const HostDetails: React.FC = () => {
         name: host.name,
         desiredPowerState: "POWER_STATE_ON",
       },
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: "Start Request Sent",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message: "Start Request Failed",
+          }),
+        );
+      });
   };
 
   const handleStopPress = () => {
@@ -332,7 +353,24 @@ const HostDetails: React.FC = () => {
         name: host.name,
         desiredPowerState: "POWER_STATE_OFF",
       },
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: "Stop Request Sent",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message: "Stop Request Failed",
+          }),
+        );
+      });
   };
 
   const handleRestartPress = () => {
@@ -343,7 +381,24 @@ const HostDetails: React.FC = () => {
         name: host.name,
         desiredPowerState: "POWER_STATE_RESET",
       },
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Success,
+            message: "Restart Request Sent",
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(
+          showToast({
+            state: ToastState.Danger,
+            message: "Restart Request Failed",
+          }),
+        );
+      });
   };
 
   return (
@@ -354,15 +409,13 @@ const HostDetails: React.FC = () => {
           {host.name != "" ? host.name : host.resourceId}
         </Heading>
         <div className="primary-actions">
-          {host.amtSku !== "Unknown" && (
+          {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
             <ButtonGroup className="button-group">
               <Button
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Secondary}
                 endSlot={<Icon icon="play" />}
-                isDisabled={
-                  host.powerStatusIndicator === "STATUS_INDICATION_IDLE"
-                }
+                isDisabled={host.currentPowerState !== "POWER_STATE_OFF"}
                 data-cy={`${dataCyIhd}StartBtn`}
                 onPress={handleStartPress}
               >
@@ -372,9 +425,7 @@ const HostDetails: React.FC = () => {
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Secondary}
                 endSlot={<Icon icon="redo" />}
-                isDisabled={
-                  host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
-                }
+                isDisabled={host.currentPowerState === "POWER_STATE_OFF"}
                 data-cy={`${dataCyIhd}RestartBtn`}
                 onPress={handleRestartPress}
               >
@@ -384,9 +435,7 @@ const HostDetails: React.FC = () => {
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Secondary}
                 endSlot={<Icon icon="square" />}
-                isDisabled={
-                  host.powerStatusIndicator !== "STATUS_INDICATION_IDLE"
-                }
+                isDisabled={host.currentPowerState === "POWER_STATE_OFF"}
                 data-cy={`${dataCyIhd}StopBtn`}
                 onPress={handleStopPress}
               >
@@ -413,7 +462,7 @@ const HostDetails: React.FC = () => {
         </div>
       </div>
 
-      {/* {host.amtSku !== "Unknown" && (
+      {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
         <Flex cols={[12]}>
           <Text size={TextSize.Large} data-cy={`${dataCyIhd}PowerStatus`}>
             Power: &nbsp;
@@ -423,7 +472,7 @@ const HostDetails: React.FC = () => {
             />
           </Text>
         </Flex>
-      )} */}
+      )}
 
       {/* Host-Details: HostStatus */}
       <Flex cols={[12]}>

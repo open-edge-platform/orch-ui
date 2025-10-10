@@ -9,7 +9,7 @@ import { CyApiDetails, CyPom } from "@orch-ui/tests";
 const dataCySelectors = ["reason"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-type ApiAliases = "putClusterNode";
+type ApiAliases = "putClusterNode" | "patchHost";
 
 const endpoints: CyApiDetails<
   ApiAliases,
@@ -18,6 +18,12 @@ const endpoints: CyApiDetails<
   putClusterNode: {
     route: "**/clusters/*/nodes",
     method: "PUT",
+    statusCode: 200,
+    response: undefined,
+  },
+  patchHost: {
+    route: "**/hosts/*",
+    method: "PATCH",
     statusCode: 200,
     response: undefined,
   },

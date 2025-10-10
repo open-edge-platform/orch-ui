@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cm } from "@orch-ui/apis";
+import { cm, infra } from "@orch-ui/apis";
 import { ConfirmationDialog } from "@orch-ui/components";
 import {
   hostsRoute,
@@ -59,6 +59,7 @@ const DeauthorizeNodeConfirmationDialog = ({
 
   const [removeHostNodeFromCluster] =
     cm.usePutV2ProjectsByProjectNameClustersAndNameNodesMutation();
+  const [patchHost] = infra.useHostServicePatchHostMutation();
 
   const [deauthorizeReason, setDeauthorizeReason] = useState<string>();
 
@@ -68,6 +69,16 @@ const DeauthorizeNodeConfirmationDialog = ({
 
   const removeNodeFn = async () => {
     try {
+      await patchHost({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: hostId,
+        hostResource: {
+          name: hostName || hostId,
+          desiredAmtState: "AMT_STATE_UNPROVISIONED",
+          desiredPowerState: "POWER_STATE_OFF",
+        },
+      }).unwrap();
+
       const deauthorizeFnList: (() => Promise<any>)[] = [];
 
       if (name && hostUuid) {

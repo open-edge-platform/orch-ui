@@ -33,9 +33,11 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
         "host-dh38bjw9",
       );
 
-      pom.interceptApis([pom.api.putClusterNode]);
+      pom.interceptApis([pom.api.patchHost, pom.api.putClusterNode]);
       pom.el.reason.type("sample-deauthorize-reason");
       cy.get(".spark-modal-footer").contains("Deauthorize").click();
+
+      cy.wait(`@${pom.api.patchHost}`);
 
       cy.get(`@${pom.api.putClusterNode}`)
         .its("request.url")
@@ -69,6 +71,8 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
           setErrorInfo={() => {}}
         />,
       );
+
+      pom.interceptApis([pom.api.patchHost, pom.api.putClusterNode]);
 
       pom.el.reason.type("sample-deauthorize-reason");
 

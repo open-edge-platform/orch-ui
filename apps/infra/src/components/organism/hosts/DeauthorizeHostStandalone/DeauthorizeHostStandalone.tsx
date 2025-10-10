@@ -52,6 +52,7 @@ const DeauthorizeHostStandalone = ({
 
   const navigate = useInfraNavigate();
   const [deauthorizeHost] = infra.useHostServiceInvalidateHostMutation();
+  const [patchHost] = infra.useHostServicePatchHostMutation();
 
   const deauthDialogContent = (
     <div {...cy} className="deauthorize-host-standalone">
@@ -86,21 +87,29 @@ const DeauthorizeHostStandalone = ({
     </div>
   );
 
-  const deauthorizeHostFn = (reason: string) => {
+  const deauthorizeHostFn = async (reason: string) => {
     try {
-      deauthorizeHost({
+      await patchHost({
+        projectName: SharedStorage.project?.name ?? "",
+        resourceId: hostId,
+        hostResource: {
+          name: hostName || hostId,
+          desiredAmtState: "AMT_STATE_UNPROVISIONED",
+          desiredPowerState: "POWER_STATE_OFF",
+        },
+      }).unwrap();
+
+      await deauthorizeHost({
         projectName: SharedStorage.project?.name ?? "",
         resourceId: hostId,
         note: reason,
-      })
-        .unwrap()
-        .then(() => {
-          navigate(hostsRoute);
-        });
+      }).unwrap();
     } catch (e) {
       setErrorInfo(e as InternalError);
+    } finally {
+      setDeauthorizeConfirmationOpen(false);
+      navigate(hostsRoute);
     }
-    setDeauthorizeConfirmationOpen(false);
   };
 
   return isDeauthConfirmationOpen ? (

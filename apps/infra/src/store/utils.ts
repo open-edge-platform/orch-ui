@@ -155,7 +155,7 @@ export const deleteHostInstanceFn = (
 
   try {
     if (host.instance) {
-      if (host.amtSku !== "Unknown") {
+      if (host.currentAmtState === "AMT_STATE_PROVISIONED") {
         promise = unprovisionAmtStatusFn()
           .unwrap()
           .then(deleteInstanceFn)
@@ -186,7 +186,7 @@ export const deleteHostInstanceFn = (
           });
       }
     } else {
-      if (host.amtSku !== "Unknown") {
+      if (host.currentAmtState === "AMT_STATE_PROVISIONED") {
         promise = unprovisionAmtStatusFn()
           .unwrap()
           .then(deleteHostFn)
