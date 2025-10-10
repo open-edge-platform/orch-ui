@@ -3,14 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CyPom } from "@orch-ui/tests";
-
-const dataCySelectors = [] as const;
-type Selectors = (typeof dataCySelectors)[number];
-
-class OsUpdatePolicyPom extends CyPom<Selectors> {
-  constructor(public rootCy: string = "osUpdatePolicy") {
-    super(rootCy, [...dataCySelectors]);
+export default class OsUpdatePolicyDetailsPom {
+  get root() {
+    return cy.get('[data-cy="osUpdatePolicyDetails"]');
   }
 }
-export default OsUpdatePolicyPom;

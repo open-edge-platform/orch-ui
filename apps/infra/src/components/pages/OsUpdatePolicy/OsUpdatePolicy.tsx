@@ -30,7 +30,7 @@ import "./OsUpdatePolicy.scss";
 const dataCy = "osUpdatePolicy";
 const OsUpdatePolicy = () => {
   const cy = { "data-cy": dataCy };
-  const className = "o-s-profiles";
+  const className = "os-update-policy";
 
   // Toast state management
   const [toastProps, setToastProps] = useState<ToastProps>({
@@ -103,7 +103,7 @@ const OsUpdatePolicy = () => {
       name="addOsUpdatePolicy"
       size={ButtonSize.Large}
       variant={ButtonVariant.Action}
-      text="Add Update Policy"
+      text="Add OS Update Policy"
       onPress={() => {
         setShowCreateOsPolicyDrawer(true);
       }}
@@ -127,7 +127,7 @@ const OsUpdatePolicy = () => {
           icon="information-circle"
           actions={[
             {
-              name: "Create OS Update Policy",
+              name: "Add OS Update Policy",
               disable: !hasRole([Role.INFRA_MANAGER_WRITE]),
               action: () => {
                 setShowCreateOsPolicyDrawer(true);

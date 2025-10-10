@@ -4,8 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { Item, Tabs, Text } from "@spark-design/react";
-import { useState } from "react";
+import { Text } from "@spark-design/react";
 import OsProfileDetailField from "../OSProfileDetails/OsProfileDetailField";
 
 import "./OsUpdatePolicyDetails.scss";
@@ -53,6 +52,17 @@ const OsUpdatePolicyDetails = ({
 }: OsUpdatePolicyDetailsProps) => {
   const cy = { "data-cy": dataCy };
 
+  // Determine if this is a mutable OS (we can infer this from the presence of mutable-specific fields)
+  const isMutableOS = !!(
+    osUpdatePolicy.kernelCommand ||
+    osUpdatePolicy.installPackages ||
+    osUpdatePolicy.updateSources?.length
+  );
+
+  // Check if this is UPDATE_POLICY_LATEST (for mutable OS, only name/description should show additional fields)
+  const isUpdateToLatest =
+    osUpdatePolicy.updatePolicy === "UPDATE_POLICY_LATEST";
+
   return (
     <div className="os-update-policy-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
@@ -62,6 +72,26 @@ const OsUpdatePolicyDetails = ({
         value={osUpdatePolicy.description}
       />
 
+      {/* OS Type - Add this missing field */}
+      <div className="os-details-advanced-settings">OS Configuration</div>
+      <OsProfileDetailField
+        label="OS Type"
+        value={isMutableOS ? "Mutable OS" : "Immutable OS"}
+      />
+
+      {/* Update Policy - Move this up and always show */}
+      <OsProfileDetailField
+        label="Update Policy"
+        value={
+          osUpdatePolicy.updatePolicy === "UPDATE_POLICY_LATEST"
+            ? "Update To Latest"
+            : osUpdatePolicy.updatePolicy === "UPDATE_POLICY_TARGET"
+              ? "Update To Target"
+              : osUpdatePolicy.updatePolicy
+        }
+      />
+
+      {/* Target OS - Only for IMMUTABLE OS with UPDATE_POLICY_TARGET */}
       {osUpdatePolicy.targetOs && (
         <>
           <div className="os-details-advanced-settings">
@@ -74,23 +104,36 @@ const OsUpdatePolicyDetails = ({
         </>
       )}
 
-      <div className="os-details-advanced-settings">Advanced Settings</div>
-      <OsProfileDetailField
-        label="Update Sources"
-        value={osUpdatePolicy.updateSources?.join(", ")}
-      />
-      <OsProfileDetailField
-        label="Kernel Command"
-        value={osUpdatePolicy.kernelCommand}
-      />
-
-      {osUpdatePolicy.updatePolicy && (
+      {/* Advanced Settings - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
+      {isMutableOS && !isUpdateToLatest && (
         <>
-          <div className="os-details-advanced-settings">Update Policy</div>
+          <div className="os-details-advanced-settings">Advanced Settings</div>
+
+          {/* Kernel Command - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
           <OsProfileDetailField
-            label="Update Policy"
-            value={osUpdatePolicy.updatePolicy}
+            label="Kernel Command"
+            value={osUpdatePolicy.kernelCommand || "Not specified"}
           />
+
+          {/* Update Sources - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
+          <OsProfileDetailField
+            label="Update Sources"
+            value={
+              osUpdatePolicy.updateSources?.length
+                ? osUpdatePolicy.updateSources.join(", ")
+                : "Not specified"
+            }
+          />
+
+          {/* Install Packages - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
+          {osUpdatePolicy.installPackages && (
+            <>
+              <div className="os-details-advanced-settings">
+                Install Packages
+              </div>
+              {renderInstallPackages(osUpdatePolicy.installPackages)}
+            </>
+          )}
         </>
       )}
     </div>

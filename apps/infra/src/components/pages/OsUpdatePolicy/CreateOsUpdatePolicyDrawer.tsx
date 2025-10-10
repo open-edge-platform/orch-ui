@@ -257,117 +257,120 @@ const CreateOsUpdatePolicyDrawer = ({
           />
         </div>
 
-        {/* Kernel Command - Only for MUTABLE OS */}
-        {osTypeValue === "OS_TYPE_MUTABLE" && (
-          <Flex cols={[12]} className="pa-1">
-            <Controller
-              name="kernelCommand"
-              control={formControl}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  data-cy="kernelCommand"
-                  size="l"
-                  id="kernelCommand"
-                  label="Kernel Command"
-                  placeholder="console=ttyS0,115200 console=tty0 net.ifnames=0"
-                  errorMessage={formErrors.kernelCommand?.message}
-                  validationState={
-                    formErrors.kernelCommand ? "invalid" : "valid"
-                  }
-                />
-              )}
-            />
-          </Flex>
-        )}
+        {/* Kernel Command - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
+        {osTypeValue === "OS_TYPE_MUTABLE" &&
+          updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
+            <Flex cols={[12]} className="pa-1">
+              <Controller
+                name="kernelCommand"
+                control={formControl}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    data-cy="kernelCommand"
+                    size="l"
+                    id="kernelCommand"
+                    label="Kernel Command"
+                    placeholder="console=ttyS0,115200 console=tty0 net.ifnames=0"
+                    errorMessage={formErrors.kernelCommand?.message}
+                    validationState={
+                      formErrors.kernelCommand ? "invalid" : "valid"
+                    }
+                  />
+                )}
+              />
+            </Flex>
+          )}
 
-        {/* Update Sources - Only for MUTABLE OS */}
-        {osTypeValue === "OS_TYPE_MUTABLE" && (
-          <Flex cols={[12]} className="pa-1">
-            <Controller
-              name="updateSources"
-              control={formControl}
-              rules={{
-                validate: (value) => {
-                  if (!value || value.trim() === "") return true; // Optional field
-                  const sources = value
-                    .split(",")
-                    .map((s) => s.trim())
-                    .filter((s) => s.length > 0);
+        {/* Update Sources - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
+        {osTypeValue === "OS_TYPE_MUTABLE" &&
+          updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
+            <Flex cols={[12]} className="pa-1">
+              <Controller
+                name="updateSources"
+                control={formControl}
+                rules={{
+                  validate: (value) => {
+                    if (!value || value.trim() === "") return true; // Optional field
+                    const sources = value
+                      .split(",")
+                      .map((source) => source.trim())
+                      .filter((source) => source.length > 0);
 
-                  // Check if sources start with "deb" or "deb-src"
-                  const invalidSources = sources.filter(
-                    (source) => !source.match(/^(deb|deb-src)\s+/),
-                  );
+                    // Check for valid APT repository format (should start with deb or deb-src)
+                    const invalidSources = sources.filter(
+                      (source) => !source.match(/^(deb|deb-src)\s+/),
+                    );
 
-                  if (invalidSources.length > 0) {
-                    return "Repository sources must start with 'deb' or 'deb-src'";
-                  }
-                  return true;
-                },
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  size="l"
-                  data-cy="updateSources"
-                  id="updateSources"
-                  label="Update Sources (APT Repository Format)"
-                  placeholder="deb http://archive.ubuntu.com/ubuntu focal main, deb http://security.ubuntu.com/ubuntu focal-security main"
-                  description="Enter APT repository sources separated by commas."
-                  errorMessage={formErrors.updateSources?.message}
-                  validationState={
-                    formErrors.updateSources ? "invalid" : "valid"
-                  }
-                />
-              )}
-            />
-          </Flex>
-        )}
+                    if (invalidSources.length > 0) {
+                      return "Repository sources must start with 'deb' or 'deb-src'";
+                    }
+                    return true;
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    size="l"
+                    data-cy="updateSources"
+                    id="updateSources"
+                    label="Update Sources (APT Repository Format)"
+                    placeholder="deb http://archive.ubuntu.com/ubuntu focal main, deb http://security.ubuntu.com/ubuntu focal-security main"
+                    description="Enter APT repository sources separated by commas."
+                    errorMessage={formErrors.updateSources?.message}
+                    validationState={
+                      formErrors.updateSources ? "invalid" : "valid"
+                    }
+                  />
+                )}
+              />
+            </Flex>
+          )}
 
-        {/* Install Packages - Only for MUTABLE OS */}
-        {osTypeValue === "OS_TYPE_MUTABLE" && (
-          <Flex cols={[12]} className="pa-1">
-            <Controller
-              name="installPackages"
-              control={formControl}
-              rules={{
-                validate: (value) => {
-                  if (!value || value.trim() === "") return true; // Optional field
-                  const packages = value
-                    .split(",")
-                    .map((pkg) => pkg.trim())
-                    .filter((pkg) => pkg.length > 0);
+        {/* Install Packages - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
+        {osTypeValue === "OS_TYPE_MUTABLE" &&
+          updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
+            <Flex cols={[12]} className="pa-1">
+              <Controller
+                name="installPackages"
+                control={formControl}
+                rules={{
+                  validate: (value) => {
+                    if (!value || value.trim() === "") return true; // Optional field
+                    const packages = value
+                      .split(",")
+                      .map((pkg) => pkg.trim())
+                      .filter((pkg) => pkg.length > 0);
 
-                  // Check for version information (contains =, :, or numbers at the end)
-                  const invalidPackages = packages.filter((pkg) =>
-                    pkg.match(/[=:]/),
-                  );
+                    // Check for version information (contains =, :, or numbers at the end)
+                    const invalidPackages = packages.filter((pkg) =>
+                      pkg.match(/[=:]/),
+                    );
 
-                  if (invalidPackages.length > 0) {
-                    return "Package names should not contain version information (=, :)";
-                  }
-                  return true;
-                },
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  size="l"
-                  data-cy="installPackages"
-                  id="installPackages"
-                  label="Install Packages (Package Names)"
-                  placeholder="tree, curl, htop"
-                  description="Enter package names separated by commas (no versions)."
-                  errorMessage={formErrors.installPackages?.message}
-                  validationState={
-                    formErrors.installPackages ? "invalid" : "valid"
-                  }
-                />
-              )}
-            />
-          </Flex>
-        )}
+                    if (invalidPackages.length > 0) {
+                      return "Package names should not contain version information (=, :)";
+                    }
+                    return true;
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    size="l"
+                    data-cy="installPackages"
+                    id="installPackages"
+                    label="Install Packages (Package Names)"
+                    placeholder="tree, curl, htop"
+                    description="Enter package names separated by commas (no versions)."
+                    errorMessage={formErrors.installPackages?.message}
+                    validationState={
+                      formErrors.installPackages ? "invalid" : "valid"
+                    }
+                  />
+                )}
+              />
+            </Flex>
+          )}
 
         <div className="pa-1">
           <Controller
@@ -481,6 +484,7 @@ const CreateOsUpdatePolicyDrawer = ({
 
   return (
     <Drawer
+      {...cy}
       show={showDrawer}
       backdropClosable
       onHide={() => {
@@ -490,7 +494,6 @@ const CreateOsUpdatePolicyDrawer = ({
         title: "Create OS Update Policy",
       }}
       bodyContent={createOsUpdatePolicyBodyContent}
-      data-cy="osProfileDrawerContent"
       footerContent={osUpdatePolicyFooter}
     />
   );
