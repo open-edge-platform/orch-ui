@@ -103,8 +103,6 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
     { skip: !host.instance?.resourceId },
   );
 
-  console.log("general host actions", { host });
-
   const getHostPopup = () => {
     if (host.instance) {
       // if its a provisioned host (with/without assigned workload/cluster)
@@ -153,9 +151,8 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
       {deleteConfirmationOpen && (
         <ConfirmationDialog
           title="Confirm Host Deletion"
-          subTitle={`Are you sure you want to delete Host "${
-            host.name || host.resourceId
-          }"?`}
+          subTitle={`Are you sure you want to delete Host "${host.name || host.resourceId
+            }"?`}
           content="This will permanently remove the host from the system and cannot be undone."
           isOpen={deleteConfirmationOpen}
           confirmCb={() => {
