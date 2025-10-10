@@ -23,7 +23,7 @@ import {
   ToastVisibility,
 } from "@spark-design/tokens";
 import { useState } from "react";
-import CreateOsUpdatePolicyDrawer from "./CreateOsUpdatePolicyDrawer";
+import CreateOsUpdatePolicyDrawer from "../../organism/CreateOsUpdatePolicyDrawer/CreateOsUpdatePolicyDrawer";
 import OsUpdatePolicyDetailsDrawer from "./OsUpdatePolicyDrawer";
 
 import "./OsUpdatePolicy.scss";
@@ -69,7 +69,6 @@ const OsUpdatePolicy = () => {
     isLoading,
     isError,
     error,
-    refetch,
   } = infra.useOsUpdatePolicyListOsUpdatePolicyQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
@@ -120,7 +119,7 @@ const OsUpdatePolicy = () => {
           <TableLoader />
         </div>
       );
-    } else if (isSuccess && osUpdatePolicy.totalElements === 0) {
+    } else if (isSuccess && osUpdatePolicy?.totalElements === 0) {
       return (
         <Empty
           title="No OS update policies are available here."
@@ -136,11 +135,12 @@ const OsUpdatePolicy = () => {
           ]}
         />
       );
-    } else {
+    } else if (isSuccess && osUpdatePolicy?.osUpdatePolicies) {
       return (
         <Table
+          key={`table-${osUpdatePolicy.totalElements}`} // Force re-render when data changes
           columns={columns}
-          data={osUpdatePolicy?.osUpdatePolicies}
+          data={osUpdatePolicy.osUpdatePolicies}
           canSearch
           sortColumns={[0]}
           isLoading={isLoading}
@@ -148,6 +148,7 @@ const OsUpdatePolicy = () => {
         />
       );
     }
+    return null;
   };
 
   if (isError) {
@@ -217,7 +218,7 @@ const OsUpdatePolicy = () => {
         <CreateOsUpdatePolicyDrawer
           showDrawer={showCreateOsPolicyDrawer}
           setShowDrawer={setShowCreateOsPolicyDrawer}
-          onPolicyCreated={() => refetch()}
+
           showToast={showToast}
         />
       )}

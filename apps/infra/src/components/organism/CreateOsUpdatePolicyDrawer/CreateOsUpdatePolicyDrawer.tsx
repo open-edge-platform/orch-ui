@@ -26,12 +26,11 @@ import { Controller, useForm } from "react-hook-form";
 
 // import "./CreateOsUpdatePolicy.scss";
 
-import "./OsUpdatePolicy.scss";
+// import "./OsUpdatePolicy.scss";
 
 interface OsUpdatePolicyDrawerProps {
   showDrawer: boolean;
   setShowDrawer: (show: boolean) => void;
-  onPolicyCreated?: () => void; // Callback to refresh the parent table
   showToast: (message: string, state: ToastState) => void; // Toast notification function
 }
 
@@ -51,7 +50,6 @@ const dataCy = "createOsUpdatePolicy";
 const CreateOsUpdatePolicyDrawer = ({
   showDrawer,
   setShowDrawer,
-  onPolicyCreated,
   showToast,
 }: OsUpdatePolicyDrawerProps) => {
   const cy = { "data-cy": dataCy };
@@ -161,11 +159,6 @@ const CreateOsUpdatePolicyDrawer = ({
 
       // Close the drawer on success
       setShowDrawer(false);
-
-      // Trigger table refresh in parent component
-      if (onPolicyCreated) {
-        onPolicyCreated();
-      }
 
       // Show success notification
       showToast("OS Update Policy created successfully!", ToastState.Success);
