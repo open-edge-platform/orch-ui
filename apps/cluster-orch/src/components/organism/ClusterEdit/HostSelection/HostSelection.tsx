@@ -113,7 +113,6 @@ const HostSelection = ({
             content={`Are you sure you want to remove ${deletedHostName} from ${
               cluster.name ?? "name"
             }?`}
-            buttonPlacement="left-reverse"
             confirmCb={() => {
               let updatedNodes: cm.NodeInfo[] = [];
               const updatedInitialNodes: cm.NodeInfo[] = [];
