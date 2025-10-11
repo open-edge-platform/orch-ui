@@ -165,8 +165,31 @@ const OsUpdatePolicy = () => {
       accessor: "name",
     },
     {
+      Header: "Description",
+      accessor: "description",
+      Cell: ({ value }: { value?: string }) => value || "—",
+    },
+    {
+      Header: "Update Policy",
+      accessor: (item: infra.OsUpdatePolicyRead) => {
+        switch (item.updatePolicy) {
+          case "UPDATE_POLICY_LATEST":
+            return "Update To Latest";
+          case "UPDATE_POLICY_TARGET":
+            return "Update To Target";
+          default:
+            return "—";
+        }
+      },
+    },
+    {
       Header: "Target OS",
-      accessor: "targetOs.name",
+      accessor: (item: infra.OsUpdatePolicyRead) => {
+        return item.updatePolicy === "UPDATE_POLICY_TARGET" &&
+          item.targetOs?.name
+          ? item.targetOs.name
+          : "—";
+      },
     },
     {
       Header: "Action",
@@ -218,7 +241,6 @@ const OsUpdatePolicy = () => {
         <CreateOsUpdatePolicyDrawer
           showDrawer={showCreateOsPolicyDrawer}
           setShowDrawer={setShowCreateOsPolicyDrawer}
-
           showToast={showToast}
         />
       )}

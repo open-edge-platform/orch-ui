@@ -150,8 +150,6 @@ const CreateOsUpdatePolicyDrawer = ({
         },
       };
 
-      console.log("API Payload:", payload);
-
       // Call the mutation
       const result = await createOsUpdatePolicy(payload).unwrap();
 
