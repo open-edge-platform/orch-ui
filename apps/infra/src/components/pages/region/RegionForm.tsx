@@ -384,8 +384,6 @@ const RegionForm: React.FC = () => {
 
       const response = await regionOperation;
 
-      dispatch(infra.infra.util.invalidateTags([{ type: "RegionService" }]));
-
       const allPromises: Promise<any>[] = [];
 
       // handle metric profiles

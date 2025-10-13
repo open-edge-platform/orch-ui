@@ -38,6 +38,7 @@ export const SiteView = ({ basePath, hideActions = false }: SiteViewProps) => {
         !siteFromRedux?.resourceId ||
         !siteFromRedux?.region?.resourceId ||
         !SharedStorage.project?.name,
+      refetchOnMountOrArgChange: true,
     },
   );
 
