@@ -50,6 +50,13 @@ export const osProfilesNavItem: CollapsableListItem<string> = {
   divider: true,
 };
 
+export const osUpdatePolicyNavItem: CollapsableListItem<string> = {
+  route: "os-update-policy",
+  icon: "globe",
+  value: "OS Update Policy",
+  divider: true,
+};
+
 export const projectsNavItem: CollapsableListItem<string> = {
   route: "projects",
   icon: "globe",
@@ -123,6 +130,7 @@ const Layout = () => {
       checkAuthAndRole([Role.INFRA_MANAGER_READ, Role.INFRA_MANAGER_WRITE])
     ) {
       items.push(osProfilesNavItem);
+      items.push(osUpdatePolicyNavItem);
       items.push(sshNavItem);
     }
 
