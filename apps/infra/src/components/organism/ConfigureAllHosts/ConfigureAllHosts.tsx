@@ -24,7 +24,6 @@ import {
   setCommonPublicSshKey,
   setCommonSecurityFeature,
   setCommonSite,
-  setCommonVPro,
   setShowAdvancedOptions,
   setValidationError,
 } from "../../../store/provisionHost";
@@ -151,7 +150,7 @@ const ConfigureAllHosts = () => {
       >
         <Section title="Security options">
           <Flex cols={[6]} gap="2" align="start">
-            <div>
+            {/* <div>
               <Heading semanticLevel={6}>vPro</Heading>
               <p>Enable vPro</p>
               <ToggleSwitch
@@ -162,7 +161,7 @@ const ConfigureAllHosts = () => {
               >
                 {commonHostData.vPro ? "Enabled" : "Disabled"}
               </ToggleSwitch>
-            </div>
+            </div> */}
             <div>
               <Heading semanticLevel={6}>
                 Secure Boot and Full Disk Encryption

@@ -47,6 +47,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
     useState<boolean>(false);
 
   const [onboardHost] = infra.useHostServicePatchRegisterHostMutation();
+  const [patchHost] = infra.useHostServicePatchHostMutation();
 
   const onDelete = () => {
     setDeleteConfirmationOpen(true);
@@ -69,6 +70,32 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
       })
       .catch(() => {
         showErrorMessageBanner(dispatch, "Failed to onboard host !");
+      });
+  };
+
+  const onToggleVpro = (on: boolean) => {
+    patchHost({
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: host.resourceId as string,
+      hostResource: {
+        name: host.name,
+        desiredAmtState: on
+          ? "AMT_STATE_PROVISIONED"
+          : "AMT_STATE_UNPROVISIONED",
+      },
+    })
+      .unwrap()
+      .then(() => {
+        showSuccessMessageBanner(
+          dispatch,
+          `Request sent to ${on ? "activate" : "deactivate"} vPro.`,
+        );
+      })
+      .catch(() => {
+        showErrorMessageBanner(
+          dispatch,
+          `Failed to ${on ? "activate" : "deactivate"} vPro.`,
+        );
       });
   };
 
@@ -95,6 +122,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
           onScheduleMaintenance={() => {
             setIsScheduleMaintenanceDrawerOpen(true);
           }}
+          onToggleVpro={onToggleVpro}
         />
       );
     } else if (
