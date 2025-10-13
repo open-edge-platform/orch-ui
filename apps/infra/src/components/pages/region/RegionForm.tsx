@@ -384,6 +384,8 @@ const RegionForm: React.FC = () => {
 
       const response = await regionOperation;
 
+      dispatch(infra.infra.util.invalidateTags([{ type: "RegionService" }]));
+
       const allPromises: Promise<any>[] = [];
 
       // handle metric profiles
@@ -486,6 +488,11 @@ const RegionForm: React.FC = () => {
       }
 
       await Promise.all(allPromises);
+
+      // Force tree refresh to show updated region data
+      if (regionId !== "new") {
+        localStorage.setItem("clearTree", "true");
+      }
 
       redirectToLocationsPage();
     } catch (error) {
