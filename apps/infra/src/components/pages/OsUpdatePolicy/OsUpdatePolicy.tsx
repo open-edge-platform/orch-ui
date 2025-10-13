@@ -167,7 +167,8 @@ const OsUpdatePolicy = () => {
     {
       Header: "Description",
       accessor: "description",
-      Cell: ({ value }: { value?: string }) => value || "—",
+      Cell: (table: { row: { original: infra.OsUpdatePolicyRead } }) =>
+        table.row.original.description || "—",
     },
     {
       Header: "Update Policy",

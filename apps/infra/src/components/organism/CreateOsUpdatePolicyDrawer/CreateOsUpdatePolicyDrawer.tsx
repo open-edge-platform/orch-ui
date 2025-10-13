@@ -151,9 +151,7 @@ const CreateOsUpdatePolicyDrawer = ({
       };
 
       // Call the mutation
-      const result = await createOsUpdatePolicy(payload).unwrap();
-
-      console.log("OS Update Policy created successfully:", result);
+      await createOsUpdatePolicy(payload).unwrap();
 
       // Close the drawer on success
       setShowDrawer(false);
