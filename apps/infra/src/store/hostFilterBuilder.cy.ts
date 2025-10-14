@@ -100,7 +100,7 @@ describe("When constructing the host filter builder", () => {
     });
     it("put all values as OR's in final query", () => {
       const result = buildColumnOrs(
-        "instance.currentOs.profileName",
+        "instance.os.profileName",
         defaultOsProfiles,
       );
       _setOsProfiles(state, { payload: defaultOsProfiles, type: "" });

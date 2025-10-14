@@ -5,7 +5,10 @@
 
 import { enhancedInfraSlice, infra } from "@orch-ui/apis";
 import { Flex, TrustedCompute } from "@orch-ui/components";
-import { getTrustedComputeCompatibility } from "@orch-ui/utils";
+import {
+  formatOsUpdateAvailable,
+  getTrustedComputeCompatibility,
+} from "@orch-ui/utils";
 import { ScheduleMaintenanceStatusTag } from "../../molecules/ScheduleMaintenanceStatusTag/ScheduleMaintenanceStatusTag";
 import "./HostsTableRowExpansionDetail.scss";
 const dataCy = "hostsTableRowExpansionDetail";
@@ -44,7 +47,10 @@ const HostsTableRowExpansionDetail = ({
         <Flex cols={[3, 9]}>
           <b className={`${className}__label`}>Available Update</b>
           <div className={`${className}__content`} data-cy="osUpdate">
-            {host.instance?.desiredOs?.name ?? <em>(No Update)</em>}
+            {formatOsUpdateAvailable(
+              host.instance?.osUpdateAvailable,
+              host.instance?.os?.osType === "OS_TYPE_MUTABLE",
+            ) ?? <em>(No Update)</em>}
           </div>
           <b className={`${className}__label`}>Trusted Compute</b>
           <div className={`${className}__content`} data-cy="trustedCompute">

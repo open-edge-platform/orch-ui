@@ -29,10 +29,19 @@ describe("<HostsTableRowExpansionDetail/>", () => {
           ...hostThree,
           instance: {
             ...hostThree.instance,
-            desiredOs: {
-              name: "desiredOsName",
-              sha256: "desiredOsSha256",
+            osUpdateAvailable: "Ubuntu",
+            updatePolicy: {
+              name: "Ubuntu",
               updateSources: [],
+              targetOs: {
+                name: "Ubuntu",
+                sha256: "desiredOsSha256",
+                osType: "OS_TYPE_IMMUTABLE",
+              },
+            },
+            os: {
+              name: "Ubuntu",
+              sha256: "desiredOsSha256",
               osType: "OS_TYPE_IMMUTABLE",
             },
           },

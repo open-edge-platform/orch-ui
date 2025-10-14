@@ -28,13 +28,17 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
-          desiredOs: {
-            resourceId: "desiredOsId",
-            name: "desiredOsName",
-            sha256: "desiredOsSha256",
+          os: os,
+          osUpdateAvailable: "Ubuntu",
+          updatePolicy: {
+            name: "Ubuntu",
             updateSources: [],
-            osType: "OS_TYPE_IMMUTABLE",
+            targetOs: {
+              resourceId: "ubuntuOsId",
+              name: "Ubuntu",
+              sha256: "desiredOsSha256",
+              osType: "OS_TYPE_IMMUTABLE",
+            },
           },
         }}
       />,
@@ -46,8 +50,7 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
-          desiredOs: os,
+          os: os,
         }}
       />,
     );
@@ -58,7 +61,7 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
-          currentOs: os,
+          os: os,
         }}
       />,
     );
@@ -66,7 +69,12 @@ describe("<OsConfig/>", () => {
     pom.root.should("contain.text", "currentOsName");
   });
   it("should render icon when added", () => {
-    cy.mount(<OsConfig instance={instanceTwo} iconOnly />);
+    cy.mount(
+      <OsConfig
+        instance={{ ...instanceTwo, osUpdateAvailable: "Ubuntu" }}
+        iconOnly
+      />,
+    );
     pom.el.icon.should("be.visible");
   });
 });

@@ -248,7 +248,7 @@ describe("<Hosts/>", () => {
         .its("request.url")
         .then((url: string) => {
           const match = url.match(
-            encodeURLQuery('(instance.currentOs.profileName="os-3")'),
+            encodeURLQuery('(instance.os.profileName="os-3")'),
           );
           return expect(match && match.length > 0).to.be.eq(true);
         });
@@ -270,7 +270,7 @@ describe("<Hosts/>", () => {
         .then((url: string) => {
           const match = url.match(
             encodeURLQuery(
-              '(instance.currentOs.profileName="os-1" OR instance.currentOs.profileName="os-3")',
+              '(instance.os.profileName="os-1" OR instance.os.profileName="os-3")',
             ),
           );
           return expect(match && match.length > 0).to.be.eq(true);

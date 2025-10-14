@@ -78,8 +78,13 @@ export const instanceTwo: enhancedInfraSlice.InstanceReadModified = {
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: osTb,
-  currentOs: osTb,
-  desiredOs: osTbUpdate,
+  osUpdateAvailable: "Ubuntu",
+  updatePolicy: {
+    updateKernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateSources: ["deb https://files.edgeorch.net orchui release"],
+    targetOs: osTbUpdate,
+    name: "Tb Os",
+  },
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
@@ -131,6 +136,12 @@ export const instanceFour: enhancedInfraSlice.InstanceReadModified = {
   instanceStatus: "Running",
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
+  updatePolicy: {
+    name: "Ubuntu",
+    kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateSources: ["deb https://files.edgeorch.net orchui release"],
+  },
+  osUpdateAvailable: "Ubuntu",
   os: osUbuntu,
   workloadMembers: [
     {
@@ -156,6 +167,7 @@ export const instanceFive: enhancedInfraSlice.InstanceReadModified = {
   name: "Instance Five",
   kind: "INSTANCE_KIND_METAL",
   os: osRedHat,
+  osUpdateAvailable: "Ubuntu",
   workloadMembers: [
     {
       kind: "WORKLOAD_MEMBER_KIND_CLUSTER_NODE",
@@ -214,7 +226,6 @@ export const provisionedInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   desiredState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
-  currentOs: osUbuntu,
 };
 
 export const provisionedInstanceTwo: enhancedInfraSlice.InstanceReadModified = {
@@ -257,6 +268,12 @@ export const instanceUnspecified: enhancedInfraSlice.InstanceReadModified = {
   currentState: "INSTANCE_STATE_UNTRUSTED",
   instanceID: "inst-ebfe2da9",
   resourceId: "inst-ebfe2da9",
+  osUpdateAvailable: "Ubuntu",
+  updatePolicy: {
+    name: "Ubuntu",
+    kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateSources: ["deb https://files.edgeorch.net orchui release"],
+  },
   kind: "INSTANCE_KIND_METAL",
   name: "",
   os: osUbuntu,
@@ -274,6 +291,12 @@ export const registeredInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   instanceStatusTimestamp: 1717761389,
   desiredState: "INSTANCE_STATE_UNTRUSTED",
   kind: "INSTANCE_KIND_METAL",
+  osUpdateAvailable: "Ubuntu",
+  updatePolicy: {
+    name: "Ubuntu",
+    kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateSources: ["deb https://files.edgeorch.net orchui release"],
+  },
   os: osUbuntu,
   securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   workloadMembers: [
@@ -376,9 +399,7 @@ export class InstanceStore extends BaseStore<
       provisioningStatus: "Provisioning In Progress",
       provisioningStatusTimestamp: currentTime,
       host: host ?? (body.host as infra.HostResourceRead),
-      os: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
-      currentOs: os ?? (body.currentOs as infra.OperatingSystemResourceRead),
-      desiredOs: os ?? (body.desiredOs as infra.OperatingSystemResourceRead),
+      os: os ?? (body.os as infra.OperatingSystemResourceRead),
       localaccount:
         localAccount ?? (body.localaccount as infra.LocalAccountResourceRead),
       timestamps: {

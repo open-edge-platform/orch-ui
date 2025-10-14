@@ -296,7 +296,7 @@ const ClusterNodesTableBySite = ({
     },
     {
       Header: "Operating System",
-      accessor: (host) => host.instance?.currentOs?.name ?? "-",
+      accessor: (host) => host.instance?.os?.name ?? "-",
     },
     {
       Header: "Role*",
