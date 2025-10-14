@@ -215,7 +215,7 @@ export const useProvisioning = () => {
             createClusterApi({
               projectName: SharedStorage.project?.name ?? "",
               clusterSpec: {
-                name: `cluster-${host.name}`,
+                name: `cluster-${registerHostResp?.resourceId}`,
                 labels: combinedClusterLabels,
                 template: `${host.templateName}-${host.templateVersion}`,
                 nodes: [nodeSpec],
