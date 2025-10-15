@@ -138,7 +138,7 @@ export const instanceFour: enhancedInfraSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   updatePolicy: {
     name: "Ubuntu",
-    kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateKernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
     updateSources: ["deb https://files.edgeorch.net orchui release"],
   },
   osUpdateAvailable: "Ubuntu",
@@ -271,7 +271,7 @@ export const instanceUnspecified: enhancedInfraSlice.InstanceReadModified = {
   osUpdateAvailable: "Ubuntu",
   updatePolicy: {
     name: "Ubuntu",
-    kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateKernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
     updateSources: ["deb https://files.edgeorch.net orchui release"],
   },
   kind: "INSTANCE_KIND_METAL",
@@ -294,7 +294,7 @@ export const registeredInstanceOne: enhancedInfraSlice.InstanceReadModified = {
   osUpdateAvailable: "Ubuntu",
   updatePolicy: {
     name: "Ubuntu",
-    kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+    updateKernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
     updateSources: ["deb https://files.edgeorch.net orchui release"],
   },
   os: osUbuntu,

@@ -244,19 +244,19 @@ export const downloadBlobFile = (blob: Blob, fileName: string) => {
  */
 export const formatOsUpdateAvailable = (
   value: string | undefined,
-  isMutable: boolean = false,
+  isMutable = false,
 ): string => {
   if (!value) return "";
 
-  if (isMutable) {
-    // For mutable OS: convert newline-separated packages to comma-separated
-    return value
-      .split("\n")
-      .map((pkg) => pkg.trim())
-      .filter((pkg) => pkg.length > 0)
-      .join(", ");
+  if (!isMutable) {
+    // For immutable OS: return the profile name as-is
+    return value;
   }
 
-  // For immutable OS: return the profile name as-is
-  return value;
+  // For mutable OS: convert newline-separated packages to comma-separated
+  return value
+    .split("\n")
+    .map((pkg) => pkg.trim())
+    .filter((pkg) => pkg.length > 0)
+    .join(", ");
 };
