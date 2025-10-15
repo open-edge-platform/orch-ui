@@ -72,14 +72,12 @@ const OsUpdatePolicyDetails = ({
         value={osUpdatePolicy.description}
       />
 
-      {/* OS Type - Add this missing field */}
       <div className="os-details-advanced-settings">OS Configuration</div>
       <OsProfileDetailField
         label="OS Type"
         value={isMutableOS ? "Mutable OS" : "Immutable OS"}
       />
 
-      {/* Update Policy - Move this up and always show */}
       <OsProfileDetailField
         label="Update Policy"
         value={

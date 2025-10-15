@@ -80,9 +80,9 @@ describe("<OsUpdatePolicy/>", () => {
       );
     });
 
-    it("should show Add OS Update Policy button", () => {
-      cy.contains("button", "Add OS Update Policy").should("exist");
-      cy.contains("button", "Add OS Update Policy").should("be.visible");
+    it("should show Create OS Update Policy button", () => {
+      cy.contains("button", "Create OS Update Policy").should("exist");
+      cy.contains("button", "Create OS Update Policy").should("be.visible");
     });
   });
 

@@ -102,7 +102,7 @@ const OsUpdatePolicy = () => {
       name="addOsUpdatePolicy"
       size={ButtonSize.Large}
       variant={ButtonVariant.Action}
-      text="Add OS Update Policy"
+      text="Create OS Update Policy"
       onPress={() => {
         setShowCreateOsPolicyDrawer(true);
       }}
@@ -126,7 +126,7 @@ const OsUpdatePolicy = () => {
           icon="information-circle"
           actions={[
             {
-              name: "Add OS Update Policy",
+              name: "Create OS Update Policy",
               disable: !hasRole([Role.INFRA_MANAGER_WRITE]),
               action: () => {
                 setShowCreateOsPolicyDrawer(true);

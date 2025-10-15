@@ -246,6 +246,35 @@ const CreateOsUpdatePolicyDrawer = ({
           />
         </div>
 
+        <div className="pa-1">
+          <Controller
+            name="updatePolicy"
+            control={formControl}
+            rules={{
+              required: "Update policy is required",
+            }}
+            render={({ field }) => (
+              <Dropdown
+                data-cy="updatePolicy"
+                name="updatePolicy"
+                label="OS Update Policy Type*"
+                placeholder="Select type"
+                selectedKey={field.value}
+                onSelectionChange={(selectedKey) => {
+                  const policyType = selectedKey as infra.UpdatePolicy;
+                  field.onChange(policyType);
+                }}
+                size={DropdownSize.Large}
+                validationState={formErrors.updatePolicy ? "invalid" : "valid"}
+                errorMessage={formErrors.updatePolicy?.message}
+              >
+                <Item key="UPDATE_POLICY_LATEST">Update To Latest</Item>
+                <Item key="UPDATE_POLICY_TARGET">Update To Target</Item>
+              </Dropdown>
+            )}
+          />
+        </div>
+
         {/* Kernel Command - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
         {osTypeValue === "OS_TYPE_MUTABLE" &&
           updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
@@ -360,35 +389,6 @@ const CreateOsUpdatePolicyDrawer = ({
               />
             </Flex>
           )}
-
-        <div className="pa-1">
-          <Controller
-            name="updatePolicy"
-            control={formControl}
-            rules={{
-              required: "Update policy is required",
-            }}
-            render={({ field }) => (
-              <Dropdown
-                data-cy="updatePolicy"
-                name="updatePolicy"
-                label="OS Update Policy Type*"
-                placeholder="Select type"
-                selectedKey={field.value}
-                onSelectionChange={(selectedKey) => {
-                  const policyType = selectedKey as infra.UpdatePolicy;
-                  field.onChange(policyType);
-                }}
-                size={DropdownSize.Large}
-                validationState={formErrors.updatePolicy ? "invalid" : "valid"}
-                errorMessage={formErrors.updatePolicy?.message}
-              >
-                <Item key="UPDATE_POLICY_LATEST">Update To Latest</Item>
-                <Item key="UPDATE_POLICY_TARGET">Update To Target</Item>
-              </Dropdown>
-            )}
-          />
-        </div>
 
         {/* Target OS - Only for IMMUTABLE OS and when UPDATE_POLICY_TARGET is selected*/}
         {osTypeValue === "OS_TYPE_IMMUTABLE" &&
