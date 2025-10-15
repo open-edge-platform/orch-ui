@@ -3985,6 +3985,7 @@ export const {
   useRegionServiceCreateRegionMutation,
   useSiteServiceDeleteSiteMutation,
   useSiteServiceGetSiteQuery,
+  useLazySiteServiceGetSiteQuery,
   useSiteServicePatchSiteMutation,
   useSiteServiceUpdateSiteMutation,
   useRegionServiceDeleteRegionMutation,
