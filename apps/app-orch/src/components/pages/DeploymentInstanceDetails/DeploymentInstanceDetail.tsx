@@ -5,18 +5,19 @@
 
 import { adm, cm } from "@orch-ui/apis";
 import {
+  AggregatedStatuses,
+  AggregatedStatusesMap,
   ApiError,
   Empty,
   setActiveNavItem,
   setBreadcrumb,
   SquareSpinner,
-  Status,
-  StatusIcon,
   TypedMetadata,
 } from "@orch-ui/components";
 import {
   API_INTERVAL,
   checkAuthAndRole,
+  clusterToStatuses,
   copyToClipboard,
   downloadFile,
   getFilter,
@@ -32,6 +33,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ClusterDetailInfoRead } from "../../../../../../library/apis/cluster-manager/clusterManagerApis";
 import {
   deploymentBreadcrumb,
   deploymentsNavItem,
@@ -39,7 +41,6 @@ import {
 } from "../../../routes/const";
 import { useAppDispatch } from "../../../store/hooks";
 import { setProps } from "../../../store/reducers/toast";
-import { printStatus } from "../../../utils/global";
 import ApplicationDetails from "../../organisms/deployments/ApplicationDetails/ApplicationDetails";
 import DeploymentDetailsHeader from "../../organisms/deployments/DeploymentDetailsHeader/DeploymentDetailsHeader";
 import DeploymentInstanceClusterStatus from "../../organisms/deployments/DeploymentInstanceClusterStatus/DeploymentInstanceClusterStatus";
@@ -82,6 +83,17 @@ const DeploymentInstanceDetail = () => {
         name: name!,
       },
       { skip: !name || !SharedStorage.project?.name },
+    );
+
+  const { data: clusterData } =
+    cm.useGetV2ProjectsByProjectNameClustersAndNameQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        name: name!,
+      },
+      {
+        skip: !name || !SharedStorage.project?.name,
+      },
     );
 
   const clusterFilter = getFilter<adm.ClusterRead>(
@@ -142,20 +154,13 @@ const DeploymentInstanceDetail = () => {
     return <ApiError error={error} />;
   } else if (isLoading || !cluster) return <SquareSpinner />;
 
-  let clusterStatusIndicator = Status.Unknown;
-  switch (cluster.status?.state?.toLowerCase()) {
-    case "ready":
-      clusterStatusIndicator = Status.Ready;
-      break;
-    case "not-ready":
-      clusterStatusIndicator = Status.NotReady;
-  }
-
   const clusterStatus = {
     status: (
-      <StatusIcon
-        status={clusterStatusIndicator}
-        text={printStatus(cluster.status?.state ?? "Unknown")}
+      <AggregatedStatuses<AggregatedStatusesMap>
+        statuses={clusterToStatuses(
+          clusterData ?? ({} as ClusterDetailInfoRead),
+        )}
+        defaultStatusName="lifecyclePhase"
       />
     ),
     applicationReady: cluster.status?.summary?.running ?? 0,
