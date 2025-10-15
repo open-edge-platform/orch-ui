@@ -87,7 +87,7 @@ describe("Org Admin Smoke", () => {
 
       // check in the API that the project was created
       let ready = false;
-      for (let i = 0; i < 60 && !ready; i++) {
+      for (let i = 0; i < 120 && !ready; i++) {
         cy.authenticatedRequest({
           method: "GET",
           url: `/v1/projects/${testData.description}`,
@@ -105,6 +105,13 @@ describe("Org Admin Smoke", () => {
         });
         cy.wait(1000); // wait 1 second before checking again
       }
+
+      // Verify that the project was created successfully
+      cy.wrap(null).then(() => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(ready, "Project creation should complete within 120 seconds").to
+          .be.true;
+      });
     });
 
     it("should rename the project", () => {
