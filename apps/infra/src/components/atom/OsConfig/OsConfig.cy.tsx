@@ -61,6 +61,7 @@ describe("<OsConfig/>", () => {
       <OsConfig
         instance={{
           ...instanceOne,
+          osUpdateAvailable: "Ubuntu",
           os: os,
         }}
       />,

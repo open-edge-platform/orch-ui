@@ -141,7 +141,7 @@ const getApiEndpoints = (hostId: string): CyApiDetails<ApiAliases> => {
           //   updateSources: ["DesiredOSUpdateSourceName"],
           // },
           os: {
-            name: "OS",
+            name: "Ubuntu",
             sha256: "OSSHA256",
             updateSources: ["OSUpdateSourceName"],
           },

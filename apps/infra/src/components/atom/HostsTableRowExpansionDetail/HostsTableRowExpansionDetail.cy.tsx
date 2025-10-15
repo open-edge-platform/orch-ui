@@ -48,7 +48,7 @@ describe("<HostsTableRowExpansionDetail/>", () => {
         }}
       />,
     );
-    pom.el.osUpdate.should("contain.text", "desiredOsName");
+    pom.el.osUpdate.should("contain.text", "Ubuntu");
   });
 
   it("should show `No Update` when no os is available", () => {
@@ -58,7 +58,7 @@ describe("<HostsTableRowExpansionDetail/>", () => {
           ...hostThree,
           instance: {
             ...hostThree.instance,
-            desiredOs: undefined,
+            osUpdateAvailable: undefined,
           },
         }}
       />,

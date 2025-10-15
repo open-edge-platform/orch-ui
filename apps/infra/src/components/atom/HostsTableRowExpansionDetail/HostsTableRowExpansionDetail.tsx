@@ -50,7 +50,7 @@ const HostsTableRowExpansionDetail = ({
             {formatOsUpdateAvailable(
               host.instance?.osUpdateAvailable,
               host.instance?.os?.osType === "OS_TYPE_MUTABLE",
-            ) ?? <em>(No Update)</em>}
+            ) || <em>(No Update)</em>}
           </div>
           <b className={`${className}__label`}>Trusted Compute</b>
           <div className={`${className}__content`} data-cy="trustedCompute">

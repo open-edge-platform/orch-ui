@@ -17,7 +17,8 @@ describe("<OSProfileDetails/>", () => {
           os={osUbuntu}
           updatePolicy={{
             name: "Ubuntu",
-            kernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
+            updateKernelCommand:
+              "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
             updateSources: ["deb https://files.edgeorch.net orchui release"],
           }}
         />,
@@ -38,12 +39,6 @@ describe("<OSProfileDetails/>", () => {
       pom.root
         .should("contain.text", "Security Features")
         .should("contain.text", "Secure Boot / FDE");
-      pom.root
-        .should("contain.text", "Kernel Command")
-        .should(
-          "contain.text",
-          "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
-        );
       pom.root
         .should("contain.text", "Profile Name")
         .should("contain.text", "Ubuntu-x86_profile");
