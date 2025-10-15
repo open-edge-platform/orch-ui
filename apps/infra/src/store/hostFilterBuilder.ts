@@ -120,7 +120,7 @@ export const searchableColumns = [
   "resourceId",
   "note",
   "site.name",
-  "instance.desiredOs.name",
+  "instance.os.name",
 ];
 
 export const buildColumnOrs = (column: string, values: string[]): string =>
@@ -239,7 +239,7 @@ export const _setOsProfiles = (
   state.osProfiles = action.payload;
   if (action.payload) {
     state.osProfilesQuery = buildColumnOrs(
-      "instance.currentOs.profileName",
+      "instance.os.profileName",
       action.payload,
     );
   } else {

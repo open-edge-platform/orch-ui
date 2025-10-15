@@ -2259,6 +2259,7 @@ export type TelemetryMetricsProfileServiceCreateTelemetryMetricsProfileApiArg =
     /** The telemetry_metrics_profile to create. */
     telemetryMetricsProfileResource: TelemetryMetricsProfileResource;
   };
+export type AmtSku = "AMT_SKU_UNSPECIFIED" | "AMT_SKU_AMT" | "AMT_SKU_ISM";
 export type StatusIndication =
   | "STATUS_INDICATION_UNSPECIFIED"
   | "STATUS_INDICATION_ERROR"
@@ -2318,6 +2319,8 @@ export type OperatingSystemResource = {
   imageId?: string;
   /** The URL repository of the OS image. */
   imageUrl?: string;
+  /** List of installed packages, encoded as a JSON list. */
+  installedPackages?: string;
   /** (IMMUTABLE) The URL of the OS manifest which contains install packages details. This will be used to fill the installed_packages field
      for the advance use case to allow manual creation of OSProfiles when supported from backend. */
   installedPackagesUrl?: string;
@@ -2424,15 +2427,23 @@ export type OsUpdatePolicy = {
   /** User-provided, human-readable description. */
   description?: string;
   /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
-     Applies only to Mutable OSes. */
+     Applies only to Mutable OSes.
+     Deprecated, will be removed in EMF v3.2.0, use update_packages field instead. */
   installPackages?: string;
   /** The OS resource's kernel Command Line Options.
-     Applies only to Mutable OSes. */
+     Applies only to Mutable OSes.
+     Deprecated, will be removed in EMF v3.2.0, use update_kernel_command field instead. */
   kernelCommand?: string;
   /** User-provided, human-readable name. */
   name: string;
   targetOs?: OperatingSystemResource;
   timestamps?: Timestamps;
+  /** The OS resource's kernel Command Line Options.
+     Applies only to Mutable OSes. */
+  updateKernelCommand?: string;
+  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+     Applies only to Mutable OSes. */
+  updatePackages?: string;
   updatePolicy?: UpdatePolicy;
   /** The list of OS resource update sources.
      Should be in 'DEB822 Source Format' for Debian style OSs.
@@ -2443,10 +2454,12 @@ export type OsUpdatePolicyRead = {
   /** User-provided, human-readable description. */
   description?: string;
   /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
-     Applies only to Mutable OSes. */
+     Applies only to Mutable OSes.
+     Deprecated, will be removed in EMF v3.2.0, use update_packages field instead. */
   installPackages?: string;
   /** The OS resource's kernel Command Line Options.
-     Applies only to Mutable OSes. */
+     Applies only to Mutable OSes.
+     Deprecated, will be removed in EMF v3.2.0, use update_kernel_command field instead. */
   kernelCommand?: string;
   /** User-provided, human-readable name. */
   name: string;
@@ -2454,6 +2467,12 @@ export type OsUpdatePolicyRead = {
   resourceId?: string;
   targetOs?: OperatingSystemResourceRead;
   timestamps?: Timestamps;
+  /** The OS resource's kernel Command Line Options.
+     Applies only to Mutable OSes. */
+  updateKernelCommand?: string;
+  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+     Applies only to Mutable OSes. */
+  updatePackages?: string;
   updatePolicy?: UpdatePolicy;
   /** The list of OS resource update sources.
      Should be in 'DEB822 Source Format' for Debian style OSs.
@@ -2464,10 +2483,12 @@ export type OsUpdatePolicyWrite = {
   /** User-provided, human-readable description. */
   description?: string;
   /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
-     Applies only to Mutable OSes. */
+     Applies only to Mutable OSes.
+     Deprecated, will be removed in EMF v3.2.0, use update_packages field instead. */
   installPackages?: string;
   /** The OS resource's kernel Command Line Options.
-     Applies only to Mutable OSes. */
+     Applies only to Mutable OSes.
+     Deprecated, will be removed in EMF v3.2.0, use update_kernel_command field instead. */
   kernelCommand?: string;
   /** User-provided, human-readable name. */
   name: string;
@@ -2475,6 +2496,12 @@ export type OsUpdatePolicyWrite = {
   /** The unique identifier of target OS will be associated with the OS Update policy. */
   targetOsId?: string;
   timestamps?: Timestamps;
+  /** The OS resource's kernel Command Line Options.
+     Applies only to Mutable OSes. */
+  updateKernelCommand?: string;
+  /** Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+     Applies only to Mutable OSes. */
+  updatePackages?: string;
   updatePolicy?: UpdatePolicy;
   /** The list of OS resource update sources.
      Should be in 'DEB822 Source Format' for Debian style OSs.
@@ -2832,6 +2859,7 @@ export type SiteResourceWrite = {
   timestamps?: Timestamps;
 };
 export type HostResource = {
+  amtSku?: AmtSku;
   amtStatusIndicator?: StatusIndication;
   bmcKind?: BaremetalControllerKind;
   currentAmtState?: AmtState;
@@ -2975,8 +3003,7 @@ export type HostusbResourceRead = {
   timestamps?: Timestamps;
 };
 export type HostResourceRead = {
-  /** coming from device introspection */
-  amtSku?: string;
+  amtSku?: AmtSku;
   /** coming from device introspection. Set only by the DM RM. */
   amtStatus?: string;
   amtStatusIndicator?: StatusIndication;
@@ -3064,10 +3091,13 @@ export type HostResourceRead = {
   serialNumber?: string;
   site?: SiteResourceRead;
   timestamps?: Timestamps;
+  /** LVM size in GB. */
+  userLvmSize?: number;
   /** (OPTIONAL) The host UUID identifier; UUID is unique and immutable. */
   uuid?: string;
 };
 export type HostResourceWrite = {
+  amtSku?: AmtSku;
   amtStatusIndicator?: StatusIndication;
   bmcKind?: BaremetalControllerKind;
   currentAmtState?: AmtState;
@@ -3162,6 +3192,8 @@ export type HostRegister = {
   name?: string;
   /** The host serial number. */
   serialNumber?: string;
+  /** LVM size in GB */
+  userLvmSize?: number;
   /** The host UUID. */
   uuid?: string;
 };
@@ -3524,39 +3556,36 @@ export type ListOsUpdatePolicyResponseWrite = {
 export type DeleteOsUpdatePolicyResponse = object;
 export type OsUpdateRun = {
   appliedPolicy?: OsUpdatePolicy;
-  endTime?: GoogleProtobufTimestamp;
   instance?: InstanceResource;
-  startTime?: GoogleProtobufTimestamp;
   statusIndicator?: StatusIndication;
-  statusTimestamp?: GoogleProtobufTimestamp;
   timestamps?: Timestamps;
 };
 export type OsUpdateRunRead = {
   appliedPolicy?: OsUpdatePolicyRead;
   /** Human-readable description. */
   description?: string;
-  endTime?: GoogleProtobufTimestamp;
+  /** UTC timestamp of OS Update ended. */
+  endTime?: number;
   instance?: InstanceResourceRead;
   /** Human-readable name. */
   name?: string;
   /** resource ID, generated by the inventory on Create. */
   resourceId?: string;
-  startTime?: GoogleProtobufTimestamp;
+  /** UTC timestamp of OS Update started. */
+  startTime?: number;
   /** Short message that describes what happened during the OS Update. */
   status?: string;
   /** Details about what happened during the OS Update. */
   statusDetails?: string;
   statusIndicator?: StatusIndication;
-  statusTimestamp?: GoogleProtobufTimestamp;
+  /** UTC timestamp of OS Update status reported. */
+  statusTimestamp?: number;
   timestamps?: Timestamps;
 };
 export type OsUpdateRunWrite = {
   appliedPolicy?: OsUpdatePolicyWrite;
-  endTime?: GoogleProtobufTimestamp;
   instance?: InstanceResourceWrite;
-  startTime?: GoogleProtobufTimestamp;
   statusIndicator?: StatusIndication;
-  statusTimestamp?: GoogleProtobufTimestamp;
   timestamps?: Timestamps;
 };
 export type ListOsUpdateRunResponse = {

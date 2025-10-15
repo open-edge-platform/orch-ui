@@ -233,3 +233,30 @@ export const downloadBlobFile = (blob: Blob, fileName: string) => {
   document.body.removeChild(anchorElement); // Remove the element after clicking
   window.URL.revokeObjectURL(url); // Revoke the URL to free resources
 };
+
+/**
+ * Formats OS profile display text based on mutability
+ * For immutable OS: returns the profile name as-is
+ * For mutable OS: converts newline-separated package names to comma-separated string
+ * @param value - The OS profile value (string)
+ * @param isMutable - Whether the OS is mutable or immutable
+ * @returns Formatted string for display
+ */
+export const formatOsUpdateAvailable = (
+  value: string | undefined,
+  isMutable = false,
+): string => {
+  if (!value) return "";
+
+  if (!isMutable) {
+    // For immutable OS: return the profile name as-is
+    return value;
+  }
+
+  // For mutable OS: convert newline-separated packages to comma-separated
+  return value
+    .split("\n")
+    .map((pkg) => pkg.trim())
+    .filter((pkg) => pkg.length > 0)
+    .join(", ");
+};
