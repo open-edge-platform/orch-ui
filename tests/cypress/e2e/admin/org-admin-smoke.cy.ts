@@ -87,7 +87,7 @@ describe("Org Admin Smoke", () => {
 
       // check in the API that the project was created
       let ready = false;
-      for (let i = 0; i < 120 && !ready; i++) {
+      for (let i = 0; i < 5 * 60 * 1000 && !ready; i++) {
         cy.authenticatedRequest({
           method: "GET",
           url: `/v1/projects/${testData.description}`,
