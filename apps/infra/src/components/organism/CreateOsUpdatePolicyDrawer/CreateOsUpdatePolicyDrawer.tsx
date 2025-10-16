@@ -63,7 +63,7 @@ const CreateOsUpdatePolicyDrawer = ({
     updateKernelCommand: "",
     updatePackages: "",
     updateSources: "",
-    updatePolicy: "UPDATE_POLICY_LATEST" as infra.UpdatePolicy,
+    updatePolicy: "UPDATE_POLICY_TARGET" as infra.UpdatePolicy, // Default to TARGET for MUTABLE OS
     osType: "OS_TYPE_MUTABLE" as infra.OsType, // Default to MUTABLE
     targetOsId: "",
   };
@@ -89,13 +89,18 @@ const CreateOsUpdatePolicyDrawer = ({
   // Reset fields when OS type changes (preserve name and description)
   useEffect(() => {
     const currentValues = getValues();
+    const newUpdatePolicy =
+      osTypeValue === "OS_TYPE_MUTABLE"
+        ? "UPDATE_POLICY_TARGET"
+        : "UPDATE_POLICY_LATEST";
+
     reset({
       name: currentValues.name, // Preserve name
       description: currentValues.description, // Preserve description
       updateKernelCommand: defaultValues.updateKernelCommand,
       updatePackages: defaultValues.updatePackages,
       updateSources: defaultValues.updateSources,
-      updatePolicy: defaultValues.updatePolicy,
+      updatePolicy: newUpdatePolicy as infra.UpdatePolicy,
       osType: osTypeValue, // Keep the new osType value
       targetOsId: defaultValues.targetOsId,
     });
@@ -267,6 +272,7 @@ const CreateOsUpdatePolicyDrawer = ({
                 size={DropdownSize.Large}
                 validationState={formErrors.updatePolicy ? "invalid" : "valid"}
                 errorMessage={formErrors.updatePolicy?.message}
+                isDisabled={osTypeValue === "OS_TYPE_MUTABLE"} // Disable for Mutable OS
               >
                 <Item key="UPDATE_POLICY_LATEST">Update To Latest</Item>
                 <Item key="UPDATE_POLICY_TARGET">Update To Target</Item>

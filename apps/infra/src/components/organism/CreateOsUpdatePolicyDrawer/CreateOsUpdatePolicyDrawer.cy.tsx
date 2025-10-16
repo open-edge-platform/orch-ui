@@ -72,7 +72,6 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
     it("should validate update sources format", () => {
       // Switch to Mutable OS and Update To Target
       pom.selectOsType("OS_TYPE_MUTABLE");
-      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
 
       // Ensure the field is visible
       cyGet("updateSources").should("exist");
@@ -92,28 +91,22 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.waitForApis();
     });
 
-    it("should hide advanced fields for Mutable OS with Update To Latest", () => {
-      // Start with defaults (Mutable OS, Update To Latest)
-      // Advanced fields should not be visible by default
-      cyGet("updateKernelCommand").should("not.exist");
-      cyGet("updatePackages").should("not.exist");
-      cyGet("updateSources").should("not.exist");
-      cyGet("targetOs").should("not.exist");
-
-      // Explicitly select the values to ensure state
+    it("should show advanced fields for Mutable OS (default Update To Target)", () => {
       pom.selectOsType("OS_TYPE_MUTABLE");
-      pom.selectUpdatePolicy("UPDATE_POLICY_LATEST");
 
-      // Advanced fields should still not be visible
-      cyGet("updateKernelCommand").should("not.exist");
-      cyGet("updatePackages").should("not.exist");
-      cyGet("updateSources").should("not.exist");
+      // Update policy should be disabled and default to UPDATE_POLICY_TARGET
+      cyGet("updatePolicy").should("have.class", "spark-dropdown-is-disabled");
+
+      // Advanced fields should be visible for Mutable OS
+      cyGet("updateKernelCommand").should("exist");
+      cyGet("updatePackages").should("exist");
+      cyGet("updateSources").should("exist");
+      // Target OS should not be visible for Mutable OS
       cyGet("targetOs").should("not.exist");
     });
 
     it("should show advanced fields for Mutable OS with Update To Target", () => {
       pom.selectOsType("OS_TYPE_MUTABLE");
-      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
 
       // Advanced fields should be visible for Mutable OS
       cyGet("updateKernelCommand").should("exist");
@@ -159,9 +152,8 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.el.name.type("Test Policy");
       pom.el.description.type("Test Description");
 
-      // Switch to show advanced fields and fill them
+      // Switch to Mutable OS (will automatically have UPDATE_POLICY_TARGET)
       pom.selectOsType("OS_TYPE_MUTABLE");
-      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
 
       // Wait for fields to appear and fill them
       cyGet("updateKernelCommand").should("exist");
@@ -174,11 +166,11 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.el.name.should("have.value", "Test Policy");
       pom.el.description.should("have.value", "Test Description");
 
-      // Update policy should be reset to default
+      // Update policy should be reset to default (UPDATE_POLICY_LATEST for Immutable)
       pom.el.updatePolicy.should("contain", "Update To Latest");
 
       // Advanced fields should not be visible for Immutable OS
-      cyGet("kernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("not.exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
     });
