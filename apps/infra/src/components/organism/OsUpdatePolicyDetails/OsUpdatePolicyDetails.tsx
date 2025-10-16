@@ -16,7 +16,7 @@ interface OsUpdatePolicyDetailsProps {
 }
 
 /**
- * Renders the details of install packages.
+ * Renders the details of update packages.
  *
  * @param {string} installPackages - The packages string containing names to be rendered.
  * @returns {JSX.Element} The JSX element containing the package names.
@@ -41,7 +41,7 @@ const renderInstallPackages = (installPackages: string) => {
           ))}
         </div>
       ) : (
-        <Text>No packages to install</Text>
+        <Text>No packages to update</Text>
       )}
     </div>
   );
@@ -52,32 +52,16 @@ const OsUpdatePolicyDetails = ({
 }: OsUpdatePolicyDetailsProps) => {
   const cy = { "data-cy": dataCy };
 
-  // Determine if this is a mutable OS (we can infer this from the presence of mutable-specific fields)
-  const isMutableOS = !!(
-    osUpdatePolicy.kernelCommand ||
-    osUpdatePolicy.installPackages ||
-    osUpdatePolicy.updateSources?.length
-  );
-
-  // Check if this is UPDATE_POLICY_LATEST (for mutable OS, only name/description should show additional fields)
-  const isUpdateToLatest =
-    osUpdatePolicy.updatePolicy === "UPDATE_POLICY_LATEST";
-
   return (
     <div className="os-update-policy-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
       <OsProfileDetailField label={"Name"} value={osUpdatePolicy.name} />
       <OsProfileDetailField
         label="Description"
-        value={osUpdatePolicy.description}
+        value={osUpdatePolicy.description || "N/A"}
       />
 
       <div className="os-details-advanced-settings">OS Configuration</div>
-      <OsProfileDetailField
-        label="OS Type"
-        value={isMutableOS ? "Mutable OS" : "Immutable OS"}
-      />
-
       <OsProfileDetailField
         label="Update Policy"
         value={
@@ -85,54 +69,41 @@ const OsUpdatePolicyDetails = ({
             ? "Update To Latest"
             : osUpdatePolicy.updatePolicy === "UPDATE_POLICY_TARGET"
               ? "Update To Target"
-              : osUpdatePolicy.updatePolicy
+              : osUpdatePolicy.updatePolicy || "N/A"
         }
       />
 
-      {/* Target OS - Only for IMMUTABLE OS with UPDATE_POLICY_TARGET */}
-      {osUpdatePolicy.targetOs && (
-        <>
-          <div className="os-details-advanced-settings">
-            Target Operating System
-          </div>
-          <OsProfileDetailField
-            label="Target OS Name"
-            value={osUpdatePolicy.targetOs.name}
-          />
-        </>
-      )}
+      {/* Target OS */}
+      <div className="os-details-advanced-settings">
+        Target Operating System
+      </div>
+      <OsProfileDetailField
+        label="Target OS Name"
+        value={osUpdatePolicy.targetOs?.name || "N/A"}
+      />
 
-      {/* Advanced Settings - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
-      {isMutableOS && !isUpdateToLatest && (
-        <>
-          <div className="os-details-advanced-settings">Advanced Settings</div>
+      {/* Advanced Settings */}
+      <div className="os-details-advanced-settings">Advanced Settings</div>
 
-          {/* Kernel Command - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
-          <OsProfileDetailField
-            label="Kernel Command"
-            value={osUpdatePolicy.kernelCommand || "Not specified"}
-          />
+      <OsProfileDetailField
+        label="Kernel Command Update"
+        value={osUpdatePolicy.kernelCommand || "N/A"}
+      />
 
-          {/* Update Sources - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
-          <OsProfileDetailField
-            label="Update Sources"
-            value={
-              osUpdatePolicy.updateSources?.length
-                ? osUpdatePolicy.updateSources.join(", ")
-                : "Not specified"
-            }
-          />
+      <OsProfileDetailField
+        label="Update Sources"
+        value={
+          osUpdatePolicy.updateSources?.length
+            ? osUpdatePolicy.updateSources.join(", ")
+            : "N/A"
+        }
+      />
 
-          {/* Install Packages - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
-          {osUpdatePolicy.installPackages && (
-            <>
-              <div className="os-details-advanced-settings">
-                Install Packages
-              </div>
-              {renderInstallPackages(osUpdatePolicy.installPackages)}
-            </>
-          )}
-        </>
+      <div className="os-details-advanced-settings">Update Packages</div>
+      {osUpdatePolicy.installPackages ? (
+        renderInstallPackages(osUpdatePolicy.installPackages)
+      ) : (
+        <OsProfileDetailField label="Packages" value="N/A" />
       )}
     </div>
   );

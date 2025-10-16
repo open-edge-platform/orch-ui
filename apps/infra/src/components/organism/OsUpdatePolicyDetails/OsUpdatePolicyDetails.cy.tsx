@@ -22,9 +22,9 @@ describe("<OsUpdatePolicyDetails/>", () => {
       cy.contains(osUpdatePolicyTarget.description).should("exist");
     });
 
-    it("should display OS Type information", () => {
+    it("should display OS Configuration information", () => {
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
-      cy.contains("OS Type").should("exist");
+      cy.contains("Update Policy").should("exist");
       cy.contains("OS Configuration").should("exist");
     });
 
@@ -34,31 +34,43 @@ describe("<OsUpdatePolicyDetails/>", () => {
     });
   });
 
-  describe("Conditional Rendering - Mutable OS", () => {
-    it("should show advanced settings for mutable OS with advanced fields", () => {
-      cy.mount(
-        <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
-      );
+  describe("Field Display - All Fields Always Visible", () => {
+    it("should always show all sections regardless of OS type", () => {
+      cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
 
-      // Should show mutable OS type
-      cy.contains("Mutable OS").should("exist");
-
-      // Should show advanced settings section
+      // All sections should always be visible
+      cy.contains("OS Configuration").should("exist");
+      cy.contains("Target Operating System").should("exist");
       cy.contains("Advanced Settings").should("exist");
+      cy.contains("Update Packages").should("exist");
 
-      // Should show mutable-specific fields
-      cy.contains("Kernel Command").should("exist");
+      // All fields should be visible
+      cy.contains("Update Policy").should("exist");
+      cy.contains("Target OS Name").should("exist");
+      cy.contains("Kernel Command Update").should("exist");
       cy.contains("Update Sources").should("exist");
     });
 
-    it("should display install packages when available", () => {
+    it("should show advanced settings for any policy", () => {
       cy.mount(
         <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
       );
 
-      if (osUpdatePolicyScheduled.installPackages) {
-        cy.contains("Install Packages").should("exist");
-      }
+      // Advanced settings section should always be visible
+      cy.contains("Advanced Settings").should("exist");
+
+      // All fields should be visible
+      cy.contains("Kernel Command Update").should("exist");
+      cy.contains("Update Sources").should("exist");
+    });
+
+    it("should display update packages when available", () => {
+      cy.mount(
+        <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
+      );
+
+      // Update Packages section should always be visible
+      cy.contains("Update Packages").should("exist");
     });
 
     it("should show correct update policy labels", () => {
@@ -72,48 +84,36 @@ describe("<OsUpdatePolicyDetails/>", () => {
     });
   });
 
-  describe("Conditional Rendering - Immutable OS", () => {
-    it("should show target OS information for immutable policies", () => {
+  describe("Target OS Display", () => {
+    it("should always show target OS section", () => {
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
 
-      if (osUpdatePolicyTarget.targetOs) {
-        cy.contains("Target Operating System").should("exist");
-        cy.contains("Target OS Name").should("exist");
+      // Target OS section should always be visible
+      cy.contains("Target Operating System").should("exist");
+      cy.contains("Target OS Name").should("exist");
+
+      // Should show the target OS name if available, otherwise N/A
+      if (osUpdatePolicyTarget.targetOs?.name) {
         cy.contains(osUpdatePolicyTarget.targetOs.name).should("exist");
+      } else {
+        cy.contains("N/A").should("exist");
       }
-    });
-
-    it("should not show advanced settings for immutable OS", () => {
-      // Create an immutable policy without mutable-specific fields
-      const immutablePolicy = {
-        ...osUpdatePolicyTarget,
-        kernelCommand: undefined,
-        installPackages: undefined,
-        updateSources: undefined,
-      };
-
-      cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={immutablePolicy} />);
-
-      // Should show immutable OS type
-      cy.contains("Immutable OS").should("exist");
-
-      // Should not show advanced settings for empty immutable policy
-      cy.contains("Advanced Settings").should("not.exist");
     });
   });
 
   describe("Field Display Logic", () => {
-    it("should show 'Not specified' for empty optional fields", () => {
+    it("should show 'N/A' for empty optional fields", () => {
       const policyWithEmptyFields = {
         ...osUpdatePolicyScheduled,
         kernelCommand: "",
         updateSources: [],
+        targetOs: undefined,
       };
 
       cy.mount(
         <OsUpdatePolicyDetails osUpdatePolicy={policyWithEmptyFields} />,
       );
-      cy.contains("Not specified").should("exist");
+      cy.contains("N/A").should("exist");
     });
 
     it("should handle policies with all fields populated", () => {
@@ -124,7 +124,9 @@ describe("<OsUpdatePolicyDetails/>", () => {
       // Check that all available fields are displayed
       cy.contains("Details").should("exist");
       cy.contains(osUpdatePolicyScheduled.name).should("exist");
-      cy.contains(osUpdatePolicyScheduled.description).should("exist");
+      if (osUpdatePolicyScheduled.description) {
+        cy.contains(osUpdatePolicyScheduled.description).should("exist");
+      }
     });
 
     it("should display update sources as comma-separated list", () => {
@@ -140,7 +142,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
   });
 
   describe("Package Display", () => {
-    it("should render install packages correctly", () => {
+    it("should render update packages correctly", () => {
       const policyWithPackages = {
         ...osUpdatePolicyScheduled,
         installPackages: "package1\npackage2\npackage3",
@@ -148,7 +150,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
 
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={policyWithPackages} />);
 
-      cy.contains("Install Packages").should("exist");
+      cy.contains("Update Packages").should("exist");
       cy.contains("package1").should("exist");
       cy.contains("package2").should("exist");
       cy.contains("package3").should("exist");
@@ -164,9 +166,24 @@ describe("<OsUpdatePolicyDetails/>", () => {
         <OsUpdatePolicyDetails osUpdatePolicy={policyWithEmptyPackages} />,
       );
 
-      if (policyWithEmptyPackages.installPackages) {
-        cy.contains("No packages to install").should("exist");
-      }
+      // Should show N/A when no packages
+      cy.contains("Update Packages").should("exist");
+      cy.contains("N/A").should("exist");
+    });
+
+    it("should handle undefined packages", () => {
+      const policyWithoutPackages = {
+        ...osUpdatePolicyScheduled,
+        installPackages: undefined,
+      };
+
+      cy.mount(
+        <OsUpdatePolicyDetails osUpdatePolicy={policyWithoutPackages} />,
+      );
+
+      // Should show N/A when packages are undefined
+      cy.contains("Update Packages").should("exist");
+      cy.contains("N/A").should("exist");
     });
   });
 
@@ -179,6 +196,16 @@ describe("<OsUpdatePolicyDetails/>", () => {
 
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={targetPolicy} />);
       cy.contains("Update To Target").should("exist");
+    });
+
+    it("should display N/A for unknown update policies", () => {
+      const unknownPolicy = {
+        ...osUpdatePolicyTarget,
+        updatePolicy: undefined as any,
+      };
+
+      cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={unknownPolicy} />);
+      cy.contains("N/A").should("exist");
     });
 
     it("should display raw value for unknown update policies", () => {
