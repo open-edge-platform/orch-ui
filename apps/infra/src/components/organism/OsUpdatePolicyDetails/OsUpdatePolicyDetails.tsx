@@ -4,7 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import OsProfileDetailField from "../OSProfileDetails/OsProfileDetailField";
+import OsUpdatePolicyDetailsField from "./OsUpdatePolicyDetailsField";
 
 import "./OsUpdatePolicyDetails.scss";
 
@@ -23,10 +23,10 @@ const OsUpdatePolicyDetails = ({
     <div className="os-update-policy-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
       <div className="os-update-policy-field">
-        <OsProfileDetailField label={"Name"} value={osUpdatePolicy.name} />
+        <OsUpdatePolicyDetailsField label="Name" value={osUpdatePolicy.name} />
       </div>
       <div className="os-update-policy-field">
-        <OsProfileDetailField
+        <OsUpdatePolicyDetailsField
           label="Description"
           value={osUpdatePolicy.description || "N/A"}
         />
@@ -34,7 +34,7 @@ const OsUpdatePolicyDetails = ({
 
       <div className="os-details-advanced-settings">OS Configuration</div>
       <div className="os-update-policy-field">
-        <OsProfileDetailField
+        <OsUpdatePolicyDetailsField
           label="Update Policy"
           value={
             osUpdatePolicy.updatePolicy === "UPDATE_POLICY_LATEST"
@@ -47,21 +47,21 @@ const OsUpdatePolicyDetails = ({
       </div>
 
       <div className="os-update-policy-field">
-        <OsProfileDetailField
+        <OsUpdatePolicyDetailsField
           label="Target OS Name"
           value={osUpdatePolicy.targetOs?.name || "N/A"}
         />
       </div>
 
       <div className="os-update-policy-field">
-        <OsProfileDetailField
+        <OsUpdatePolicyDetailsField
           label="Kernel Command Update"
           value={osUpdatePolicy.updateKernelCommand || "N/A"}
         />
       </div>
 
       <div className="os-update-policy-field">
-        <OsProfileDetailField
+        <OsUpdatePolicyDetailsField
           label="Update Sources"
           value={
             osUpdatePolicy.updateSources?.length
@@ -72,7 +72,7 @@ const OsUpdatePolicyDetails = ({
       </div>
 
       <div className="os-update-policy-field">
-        <OsProfileDetailField
+        <OsUpdatePolicyDetailsField
           label="Update Packages"
           value={
             osUpdatePolicy.updatePackages

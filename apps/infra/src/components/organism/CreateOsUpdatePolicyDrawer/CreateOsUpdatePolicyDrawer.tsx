@@ -37,7 +37,7 @@ interface OsUpdatePolicyDrawerProps {
 interface CreateOsUpdatePolicyFormData {
   name: string;
   description: string;
-  kernelCommand: string;
+  updateKernelCommand: string;
   updatePackages: string;
   updateSources: string;
   updatePolicy: infra.UpdatePolicy;
@@ -60,7 +60,7 @@ const CreateOsUpdatePolicyDrawer = ({
   const defaultValues: CreateOsUpdatePolicyFormData = {
     name: "",
     description: "",
-    kernelCommand: "",
+    updateKernelCommand: "",
     updatePackages: "",
     updateSources: "",
     updatePolicy: "UPDATE_POLICY_LATEST" as infra.UpdatePolicy,
@@ -92,7 +92,7 @@ const CreateOsUpdatePolicyDrawer = ({
     reset({
       name: currentValues.name, // Preserve name
       description: currentValues.description, // Preserve description
-      kernelCommand: defaultValues.kernelCommand,
+      updateKernelCommand: defaultValues.updateKernelCommand,
       updatePackages: defaultValues.updatePackages,
       updateSources: defaultValues.updateSources,
       updatePolicy: defaultValues.updatePolicy,
@@ -126,7 +126,7 @@ const CreateOsUpdatePolicyDrawer = ({
           updatePolicy: data.updatePolicy,
           // Only include fields relevant to the selected OS type
           ...(data.osType === "OS_TYPE_MUTABLE" && {
-            kernelCommand: data.kernelCommand || undefined,
+            updateKernelCommand: data.updateKernelCommand || undefined,
             updatePackages: data.updatePackages
               ? data.updatePackages
                   .split(",") // Split by commas only
@@ -280,19 +280,19 @@ const CreateOsUpdatePolicyDrawer = ({
           updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
             <Flex cols={[12]} className="pa-1">
               <Controller
-                name="kernelCommand"
+                name="updateKernelCommand"
                 control={formControl}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    data-cy="kernelCommand"
+                    data-cy="updateKernelCommand"
                     size="l"
-                    id="kernelCommand"
+                    id="updateKernelCommand"
                     label="Kernel Command Update"
                     placeholder="console=ttyS0,115200 console=tty0 net.ifnames=0"
-                    errorMessage={formErrors.kernelCommand?.message}
+                    errorMessage={formErrors.updateKernelCommand?.message}
                     validationState={
-                      formErrors.kernelCommand ? "invalid" : "valid"
+                      formErrors.updateKernelCommand ? "invalid" : "valid"
                     }
                   />
                 )}
@@ -352,34 +352,15 @@ const CreateOsUpdatePolicyDrawer = ({
               <Controller
                 name="updatePackages"
                 control={formControl}
-                rules={{
-                  validate: (value) => {
-                    if (!value || value.trim() === "") return true; // Optional field
-                    const packages = value
-                      .split(",")
-                      .map((pkg) => pkg.trim())
-                      .filter((pkg) => pkg.length > 0);
-
-                    // Check for version information (contains =, :, or numbers at the end)
-                    const invalidPackages = packages.filter((pkg) =>
-                      pkg.match(/[=:]/),
-                    );
-
-                    if (invalidPackages.length > 0) {
-                      return "Package names should not contain version information (=, :)";
-                    }
-                    return true;
-                  },
-                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     size="l"
                     data-cy="updatePackages"
                     id="updatePackages"
-                    label="Update Packages (Package Names)"
+                    label="Update Packages"
                     placeholder="tree, curl, htop"
-                    description="Enter package names separated by commas (no versions)."
+                    description="Enter package names separated by commas"
                     errorMessage={formErrors.updatePackages?.message}
                     validationState={
                       formErrors.updatePackages ? "invalid" : "valid"
