@@ -56,7 +56,7 @@ const OsUpdatePolicyDetails = ({
       <div className="os-update-policy-field">
         <OsProfileDetailField
           label="Kernel Command Update"
-          value={osUpdatePolicy.kernelCommand || "N/A"}
+          value={osUpdatePolicy.updateKernelCommand || "N/A"}
         />
       </div>
 
