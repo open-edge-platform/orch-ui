@@ -101,7 +101,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
     it("should show 'N/A' for empty optional fields", () => {
       const policyWithEmptyFields = {
         ...osUpdatePolicyScheduled,
-        kernelCommand: "",
+        updateKernelCommand: "",
         updateSources: [],
         targetOs: undefined,
       };

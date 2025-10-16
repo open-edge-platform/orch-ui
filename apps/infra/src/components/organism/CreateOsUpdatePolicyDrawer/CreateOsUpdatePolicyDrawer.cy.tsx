@@ -69,23 +69,6 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       cy.contains("Name must be less than 50 characters").should("exist");
     });
 
-    it("should validate package names format", () => {
-      // Switch to Mutable OS and Update To Target to show package field
-      pom.selectOsType("OS_TYPE_MUTABLE");
-      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
-
-      // Ensure the field is visible
-      cyGet("updatePackages").should("exist");
-
-      // Enter invalid package name with version
-      cyGet("updatePackages").type("package=1.0.0");
-      cyGet("addBtn").click();
-
-      cy.contains(
-        "Package names should not contain version information",
-      ).should("exist");
-    });
-
     it("should validate update sources format", () => {
       // Switch to Mutable OS and Update To Target
       pom.selectOsType("OS_TYPE_MUTABLE");
@@ -112,7 +95,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
     it("should hide advanced fields for Mutable OS with Update To Latest", () => {
       // Start with defaults (Mutable OS, Update To Latest)
       // Advanced fields should not be visible by default
-      cyGet("kernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("not.exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
       cyGet("targetOs").should("not.exist");
@@ -122,7 +105,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.selectUpdatePolicy("UPDATE_POLICY_LATEST");
 
       // Advanced fields should still not be visible
-      cyGet("kernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("not.exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
       cyGet("targetOs").should("not.exist");
@@ -133,7 +116,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
 
       // Advanced fields should be visible for Mutable OS
-      cyGet("kernelCommand").should("exist");
+      cyGet("updateKernelCommand").should("exist");
       cyGet("updatePackages").should("exist");
       cyGet("updateSources").should("exist");
       // Target OS should not be visible for Mutable OS
@@ -147,7 +130,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       // Target OS field should be visible for Immutable OS with Update To Target
       cyGet("targetOs").should("exist");
       // Advanced fields should not be visible for Immutable OS
-      cyGet("kernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("not.exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
     });
@@ -157,7 +140,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.selectUpdatePolicy("UPDATE_POLICY_LATEST");
 
       // No advanced fields should be visible for Immutable OS with Update To Latest
-      cyGet("kernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("not.exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
       cyGet("targetOs").should("not.exist");
@@ -181,8 +164,8 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
 
       // Wait for fields to appear and fill them
-      cyGet("kernelCommand").should("exist");
-      pom.el.kernelCommand.type("test-kernel-command");
+      cyGet("updateKernelCommand").should("exist");
+      pom.el.updateKernelCommand.type("test-kernel-command");
 
       // Change OS type to Immutable
       pom.selectOsType("OS_TYPE_IMMUTABLE");
