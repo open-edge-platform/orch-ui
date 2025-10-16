@@ -35,16 +35,12 @@ describe("<OsUpdatePolicyDetails/>", () => {
   });
 
   describe("Field Display - All Fields Always Visible", () => {
-    it("should always show all sections regardless of OS type", () => {
+    it("should always show main sections", () => {
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
 
-      // All sections should always be visible
+      // Only these two sections should be visible as headers
+      cy.contains("Details").should("exist");
       cy.contains("OS Configuration").should("exist");
-      cy.contains("Target Operating System").should("exist");
-      cy.contains("Advanced Settings").should("exist");
-      cy.contains("Update Packages").should("exist");
-
-      // All fields should be visible
       cy.contains("Update Policy").should("exist");
       cy.contains("Target OS Name").should("exist");
       cy.contains("Kernel Command Update").should("exist");
@@ -56,10 +52,11 @@ describe("<OsUpdatePolicyDetails/>", () => {
         <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
       );
 
-      // Advanced settings section should always be visible
-      cy.contains("Advanced Settings").should("exist");
+      // main section headers should be visible
+      cy.contains("Details").should("exist");
+      cy.contains("OS Configuration").should("exist");
 
-      // All fields should be visible
+      // All fields should be visible as labels
       cy.contains("Kernel Command Update").should("exist");
       cy.contains("Update Sources").should("exist");
     });
@@ -69,7 +66,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
         <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
       );
 
-      // Update Packages section should always be visible
+      // Update Packages should be visible as a field label
       cy.contains("Update Packages").should("exist");
     });
 
@@ -85,11 +82,10 @@ describe("<OsUpdatePolicyDetails/>", () => {
   });
 
   describe("Target OS Display", () => {
-    it("should always show target OS section", () => {
+    it("should show target OS field", () => {
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
 
-      // Target OS section should always be visible
-      cy.contains("Target Operating System").should("exist");
+      // the field label should exist
       cy.contains("Target OS Name").should("exist");
 
       // Should show the target OS name if available, otherwise N/A
@@ -145,11 +141,12 @@ describe("<OsUpdatePolicyDetails/>", () => {
     it("should render update packages correctly", () => {
       const policyWithPackages = {
         ...osUpdatePolicyScheduled,
-        installPackages: "package1\npackage2\npackage3",
+        updatePackages: "package1\npackage2\npackage3",
       };
 
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={policyWithPackages} />);
 
+      // Update Packages should appear as field label, not section header
       cy.contains("Update Packages").should("exist");
       cy.contains("package1").should("exist");
       cy.contains("package2").should("exist");
@@ -159,7 +156,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
     it("should handle empty package list", () => {
       const policyWithEmptyPackages = {
         ...osUpdatePolicyScheduled,
-        installPackages: "",
+        updatePackages: "",
       };
 
       cy.mount(
@@ -174,7 +171,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
     it("should handle undefined packages", () => {
       const policyWithoutPackages = {
         ...osUpdatePolicyScheduled,
-        installPackages: undefined,
+        updatePackages: undefined,
       };
 
       cy.mount(

@@ -4,7 +4,6 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { Text } from "@spark-design/react";
 import OsProfileDetailField from "../OSProfileDetails/OsProfileDetailField";
 
 import "./OsUpdatePolicyDetails.scss";
@@ -15,38 +14,6 @@ interface OsUpdatePolicyDetailsProps {
   osUpdatePolicy: infra.OsUpdatePolicyRead;
 }
 
-/**
- * Renders the details of update packages.
- *
- * @param {string} installPackages - The packages string containing names to be rendered.
- * @returns {JSX.Element} The JSX element containing the package names.
- */
-const renderInstallPackages = (installPackages: string) => {
-  const packages = installPackages.split("\n").filter((pkg) => pkg.trim());
-
-  return (
-    <div className="install-packages-content">
-      {packages.length ? (
-        <div className="install-packages__grid-wrapper">
-          <div>
-            <Text style={{ fontWeight: "500" }}>Package Name</Text>
-          </div>
-          {packages.map((pkg: string, index: number) => (
-            <div key={index}>
-              <span className="line"></span>
-              <div>
-                <Text>{pkg.trim()}</Text>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <Text>No packages to update</Text>
-      )}
-    </div>
-  );
-};
-
 const OsUpdatePolicyDetails = ({
   osUpdatePolicy,
 }: OsUpdatePolicyDetailsProps) => {
@@ -55,56 +22,69 @@ const OsUpdatePolicyDetails = ({
   return (
     <div className="os-update-policy-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
-      <OsProfileDetailField label={"Name"} value={osUpdatePolicy.name} />
-      <OsProfileDetailField
-        label="Description"
-        value={osUpdatePolicy.description || "N/A"}
-      />
+      <div className="os-update-policy-field">
+        <OsProfileDetailField label={"Name"} value={osUpdatePolicy.name} />
+      </div>
+      <div className="os-update-policy-field">
+        <OsProfileDetailField
+          label="Description"
+          value={osUpdatePolicy.description || "N/A"}
+        />
+      </div>
 
       <div className="os-details-advanced-settings">OS Configuration</div>
-      <OsProfileDetailField
-        label="Update Policy"
-        value={
-          osUpdatePolicy.updatePolicy === "UPDATE_POLICY_LATEST"
-            ? "Update To Latest"
-            : osUpdatePolicy.updatePolicy === "UPDATE_POLICY_TARGET"
-              ? "Update To Target"
-              : osUpdatePolicy.updatePolicy || "N/A"
-        }
-      />
-
-      {/* Target OS */}
-      <div className="os-details-advanced-settings">
-        Target Operating System
+      <div className="os-update-policy-field">
+        <OsProfileDetailField
+          label="Update Policy"
+          value={
+            osUpdatePolicy.updatePolicy === "UPDATE_POLICY_LATEST"
+              ? "Update To Latest"
+              : osUpdatePolicy.updatePolicy === "UPDATE_POLICY_TARGET"
+                ? "Update To Target"
+                : osUpdatePolicy.updatePolicy || "N/A"
+          }
+        />
       </div>
-      <OsProfileDetailField
-        label="Target OS Name"
-        value={osUpdatePolicy.targetOs?.name || "N/A"}
-      />
 
-      {/* Advanced Settings */}
-      <div className="os-details-advanced-settings">Advanced Settings</div>
+      <div className="os-update-policy-field">
+        <OsProfileDetailField
+          label="Target OS Name"
+          value={osUpdatePolicy.targetOs?.name || "N/A"}
+        />
+      </div>
 
-      <OsProfileDetailField
-        label="Kernel Command Update"
-        value={osUpdatePolicy.kernelCommand || "N/A"}
-      />
+      <div className="os-update-policy-field">
+        <OsProfileDetailField
+          label="Kernel Command Update"
+          value={osUpdatePolicy.kernelCommand || "N/A"}
+        />
+      </div>
 
-      <OsProfileDetailField
-        label="Update Sources"
-        value={
-          osUpdatePolicy.updateSources?.length
-            ? osUpdatePolicy.updateSources.join(", ")
-            : "N/A"
-        }
-      />
+      <div className="os-update-policy-field">
+        <OsProfileDetailField
+          label="Update Sources"
+          value={
+            osUpdatePolicy.updateSources?.length
+              ? osUpdatePolicy.updateSources.join(", ")
+              : "N/A"
+          }
+        />
+      </div>
 
-      <div className="os-details-advanced-settings">Update Packages</div>
-      {osUpdatePolicy.installPackages ? (
-        renderInstallPackages(osUpdatePolicy.installPackages)
-      ) : (
-        <OsProfileDetailField label="Packages" value="N/A" />
-      )}
+      <div className="os-update-policy-field">
+        <OsProfileDetailField
+          label="Update Packages"
+          value={
+            osUpdatePolicy.updatePackages
+              ? osUpdatePolicy.updatePackages
+                  .split("\n")
+                  .filter((pkg) => pkg.trim())
+                  .map((pkg) => pkg.trim())
+                  .join(", ")
+              : "N/A"
+          }
+        />
+      </div>
     </div>
   );
 };
