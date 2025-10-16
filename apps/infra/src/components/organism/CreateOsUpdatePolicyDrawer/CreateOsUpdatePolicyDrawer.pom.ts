@@ -11,7 +11,7 @@ const dataCySelectors = [
   "description",
   "osType",
   "kernelCommand",
-  "installPackages",
+  "updatePackages",
   "updateSources",
   "updatePolicy",
   "targetOs",
@@ -94,7 +94,7 @@ export class CreateOsUpdatePolicyDrawerPom extends CyPom<
     this.selectOsType("OS_TYPE_MUTABLE");
     this.selectUpdatePolicy("UPDATE_POLICY_TARGET");
     this.el.kernelCommand.type("console=ttyS0,115200");
-    this.el.installPackages.type("curl, wget, vim");
+    this.el.updatePackages.type("curl, wget, vim");
     this.el.updateSources.type(
       "deb http://archive.ubuntu.com/ubuntu focal main",
     );
