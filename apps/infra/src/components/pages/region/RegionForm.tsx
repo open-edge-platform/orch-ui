@@ -487,6 +487,11 @@ const RegionForm: React.FC = () => {
 
       await Promise.all(allPromises);
 
+      // Force tree refresh to show updated region data
+      if (regionId !== "new") {
+        localStorage.setItem("clearTree", "true");
+      }
+
       redirectToLocationsPage();
     } catch (error) {
       setErrorInfo(error);
