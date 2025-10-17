@@ -16,7 +16,7 @@ const OsUpdatePolicyDetailField = ({
   value = "",
 }: OsProfileDrawerFieldProps) => {
   return (
-    <Flex className="os-update-policy-container" cols={[4, 8]}>
+    <Flex align="start" className="os-update-policy-container" cols={[4, 8]}>
       <Text className="os-update-policy-label">{label}</Text>
       <Text className="os-update-policy-value">{value}</Text>
     </Flex>
