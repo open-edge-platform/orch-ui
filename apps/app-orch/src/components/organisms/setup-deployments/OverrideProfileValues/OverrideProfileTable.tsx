@@ -101,7 +101,7 @@ const OverrideProfileTable = ({
         .catch(setParsedErr)
         .finally(() => setIsloading(false));
     }
-  }, [selectedPackage, selectedProfile, overrideValues]);
+  }, [selectedPackage, selectedProfile]);
 
   const columns: TableColumn<catalog.Application>[] = [
     {
