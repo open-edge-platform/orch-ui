@@ -35,7 +35,7 @@ jobs:
 
       - name: Code style check
         run: npm run library:lint
-      
+
       - name: Run api:generate script
         run: npm run api:generate
 
