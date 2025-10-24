@@ -1,0 +1,29 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.os-update {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &__header {
+        margin-bottom: 8px;
+    }
+
+    &__policy-selection {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__actions {
+        margin-left: 1rem;
+    }
+
+    &__apply-button {
+        height: 100% !important;
+    }
+}

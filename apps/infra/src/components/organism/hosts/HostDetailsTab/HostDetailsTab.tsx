@@ -21,6 +21,7 @@ import {
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
+import OsUpdate from "../../../organism/OsUpdate/OsUpdate";
 import VproDetails from "../../VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
@@ -81,10 +82,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       id: 7,
       title: "Host Labels",
     },
+    {
+      id: 8,
+      title: "Updates",
+    },
     ...(host.currentAmtState === "AMT_STATE_PROVISIONED"
       ? [
           {
-            id: 8,
+            id: 9,
             title: "vPro Details",
           },
         ]
@@ -264,6 +269,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
         {(!host.metadata || host.metadata.length === 0) && (
           <em>No Host labels are available!</em>
         )}
+      </div>
+    </Item>,
+  );
+
+  itemList.push(
+    <Item title={tabItems[7].title}>
+      <div className="os-update-container">
+        <OsUpdate host={host} />
       </div>
     </Item>,
   );
