@@ -100,17 +100,17 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
       </Flex>
 
       <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
-        <Text>Assigned OS Update Policy</Text>
-        <Text data-cy="desiredOsProfiles">
-          {host.instance?.updatePolicy?.name || "-"}
-        </Text>
-      </Flex>
-
-      <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
         <Text>Updates</Text>
         <Text data-cy="desiredOsProfiles">
           {formatOsUpdateAvailable(host?.instance?.osUpdateAvailable ?? "-") ||
             "-"}
+        </Text>
+      </Flex>
+
+      <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
+        <Text>Assigned OS Update Policy</Text>
+        <Text data-cy="desiredOsProfiles">
+          {host.instance?.updatePolicy?.name || "-"}
         </Text>
       </Flex>
 
@@ -130,7 +130,9 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
             placeholder={
               isPoliciesLoading
                 ? "Loading policies..."
-                : "Select an OS Update Policy"
+                : policies.length > 0
+                  ? "Select an OS Update Policy"
+                  : "No OS Update Policies Available"
             }
             selectedKey={selectedPolicyId}
             onSelectionChange={(key) => setSelectedPolicyId(key as string)}
