@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { infra } from "@orch-ui/apis";
 import { Flex, SquareSpinner } from "@orch-ui/components";
+import { SharedStorage } from "@orch-ui/utils";
 import { Heading } from "@spark-design/react";
 import { DeploymentMetadata } from "../../../../components/atom/locations/DeploymentMetadata/DeploymentMetadata";
 import { SiteActionsPopup } from "../../../../components/atom/locations/SiteActionsPopup/SiteActionsPopup";
@@ -22,8 +24,23 @@ interface SiteViewProps {
 
 export const SiteView = ({ basePath, hideActions = false }: SiteViewProps) => {
   const cy = { "data-cy": dataCy };
-  const site = useAppSelector(selectSite);
+  const siteFromRedux = useAppSelector(selectSite);
   const className = "site-view";
+
+  const { data: site } = infra.useSiteServiceGetSiteQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+      resourceId: siteFromRedux?.resourceId ?? "",
+      regionResourceId: siteFromRedux?.region?.resourceId ?? "",
+    },
+    {
+      skip:
+        !siteFromRedux?.resourceId ||
+        !siteFromRedux?.region?.resourceId ||
+        !SharedStorage.project?.name,
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   if (!site) {
     return <SquareSpinner />;

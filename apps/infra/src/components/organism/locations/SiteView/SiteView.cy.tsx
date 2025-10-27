@@ -11,6 +11,7 @@ import { SiteViewPom } from "./SiteView.pom";
 const pom = new SiteViewPom();
 describe("<SiteView/>", () => {
   it("should render component", () => {
+    pom.interceptApis([pom.api.getSite]);
     cy.mount(<SiteView />, {
       reduxStore: setupStore({
         locations: {
@@ -21,10 +22,12 @@ describe("<SiteView/>", () => {
       }),
     });
 
+    pom.waitForApis();
     pom.root.should("exist");
   });
 
   it("should render all info correctly when the site is valid", () => {
+    pom.interceptApis([pom.api.getSite]);
     pom.metrics.interceptApis([pom.metrics.api.getRegionTelemetryMetrics]);
     pom.logs.interceptApis([pom.logs.api.getRegionTelemetryLogs]);
 
@@ -38,6 +41,7 @@ describe("<SiteView/>", () => {
       }),
     });
 
+    pom.waitForApis();
     pom.metrics.waitForApis();
     pom.logs.waitForApis();
 
@@ -50,6 +54,7 @@ describe("<SiteView/>", () => {
   });
 
   it("should render actions button by default when hideActions prop is not passed", () => {
+    pom.interceptApis([pom.api.getSite]);
     pom.metrics.interceptApis([pom.metrics.api.getRegionTelemetryMetrics]);
     pom.logs.interceptApis([pom.logs.api.getRegionTelemetryLogs]);
 
@@ -63,12 +68,14 @@ describe("<SiteView/>", () => {
       }),
     });
 
+    pom.waitForApis();
     pom.metrics.waitForApis();
     pom.logs.waitForApis();
     pom.siteActionsPopup.el.siteActionsBtn.should("exist");
   });
 
   it("should not render actions button when hideActions prop is passed as true", () => {
+    pom.interceptApis([pom.api.getSite]);
     pom.metrics.interceptApis([pom.metrics.api.getRegionTelemetryMetrics]);
     pom.logs.interceptApis([pom.logs.api.getRegionTelemetryLogs]);
 
@@ -82,6 +89,7 @@ describe("<SiteView/>", () => {
       }),
     });
 
+    pom.waitForApis();
     pom.metrics.waitForApis();
     pom.logs.waitForApis();
     pom.siteActionsPopup.el.siteActionsBtn.should("not.exist");
