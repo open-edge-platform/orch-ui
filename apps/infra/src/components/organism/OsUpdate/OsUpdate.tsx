@@ -27,7 +27,6 @@ import {
 import "./OsUpdate.scss";
 
 const dataCy = "osUpdate";
-
 interface OsUpdateProps {
   host: infra.HostResourceRead;
 }
