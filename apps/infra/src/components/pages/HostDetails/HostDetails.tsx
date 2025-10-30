@@ -18,7 +18,6 @@ import {
 import {
   API_INTERVAL,
   checkAuthAndRole,
-  formatOsUpdateAvailable,
   getCustomStatusOnIdleAggregation,
   getTrustedComputeCompatibility,
   HostGenericStatuses,
@@ -545,14 +544,6 @@ const HostDetails: React.FC = () => {
             <tr>
               <td>OS</td>
               <td data-cy="osProfiles">{host?.instance?.os?.name ?? "-"}</td>
-            </tr>
-            <tr>
-              <td>Updates</td>
-              <td data-cy="desiredOsProfiles">
-                {formatOsUpdateAvailable(
-                  host?.instance?.osUpdateAvailable ?? "-",
-                )}
-              </td>
             </tr>
             {host.site && (
               <tr>
