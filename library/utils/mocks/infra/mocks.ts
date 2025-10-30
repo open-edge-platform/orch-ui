@@ -14,6 +14,7 @@ import {
   InstanceStore,
   OsResourceStore,
   OsUpdatePolicyStore,
+  OsUpdateRunStore,
   RegionStore,
   RepeatedScheduleStore,
   SingleSchedule2Store,
@@ -45,6 +46,7 @@ export const telemetryMetricsProfilesStore =
 export const telemetrylogsProfilesStore = new TelemetryLogsProfilesStore();
 export const osResourceStore = new OsResourceStore();
 export const osUpdatePolicyStore = new OsUpdatePolicyStore();
+export const osUpdateRunStore = new OsUpdateRunStore();
 export const instanceStore = new InstanceStore();
 export const workloadStore = new WorkloadStore();
 export const vproDetailsStore = new VproDetailsStore();
@@ -946,6 +948,70 @@ export const handlers = [
       },
       { status: 200 },
     );
+  }),
+
+  // os update runs
+  http.get(`${baseURL}/os-update-runs`, async ({ request }) => {
+    const url = new URL(request.url);
+    const filter = url.searchParams.get("filter");
+    const pageSize = parseInt(url.searchParams.get("pageSize") || "20");
+    const offset = parseInt(url.searchParams.get("offset") || "0");
+
+    let runs = osUpdateRunStore.list();
+    // Apply filter if provided
+    if (filter) {
+      // Parse filter for hostId
+      const hostIdMatch = filter.match(/hostId="([^"]+)"/);
+      if (hostIdMatch) {
+        const hostId = hostIdMatch[1];
+        runs = osUpdateRunStore.listByHostId(hostId);
+      }
+      // Parse filter for resourceId
+      const resourceIdMatch = filter.match(/resourceId="([^"]+)"/);
+      if (resourceIdMatch) {
+        const resourceId = resourceIdMatch[1];
+        runs = runs.filter((run) => run.instance?.instanceID === resourceId);
+      }
+    }
+
+    // Apply pagination
+    const paginatedRuns = runs.slice(offset, offset + pageSize);
+    const hasNext = offset + pageSize < runs.length;
+    await delay(mockDelay);
+    return HttpResponse.json(
+      {
+        hasNext,
+        osUpdateRuns: paginatedRuns,
+        totalElements: runs.length,
+      } as infra.OsUpdateRunListOsUpdateRunApiResponse,
+      { status: 200 },
+    );
+  }),
+
+  http.get(`${baseURL}/os-update-runs/:resourceId`, async ({ params }) => {
+    const { resourceId } = params as infra.OsUpdateRunGetOsUpdateRunApiArg;
+    const run = osUpdateRunStore.get(resourceId);
+
+    if (run) {
+      await delay(mockDelay);
+      return HttpResponse.json(run, { status: 200 });
+    }
+
+    return HttpResponse.json(
+      {
+        detail:
+          "rpc error: code = NotFound desc = ent: OS update run not found",
+        status: 404,
+      },
+      { status: 404 },
+    );
+  }),
+
+  http.delete(`${baseURL}/os-update-runs/:resourceId`, async ({ params }) => {
+    const { resourceId } = params as infra.OsUpdateRunDeleteOsUpdateRunApiArg;
+    const deleteResult = osUpdateRunStore.delete(resourceId);
+
+    return HttpResponse.json(undefined, { status: deleteResult ? 200 : 404 });
   }),
 
   // telemetry

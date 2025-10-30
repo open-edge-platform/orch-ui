@@ -10,6 +10,7 @@ export * from "./instances";
 export * from "./locations";
 export * from "./osresources";
 export * from "./osUpdatePolicy";
+export * from "./osUpdateRun";
 export * from "./regions";
 export * from "./repeatedSchedule";
 export * from "./schedule";
