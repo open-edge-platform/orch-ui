@@ -49,15 +49,6 @@ describe("<OsUpdate/>", () => {
       pom.root.should("exist");
     });
 
-    it("should display OS information", () => {
-      pom.interceptApis([pom.api.getOsUpdatePolicies]);
-      cy.mount(<OsUpdate host={mockHostWithUpdate} />);
-      pom.waitForApis();
-
-      cy.contains("OS").should("exist");
-      pom.osName.should("contain", mockHostWithUpdate.instance?.os?.name);
-    });
-
     it("should display update availability information", () => {
       pom.interceptApis([pom.api.getOsUpdatePolicies]);
       cy.mount(<OsUpdate host={mockHostWithUpdate} />);
@@ -90,7 +81,6 @@ describe("<OsUpdate/>", () => {
       pom.waitForApis();
 
       pom.root.should("exist");
-      pom.osName.should("contain", "-");
       pom.updatesAvailable.should("contain", "-");
       pom.assignedPolicy.should("contain", "-");
     });

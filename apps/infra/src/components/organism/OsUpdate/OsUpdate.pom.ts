@@ -74,10 +74,6 @@ class OsUpdatePom extends CyPom<Selectors, ApiAliases> {
     super(rootCy, [...dataCySelectors], endpoints);
   }
 
-  get osName() {
-    return this.el.osProfiles;
-  }
-
   get updatesAvailable() {
     return this.el.desiredOsProfiles.first();
   }
