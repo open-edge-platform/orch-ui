@@ -18,7 +18,7 @@ import {
   MessageBannerAlertState,
   ToastState,
 } from "@spark-design/tokens";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import {
   showMessageNotification,
@@ -41,10 +41,25 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
     data: osUpdatePolicies,
     isLoading: isPoliciesLoading,
     isError: isPoliciesError,
+    error: policiesError,
   } = infra.useOsUpdatePolicyListOsUpdatePolicyQuery({
     projectName: SharedStorage.project?.name ?? "",
     pageSize: 100,
   });
+
+  // Handle policies loading error
+  useEffect(() => {
+    if (isPoliciesError && policiesError) {
+      dispatch(
+        showMessageNotification({
+          messageTitle: "Failed to load OS Update Policies",
+          messageBody: `${parseError(policiesError).data}`,
+          variant: MessageBannerAlertState.Error,
+          showMessage: true,
+        }),
+      );
+    }
+  }, [isPoliciesError, policiesError]);
 
   // Patch Instance Mutation
   const [patchInstance, { isLoading: isPatching }] =
