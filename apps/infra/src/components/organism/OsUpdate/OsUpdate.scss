@@ -4,19 +4,19 @@
  */
 
 .os-update {
-    padding: 16px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem;
 
     &__header {
-        margin-bottom: 8px;
+        margin-bottom: 0.5rem;
     }
 
     &__policy-selection {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     &__actions {
