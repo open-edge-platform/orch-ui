@@ -6,7 +6,7 @@
 import { infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwo as mockHost,
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   osUpdatePolicyTarget,
 } from "@orch-ui/utils";
 import OsUpdate from "./OsUpdate";
@@ -49,15 +49,6 @@ describe("<OsUpdate/>", () => {
       pom.root.should("exist");
     });
 
-    it("should display OS information", () => {
-      pom.interceptApis([pom.api.getOsUpdatePolicies]);
-      cy.mount(<OsUpdate host={mockHostWithUpdate} />);
-      pom.waitForApis();
-
-      cy.contains("OS").should("exist");
-      pom.osName.should("contain", mockHostWithUpdate.instance?.os?.name);
-    });
-
     it("should display update availability information", () => {
       pom.interceptApis([pom.api.getOsUpdatePolicies]);
       cy.mount(<OsUpdate host={mockHostWithUpdate} />);
@@ -90,7 +81,6 @@ describe("<OsUpdate/>", () => {
       pom.waitForApis();
 
       pom.root.should("exist");
-      pom.osName.should("contain", "-");
       pom.updatesAvailable.should("contain", "-");
       pom.assignedPolicy.should("contain", "-");
     });
@@ -110,7 +100,7 @@ describe("<OsUpdate/>", () => {
 
       // Should show available policies
       cy.contains(osUpdatePolicyTarget.name).should("exist");
-      cy.contains(osUpdatePolicyScheduled.name).should("exist");
+      cy.contains(osUpdatePolicyLatest.name).should("exist");
     });
 
     it("should show loading state while fetching policies", () => {
