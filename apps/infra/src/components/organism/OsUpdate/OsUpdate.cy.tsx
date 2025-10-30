@@ -6,7 +6,7 @@
 import { infra } from "@orch-ui/apis";
 import {
   assignedWorkloadHostTwo as mockHost,
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   osUpdatePolicyTarget,
 } from "@orch-ui/utils";
 import OsUpdate from "./OsUpdate";
@@ -110,7 +110,7 @@ describe("<OsUpdate/>", () => {
 
       // Should show available policies
       cy.contains(osUpdatePolicyTarget.name).should("exist");
-      cy.contains(osUpdatePolicyScheduled.name).should("exist");
+      cy.contains(osUpdatePolicyLatest.name).should("exist");
     });
 
     it("should show loading state while fetching policies", () => {

@@ -6,9 +6,9 @@
 import { infra } from "@orch-ui/apis";
 import { BaseStore } from "./baseStore";
 import {
-  osUpdatePolicyImmediate,
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   osUpdatePolicyTarget,
+  osUpdatePolicyUnspecified,
 } from "./osUpdatePolicy";
 
 export const createOsUpdateRun = (
@@ -50,7 +50,7 @@ export const osUpdateRunCompleted = createOsUpdateRun(
   "osupdaterun-completed-001",
   "Security Update Run - Completed",
   "Completed security update for production host",
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   {
     instanceID: "inst-prod-001",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -67,7 +67,7 @@ export const osUpdateRunInProgress = createOsUpdateRun(
   "osupdaterun-progress-002",
   "Critical Patch Run - In Progress",
   "Currently applying critical security patches",
-  osUpdatePolicyImmediate,
+  osUpdatePolicyUnspecified,
   {
     instanceID: "inst-edge-002",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -101,7 +101,7 @@ export const osUpdateRunPending = createOsUpdateRun(
   "osupdaterun-pending-004",
   "Scheduled Update - Pending",
   "Waiting for maintenance window to begin",
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   {
     instanceID: "inst-staging-004",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -118,7 +118,7 @@ export const osUpdateRunCompleted3 = createOsUpdateRun(
   "osupdaterun-completed-006",
   "Security Patches - Completed",
   "Applied critical security patches to edge instance",
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   {
     instanceID: "inst-edge-006",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -135,7 +135,7 @@ export const osUpdateRunCompleted4 = createOsUpdateRun(
   "osupdaterun-completed-007",
   "Package Updates - Completed",
   "Updated system packages to latest versions",
-  osUpdatePolicyImmediate,
+  osUpdatePolicyUnspecified,
   {
     instanceID: "inst-dev-007",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -148,28 +148,11 @@ export const osUpdateRunCompleted4 = createOsUpdateRun(
   Math.floor(Date.now() / 1000) - 258900, // Ended after 5 minutes
 );
 
-export const osUpdateRunCompleted5 = createOsUpdateRun(
-  "osupdaterun-completed-008",
-  "Firmware Update - Completed",
-  "Updated system firmware to latest version",
-  osUpdatePolicyTarget,
-  {
-    instanceID: "inst-prod-008",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Production Instance 008",
-  } as infra.InstanceResourceRead,
-  "STATUS_INDICATION_IDLE" as infra.StatusIndication,
-  "Update completed successfully",
-  "Firmware updated successfully. System restart completed.",
-  Math.floor(Date.now() / 1000) - 345600, // Started 4 days ago
-  Math.floor(Date.now() / 1000) - 344700, // Ended after 15 minutes
-);
-
 export const osUpdateRunInProgress2 = createOsUpdateRun(
   "osupdaterun-progress-009",
   "System Update - In Progress",
   "Currently updating system components",
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   {
     instanceID: "inst-staging-009",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -186,7 +169,7 @@ export const osUpdateRunFailed2 = createOsUpdateRun(
   "osupdaterun-failed-010",
   "Critical Update - Failed",
   "Failed to apply critical system updates",
-  osUpdatePolicyImmediate,
+  osUpdatePolicyUnspecified,
   {
     instanceID: "inst-test-010",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -203,7 +186,7 @@ export const osUpdateRunPending2 = createOsUpdateRun(
   "osupdaterun-pending-011",
   "Maintenance Update - Pending",
   "Scheduled maintenance update pending approval",
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   {
     instanceID: "inst-prod-011",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
@@ -234,20 +217,37 @@ export const osUpdateRunCompleted6 = createOsUpdateRun(
 );
 
 export const osUpdateRunCompleted2 = createOsUpdateRun(
-  "osupdaterun-completed-005",
-  "Kernel Update - Completed",
-  "Successfully updated kernel packages",
-  osUpdatePolicyImmediate,
+  "osupdaterun-completed-012",
+  "Security Update - Completed",
+  "Security patches successfully applied",
+  osUpdatePolicyLatest,
   {
-    instanceID: "inst-prod-005",
+    instanceID: "inst-dev-012",
     kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Production Edge Instance 005",
+    name: "Development Instance 012",
   } as infra.InstanceResourceRead,
-  "STATUS_INDICATION_IDLE" as infra.StatusIndication,
-  "Update completed successfully",
-  "Kernel packages updated successfully. System reboot completed without issues.",
-  Math.floor(Date.now() / 1000) - 86400, // Started 1 day ago
-  Math.floor(Date.now() / 1000) - 86100, // Ended after 5 minutes
+  "STATUS_INDICATION_SUCCESS" as infra.StatusIndication,
+  "Completed successfully",
+  "All security patches have been applied and system has been restarted.",
+  Math.floor(Date.now() / 1000) - 864000, // Started 10 days ago
+  Math.floor(Date.now() / 1000) - 862800, // Completed after 20 minutes
+);
+
+export const osUpdateRunCompleted5 = createOsUpdateRun(
+  "osupdaterun-completed-013",
+  "Firmware Update - Completed",
+  "Device firmware successfully updated to latest version",
+  osUpdatePolicyUnspecified,
+  {
+    instanceID: "inst-beta-013",
+    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
+    name: "Beta Instance 013",
+  } as infra.InstanceResourceRead,
+  "STATUS_INDICATION_SUCCESS" as infra.StatusIndication,
+  "Update successful",
+  "Firmware updated to version 2.1.3. All systems operational.",
+  Math.floor(Date.now() / 1000) - 1209600, // Started 14 days ago
+  Math.floor(Date.now() / 1000) - 1207800, // Completed after 30 minutes
 );
 
 export class OsUpdateRunStore extends BaseStore<
