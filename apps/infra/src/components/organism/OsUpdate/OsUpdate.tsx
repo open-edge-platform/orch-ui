@@ -94,12 +94,7 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
   return (
     <div {...cy} className="os-update">
       <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
-        <Text>OS</Text>
-        <Text data-cy="osProfiles">{host?.instance?.os?.name ?? "-"}</Text>
-      </Flex>
-
-      <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
-        <Text>Updates</Text>
+        <Text>Available Update</Text>
         <Text data-cy="desiredOsProfiles">
           {formatOsUpdateAvailable(host?.instance?.osUpdateAvailable ?? "-") ||
             "-"}
