@@ -6,6 +6,16 @@
 import { infra } from "@orch-ui/apis";
 import { BaseStore } from "./baseStore";
 import {
+  instanceFour,
+  instanceOne,
+  instanceThree,
+  instanceTwo,
+  instanceUnspecified,
+  provisionedInstanceOne,
+  provisionedInstanceThree,
+  provisionedInstanceTwo,
+} from "./instances";
+import {
   osUpdatePolicyLatest,
   osUpdatePolicyTarget,
   osUpdatePolicyUnspecified,
@@ -51,11 +61,7 @@ export const osUpdateRunCompleted = createOsUpdateRun(
   "Security Update Run - Completed",
   "Completed security update for production host",
   osUpdatePolicyLatest,
-  {
-    instanceID: "inst-prod-001",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Production Edge Instance 001",
-  } as infra.InstanceResourceRead,
+  instanceOne,
   "STATUS_INDICATION_IDLE" as infra.StatusIndication,
   "Update completed successfully",
   "All security patches applied successfully. System rebooted and operational.",
@@ -68,11 +74,7 @@ export const osUpdateRunInProgress = createOsUpdateRun(
   "Critical Patch Run - In Progress",
   "Currently applying critical security patches",
   osUpdatePolicyUnspecified,
-  {
-    instanceID: "inst-edge-002",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Edge Instance 002",
-  } as infra.InstanceResourceRead,
+  instanceTwo,
   "STATUS_INDICATION_IN_PROGRESS" as infra.StatusIndication,
   "Installing updates",
   "Currently downloading and installing critical patches. Step 3 of 5 completed.",
@@ -85,11 +87,7 @@ export const osUpdateRunFailed = createOsUpdateRun(
   "Target OS Update - Failed",
   "Failed to update to target OS version",
   osUpdatePolicyTarget,
-  {
-    instanceID: "inst-dev-003",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Development Instance 003",
-  } as infra.InstanceResourceRead,
+  instanceThree,
   "STATUS_INDICATION_ERROR" as infra.StatusIndication,
   "Update failed",
   "Failed to download target OS image. Network connectivity issues detected.",
@@ -102,11 +100,7 @@ export const osUpdateRunPending = createOsUpdateRun(
   "Scheduled Update - Pending",
   "Waiting for maintenance window to begin",
   osUpdatePolicyLatest,
-  {
-    instanceID: "inst-staging-004",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Staging Instance 004",
-  } as infra.InstanceResourceRead,
+  instanceFour,
   "STATUS_INDICATION_UNSPECIFIED" as infra.StatusIndication,
   "Pending",
   "Waiting for scheduled maintenance window at 2:00 AM UTC.",
@@ -119,11 +113,7 @@ export const osUpdateRunCompleted3 = createOsUpdateRun(
   "Security Patches - Completed",
   "Applied critical security patches to edge instance",
   osUpdatePolicyLatest,
-  {
-    instanceID: "inst-edge-006",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Edge Instance 006",
-  } as infra.InstanceResourceRead,
+  provisionedInstanceOne,
   "STATUS_INDICATION_IDLE" as infra.StatusIndication,
   "Update completed successfully",
   "Security patches applied successfully. No reboot required.",
@@ -136,11 +126,7 @@ export const osUpdateRunCompleted4 = createOsUpdateRun(
   "Package Updates - Completed",
   "Updated system packages to latest versions",
   osUpdatePolicyUnspecified,
-  {
-    instanceID: "inst-dev-007",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Development Instance 007",
-  } as infra.InstanceResourceRead,
+  provisionedInstanceTwo,
   "STATUS_INDICATION_IDLE" as infra.StatusIndication,
   "Update completed successfully",
   "All packages updated successfully. System performance improved.",
@@ -153,11 +139,7 @@ export const osUpdateRunInProgress2 = createOsUpdateRun(
   "System Update - In Progress",
   "Currently updating system components",
   osUpdatePolicyLatest,
-  {
-    instanceID: "inst-staging-009",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Staging Instance 009",
-  } as infra.InstanceResourceRead,
+  provisionedInstanceThree,
   "STATUS_INDICATION_IN_PROGRESS" as infra.StatusIndication,
   "Installing updates",
   "System components are being updated. Step 2 of 4 completed.",
@@ -170,11 +152,7 @@ export const osUpdateRunFailed2 = createOsUpdateRun(
   "Critical Update - Failed",
   "Failed to apply critical system updates",
   osUpdatePolicyUnspecified,
-  {
-    instanceID: "inst-test-010",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Test Instance 010",
-  } as infra.InstanceResourceRead,
+  instanceUnspecified,
   "STATUS_INDICATION_ERROR" as infra.StatusIndication,
   "Update failed",
   "Critical system update failed due to insufficient disk space.",
@@ -187,11 +165,7 @@ export const osUpdateRunPending2 = createOsUpdateRun(
   "Maintenance Update - Pending",
   "Scheduled maintenance update pending approval",
   osUpdatePolicyLatest,
-  {
-    instanceID: "inst-prod-011",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Production Instance 011",
-  } as infra.InstanceResourceRead,
+  instanceOne, // Reusing instanceOne for different scenario
   "STATUS_INDICATION_UNSPECIFIED" as infra.StatusIndication,
   "Pending approval",
   "Waiting for maintenance window approval from operations team.",
@@ -204,11 +178,7 @@ export const osUpdateRunCompleted6 = createOsUpdateRun(
   "Driver Update - Completed",
   "Updated hardware drivers to latest versions",
   osUpdatePolicyTarget,
-  {
-    instanceID: "inst-edge-012",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Edge Instance 012",
-  } as infra.InstanceResourceRead,
+  instanceTwo, // Reusing instanceTwo for different scenario
   "STATUS_INDICATION_IDLE" as infra.StatusIndication,
   "Update completed successfully",
   "Hardware drivers updated successfully. All devices functioning normally.",
@@ -221,11 +191,7 @@ export const osUpdateRunCompleted2 = createOsUpdateRun(
   "Security Update - Completed",
   "Security patches successfully applied",
   osUpdatePolicyLatest,
-  {
-    instanceID: "inst-dev-012",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Development Instance 012",
-  } as infra.InstanceResourceRead,
+  instanceThree, // Reusing instanceThree for different scenario
   "STATUS_INDICATION_SUCCESS" as infra.StatusIndication,
   "Completed successfully",
   "All security patches have been applied and system has been restarted.",
@@ -238,11 +204,7 @@ export const osUpdateRunCompleted5 = createOsUpdateRun(
   "Firmware Update - Completed",
   "Device firmware successfully updated to latest version",
   osUpdatePolicyUnspecified,
-  {
-    instanceID: "inst-beta-013",
-    kind: "INSTANCE_KIND_EDGE" as infra.InstanceKind,
-    name: "Beta Instance 013",
-  } as infra.InstanceResourceRead,
+  instanceFour, // Reusing instanceFour for different scenario
   "STATUS_INDICATION_SUCCESS" as infra.StatusIndication,
   "Update successful",
   "Firmware updated to version 2.1.3. All systems operational.",
@@ -290,9 +252,6 @@ export class OsUpdateRunStore extends BaseStore<
 
   // Filter runs by instanceId using the instance relationship
   listByInstanceId(instanceId: string): infra.OsUpdateRunRead[] {
-    //TODO: temporarily mock data is not filtered
-    return this.list().filter(
-      (history) => history.instance?.resourceId === instanceId,
-    );
+    return this.list().filter((run) => run.instance?.resourceId === instanceId);
   }
 }

@@ -964,13 +964,23 @@ export const handlers = [
       const hostIdMatch = filter.match(/hostId="([^"]+)"/);
       if (hostIdMatch) {
         const hostId = hostIdMatch[1];
-        runs = osUpdateRunStore.listByHostId(hostId);
+        runs = osUpdateRunStore.listByInstanceId(hostId);
+      }
+      // Parse filter for instance.resourceId (AIP-160 compliant)
+      const instanceResourceIdMatch = filter.match(
+        /instance\.resourceId="([^"]+)"/,
+      );
+      if (instanceResourceIdMatch) {
+        const instanceResourceId = instanceResourceIdMatch[1];
+        runs = runs.filter(
+          (run) => run.instance?.resourceId === instanceResourceId,
+        );
       }
       // Parse filter for resourceId
       const resourceIdMatch = filter.match(/resourceId="([^"]+)"/);
       if (resourceIdMatch) {
         const resourceId = resourceIdMatch[1];
-        runs = runs.filter((run) => run.instance?.instanceID === resourceId);
+        runs = runs.filter((run) => run.instance?.resourceId === resourceId);
       }
     }
 
