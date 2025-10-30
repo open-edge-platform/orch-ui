@@ -70,7 +70,7 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
     error: osUpdateRunsError,
   } = infra.useOsUpdateRunListOsUpdateRunQuery({
     projectName: SharedStorage.project?.name ?? "",
-    filter: `instance.resourceId=${host?.instance?.resourceId}`, // `hostId="${host.resourceId}"`,
+    filter: `instance.resourceId="${host?.instance?.resourceId}"`,
     pageSize,
     offset,
   });

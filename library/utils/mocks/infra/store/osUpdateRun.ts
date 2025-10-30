@@ -288,10 +288,11 @@ export class OsUpdateRunStore extends BaseStore<
     };
   }
 
-  // Filter runs by hostId using the instance relationship
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  listByHostId(hostId: string): infra.OsUpdateRunRead[] {
+  // Filter runs by instanceId using the instance relationship
+  listByInstanceId(instanceId: string): infra.OsUpdateRunRead[] {
     //TODO: temporarily mock data is not filtered
-    return this.list().filter(() => true);
+    return this.list().filter(
+      (history) => history.instance?.resourceId === instanceId,
+    );
   }
 }
