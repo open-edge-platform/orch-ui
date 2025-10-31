@@ -90,7 +90,7 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
       Cell: (table: { row: { original: infra.OsUpdateRunRead } }) => {
         const run = table.row.original;
         return (
-          <div key={run.resourceId} className="os-update-history__status-cell">
+          <div className="os-update-history__status-cell">
             <StatusIcon
               status={getStatusIconVariant(run.statusIndicator)}
               text={run.status || "Unknown"}

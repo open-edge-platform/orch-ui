@@ -15,15 +15,11 @@ import {
   ButtonSize,
   ButtonVariant,
   DropdownSize,
-  MessageBannerAlertState,
   ToastState,
 } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
-import {
-  showMessageNotification,
-  showToast,
-} from "../../../store/notifications";
+import { showToast } from "../../../store/notifications";
 import "./OsUpdate.scss";
 
 const dataCy = "osUpdate";
@@ -51,11 +47,9 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
   useEffect(() => {
     if (isPoliciesError && policiesError) {
       dispatch(
-        showMessageNotification({
-          messageTitle: "Failed to load OS Update Policies",
-          messageBody: `${parseError(policiesError).data}`,
-          variant: MessageBannerAlertState.Error,
-          showMessage: true,
+        showToast({
+          message: `Failed to load OS Update Policies: ${parseError(policiesError).data}`,
+          state: ToastState.Danger,
         }),
       );
     }
@@ -67,10 +61,12 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
 
   const handleApplyPolicy = async () => {
     if (!selectedPolicyId) {
-      showToast({
-        message: "Please select an OS Update Policy",
-        state: ToastState.Danger,
-      });
+      dispatch(
+        showToast({
+          message: "Please select an OS Update Policy",
+          state: ToastState.Danger,
+        }),
+      );
       return;
     }
 
@@ -85,20 +81,16 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
 
       await patchInstance(patchPayload).unwrap();
       dispatch(
-        showMessageNotification({
-          messageTitle: "OS Update Policy applied successfully",
-          messageBody: "",
-          variant: MessageBannerAlertState.Success,
-          showMessage: true,
+        showToast({
+          message: "OS Update Policy applied successfully",
+          state: ToastState.Success,
         }),
       );
     } catch (error) {
       dispatch(
-        showMessageNotification({
-          messageTitle: "Failed to apply OS Update Policy",
-          messageBody: `${parseError(error).data}`,
-          variant: MessageBannerAlertState.Error,
-          showMessage: true,
+        showToast({
+          message: `Failed to apply OS Update Policy: ${parseError(error).data}`,
+          state: ToastState.Danger,
         }),
       );
     }
