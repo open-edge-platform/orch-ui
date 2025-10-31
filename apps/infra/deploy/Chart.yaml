@@ -7,6 +7,8 @@ type: application
 version: 3.2.10
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
-appVersion: "3.2.9-dev"
+appVersion: "3.2.10"
 dependencies: []
-annotations: {}
+annotations:
+  revision: 583b9275d77cd13fe5ee5fbee42ff5d4a39f4426
+  created: "2025-10-31T16:35:22Z"

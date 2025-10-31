@@ -8,6 +8,8 @@ version: 3.2.5
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "3.2.4-dev"
-annotations: {}
+appVersion: "3.2.5"
+annotations:
+  revision: 583b9275d77cd13fe5ee5fbee42ff5d4a39f4426
+  created: "2025-10-31T16:35:26Z"
 dependencies: []
