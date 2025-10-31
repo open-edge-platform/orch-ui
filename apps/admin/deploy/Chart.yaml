@@ -11,6 +11,4 @@ version: 3.2.3-dev
 appVersion: "3.2.3-dev"
 annotations:
   api_observability_monitor: 0.0.5
-  revision: 583b9275d77cd13fe5ee5fbee42ff5d4a39f4426
-  created: "2025-10-31T16:35:11Z"
 dependencies: []

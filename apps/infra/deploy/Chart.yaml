@@ -9,6 +9,3 @@ version: 3.2.9
 
 appVersion: "3.2.9"
 dependencies: []
-annotations:
-  revision: 583b9275d77cd13fe5ee5fbee42ff5d4a39f4426
-  created: "2025-10-31T16:35:22Z"
