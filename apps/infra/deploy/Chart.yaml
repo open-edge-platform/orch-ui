@@ -9,3 +9,4 @@ version: 3.2.9
 
 appVersion: "3.2.9"
 dependencies: []
+annotations: {}

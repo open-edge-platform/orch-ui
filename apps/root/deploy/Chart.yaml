@@ -9,4 +9,5 @@ version: 3.2.4
 
 # This value is supplied only to enable local unbuilt deployment of released content.
 appVersion: "3.2.4"
+annotations: {}
 dependencies: []
