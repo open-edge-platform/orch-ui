@@ -114,6 +114,7 @@ const SshKeysTable = ({
     },
     {
       Header: "Action",
+      textAlign: "center",
       Cell: (table: { row: { original: infra.LocalAccountResourceRead } }) => {
         const localAccount = table.row.original;
         return (
