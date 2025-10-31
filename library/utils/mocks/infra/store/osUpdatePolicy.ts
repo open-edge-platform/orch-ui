@@ -43,22 +43,22 @@ export const osUpdatePolicyTarget = createOsUpdatePolicy(
   osTbUpdate, // Use the actual OS resource
 );
 
-export const osUpdatePolicyScheduled = createOsUpdatePolicy(
+export const osUpdatePolicyLatest = createOsUpdatePolicy(
   "osupdatepolicy-b22027e6",
   "Production Security Updates",
   "Automated security updates policy for production environments",
-  "UPDATE_POLICY_SCHEDULED" as infra.UpdatePolicy,
+  "UPDATE_POLICY_LATEST" as infra.UpdatePolicy,
   osUbuntu, // Use the actual OS resource
   "security-updates kernel-updates",
   ["https://security-updates.example.com/repo"],
   "grub-reboot 0",
 );
 
-export const osUpdatePolicyImmediate = createOsUpdatePolicy(
+export const osUpdatePolicyUnspecified = createOsUpdatePolicy(
   "osupdatepolicy-c33038f7",
-  "Critical Patch Policy",
-  "Immediate updates for critical security patches",
-  "UPDATE_POLICY_IMMEDIATE" as infra.UpdatePolicy,
+  "Default Update Policy",
+  "Default update policy with unspecified behavior",
+  "UPDATE_POLICY_UNSPECIFIED" as infra.UpdatePolicy,
   osRedHat, // Use the actual OS resource
   "critical-patches",
   ["https://critical-updates.example.com/repo"],
@@ -72,8 +72,8 @@ export class OsUpdatePolicyStore extends BaseStore<
   constructor() {
     super("resourceId", [
       osUpdatePolicyTarget,
-      osUpdatePolicyScheduled,
-      osUpdatePolicyImmediate,
+      osUpdatePolicyLatest,
+      osUpdatePolicyUnspecified,
     ]);
   }
 

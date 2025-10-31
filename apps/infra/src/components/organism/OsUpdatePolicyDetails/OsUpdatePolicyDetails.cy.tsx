@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { osUpdatePolicyScheduled, osUpdatePolicyTarget } from "@orch-ui/utils";
+import { osUpdatePolicyLatest, osUpdatePolicyTarget } from "@orch-ui/utils";
 import OsUpdatePolicyDetails from "./OsUpdatePolicyDetails";
 import OsUpdatePolicyDetailsPom from "./OsUpdatePolicyDetails.pom";
 
@@ -19,7 +19,9 @@ describe("<OsUpdatePolicyDetails/>", () => {
     it("should display policy name and description", () => {
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
       cy.contains(osUpdatePolicyTarget.name).should("exist");
-      cy.contains(osUpdatePolicyTarget.description).should("exist");
+      if (osUpdatePolicyTarget.description) {
+        cy.contains(osUpdatePolicyTarget.description).should("exist");
+      }
     });
 
     it("should display OS Configuration information", () => {
@@ -35,10 +37,9 @@ describe("<OsUpdatePolicyDetails/>", () => {
   });
 
   describe("Field Display - All Fields Always Visible", () => {
-    it("should always show main sections", () => {
+    it("should show main sections", () => {
       cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyTarget} />);
 
-      // Only these two sections should be visible as headers
       cy.contains("Details").should("exist");
       cy.contains("OS Configuration").should("exist");
       cy.contains("Update Policy").should("exist");
@@ -47,24 +48,8 @@ describe("<OsUpdatePolicyDetails/>", () => {
       cy.contains("Update Sources").should("exist");
     });
 
-    it("should show advanced settings for any policy", () => {
-      cy.mount(
-        <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
-      );
-
-      // main section headers should be visible
-      cy.contains("Details").should("exist");
-      cy.contains("OS Configuration").should("exist");
-
-      // All fields should be visible as labels
-      cy.contains("Kernel Command Update").should("exist");
-      cy.contains("Update Sources").should("exist");
-    });
-
     it("should display update packages when available", () => {
-      cy.mount(
-        <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
-      );
+      cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyLatest} />);
 
       // Update Packages should be visible as a field label
       cy.contains("Update Packages").should("exist");
@@ -72,7 +57,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
 
     it("should show correct update policy labels", () => {
       const policyWithLatest = {
-        ...osUpdatePolicyScheduled,
+        ...osUpdatePolicyLatest,
         updatePolicy: "UPDATE_POLICY_LATEST" as const,
       };
 
@@ -100,7 +85,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
   describe("Field Display Logic", () => {
     it("should show 'N/A' for empty optional fields", () => {
       const policyWithEmptyFields = {
-        ...osUpdatePolicyScheduled,
+        ...osUpdatePolicyLatest,
         updateKernelCommand: "",
         updateSources: [],
         targetOs: undefined,
@@ -113,25 +98,22 @@ describe("<OsUpdatePolicyDetails/>", () => {
     });
 
     it("should handle policies with all fields populated", () => {
-      cy.mount(
-        <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
-      );
+      cy.mount(<OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyLatest} />);
 
       // Check that all available fields are displayed
       cy.contains("Details").should("exist");
-      cy.contains(osUpdatePolicyScheduled.name).should("exist");
-      if (osUpdatePolicyScheduled.description) {
-        cy.contains(osUpdatePolicyScheduled.description).should("exist");
+      cy.contains(osUpdatePolicyLatest.name).should("exist");
+      if (osUpdatePolicyLatest.description) {
+        cy.contains(osUpdatePolicyLatest.description).should("exist");
       }
     });
 
     it("should display update sources as comma-separated list", () => {
-      if (osUpdatePolicyScheduled.updateSources?.length) {
+      if (osUpdatePolicyLatest.updateSources?.length) {
         cy.mount(
-          <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyScheduled} />,
+          <OsUpdatePolicyDetails osUpdatePolicy={osUpdatePolicyLatest} />,
         );
-        const expectedSources =
-          osUpdatePolicyScheduled.updateSources.join(", ");
+        const expectedSources = osUpdatePolicyLatest.updateSources.join(", ");
         cy.contains(expectedSources).should("exist");
       }
     });
@@ -140,7 +122,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
   describe("Package Display", () => {
     it("should render update packages correctly", () => {
       const policyWithPackages = {
-        ...osUpdatePolicyScheduled,
+        ...osUpdatePolicyLatest,
         updatePackages: "package1\npackage2\npackage3",
       };
 
@@ -155,7 +137,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
 
     it("should handle empty package list", () => {
       const policyWithEmptyPackages = {
-        ...osUpdatePolicyScheduled,
+        ...osUpdatePolicyLatest,
         updatePackages: "",
       };
 
@@ -170,7 +152,7 @@ describe("<OsUpdatePolicyDetails/>", () => {
 
     it("should handle undefined packages", () => {
       const policyWithoutPackages = {
-        ...osUpdatePolicyScheduled,
+        ...osUpdatePolicyLatest,
         updatePackages: undefined,
       };
 
