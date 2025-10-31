@@ -29,21 +29,21 @@ type RegionViewActionsKey = keyof typeof RegionViewActions;
 export const RegionView = () => {
   const cy = { "data-cy": dataCy };
   const dispatch = useAppDispatch();
-  const region = useAppSelector(selectRegion);
+  const regionFromRedux = useAppSelector(selectRegion);
   const navigate = useInfraNavigate();
   const className = "region-view";
 
   //if you get here from a search result, metadata will be missing
   //because of the lightweight nature of the search results. Will need
   //to retrieve the remaining information
-  const { resourceId = undefined } = region ?? {};
-  const { data: _region } = infra.useRegionServiceGetRegionQuery(
+  const { resourceId = undefined } = regionFromRedux ?? {};
+  const { data: region } = infra.useRegionServiceGetRegionQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
       resourceId: resourceId ?? "",
     },
     {
-      skip: !region || (region && region.metadata !== undefined),
+      skip: !regionFromRedux,
     },
   );
 
@@ -52,8 +52,8 @@ export const RegionView = () => {
   const regionType =
     region && region.metadata && region.metadata.length > 0
       ? region.metadata[0].key
-      : _region && _region.metadata && _region.metadata.length > 0
-        ? _region.metadata[0].key
+      : region && region.metadata && region.metadata.length > 0
+        ? region.metadata[0].key
         : "Not specified";
 
   return (
