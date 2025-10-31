@@ -177,3 +177,5 @@ nginx:
         source: "/mfe/admin/(.*)"
         dest: "/$1"
       proxy_pass: "http://{{ .Release.Name }}-admin.{{ .Release.Namespace }}.svc:80"
+
+traefikApiGroup: "traefik.containo.us/v1alpha1"
