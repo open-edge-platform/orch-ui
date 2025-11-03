@@ -21,6 +21,8 @@ import {
 import { Item, MessageBanner, Tabs } from "@spark-design/react";
 import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
+import OsUpdate from "../../../organism/OsUpdate/OsUpdate";
+import OsUpdateHistory from "../../../organism/OsUpdateHistory/OsUpdateHistory";
 import VproDetails from "../../VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
@@ -81,10 +83,18 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       id: 7,
       title: "Host Labels",
     },
+    {
+      id: 8,
+      title: "Updates",
+    },
+    {
+      id: 9,
+      title: "Update History",
+    },
     ...(host.currentAmtState === "AMT_STATE_PROVISIONED"
       ? [
           {
-            id: 8,
+            id: 10,
             title: "vPro Details",
           },
         ]
@@ -268,9 +278,25 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     </Item>,
   );
 
+  itemList.push(
+    <Item title={tabItems[7].title}>
+      <div className="os-update-container">
+        <OsUpdate host={host} />
+      </div>
+    </Item>,
+  );
+
+  itemList.push(
+    <Item title={tabItems[8].title}>
+      <div className="os-update-history-container">
+        <OsUpdateHistory host={host} />
+      </div>
+    </Item>,
+  );
+
   if (host.currentAmtState === "AMT_STATE_PROVISIONED") {
     itemList.push(
-      <Item title="vPro Details">
+      <Item title={tabItems[9].title}>
         <VproDetails host={host} />
       </Item>,
     );

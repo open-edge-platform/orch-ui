@@ -214,11 +214,6 @@ describe("HostDetails", () => {
     it("show OS field", () => {
       pom.getHostDescriptionValueByKey("OS").should("contain.text", "Ubuntu");
     });
-    it("show Updates field", () => {
-      pom
-        .getHostDescriptionValueByKey("Updates")
-        .should("contain.text", "Ubuntu");
-    });
 
     it("show `OS update available` under the Hostname", () => {
       pom.el.osUpdateAvailable.should("exist");

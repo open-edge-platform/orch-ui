@@ -255,9 +255,11 @@ export const provisionHost = createSlice({
     ) {
       const changed = state.commonHostData?.os?.name !== action.payload.name;
       state.commonHostData.os = action.payload;
+
+      const metadata = action.payload.metadata?.trim() || "{}";
       state.kubernetesVersion =
         (
-          JSON.parse(action.payload.metadata ?? "{}") as {
+          JSON.parse(metadata) as {
             "kubernetes-version"?: string;
           }
         )["kubernetes-version"] ?? "";

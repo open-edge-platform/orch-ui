@@ -6,9 +6,9 @@
 import { cyGet } from "@orch-ui/tests";
 // import * as x from "@orch-ui/utils";
 import {
-  osUpdatePolicyImmediate,
-  osUpdatePolicyScheduled,
+  osUpdatePolicyLatest,
   osUpdatePolicyTarget,
+  osUpdatePolicyUnspecified,
 } from "@orch-ui/utils";
 import OsUpdatePolicy from "./OsUpdatePolicy";
 import OsUpdatePolicyPom from "./OsUpdatePolicy.pom";
@@ -70,13 +70,10 @@ describe("<OsUpdatePolicy/>", () => {
 
     it("should display policy names in table", () => {
       pom.osProfilesTablePom.root.should("contain", osUpdatePolicyTarget.name);
+      pom.osProfilesTablePom.root.should("contain", osUpdatePolicyLatest.name);
       pom.osProfilesTablePom.root.should(
         "contain",
-        osUpdatePolicyScheduled.name,
-      );
-      pom.osProfilesTablePom.root.should(
-        "contain",
-        osUpdatePolicyImmediate.name,
+        osUpdatePolicyUnspecified.name,
       );
     });
 
@@ -135,7 +132,7 @@ describe("<OsUpdatePolicy/>", () => {
       // Should not show non-matching policies
       pom.osProfilesTablePom.root.should(
         "not.contain",
-        osUpdatePolicyScheduled.name,
+        osUpdatePolicyLatest.name,
       );
     });
 
@@ -146,10 +143,7 @@ describe("<OsUpdatePolicy/>", () => {
 
       // Should show all policies again
       pom.osProfilesTablePom.root.should("contain", osUpdatePolicyTarget.name);
-      pom.osProfilesTablePom.root.should(
-        "contain",
-        osUpdatePolicyScheduled.name,
-      );
+      pom.osProfilesTablePom.root.should("contain", osUpdatePolicyLatest.name);
     });
   });
 
