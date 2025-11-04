@@ -163,7 +163,7 @@ const singleRegionEndpoints: CyApiDetails<
     route: `${route}/*`,
     method: "PUT",
     statusCode: 200,
-    body: regionUsWestUpdated,
+    response: regionUsWestUpdated,
   },
 };
 
