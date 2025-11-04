@@ -38,7 +38,6 @@ export const RegionView = () => {
   //to retrieve the remaining information
   const { resourceId = undefined } = regionFromRedux ?? {};
 
-  console.log(regionFromRedux);
   const { data: region } = infra.useRegionServiceGetRegionQuery({
     projectName: SharedStorage.project?.name ?? "",
     resourceId: resourceId ?? "",
