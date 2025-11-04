@@ -15,7 +15,7 @@ import {
   singleDigitPadding,
 } from "./utils";
 
-const isOnMarchDaylightSavings = true;
+const isOnMarchDaylightSavings = false;
 
 describe("helper store/utils", () => {
   it("convert24hrTimeTo12hr", () => {
