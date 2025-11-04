@@ -102,6 +102,9 @@ describe("<Locations/>", () => {
 
       describe("from region view details drawer", () => {
         beforeEach(() => {
+          pom.regionViewPom.interceptApis([
+            pom.regionViewPom.api.getAnyRegionMocked,
+          ]);
           cy.mount(<Locations />, {
             reduxStore: setupStore({
               locations: {
@@ -113,6 +116,7 @@ describe("<Locations/>", () => {
               },
             }),
           });
+          pom.regionViewPom.waitForApis();
           pom.regionViewPom.el.regionActions
             .find("button")
             .click({ multiple: true })

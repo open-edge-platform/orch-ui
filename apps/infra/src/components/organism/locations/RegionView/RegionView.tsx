@@ -37,15 +37,12 @@ export const RegionView = () => {
   //because of the lightweight nature of the search results. Will need
   //to retrieve the remaining information
   const { resourceId = undefined } = regionFromRedux ?? {};
-  const { data: region } = infra.useRegionServiceGetRegionQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      resourceId: resourceId ?? "",
-    },
-    {
-      skip: !regionFromRedux,
-    },
-  );
+
+  console.log(regionFromRedux);
+  const { data: region } = infra.useRegionServiceGetRegionQuery({
+    projectName: SharedStorage.project?.name ?? "",
+    resourceId: resourceId ?? "",
+  });
 
   if (!region || !region?.resourceId === null) return null;
 
