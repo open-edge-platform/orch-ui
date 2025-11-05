@@ -4,7 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { Flex } from "@orch-ui/components";
+import { Flex, Table, TableColumn } from "@orch-ui/components";
 import {
   formatOsUpdateAvailable,
   parseError,
@@ -17,10 +17,20 @@ import {
   DropdownSize,
   ToastState,
 } from "@spark-design/tokens";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import { showToast } from "../../../store/notifications";
 import "./OsUpdate.scss";
+
+interface Package {
+  Name: string;
+  Version: string;
+  Architecture: string;
+  Distribution: string;
+  URL: string;
+  License: string;
+  Modified: string;
+}
 
 const dataCy = "osUpdate";
 interface OsUpdateProps {
@@ -58,6 +68,37 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
   // Patch Instance Mutation
   const [patchInstance, { isLoading: isPatching }] =
     infra.useInstanceServicePatchInstanceMutation();
+
+  // Get available packages from host.instance.osUpdateAvailable field to display in table
+  const availablePackages: Package[] = useMemo(() => {
+    if (!host.instance?.osUpdateAvailable) return [];
+
+    try {
+      const packageData: Package[] = JSON.parse(
+        host.instance.osUpdateAvailable,
+      );
+      return packageData || [];
+    } catch (error) {
+      console.error("Failed to parse osUpdateAvailable:", error);
+      return [];
+    }
+  }, [host.instance?.osUpdateAvailable]);
+
+  // Table columns for package selection
+  const packageColumns: TableColumn<Package>[] = [
+    {
+      Header: "Package Name",
+      accessor: "Name",
+    },
+    {
+      Header: "Version",
+      accessor: "Version",
+    },
+    {
+      Header: "Distribution",
+      accessor: "Distribution",
+    },
+  ];
 
   const handleApplyPolicy = async () => {
     if (!selectedPolicyId) {
@@ -100,25 +141,44 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
 
   return (
     <div {...cy} className="os-update">
-      <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
-        <Text>Available Update</Text>
-        <Text data-cy="desiredOsProfiles">
-          {formatOsUpdateAvailable(host?.instance?.osUpdateAvailable ?? "-") ||
-            "-"}
-        </Text>
-      </Flex>
+      {Array.isArray(availablePackages) && availablePackages.length > 0 ? (
+        <Flex align="start" cols={[3, 9]}>
+          <Text className="os-update__policy-label">Available Update</Text>
+          <Flex cols={[8, 4]}>
+            <Table
+              data-cy="osUpdatePackageTable"
+              columns={packageColumns}
+              data={availablePackages}
+            />
+          </Flex>
+        </Flex>
+      ) : (
+        <Flex
+          align="middle"
+          className="os-update-policy-container"
+          cols={[3, 9]}
+        >
+          <Text className="os-update__policy-label">Available Update</Text>
+          <Text data-cy="desiredOsProfiles">
+            {(formatOsUpdateAvailable(
+              host?.instance?.osUpdateAvailable ?? "-",
+              "string",
+            ) as string) || "-"}
+          </Text>
+        </Flex>
+      )}
 
       <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
-        <Text>Assigned OS Update Policy</Text>
+        <Text className="os-update__policy-label">
+          Assigned OS Update Policy
+        </Text>
         <Text data-cy="desiredOsProfiles">
           {host.instance?.updatePolicy?.name || "-"}
         </Text>
       </Flex>
 
       <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
-        <Text className="os-update-policy-label">
-          <strong>Select OS Update Policy</strong>
-        </Text>
+        <Text className="os-update__policy-label">Select OS Update Policy</Text>
         <Flex
           align="middle"
           className="os-update-dropdown-container"

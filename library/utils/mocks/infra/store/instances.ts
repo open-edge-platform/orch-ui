@@ -78,7 +78,8 @@ export const instanceTwo: enhancedInfraSlice.InstanceReadModified = {
   instanceStatusTimestamp: 1717761389,
   kind: "INSTANCE_KIND_METAL",
   os: osTb,
-  osUpdateAvailable: "Ubuntu",
+  osUpdateAvailable:
+    '[{"Name":"libpcre2-32-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"},{"Name":"libpcre2-16-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"}]',
   updatePolicy: {
     updateKernelCommand: "kvmgt vfio-iommu-type1 vfio-mdev i915.enable_gvt=1",
     updateSources: ["deb https://files.edgeorch.net orchui release"],
