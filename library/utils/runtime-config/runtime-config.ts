@@ -60,12 +60,17 @@ export class RuntimeConfig {
   }
 
   public static documentation(version: string = "main"): DocItem {
+    console.log(
+      "window.__RUNTIME_CONFIG__?.DOCUMENTATION:",
+      window.__RUNTIME_CONFIG__?.DOCUMENTATION,
+      "window.__RUNTIME_CONFIG__", window.__RUNTIME_CONFIG__,
+    );
     const docs = window.__RUNTIME_CONFIG__?.DOCUMENTATION;
 
     if (!docs) {
       return [];
     }
-
+    console.log("===>", docs["2025.2"] ?? docs["main"] ?? []);
     return docs[version] ?? docs["main"] ?? [];
   }
 
