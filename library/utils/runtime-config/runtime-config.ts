@@ -63,8 +63,8 @@ export class RuntimeConfig {
     console.log(
       "window.__RUNTIME_CONFIG__?.DOCUMENTATION:",
       window.__RUNTIME_CONFIG__?.DOCUMENTATION,
-      "window.__RUNTIME_CONFIG__", window.__RUNTIME_CONFIG__,
     );
+    console.log("window.__RUNTIME_CONFIG__", window.__RUNTIME_CONFIG__);
     const docs = window.__RUNTIME_CONFIG__?.DOCUMENTATION;
 
     if (!docs) {
