@@ -9,7 +9,7 @@ export interface IUser {
   password: string;
 }
 
-const password = process.env.ORCH_DEFAULT_PASSWORD as string | undefined;
+const password = Cypress.env("ORCH_DEFAULT_PASSWORD") as string | undefined;
 if (!password) {
   throw new Error("ORCH_DEFAULT_PASSWORD environment variable must be set");
 }
