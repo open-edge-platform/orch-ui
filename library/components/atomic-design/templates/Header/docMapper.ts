@@ -52,6 +52,11 @@ export const getDocsForUrl = (url: string) => {
   const docHost = "https://docs.openedgeplatform.intel.com/edge-manage-docs";
   const urlParts = url.substring(1).split("/");
   let docVersion = "main";
+  console.log("window.__RUNTIME_CONFIG__", window.__RUNTIME_CONFIG__);
+  console.log(
+    "window.__RUNTIME_CONFIG__?.VERSIONS.orchestrator",
+    window.__RUNTIME_CONFIG__?.VERSIONS.orchestrator,
+  );
   if (
     window.__RUNTIME_CONFIG__?.VERSIONS.orchestrator &&
     RuntimeConfig.getComponentVersion("orchestrator")
