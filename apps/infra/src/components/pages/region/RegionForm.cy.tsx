@@ -25,9 +25,16 @@ describe("<RegionForm />", () => {
         ]);
         cy.mount(<RegionForm />, {
           routerProps: {
-            initialEntries: [`/regions/${pom.testRegion.resourceId}`],
+            initialEntries: [
+              `/infrastructure/regions/${pom.testRegion.resourceId}`,
+            ],
           },
-          routerRule: createChildRoutes(),
+          routerRule: [
+            {
+              path: "/infrastructure/*",
+              children: createChildRoutes(),
+            },
+          ],
         });
         pom.waitForApi([
           pom.api.getRegionMocked,
@@ -73,7 +80,7 @@ describe("<RegionForm />", () => {
             });
           });
 
-        pom.getPath().should("contain", "/locations");
+        pom.getPath().should("contain", "/infrastructure/locations");
       });
 
       it("should update region (creating a new type)", () => {
@@ -104,7 +111,7 @@ describe("<RegionForm />", () => {
             });
           });
 
-        pom.getPath().should("contain", "/locations");
+        pom.getPath().should("contain", "/infrastructure/locations");
       });
 
       xit("should delete region", () => {
