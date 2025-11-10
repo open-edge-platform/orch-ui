@@ -62,6 +62,7 @@ import TelemetryMetricsForm, {
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { selectBranches, setIsEmpty } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
+import { handleViewRegionAction } from "../../organism/locations/RegionSiteTree/RegionSiteTree.handlers";
 
 const baseRegionTypes = ["Country", "State", "County", "Region", "City"];
 
@@ -486,6 +487,11 @@ const RegionForm: React.FC = () => {
       }
 
       await Promise.all(allPromises);
+
+      // Update Redux store with the edited region details
+      if (regionId !== "new") {
+        handleViewRegionAction(dispatch, response);
+      }
 
       // Force tree refresh to show updated region data
       if (regionId !== "new") {
