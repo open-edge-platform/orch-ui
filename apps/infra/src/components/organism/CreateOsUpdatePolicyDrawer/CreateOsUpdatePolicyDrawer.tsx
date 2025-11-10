@@ -312,11 +312,6 @@ const CreateOsUpdatePolicyDrawer = ({
                       onSelectionChange={(selectedKey) => {
                         const osResourceId = selectedKey as string;
 
-                        // Find the selected OS for additional info
-                        // const selectedOs = osResources?.find(
-                        //   (os) => os.resourceId === osResourceId,
-                        // );
-
                         // Update the form field
                         field.onChange(osResourceId);
                       }}
