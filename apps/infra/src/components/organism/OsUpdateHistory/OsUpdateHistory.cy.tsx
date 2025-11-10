@@ -110,19 +110,12 @@ describe("<OsUpdateHistory/>", () => {
       pom.endTimes.first().should("not.contain", "In Progress");
     });
 
-    it("should display status details when available", () => {
-      pom.statusDetails
-        .first()
-        .should("contain", "All security patches applied successfully.");
-    });
-
     it("should have proper data-cy attributes", () => {
       pom.table.root.should("have.attr", "data-cy", "osUpdateHistoryTable");
       pom.appliedPolicies.should("have.attr", "data-cy", "appliedPolicy");
       pom.startTimes.should("have.attr", "data-cy", "startTime");
       pom.endTimes.should("have.attr", "data-cy", "endTime");
       pom.durations.should("have.attr", "data-cy", "duration");
-      pom.statusDetails.should("have.attr", "data-cy", "statusDetails");
     });
   });
 

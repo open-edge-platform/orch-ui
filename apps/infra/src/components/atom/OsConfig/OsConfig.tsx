@@ -4,7 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { formatOsUpdateAvailable, isOSUpdateAvailable } from "@orch-ui/utils";
+import { isOSUpdateAvailable } from "@orch-ui/utils";
 import { Icon } from "@spark-design/react";
 import "./OsConfig.scss";
 const dataCy = "osConfig";
@@ -22,13 +22,6 @@ export const OsConfig = ({ instance, iconOnly = false }: OsConfigProps) => {
       return instance.os.name;
     }
 
-    const osUpdateAvailable = formatOsUpdateAvailable(
-      instance?.osUpdateAvailable,
-    );
-
-    if (osUpdateAvailable) {
-      return osUpdateAvailable;
-    }
     return <em>(Not set)</em>;
   };
 
