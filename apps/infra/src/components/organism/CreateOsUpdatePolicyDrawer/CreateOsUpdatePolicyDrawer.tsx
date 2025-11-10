@@ -129,9 +129,12 @@ const CreateOsUpdatePolicyDrawer = ({
           name: data.name,
           description: data.description,
           updatePolicy: data.updatePolicy,
-          // Only include fields relevant to the selected OS type
-          ...(data.osType === "OS_TYPE_MUTABLE" && {
+          // Include updateKernelCommand for both OS types when not UPDATE_POLICY_LATEST
+          ...(data.updatePolicy !== "UPDATE_POLICY_LATEST" && {
             updateKernelCommand: data.updateKernelCommand || undefined,
+          }),
+          // Only include updatePackages and updateSources for MUTABLE OS
+          ...(data.osType === "OS_TYPE_MUTABLE" && {
             updatePackages: data.updatePackages
               ? data.updatePackages
                   .split(",") // Split by commas only
@@ -281,30 +284,84 @@ const CreateOsUpdatePolicyDrawer = ({
           />
         </div>
 
-        {/* Kernel Command - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
-        {osTypeValue === "OS_TYPE_MUTABLE" &&
-          updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
-            <Flex cols={[12]} className="pa-1">
+        {/* Target OS - Only for IMMUTABLE OS and when UPDATE_POLICY_TARGET is selected*/}
+        {osTypeValue === "OS_TYPE_IMMUTABLE" &&
+          updatePolicyValue === "UPDATE_POLICY_TARGET" && (
+            <div className="pa-1">
               <Controller
-                name="updateKernelCommand"
+                name="targetOsId"
                 control={formControl}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    data-cy="updateKernelCommand"
-                    size="l"
-                    id="updateKernelCommand"
-                    label="Kernel Command Update"
-                    placeholder="console=ttyS0,115200 console=tty0 net.ifnames=0"
-                    errorMessage={formErrors.updateKernelCommand?.message}
-                    validationState={
-                      formErrors.updateKernelCommand ? "invalid" : "valid"
-                    }
-                  />
-                )}
+                rules={{
+                  required:
+                    osTypeValue === "OS_TYPE_IMMUTABLE" &&
+                    updatePolicyValue === "UPDATE_POLICY_TARGET"
+                      ? "Target OS is required for Immutable OS with Target Policy"
+                      : false,
+                }}
+                render={({ field }) => {
+                  const osOptions = osResources?.filter(
+                    (os) => os.osType === osTypeValue,
+                  );
+                  return (
+                    <Dropdown
+                      data-cy="targetOs"
+                      name="targetOs"
+                      label="Target OS*"
+                      placeholder="Select target OS"
+                      selectedKey={field.value}
+                      onSelectionChange={(selectedKey) => {
+                        const osResourceId = selectedKey as string;
+
+                        // Find the selected OS for additional info
+                        // const selectedOs = osResources?.find(
+                        //   (os) => os.resourceId === osResourceId,
+                        // );
+
+                        // Update the form field
+                        field.onChange(osResourceId);
+                      }}
+                      size={DropdownSize.Large}
+                      validationState={
+                        formErrors.targetOsId ? "invalid" : "valid"
+                      }
+                      errorMessage={formErrors.targetOsId?.message}
+                      isDisabled={isLoading || !osOptions?.length}
+                    >
+                      {osOptions?.map((os) => (
+                        <Item key={os.resourceId} aria-label={os.name}>
+                          {os.name}
+                        </Item>
+                      ))}
+                    </Dropdown>
+                  );
+                }}
               />
-            </Flex>
+            </div>
           )}
+
+        {/* Kernel Command - Show for both MUTABLE and IMMUTABLE OS when NOT UPDATE_POLICY_LATEST */}
+        {updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
+          <Flex cols={[12]} className="pa-1">
+            <Controller
+              name="updateKernelCommand"
+              control={formControl}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  data-cy="updateKernelCommand"
+                  size="l"
+                  id="updateKernelCommand"
+                  label="Kernel Command Update"
+                  placeholder="console=ttyS0,115200 console=tty0 net.ifnames=0"
+                  errorMessage={formErrors.updateKernelCommand?.message}
+                  validationState={
+                    formErrors.updateKernelCommand ? "invalid" : "valid"
+                  }
+                />
+              )}
+            />
+          </Flex>
+        )}
 
         {/* Update Sources - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
         {osTypeValue === "OS_TYPE_MUTABLE" &&
@@ -375,61 +432,6 @@ const CreateOsUpdatePolicyDrawer = ({
                 )}
               />
             </Flex>
-          )}
-
-        {/* Target OS - Only for IMMUTABLE OS and when UPDATE_POLICY_TARGET is selected*/}
-        {osTypeValue === "OS_TYPE_IMMUTABLE" &&
-          updatePolicyValue === "UPDATE_POLICY_TARGET" && (
-            <div className="pa-1">
-              <Controller
-                name="targetOsId"
-                control={formControl}
-                rules={{
-                  required:
-                    osTypeValue === "OS_TYPE_IMMUTABLE" &&
-                    updatePolicyValue === "UPDATE_POLICY_TARGET"
-                      ? "Target OS is required for Immutable OS with Target Policy"
-                      : false,
-                }}
-                render={({ field }) => {
-                  const osOptions = osResources?.filter(
-                    (os) => os.osType === osTypeValue,
-                  );
-                  return (
-                    <Dropdown
-                      data-cy="targetOs"
-                      name="targetOs"
-                      label="Target OS*"
-                      placeholder="Select target OS"
-                      selectedKey={field.value}
-                      onSelectionChange={(selectedKey) => {
-                        const osResourceId = selectedKey as string;
-
-                        // Find the selected OS for additional info
-                        // const selectedOs = osResources?.find(
-                        //   (os) => os.resourceId === osResourceId,
-                        // );
-
-                        // Update the form field
-                        field.onChange(osResourceId);
-                      }}
-                      size={DropdownSize.Large}
-                      validationState={
-                        formErrors.targetOsId ? "invalid" : "valid"
-                      }
-                      errorMessage={formErrors.targetOsId?.message}
-                      isDisabled={isLoading || !osOptions?.length}
-                    >
-                      {osOptions?.map((os) => (
-                        <Item key={os.resourceId} aria-label={os.name}>
-                          {os.name}
-                        </Item>
-                      ))}
-                    </Dropdown>
-                  );
-                }}
-              />
-            </div>
           )}
       </div>
     </form>
