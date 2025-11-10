@@ -4,7 +4,6 @@
  */
 
 import { cyGet } from "@orch-ui/tests";
-import { setRegion } from "../../../../store/locations";
 import { setupStore } from "../../../../store/store";
 import { RegionView } from "./RegionView";
 import { RegionViewPom } from "./RegionView.pom";
@@ -26,12 +25,14 @@ describe("<RegionView/>", () => {
       },
     });
     beforeEach(() => {
+      pom.interceptApis([pom.api.getSingleRegionMocked]);
       pom.metrics.interceptApis([pom.metrics.api.getRegionTelemetryMetrics]);
       pom.logs.interceptApis([pom.logs.api.getRegionTelemetryLogs]);
       cy.mount(<RegionView />, {
         //@ts-ignore TODO: how to make store pieces optional
         reduxStore: store,
       });
+      pom.waitForApis();
       pom.metrics.waitForApis();
       pom.logs.waitForApis();
     });
@@ -53,11 +54,27 @@ describe("<RegionView/>", () => {
       cyGet("Edit").click();
       cy.get("#pathname").contains("/regions/region-1.0");
     });
+  });
 
-    it("should handle redux stored region with no metadata", () => {
-      store.dispatch(setRegion({ metadata: [], name: "region-no-metadata" }));
-      pom.el.type.should("contain.text", "Not specified");
+  it("should handle redux stored region with no metadata", () => {
+    const store = setupStore({
+      locations: {
+        regionId: undefined,
+        region: {
+          resourceId: "region-1.0",
+          name: "region-no-metadata",
+          metadata: [],
+        },
+        branches: [],
+        isEmpty: undefined,
+        expandedRegionIds: [],
+      },
     });
+
+    pom.interceptApis([pom.api.getSingleRegionNoMetadataMocked]);
+    cy.mount(<RegionView />, { reduxStore: store });
+    pom.waitForApis();
+    pom.el.type.should("contain.text", "Not specified");
   });
 
   it("should handle api response region with no metadata (e.g. search results)", () => {

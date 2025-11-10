@@ -235,28 +235,44 @@ export const downloadBlobFile = (blob: Blob, fileName: string) => {
 };
 
 /**
- * Formats OS profile display text based on mutability
- * For immutable OS: returns the profile name as-is
- * For mutable OS: converts newline-separated package names to comma-separated string
- * @param value - The OS profile value (string)
- * @param isMutable - Whether the OS is mutable or immutable
- * @returns Formatted string for display
+ * Formats OS update available data based on input type and expected format
+ * @param value - The OS update value (string or JSON string)
+ * @param expectedFormat - Format to return: "string" for comma-separated names, "array" for structured data
+ * @returns Formatted string, array, or original value based on input and expectedFormat
  */
 export const formatOsUpdateAvailable = (
   value: string | undefined,
-  isMutable = false,
-): string => {
-  if (!value) return "";
+  expectedFormat?: "string" | "array",
+) => {
+  if (!value) return expectedFormat === "array" ? [] : "";
 
-  if (!isMutable) {
-    // For immutable OS: return the profile name as-is
+  // Try to parse as JSON first
+  try {
+    const parsedData = JSON.parse(value);
+
+    // Check if it's an array of package objects (direct array format)
+    if (Array.isArray(parsedData)) {
+      if (expectedFormat === "array") {
+        return parsedData.map((pkg: any) => ({
+          name: pkg.name,
+          available_version: pkg.available_version,
+          architecture: pkg.architecture,
+        }));
+      } else {
+        // Return comma-separated package names
+        return parsedData
+          .map((pkg: any) => pkg.name)
+          .filter(Boolean)
+          .join(", ");
+      }
+    }
+  } catch (error) {
+    // Not valid JSON, treat as plain string
+    if (expectedFormat === "array") {
+      // For array format, if it's not JSON, return empty array
+      return [];
+    }
+    // For string format, return the original value
     return value;
   }
-
-  // For mutable OS: convert newline-separated packages to comma-separated
-  return value
-    .split("\n")
-    .map((pkg) => pkg.trim())
-    .filter((pkg) => pkg.length > 0)
-    .join(", ");
 };

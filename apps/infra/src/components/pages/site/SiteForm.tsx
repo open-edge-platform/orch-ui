@@ -55,7 +55,7 @@ import TelemetryMetricsForm, {
   SystemMetricPair,
 } from "../../../components/organism/TelemetryMetricsForm/TelemetryMetricsForm";
 import { useAppDispatch } from "../../../store/hooks";
-import { setTreeBranchNodeCollapse } from "../../../store/locations";
+import { resetTree, setTreeBranchNodeCollapse } from "../../../store/locations";
 import { setErrorInfo, showToast } from "../../../store/notifications";
 import { handleSiteViewAction } from "../../organism/locations/RegionSiteTree/RegionSiteTree.handlers";
 import "./SiteForm.scss";
@@ -484,6 +484,8 @@ const SiteForm = () => {
           }),
         );
       }
+      // Reset the locations tree to force a refresh
+      dispatch(resetTree(locationRoute));
       navigate(locationRoute);
     } catch (error) {
       setErrorInfo(error);
