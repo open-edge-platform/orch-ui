@@ -88,7 +88,7 @@ describe("<ApplicationCreateEdit />", () => {
     pom.sourceForm.el.chartVersionCombobox
       .first()
       .parentsUntil(".spark-combobox")
-      .should("contain.text", "Invalid version (ex. 1.0.0 or v0.1.2)");
+      .should("contain.text", "Invalid version (ex. 1.0.0, v1.0.0, 1.0.0-rc1, 1.0.0-pre-rc1)");
   });
 
   // TODO: this test is failing on unknow reason when run in unit-test.cy.ts (may be window.store; need inspection)

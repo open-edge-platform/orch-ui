@@ -115,4 +115,39 @@ describe("FiltersDrawer (Component test)", () => {
     filtersDrawerPom.el.buttonClose.click();
     cy.get("@onCloseStub").should("have.been.called");
   });
+
+  it("should allow duplicate keys when filtering", () => {
+    const applyHandler = cy.spy().as("onApplyHandler");
+    cy.mount(
+      <FiltersDrawer
+        show={true}
+        filters={[]}
+        onApply={applyHandler}
+        onClose={emptyHandler}
+      />,
+    );
+    metadataFormPom.interceptApis([metadataFormPom.api.getMetadata]);
+    emptyPom.el.emptyActionBtn.click();
+    metadataFormPom.waitForApis();
+    
+    // Add first metadata with key "env"
+    metadataFormPom.getNewEntryInput("Key").type("env");
+    metadataFormPom.getNewEntryInput("Value").type("dev");
+    metadataFormPom.el.add.click();
+    
+    // Add second metadata with same key "env" - should not show error
+    metadataFormPom.getNewEntryInput("Key").type("env");
+    metadataFormPom.getNewEntryInput("Value").type("prod");
+    
+    // Verify no error message is shown for duplicate key
+    metadataFormPom.rhfComboboxKeyPom.getErrorMessage().should("not.exist");
+    
+    metadataFormPom.el.add.click();
+    filtersDrawerPom.el.buttonApply.click();
+    
+    cy.get("@onApplyHandler").should("have.been.calledWith", [
+      { key: "env", value: "dev" },
+      { key: "env", value: "prod" },
+    ]);
+  });
 });
