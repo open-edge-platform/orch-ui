@@ -36,6 +36,7 @@ import {
   MessageBanner,
   Shimmer,
   Text,
+  Tooltip,
 } from "@spark-design/react";
 import {
   ButtonSize,
@@ -401,6 +402,8 @@ const HostDetails: React.FC = () => {
       });
   };
 
+  const hasWritePermission = checkAuthAndRole([Role.INFRA_MANAGER_WRITE]);
+
   return (
     <div className={cssSelectorIhd} data-cy={dataCyIhd}>
       {/* HostDetails Heading */}
@@ -411,36 +414,51 @@ const HostDetails: React.FC = () => {
         <div className="primary-actions">
           {host.currentAmtState === "AMT_STATE_PROVISIONED" && (
             <ButtonGroup className="button-group">
-              <Button
-                size={ButtonSize.Large}
-                variant={ButtonVariant.Secondary}
-                endSlot={<Icon icon="play" />}
-                isDisabled={host.currentPowerState !== "POWER_STATE_OFF"}
-                data-cy={`${dataCyIhd}StartBtn`}
-                onPress={handleStartPress}
-              >
-                Start
-              </Button>
-              <Button
-                size={ButtonSize.Large}
-                variant={ButtonVariant.Secondary}
-                endSlot={<Icon icon="redo" />}
-                isDisabled={host.currentPowerState === "POWER_STATE_OFF"}
-                data-cy={`${dataCyIhd}RestartBtn`}
-                onPress={handleRestartPress}
-              >
-                Restart
-              </Button>
-              <Button
-                size={ButtonSize.Large}
-                variant={ButtonVariant.Secondary}
-                endSlot={<Icon icon="square" />}
-                isDisabled={host.currentPowerState === "POWER_STATE_OFF"}
-                data-cy={`${dataCyIhd}StopBtn`}
-                onPress={handleStopPress}
-              >
-                Stop
-              </Button>
+              <PermissionTooltip showTooltip={!hasWritePermission}>
+                <Button
+                  size={ButtonSize.Large}
+                  variant={ButtonVariant.Secondary}
+                  endSlot={<Icon icon="play" />}
+                  isDisabled={
+                    host.currentPowerState !== "POWER_STATE_OFF" ||
+                    !hasWritePermission
+                  }
+                  data-cy={`${dataCyIhd}StartBtn`}
+                  onPress={handleStartPress}
+                >
+                  Start
+                </Button>
+              </PermissionTooltip>
+              <PermissionTooltip showTooltip={!hasWritePermission}>
+                <Button
+                  size={ButtonSize.Large}
+                  variant={ButtonVariant.Secondary}
+                  endSlot={<Icon icon="redo" />}
+                  isDisabled={
+                    host.currentPowerState === "POWER_STATE_OFF" ||
+                    !hasWritePermission
+                  }
+                  data-cy={`${dataCyIhd}RestartBtn`}
+                  onPress={handleRestartPress}
+                >
+                  Restart
+                </Button>
+              </PermissionTooltip>
+              <PermissionTooltip showTooltip={!hasWritePermission}>
+                <Button
+                  size={ButtonSize.Large}
+                  variant={ButtonVariant.Secondary}
+                  endSlot={<Icon icon="square" />}
+                  isDisabled={
+                    host.currentPowerState === "POWER_STATE_OFF" ||
+                    !hasWritePermission
+                  }
+                  data-cy={`${dataCyIhd}StopBtn`}
+                  onPress={handleStopPress}
+                >
+                  Stop
+                </Button>
+              </PermissionTooltip>
             </ButtonGroup>
           )}
 
@@ -630,6 +648,22 @@ const HostDetails: React.FC = () => {
         />
       )}
     </div>
+  );
+};
+
+const PermissionTooltip = ({
+  children,
+  showTooltip,
+}: {
+  children: React.ReactElement;
+  showTooltip: boolean;
+}) => {
+  return showTooltip ? (
+    <Tooltip content="You don't have permission to perform this action">
+      {children}
+    </Tooltip>
+  ) : (
+    children
   );
 };
 
