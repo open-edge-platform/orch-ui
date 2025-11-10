@@ -164,8 +164,6 @@ const CreateOsUpdatePolicyDrawer = ({
       // Show success notification
       showToast("OS Update Policy created successfully!", ToastState.Success);
     } catch (error) {
-      console.error("Failed to create OS Update Policy:", error);
-
       // Show error notification
       showToast(
         `Failed to create OS Update Policy: ${error}`,
