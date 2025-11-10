@@ -23,13 +23,9 @@ import { showToast } from "../../../store/notifications";
 import "./OsUpdate.scss";
 
 interface Package {
-  Name: string;
-  Version: string;
-  Architecture: string;
-  Distribution: string;
-  URL: string;
-  License: string;
-  Modified: string;
+  name: string;
+  available_version: string;
+  architecture: string;
 }
 
 const dataCy = "osUpdate";
@@ -79,7 +75,6 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
       );
       return packageData || [];
     } catch (error) {
-      console.error("Failed to parse osUpdateAvailable:", error);
       return [];
     }
   }, [host.instance?.osUpdateAvailable]);
@@ -88,15 +83,15 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
   const packageColumns: TableColumn<Package>[] = [
     {
       Header: "Package Name",
-      accessor: "Name",
+      accessor: "name",
     },
     {
-      Header: "Version",
-      accessor: "Version",
+      Header: "Available Version",
+      accessor: "available_version",
     },
     {
-      Header: "Distribution",
-      accessor: "Distribution",
+      Header: "Architecture",
+      accessor: "architecture",
     },
   ];
 

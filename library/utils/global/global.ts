@@ -254,18 +254,14 @@ export const formatOsUpdateAvailable = (
     if (Array.isArray(parsedData)) {
       if (expectedFormat === "array") {
         return parsedData.map((pkg: any) => ({
-          name: pkg.Name || pkg.name,
-          version: pkg.Version || pkg.version,
-          distribution: pkg.Distribution || pkg.distribution,
-          architecture: pkg.Architecture || pkg.architecture,
-          url: pkg.URL || pkg.url,
-          license: pkg.License || pkg.license,
-          modified: pkg.Modified || pkg.modified,
+          name: pkg.name,
+          available_version: pkg.available_version,
+          architecture: pkg.architecture,
         }));
       } else {
         // Return comma-separated package names
         return parsedData
-          .map((pkg: any) => pkg.Name || pkg.name)
+          .map((pkg: any) => pkg.name)
           .filter(Boolean)
           .join(", ");
       }
