@@ -436,7 +436,7 @@ const ApplicationTable = ({
         <ConfirmationDialog
           isOpen={true}
           title="Confirm Navigation"
-          content="You will lose your progress in the deployment package creation process. Do you want to continue to add a new application?"
+          content="You will be moved to the application creation stepper. You will lose your current progress in the deployment package creation process. Do you want to continue to add a new application?"
           confirmBtnText="Continue"
           cancelBtnText="Cancel"
           confirmCb={handleAddApplicationConfirm}
