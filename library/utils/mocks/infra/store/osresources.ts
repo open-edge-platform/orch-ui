@@ -28,7 +28,13 @@ export const createOsResource = (
     osType: osType,
     installedPackages:
       '{"Repo":[{"Name":"libpcre2-32-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"},{"Name":"libpcre2-16-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"}]}',
+    existingCvesUrl:
+      "https://security-metadata.canonical.com/oval/com.ubuntu.jammy.cve.oval.xml.bz2",
+    fixedCvesUrl:
+      "https://security-metadata.canonical.com/oval/com.ubuntu.jammy.usn.oval.xml.bz2",
     existingCves:
+      '[{"cve_id":"CVE-2016-5180","priority":"critical","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2021-3672","priority":"medium","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2020-8277","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2022-4904","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]}]',
+    fixedCves:
       '[{"cve_id":"CVE-2016-5180","priority":"critical","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2021-3672","priority":"medium","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2020-8277","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2022-4904","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]}]',
     metadata,
   };
@@ -63,7 +69,7 @@ export const osUbuntu = createOsResource(
   "http://archive.ubuntu.com/ubuntu",
   "Ubuntu-x86_profile",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
-  "OS_TYPE_IMMUTABLE",
+  "OS_TYPE_MUTABLE",
   '{"kubernetes-version":"v1.30.0"}',
 );
 
