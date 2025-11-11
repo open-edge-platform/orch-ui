@@ -147,24 +147,6 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
         );
       },
     },
-    {
-      Header: "Status Details",
-      accessor: "statusDetails",
-      Cell: (table: { row: { original: infra.OsUpdateRunRead } }) => {
-        const statusDetails = table.row.original.statusDetails;
-        return statusDetails ? (
-          <Text
-            size="s"
-            className="os-update-history__status-details"
-            data-cy="statusDetails"
-          >
-            {statusDetails}
-          </Text>
-        ) : (
-          <Text size="s">-</Text>
-        );
-      },
-    },
   ];
 
   if (isOsUpdateRunsLoading) {
