@@ -259,7 +259,6 @@ const ApplicationTable = ({
       <Button
         data-cy="newAppRibbonButton"
         onPress={() => {
-          console.log("pressed");
           setShowConfirmDialog(true);
         }}
         isDisabled={!hasPermission}
@@ -276,7 +275,6 @@ const ApplicationTable = ({
         <Button
           data-cy="newAppRibbonButton"
           onPress={() => {
-            console.log("pressed");
             setShowConfirmDialog(true);
           }}
           isDisabled={!hasPermission}
