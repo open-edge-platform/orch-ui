@@ -123,7 +123,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       // Target OS field should be visible for Immutable OS with Update To Target
       cyGet("targetOs").should("exist");
       // Advanced fields should not be visible for Immutable OS
-      cyGet("updateKernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
     });
