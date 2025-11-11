@@ -47,10 +47,10 @@ const HostsTableRowExpansionDetail = ({
         <Flex cols={[3, 9]}>
           <b className={`${className}__label`}>Available Update</b>
           <div className={`${className}__content`} data-cy="osUpdate">
-            {formatOsUpdateAvailable(
+            {(formatOsUpdateAvailable(
               host.instance?.osUpdateAvailable,
-              host.instance?.os?.osType === "OS_TYPE_MUTABLE",
-            ) || <em>(No Update)</em>}
+              "string",
+            ) as string) || <em>(No Update)</em>}
           </div>
           <b className={`${className}__label`}>Trusted Compute</b>
           <div className={`${className}__content`} data-cy="trustedCompute">
