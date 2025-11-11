@@ -8,6 +8,7 @@ import {
   ApiError,
   columnApiNameToDisplayName,
   columnDisplayNameToApiName,
+  ConfirmationDialog,
   Empty,
   EmptyActionProps,
   Popup,
@@ -93,6 +94,13 @@ const ApplicationTable = ({
   }>({
     isDrawerShown: false,
   });
+
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
+
+  const handleAddApplicationConfirm = () => {
+    dispatch(clearApplication());
+    navigate("/applications/applications/add", { relative: "path" });
+  };
 
   const columns: TableColumn<catalog.Application>[] = [
     {
@@ -222,8 +230,7 @@ const ApplicationTable = ({
     if (kind === "KIND_NORMAL") {
       // Adding "Add application" action to applications
       emptyDataAction.push({
-        action: () =>
-          navigate("/applications/applications/add", { relative: "path" }),
+        action: () => setShowConfirmDialog(true),
         name: `Add ${applicationType}`,
         disable: !hasPermission,
       });
@@ -252,8 +259,8 @@ const ApplicationTable = ({
       <Button
         data-cy="newAppRibbonButton"
         onPress={() => {
-          dispatch(clearApplication());
-          navigate("/applications/applications/add", { relative: "path" });
+          console.log("pressed");
+          setShowConfirmDialog(true);
         }}
         isDisabled={!hasPermission}
       >
@@ -269,8 +276,8 @@ const ApplicationTable = ({
         <Button
           data-cy="newAppRibbonButton"
           onPress={() => {
-            dispatch(clearApplication());
-            navigate("/applications/applications/add", { relative: "path" });
+            console.log("pressed");
+            setShowConfirmDialog(true);
           }}
           isDisabled={!hasPermission}
         >
@@ -422,6 +429,18 @@ const ApplicationTable = ({
           }}
           backdropIsVisible
           backdropClosable
+        />
+      )}
+
+      {showConfirmDialog && (
+        <ConfirmationDialog
+          isOpen={true}
+          title="Confirm Navigation"
+          content="You will lose your progress in the deployment package creation process. Do you want to continue to add a new application?"
+          confirmBtnText="Continue"
+          cancelBtnText="Cancel"
+          confirmCb={handleAddApplicationConfirm}
+          cancelCb={() => setShowConfirmDialog(false)}
         />
       )}
     </div>
