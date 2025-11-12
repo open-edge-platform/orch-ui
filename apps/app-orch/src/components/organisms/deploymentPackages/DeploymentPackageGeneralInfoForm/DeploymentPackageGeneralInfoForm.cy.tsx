@@ -119,7 +119,11 @@ describe("<DeploymentPackageGeneralInfoForm />", () => {
         pom.el.version.clear().type(version);
         pom.el.version.blur();
         cy.wait(500);
-        cy.get('[data-cy="version"]').should("have.attr", "aria-invalid", "true");
+        cy.get('[data-cy="version"]').should(
+          "have.attr",
+          "aria-invalid",
+          "true",
+        );
       });
     });
   });
