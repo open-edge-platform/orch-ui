@@ -129,22 +129,22 @@ describe("FiltersDrawer (Component test)", () => {
     metadataFormPom.interceptApis([metadataFormPom.api.getMetadata]);
     emptyPom.el.emptyActionBtn.click();
     metadataFormPom.waitForApis();
-    
+
     // Add first metadata with key "env"
     metadataFormPom.getNewEntryInput("Key").type("env");
     metadataFormPom.getNewEntryInput("Value").type("dev");
     metadataFormPom.el.add.click();
-    
+
     // Add second metadata with same key "env" - should not show error
     metadataFormPom.getNewEntryInput("Key").type("env");
     metadataFormPom.getNewEntryInput("Value").type("prod");
-    
+
     // Verify no error message is shown for duplicate key
     metadataFormPom.rhfComboboxKeyPom.getErrorMessage().should("not.exist");
-    
+
     metadataFormPom.el.add.click();
     filtersDrawerPom.el.buttonApply.click();
-    
+
     cy.get("@onApplyHandler").should("have.been.calledWith", [
       { key: "env", value: "dev" },
       { key: "env", value: "prod" },

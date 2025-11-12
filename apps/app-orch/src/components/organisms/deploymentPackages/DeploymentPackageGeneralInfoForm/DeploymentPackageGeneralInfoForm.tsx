@@ -93,7 +93,10 @@ const DeploymentPackageGeneralInfoForm = ({
                 label="Version"
                 onInput={(e) => {
                   const value = e.currentTarget.value;
-                  if (value.length && deploymentPackageVersionPattern.test(value)) {
+                  if (
+                    value.length &&
+                    deploymentPackageVersionPattern.test(value)
+                  ) {
                     dispatch(setVersion(e.currentTarget.value));
                   }
                 }}
