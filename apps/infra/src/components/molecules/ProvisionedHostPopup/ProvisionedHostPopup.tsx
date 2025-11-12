@@ -105,6 +105,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       ? [
           {
             displayText: "Activate vPro",
+            disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
             onSelect: () => onToggleVpro && onToggleVpro(true),
           },
         ]
@@ -114,6 +115,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
       ? [
           {
             displayText: "De-Activate vPro",
+            disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
             onSelect: () => onToggleVpro && onToggleVpro(false),
           },
         ]
