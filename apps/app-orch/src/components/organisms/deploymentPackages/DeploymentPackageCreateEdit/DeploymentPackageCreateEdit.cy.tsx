@@ -88,6 +88,7 @@ describe("<DeploymentPackageCreateEdit />", () => {
         it("should goto add application page", () => {
           pom.appTablePom.root.should("exist");
           pom.appTablePom.el.newAppRibbonButton.click();
+          pom.appTablePom.confirmationDialog.el.confirmBtn.click();
           pom.getPath().should("eq", "/applications/applications/add");
         });
 
