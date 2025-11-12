@@ -47,6 +47,7 @@ const FiltersDrawer = ({
         onUpdate={(metadataPairs: MetadataPair[]) => {
           setCurrentFilters(() => metadataPairs);
         }}
+        allowDuplicateKeys={true}
       />
     ),
     [filters],

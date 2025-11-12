@@ -89,7 +89,7 @@ const ApplicationForm = ({ control, errors }: ApplicationFormProps) => {
                   errorMessage={
                     errors.version?.type === "required"
                       ? "Version is required"
-                      : "Invalid version (ex. 1.0.0 or v0.1.2)"
+                      : "Invalid version (ex. 1.0.0, v1.0.0, 1.0.0-rc1, 1.0.0-pre-rc1)"
                   }
                   validationState={
                     errors.version && Object.keys(errors.version).length > 0

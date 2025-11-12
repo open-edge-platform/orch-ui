@@ -232,7 +232,7 @@ const ApplicationSource = ({
                   ? "valid"
                   : "invalid"
               }
-              errorMessage="Invalid version (ex. 1.0.0 or v0.1.2)"
+              errorMessage="Invalid version (ex. 1.0.0, v1.0.0, 1.0.0-rc1, 1.0.0-pre-rc1)"
               data-cy="chartVersionCombobox"
             >
               {chartVersionsLoaded && chartVersions

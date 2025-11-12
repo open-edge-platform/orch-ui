@@ -23,6 +23,7 @@ export interface MetadataFormProps {
   leftLabelText?: string;
   rightLabelText?: string;
   hasError?: (isError: boolean) => void;
+  allowDuplicateKeys?: boolean;
 }
 
 const upperCaseRegex = new RegExp("[A-Z]");
@@ -36,6 +37,7 @@ export const MetadataForm = ({
   leftLabelText,
   rightLabelText,
   hasError,
+  allowDuplicateKeys = false,
 }: MetadataFormProps) => {
   const { data: metadataResponse } = mbApi.useMetadataServiceGetMetadataQuery(
     {
@@ -59,6 +61,7 @@ export const MetadataForm = ({
       leftLabelText={leftLabelText}
       rightLabelText={rightLabelText}
       hasError={hasError}
+      allowDuplicateKeys={allowDuplicateKeys}
     />
   );
 };
@@ -72,6 +75,7 @@ export interface MetadataFormContentProps {
   leftLabelText?: string;
   rightLabelText?: string;
   hasError?: (error: boolean) => void;
+  allowDuplicateKeys?: boolean;
 }
 
 export enum ErrorMessages {
@@ -95,6 +99,7 @@ export const MetadataFormContent = ({
   buttonText,
   leftLabelText,
   rightLabelText,
+  allowDuplicateKeys = false,
 }: MetadataFormContentProps) => {
   const {
     control,
@@ -262,14 +267,16 @@ export const MetadataFormContent = ({
               }}
               validate={{
                 //@ts-ignore
-                noDuplicate: (value: string) => {
-                  const pairs = [...getValues().pairs];
-                  pairs.splice(index, 1); // dont compare against itself
-                  const hasDuplicate = pairs
-                    .map((pair: MetadataPair) => pair.key)
-                    .some((key: string) => key === value);
-                  return !hasDuplicate || ErrorMessages.KeyExists;
-                },
+                ...(!allowDuplicateKeys && {
+                  noDuplicate: (value: string) => {
+                    const pairs = [...getValues().pairs];
+                    pairs.splice(index, 1); // dont compare against itself
+                    const hasDuplicate = pairs
+                      .map((pair: MetadataPair) => pair.key)
+                      .some((key: string) => key === value);
+                    return !hasDuplicate || ErrorMessages.KeyExists;
+                  },
+                }),
                 //@ts-ignore
                 noUpperCase: (value: string) => checkForUpperCase(value),
                 //@ts-ignore
