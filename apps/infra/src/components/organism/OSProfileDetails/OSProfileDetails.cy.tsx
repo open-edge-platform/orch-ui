@@ -58,8 +58,11 @@ describe("<OSProfileDetails/>", () => {
       pom.getTab("Installed Packages").should("exist");
       pom.el.installedPackagesRoot.should("be.visible");
 
-      pom.getTab("Cves").should("exist").click();
-      pom.el.cveTabRoot.should("be.visible");
+      pom.getTab("Existing Cves").should("exist").click();
+      pom.el.existingCveTabRoot.should("be.visible");
+
+      pom.getTab("Fixed Cves").should("exist").click();
+      pom.el.fixedCveTabRoot.should("be.visible");
     });
     it("should not render installed packages list if empty", () => {
       cy.mount(
@@ -97,9 +100,9 @@ describe("<OSProfileDetails/>", () => {
       pom.root.should("contain.text", "tmv3");
     });
 
-    it("should render cve list in table", () => {
+    it("should render existing cves list in table", () => {
       cy.mount(<OSProfileDetails os={osTb} />);
-      pom.getTab("Cves").should("exist").click();
+      pom.getTab("Existing Cves").should("exist").click();
       pom.table.root.should("exist");
 
       pom.table.getColumnHeader(0).contains("Cve Id");
@@ -109,6 +112,16 @@ describe("<OSProfileDetails/>", () => {
       pom.table.getCell(1, 1).contains("CVE-2016-5180");
       pom.table.getCell(1, 2).contains("critical");
       pom.table.getCell(1, 3).contains("fluent-bit-3.1.9-11.emt3.x86_64");
+    });
+
+    it("should render fixed cves list in table", () => {
+      cy.mount(<OSProfileDetails os={osTb} />);
+      pom.getTab("Fixed Cves").should("exist").click();
+      pom.table.root.should("exist");
+
+      pom.table.getColumnHeader(0).contains("Cve Id");
+      pom.table.getColumnHeader(1).contains("Priority");
+      pom.table.getColumnHeader(2).contains("Affected Packages");
     });
   });
 });

@@ -6,7 +6,11 @@
 import { TablePom } from "@orch-ui/components";
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = ["installedPackagesRoot", "cveTabRoot"] as const;
+const dataCySelectors = [
+  "installedPackagesRoot",
+  "existingCveTabRoot",
+  "fixedCveTabRoot",
+] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 export class OSProfileDetailsPom extends CyPom<Selectors> {
