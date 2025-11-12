@@ -84,7 +84,8 @@ describe("<ApplicationCreateEdit />", () => {
       pom.sourceForm.chartName.resources[0].chartName,
     );
 
-    pom.sourceForm.el.chartVersionCombobox.first().type("1.0.0-");
+    pom.sourceForm.el.chartVersionCombobox.first().clear().type("1.0.0-");
+    cy.wait(500);
     pom.sourceForm.el.chartVersionCombobox
       .first()
       .parentsUntil(".spark-combobox")

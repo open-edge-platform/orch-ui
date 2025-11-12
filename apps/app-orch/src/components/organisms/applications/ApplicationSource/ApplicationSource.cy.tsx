@@ -77,15 +77,16 @@ describe("<ApplicationSource />", () => {
     validVersions.forEach((version) => {
       it(`should accept valid versionPattern: "${version}"`, () => {
         // Type version and check for valid state
-
-        pom.el.chartVersionCombobox.first().type(version);
+        pom.el.chartVersionCombobox.first().clear().type(version);
+        cy.wait(500);
         cy.contains("Invalid version").should("not.exist");
       });
     });
 
     invalidVersions.forEach((version) => {
       it(`should reject invalid versionPattern: "${version}"`, () => {
-        pom.el.chartVersionCombobox.first().type(version);
+        pom.el.chartVersionCombobox.first().clear().type(version);
+        cy.wait(500);
         cy.contains("Invalid version").should("exist");
       });
     });
