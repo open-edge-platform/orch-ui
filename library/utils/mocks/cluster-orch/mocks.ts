@@ -15,16 +15,8 @@ const projectName = SharedStorage.project?.name;
 
 const cts = new ClusterTemplatesStore();
 export const clusterTemplateHandlers = [
-  http.get(`/v2/projects/${projectName}/templates`, ({ request }) => {
-    const filter = new URL(request.url).searchParams.get("filter");
-    let templates = cts.list();
-
-    if (filter) {
-      const kubeVersion = filter.split("=").pop();
-      templates = templates.filter((template) => {
-        return template.kubernetesVersion === kubeVersion;
-      });
-    }
+  http.get(`/v2/projects/${projectName}/templates`, () => {
+    const templates = cts.list();
 
     return HttpResponse.json(
       {

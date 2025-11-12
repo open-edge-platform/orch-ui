@@ -50,7 +50,6 @@ export interface HostProvisionState {
   autoProvision: boolean;
   createCluster: boolean;
   hasHostDefinitionError: boolean;
-  kubernetesVersion: string;
 }
 
 export const initialState: HostProvisionState = {
@@ -70,7 +69,6 @@ export const initialState: HostProvisionState = {
   autoProvision: true,
   createCluster: true,
   hasHostDefinitionError: false,
-  kubernetesVersion: "",
 };
 
 export type SiteReadWithPath = infra.SiteResourceRead & {
@@ -255,14 +253,6 @@ export const provisionHost = createSlice({
     ) {
       const changed = state.commonHostData?.os?.name !== action.payload.name;
       state.commonHostData.os = action.payload;
-
-      const metadata = action.payload.metadata?.trim() || "{}";
-      state.kubernetesVersion =
-        (
-          JSON.parse(metadata) as {
-            "kubernetes-version"?: string;
-          }
-        )["kubernetes-version"] ?? "";
 
       if (changed) {
         delete state.commonHostData["clusterTemplateName"];

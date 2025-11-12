@@ -15,7 +15,6 @@ export const createOsResource = (
   profileName: string,
   securityFeature: infra.InstanceResourceRead["securityFeature"],
   osType: infra.OperatingSystemResourceRead["osType"],
-  metadata: string,
 ): infra.OperatingSystemResourceRead => {
   return {
     resourceId: id,
@@ -30,7 +29,6 @@ export const createOsResource = (
       '{"Repo":[{"Name":"libpcre2-32-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"},{"Name":"libpcre2-16-0","Version":"10.42-3","Architecture":"x86_64","Distribution":"tmv3","URL":"https://www.pcre.org/","License":"BSD","Modified":"No"}]}',
     existingCves:
       '[{"cve_id":"CVE-2016-5180","priority":"critical","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2021-3672","priority":"medium","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2020-8277","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]},{"cve_id":"CVE-2022-4904","priority":"high","affected_packages":["fluent-bit-3.1.9-11.emt3.x86_64"]}]',
-    metadata,
   };
 };
 
@@ -42,7 +40,6 @@ export const osTb = createOsResource(
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export const osTbUpdate = createOsResource(
@@ -53,7 +50,6 @@ export const osTbUpdate = createOsResource(
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export const osUbuntu = createOsResource(
@@ -64,7 +60,6 @@ export const osUbuntu = createOsResource(
   "Ubuntu-x86_profile",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetes-version":"v1.30.0"}',
 );
 
 export const osRedHat = createOsResource(
@@ -75,7 +70,6 @@ export const osRedHat = createOsResource(
   "Redhat-x86_profile",
   "SECURITY_FEATURE_NONE",
   "OS_TYPE_IMMUTABLE",
-  '{"kubernetes-version":"v1.32.0"}',
 );
 
 export class OsResourceStore extends BaseStore<
