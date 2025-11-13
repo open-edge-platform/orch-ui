@@ -10,6 +10,7 @@ export interface IUser {
 }
 
 const password = process.env.ORCH_DEFAULT_PASSWORD || "ChangeMeOn1stLogin!";
+// Cypress.env("ORCH_DEFAULT_PASSWORD")
 
 export const ADMIN_USER: IUser = {
   username: "sample-org-admin",
