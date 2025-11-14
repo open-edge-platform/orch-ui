@@ -112,9 +112,11 @@ export const getDocsForUrl = (url: string) => {
       docVersion
     ) {
       if (RuntimeConfig.documentationVersionExists(docVersion)) {
+        console.log("docversion assigned");
         // concatenating the release version with docsUrl
         docsUrl = `${docHost}/${docVersion}`;
       } else {
+        console.log("main assigned");
         docsUrl = `${docHost}/main`;
       }
     }
