@@ -173,7 +173,8 @@ describe("test no mapping", () => {
       },
     };
     window.__RUNTIME_CONFIG__ = cfg;
-    expect(getDocsForUrl("/random")).to.equal("http://localhost:8000/docs");
+    // When no documentation URLs exist, fallback to "/"
+    expect(getDocsForUrl("/random")).to.equal("/");
   });
 });
 
