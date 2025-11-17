@@ -124,6 +124,23 @@ const CreateOsUpdatePolicyDrawer = ({
     }
   }, [targetOsIdValue, reset, getValues]);
 
+  // Clear target OS when kernel command is entered (mutually exclusive)
+  useEffect(() => {
+    if (updateKernelCommandValue && updateKernelCommandValue.trim() !== "") {
+      const currentValues = getValues();
+      if (
+        currentValues.targetOsId &&
+        currentValues.targetOsId !== "" &&
+        currentValues.targetOsId !== "none"
+      ) {
+        reset({
+          ...currentValues,
+          targetOsId: "", // Clear target OS when kernel command is entered
+        });
+      }
+    }
+  }, [updateKernelCommandValue, reset, getValues]);
+
   // Revalidate both fields when either changes (for mutual exclusivity validation)
   // Only trigger after form has been submitted at least once
   useEffect(() => {
@@ -326,22 +343,13 @@ const CreateOsUpdatePolicyDrawer = ({
               <Controller
                 name="targetOsId"
                 control={formControl}
-                rules={{
-                  validate: (value) => {
-                    const hasTargetOs =
-                      value && value !== "" && value !== "none";
-                    const hasKernelCommand =
-                      getValues("updateKernelCommand")?.trim() !== "";
-
-                    if (!hasTargetOs && !hasKernelCommand) {
-                      return "Either Target OS or Kernel Command must be specified";
-                    }
-                    return true;
-                  },
-                }}
                 render={({ field }) => {
                   const osOptions = osResources?.filter(
                     (os) => os.osType === osTypeValue,
+                  );
+                  const isKernelCommandEntered = Boolean(
+                    updateKernelCommandValue &&
+                      updateKernelCommandValue.trim() !== "",
                   );
                   return (
                     <Dropdown
@@ -360,7 +368,11 @@ const CreateOsUpdatePolicyDrawer = ({
                         formErrors.targetOsId ? "invalid" : "valid"
                       }
                       errorMessage={formErrors.targetOsId?.message}
-                      isDisabled={isLoading || !osOptions?.length}
+                      isDisabled={
+                        isLoading ||
+                        !osOptions?.length ||
+                        isKernelCommandEntered
+                      }
                     >
                       <Item key="none">None</Item>
                       {osOptions?.map((os) => (
@@ -411,7 +423,7 @@ const CreateOsUpdatePolicyDrawer = ({
                     placeholder="console=ttyS0,115200 console=tty0 net.ifnames=0"
                     description={
                       isTargetOsSelected
-                        ? "This field is disabled when a Target OS is selected. Only one can be updated at a time."
+                        ? "This field is disabled when a Target OS is selected. Only one can be specified at a time."
                         : "Specify kernel command parameters or select a Target OS."
                     }
                     isDisabled={isTargetOsSelected}
