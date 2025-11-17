@@ -64,12 +64,14 @@ describe("<ApplicationTable />", () => {
       });
       it("should redirect to the correct URL", () => {
         pom.empty.el.emptyActionBtn.click();
+        pom.confirmationDialog.el.confirmBtn.click();
         pom.getPath().should("eq", "/applications/applications/add");
       });
     });
     describe("the ribbon component", () => {
       it("should redirect to the correct URL", () => {
         pom.el.newAppRibbonButton.click();
+        pom.confirmationDialog.el.confirmBtn.click();
         pom.getPath().should("eq", "/applications/applications/add");
       });
     });
@@ -137,6 +139,7 @@ describe("<ApplicationTable />", () => {
       pom.waitForApis();
       pom.empty.root.should("be.visible");
       pom.empty.el.emptyActionBtn.click();
+      pom.confirmationDialog.el.confirmBtn.click();
       cy.get("#pathname").contains("/add");
     });
 
