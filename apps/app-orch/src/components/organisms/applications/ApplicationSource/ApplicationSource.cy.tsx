@@ -94,7 +94,6 @@ describe("<ApplicationSource />", () => {
     invalidVersions.forEach((version) => {
       it(`should reject invalid versionPattern: "${version}"`, () => {
         pom.el.chartVersionCombobox.first().clear().type(version);
-        cy.wait(500);
         cy.contains("Invalid version").should("exist");
       });
     });
