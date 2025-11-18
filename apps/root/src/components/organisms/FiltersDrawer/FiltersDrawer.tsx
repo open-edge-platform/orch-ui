@@ -26,6 +26,7 @@ const FiltersDrawer = ({
 }: FiltersDrawerProps) => {
   const [currentFilters, setCurrentFilters] = useState<MetadataPair[]>(filters);
   const [showFilters, setShowFilters] = useState(false);
+  const [hasFormErrors, setHasFormErrors] = useState(false);
 
   const noFilters = currentFilters.length === 0;
 
@@ -47,6 +48,10 @@ const FiltersDrawer = ({
         onUpdate={(metadataPairs: MetadataPair[]) => {
           setCurrentFilters(() => metadataPairs);
         }}
+        hasError={(isError: boolean) => {
+          setHasFormErrors(isError);
+        }}
+        allowDuplicateKeys={true}
       />
     ),
     [filters],
@@ -113,6 +118,7 @@ const FiltersDrawer = ({
               <Button
                 size={ButtonSize.Large}
                 variant={ButtonVariant.Action}
+                isDisabled={hasFormErrors || noFilters}
                 onPress={() => {
                   onApply(currentFilters);
                   handleClose();

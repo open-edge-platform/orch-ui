@@ -137,7 +137,7 @@ const DeploymentPackageTable = ({
       accessor: (item) => rfc3339ToDate(item.createTime),
     },
     {
-      Header: "Deployed",
+      Header: "In Use",
       accessor: (item) => (item.isDeployed ? "Yes" : "No"),
       Cell: (table) => (
         <div
