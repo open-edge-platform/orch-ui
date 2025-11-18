@@ -173,7 +173,8 @@ describe("test no mapping", () => {
       },
     };
     window.__RUNTIME_CONFIG__ = cfg;
-    expect(getDocsForUrl("/random")).to.equal("http://localhost:8000/docs");
+    // When no documentation URLs exist, fallback to "/"
+    expect(getDocsForUrl("/random")).to.equal("/");
   });
 });
 
@@ -217,6 +218,17 @@ describe("doc URL tests for orchestrator versions", () => {
   it("Should construct URL with mainline doc version if orchestrator version is not available", () => {
     window.__RUNTIME_CONFIG__ = createTestConfig({
       VERSIONS: {},
+    });
+    expect(getDocsForUrl("/dashboard")).to.equal(
+      "https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/monitor_deployments/index.html",
+    );
+  });
+
+  it("Should construct URL with mainline doc version if particular orchestrator version doesnt have doc changes", () => {
+    window.__RUNTIME_CONFIG__ = createTestConfig({
+      VERSIONS: {
+        orchestrator: "v2025.2.0-dev-a49a3b02",
+      },
     });
     expect(getDocsForUrl("/dashboard")).to.equal(
       "https://docs.openedgeplatform.intel.com/edge-manage-docs/main/user_guide/monitor_deployments/index.html",

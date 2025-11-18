@@ -123,7 +123,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       // Target OS field should be visible for Immutable OS with Update To Target
       cyGet("targetOs").should("exist");
       // Advanced fields should not be visible for Immutable OS
-      cyGet("updateKernelCommand").should("not.exist");
+      cyGet("updateKernelCommand").should("exist");
       cyGet("updatePackages").should("not.exist");
       cyGet("updateSources").should("not.exist");
     });
@@ -203,7 +203,124 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
 
       // Click to open dropdown and check options
       cyGet("targetOs").find("button").click();
+      cy.contains("None").should("exist");
       cy.contains(osUbuntu.name || "").should("exist");
+    });
+  });
+
+  describe("Kernel Command and Target OS Mutual Exclusivity", () => {
+    beforeEach(() => {
+      pom.interceptApis([pom.api.getOperatingSystems]);
+      cy.mount(<CreateOsUpdatePolicyDrawer {...mockProps} />);
+      pom.waitForApis();
+    });
+
+    it("should show kernel command field only when Update To Target is selected", () => {
+      pom.selectOsType("OS_TYPE_IMMUTABLE");
+      pom.selectUpdatePolicy("UPDATE_POLICY_LATEST");
+
+      // Kernel command should not be visible for Update To Latest
+      cyGet("updateKernelCommand").should("not.exist");
+
+      // Switch to Update To Target
+      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
+
+      // Kernel command should now be visible
+      cyGet("updateKernelCommand").should("exist");
+    });
+
+    it("should require either target OS or kernel command", () => {
+      pom.selectOsType("OS_TYPE_IMMUTABLE");
+      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
+
+      // Fill required fields but leave both target OS and kernel command empty
+      pom.el.name.type("Test Policy");
+
+      // Try to submit
+      cyGet("addBtn").click();
+
+      // Should show validation error
+      cy.contains(
+        "Either Target OS or Kernel Command must be specified",
+      ).should("exist");
+    });
+
+    it("should allow submission with only kernel command", () => {
+      pom.interceptApis([
+        pom.api.getOperatingSystems,
+        pom.api.createOsUpdatePolicy,
+      ]);
+
+      pom.selectOsType("OS_TYPE_IMMUTABLE");
+      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
+
+      // Fill required fields with kernel command only
+      pom.el.name.type("Test Policy");
+      cyGet("updateKernelCommand").type("console=ttyS0");
+
+      // Submit should succeed
+      cyGet("addBtn").click();
+
+      cy.wait("@createOsUpdatePolicy").then((interception) => {
+        expect(interception.request.body.updateKernelCommand).to.equal(
+          "console=ttyS0",
+        );
+        expect(interception.request.body).to.not.have.property("targetOsId");
+      });
+    });
+
+    it("should allow submission with only target OS", () => {
+      pom.interceptApis([
+        pom.api.getOperatingSystems,
+        pom.api.createOsUpdatePolicy,
+      ]);
+
+      pom.selectOsType("OS_TYPE_IMMUTABLE");
+      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
+
+      // Fill required fields with target OS only
+      pom.el.name.type("Test Policy");
+
+      // Select target OS
+      cyGet("targetOs").find("button").click({ force: true });
+      cy.get("[role='listbox']")
+        .should("be.visible")
+        .contains(osUbuntu.name || "")
+        .click({ force: true });
+
+      cy.get("[role='listbox']").should("not.exist");
+
+      // Submit should succeed
+      cyGet("addBtn").click();
+
+      cy.wait("@createOsUpdatePolicy").then((interception) => {
+        expect(interception.request.body.targetOsId).to.equal(
+          osUbuntu.resourceId,
+        );
+        expect(interception.request.body).to.not.have.property(
+          "updateKernelCommand",
+        );
+      });
+    });
+
+    it("should not allow submission with both empty when switching from valid state", () => {
+      pom.selectOsType("OS_TYPE_IMMUTABLE");
+      pom.selectUpdatePolicy("UPDATE_POLICY_TARGET");
+
+      // Fill required fields with kernel command
+      pom.el.name.type("Test Policy");
+      cyGet("updateKernelCommand").type("console=ttyS0");
+
+      // Clear the kernel command
+      cyGet("updateKernelCommand").clear();
+
+      // Try to submit with both empty
+      cyGet("addBtn").click();
+
+      // Should show validation error
+      cy.contains(
+        "Either Target OS or Kernel Command must be specified",
+      ).should("exist");
     });
   });
 });

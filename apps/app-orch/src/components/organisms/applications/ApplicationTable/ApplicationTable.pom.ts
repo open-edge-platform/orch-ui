@@ -6,6 +6,7 @@
 import { catalog } from "@orch-ui/apis";
 import {
   ApiErrorPom,
+  ConfirmationDialogPom,
   EmptyPom,
   RibbonPom,
   TablePom,
@@ -119,6 +120,7 @@ class ApplicationTablePom extends CyPom<Selectors, ApiAliases> {
   apiErrorPom: ApiErrorPom;
   appDescriptionTextPom: TextTruncatePom;
   appDrawerPom: ApplicationDetailsDrawerContentPom;
+  confirmationDialog: ConfirmationDialogPom;
   constructor(public rootCy = "applicationTable") {
     super(rootCy, [...dataCySelectors], appApiIntercepts);
 
@@ -129,6 +131,7 @@ class ApplicationTablePom extends CyPom<Selectors, ApiAliases> {
     this.apiErrorPom = new ApiErrorPom();
     this.appDrawerPom = new ApplicationDetailsDrawerContentPom();
     this.appDescriptionTextPom = new TextTruncatePom();
+    this.confirmationDialog = new ConfirmationDialogPom("dialog");
   }
 
   public getActionPopupBySearchText(search: string): Cy {
