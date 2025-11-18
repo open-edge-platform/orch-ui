@@ -59,7 +59,7 @@ const DeploymentPackageDetailsMain = ({
               </td>
             </tr>
             <tr>
-              <td>Deployed:</td>
+              <td>In Use:</td>
               <td data-cy="dpIsDeployed">
                 {deploymentPackage.isDeployed ? "Yes" : "No"}
               </td>

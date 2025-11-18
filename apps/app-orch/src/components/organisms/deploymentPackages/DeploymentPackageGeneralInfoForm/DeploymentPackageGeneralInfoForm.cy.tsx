@@ -103,7 +103,15 @@ describe("<DeploymentPackageGeneralInfoForm />", () => {
       "1.0.0-pre-rc1",
       "2.1.3-alpha",
     ];
-    const invalidVersions = ["V1.0.0", "1.0.0-", "abc", "1.0"];
+    const invalidVersions = [
+      "V1.0.0",
+      "1.0.0-",
+      "1.0.0-pre-",
+      "1.0.0-pre-rc1-",
+      "1.0.0-pre-rc1-beta",
+      "abc",
+      "1.0",
+    ];
 
     validVersions.forEach((version) => {
       it(`should accept valid version: "${version}"`, () => {

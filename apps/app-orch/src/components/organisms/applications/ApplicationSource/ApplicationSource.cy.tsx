@@ -17,7 +17,15 @@ const validVersions = [
   "1.0.0-pre-rc1",
   "v2.1.3-alpha-beta",
 ];
-const invalidVersions = ["1", "abc", "1.0", "1.0.0.0", "v"];
+const invalidVersions = [
+  "1",
+  "abc",
+  "1.0",
+  "1.0.0.0",
+  "v",
+  "1.0.0-rc1-",
+  "1.0.0-pre-rc1-",
+];
 
 let pom: ApplicationSourcePom;
 describe("<ApplicationSource />", () => {

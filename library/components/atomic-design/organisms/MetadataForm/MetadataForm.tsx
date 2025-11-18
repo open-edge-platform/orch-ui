@@ -267,16 +267,26 @@ export const MetadataFormContent = ({
               }}
               validate={{
                 //@ts-ignore
-                ...(!allowDuplicateKeys && {
-                  noDuplicate: (value: string) => {
-                    const pairs = [...getValues().pairs];
-                    pairs.splice(index, 1); // dont compare against itself
-                    const hasDuplicate = pairs
-                      .map((pair: MetadataPair) => pair.key)
-                      .some((key: string) => key === value);
-                    return !hasDuplicate || ErrorMessages.KeyExists;
-                  },
-                }),
+                required: (value: string) => {
+                  const valueField = getValues(`pairs.${index}.value`);
+                  if (valueField && !value) {
+                    return ErrorMessages.IsRequired;
+                  }
+                  return true;
+                },
+                //@ts-ignore
+                ...(!allowDuplicateKeys
+                  ? {
+                      noDuplicate: (value: string) => {
+                        const pairs = [...getValues().pairs];
+                        pairs.splice(index, 1); // dont compare against itself
+                        const hasDuplicate = pairs
+                          .map((pair: MetadataPair) => pair.key)
+                          .some((key: string) => key === value);
+                        return !hasDuplicate || ErrorMessages.KeyExists;
+                      },
+                    }
+                  : {}),
                 //@ts-ignore
                 noUpperCase: (value: string) => checkForUpperCase(value),
                 //@ts-ignore
@@ -306,6 +316,14 @@ export const MetadataFormContent = ({
                 onUpdate(getMetadataPairs());
               }}
               validate={{
+                //@ts-ignore
+                required: (value: string) => {
+                  const keyValue = getValues(`pairs.${index}.key`);
+                  if (keyValue && !value) {
+                    return ErrorMessages.IsRequired;
+                  }
+                  return true;
+                },
                 //@ts-ignore
                 noUpperCase: (value: string) => checkForUpperCase(value),
                 //@ts-ignore
