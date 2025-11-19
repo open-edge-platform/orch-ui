@@ -95,4 +95,44 @@ describe("<DeploymentPackageGeneralInfoForm />", () => {
       pom.nameTextField.contains(nameErrorMsgForRequired);
     });
   });
+  describe("should validate version", () => {
+    const validVersions = [
+      "1.0.0",
+      "v1.0.0",
+      "1.0.0-rc1",
+      "1.0.0-pre-rc1",
+      "2.1.3-alpha",
+    ];
+    const invalidVersions = [
+      "V1.0.0",
+      "1.0.0-",
+      "1.0.0-pre-",
+      "1.0.0-pre-rc1-",
+      "1.0.0-pre-rc1-beta",
+      "abc",
+      "1.0",
+    ];
+
+    validVersions.forEach((version) => {
+      it(`should accept valid version: "${version}"`, () => {
+        pom.el.version.clear().type(version);
+        cy.get('[data-cy="version"]')
+          .parent()
+          .should("not.contain.text", "Invalid version");
+      });
+    });
+
+    invalidVersions.forEach((version) => {
+      it(`should reject invalid version: "${version}"`, () => {
+        pom.el.version.clear().type(version);
+        pom.el.version.blur();
+        cy.wait(500);
+        cy.get('[data-cy="version"]').should(
+          "have.attr",
+          "aria-invalid",
+          "true",
+        );
+      });
+    });
+  });
 });

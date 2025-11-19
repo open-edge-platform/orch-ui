@@ -111,8 +111,12 @@ export const getDocsForUrl = (url: string) => {
       docsUrlObj.protocol === docHostObj.protocol &&
       docVersion
     ) {
-      // concatenating the release version with docsUrl
-      docsUrl = `${docHost}/${docVersion}`;
+      if (RuntimeConfig.documentationVersionExists(docVersion)) {
+        // concatenating the release version with docsUrl
+        docsUrl = `${docHost}/${docVersion}`;
+      } else {
+        docsUrl = `${docHost}/main`;
+      }
     }
   } catch (e) {
     // fallback: do nothing, keep docsUrl as is
@@ -121,9 +125,9 @@ export const getDocsForUrl = (url: string) => {
   if (docsMapper.length === 1) {
     return `${docsUrl}${docsMapper[0].dest}`;
   }
-  // default option
+  // default option - fallback to first documentation URL
+  // RuntimeConfig.documentation() already handles version fallback to "main"
   const defaultDocsAddress =
-    RuntimeConfig.documentation(docVersion)[0]?.dest ??
-    `${window.location.origin}/docs`;
+    RuntimeConfig.documentation(docVersion)[0]?.dest ?? "/";
   return `${docsUrl}${defaultDocsAddress}`;
 };
