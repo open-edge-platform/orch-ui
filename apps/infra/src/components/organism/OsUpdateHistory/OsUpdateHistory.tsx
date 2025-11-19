@@ -26,9 +26,37 @@ const formatTimestamp = (timestamp: number): string => {
   return new Date(timestamp * 1000).toLocaleString();
 };
 
-// Helper function to format duration
-const formatDuration = (startTime?: number, endTime?: number): string => {
-  if (!startTime || !endTime) return "N/A";
+export const isOsUpdateInProgress = (
+  startTime?: number,
+  endTime?: number,
+): boolean => {
+  if (!startTime) return false;
+  if (!endTime) return true; // No endTime means in progress
+  return endTime < startTime; // endTime before startTime indicates in progress
+};
+
+export const formatOsUpdateDuration = (
+  startTime?: number,
+  endTime?: number,
+): string => {
+  if (!startTime) return "N/A";
+
+  // Check if update is still in progress
+  if (isOsUpdateInProgress(startTime, endTime)) {
+    // Calculate elapsed time since startTime
+    const currentTime = Math.floor(Date.now() / 1000);
+    const elapsedMinutes = Math.round((currentTime - startTime) / 60);
+
+    if (elapsedMinutes < 60) return `${elapsedMinutes}m`;
+    const hours = Math.floor(elapsedMinutes / 60);
+    const remainingMinutes = elapsedMinutes % 60;
+    return remainingMinutes > 0
+      ? `${hours}h ${remainingMinutes}m`
+      : `${hours}h`;
+  }
+
+  if (!endTime) return "N/A";
+
   const minutes = Math.round((endTime - startTime) / 60);
   if (minutes < 60) return `${minutes}m`;
   const hours = Math.floor(minutes / 60);
@@ -127,22 +155,27 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
       Header: "End Time",
       accessor: "endTime",
       Cell: (table: { row: { original: infra.OsUpdateRunRead } }) => {
-        const endTime = table.row.original.endTime;
+        const run = table.row.original;
+        const inProgress = isOsUpdateInProgress(run.startTime, run.endTime);
         return (
           <Text size="s" data-cy="endTime">
-            {endTime ? formatTimestamp(endTime) : "In Progress"}
+            {inProgress
+              ? "In Progress"
+              : run.endTime
+                ? formatTimestamp(run.endTime)
+                : "N/A"}
           </Text>
         );
       },
     },
     {
       Header: "Duration",
-      accessor: (run) => formatDuration(run.startTime, run.endTime),
+      accessor: (run) => formatOsUpdateDuration(run.startTime, run.endTime),
       Cell: (table: { row: { original: infra.OsUpdateRunRead } }) => {
         const run = table.row.original;
         return (
           <Text size="s" data-cy="duration">
-            {formatDuration(run.startTime, run.endTime)}
+            {formatOsUpdateDuration(run.startTime, run.endTime)}
           </Text>
         );
       },
