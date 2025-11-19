@@ -15,6 +15,7 @@ export const createOsResource = (
   profileName: string,
   securityFeature: infra.InstanceResourceRead["securityFeature"],
   osType: infra.OperatingSystemResourceRead["osType"],
+  metadata: string,
 ): infra.OperatingSystemResourceRead => {
   return {
     resourceId: id,
@@ -47,6 +48,7 @@ export const osTb = createOsResource(
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
+  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export const osTbUpdate = createOsResource(
@@ -57,6 +59,7 @@ export const osTbUpdate = createOsResource(
   "TbOS",
   "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   "OS_TYPE_IMMUTABLE",
+  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export const osUbuntu = createOsResource(
@@ -78,6 +81,7 @@ export const osRedHat = createOsResource(
   "Redhat-x86_profile",
   "SECURITY_FEATURE_NONE",
   "OS_TYPE_IMMUTABLE",
+  '{"kubernetes-version":"v1.28.0"}',
 );
 
 export class OsResourceStore extends BaseStore<
