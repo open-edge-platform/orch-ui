@@ -69,6 +69,11 @@ export class RuntimeConfig {
     return docs[version] ?? docs["main"] ?? [];
   }
 
+  public static documentationVersionExists(version: string = "main") {
+    const docs = window.__RUNTIME_CONFIG__?.DOCUMENTATION;
+    return docs[version] && docs[version].length > 0;
+  }
+
   /**
    * Returns the API URL for Catalog
    */

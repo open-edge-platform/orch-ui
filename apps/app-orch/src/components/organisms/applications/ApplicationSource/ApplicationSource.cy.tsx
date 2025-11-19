@@ -9,8 +9,23 @@ import ApplicationSource from "./ApplicationSource";
 import ApplicationSourcePom from "./ApplicationSource.pom";
 
 // Add tests for various versionPattern values
-const validVersions = ["1.0.0", "v0.1.2", "0.0.1"];
-const invalidVersions = ["1", "abc", "1.0", "1.0.0.0", "v"];
+const validVersions = [
+  "1.0.0",
+  "v0.1.2",
+  "0.0.1",
+  "1.0.0-rc1",
+  "1.0.0-pre-rc1",
+  "v2.1.3-alpha-beta",
+];
+const invalidVersions = [
+  "1",
+  "abc",
+  "1.0",
+  "1.0.0.0",
+  "v",
+  "1.0.0-rc1-",
+  "1.0.0-pre-rc1-",
+];
 
 let pom: ApplicationSourcePom;
 describe("<ApplicationSource />", () => {
@@ -70,15 +85,14 @@ describe("<ApplicationSource />", () => {
     validVersions.forEach((version) => {
       it(`should accept valid versionPattern: "${version}"`, () => {
         // Type version and check for valid state
-
-        pom.el.chartVersionCombobox.first().type(version);
+        pom.el.chartVersionCombobox.first().clear().type(version);
         cy.contains("Invalid version").should("not.exist");
       });
     });
 
     invalidVersions.forEach((version) => {
       it(`should reject invalid versionPattern: "${version}"`, () => {
-        pom.el.chartVersionCombobox.first().type(version);
+        pom.el.chartVersionCombobox.first().clear().type(version);
         cy.contains("Invalid version").should("exist");
       });
     });

@@ -15,7 +15,7 @@ import {
   setVersion,
 } from "../../../../store/reducers/deploymentPackage";
 import { getDisplayNameValidationErrorMessage } from "../../../../utils/global";
-import { versionPattern } from "../../../../utils/regexPatterns";
+import { deploymentPackageVersionPattern } from "../../../../utils/regexPatterns";
 import {
   DeploymentPackageCreateMode,
   PackageInputs,
@@ -84,7 +84,7 @@ const DeploymentPackageGeneralInfoForm = ({
             control={control}
             rules={{
               required: true,
-              pattern: versionPattern,
+              pattern: deploymentPackageVersionPattern,
             }}
             render={({ field }) => (
               <TextField
@@ -93,14 +93,17 @@ const DeploymentPackageGeneralInfoForm = ({
                 label="Version"
                 onInput={(e) => {
                   const value = e.currentTarget.value;
-                  if (value.length && versionPattern.test(value)) {
+                  if (
+                    value.length &&
+                    deploymentPackageVersionPattern.test(value)
+                  ) {
                     dispatch(setVersion(e.currentTarget.value));
                   }
                 }}
                 errorMessage={
                   errors.version?.type === "required"
                     ? "Version is required"
-                    : "Invalid version (ex. 1.0.0 or v0.1.2)"
+                    : "Invalid version (ex. 1.0.0, v1.0.0, 1.0.0-rc1, 1.0.0-pre-rc1)"
                 }
                 validationState={
                   errors.version && Object.keys(errors.version).length > 0

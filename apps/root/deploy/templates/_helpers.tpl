@@ -81,11 +81,47 @@ window.__RUNTIME_CONFIG__ = {
   OBSERVABILITY_URL: {{ .Values.global.observability.url | quote }},
   TITLE: {{ .Values.header.title | quote }},
   DOCUMENTATION_URL: {{ .Values.header.documentationUrl | quote }},
-  DOCUMENTATION: [
-    {{- range .Values.header.documentation }}
+  DOCUMENTATION: {
+    {{- if .Values.header.documentation.common }}
+    "3.0": [
+      {{- range .Values.header.documentation.common }}
       { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+      {{- if .Values.header.documentation.v3_0 }}
+      {{- range .Values.header.documentation.v3_0 }}
+      { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+      {{- end }}
+    ],
+    "3.1": [
+      {{- range .Values.header.documentation.common }}
+      { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+      {{- if .Values.header.documentation.v3_1 }}
+      {{- range .Values.header.documentation.v3_1 }}
+      { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+      {{- end }}
+    ],
+    "main": [
+      {{- range .Values.header.documentation.common }}
+      { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+      {{- if .Values.header.documentation.v3_1 }}
+      {{- range .Values.header.documentation.v3_1 }}
+      { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+      {{- end }}
+    ]
+    {{- else }}
+    {{/* Fallback for old format - maintain backward compatibility */}}
+    "main": [
+      {{- range .Values.header.documentation }}
+      { src: "{{ .src }}", dest: "{{ .dest }}" },
+      {{- end }}
+    ]
     {{- end }}
-  ],
+  },
   MFE: {
     APP_ORCH: {{ .Values.mfe.app_orch | quote }},
     INFRA: {{ .Values.mfe.infra | quote }},
