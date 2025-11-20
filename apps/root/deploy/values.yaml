@@ -29,7 +29,7 @@ global:
 # if an MFE is set to true it means that is available, and other MFE will use this flag to know that they can import remote components from it
 mfe:
   app_orch: false
-  infra: false
+  infra: true
   cluster_orch: true
   admin: true
 

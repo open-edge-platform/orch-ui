@@ -4,7 +4,11 @@
  */
 
 import { adm } from "@orch-ui/apis";
-import { DashboardStatus, MetadataPairs } from "@orch-ui/components";
+import {
+  AppOrchGuard,
+  DashboardStatus,
+  MetadataPairs,
+} from "@orch-ui/components";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import "./DashboardDeploymentsStatus.scss";
 const { useDeploymentServiceGetDeploymentsStatusQuery } = adm;
@@ -17,6 +21,9 @@ const DashboardDeploymentsStatus = ({
   dataCy?: string;
   metadata?: MetadataPairs;
 }) => {
+  const runtimeConfig = window.__RUNTIME_CONFIG__;
+
+  console.log("deployments", { runtimeConfig });
   const { data, isError, error, isLoading, isSuccess } =
     useDeploymentServiceGetDeploymentsStatusQuery(
       {
@@ -55,7 +62,7 @@ const DashboardDeploymentsStatus = ({
         apiError={error}
         empty={{
           icon: "three-dots-circle",
-          text: "There are no deployments",
+          text: "There are no deploymentsabc",
         }}
       />
     </div>
@@ -63,5 +70,7 @@ const DashboardDeploymentsStatus = ({
 };
 
 export default ({ metadata }: { metadata?: MetadataPairs }) => (
-  <DashboardDeploymentsStatus metadata={metadata} />
+  <AppOrchGuard>
+    <DashboardDeploymentsStatus metadata={metadata} />
+  </AppOrchGuard>
 );

@@ -13,7 +13,9 @@ import Layout from "../layouts/Layout";
 
 const AppOrchUI = React.lazy(async () => await import("AppOrchUI/App"));
 const ClusterOrchUI = React.lazy(async () => await import("ClusterOrchUI/App"));
-const EimUI = React.lazy(async () => await import("EimUI/App"));
+const EimUI = RuntimeConfig.isEnabled("INFRA") 
+  ? React.lazy(async () => await import("EimUI/App")) 
+  : null;
 const Admin = RuntimeConfig.isEnabled("ADMIN")
   ? React.lazy(async () => await import("Admin/App"))
   : null;
@@ -63,7 +65,7 @@ export const childRoutes: RouteObject[] = [
     path: "/infrastructure/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        <EimUI />
+        {EimUI !== null ? <EimUI /> : "Infrastructure disabled"}
       </Suspense>
     ),
   },
