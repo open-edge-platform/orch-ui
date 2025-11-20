@@ -6,7 +6,7 @@
 import { infra } from "@orch-ui/apis";
 import { Table, TableColumn } from "@orch-ui/components";
 import { Item, MessageBanner, Tabs, Text } from "@spark-design/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import OsProfileDetailField from "./OsProfileDetailField";
 
 import "./OSProfileDetails.scss";
@@ -139,6 +139,8 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
     ? JSON.parse(os.existingCves)
     : null;
 
+  const fixedCves: Cve[] = os?.fixedCves ? JSON.parse(os.fixedCves) : null;
+
   return (
     <div className="os-profile-detail-content" {...cy}>
       <div className="os-details-header">Details</div>
@@ -159,6 +161,20 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
         }
       />
       <OsProfileDetailField label="Repository URL" value={os.imageUrl} />
+      {os.osType === "OS_TYPE_MUTABLE" ? (
+        <React.Fragment>
+          <OsProfileDetailField
+            label="Existing CVEs URL"
+            value={os.existingCvesUrl}
+            isClickable
+          />
+          <OsProfileDetailField
+            label="Fixed CVEs URL"
+            value={os.fixedCvesUrl}
+            isClickable
+          />
+        </React.Fragment>
+      ) : null}
       <OsProfileDetailField label="sha256" value={os.sha256} />
       <OsProfileDetailField
         label="Kernel Command"
@@ -215,11 +231,25 @@ const OSProfileDetails = ({ os, updatePolicy }: OSProfileDetailsProps) => {
             </div>
           </Item>
 
-          <Item className="osprofile-tab-item" title="Cves">
-            <div className="cve-content" data-cy="cveTabRoot">
+          <Item className="osprofile-tab-item" title="Existing Cves">
+            <div className="cve-content" data-cy="existingCveTabRoot">
               <Table
                 columns={CveColumns}
                 data={existingCves}
+                sortColumns={[1]}
+                initialSort={{
+                  column: "Priority",
+                  direction: "asc",
+                }}
+              />
+            </div>
+          </Item>
+
+          <Item className="osprofile-tab-item" title="Fixed Cves">
+            <div className="cve-content" data-cy="fixedCveTabRoot">
+              <Table
+                columns={CveColumns}
+                data={fixedCves}
                 sortColumns={[1]}
                 initialSort={{
                   column: "Priority",

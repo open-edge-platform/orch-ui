@@ -4,7 +4,7 @@
  */
 
 import { cyGet } from "@orch-ui/tests";
-import { osUbuntu } from "@orch-ui/utils";
+import { osRedHat } from "@orch-ui/utils";
 import CreateOsUpdatePolicyDrawer from "./CreateOsUpdatePolicyDrawer";
 import { CreateOsUpdatePolicyDrawerPom } from "./CreateOsUpdatePolicyDrawer.pom";
 
@@ -204,7 +204,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       // Click to open dropdown and check options
       cyGet("targetOs").find("button").click();
       cy.contains("None").should("exist");
-      cy.contains(osUbuntu.name || "").should("exist");
+      cy.contains(osRedHat.name || "").should("exist");
     });
   });
 
@@ -285,7 +285,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       cyGet("targetOs").find("button").click({ force: true });
       cy.get("[role='listbox']")
         .should("be.visible")
-        .contains(osUbuntu.name || "")
+        .contains(osRedHat.name || "")
         .click({ force: true });
 
       cy.get("[role='listbox']").should("not.exist");
@@ -295,7 +295,7 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
 
       cy.wait("@createOsUpdatePolicy").then((interception) => {
         expect(interception.request.body.targetOsId).to.equal(
-          osUbuntu.resourceId,
+          osRedHat.resourceId,
         );
         expect(interception.request.body).to.not.have.property(
           "updateKernelCommand",
