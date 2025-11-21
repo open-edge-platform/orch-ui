@@ -13,7 +13,8 @@ on:
       - 'tests/**'
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   post-merge-pipeline:

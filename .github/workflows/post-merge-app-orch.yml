@@ -13,7 +13,8 @@ on:
       - 'apps/app-orch/**'
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   post-merge-pipeline:
