@@ -8,7 +8,8 @@ on:
 env:
   CYPRESS_BASE_URL: "http://localhost:8080"
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   pre-merge-pipeline:

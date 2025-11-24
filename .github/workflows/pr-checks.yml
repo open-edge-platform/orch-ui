@@ -9,7 +9,8 @@ on:
     types: [opened, reopened, synchronize]
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   detect-changed-folders:
