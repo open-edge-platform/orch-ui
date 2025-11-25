@@ -6,7 +6,8 @@ name: Library Workflow
 on:
   workflow_call
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   run-library-pipeline:

@@ -13,7 +13,8 @@ on:
       - 'apps/infra/**'
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   post-merge-pipeline:
