@@ -23,7 +23,6 @@ import React, { Suspense } from "react";
 import OSProfileDetails from "../../../organism/OSProfileDetails/OSProfileDetails";
 import OsUpdate from "../../../organism/OsUpdate/OsUpdate";
 import OsUpdateHistory from "../../../organism/OsUpdateHistory/OsUpdateHistory";
-import VproDetails from "../../VproDetails/VproDetails";
 import { ResourceType, ResourceTypeTitle } from "../ResourceDetails";
 import { HostResourcesCpuRead } from "../resourcedetails/Cpu";
 import ResourceIndicator from "../ResourceIndicator";
@@ -91,14 +90,14 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
       id: 9,
       title: "Update History",
     },
-    ...(host.currentAmtState === "AMT_STATE_PROVISIONED"
-      ? [
-          {
-            id: 10,
-            title: "vPro Details",
-          },
-        ]
-      : []),
+    // ...(host.currentAmtState === "AMT_STATE_PROVISIONED"
+    //   ? [
+    //       {
+    //         id: 10,
+    //         title: "vPro Details",
+    //       },
+    //     ]
+    //   : []),
   ];
 
   const itemList = [
@@ -294,13 +293,13 @@ const HostDetailsTab: React.FC<HostDetailsTabProps> = (props) => {
     </Item>,
   );
 
-  if (host.currentAmtState === "AMT_STATE_PROVISIONED") {
-    itemList.push(
-      <Item title={tabItems[9].title}>
-        <VproDetails host={host} />
-      </Item>,
-    );
-  }
+  // if (host.currentAmtState === "AMT_STATE_PROVISIONED") {
+  //   itemList.push(
+  //     <Item title={tabItems[9].title}>
+  //       <VproDetails host={host} />
+  //     </Item>,
+  //   );
+  // }
 
   return (
     <div className="infra-host-resources" data-cy={dataCy}>
