@@ -18,8 +18,8 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
         with:
-          submodules: true
           token: ${{ secrets.SYS_EMF_GH_TOKEN }}
+          submodules: true
           persist-credentials: false
 
       - name: Cache npm dependencies
