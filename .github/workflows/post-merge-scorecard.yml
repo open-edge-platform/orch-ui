@@ -16,11 +16,12 @@ permissions:
 jobs:
   call-scorecard:
     permissions:
-      contents: read
-      security-events: write
+      security-events: write   # required for SARIF upload
       id-token: write
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge-scorecard.yml@main
+      contents: read
+
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge-scorecard.yml@79c4381f9be567527d8782094317b0282493e45a  # v0.1.66
     with:
       project_folder: "."
     secrets:
-      SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
+      SYS_ORCH_GITHUB: ${{ secrets.SYS_EMF_GH_TOKEN }}
