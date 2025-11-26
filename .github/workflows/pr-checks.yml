@@ -9,7 +9,8 @@ on:
     types: [opened, reopened, synchronize]
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   detect-changed-folders:
@@ -25,15 +26,15 @@ jobs:
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Discover changed files at root level
-        uses: open-edge-platform/orch-ci/discover-changed-files@0.1.56
+        uses: open-edge-platform/orch-ci/discover-changed-files@0.1.66
         id: root-file-changes
 
       - name: Discover changed folders at root level
-        uses: open-edge-platform/orch-ci/discover-changed-subfolders@0.1.56
+        uses: open-edge-platform/orch-ci/discover-changed-subfolders@0.1.66
         id: discover-changes
 
       - name: Discover changed apps
-        uses: open-edge-platform/orch-ci/discover-changed-subfolders@0.1.56
+        uses: open-edge-platform/orch-ci/discover-changed-subfolders@0.1.66
         id: discover-changes-apps
         with:
           project_folder: "apps"
@@ -44,7 +45,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: License check
         run: make license
@@ -56,7 +57,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Apply all versions
         run: make apply-all-versions
