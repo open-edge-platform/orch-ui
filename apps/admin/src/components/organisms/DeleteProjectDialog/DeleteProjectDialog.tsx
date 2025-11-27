@@ -45,7 +45,7 @@ const DeleteProjectDialog = ({
   const [deleteProjectName, setDeleteProjectName] = useState<string>("");
   const [deleteProject] = useDeleteProject();
 
-  const projectReadableName = project.spec?.description ?? project.name;
+  const projectReadableName = project.name;
 
   const onDeleteProject = () => {
     const projectName = project.name;
