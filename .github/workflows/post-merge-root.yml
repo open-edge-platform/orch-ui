@@ -11,6 +11,7 @@ on:
       - release-*
     paths:
       - 'apps/root/**'
+      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:
