@@ -10,7 +10,7 @@ const mockSize = 15;
 export const projects: AdminProject[] = [...Array(mockSize).keys()].map(
   (index) => {
     return {
-      name: `project-${index}`,
+      name: `Project ${index}`,
       spec: {
         description: `Project ${index}`,
       },
