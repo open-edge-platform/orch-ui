@@ -101,10 +101,8 @@ export const ProjectSwitch = ({
   const projectSwitchOptions = useMemo(() => {
     return unsortedProjectSwitchOptions
       ? [...unsortedProjectSwitchOptions].sort((a, b) => {
-          const nameA =
-            (a.spec?.description || a.name || "").toLowerCase() || "";
-          const nameB =
-            (b.spec?.description || b.name || "").toLowerCase() || "";
+          const nameA = (a.name || "").toLowerCase() || "";
+          const nameB = (b.name || "").toLowerCase() || "";
           return nameA.localeCompare(nameB);
         })
       : [];
@@ -192,7 +190,7 @@ export const ProjectSwitch = ({
                     key={option.name}
                   >
                     <Icon icon="grid" className={iconClassname} />
-                    {option.spec?.description ?? option.name}
+                    {option.name}
                   </li>
                 );
               })}
@@ -222,7 +220,7 @@ export const ProjectSwitch = ({
     }
   };
 
-  const name = selectedProject?.spec?.description ?? selectedProject?.name;
+  const name = selectedProject?.name;
   const prefix = hasRole(projectAdminRoles) ? "Manage" : "Select";
   return (
     <div {...cy}>

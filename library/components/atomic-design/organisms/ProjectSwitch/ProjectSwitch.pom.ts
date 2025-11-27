@@ -29,7 +29,7 @@ const successEndpoints: CyApiDetails<SuccessApiAliases, Project[]> = {
     route: "*/projects?member-role=true",
     statusCode: 200,
     response: [...Array(mockProjectLength).keys()].map((index) => ({
-      name: `project-${index}`,
+      name: `Project ${index}`,
       spec: {
         description: `Project ${index}`,
       },
