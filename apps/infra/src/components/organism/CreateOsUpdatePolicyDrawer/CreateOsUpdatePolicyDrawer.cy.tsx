@@ -333,14 +333,9 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
 
     it("should require at least one of kernel command, update sources, or update packages for Mutable OS", () => {
       pom.selectOsType("OS_TYPE_MUTABLE");
-
-      // Fill only required name field, leave all optional fields empty
       pom.el.name.type("Test Mutable Policy");
-
-      // Try to submit
       cyGet("addBtn").click();
 
-      // Should show validation error
       cy.contains(
         "Either Kernel Command, Update Sources, or Update Packages must be specified",
       ).should("exist");
