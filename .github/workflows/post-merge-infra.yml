@@ -11,6 +11,7 @@ on:
       - release-*
     paths:
       - 'apps/infra/**'
+      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:

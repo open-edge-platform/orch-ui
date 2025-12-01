@@ -144,5 +144,8 @@
       "apps\\infra\\public",
       "apps\\root\\public"
     ]
+  },
+  "overrides": {
+    "js-yaml": "^4.1.1"
   }
 }
