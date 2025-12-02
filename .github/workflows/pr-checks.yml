@@ -126,7 +126,11 @@ jobs:
       orch_ci_repo_ref: main
       version_suffix: "-pr-${{ github.event.number }}"
     secrets:
-      GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
+      SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
+      NO_AUTH_ECR_PUSH_USERNAME: ${{ secrets.NO_AUTH_ECR_PUSH_USERNAME }}
+      NO_AUTH_ECR_PUSH_PASSWD: ${{ secrets.NO_AUTH_ECR_PUSH_PASSWD }}
+      NO_AUTH_S3_PUSH_USERNAME: ${{ secrets.NO_AUTH_S3_PUSH_USERNAME }}
+      NO_AUTH_S3_PUSH_PASSWD: ${{ secrets.NO_AUTH_S3_PUSH_PASSWD }}
 
   final-check:
     permissions:
