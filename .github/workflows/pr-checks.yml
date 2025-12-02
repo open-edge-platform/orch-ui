@@ -125,7 +125,8 @@ jobs:
       project_folder: apps/${{ matrix.project_folder }}
       orch_ci_repo_ref: main
       version_suffix: "-pr-${{ github.event.number }}"
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
 
   final-check:
     permissions:
