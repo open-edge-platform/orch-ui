@@ -11,6 +11,7 @@ import {
   ButtonGroup,
   Drawer,
   Dropdown,
+  Icon,
   Item,
   TextField,
 } from "@spark-design/react";
@@ -23,6 +24,7 @@ import {
 } from "@spark-design/tokens";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import "./CreateOsUpdatePolicyDrawer.scss";
 
 // import "./CreateOsUpdatePolicy.scss";
 
@@ -242,7 +244,7 @@ const CreateOsUpdatePolicyDrawer = ({
   const createOsUpdatePolicyBodyContent = (
     <form id="createOsUpdatePolicyForm" onSubmit={handleSubmit(onSubmit)}>
       <div {...cy} className="create-os-update-policy">
-        <Flex cols={[12]} className="pa-1">
+        <Flex cols={[12]} className="pa-1 field-container">
           <Controller
             name="name"
             control={formControl}
@@ -268,7 +270,7 @@ const CreateOsUpdatePolicyDrawer = ({
           />
         </Flex>
 
-        <Flex cols={[12]} className="pa-1">
+        <Flex cols={[12]} className="pa-1 field-container">
           <Controller
             name="description"
             control={formControl}
@@ -287,7 +289,7 @@ const CreateOsUpdatePolicyDrawer = ({
           />
         </Flex>
 
-        <div className="pa-1">
+        <div className="pa-1 field-container">
           <Controller
             name="osType"
             control={formControl}
@@ -316,7 +318,7 @@ const CreateOsUpdatePolicyDrawer = ({
           />
         </div>
 
-        <div className="pa-1">
+        <div className="pa-1 field-container">
           <Controller
             name="updatePolicy"
             control={formControl}
@@ -349,7 +351,7 @@ const CreateOsUpdatePolicyDrawer = ({
         {/* Target OS - Only for IMMUTABLE OS and when UPDATE_POLICY_TARGET is selected*/}
         {osTypeValue === "OS_TYPE_IMMUTABLE" &&
           updatePolicyValue === "UPDATE_POLICY_TARGET" && (
-            <div className="pa-1">
+            <div className="pa-1 field-container">
               <Controller
                 name="targetOsId"
                 control={formControl}
@@ -419,7 +421,7 @@ const CreateOsUpdatePolicyDrawer = ({
 
         {/* Kernel Command - Show only when UPDATE_POLICY_TARGET is selected */}
         {updatePolicyValue === "UPDATE_POLICY_TARGET" && (
-          <Flex cols={[12]} className="pa-1">
+          <Flex cols={[12]} className="pa-1 field-container">
             <Controller
               name="updateKernelCommand"
               control={formControl}
@@ -492,7 +494,7 @@ const CreateOsUpdatePolicyDrawer = ({
         {/* Update Sources - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
         {osTypeValue === "OS_TYPE_MUTABLE" &&
           updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
-            <Flex cols={[12]} className="pa-1">
+            <Flex cols={[12]} className="pa-1 field-container">
               <Controller
                 name="updateSources"
                 control={formControl}
@@ -540,9 +542,41 @@ const CreateOsUpdatePolicyDrawer = ({
                     size="l"
                     data-cy="updateSources"
                     id="updateSources"
-                    label="Update Sources (APT Repository Format)"
-                    placeholder="deb http://archive.ubuntu.com/ubuntu focal main, deb http://security.ubuntu.com/ubuntu focal-security main"
-                    description="Enter APT repository sources separated by commas."
+                    label={
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                      >
+                        Update Sources (APT Repository Format)
+                        <Button
+                          iconOnly
+                          size="s"
+                          variant="ghost"
+                          style={{
+                            padding: 0,
+                            minWidth: "auto",
+                            height: "16px",
+                          }}
+                          onPress={() => {
+                            window.open(
+                              "https://repolib.readthedocs.io/en/latest/deb822-format.html",
+                              "_blank",
+                              "noopener,noreferrer",
+                            );
+                          }}
+                        >
+                          <Icon
+                            altText="Information"
+                            icon="information-circle"
+                          />
+                        </Button>
+                      </span>
+                    }
+                    placeholder="Enter update sources in DEB822 format"
+                    description="Click the info icon for more information on the format."
                     errorMessage={
                       formErrors.updateSources?.message?.trim()
                         ? formErrors.updateSources.message
@@ -560,7 +594,7 @@ const CreateOsUpdatePolicyDrawer = ({
         {/* Update Packages - Only for MUTABLE OS and NOT UPDATE_POLICY_LATEST */}
         {osTypeValue === "OS_TYPE_MUTABLE" &&
           updatePolicyValue !== "UPDATE_POLICY_LATEST" && (
-            <Flex cols={[12]} className="pa-1">
+            <Flex cols={[12]} className="pa-1 field-container">
               <Controller
                 name="updatePackages"
                 control={formControl}
