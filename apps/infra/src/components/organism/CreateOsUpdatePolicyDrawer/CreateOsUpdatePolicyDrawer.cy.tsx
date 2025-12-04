@@ -323,4 +323,22 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       ).should("exist");
     });
   });
+
+  describe("Mutable OS Field Validation", () => {
+    beforeEach(() => {
+      pom.interceptApis([pom.api.getOperatingSystems]);
+      cy.mount(<CreateOsUpdatePolicyDrawer {...mockProps} />);
+      pom.waitForApis();
+    });
+
+    it("should require at least one of kernel command, update sources, or update packages for Mutable OS", () => {
+      pom.selectOsType("OS_TYPE_MUTABLE");
+      pom.el.name.type("Test Mutable Policy");
+      cyGet("addBtn").click();
+
+      cy.contains(
+        "Either Kernel Command, Update Sources, or Update Packages must be specified",
+      ).should("exist");
+    });
+  });
 });

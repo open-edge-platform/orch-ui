@@ -88,6 +88,8 @@ const CreateOsUpdatePolicyDrawer = ({
   const updatePolicyValue = watch("updatePolicy");
   const targetOsIdValue = watch("targetOsId");
   const updateKernelCommandValue = watch("updateKernelCommand");
+  const updateSourcesValue = watch("updateSources");
+  const updatePackagesValue = watch("updatePackages");
 
   // Reset fields when OS type changes (preserve name and description)
   useEffect(() => {
@@ -141,18 +143,26 @@ const CreateOsUpdatePolicyDrawer = ({
     }
   }, [updateKernelCommandValue, reset, getValues]);
 
-  // Revalidate both fields when either changes (for mutual exclusivity validation)
+  // Revalidate fields when values change (for mutual requirement validation)
   // Only trigger after form has been submitted at least once
   useEffect(() => {
     if (isSubmitted && updatePolicyValue === "UPDATE_POLICY_TARGET") {
-      // Trigger validation for both fields when either value changes
-      trigger(["updateKernelCommand", "targetOsId"]);
+      if (osTypeValue === "OS_TYPE_IMMUTABLE") {
+        // For Immutable OS: validate Target OS and Kernel Command
+        trigger(["updateKernelCommand", "targetOsId"]);
+      } else if (osTypeValue === "OS_TYPE_MUTABLE") {
+        // For Mutable OS: validate Kernel Command, Update Sources, and Update Packages
+        trigger(["updateKernelCommand", "updateSources", "updatePackages"]);
+      }
     }
   }, [
     isSubmitted,
     targetOsIdValue,
     updateKernelCommandValue,
+    updateSourcesValue,
+    updatePackagesValue,
     updatePolicyValue,
+    osTypeValue,
     trigger,
   ]);
 
@@ -343,6 +353,22 @@ const CreateOsUpdatePolicyDrawer = ({
               <Controller
                 name="targetOsId"
                 control={formControl}
+                rules={{
+                  validate: (value) => {
+                    const hasTargetOs =
+                      value && value !== "" && value !== "none";
+                    const hasKernelCommand =
+                      updateKernelCommandValue &&
+                      updateKernelCommandValue.trim() !== "";
+
+                    if (!hasTargetOs && !hasKernelCommand) {
+                      // Return a space to mark as invalid without showing duplicate message
+                      // The error message will be shown on the Kernel Command field
+                      return " ";
+                    }
+                    return true;
+                  },
+                }}
                 render={({ field }) => {
                   const osOptions = osResources?.filter(
                     (os) => os.osType === osTypeValue,
@@ -367,7 +393,11 @@ const CreateOsUpdatePolicyDrawer = ({
                       validationState={
                         formErrors.targetOsId ? "invalid" : "valid"
                       }
-                      errorMessage={formErrors.targetOsId?.message}
+                      errorMessage={
+                        formErrors.targetOsId?.message?.trim()
+                          ? formErrors.targetOsId.message
+                          : undefined
+                      }
                       isDisabled={
                         isLoading ||
                         !osOptions?.length ||
@@ -395,15 +425,36 @@ const CreateOsUpdatePolicyDrawer = ({
               control={formControl}
               rules={{
                 validate: (value) => {
-                  const hasTargetOs =
-                    targetOsIdValue &&
-                    targetOsIdValue !== "" &&
-                    targetOsIdValue !== "none";
                   const hasKernelCommand = value && value.trim() !== "";
 
-                  if (!hasTargetOs && !hasKernelCommand) {
-                    return "Either Target OS or Kernel Command must be specified";
+                  // For Immutable OS: require either Target OS or Kernel Command
+                  if (osTypeValue === "OS_TYPE_IMMUTABLE") {
+                    const hasTargetOs =
+                      targetOsIdValue &&
+                      targetOsIdValue !== "" &&
+                      targetOsIdValue !== "none";
+
+                    if (!hasTargetOs && !hasKernelCommand) {
+                      return "Either Target OS or Kernel Command must be specified";
+                    }
                   }
+
+                  // For Mutable OS: require at least one of Kernel Command, Update Sources, or Update Packages
+                  if (osTypeValue === "OS_TYPE_MUTABLE") {
+                    const hasUpdateSources =
+                      updateSourcesValue && updateSourcesValue.trim() !== "";
+                    const hasUpdatePackages =
+                      updatePackagesValue && updatePackagesValue.trim() !== "";
+
+                    if (
+                      !hasKernelCommand &&
+                      !hasUpdateSources &&
+                      !hasUpdatePackages
+                    ) {
+                      return "Either Kernel Command, Update Sources, or Update Packages must be specified";
+                    }
+                  }
+
                   return true;
                 },
               }}
@@ -447,19 +498,38 @@ const CreateOsUpdatePolicyDrawer = ({
                 control={formControl}
                 rules={{
                   validate: (value) => {
-                    if (!value || value.trim() === "") return true; // Optional field
-                    const sources = value
-                      .split(",")
-                      .map((source) => source.trim())
-                      .filter((source) => source.length > 0);
+                    // Check if at least one of the three fields is filled (for Mutable OS)
+                    const hasUpdateSources = value && value.trim() !== "";
+                    const hasUpdatePackages =
+                      updatePackagesValue && updatePackagesValue.trim() !== "";
+                    const hasKernelCommand =
+                      updateKernelCommandValue &&
+                      updateKernelCommandValue.trim() !== "";
 
-                    // Check for valid APT repository format (should start with deb or deb-src)
-                    const invalidSources = sources.filter(
-                      (source) => !source.match(/^(deb|deb-src)\s+/),
-                    );
+                    if (
+                      !hasKernelCommand &&
+                      !hasUpdateSources &&
+                      !hasUpdatePackages
+                    ) {
+                      // Return a space to mark as invalid without showing duplicate message
+                      return " ";
+                    }
 
-                    if (invalidSources.length > 0) {
-                      return "Repository sources must start with 'deb' or 'deb-src'";
+                    // Validate APT repository format if value is provided
+                    if (hasUpdateSources) {
+                      const sources = value
+                        .split(",")
+                        .map((source) => source.trim())
+                        .filter((source) => source.length > 0);
+
+                      // Check for valid APT repository format (should start with deb or deb-src)
+                      const invalidSources = sources.filter(
+                        (source) => !source.match(/^(deb|deb-src)\s+/),
+                      );
+
+                      if (invalidSources.length > 0) {
+                        return "Repository sources must start with 'deb' or 'deb-src'";
+                      }
                     }
                     return true;
                   },
@@ -473,7 +543,11 @@ const CreateOsUpdatePolicyDrawer = ({
                     label="Update Sources (APT Repository Format)"
                     placeholder="deb http://archive.ubuntu.com/ubuntu focal main, deb http://security.ubuntu.com/ubuntu focal-security main"
                     description="Enter APT repository sources separated by commas."
-                    errorMessage={formErrors.updateSources?.message}
+                    errorMessage={
+                      formErrors.updateSources?.message?.trim()
+                        ? formErrors.updateSources.message
+                        : undefined
+                    }
                     validationState={
                       formErrors.updateSources ? "invalid" : "valid"
                     }
@@ -490,6 +564,27 @@ const CreateOsUpdatePolicyDrawer = ({
               <Controller
                 name="updatePackages"
                 control={formControl}
+                rules={{
+                  validate: (value) => {
+                    // Check if at least one of the three fields is filled (for Mutable OS)
+                    const hasUpdatePackages = value && value.trim() !== "";
+                    const hasUpdateSources =
+                      updateSourcesValue && updateSourcesValue.trim() !== "";
+                    const hasKernelCommand =
+                      updateKernelCommandValue &&
+                      updateKernelCommandValue.trim() !== "";
+
+                    if (
+                      !hasKernelCommand &&
+                      !hasUpdateSources &&
+                      !hasUpdatePackages
+                    ) {
+                      // Return a space to mark as invalid without showing duplicate message
+                      return " ";
+                    }
+                    return true;
+                  },
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -499,7 +594,11 @@ const CreateOsUpdatePolicyDrawer = ({
                     label="Update Packages"
                     placeholder="tree, curl, htop"
                     description="Enter package names separated by commas"
-                    errorMessage={formErrors.updatePackages?.message}
+                    errorMessage={
+                      formErrors.updatePackages?.message?.trim()
+                        ? formErrors.updatePackages.message
+                        : undefined
+                    }
                     validationState={
                       formErrors.updatePackages ? "invalid" : "valid"
                     }
