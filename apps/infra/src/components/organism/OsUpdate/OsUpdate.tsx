@@ -136,34 +136,7 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
 
   return (
     <div {...cy} className="os-update">
-      {Array.isArray(availablePackages) && availablePackages.length > 0 ? (
-        <Flex align="start" cols={[3, 9]}>
-          <Text className="os-update__policy-label">Available Update</Text>
-          <Flex cols={[8, 4]}>
-            <Table
-              data-cy="osUpdatePackageTable"
-              columns={packageColumns}
-              data={availablePackages}
-            />
-          </Flex>
-        </Flex>
-      ) : (
-        <Flex
-          align="middle"
-          className="os-update-policy-container"
-          cols={[3, 9]}
-        >
-          <Text className="os-update__policy-label">Available Update</Text>
-          <Text data-cy="desiredOsProfiles">
-            {(formatOsUpdateAvailable(
-              host?.instance?.osUpdateAvailable ?? "-",
-              "string",
-            ) as string) || "-"}
-          </Text>
-        </Flex>
-      )}
-
-      <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
+      <Flex align="middle" cols={[3, 9]}>
         <Text className="os-update__policy-label">
           Assigned OS Update Policy
         </Text>
@@ -172,7 +145,7 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
         </Text>
       </Flex>
 
-      <Flex align="middle" className="os-update-policy-container" cols={[3, 9]}>
+      <Flex align="middle" className="os-update__field-container" cols={[3, 9]}>
         <Text className="os-update__policy-label">Select OS Update Policy</Text>
         <Flex
           align="middle"
@@ -219,6 +192,37 @@ const OsUpdate = ({ host }: OsUpdateProps) => {
           </div>
         </Flex>
       </Flex>
+
+      {Array.isArray(availablePackages) && availablePackages.length > 0 ? (
+        <Flex
+          className="os-update__field-container"
+          align="start"
+          cols={[3, 9]}
+        >
+          <Text className="os-update__policy-label">Available Update</Text>
+          <Flex cols={[8, 4]}>
+            <Table
+              data-cy="osUpdatePackageTable"
+              columns={packageColumns}
+              data={availablePackages}
+            />
+          </Flex>
+        </Flex>
+      ) : (
+        <Flex
+          align="middle"
+          className="os-update__field-container"
+          cols={[3, 9]}
+        >
+          <Text className="os-update__policy-label">Available Update</Text>
+          <Text data-cy="desiredOsProfiles">
+            {(formatOsUpdateAvailable(
+              host?.instance?.osUpdateAvailable ?? "-",
+              "string",
+            ) as string) || "-"}
+          </Text>
+        </Flex>
+      )}
     </div>
   );
 };
