@@ -11,6 +11,7 @@ import {
   ButtonGroup,
   Drawer,
   Dropdown,
+  Icon,
   Item,
   TextField,
 } from "@spark-design/react";
@@ -24,7 +25,7 @@ import {
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-// import "./CreateOsUpdatePolicy.scss";
+import "./CreateOsUpdatePolicyDrawer.scss";
 
 // import "./OsUpdatePolicy.scss";
 
@@ -519,27 +520,16 @@ const CreateOsUpdatePolicyDrawer = ({
                   <Textarea
                     {...field}
                     description={
-                      <span
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                      >
+                      <span className="update-source">
                         Update Sources (APT Repository Format)
                         <Button
                           iconOnly
                           size="s"
                           variant="ghost"
                           className="icon-btn"
-                          // style={{
-                          //   padding: "0.2rem 0 0 0",
-                          //   minWidth: "auto",
-                          //   height: "16px",
-                          // }}
                           onPress={() => {
                             window.open(
-                              "https://repolib.readthedocs.io/en/latest/deb822-format.html",
+                              "https://docs.openedgeplatform.intel.com/edge-manage-docs/dev/user_guide/advanced_functionality/install_new_packages.html#update-os-resources",
                               "_blank",
                               "noopener,noreferrer",
                             );
