@@ -36,7 +36,7 @@ const OsUpdatePolicy = () => {
   const [toastProps, setToastProps] = useState<ToastProps>({
     state: ToastState.Success,
     visibility: ToastVisibility.Hide,
-    duration: 3000,
+    duration: 4000,
     position: ToastPosition.TopRight,
     canClose: true,
   });
