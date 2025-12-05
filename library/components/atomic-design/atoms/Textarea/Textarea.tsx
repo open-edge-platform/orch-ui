@@ -11,7 +11,7 @@ import "./Textarea.scss";
 
 export interface TextareaProps {
   label?: string;
-  description?: string;
+  description?: string | React.ReactNode;
   value?: string;
   placeholder?: string;
   rows?: number;
@@ -20,6 +20,7 @@ export interface TextareaProps {
   errorMessage?: string;
   validationState?: boolean;
   style?: React.CSSProperties;
+  inputStyle?: React.CSSProperties;
 }
 
 export const Textarea = ({
@@ -33,16 +34,23 @@ export const Textarea = ({
   errorMessage,
   style,
   dataCy = "textarea",
+  inputStyle,
 }: TextareaProps) => (
   <div className="textarea" data-cy={dataCy} style={style}>
     {label && <FieldLabel size="l">{label}</FieldLabel>}
-    {description && <Text size={TextSize.Small}>{description}</Text>}
+    {description &&
+      (typeof description === "string" ? (
+        <Text size={TextSize.Small}>{description}</Text>
+      ) : (
+        description
+      ))}
     <textarea
       className="textarea__input spark-input spark-input-outline spark-focus spark-focus-within spark-focus-snap"
       placeholder={placeholder}
       rows={rows}
       onChange={onChange}
       value={value}
+      style={inputStyle}
     />
     {!validationState && (
       <span className="spark-font-100 spark-text-field-error-message">
