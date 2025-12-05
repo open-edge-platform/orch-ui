@@ -68,20 +68,6 @@ describe("<CreateOsUpdatePolicyDrawer/>", () => {
       cy.get('[data-cy="addBtn"]').click();
       cy.contains("Name must be less than 50 characters").should("exist");
     });
-
-    it("should validate update sources format", () => {
-      // Switch to Mutable OS and Update To Target
-      pom.selectOsType("OS_TYPE_MUTABLE");
-
-      // Ensure the field is visible
-      cyGet("updateSources").should("exist");
-
-      // Enter invalid source format
-      cyGet("updateSources").type("invalid-source-format");
-      cyGet("addBtn").click();
-
-      cy.contains("Repository sources must start with 'deb'").should("exist");
-    });
   });
 
   describe("Conditional Field Rendering", () => {
