@@ -4,8 +4,8 @@
  */
 
 import { infra } from "@orch-ui/apis";
-import { Flex } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { Flex, Textarea } from "@orch-ui/components";
+import { parseError, SharedStorage } from "@orch-ui/utils";
 import {
   Button,
   ButtonGroup,
@@ -231,11 +231,8 @@ const CreateOsUpdatePolicyDrawer = ({
       // Show success notification
       showToast("OS Update Policy created successfully!", ToastState.Success);
     } catch (error) {
-      // Show error notification
-      showToast(
-        `Failed to create OS Update Policy: ${error}`,
-        ToastState.Danger,
-      );
+      const errorParsed = parseError(error).data;
+      showToast(`${errorParsed}`, ToastState.Danger);
     }
   };
 
@@ -515,42 +512,56 @@ const CreateOsUpdatePolicyDrawer = ({
                       return " ";
                     }
 
-                    // Validate APT repository format if value is provided
-                    if (hasUpdateSources) {
-                      const sources = value
-                        .split(",")
-                        .map((source) => source.trim())
-                        .filter((source) => source.length > 0);
-
-                      // Check for valid APT repository format (should start with deb or deb-src)
-                      const invalidSources = sources.filter(
-                        (source) => !source.match(/^(deb|deb-src)\s+/),
-                      );
-
-                      if (invalidSources.length > 0) {
-                        return "Repository sources must start with 'deb' or 'deb-src'";
-                      }
-                    }
                     return true;
                   },
                 }}
                 render={({ field }) => (
-                  <TextField
+                  <Textarea
                     {...field}
-                    size="l"
-                    data-cy="updateSources"
-                    id="updateSources"
-                    label="Update Sources (APT Repository Format)"
-                    placeholder="deb http://archive.ubuntu.com/ubuntu focal main, deb http://security.ubuntu.com/ubuntu focal-security main"
-                    description="Enter APT repository sources separated by commas."
-                    errorMessage={
-                      formErrors.updateSources?.message?.trim()
-                        ? formErrors.updateSources.message
+                    description={
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                      >
+                        Update Sources (APT Repository Format)
+                        <Button
+                          iconOnly
+                          size="s"
+                          variant="ghost"
+                          className="icon-btn"
+                          // style={{
+                          //   padding: "0.2rem 0 0 0",
+                          //   minWidth: "auto",
+                          //   height: "16px",
+                          // }}
+                          onPress={() => {
+                            window.open(
+                              "https://repolib.readthedocs.io/en/latest/deb822-format.html",
+                              "_blank",
+                              "noopener,noreferrer",
+                            );
+                          }}
+                        >
+                          <Icon
+                            altText="Information"
+                            icon="information-circle"
+                          />
+                        </Button>
+                      </span>
+                    }
+                    value={field.value}
+                    onChange={(e) => field.onChange(e.currentTarget.value)}
+                    rows={5}
+                    inputStyle={
+                      formErrors.updateSources
+                        ? { borderColor: "red" }
                         : undefined
                     }
-                    validationState={
-                      formErrors.updateSources ? "invalid" : "valid"
-                    }
+                    dataCy="updateSources"
+                    placeholder="Enter update sources in DEB822 format"
                   />
                 )}
               />
