@@ -103,10 +103,11 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
   const columns: TableColumn<AdminProject>[] = [
     {
       Header: "Project Name",
-      accessor: (project) => project.name,
+      accessor: (project) => project.spec?.description ?? project.name,
       Cell: (table) => {
         const activeProjectName = SharedStorage.project?.name;
-        const name = table.row.original.name;
+        const name =
+          table.row.original.spec?.description ?? table.row.original.name;
         return (
           <>
             <Text className="project-name">{name}</Text>
@@ -292,7 +293,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
 
   const getProjectName = (project?: AdminProject) => {
     if (project) {
-      return project.name;
+      return project.spec?.description ?? project.name;
     }
     return "";
   };
