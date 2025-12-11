@@ -55,4 +55,28 @@ describe("<DeploymentUpgradeAvailabilityStatus/>", () => {
     pom.waitForApis();
     pom.root.should("contain.text", "Upgrade not Fetched!");
   });
+
+  it("should show upgrade available for semver edge case (2.0.9 vs 2.0.10)", () => {
+    pom.interceptApis([pom.api.getVersionListForUpdateAvailable]);
+    cy.mount(
+      <DeploymentUpgradeAvailabilityStatus
+        currentCompositeAppName="upgrade-test-app"
+        currentVersion="2.0.9"
+      />,
+    );
+    pom.waitForApis();
+    pom.root.should("contain.text", "Upgrades Available!");
+  });
+
+  it("should not show upgrade available if only current version exists (2.0.10)", () => {
+    pom.interceptApis([pom.api.getVersionListForUpdateAvailable]);
+    cy.mount(
+      <DeploymentUpgradeAvailabilityStatus
+        currentCompositeAppName="upgrade-test-app"
+        currentVersion="2.0.10"
+      />,
+    );
+    pom.waitForApis();
+    pom.root.should("be.empty");
+  });
 });

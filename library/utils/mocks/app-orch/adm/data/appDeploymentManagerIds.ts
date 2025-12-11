@@ -18,3 +18,8 @@ export const deploymentTwoName = "Store checkout deployment";
 
 export const deploymentThreeId = "deployment-three";
 export const deploymentThreeName = "Ads test deployment";
+
+export const deploymentWithUpdateAvailableId =
+  "deployment-with-update-available";
+export const deploymentWithUpdateAvailableName =
+  "deployment-with-update-available";
