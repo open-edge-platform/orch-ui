@@ -38,7 +38,7 @@ jobs:
       project_folder: tests
       orch_ci_repo_ref: main
     secrets:
-      SYS_ORCH_GITHUB: ${{ secrets.SYS_EMF_GH_TOKEN }}
+      SYS_EMF_GH_TOKEN: ${{ secrets.SYS_EMF_GH_TOKEN }}
       NO_AUTH_ECR_PUSH_USERNAME: ${{ secrets.NO_AUTH_ECR_PUSH_USERNAME }}
       NO_AUTH_ECR_PUSH_PASSWD: ${{ secrets.NO_AUTH_ECR_PUSH_PASSWD }}
       MSTEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}
