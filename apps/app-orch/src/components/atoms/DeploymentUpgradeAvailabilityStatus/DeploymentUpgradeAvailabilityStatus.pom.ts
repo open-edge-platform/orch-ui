@@ -10,7 +10,11 @@ import { packageOne } from "@orch-ui/utils";
 const dataCySelectors = [] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-type ApiAliases = "getVersionList" | "getEmptyVersionList" | "getVersionError";
+type ApiAliases =
+  | "getVersionList"
+  | "getEmptyVersionList"
+  | "getVersionError"
+  | "getVersionListForUpdateAvailable";
 
 const project = defaultActiveProject.name;
 const versionApiUrl = `/v3/projects/${project}/catalog/deployment_packages/**/versions`;
@@ -27,6 +31,14 @@ export const versionEndpoints: CyApiDetails<
     route: versionApiUrl,
     response: {
       deploymentPackages: generateVersionList(10),
+    },
+  },
+  getVersionListForUpdateAvailable: {
+    route: versionApiUrl,
+    response: {
+      deploymentPackages: [
+        { ...packageOne, name: "upgrade-test-app", version: "2.0.10" },
+      ],
     },
   },
   getEmptyVersionList: {

@@ -41,6 +41,8 @@ import {
   deploymentTwoName,
   deploymentUnknownId,
   deploymentUpdatingId,
+  deploymentWithUpdateAvailableId,
+  deploymentWithUpdateAvailableName,
 } from "./data/appDeploymentManagerIds";
 
 const deploymentOneMetadata: { [key: string]: string } = {
@@ -72,6 +74,45 @@ export const deploymentMinimal: adm.DeploymentRead = {
     },
   },
   createTime: "Sat Mar 16 2024 22:52:19 GMT-0700",
+};
+
+export const deploymentWithUpdateAvailable: adm.DeploymentRead = {
+  deployId: deploymentWithUpdateAvailableId,
+  name: deploymentWithUpdateAvailableName,
+  displayName: deploymentWithUpdateAvailableName,
+  appName: packageOne.name,
+  appVersion: "0.0.1", //packageOne.version,
+  profileName: "default-profile",
+  publisherName: "intel", // FIXME remove once gone from ADM
+  overrideValues: [
+    {
+      targetNamespace: "testing",
+      appName: applicationOne.name,
+      values: {
+        version: "11",
+        image: { containerDisk: { pullSecret: "value1" } },
+        a: { b: { c: { d: { e: "value3" } } } },
+      },
+    },
+    {
+      targetNamespace: "console",
+      appName: applicationTwo.name,
+    },
+  ],
+  targetClusters: packageOne.applicationReferences.map((ar) => ({
+    appName: ar.name,
+    labels: deploymentOneMetadata,
+  })),
+  status: {
+    state: "RUNNING",
+    summary: {
+      down: 0,
+      running: 3,
+      total: 3,
+    },
+  },
+  createTime: "2022-03-30T13:29:10Z",
+  deploymentType: "Auto-scaling",
 };
 
 // deploymentOne has 1 cluster and all apps are running fine
@@ -319,6 +360,7 @@ export class DeploymentsStore extends BaseStore<
       deploymentThree,
       deploymentEditAutomatic,
       deploymentEditManual,
+      deploymentWithUpdateAvailable,
     ]);
   }
 
