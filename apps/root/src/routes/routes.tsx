@@ -11,8 +11,12 @@ import ExtensionHandler from "../components/atoms/ExtensionHandler/ExtensionHand
 import { DashboardSummaries } from "../components/pages/DashboardSummaries/DashboardSummaries";
 import Layout from "../layouts/Layout";
 
-const AppOrchUI = React.lazy(async () => await import("AppOrchUI/App"));
-const ClusterOrchUI = React.lazy(async () => await import("ClusterOrchUI/App"));
+const AppOrchUI = RuntimeConfig.isEnabled("APP_ORCH")
+  ? React.lazy(async () => await import("AppOrchUI/App"))
+  : null;
+const ClusterOrchUI = RuntimeConfig.isEnabled("CLUSTER_ORCH")
+  ? React.lazy(async () => await import("ClusterOrchUI/App"))
+  : null;
 const EimUI = RuntimeConfig.isEnabled("INFRA") 
   ? React.lazy(async () => await import("EimUI/App")) 
   : null;
@@ -49,7 +53,7 @@ export const childRoutes: RouteObject[] = [
     path: "/applications/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        <AppOrchUI />
+        {AppOrchUI !== null ? <AppOrchUI /> : "Applications disabled"}
       </Suspense>
     ),
   },
@@ -57,7 +61,7 @@ export const childRoutes: RouteObject[] = [
     path: "/cluster-orch/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        <ClusterOrchUI />
+        {ClusterOrchUI !== null ? <ClusterOrchUI /> : "Cluster Orchestration disabled"}
       </Suspense>
     ),
   },
