@@ -79,7 +79,7 @@ export const osUpdateRunInProgress = createOsUpdateRun(
   "Installing updates",
   "Currently downloading and installing critical patches. Step 3 of 5 completed.",
   Math.floor(Date.now() / 1000) - 900, // Started 15 minutes ago
-  undefined, // Still in progress
+  Math.floor(Date.now() / 1000) - 86400, // endTime set to 1 day in the past (before startTime) to indicate in-progress
 );
 
 export const osUpdateRunFailed = createOsUpdateRun(
@@ -104,8 +104,8 @@ export const osUpdateRunPending = createOsUpdateRun(
   "STATUS_INDICATION_UNSPECIFIED" as infra.StatusIndication,
   "Pending",
   "Waiting for scheduled maintenance window at 2:00 AM UTC.",
-  undefined, // Hasn't started yet
-  undefined,
+  Math.floor(Date.now() / 1000) + 7200, // Scheduled to start 2 hours in the future
+  Math.floor(Date.now() / 1000) - 86400, // endTime set to 1 day in the past (before startTime) to indicate not started/in-progress
 );
 
 export const osUpdateRunCompleted3 = createOsUpdateRun(

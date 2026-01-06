@@ -8,13 +8,14 @@ on:
 env:
   CYPRESS_BASE_URL: "http://localhost:8080"
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   pre-merge-pipeline:
     permissions:
       contents: read
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@main
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@20b640842e63420b06b3ff4247e608228e14c74a  # 2026.0.1
     with:
       bootstrap_tools: "base"
       run_version_check: true
