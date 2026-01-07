@@ -105,7 +105,7 @@ jobs:
       fail-fast: false
       matrix:
         project_folder: ${{ (needs.setup-conditions.outputs.common_condition == 'true' && fromJson('["admin", "app-orch", "cluster-orch", "infra", "root"]')) || fromJson(needs.detect-changed-folders.outputs.changed_apps) }}
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@20b640842e63420b06b3ff4247e608228e14c74a  # 2026.0.1
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@aca1e7ad41fcb49f5da7cd31cecdca46822b25fa  # 2026.0.2
     with:
       bootstrap_tools: "base,helm,yq,jq"
       run_security_scans: true
