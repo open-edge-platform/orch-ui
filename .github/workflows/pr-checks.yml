@@ -26,15 +26,15 @@ jobs:
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Discover changed files at root level
-        uses: open-edge-platform/orch-ci/discover-changed-files@20b640842e63420b06b3ff4247e608228e14c74a  # 2026.0.1
+        uses: open-edge-platform/orch-ci/discover-changed-files@aca1e7ad41fcb49f5da7cd31cecdca46822b25fa  # 2026.0.2
         id: root-file-changes
 
       - name: Discover changed folders at root level
-        uses: open-edge-platform/orch-ci/discover-changed-subfolders@20b640842e63420b06b3ff4247e608228e14c74a  # 2026.0.1
+        uses: open-edge-platform/orch-ci/discover-changed-subfolders@aca1e7ad41fcb49f5da7cd31cecdca46822b25fa  # 2026.0.2
         id: discover-changes
 
       - name: Discover changed apps
-        uses: open-edge-platform/orch-ci/discover-changed-subfolders@20b640842e63420b06b3ff4247e608228e14c74a  # 2026.0.1
+        uses: open-edge-platform/orch-ci/discover-changed-subfolders@aca1e7ad41fcb49f5da7cd31cecdca46822b25fa  # 2026.0.2
         id: discover-changes-apps
         with:
           project_folder: "apps"
