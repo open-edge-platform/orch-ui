@@ -130,7 +130,8 @@
     "react-stately": "^3.20.0",
     "react-table": "^7.8.0",
     "react-transition-group": "^4.4.5",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "semver": "^7.7.2"
   },
   "sideEffects": [
     "**/*.scss",
