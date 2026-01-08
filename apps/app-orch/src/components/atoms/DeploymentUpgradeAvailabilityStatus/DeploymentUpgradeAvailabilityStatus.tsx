@@ -49,9 +49,9 @@ const DeploymentUpgradeAvailabilityStatus = ({
   }
 
   const hasLatestVersions =
-    (data?.deploymentPackages.filter((compositeApp) =>
+    data?.deploymentPackages.some((compositeApp) =>
       semverGt(compositeApp.version, currentVersion),
-    ).length ?? 0) > 0;
+    ) ?? false;
 
   return (
     <span {...cy}>
