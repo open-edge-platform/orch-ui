@@ -5,6 +5,7 @@
 
 import { catalog } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
+import { gt as semverGt } from "semver";
 import "./DeploymentUpgradeAvailabilityStatus.scss";
 
 const dataCy = "deploymentUpgradeAvailabilityStatus";
@@ -48,9 +49,9 @@ const DeploymentUpgradeAvailabilityStatus = ({
   }
 
   const hasLatestVersions =
-    (data?.deploymentPackages.filter(
-      (compositeApp) => compositeApp.version > currentVersion,
-    ).length ?? 0) > 0;
+    data?.deploymentPackages.some((compositeApp) =>
+      semverGt(compositeApp.version, currentVersion),
+    ) ?? false;
 
   return (
     <span {...cy}>
