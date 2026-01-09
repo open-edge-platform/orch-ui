@@ -31,7 +31,7 @@ mfe:
   app_orch: false
   infra: true
   cluster_orch: false
-  admin: true
+  admin: false
 
 api:
   catalog: "https://api.kind.internal"
