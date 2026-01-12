@@ -92,7 +92,13 @@ export {
   Section,
   SectionProps
 } from "./atomic-design/atoms/Section/Section";
-export { AppOrchGuard } from "./atomic-design/atoms/AppOrchGuard/AppOrchGuard";
+export {
+  Show,
+  AppOrchShow,
+  InfraShow,
+  ClusterOrchShow,
+  AdminShow
+} from "./atomic-design/atoms/Show/Show";
 /************************** Molecules *****************************************/
 export { CodeSample } from "./atomic-design/molecules/CodeSample/CodeSample";
 export { DragDrop } from "./atomic-design/molecules/DragDrop/DragDrop";

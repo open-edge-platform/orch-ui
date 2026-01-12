@@ -6,7 +6,7 @@
 import { adm } from "@orch-ui/apis";
 import {
   ApiError,
-  AppOrchGuard,
+  AppOrchShow,
   Empty,
   SquareSpinner,
   Table,
@@ -150,11 +150,11 @@ const DeploymentDetailsTable = ({ labels }: DeploymentDetailsTableProps) => {
   }
 
   return (
-    <AppOrchGuard>
+    <AppOrchShow>
       <div {...cy} className="deployment-details-row">
         {jsx}
       </div>
-    </AppOrchGuard>
+    </AppOrchShow>
   );
 };
 

@@ -5,7 +5,7 @@
 
 import { tm } from "@orch-ui/apis";
 import {
-  AppOrchGuard,
+  AppOrchShow,
   Flex,
   MetadataPair,
   SquareSpinner,
@@ -111,11 +111,11 @@ export const DashboardSummaries = () => {
         )}
       </div>
 
-      <AppOrchGuard>
+      <AppOrchShow>
         <DashboardCard style={{ marginTop: "2rem" }}>
           <DeploymentsContainer filters={filters} />
         </DashboardCard>
-      </AppOrchGuard>
+      </AppOrchShow>
 
       <FiltersDrawer
         show={showFilters}

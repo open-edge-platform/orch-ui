@@ -17,8 +17,8 @@ const AppOrchUI = RuntimeConfig.isEnabled("APP_ORCH")
 const ClusterOrchUI = RuntimeConfig.isEnabled("CLUSTER_ORCH")
   ? React.lazy(async () => await import("ClusterOrchUI/App"))
   : null;
-const EimUI = RuntimeConfig.isEnabled("INFRA") 
-  ? React.lazy(async () => await import("EimUI/App")) 
+const EimUI = RuntimeConfig.isEnabled("INFRA")
+  ? React.lazy(async () => await import("EimUI/App"))
   : null;
 const Admin = RuntimeConfig.isEnabled("ADMIN")
   ? React.lazy(async () => await import("Admin/App"))
@@ -61,7 +61,11 @@ export const childRoutes: RouteObject[] = [
     path: "/cluster-orch/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        {ClusterOrchUI !== null ? <ClusterOrchUI /> : "Cluster Orchestration disabled"}
+        {ClusterOrchUI !== null ? (
+          <ClusterOrchUI />
+        ) : (
+          "Cluster Orchestration disabled"
+        )}
       </Suspense>
     ),
   },

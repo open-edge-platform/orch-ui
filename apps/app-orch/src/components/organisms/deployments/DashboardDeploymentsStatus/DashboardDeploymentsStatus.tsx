@@ -5,7 +5,7 @@
 
 import { adm } from "@orch-ui/apis";
 import {
-  AppOrchGuard,
+  AppOrchShow,
   DashboardStatus,
   MetadataPairs,
 } from "@orch-ui/components";
@@ -62,7 +62,7 @@ const DashboardDeploymentsStatus = ({
         apiError={error}
         empty={{
           icon: "three-dots-circle",
-          text: "There are no deploymentsabc",
+          text: "There are no deployments",
         }}
       />
     </div>
@@ -70,7 +70,7 @@ const DashboardDeploymentsStatus = ({
 };
 
 export default ({ metadata }: { metadata?: MetadataPairs }) => (
-  <AppOrchGuard>
+  <AppOrchShow>
     <DashboardDeploymentsStatus metadata={metadata} />
-  </AppOrchGuard>
+  </AppOrchShow>
 );
