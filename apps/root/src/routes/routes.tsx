@@ -53,7 +53,7 @@ export const childRoutes: RouteObject[] = [
     path: "/applications/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        {AppOrchUI !== null ? <AppOrchUI /> : "Applications disabled"}
+        {AppOrchUI !== null ? <AppOrchUI /> : "App Orchestration disabled"}
       </Suspense>
     ),
   },
