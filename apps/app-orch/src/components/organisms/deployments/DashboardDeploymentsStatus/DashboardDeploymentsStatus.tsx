@@ -21,9 +21,6 @@ const DashboardDeploymentsStatus = ({
   dataCy?: string;
   metadata?: MetadataPairs;
 }) => {
-  const runtimeConfig = window.__RUNTIME_CONFIG__;
-
-  console.log("deployments", { runtimeConfig });
   const { data, isError, error, isLoading, isSuccess } =
     useDeploymentServiceGetDeploymentsStatusQuery(
       {
