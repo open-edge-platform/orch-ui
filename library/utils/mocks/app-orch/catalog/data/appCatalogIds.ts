@@ -8,7 +8,7 @@ export const appPackageOneName = "smart-inventory-package";
 export const appPackageOneNameExtension = "smart-inventory package extension";
 export const appPackageTwoNameExtension =
   "smart-inventory package two extension";
-export const appPackageOneVersionOne = "0.0.1";
+export const appPackageOneVersionOne = "0.0.2";
 export const appPackageOneVersionTwo = "0.0.2";
 export const appPackageOneVersionThree = "3.0.0";
 
