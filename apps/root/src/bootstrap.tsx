@@ -29,9 +29,6 @@ import { setupWorker } from "msw/browser";
 // it is not ideal but is a commodity workaroung to make it easier for non-technical
 // people to run the UI with mock data
 async function prepare() {
-  const runtimeConfig = window.__RUNTIME_CONFIG__;
-
-  console.log({ runtimeConfig, j: "a" });
   /* devblock:start */
   if (process.env.REACT_MOCK_API === "true") {
     const { handlers: newHandlers } = await import(
