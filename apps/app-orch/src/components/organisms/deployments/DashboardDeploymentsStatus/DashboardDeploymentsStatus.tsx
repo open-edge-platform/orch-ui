@@ -4,7 +4,11 @@
  */
 
 import { adm } from "@orch-ui/apis";
-import { DashboardStatus, MetadataPairs } from "@orch-ui/components";
+import {
+  AppOrchShow,
+  DashboardStatus,
+  MetadataPairs,
+} from "@orch-ui/components";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import "./DashboardDeploymentsStatus.scss";
 const { useDeploymentServiceGetDeploymentsStatusQuery } = adm;
@@ -63,5 +67,7 @@ const DashboardDeploymentsStatus = ({
 };
 
 export default ({ metadata }: { metadata?: MetadataPairs }) => (
-  <DashboardDeploymentsStatus metadata={metadata} />
+  <AppOrchShow>
+    <DashboardDeploymentsStatus metadata={metadata} />
+  </AppOrchShow>
 );

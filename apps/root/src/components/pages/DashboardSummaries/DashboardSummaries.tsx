@@ -4,7 +4,12 @@
  */
 
 import { tm } from "@orch-ui/apis";
-import { Flex, MetadataPair, SquareSpinner } from "@orch-ui/components";
+import {
+  AppOrchShow,
+  Flex,
+  MetadataPair,
+  SquareSpinner,
+} from "@orch-ui/components";
 import { SharedStorage } from "@orch-ui/utils";
 import { Button, Heading, Tag } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
@@ -106,9 +111,11 @@ export const DashboardSummaries = () => {
         )}
       </div>
 
-      <DashboardCard style={{ marginTop: "2rem" }}>
-        <DeploymentsContainer filters={filters} />
-      </DashboardCard>
+      <AppOrchShow>
+        <DashboardCard style={{ marginTop: "2rem" }}>
+          <DeploymentsContainer filters={filters} />
+        </DashboardCard>
+      </AppOrchShow>
 
       <FiltersDrawer
         show={showFilters}

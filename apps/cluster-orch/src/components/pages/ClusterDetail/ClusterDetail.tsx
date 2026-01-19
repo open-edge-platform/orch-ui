@@ -8,6 +8,7 @@ import {
   AggregatedStatuses,
   AggregatedStatusesMap,
   ApiError,
+  AppOrchShow,
   CardBox,
   CardContainer,
   ConfirmationDialog,
@@ -32,6 +33,7 @@ import {
   getTrustedComputeCluster,
   parseError,
   Role,
+  RuntimeConfig,
   SharedStorage,
   useInfraNavigate,
 } from "@orch-ui/utils";
@@ -416,21 +418,23 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
             </tr>
           </table>
         </div>
-        <CardContainer
-          dataCy={`${dataCy}DeploymentMetadata`}
-          className="deployment-heading"
-          cardTitle="Deployment Configuration"
-          titleSemanticLevel={6}
-        >
-          {combinedMetadata.length === 0 && (
-            <CardBox>
-              <Empty icon="database" subTitle="Metadata are not defined" />
-            </CardBox>
-          )}
-          {combinedMetadata.length > 0 && (
-            <MetadataDisplay metadata={combinedMetadata} />
-          )}
-        </CardContainer>
+        <AppOrchShow>
+          <CardContainer
+            dataCy={`${dataCy}DeploymentMetadata`}
+            className="deployment-heading"
+            cardTitle="Deployment Configuration"
+            titleSemanticLevel={6}
+          >
+            {combinedMetadata.length === 0 && (
+              <CardBox>
+                <Empty icon="database" subTitle="Metadata are not defined" />
+              </CardBox>
+            )}
+            {combinedMetadata.length > 0 && (
+              <MetadataDisplay metadata={combinedMetadata} />
+            )}
+          </CardContainer>
+        </AppOrchShow>
       </Flex>
 
       {hasHeader && (
@@ -454,9 +458,14 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
               filterOn="resourceId"
             />
           </Item>
-          <Item title={<Text>Deployment Instances</Text>}>
-            <DeploymentInstancesTable clusterId={clusterDetail.name} />
-          </Item>
+          {/* Didn't use AppOrchShow here because the Item component's internal hook state complains
+              about different ordering of items
+          */}
+          {RuntimeConfig.isEnabled("APP_ORCH") ? (
+            <Item title={<Text>Deployment Instances</Text>}>
+              <DeploymentInstancesTable clusterId={clusterDetail.name} />
+            </Item>
+          ) : null}
         </Tabs>
       )}
 
