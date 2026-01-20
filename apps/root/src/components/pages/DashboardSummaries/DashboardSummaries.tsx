@@ -10,7 +10,7 @@ import {
   MetadataPair,
   SquareSpinner,
 } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { RuntimeConfig, SharedStorage } from "@orch-ui/utils";
 import { Button, Heading, Tag } from "@spark-design/react";
 import { ButtonVariant } from "@spark-design/tokens";
 import React, { Suspense, useEffect, useState } from "react";
@@ -77,14 +77,32 @@ export const DashboardSummaries = () => {
         </Button>
       </Flex>
       <DashboardCard style={{ padding: 0 }}>
-        <Flex cols={[6, 6]} colsSm={[12, 12]}>
-          <Suspense fallback={<SquareSpinner message="One moment..." />}>
-            <AppOrchUIDeploymentStatus metadata={{ pairs: filters }} />
-          </Suspense>
-          <Suspense fallback={<SquareSpinner message="One moment..." />}>
-            <EimUIHostStatus metadata={{ pairs: filters }} />
-          </Suspense>
-        </Flex>
+        <div
+          className={`dashboard__status-container${
+            !RuntimeConfig.isEnabled("APP_ORCH")
+              ? " dashboard__status-container--centered"
+              : ""
+          }`}
+        >
+          <AppOrchShow>
+            <div className="dashboard__status-item">
+              <Suspense fallback={<SquareSpinner message="One moment..." />}>
+                <AppOrchUIDeploymentStatus metadata={{ pairs: filters }} />
+              </Suspense>
+            </div>
+          </AppOrchShow>
+          <div
+            className={`dashboard__status-item${
+              !RuntimeConfig.isEnabled("APP_ORCH")
+                ? " dashboard__status-item--centered"
+                : ""
+            }`}
+          >
+            <Suspense fallback={<SquareSpinner message="One moment..." />}>
+              <EimUIHostStatus metadata={{ pairs: filters }} />
+            </Suspense>
+          </div>
+        </div>
       </DashboardCard>
 
       <div className="filters">
