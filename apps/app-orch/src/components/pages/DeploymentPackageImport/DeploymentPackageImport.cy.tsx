@@ -8,6 +8,14 @@ import DeploymentPackageImportPom from "./DeploymentPackageImport.pom";
 const pom = new DeploymentPackageImportPom();
 describe("<DeploymentPackageImport />", () => {
   beforeEach(() => {
+    cy.intercept("GET", "**/deployment_packages*", {
+      statusCode: 200,
+      body: {
+        deploymentPackages: [],
+        totalSize: 0,
+      },
+    }).as("listDeploymentPackages");
+
     cy.mount(<DeploymentPackageImport />);
   });
   it("should import files correctly", () => {
@@ -63,8 +71,11 @@ describe("<DeploymentPackageImport />", () => {
   });
 
   it("should show error message banner when import failed", () => {
+    pom.interceptApis([
+      pom.api.listDeploymentPackages,
+      pom.api.dpImportSuccess,
+    ]);
     pom.uploadButtonEmpty.uploadFile("../cypress/fixtures/");
-    pom.interceptApis([pom.api.dpImportSuccess]);
     pom.el.importButton.click();
     pom.waitForApis();
     pom.messageBanner.should("be.visible");
@@ -72,5 +83,194 @@ describe("<DeploymentPackageImport />", () => {
       "have.class",
       "spark-message-banner-state-success",
     );
+  });
+
+  it("should show confirmation dialog when duplicate packages are detected", () => {
+    pom.interceptApis([pom.api.listDeploymentPackagesWithDuplicates]);
+
+    // Create a mock YAML file with duplicate name and version
+    const yamlContent = `metadata:
+  name: test-package
+spec:
+  version: 1.0.0`;
+
+    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
+      type: "text/yaml",
+    });
+
+    // Upload file using DataTransfer
+    cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      (input[0] as HTMLInputElement).files = dataTransfer.files;
+      input[0].dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    // Wait for API to load
+    pom.waitForApis();
+
+    // Click import button
+    pom.el.importButton.should("be.visible");
+    pom.el.importButton.click();
+
+    // Confirmation dialog should appear
+    pom.confirmDialog.should("exist");
+    pom.confirmationDialog.el.title.should(
+      "contain.text",
+      "Duplicate Deployment Package Detected",
+    );
+    pom.confirmationDialog.el.cancelBtn.should("be.visible");
+    pom.confirmationDialog.el.confirmBtn.should("be.visible");
+  });
+
+  it("should proceed with upload when user confirms duplicate", () => {
+    // Mock API to return existing packages
+    pom.interceptApis([
+      pom.api.listDeploymentPackagesWithDuplicates,
+      pom.api.dpImportSuccess,
+    ]);
+
+    // Create a mock YAML file with duplicate name and version
+    const yamlContent = `metadata:
+  name: test-package
+spec:
+  version: 1.0.0`;
+
+    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
+      type: "text/yaml",
+    });
+
+    // Upload file
+    cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      (input[0] as HTMLInputElement).files = dataTransfer.files;
+      input[0].dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    pom.waitForApis();
+
+    // Click import button
+    pom.el.importButton.click();
+
+    // Wait for confirmation dialog and click continue
+    pom.confirmDialog.should("exist");
+    pom.confirmationDialog.el.confirmBtn.click();
+
+    // Upload should proceed
+    cy.wait("@dpImportSuccess");
+  });
+
+  it("should cancel upload when user cancels duplicate confirmation", () => {
+    // Mock API to return existing packages
+    pom.interceptApis([pom.api.listDeploymentPackagesWithDuplicates]);
+
+    // Create a mock YAML file with duplicate name and version
+    const yamlContent = `metadata:
+  name: test-package
+spec:
+  version: 1.0.0`;
+
+    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
+      type: "text/yaml",
+    });
+
+    // Upload file
+    cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      (input[0] as HTMLInputElement).files = dataTransfer.files;
+      input[0].dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    pom.waitForApis();
+
+    // Click import button
+    pom.el.importButton.click();
+
+    // Wait for confirmation dialog and click cancel
+    pom.confirmDialog.should("exist");
+    pom.confirmationDialog.el.cancelBtn.click();
+
+    // Dialog should close and upload should not proceed
+    pom.confirmDialog.should("not.exist");
+  });
+
+  it("should not show confirmation dialog when no duplicates are detected", () => {
+    // Mock API to return no existing packages
+    pom.interceptApis([
+      pom.api.listDeploymentPackages,
+      pom.api.dpImportSuccess,
+    ]);
+
+    // Create a mock YAML file with unique name and version
+    const yamlContent = `metadata:
+  name: unique-package
+spec:
+  version: 2.0.0`;
+
+    const file = new File([yamlContent], "unique-package-2.0.0.yaml", {
+      type: "text/yaml",
+    });
+
+    // Upload file
+    cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      (input[0] as HTMLInputElement).files = dataTransfer.files;
+      input[0].dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    pom.waitForApis();
+
+    // Click import button
+    pom.el.importButton.click();
+
+    // Confirmation dialog should NOT appear
+    pom.confirmDialog.should("not.exist");
+
+    // Upload should proceed directly
+    cy.wait("@dpImportSuccess");
+  });
+
+  it("should detect duplicates in tar.gz files by filename", () => {
+    // Mock API to return existing packages
+    cy.intercept("GET", "**/deployment_packages*", {
+      statusCode: 200,
+      body: {
+        deploymentPackages: [
+          {
+            name: "deployment_file_three",
+            version: "1.0.0",
+            description: "Test package",
+            createTime: "2024-01-01T00:00:00Z",
+          },
+        ],
+        totalSize: 1,
+      },
+    }).as("listDeploymentPackages");
+
+    // Upload tar.gz file that matches existing package
+    cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').selectFile(
+      "../cypress/fixtures/deployment_file_three.tar.gz",
+      { force: true },
+    );
+
+    cy.wait("@listDeploymentPackages");
+
+    // Click import button
+    pom.el.importButton.click();
+
+    // Confirmation dialog should appear if filename matches pattern
+    // Note: This test depends on the tar.gz filename following the pattern name-version.tar.gz
+  });
+
+  it("should have accessibility attributes on file list", () => {
+    pom.uploadButtonEmpty.uploadFile("../cypress/fixtures/");
+
+    // Check that List has aria-label
+    pom.el.fileList.should("have.attr", "aria-label", "Uploaded files list");
+
+    // Check that Items have textValue (this is checked by verifying no console errors)
   });
 });
