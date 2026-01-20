@@ -6,14 +6,16 @@
 import { infra } from "@orch-ui/apis";
 import {
   ApiError,
+  columnDisplayNameToApiName,
   Empty,
+  SortDirection,
   Status,
   StatusIcon,
   Table,
   TableColumn,
   TableLoader,
 } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { Direction, getOrder, SharedStorage } from "@orch-ui/utils";
 import { Text } from "@spark-design/react";
 import { useSearchParams } from "react-router-dom";
 
@@ -89,6 +91,7 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
   // Pagination configuration
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
   const offset = parseInt(searchParams.get("offset") ?? "0");
+  const sortDirection = (searchParams.get("direction") as Direction) ?? "desc";
 
   // Fetch OS Update Runs for this instance
   const {
@@ -101,6 +104,7 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
     filter: `instance.resourceId="${host?.instance?.resourceId}"`,
     pageSize,
     offset,
+    orderBy: getOrder(searchParams.get("column") ?? "startTime", sortDirection),
   });
 
   const runs = osUpdateRuns?.osUpdateRuns || [];
@@ -111,10 +115,12 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
     {
       Header: "Name",
       accessor: "name",
+      apiName: "name",
     },
     {
       Header: "Status",
       accessor: "status",
+      apiName: "status",
       Cell: (table: { row: { original: infra.OsUpdateRunRead } }) => {
         const run = table.row.original;
         return (
@@ -142,6 +148,7 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
     {
       Header: "Start Time",
       accessor: "startTime",
+      apiName: "startTime",
       Cell: (table: { row: { original: infra.OsUpdateRunRead } }) => {
         const startTime = table.row.original.startTime;
         return (
@@ -218,6 +225,27 @@ const OsUpdateHistory = ({ host }: OsUpdateHistoryProps) => {
         isLoading={isOsUpdateRunsLoading}
         canSearch
         dataCy="osUpdateHistoryTable"
+        // Sorting
+        sortColumns={[0, 1, 3]}
+        initialSort={{
+          column: "startTime",
+          direction: "desc",
+        }}
+        onSort={(column: string, direction: SortDirection) => {
+          setSearchParams((prev) => {
+            if (direction) {
+              const apiName = columnDisplayNameToApiName(columns, column);
+              if (apiName) {
+                prev.set("column", apiName);
+                prev.set("direction", direction);
+              }
+            } else {
+              prev.delete("column");
+              prev.delete("direction");
+            }
+            return prev;
+          });
+        }}
         // Pagination
         canPaginate
         isServerSidePaginated
