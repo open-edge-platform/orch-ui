@@ -143,26 +143,15 @@ const DeploymentPackageImport = () => {
   // Check if any uploaded files match existing packages by name AND version
   const checkForDuplicates = async (): Promise<string[]> => {
     if (!existingPackages?.deploymentPackages) {
-      console.log("[Duplicate Check] No existing packages data");
       return [];
     }
 
-    console.log(
-      "[Duplicate Check] Existing packages count:",
-      existingPackages.deploymentPackages.length,
-    );
-
-    const duplicates: string[] = [];
+    const duplicates = new Set<string>();
     const existingPackageMap = new Map(
       existingPackages.deploymentPackages.map((pkg) => [
         `${pkg.name}:${pkg.version}`,
         pkg,
       ]),
-    );
-
-    console.log(
-      "[Duplicate Check] Existing package map:",
-      Array.from(existingPackageMap.keys()),
     );
 
     for (const file of files) {
@@ -175,44 +164,23 @@ const DeploymentPackageImport = () => {
         if (packageInfo) {
           name = packageInfo.name;
           version = packageInfo.version;
-          console.log(
-            `[Duplicate Check] Parsed YAML file ${file.name}:`,
-            packageInfo,
-          );
-        } else {
-          console.log(
-            `[Duplicate Check] Failed to parse YAML file ${file.name}`,
-          );
         }
       } else if (file.name.endsWith(".tar.gz")) {
         // For tar.gz files, extract from filename
         const packageInfo = extractPackageInfoFromFilename(file.name);
         name = packageInfo.name;
         version = packageInfo.version;
-        console.log(
-          `[Duplicate Check] Extracted from filename ${file.name}:`,
-          packageInfo,
-        );
       }
 
       if (name && version) {
         const key = `${name}:${version}`;
-        console.log(`[Duplicate Check] Checking key: ${key}`);
         if (existingPackageMap.has(key)) {
-          console.log(`[Duplicate Check] Found duplicate: ${key}`);
-          duplicates.push(`${name} (v${version})`);
-        } else {
-          console.log(`[Duplicate Check] Not a duplicate: ${key}`);
+          duplicates.add(`${name} (v${version})`);
         }
-      } else {
-        console.log(
-          `[Duplicate Check] Skipping file ${file.name} - missing name or version`,
-        );
       }
     }
 
-    console.log("[Duplicate Check] Total duplicates found:", duplicates);
-    return duplicates;
+    return Array.from(duplicates);
   };
 
   const handleUploadClick = async () => {
