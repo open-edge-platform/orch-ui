@@ -71,6 +71,7 @@ const DeploymentPackageImport = () => {
   const [apiError, setApiError] = useState<string>("");
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
   const [duplicatePackages, setDuplicatePackages] = useState<string[]>([]);
+  const [dialogKey, setDialogKey] = useState<number>(0);
 
   // Fetch existing deployment packages to check for duplicates
   const { data: existingPackages } =
@@ -187,6 +188,7 @@ const DeploymentPackageImport = () => {
     const duplicates = await checkForDuplicates();
     if (duplicates.length > 0) {
       setDuplicatePackages(duplicates);
+      setDialogKey((prev) => prev + 1);
       setShowConfirmDialog(true);
     } else {
       handleUpload();
@@ -235,7 +237,7 @@ const DeploymentPackageImport = () => {
       )}
       {showConfirmDialog && (
         <ConfirmationDialog
-          key={`confirm-${Date.now()}`}
+          key={`confirm-${dialogKey}`}
           isOpen={true}
           title="Duplicate Deployment Package Detected"
           subTitle={`The following package(s) with the same name and version already exist: ${duplicatePackages.join(", ")}. This may overwrite existing packages. Do you still want to continue?`}

@@ -78,17 +78,7 @@ describe("<DeploymentPackageImport />", () => {
   });
 
   it("should show confirmation dialog when duplicate packages are detected", () => {
-    // Create a mock YAML file with duplicate name and version
-    const yamlContent = `metadata:
-  name: test-package
-spec:
-  version: 1.0.0`;
-
-    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
-      type: "text/yaml",
-    });
-
-    // Intercept API with duplicates
+    // Intercept API with duplicates BEFORE mounting
     cy.intercept("GET", "**/deployment_packages*", {
       statusCode: 200,
       body: {
@@ -104,6 +94,22 @@ spec:
       },
     }).as("listDeploymentPackages");
 
+    // Mount component AFTER setting up intercept
+    cy.mount(<DeploymentPackageImport />);
+
+    // Wait for initial API call
+    cy.wait("@listDeploymentPackages");
+
+    // Create a mock YAML file with duplicate name and version
+    const yamlContent = `metadata:
+  name: test-package
+spec:
+  version: 1.0.0`;
+
+    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
+      type: "text/yaml",
+    });
+
     // Upload file using DataTransfer
     cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
       const dataTransfer = new DataTransfer();
@@ -111,9 +117,6 @@ spec:
       (input[0] as HTMLInputElement).files = dataTransfer.files;
       input[0].dispatchEvent(new Event("change", { bubbles: true }));
     });
-
-    // Wait for API to load
-    cy.wait("@listDeploymentPackages");
 
     // Click import button
     pom.el.importButton.should("be.visible");
@@ -130,17 +133,7 @@ spec:
   });
 
   it("should proceed with upload when user confirms duplicate", () => {
-    // Create a mock YAML file with duplicate name and version
-    const yamlContent = `metadata:
-  name: test-package
-spec:
-  version: 1.0.0`;
-
-    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
-      type: "text/yaml",
-    });
-
-    // Intercept APIs
+    // Intercept APIs BEFORE mounting
     cy.intercept("GET", "**/deployment_packages*", {
       statusCode: 200,
       body: {
@@ -161,6 +154,22 @@ spec:
       body: { responses: [] },
     }).as("dpImportSuccess");
 
+    // Mount component AFTER setting up intercepts
+    cy.mount(<DeploymentPackageImport />);
+
+    // Wait for initial API call
+    cy.wait("@listDeploymentPackages");
+
+    // Create a mock YAML file with duplicate name and version
+    const yamlContent = `metadata:
+  name: test-package
+spec:
+  version: 1.0.0`;
+
+    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
+      type: "text/yaml",
+    });
+
     // Upload file
     cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
       const dataTransfer = new DataTransfer();
@@ -168,8 +177,6 @@ spec:
       (input[0] as HTMLInputElement).files = dataTransfer.files;
       input[0].dispatchEvent(new Event("change", { bubbles: true }));
     });
-
-    cy.wait("@listDeploymentPackages");
 
     // Click import button
     pom.el.importButton.click();
@@ -183,17 +190,7 @@ spec:
   });
 
   it("should cancel upload when user cancels duplicate confirmation", () => {
-    // Create a mock YAML file with duplicate name and version
-    const yamlContent = `metadata:
-  name: test-package
-spec:
-  version: 1.0.0`;
-
-    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
-      type: "text/yaml",
-    });
-
-    // Intercept API with duplicates
+    // Intercept API with duplicates BEFORE mounting
     cy.intercept("GET", "**/deployment_packages*", {
       statusCode: 200,
       body: {
@@ -209,6 +206,22 @@ spec:
       },
     }).as("listDeploymentPackages");
 
+    // Mount component AFTER setting up intercept
+    cy.mount(<DeploymentPackageImport />);
+
+    // Wait for initial API call
+    cy.wait("@listDeploymentPackages");
+
+    // Create a mock YAML file with duplicate name and version
+    const yamlContent = `metadata:
+  name: test-package
+spec:
+  version: 1.0.0`;
+
+    const file = new File([yamlContent], "test-package-1.0.0.yaml", {
+      type: "text/yaml",
+    });
+
     // Upload file
     cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
       const dataTransfer = new DataTransfer();
@@ -216,8 +229,6 @@ spec:
       (input[0] as HTMLInputElement).files = dataTransfer.files;
       input[0].dispatchEvent(new Event("change", { bubbles: true }));
     });
-
-    cy.wait("@listDeploymentPackages");
 
     // Click import button
     pom.el.importButton.click();
@@ -231,17 +242,7 @@ spec:
   });
 
   it("should not show confirmation dialog when no duplicates are detected", () => {
-    // Create a mock YAML file with unique name and version
-    const yamlContent = `metadata:
-  name: unique-package
-spec:
-  version: 2.0.0`;
-
-    const file = new File([yamlContent], "unique-package-2.0.0.yaml", {
-      type: "text/yaml",
-    });
-
-    // Intercept APIs - no existing packages
+    // Intercept APIs BEFORE mounting - no existing packages
     cy.intercept("GET", "**/deployment_packages*", {
       statusCode: 200,
       body: {
@@ -255,6 +256,22 @@ spec:
       body: { responses: [] },
     }).as("dpImportSuccess");
 
+    // Mount component AFTER setting up intercepts
+    cy.mount(<DeploymentPackageImport />);
+
+    // Wait for initial API call
+    cy.wait("@listDeploymentPackages");
+
+    // Create a mock YAML file with unique name and version
+    const yamlContent = `metadata:
+  name: unique-package
+spec:
+  version: 2.0.0`;
+
+    const file = new File([yamlContent], "unique-package-2.0.0.yaml", {
+      type: "text/yaml",
+    });
+
     // Upload file
     cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').then((input) => {
       const dataTransfer = new DataTransfer();
@@ -262,8 +279,6 @@ spec:
       (input[0] as HTMLInputElement).files = dataTransfer.files;
       input[0].dispatchEvent(new Event("change", { bubbles: true }));
     });
-
-    cy.wait("@listDeploymentPackages");
 
     // Click import button
     pom.el.importButton.click();
@@ -276,7 +291,7 @@ spec:
   });
 
   it("should detect duplicates in tar.gz files by filename", () => {
-    // Mock API to return existing packages
+    // Mock API to return existing packages BEFORE mounting
     cy.intercept("GET", "**/deployment_packages*", {
       statusCode: 200,
       body: {
@@ -292,13 +307,17 @@ spec:
       },
     }).as("listDeploymentPackages");
 
+    // Mount component AFTER setting up intercept
+    cy.mount(<DeploymentPackageImport />);
+
+    // Wait for initial API call
+    cy.wait("@listDeploymentPackages");
+
     // Upload tar.gz file that matches existing package
     cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').selectFile(
       "../cypress/fixtures/deployment_file_three.tar.gz",
       { force: true },
     );
-
-    cy.wait("@listDeploymentPackages");
 
     // Click import button
     pom.el.importButton.click();
