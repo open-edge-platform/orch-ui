@@ -38,6 +38,7 @@ jobs:
       project_folder: apps/app-orch
       orch_ci_repo_ref: main
       run_version_dev: true
+      trivy_image_skip: "ghcr.io/dependabot/dependabot-updater-core:latest"
     secrets:
       SYS_EMF_GH_TOKEN: ${{ secrets.SYS_EMF_GH_TOKEN }}
       NO_AUTH_ECR_PUSH_USERNAME: ${{ secrets.NO_AUTH_ECR_PUSH_USERNAME }}
