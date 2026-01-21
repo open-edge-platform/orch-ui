@@ -3,8 +3,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { IRuntimeConfig } from "@orch-ui/utils";
 import DeploymentDetailsTable from "./DeploymentDetailsTable";
 import DeploymentDetailsTablePom from "./DeploymentDetailsTable.pom";
+
+const runtimeConfig: IRuntimeConfig = {
+  DOCUMENTATION: [],
+  VERSIONS: {},
+  AUTH: "",
+  KC_CLIENT_ID: "",
+  KC_REALM: "",
+  KC_URL: "",
+  SESSION_TIMEOUT: 0,
+  OBSERVABILITY_URL: "",
+  TITLE: "",
+  MFE: { APP_ORCH: "true" },
+  API: {},
+};
 
 const pom = new DeploymentDetailsTablePom();
 describe("<DeploymentDetailsTable />", () => {
@@ -12,6 +27,7 @@ describe("<DeploymentDetailsTable />", () => {
     beforeEach(() => {
       pom.interceptApis([pom.api.getDeploymentMock]);
       cy.mount(<DeploymentDetailsTable />, {
+        runtimeConfig,
         routerProps: {
           initialEntries: ["/dashboard"],
         },

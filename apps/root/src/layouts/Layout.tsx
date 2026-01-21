@@ -12,7 +12,12 @@ import {
 import "@orch-ui/styles/Global.scss";
 import "@orch-ui/styles/spark-global.scss";
 import "@orch-ui/styles/transitions.scss";
-import { Role, SharedStorage, StorageItems } from "@orch-ui/utils";
+import {
+  Role,
+  RuntimeConfig,
+  SharedStorage,
+  StorageItems,
+} from "@orch-ui/utils";
 import { useEffect, useReducer } from "react";
 import { useOutlet } from "react-router-dom";
 
@@ -57,51 +62,59 @@ const Layout = () => {
 
   const alertRoles = [Role.ALERTS_READ, Role.ALERTS_WRITE];
 
+  const headerItems = [
+    <RBACWrapper key="dashboard" showTo={dashboardRoles}>
+      <HeaderItem
+        name="menuDashboard"
+        to="/dashboard"
+        match="dashboard"
+        size={headerSize}
+        matchRoot
+      >
+        Dashboard
+      </HeaderItem>
+    </RBACWrapper>,
+    RuntimeConfig.isEnabled("APP_ORCH") && (
+      <RBACWrapper key="deployments" showTo={deploymentsRoles}>
+        <HeaderItem
+          name="menuDeployments"
+          to="/applications/deployments"
+          match="applications"
+          size={headerSize}
+        >
+          Deployments
+        </HeaderItem>
+      </RBACWrapper>
+    ),
+    RuntimeConfig.isEnabled("INFRA") && (
+      <RBACWrapper key="infrastructure" showTo={infraRoles}>
+        <HeaderItem
+          name="menuInfrastructure"
+          to="/infrastructure"
+          match="infrastructure"
+          size={headerSize}
+        >
+          Infrastructure
+        </HeaderItem>
+      </RBACWrapper>
+    ),
+    RuntimeConfig.isEnabled("ADMIN") && (
+      <RBACWrapper key="alerts" showTo={alertRoles}>
+        <HeaderItem
+          name="menuAlerts"
+          to="/admin/alerts"
+          match="admin/alerts"
+          size={headerSize}
+        >
+          Alerts
+        </HeaderItem>
+      </RBACWrapper>
+    ),
+  ].filter((item): item is JSX.Element => Boolean(item));
+
   return (
     <>
-      <Header size={headerSize}>
-        <RBACWrapper showTo={dashboardRoles}>
-          <HeaderItem
-            name="menuDashboard"
-            to="/dashboard"
-            match="dashboard"
-            size={headerSize}
-            matchRoot
-          >
-            Dashboard
-          </HeaderItem>
-        </RBACWrapper>
-        <RBACWrapper showTo={deploymentsRoles}>
-          <HeaderItem
-            name="menuDeployments"
-            to="/applications/deployments"
-            match="applications"
-            size={headerSize}
-          >
-            Deployments
-          </HeaderItem>
-        </RBACWrapper>
-        <RBACWrapper showTo={infraRoles}>
-          <HeaderItem
-            name="menuInfrastructure"
-            to="/infrastructure"
-            match="infrastructure"
-            size={headerSize}
-          >
-            Infrastructure
-          </HeaderItem>
-        </RBACWrapper>
-        <RBACWrapper showTo={alertRoles}>
-          <HeaderItem
-            name="menuAlerts"
-            to="/admin/alerts"
-            match="admin/alerts"
-            size={headerSize}
-          >
-            Alerts
-          </HeaderItem>
-        </RBACWrapper>
-      </Header>
+      <Header size={headerSize}>{headerItems}</Header>
       <div>{currentOutlet}</div>
     </>
   );
