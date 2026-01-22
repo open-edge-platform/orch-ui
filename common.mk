@@ -89,6 +89,9 @@ docker-push: ## @HELP Push the docker image to a registry
 	# docker tag $(DOCKER_TAG) $(DOCKER_TAG_BRANCH)
 	# docker push $(DOCKER_TAG_BRANCH)
 
+dev-update: docker-build docker-push ## @HELP Build, push and restart the pod
+	kubectl delete pod -n orch-ui -l app=$(PROJECT_NAME)
+
 KIND_CLUSTER_NAME="kind"
 docker-kind-load: ## @HELP Loads the docker image on a kind cluster
 	kind load docker-image ${DOCKER_REGISTRY}${DOCKER_REPOSITORY}:${DOCKER_TAG} --name=${KIND_CLUSTER_NAME}
