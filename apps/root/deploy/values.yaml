@@ -30,7 +30,7 @@ global:
 mfe:
   app_orch: false
   infra: true
-  cluster_orch: true
+  cluster_orch: false
   admin: true
 
 api:
