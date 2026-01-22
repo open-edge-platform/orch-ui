@@ -240,7 +240,7 @@ const DeploymentPackageImport = () => {
           key={`confirm-${dialogKey}`}
           isOpen={true}
           title="Duplicate Deployment Package Detected"
-          subTitle={`The following package(s) with the same name and version already exist: ${duplicatePackages.join(", ")}. This may overwrite existing packages. Do you still want to continue?`}
+          subTitle={`The following package${duplicatePackages.length > 1 ? "s" : ""} already exist${duplicatePackages.length === 1 ? "s" : ""}: ${duplicatePackages.join(", ")}. Importing will overwrite the existing package${duplicatePackages.length > 1 ? "s" : ""}. Do you want to continue?`}
           confirmBtnText="Continue"
           cancelBtnText="Cancel"
           confirmCb={() => {
