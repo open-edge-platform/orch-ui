@@ -4,10 +4,12 @@
  */
 
 import {
+  catalog,
   CatalogUploadDeploymentPackageResponse,
   useUploadDeploymentPackageMutation,
 } from "@orch-ui/apis";
 import {
+  ConfirmationDialog,
   DragDrop,
   Empty,
   setBreadcrumb,
@@ -28,6 +30,7 @@ import {
   MessageBanner,
 } from "@spark-design/react";
 import { ButtonVariant, ListSize } from "@spark-design/tokens";
+import * as yaml from "js-yaml";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -66,6 +69,21 @@ const DeploymentPackageImport = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [sizeError, setSizeError] = useState<boolean>(false);
   const [apiError, setApiError] = useState<string>("");
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
+  const [duplicatePackages, setDuplicatePackages] = useState<string[]>([]);
+  const [dialogKey, setDialogKey] = useState<number>(0);
+
+  // Fetch existing deployment packages to check for duplicates
+  const { data: existingPackages } =
+    catalog.useCatalogServiceListDeploymentPackagesQuery(
+      {
+        projectName: SharedStorage.project?.name ?? "",
+        pageSize: 500,
+      },
+      {
+        skip: !SharedStorage.project?.name,
+      },
+    );
 
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));
@@ -78,6 +96,102 @@ const DeploymentPackageImport = () => {
         ...files,
         ...filterFilesByExtension([...e.target.files], ["yaml", "tar.gz"]),
       ]);
+    }
+  };
+
+  // Extract package name and version from tar.gz filename
+  const extractPackageInfoFromFilename = (
+    filename: string,
+  ): { name: string; version: string } => {
+    // Remove .tar.gz extension
+    const nameWithVersion = filename.replace(/\.tar\.gz$/, "");
+
+    // Try to extract version pattern (e.g., -1.0.0, -v1.0.0, -1.0.0-alpha)
+    const versionMatch = nameWithVersion.match(/-v?(\d+\.\d+\.\d+[^\s]*)$/);
+
+    if (versionMatch) {
+      const version = versionMatch[1];
+      const name = nameWithVersion.substring(
+        0,
+        nameWithVersion.length - versionMatch[0].length,
+      );
+      return { name, version };
+    }
+
+    // If no version found, return the whole name as package name with empty version
+    return { name: nameWithVersion, version: "" };
+  };
+
+  // Parse YAML file content to extract name and version
+  const parseYamlFile = async (
+    file: File,
+  ): Promise<{ name: string; version: string } | null> => {
+    try {
+      const text = await file.text();
+      const parsed = yaml.load(text) as any;
+
+      // Extract name and version from the YAML content
+      const name = parsed?.metadata?.name || parsed?.name || "";
+      const version = parsed?.spec?.version || parsed?.version || "";
+
+      return { name, version };
+    } catch (error) {
+      console.error("Error parsing YAML file:", error);
+      return null;
+    }
+  };
+
+  // Check if any uploaded files match existing packages by name AND version
+  const checkForDuplicates = async (): Promise<string[]> => {
+    if (!existingPackages?.deploymentPackages) {
+      return [];
+    }
+
+    const duplicates = new Set<string>();
+    const existingPackageMap = new Map(
+      existingPackages.deploymentPackages.map((pkg) => [
+        `${pkg.name}:${pkg.version}`,
+        pkg,
+      ]),
+    );
+
+    for (const file of files) {
+      let name = "";
+      let version = "";
+
+      // For YAML files, parse the content
+      if (file.name.endsWith(".yaml")) {
+        const packageInfo = await parseYamlFile(file);
+        if (packageInfo) {
+          name = packageInfo.name;
+          version = packageInfo.version;
+        }
+      } else if (file.name.endsWith(".tar.gz")) {
+        // For tar.gz files, extract from filename
+        const packageInfo = extractPackageInfoFromFilename(file.name);
+        name = packageInfo.name;
+        version = packageInfo.version;
+      }
+
+      if (name && version) {
+        const key = `${name}:${version}`;
+        if (existingPackageMap.has(key)) {
+          duplicates.add(`${name} (v${version})`);
+        }
+      }
+    }
+
+    return Array.from(duplicates);
+  };
+
+  const handleUploadClick = async () => {
+    const duplicates = await checkForDuplicates();
+    if (duplicates.length > 0) {
+      setDuplicatePackages(duplicates);
+      setDialogKey((prev) => prev + 1);
+      setShowConfirmDialog(true);
+    } else {
+      handleUpload();
     }
   };
 
@@ -120,6 +234,23 @@ const DeploymentPackageImport = () => {
         <div className="spinner-container">
           <SquareSpinner message="Importing Deployment Package" />
         </div>
+      )}
+      {showConfirmDialog && (
+        <ConfirmationDialog
+          key={`confirm-${dialogKey}`}
+          isOpen={true}
+          title="Duplicate Deployment Package Detected"
+          subTitle={`The following package${duplicatePackages.length > 1 ? "s" : ""} already exist${duplicatePackages.length === 1 ? "s" : ""}: ${duplicatePackages.join(", ")}. Importing will overwrite the existing package${duplicatePackages.length > 1 ? "s" : ""}. Do you want to continue?`}
+          confirmBtnText="Continue"
+          cancelBtnText="Cancel"
+          confirmCb={() => {
+            setShowConfirmDialog(false);
+            handleUpload();
+          }}
+          cancelCb={() => {
+            setShowConfirmDialog(false);
+          }}
+        />
       )}
       <Heading semanticLevel={1} size="l" data-cy="title">
         Import Deployment Package
@@ -195,9 +326,13 @@ const DeploymentPackageImport = () => {
                 dataCy="uploadButtonList"
               />
               <div className="upload-files">
-                <List size={ListSize.L} data-cy="fileList">
+                <List
+                  size={ListSize.L}
+                  data-cy="fileList"
+                  aria-label="Uploaded files list"
+                >
                   {files.map((file: File, i) => (
-                    <Item key={i}>
+                    <Item key={i} textValue={file.name}>
                       {file.name}
                       <Icon
                         icon="trash"
@@ -221,7 +356,7 @@ const DeploymentPackageImport = () => {
                   Cancel
                 </Button>
                 <Button
-                  onPress={handleUpload}
+                  onPress={handleUploadClick}
                   data-cy="importButton"
                   isDisabled={isSuccess}
                 >
