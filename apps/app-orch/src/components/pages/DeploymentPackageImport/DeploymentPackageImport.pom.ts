@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CatalogUploadDeploymentPackageResponse } from "@orch-ui/apis";
+import { catalog, CatalogUploadDeploymentPackageResponse } from "@orch-ui/apis";
+import { ConfirmationDialogPom } from "@orch-ui/components";
 import { Cy, CyApiDetails, CyPom } from "@orch-ui/tests";
 
 // FIXME remove me once @orch-ui/components@0.0.17 is published
@@ -55,13 +56,19 @@ const dataCySelectors = [
 ] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-type ApiAliases = "dpImportFail" | "dpImportSuccess";
+type ApiAliases =
+  | "dpImportFail"
+  | "dpImportSuccess"
+  | "listDeploymentPackages"
+  | "listDeploymentPackagesWithDuplicates";
 
 const caApiUrl = "**/upload";
+const listDpApiUrl = "**/deployment_packages*";
 
 export const apApis: CyApiDetails<
   ApiAliases,
-  CatalogUploadDeploymentPackageResponse
+  | CatalogUploadDeploymentPackageResponse
+  | catalog.CatalogServiceListDeploymentPackagesApiResponse
 > = {
   dpImportFail: {
     route: caApiUrl,
@@ -83,15 +90,46 @@ export const apApis: CyApiDetails<
     statusCode: 201,
     response: { responses: [] },
   },
+  listDeploymentPackages: {
+    route: listDpApiUrl,
+    method: "GET",
+    statusCode: 200,
+    response: {
+      deploymentPackages: [],
+      totalElements: 0,
+    },
+  },
+  listDeploymentPackagesWithDuplicates: {
+    route: listDpApiUrl,
+    method: "GET",
+    statusCode: 200,
+    response: {
+      deploymentPackages: [
+        {
+          name: "test-package",
+          version: "1.0.0",
+          description: "Test package",
+          createTime: "2024-01-01T00:00:00Z",
+          applicationReferences: [],
+          artifacts: [],
+          extensions: [],
+        },
+      ],
+      totalElements: 1,
+    },
+  },
 };
 
 class DeploymentPackageImportPom extends CyPom<Selectors, ApiAliases> {
   public uploadButtonEmpty: UploadButtonPom;
   public uploadButtonList: UploadButtonPom;
+  public confirmationDialog: ConfirmationDialogPom;
+
   constructor(public rootCy = "deploymentPackageImport") {
     super(rootCy, [...dataCySelectors], apApis);
     this.uploadButtonEmpty = new UploadButtonPom("uploadButtonEmpty");
     this.uploadButtonList = new UploadButtonPom("uploadButtonList");
+    this.confirmationDialog = new ConfirmationDialogPom("dialog");
   }
 
   public getFiles() {
@@ -108,6 +146,10 @@ class DeploymentPackageImportPom extends CyPom<Selectors, ApiAliases> {
 
   public get messageBanner() {
     return this.root.find('[data-testid="message-banner"]');
+  }
+
+  public get confirmDialog() {
+    return cy.get('[data-cy="confirmationDialog"]');
   }
 }
 export default DeploymentPackageImportPom;

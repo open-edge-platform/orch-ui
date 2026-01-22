@@ -24,7 +24,7 @@ const runtimeConfig: IRuntimeConfig = {
   KC_URL: "",
   SESSION_TIMEOUT: 0,
   OBSERVABILITY_URL: "",
-  MFE: { CLUSTER_ORCH: "false" },
+  MFE: { CLUSTER_ORCH: "false", APP_ORCH: "true" },
   TITLE: "",
   API: {},
   DOCUMENTATION: [],

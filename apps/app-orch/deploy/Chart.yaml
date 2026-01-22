@@ -4,10 +4,10 @@ apiVersion: v2
 name: orch-ui-app-orch
 description: Deploy the Edge Orchestrator app-orch pod
 type: application
-version: 4.0.1-dev
+version: 4.0.3-dev
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "4.0.1-dev"
+appVersion: "4.0.3-dev"
 annotations: {}
 dependencies: []
