@@ -36,6 +36,7 @@ export type KINDS = "KIND_NORMAL" | "KIND_EXTENSION" | "KIND_ADDON";
 // initialize an empty api service that we'll inject endpoints into later as needed
 export const appCatalogApis = createApi({
   reducerPath: "catalogServiceApis",
+  tagTypes: ["CatalogService"],
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, { endpoint }) => {
@@ -59,6 +60,7 @@ export const appCatalogApis = createApi({
         body: queryArg.data,
         formData: true,
       }),
+      invalidatesTags: ["CatalogService"],
     }),
     // Adding new endpoint to list Charts
     CatalogServiceListCharts: builder.query<
