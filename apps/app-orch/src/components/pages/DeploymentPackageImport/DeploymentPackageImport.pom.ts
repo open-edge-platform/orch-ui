@@ -129,7 +129,7 @@ class DeploymentPackageImportPom extends CyPom<Selectors, ApiAliases> {
     super(rootCy, [...dataCySelectors], apApis);
     this.uploadButtonEmpty = new UploadButtonPom("uploadButtonEmpty");
     this.uploadButtonList = new UploadButtonPom("uploadButtonList");
-    this.confirmationDialog = new ConfirmationDialogPom();
+    this.confirmationDialog = new ConfirmationDialogPom("dialog");
   }
 
   public getFiles() {

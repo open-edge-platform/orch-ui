@@ -297,8 +297,8 @@ spec:
       body: {
         deploymentPackages: [
           {
-            name: "deployment_file_three",
-            version: "1.0.0",
+            name: "dp-wordpress",
+            version: "25.0.0",
             description: "Test package",
             createTime: "2024-01-01T00:00:00Z",
           },
@@ -313,17 +313,21 @@ spec:
     // Wait for initial API call
     cy.wait("@listDeploymentPackages");
 
-    // Upload tar.gz file that matches existing package
+    // Upload tar.gz file with version in filename that matches existing package (dp-wordpress-25.0.0.tar.gz)
     cy.get('[data-cy="uploadButtonEmpty"] input[type="file"]').selectFile(
-      "../cypress/fixtures/deployment_file_three.tar.gz",
+      "../cypress/fixtures/dp-wordpress-25.0.0.tar.gz",
       { force: true },
     );
 
     // Click import button
     pom.el.importButton.click();
 
-    // Confirmation dialog should appear if filename matches pattern
-    // Note: This test depends on the tar.gz filename following the pattern name-version.tar.gz
+    // Confirmation dialog should appear since filename matches existing package name and version
+    pom.confirmDialog.should("exist");
+    pom.confirmationDialog.el.title.should(
+      "contain.text",
+      "Duplicate Deployment Package Detected",
+    );
   });
 
   it("should have accessibility attributes on file list", () => {
