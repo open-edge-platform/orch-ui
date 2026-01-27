@@ -28,7 +28,7 @@ global:
 # all MFE's need to be on (true) at this level and not run as standalone applications
 # if an MFE is set to true it means that is available, and other MFE will use this flag to know that they can import remote components from it
 mfe:
-  app_orch: true
+  app_orch: false
   infra: true
   cluster_orch: true
   admin: true
