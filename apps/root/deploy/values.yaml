@@ -201,26 +201,5 @@ resources:
     cpu: "50m"
 
 nginx:
-  rewrites:
-    - location: "/mfe/applications"
-      rewrite:
-        source: "/mfe/applications/(.*)"
-        dest: "/$1"
-      proxy_pass: "http://{{ .Release.Name }}-app-orch.{{ .Release.Namespace }}.svc:80"
-    - location: "/mfe/cluster-orch"
-      rewrite:
-        source: "/mfe/cluster-orch/(.*)"
-        dest: "/$1"
-      proxy_pass: "http://{{ .Release.Name }}-cluster-orch.{{ .Release.Namespace }}.svc:80"
-    - location: "/mfe/infrastructure"
-      rewrite:
-        source: "/mfe/infrastructure/(.*)"
-        dest: "/$1"
-      proxy_pass: "http://{{ .Release.Name }}-infra.{{ .Release.Namespace }}.svc:80"
-    - location: "/mfe/admin"
-      rewrite:
-        source: "/mfe/admin/(.*)"
-        dest: "/$1"
-      proxy_pass: "http://{{ .Release.Name }}-admin.{{ .Release.Namespace }}.svc:80"
-
+  rewrites: []
 traefikApiGroup: "traefik.containo.us/v1alpha1"
