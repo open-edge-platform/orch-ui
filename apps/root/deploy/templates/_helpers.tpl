@@ -38,7 +38,19 @@ server {
   keepalive_timeout 60s;
   server_tokens off;
   charset utf-8;
-  {{ $rewrites := .Values.nginx.rewrites }}
+  {{- $rewrites := list }}
+  {{- if .Values.mfe.app_orch }}
+    {{- $rewrites = append $rewrites (dict "location" "/mfe/applications" "rewrite" (dict "source" "/mfe/applications/(.*)" "dest" "/$1") "proxy_pass" (printf "http://%s-app-orch.%s.svc:80" .Release.Name .Release.Namespace)) }}
+  {{- end }}
+  {{- if .Values.mfe.cluster_orch }}
+    {{- $rewrites = append $rewrites (dict "location" "/mfe/cluster-orch" "rewrite" (dict "source" "/mfe/cluster-orch/(.*)" "dest" "/$1") "proxy_pass" (printf "http://%s-cluster-orch.%s.svc:80" .Release.Name .Release.Namespace)) }}
+  {{- end }}
+  {{- if .Values.mfe.infra }}
+    {{- $rewrites = append $rewrites (dict "location" "/mfe/infrastructure" "rewrite" (dict "source" "/mfe/infrastructure/(.*)" "dest" "/$1") "proxy_pass" (printf "http://%s-infra.%s.svc:80" .Release.Name .Release.Namespace)) }}
+  {{- end }}
+  {{- if .Values.mfe.admin }}
+    {{- $rewrites = append $rewrites (dict "location" "/mfe/admin" "rewrite" (dict "source" "/mfe/admin/(.*)" "dest" "/$1") "proxy_pass" (printf "http://%s-admin.%s.svc:80" .Release.Name .Release.Namespace)) }}
+  {{- end }}
   {{ range $rewrites }}
   location {{ .location }} {
     rewrite {{ .rewrite.source }} {{ .rewrite.dest }}  break;
