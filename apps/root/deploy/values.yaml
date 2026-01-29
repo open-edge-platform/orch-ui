@@ -202,25 +202,33 @@ resources:
 
 nginx:
   rewrites:
+{{- if .Values.mfe.app_orch }}
     - location: "/mfe/applications"
       rewrite:
         source: "/mfe/applications/(.*)"
         dest: "/$1"
       proxy_pass: "http://{{ .Release.Name }}-app-orch.{{ .Release.Namespace }}.svc:80"
+{{- end }}
+{{- if .Values.mfe.cluster_orch }}
     - location: "/mfe/cluster-orch"
       rewrite:
         source: "/mfe/cluster-orch/(.*)"
         dest: "/$1"
       proxy_pass: "http://{{ .Release.Name }}-cluster-orch.{{ .Release.Namespace }}.svc:80"
+{{- end }}
+{{- if .Values.mfe.infra }}
     - location: "/mfe/infrastructure"
       rewrite:
         source: "/mfe/infrastructure/(.*)"
         dest: "/$1"
       proxy_pass: "http://{{ .Release.Name }}-infra.{{ .Release.Namespace }}.svc:80"
+{{- end }}
+{{- if .Values.mfe.admin }}
     - location: "/mfe/admin"
       rewrite:
         source: "/mfe/admin/(.*)"
         dest: "/$1"
       proxy_pass: "http://{{ .Release.Name }}-admin.{{ .Release.Namespace }}.svc:80"
+{{- end }}
 
 traefikApiGroup: "traefik.containo.us/v1alpha1"
