@@ -79,6 +79,11 @@ window.__RUNTIME_CONFIG__ = {
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }},
     ADMIN: {{ .Values.mfe.admin | quote }}
   },
+  FEATURES: {
+    ALERTS: {{ .Values.features.alerts.enabled | quote }},
+    CLUSTER_TEMPLATES: {{ .Values.features.clusterTemplates.enabled | quote }},
+    OS_PROFILES: {{ .Values.features.osProfiles.enabled | quote }}
+  },
   API: {
     CO: {{ .Values.api.clusterOrch | quote }},
     MB: {{ .Values.api.metadataBroker | quote }},

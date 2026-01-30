@@ -27,6 +27,16 @@ mfe:
   cluster_orch: true
   admin: true
 
+# Feature flags - controls which admin features are available based on backend services
+# These are set by the EMF repository based on which services are deployed
+features:
+  alerts:
+    enabled: true  # Requires orchestrator-observability/alerting-monitor
+  clusterTemplates:
+    enabled: true  # Requires cluster-manager
+  osProfiles:
+    enabled: true  # Requires infra-manager/infra-operator
+
 api:
   clusterOrch: "https://cluster-orch.kind.internal"
   metadataBroker: "https://metadata.kind.internal"

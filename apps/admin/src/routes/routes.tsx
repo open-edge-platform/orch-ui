@@ -69,15 +69,22 @@ const getHomeRoute = () => {
     return "/admin/projects";
   }
 
-  if (hasAlertPermission) {
+  if (hasAlertPermission && RuntimeConfig.isFeatureEnabled("ALERTS")) {
     return "/admin/alert-definitions";
   }
 
-  if (hasClusterPermission) {
+  if (
+    hasClusterPermission &&
+    RuntimeConfig.isFeatureEnabled("CLUSTER_TEMPLATES")
+  ) {
     return "/admin/cluster-templates";
   }
 
-  if (OSProfiles && hasInfraPermission) {
+  if (
+    OSProfiles &&
+    hasInfraPermission &&
+    RuntimeConfig.isFeatureEnabled("OS_PROFILES")
+  ) {
     return "/admin/os-profiles";
   }
 
@@ -92,23 +99,12 @@ const getHomeRoute = () => {
 // this component is responsible for redirecting the user to the correct home page
 const redirectToHome = <Navigate to={getHomeRoute()} replace={true} />;
 
-export const childRoutes = [
+export const childRoutes: RouteObjectWithRef[] = [
   {
     path: "projects",
     // NOTE we don't do RBAC on the project page as even if the user doesn't have
     // permission to manage projects they should still be able to see the access the page (which renders a modal with instructions)
     element: <Projects />,
-  },
-  {
-    path: "alert-definitions",
-    element: (
-      <RBACWrapper
-        showTo={[Role.ALERTS_READ, Role.ALERTS_WRITE]}
-        missingRoleContent={<PermissionDenied />}
-      >
-        <AlertDefinitions />
-      </RBACWrapper>
-    ),
   },
   {
     path: "ssh-keys",
@@ -186,13 +182,32 @@ if (RuntimeConfig.isEnabled("INFRA")) {
   }
 }
 
+// Add alert routes only if alerts feature is enabled (requires observability backend)
+if (RuntimeConfig.isFeatureEnabled("ALERTS")) {
+  childRoutes.push({
+    path: "alert-definitions",
+    element: (
+      <RBACWrapper
+        showTo={[Role.ALERTS_READ, Role.ALERTS_WRITE]}
+        missingRoleContent={<PermissionDenied />}
+      >
+        <AlertDefinitions />
+      </RBACWrapper>
+    ),
+  });
+}
+
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <Layout />,
     children: mapChildRoutes(childRoutes),
   },
-  {
+];
+
+// Add alerts page only if alerts feature is enabled
+if (RuntimeConfig.isFeatureEnabled("ALERTS")) {
+  routes.push({
     path: "alerts",
     element: (
       <RBACWrapper
@@ -202,7 +217,7 @@ const routes: RouteObject[] = [
         <Alerts />
       </RBACWrapper>
     ),
-  },
-];
+  });
+}
 
 export default routes;
