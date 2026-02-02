@@ -105,6 +105,7 @@ export const childRoutes: RouteObjectWithRef[] = [
     // NOTE we don't do RBAC on the project page as even if the user doesn't have
     // permission to manage projects they should still be able to see the access the page (which renders a modal with instructions)
     element: <Projects />,
+    nodeRef: createRef(),
   },
   {
     path: "ssh-keys",
@@ -116,10 +117,12 @@ export const childRoutes: RouteObjectWithRef[] = [
         <SshKeys />
       </RBACWrapper>
     ),
+    nodeRef: createRef(),
   },
   {
     path: "about",
     element: <About />,
+    nodeRef: createRef(),
   },
   {
     path: "*",
@@ -153,6 +156,7 @@ const addClusterRoute = (path: string, Element: RemoteComponent) => {
           <Element />
         </RBACWrapper>
       ),
+      nodeRef: createRef(),
     });
 };
 
@@ -169,6 +173,7 @@ if (RuntimeConfig.isEnabled("INFRA")) {
     childRoutes.push({
       path: "os-profiles",
       element: <OSProfiles />,
+      nodeRef: createRef(),
     });
   }
 }
@@ -178,6 +183,7 @@ if (RuntimeConfig.isEnabled("INFRA")) {
     childRoutes.push({
       path: "os-update-policy",
       element: <OsUpdatePolicy />,
+      nodeRef: createRef(),
     });
   }
 }
@@ -194,6 +200,7 @@ if (RuntimeConfig.isFeatureEnabled("ALERTS")) {
         <AlertDefinitions />
       </RBACWrapper>
     ),
+    nodeRef: createRef(),
   });
 }
 
