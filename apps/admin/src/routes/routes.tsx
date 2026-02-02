@@ -69,22 +69,15 @@ const getHomeRoute = () => {
     return "/admin/projects";
   }
 
-  if (hasAlertPermission && RuntimeConfig.isFeatureEnabled("ALERTS")) {
+  if (hasAlertPermission && RuntimeConfig.isEnabled("ALERTS")) {
     return "/admin/alert-definitions";
   }
 
-  if (
-    hasClusterPermission &&
-    RuntimeConfig.isFeatureEnabled("CLUSTER_TEMPLATES")
-  ) {
+  if (hasClusterPermission) {
     return "/admin/cluster-templates";
   }
 
-  if (
-    OSProfiles &&
-    hasInfraPermission &&
-    RuntimeConfig.isFeatureEnabled("OS_PROFILES")
-  ) {
+  if (OSProfiles && hasInfraPermission) {
     return "/admin/os-profiles";
   }
 
@@ -188,8 +181,8 @@ if (RuntimeConfig.isEnabled("INFRA")) {
   }
 }
 
-// Add alert routes only if alerts feature is enabled (requires observability backend)
-if (RuntimeConfig.isFeatureEnabled("ALERTS")) {
+// Add alert routes only if alerts MFE is enabled (requires observability backend)
+if (RuntimeConfig.isEnabled("ALERTS")) {
   childRoutes.push({
     path: "alert-definitions",
     element: (
@@ -212,8 +205,8 @@ const routes: RouteObject[] = [
   },
 ];
 
-// Add alerts page only if alerts feature is enabled
-if (RuntimeConfig.isFeatureEnabled("ALERTS")) {
+// Add alerts page only if alerts MFE is enabled
+if (RuntimeConfig.isEnabled("ALERTS")) {
   routes.push({
     path: "alerts",
     element: (

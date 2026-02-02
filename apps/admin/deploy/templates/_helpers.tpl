@@ -77,12 +77,8 @@ window.__RUNTIME_CONFIG__ = {
     APP_ORCH: {{ .Values.mfe.app_orch | quote }},
     INFRA: {{ .Values.mfe.infra | quote }},
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }},
-    ADMIN: {{ .Values.mfe.admin | quote }}
-  },
-  FEATURES: {
-    ALERTS: {{ .Values.features.alerts.enabled | quote }},
-    CLUSTER_TEMPLATES: {{ .Values.features.clusterTemplates.enabled | quote }},
-    OS_PROFILES: {{ .Values.features.osProfiles.enabled | quote }}
+    ADMIN: {{ .Values.mfe.admin | quote }},
+    ALERTS: {{ .Values.mfe.alerts | quote }}
   },
   API: {
     CO: {{ .Values.api.clusterOrch | quote }},

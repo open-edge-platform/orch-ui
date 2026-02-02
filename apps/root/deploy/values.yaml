@@ -32,6 +32,7 @@ mfe:
   infra: true
   cluster_orch: true
   admin: true
+  alerts: true
 
 api:
   catalog: "https://api.kind.internal"

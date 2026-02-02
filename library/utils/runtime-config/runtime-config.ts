@@ -21,11 +21,7 @@ export interface IRuntimeConfig {
     INFRA?: string;
     CLUSTER_ORCH?: string;
     ADMIN?: string;
-  };
-  FEATURES?: {
     ALERTS?: string;
-    CLUSTER_TEMPLATES?: string;
-    OS_PROFILES?: string;
   };
   TITLE: string;
   DOCUMENTATION_URL?: string;
@@ -165,15 +161,6 @@ export class RuntimeConfig {
     if (!mfes) return false;
 
     return mfes[mfe] === "true";
-  };
-
-  public static isFeatureEnabled = (
-    feature: "ALERTS" | "CLUSTER_TEMPLATES" | "OS_PROFILES",
-  ): boolean => {
-    const features = window.__RUNTIME_CONFIG__?.FEATURES;
-    if (!features) return true; // Default to true for backward compatibility
-
-    return features[feature] === "true";
   };
 
   public static isAuthEnabled = (): boolean => {
