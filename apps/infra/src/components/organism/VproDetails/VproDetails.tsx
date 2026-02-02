@@ -17,8 +17,7 @@ const VproDetails = ({ host }: VproDetailsProps) => {
   return (
     <div {...cy} className="vpro-details-container">
       <VproDetailItem label="SKU" value={host.amtSku} />
-      <VproDetailItem label="Power state" value={host.powerStatus} />
-      <VproDetailItem label="Power state" value={host.powerStatus} />
+      <VproDetailItem label="Power status" value={host.powerStatus} />
       <VproDetailItem label="AMT Status" value={host.amtStatus} />
     </div>
   );

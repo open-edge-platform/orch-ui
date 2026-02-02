@@ -8,7 +8,6 @@ export const assignedWorkloadHostOneId = "host-assigned-1-ready"; // Ready
 export const assignedWorkloadHostTwoId = "host-assigned-2-inprogress"; // InProgress
 export const assignedWorkloadHostThreeId = "host-assigned-3-no-name"; // With No Name
 export const assignedWorkloadHostFourId = "host-assigned-4-no-uuid"; // With No UUID
-export const vProHostId = "host-119733b8";
 
 export const assignedWorkloadHostOneUuid =
   "4c4c4544-0044-4210-8031-c2c04f3052aa";
