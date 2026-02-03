@@ -42,7 +42,7 @@ import "./ProjectsTable.scss";
 
 const dataCy = "projectsTable";
 
-export type ProjectModalType = "create" | "delete" | "rename";
+export type ProjectModalType = "create" | "delete";
 interface ProjectModalState {
   type?: ProjectModalType;
   forProject?: AdminProject;
@@ -103,11 +103,10 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
   const columns: TableColumn<AdminProject>[] = [
     {
       Header: "Project Name",
-      accessor: (project) => project.spec?.description ?? project.name,
+      accessor: (project) => project.name ?? "-",
       Cell: (table) => {
         const activeProjectName = SharedStorage.project?.name;
-        const name =
-          table.row.original.spec?.description ?? table.row.original.name;
+        const name = table.row.original.name ?? "-";
         return (
           <>
             <Text className="project-name">{name}</Text>
@@ -118,6 +117,10 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
           </>
         );
       },
+    },
+    {
+      Header: "Project Description",
+      accessor: (project) => project.spec?.description ?? "-",
     },
     {
       Header: "Project Id",
@@ -165,12 +168,6 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
           setActionPopupState={(isToggled: boolean) =>
             setPollingInterval(isToggled ? 0 : API_INTERVAL)
           }
-          onRename={(selectedProject) => {
-            setProjectModalState({
-              type: "rename",
-              forProject: selectedProject,
-            });
-          }}
           onDelete={(selectedProject) => {
             setProjectModalState({
               type: "delete",
@@ -293,7 +290,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
 
   const getProjectName = (project?: AdminProject) => {
     if (project) {
-      return project.spec?.description ?? project.name;
+      return project.name ?? "-";
     }
     return "";
   };
@@ -302,17 +299,15 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
     <div {...cy} className="projects-table">
       {getProjectTableComponent()}
 
-      {(projectModalState?.type === "create" ||
-        projectModalState?.type === "rename") && (
+      {projectModalState?.type === "create" && (
         <CreateEditProject
           isOpen
-          existingProject={projectModalState?.forProject}
           onClose={onCloseModal}
-          onCreateEdit={(newProjectname) => {
+          onCreateEdit={() => {
             dispatch(
               showMessageNotification({
                 messageTitle: "Success",
-                messageBody: `Successfully ${projectModalState.type}d a project ${getProjectName(projectModalState?.forProject)}${projectModalState.type === "rename" ? ` to ${newProjectname}` : ""}`,
+                messageBody: "Successfully created a project",
                 variant: MessageBannerAlertState.Success,
               }),
             );
@@ -322,7 +317,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
             dispatch(
               showMessageNotification({
                 messageTitle: "Error",
-                messageBody: `Error ${projectModalState.type === "create" ? "creating" : "renaming"} project ${getProjectName(projectModalState?.forProject)}. ${errorMessage}`,
+                messageBody: `Error creating project. ${errorMessage}`,
                 variant: MessageBannerAlertState.Error,
               }),
             );

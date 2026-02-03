@@ -40,23 +40,13 @@ describe("<ProjectsTable/>", () => {
         />,
       );
       pom.waitForApis();
-      pom.tablePom.getCell(1, 3).contains("Error in Deleting Project");
+      pom.tablePom.getCell(1, 4).contains("Error in Deleting Project");
     });
     it("should see project status that is not an error", () => {
-      pom.tablePom.getCell(2, 3).should("contain.text", "Project is active");
+      pom.tablePom.getCell(2, 4).should("contain.text", "Project is active");
     });
 
-    it("should see rename project modal", () => {
-      pom.getPopupOptionsByRowIndex(2).click().as("popup");
-      cy.get("@popup").contains("Rename").click();
-      pom.createRenameProjectPom.modalPom.el.modalTitle.should(
-        "contain.text",
-        "Rename",
-      );
-      pom.createRenameProjectPom.root.should("exist");
-    });
-
-    it("should see delete projectmodal", () => {
+    it("should see delete project modal", () => {
       pom.getPopupOptionsByRowIndex(2).click().as("popup");
       cy.get("@popup").contains("Delete").click();
       pom.deleteProjectPom.root.should("exist");
@@ -120,37 +110,6 @@ describe("<ProjectsTable/>", () => {
       pom.waitForApis();
     });
 
-    describe("rename option", () => {
-      beforeEach(() => {
-        pom.renameProjectPopup(2, "new-name");
-      });
-      it("should show message on successful rename", () => {
-        pom.createRenameProjectPom.interceptApis([
-          pom.createRenameProjectPom.api.renameProject,
-        ]);
-        pom.createRenameProjectPom.el.submitProject.click();
-        pom.createRenameProjectPom.waitForApis();
-
-        cyGet("testMessage").should(
-          "contain.text",
-          "Successfully renamed a project Project 1 to new-name",
-        );
-      });
-
-      it("should show message on rename error", () => {
-        pom.createRenameProjectPom.interceptApis([
-          pom.createRenameProjectPom.api.renameProjectError,
-        ]);
-        pom.createRenameProjectPom.el.submitProject.click();
-        pom.createRenameProjectPom.waitForApis();
-
-        cyGet("testMessage").should(
-          "contain.text",
-          "Error renaming project Project 1",
-        );
-      });
-    });
-
     describe("delete option", () => {
       beforeEach(() => {
         pom.deleteProjectPopup(2, "Project 1");
@@ -164,7 +123,7 @@ describe("<ProjectsTable/>", () => {
 
         cyGet("testMessage").should(
           "contain.text",
-          "Project Project 1 is being deleted",
+          "Project project-1 is being deleted.",
         );
       });
 
@@ -177,7 +136,7 @@ describe("<ProjectsTable/>", () => {
 
         cyGet("testMessage").should(
           "contain.text",
-          "Error in deleting project Project 1",
+          "Error in deleting project project-1. Unauthorized",
         );
       });
     });

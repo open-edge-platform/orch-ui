@@ -63,7 +63,7 @@ class ProjectsTablePom extends CyPom<Selectors, ApiAliases> {
   emptyPom: EmptyPom;
   apiErrorPom: ApiErrorPom;
 
-  createRenameProjectPom: CreateEditProjectPom;
+  createProjectPom: CreateEditProjectPom;
   deleteProjectPom: DeleteProjectDialogPom;
 
   constructor(public rootCy: string = "projectsTable") {
@@ -76,7 +76,7 @@ class ProjectsTablePom extends CyPom<Selectors, ApiAliases> {
     this.emptyPom = new EmptyPom();
     this.apiErrorPom = new ApiErrorPom();
 
-    this.createRenameProjectPom = new CreateEditProjectPom();
+    this.createProjectPom = new CreateEditProjectPom();
     this.deleteProjectPom = new DeleteProjectDialogPom();
   }
 
@@ -87,11 +87,6 @@ class ProjectsTablePom extends CyPom<Selectors, ApiAliases> {
     return this.tableUtilPom
       .getRowBySearchText(projectName)
       .find("[data-cy='projectPopup']");
-  }
-  renameProjectPopup(index: number, name: string) {
-    this.getPopupOptionsByRowIndex(index).click().as("popup");
-    cy.get("@popup").contains("Rename").click({ force: true });
-    this.createRenameProjectPom.el.projectName.type(name);
   }
   deleteProjectPopup(index: number, name: string) {
     this.getPopupOptionsByRowIndex(index).click().as("popup");
