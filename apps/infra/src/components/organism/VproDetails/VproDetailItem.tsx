@@ -22,7 +22,7 @@ const VproDetailItem = ({ label, value }: VproDetailItemProps) => {
       {React.isValidElement(displayValue) ? (
         <>{displayValue}</>
       ) : (
-        <Text className="value">{displayValue ?? "N/A"}</Text>
+        <Text className="value">{displayValue ?? "-"}</Text>
       )}
     </Flex>
   );

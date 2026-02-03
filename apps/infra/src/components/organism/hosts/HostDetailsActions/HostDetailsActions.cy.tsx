@@ -148,7 +148,11 @@ describe("Host Details Action component testing", () => {
         .getActionPopupBySearchText("Delete")
         .click();
 
-      pom.interceptApis([pom.api.deleteHost, pom.api.deleteInstance]);
+      pom.interceptApis([
+        pom.api.unprovisionAmtStatusFn,
+        pom.api.deleteHost,
+        pom.api.deleteInstance,
+      ]);
       cyGet("dialog").find("[data-cy='confirmBtn']").click();
       pom.waitForApis();
       cyGet("dialog").should("not.exist");
