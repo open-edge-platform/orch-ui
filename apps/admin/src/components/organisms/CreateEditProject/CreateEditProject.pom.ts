@@ -10,6 +10,8 @@ import { CyApiDetails, CyPom } from "@orch-ui/tests";
 const dataCySelectors = [
   "projectNameLabel",
   "projectName",
+  "projectDescriptionLabel",
+  "projectDescription",
   "submitProject",
   "cancel",
 ] as const;
@@ -17,18 +19,13 @@ type Selectors = (typeof dataCySelectors)[number];
 
 const projectByIdRoute = "*/projects/*";
 
-type SuccessApiAliases = "createProject" | "renameProject";
-type ErrorApiAliases = "createProjectError" | "renameProjectError";
+type SuccessApiAliases = "createProject";
+type ErrorApiAliases = "createProjectError";
 type ApiAliases = SuccessApiAliases | ErrorApiAliases;
 
 const successEndpoints: CyApiDetails<SuccessApiAliases, tm.ProjectProjectPost> =
   {
     createProject: {
-      route: projectByIdRoute,
-      method: "PUT",
-      statusCode: 200,
-    },
-    renameProject: {
       route: projectByIdRoute,
       method: "PUT",
       statusCode: 200,
@@ -40,15 +37,6 @@ const errorEndpoints: CyApiDetails<ErrorApiAliases> = {
     route: projectByIdRoute,
     method: "PUT",
     statusCode: 500,
-    networkError: true,
-  },
-  renameProjectError: {
-    route: projectByIdRoute,
-    method: "PUT",
-    statusCode: 401,
-    response: {
-      message: "Unauthorized",
-    },
     networkError: true,
   },
 };

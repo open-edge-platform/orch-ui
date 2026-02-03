@@ -5,7 +5,7 @@
 
 import { CyPom } from "@orch-ui/tests";
 
-const dataCySelectors = ["Rename", "Delete"] as const;
+const dataCySelectors = ["Delete"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
 class ProjectPopupPom extends CyPom<Selectors> {
