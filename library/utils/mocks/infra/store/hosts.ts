@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -188,7 +188,16 @@ export const assignedWorkloadHostOne: HostMock = {
     updatedAt: new Date().toISOString(),
   },
   powerStatusIndicator: "STATUS_INDICATION_IDLE",
-  powerStatus: "On",
+  powerStatus: "Powered on", // vpro power state
+  powerStatusTimestamp: 1769667960,
+  powerCommandPolicy: "POWER_COMMAND_POLICY_UNSPECIFIED",
+  powerOnTime: 1769667960,
+  amtSku: "AMT_SKU_AMT",
+  desiredAmtState: "AMT_STATE_PROVISIONED",
+  currentAmtState: "AMT_STATE_PROVISIONED",
+  amtStatus: "AMT Activation Done",
+  amtStatusIndicator: "STATUS_INDICATION_IDLE",
+  amtStatusTimestamp: 0,
 };
 
 export const assignedWorkloadHostTwo: HostMock = {
