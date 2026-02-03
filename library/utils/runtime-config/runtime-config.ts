@@ -21,6 +21,7 @@ export interface IRuntimeConfig {
     INFRA?: string;
     CLUSTER_ORCH?: string;
     ADMIN?: string;
+    ALERTS?: string;
   };
   TITLE: string;
   DOCUMENTATION_URL?: string;

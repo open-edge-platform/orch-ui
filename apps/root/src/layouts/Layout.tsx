@@ -98,7 +98,7 @@ const Layout = () => {
         </HeaderItem>
       </RBACWrapper>
     ),
-    RuntimeConfig.isEnabled("ADMIN") && (
+    RuntimeConfig.isEnabled("ALERTS") && (
       <RBACWrapper key="alerts" showTo={alertRoles}>
         <HeaderItem
           name="menuAlerts"

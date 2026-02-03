@@ -138,7 +138,8 @@ window.__RUNTIME_CONFIG__ = {
     APP_ORCH: {{ .Values.mfe.app_orch | quote }},
     INFRA: {{ .Values.mfe.infra | quote }},
     CLUSTER_ORCH: {{ .Values.mfe.cluster_orch | quote }},
-    ADMIN: {{ .Values.mfe.admin | quote }}
+    ADMIN: {{ .Values.mfe.admin | quote }},
+    ALERTS: {{ .Values.mfe.alerts | quote }}
   },
   API: {
     CATALOG: {{ .Values.api.catalog | quote }},
