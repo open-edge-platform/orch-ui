@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -1217,42 +1217,5 @@ export const handlers = [
     }
 
     return HttpResponse.json({}, { status: 502 });
-  }),
-
-  // VPro details endpoints
-  http.get(`${baseURL}/dm/devices/:guid`, async ({ params }) => {
-    const { guid } = params as { guid: string };
-    const vproDetails = vproDetailsStore.getDeviceByGuid(guid);
-    console.log("vproDetails:", vproDetails);
-    if (vproDetails) {
-      await delay(1000);
-      return HttpResponse.json(vproDetails as any, { status: 200 });
-    }
-
-    return HttpResponse.json(
-      {
-        detail:
-          "rpc error: code = NotFound desc = ent: vPro details not found for host",
-        status: 404,
-      },
-      { status: 404 },
-    );
-  }),
-
-  http.get(`${baseURL}/dm/amt/generalSettings/:guid`, async () => {
-    const vproDetails = vproGeneralSettingsStore.getGeneralSettingsByGuid();
-    if (vproDetails) {
-      await delay(1000);
-      return HttpResponse.json(vproDetails as any, { status: 200 });
-    }
-
-    return HttpResponse.json(
-      {
-        detail:
-          "rpc error: code = NotFound desc = ent: vPro details not found for host",
-        status: 404,
-      },
-      { status: 404 },
-    );
   }),
 ];

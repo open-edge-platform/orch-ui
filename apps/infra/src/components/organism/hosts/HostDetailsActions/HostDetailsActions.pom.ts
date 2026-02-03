@@ -15,7 +15,10 @@ type Selectors = (typeof dataCySelectors)[number];
 type InstanceApiAliases =
   | "getInstanceWithWorkload"
   | "getInstanceWithoutWorkload";
-type DeleteApiAliases = "deleteHost" | "deleteInstance";
+type DeleteApiAliases =
+  | "deleteHost"
+  | "deleteInstance"
+  | "unprovisionAmtStatusFn";
 
 type ApiAliases = InstanceApiAliases | DeleteApiAliases;
 
@@ -58,6 +61,11 @@ const deleteEndpoints: CyApiDetails<
   deleteInstance: {
     method: "DELETE",
     route: `**/v1/projects/${defaultActiveProject.name}/compute/instances/**`,
+    statusCode: 200,
+  },
+  unprovisionAmtStatusFn: {
+    method: "PATCH",
+    route: `**/v1/projects/${defaultActiveProject.name}/compute/hosts/**`,
     statusCode: 200,
   },
 };
