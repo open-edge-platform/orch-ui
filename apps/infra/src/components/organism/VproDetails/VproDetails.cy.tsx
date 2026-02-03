@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -7,11 +7,7 @@ import { infra } from "@orch-ui/apis";
 import { defaultActiveProject } from "@orch-ui/tests";
 import { SharedStorage } from "@orch-ui/utils";
 import VproDetails from "./VproDetails";
-import VproDetailsPom, {
-  mockAmtSettingsData,
-  mockDeviceData,
-  mockHostUuid,
-} from "./VproDetails.pom";
+import VproDetailsPom, { mockHostUuid } from "./VproDetails.pom";
 
 const pom = new VproDetailsPom();
 
@@ -20,6 +16,11 @@ describe("<VproDetails/>", () => {
     uuid: mockHostUuid,
     name: "Test Host",
     resourceId: "test-host-id",
+    amtSku: "AMT_SKU_AMT",
+    desiredAmtState: "AMT_STATE_PROVISIONED",
+    currentAmtState: "AMT_STATE_PROVISIONED",
+    amtStatus: "AMT Activation Done",
+    powerStatus: "Powered on",
   };
 
   beforeEach(() => {
@@ -27,106 +28,27 @@ describe("<VproDetails/>", () => {
     SharedStorage.project = defaultActiveProject;
   });
 
-  it("should render component with all data", () => {
-    // Intercept API calls and provide mock data
-    pom.interceptApis([pom.api.getDeviceData, pom.api.getAmtSettings]);
+  it("should render component", () => {
     cy.mount(<VproDetails host={mockHost} />);
-    pom.waitForApis();
-    // Verify component renders
     pom.root.should("exist");
-
-    // Verify device details are correctly displayed
-    pom.verifyDeviceDetails();
-
-    // Verify AMT settings are correctly displayed
-    pom.verifyAmtSettings();
   });
 
-  it("should display loading state while data is being fetched", () => {
-    // Use direct intercept with delay instead of interceptApis with delay parameter
-    cy.intercept(
-      `**/projects/${defaultActiveProject.name}/dm/devices/${mockHostUuid}`,
-      {
-        statusCode: 200,
-        body: mockDeviceData,
-        delay: 500,
-      },
-    ).as("delayedDeviceData");
-
-    cy.intercept(
-      `**/projects/${defaultActiveProject.name}/dm/amt/generalSettings/${mockHostUuid}`,
-      {
-        statusCode: 200,
-        body: mockAmtSettingsData,
-        delay: 500,
-      },
-    ).as("delayedAmtSettings");
-
+  it("should display SKU value correctly", () => {
     cy.mount(<VproDetails host={mockHost} />);
-    pom.waitForApis();
-    // Should show loading text
-    cy.contains("Loading additional details...").should("be.visible");
-
-    // Wait for delayed responses
-    cy.wait(["@delayedDeviceData", "@delayedAmtSettings"]);
-
-    // Eventually data should appear
-    cy.contains("Display Name").should("exist");
+    pom.getDetailValueByLabel("SKU").should("contain", mockHost.amtSku);
   });
 
-  it("should handle error state in device data", () => {
-    // Mock device data with error
-    cy.intercept(
-      `**/projects/${defaultActiveProject.name}/dm/devices/${mockHostUuid}`,
-      {
-        statusCode: 500,
-        body: { error: "Server Error" },
-      },
-    ).as("deviceError");
-
-    // Mock AMT settings with success
-    cy.intercept(
-      `**/projects/${defaultActiveProject.name}/dm/amt/generalSettings/${mockHostUuid}`,
-      {
-        statusCode: 200,
-        body: mockAmtSettingsData,
-      },
-    ).as("amtSettings");
-
+  it("should display Power status value correctly", () => {
     cy.mount(<VproDetails host={mockHost} />);
-    pom.waitForApis();
-    // Should show error message
-    cy.contains("Unfortunately an error occurred").should("be.visible");
+    pom
+      .getDetailValueByLabel("Power status")
+      .should("contain", mockHost.powerStatus);
   });
 
-  it("should handle missing device info gracefully", () => {
-    // Mock device data without deviceInfo
-    const incompleteData = { ...mockDeviceData };
-    delete incompleteData.deviceInfo;
-
-    cy.intercept(
-      `**/projects/${defaultActiveProject.name}/dm/devices/${mockHostUuid}`,
-      {
-        statusCode: 200,
-        body: incompleteData,
-      },
-    ).as("incompleteDevice");
-
-    // Mock AMT settings with success
-    cy.intercept(
-      `**/projects/${defaultActiveProject.name}/dm/amt/generalSettings/${mockHostUuid}`,
-      {
-        statusCode: 200,
-        body: mockAmtSettingsData,
-      },
-    ).as("amtSettings");
-
+  it("should display AMT Status value correctly", () => {
     cy.mount(<VproDetails host={mockHost} />);
-    pom.waitForApis();
-    // Basic details should still appear
-    pom.getDetailValueByLabel("Display Name").should("exist");
-
-    // But no device info details
-    cy.contains("IP Address").should("not.exist");
+    pom
+      .getDetailValueByLabel("AMT Status")
+      .should("contain", mockHost.amtStatus);
   });
 });

@@ -1,17 +1,10 @@
 /*
- * SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 
 .vpro-details-container {
   width: 100%;
-
-  .section-header {
-    font-size: 1.25rem;
-    font-weight: 400;
-    color: var(--spark-color-black);
-    margin: 1.6rem auto;
-  }
 
   .item-container {
     font-size: 0.625rem;
@@ -32,9 +25,5 @@
       color: var(--spark-color-theme-light-gray900);
       word-break: break-all;
     }
-  }
-
-  .connection-status {
-    display: flex;
   }
 }
