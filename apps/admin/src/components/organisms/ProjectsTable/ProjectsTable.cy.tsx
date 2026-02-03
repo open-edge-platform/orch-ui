@@ -123,7 +123,7 @@ describe("<ProjectsTable/>", () => {
 
         cyGet("testMessage").should(
           "contain.text",
-          "Project Project 1 is being deleted",
+          "Project project-1 is being deleted.",
         );
       });
 
@@ -136,7 +136,7 @@ describe("<ProjectsTable/>", () => {
 
         cyGet("testMessage").should(
           "contain.text",
-          "Error in deleting project Project 1",
+          "Error in deleting project project-1. Unauthorized",
         );
       });
     });
