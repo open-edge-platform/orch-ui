@@ -113,7 +113,10 @@ const Layout = () => {
     ) {
       items.push(projectsNavItem);
     }
-    if (checkAuthAndRole([Role.ALERTS_READ, Role.ALERTS_WRITE])) {
+    if (
+      RuntimeConfig.isEnabled("ALERTS") &&
+      checkAuthAndRole([Role.ALERTS_READ, Role.ALERTS_WRITE])
+    ) {
       items.push(alertDefNavItem);
     }
     if (
