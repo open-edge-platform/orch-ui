@@ -5,12 +5,7 @@
 
 import { tm } from "@orch-ui/apis";
 import { MessageBannerAlertState, Modal } from "@orch-ui/components";
-import {
-  AdminProject,
-  parseError,
-  ProjectModalInput,
-  toApiName,
-} from "@orch-ui/utils";
+import { parseError, ProjectModalInput, toApiName } from "@orch-ui/utils";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import {
@@ -35,7 +30,6 @@ const dataCy = "createEditProject";
 
 export interface CreateEditProjectProps {
   isOpen: boolean;
-  existingProject?: AdminProject;
   onCreateEdit?: (newProjectname: string) => void;
   onClose: () => void;
   onError?: (err: string) => void;
@@ -44,7 +38,6 @@ export interface CreateEditProjectProps {
 
 export const CreateEditProject = ({
   isOpen,
-  existingProject,
   onCreateEdit,
   onClose,
   onError,
@@ -56,10 +49,13 @@ export const CreateEditProject = ({
 
   const [createProject] = usePutProject();
   const [projectNameInput, setProjectNameInput] = useState<string>("");
+  const [projectDescriptionInput, setProjectDescriptionInput] =
+    useState<string>("");
 
   const closeAndReset = () => {
     onClose();
     setProjectNameInput("");
+    setProjectDescriptionInput("");
   };
 
   const {
@@ -80,25 +76,14 @@ export const CreateEditProject = ({
     unregister();
   }, [open]);
 
-  /* Method to handle submit: create or rename project */
+  /* Method to handle submit: create project */
   const handleCreateSubmit = () => {
-    let p;
-    // If project Name not supplied prior to dialog open: then create project else rename
-    if (!existingProject?.name) {
-      p = createProject({
-        "project.Project": toApiName(projectNameInput),
-        projectProjectPost: {
-          description: projectNameInput,
-        },
-      });
-    } else {
-      p = createProject({
-        "project.Project": toApiName(existingProject.name),
-        projectProjectPost: {
-          description: projectNameInput,
-        },
-      });
-    }
+    const p = createProject({
+      "project.Project": toApiName(projectNameInput),
+      projectProjectPost: {
+        description: projectDescriptionInput || projectNameInput,
+      },
+    });
 
     if (p) {
       p.then((res) => {
@@ -116,7 +101,7 @@ export const CreateEditProject = ({
       <Modal
         open={isOpen}
         onRequestClose={closeAndReset}
-        modalHeading={existingProject ? "Rename Project" : "Create New Project"}
+        modalHeading="Create New Project"
         passiveModal
         isDimissable={isDimissable}
       >
@@ -141,11 +126,7 @@ export const CreateEditProject = ({
                   {...field}
                   className="name"
                   data-cy="projectName"
-                  placeholder={
-                    existingProject?.spec?.description ||
-                    existingProject?.name ||
-                    "Enter new project name"
-                  }
+                  placeholder="Enter new project name"
                   onInput={(e) => setProjectNameInput(e.currentTarget.value)}
                   validationState={
                     errors.nameInput !== undefined ? "invalid" : "valid"
@@ -161,6 +142,19 @@ export const CreateEditProject = ({
               )}
             />
           </div>
+          <div className="project-field-container">
+            <FieldLabel data-cy="projectDescriptionLabel">
+              Project Description (optional)
+            </FieldLabel>
+            <TextField
+              className="description"
+              data-cy="projectDescription"
+              placeholder="Enter project description (defaults to project name)"
+              value={projectDescriptionInput}
+              onInput={(e) => setProjectDescriptionInput(e.currentTarget.value)}
+              size={InputSize.Large}
+            />
+          </div>
           <ButtonGroup align={ButtonGroupAlignment.Start}>
             <Button
               data-cy="submitProject"
@@ -169,7 +163,7 @@ export const CreateEditProject = ({
               size={ButtonSize.Medium}
               variant={ButtonVariant.Action}
             >
-              {existingProject ? "Save" : "Create"}
+              Create
             </Button>
             {isDimissable && (
               <Button

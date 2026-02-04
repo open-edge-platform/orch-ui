@@ -13,7 +13,6 @@ interface ProjectPopupProps {
   project: AdminProject;
   /** render button subcomponent/custom click component for which onClick will show the popup. By default show ellipsis.*/
   jsx?: React.ReactNode;
-  onRename?: (project: AdminProject) => void;
   onDelete?: (project: AdminProject) => void;
   // these props are used for testing purposes
   hasRole?: (roles: string[]) => boolean;
@@ -24,20 +23,11 @@ interface ProjectPopupProps {
 const ProjectPopup = ({
   project,
   jsx = <Icon artworkStyle="light" icon="ellipsis-v" />,
-  onRename,
   onDelete,
   hasRole = hasRoleDefault,
   setActionPopupState,
 }: ProjectPopupProps) => {
   const getPopupActions = (): PopupOption[] => [
-    {
-      displayText: "Rename",
-      onSelect: () => onRename && onRename(project),
-      disable:
-        !hasRole([Role.PROJECT_WRITE, Role.PROJECT_UPDATE]) ||
-        project.status?.projectStatus?.statusIndicator ===
-          "STATUS_INDICATION_IN_PROGRESS",
-    },
     {
       displayText: "Delete",
       onSelect: () => onDelete && onDelete(project),
