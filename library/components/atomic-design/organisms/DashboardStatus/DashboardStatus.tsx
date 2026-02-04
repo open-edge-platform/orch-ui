@@ -82,7 +82,7 @@ export const DashboardStatus = ({
         {showTooltip && (
           <Icon
             icon="information-circle"
-            title={`This metrics represents the count of deployment clusters,\nnot the number of deployments`}
+            title="This metrics represents the count of deployment clusters,&#10;not the number of deployments"
             style={{
               cursor: "pointer",
               color: "var(--spark-color-classic-blue)",
