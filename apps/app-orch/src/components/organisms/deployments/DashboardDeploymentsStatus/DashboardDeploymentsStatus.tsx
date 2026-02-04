@@ -61,6 +61,7 @@ const DashboardDeploymentsStatus = ({
           icon: "three-dots-circle",
           text: "There are no deployments",
         }}
+        showTooltip={true}
       />
     </div>
   );

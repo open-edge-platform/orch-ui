@@ -44,6 +44,7 @@ export interface DashboardStatusProps {
     right?: React.ReactNode;
   };
   dataCy?: string;
+  showTooltip?: boolean;
 }
 export const DashboardStatus = ({
   cardTitle = "",
@@ -63,6 +64,7 @@ export const DashboardStatus = ({
     right: null,
   },
   dataCy = "dashboardStatus",
+  showTooltip = false,
 }: DashboardStatusProps) => {
   if (isSuccess && (total === 0 || error > total || running > total)) {
     return (
@@ -75,7 +77,19 @@ export const DashboardStatus = ({
   }
   return (
     <div className="dashboard-status" data-cy={dataCy}>
-      <Heading semanticLevel={6}>{cardTitle}</Heading>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <Heading semanticLevel={6}>{cardTitle}</Heading>
+        {showTooltip && (
+          <Icon
+            icon="information-circle"
+            title={`This metrics represents the count of deployment clusters,\nnot the number of deployments`}
+            style={{
+              cursor: "pointer",
+              color: "var(--spark-color-classic-blue)",
+            }}
+          />
+        )}
+      </div>
       {isSuccess && (
         <>
           <div className="dashboard-status__stat-group">
