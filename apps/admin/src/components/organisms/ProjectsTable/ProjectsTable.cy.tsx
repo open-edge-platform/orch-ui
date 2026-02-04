@@ -112,7 +112,7 @@ describe("<ProjectsTable/>", () => {
 
     describe("delete option", () => {
       beforeEach(() => {
-        pom.deleteProjectPopup(2, "Project 1");
+        pom.deleteProjectPopup(2, "project-1");
       });
       it("should show message on successful delete", () => {
         pom.deleteProjectPom.interceptApis([
