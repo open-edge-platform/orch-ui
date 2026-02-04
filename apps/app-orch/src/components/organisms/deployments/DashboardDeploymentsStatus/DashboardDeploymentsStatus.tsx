@@ -61,7 +61,7 @@ const DashboardDeploymentsStatus = ({
           icon: "three-dots-circle",
           text: "There are no deployments",
         }}
-        tooltipTitle="This metrics represents the count of deployment clusters,&#10;not the number of deployments"
+        tooltipTitle="These metrics represent the count of deployment clusters,&#10;not the number of deployments"
       />
     </div>
   );
