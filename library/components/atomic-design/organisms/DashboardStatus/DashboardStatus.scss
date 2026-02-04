@@ -15,6 +15,17 @@
     font-weight: 500;
   }
 
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__tooltip-icon {
+    cursor: pointer;
+    color: var(--spark-color-classic-blue);
+  }
+
   &__stat-group {
     display: flex;
     justify-content: space-between;
