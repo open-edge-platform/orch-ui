@@ -44,6 +44,7 @@ export interface DashboardStatusProps {
     right?: React.ReactNode;
   };
   dataCy?: string;
+  tooltipTitle?: string;
 }
 export const DashboardStatus = ({
   cardTitle = "",
@@ -63,6 +64,7 @@ export const DashboardStatus = ({
     right: null,
   },
   dataCy = "dashboardStatus",
+  tooltipTitle,
 }: DashboardStatusProps) => {
   if (isSuccess && (total === 0 || error > total || running > total)) {
     return (
@@ -75,7 +77,16 @@ export const DashboardStatus = ({
   }
   return (
     <div className="dashboard-status" data-cy={dataCy}>
-      <Heading semanticLevel={6}>{cardTitle}</Heading>
+      <div className="dashboard-status__header">
+        <Heading semanticLevel={6}>{cardTitle}</Heading>
+        {tooltipTitle && (
+          <Icon
+            icon="information-circle"
+            title={tooltipTitle}
+            className="dashboard-status__tooltip-icon"
+          />
+        )}
+      </div>
       {isSuccess && (
         <>
           <div className="dashboard-status__stat-group">
