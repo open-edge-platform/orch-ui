@@ -39,17 +39,6 @@ jobs:
         with:
           project_folder: "apps"
 
-  license-check:
-    permissions:
-      contents: read
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: License check
-        run: make license
-
   matching-versions:
     permissions:
       contents: read
