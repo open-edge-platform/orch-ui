@@ -9,12 +9,10 @@ import AdminPom from "./admin.pom";
 
 interface ProjectTestData {
   description: string;
-  updatedDescription: string;
 }
 
 const isProjectTestData = (arg: any): arg is ProjectTestData => {
   if (!arg.description) return false;
-  if (!arg.updatedDescription) return false;
   return true;
 };
 
@@ -57,10 +55,10 @@ describe("Org Admin Smoke", () => {
       // we select by text so it supports both the empty and full table
       cy.contains("Create Project").click();
 
-      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.projectName.type(
+      pom.projectsPom.projectsTablePom.createProjectPom.el.projectName.type(
         testData.description,
       );
-      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
+      pom.projectsPom.projectsTablePom.createProjectPom.el.submitProject.click();
 
       // wait for the modal to close and the page to reload
       cy.wait("@createProject");
@@ -107,25 +105,6 @@ describe("Org Admin Smoke", () => {
       }
     });
 
-    it("should rename the project", () => {
-      cy.contains("Project Name").should("be.visible");
-      pom.projectsPom.projectsTablePom.tablePom.search(
-        testData.description,
-        false,
-      );
-      // wait for search to complete
-      pom.projectsPom.projectsTablePom.tablePom
-        .getRows()
-        .should("have.length", 1);
-
-      pom.projectsPom.projectsTablePom.renameProjectPopup(
-        0,
-        testData.updatedDescription,
-      );
-      pom.projectsPom.projectsTablePom.createRenameProjectPom.el.submitProject.click();
-      cy.contains(testData.updatedDescription).should("exist");
-    });
-
     it("should delete the project", () => {
       cy.contains("Project Name").should("be.visible");
       pom.projectsPom.projectsTablePom.tablePom.search(
@@ -139,7 +118,7 @@ describe("Org Admin Smoke", () => {
 
       pom.projectsPom.projectsTablePom.deleteProjectPopup(
         0,
-        testData.updatedDescription,
+        testData.description,
       );
       pom.projectsPom.projectsTablePom.deleteProjectPom.modalPom.el.primaryBtn.click();
       cy.contains("Deletion in process").should("be.visible");
