@@ -206,6 +206,10 @@ export {
 } from "./atomic-design/organisms/TrustedCompute/TrustedCompute";
 /***************************** Pages *****************************************/
 export { PageNotFound } from "./atomic-design/pages/PageNotFound/PageNotFound";
+export {
+  FeatureDisabled,
+  FeatureDisabledProps,
+} from "./atomic-design/pages/FeatureDisabled/FeatureDisabled";
 
 /***************************** Templates  *****************************************/
 export { SidebarMain } from "./atomic-design/templates/SidebarMain/SidebarMain";

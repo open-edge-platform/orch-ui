@@ -1,9 +1,10 @@
 /*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
+  FeatureDisabled,
   PageNotFound,
   PermissionDenied,
   RBACWrapper,
@@ -217,6 +218,11 @@ if (RuntimeConfig.isEnabled("ALERTS")) {
         <Alerts />
       </RBACWrapper>
     ),
+  });
+} else {
+  routes.push({
+    path: "alerts",
+    element: <FeatureDisabled featureName="Alerts" />,
   });
 }
 

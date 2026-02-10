@@ -1,9 +1,14 @@
 /*
- * SPDX-FileCopyrightText: (C) 2023 Intel Corporation
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuthWrapper, PageNotFound, SquareSpinner } from "@orch-ui/components";
+import {
+  AuthWrapper,
+  FeatureDisabled,
+  PageNotFound,
+  SquareSpinner,
+} from "@orch-ui/components";
 import { RuntimeConfig } from "@orch-ui/utils";
 import React, { Suspense } from "react";
 import { RouteObject } from "react-router-dom";
@@ -53,7 +58,11 @@ export const childRoutes: RouteObject[] = [
     path: "/applications/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        {AppOrchUI !== null ? <AppOrchUI /> : "App Orchestration disabled"}
+        {AppOrchUI !== null ? (
+          <AppOrchUI />
+        ) : (
+          <FeatureDisabled featureName="App Orchestration" />
+        )}
       </Suspense>
     ),
   },
@@ -64,7 +73,7 @@ export const childRoutes: RouteObject[] = [
         {ClusterOrchUI !== null ? (
           <ClusterOrchUI />
         ) : (
-          "Cluster Orchestration disabled"
+          <FeatureDisabled featureName="Cluster Orchestration" />
         )}
       </Suspense>
     ),
@@ -73,7 +82,11 @@ export const childRoutes: RouteObject[] = [
     path: "/infrastructure/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        {EimUI !== null ? <EimUI /> : "Infrastructure disabled"}
+        {EimUI !== null ? (
+          <EimUI />
+        ) : (
+          <FeatureDisabled featureName="Infrastructure" />
+        )}
       </Suspense>
     ),
   },
@@ -81,7 +94,11 @@ export const childRoutes: RouteObject[] = [
     path: "/admin/*",
     element: (
       <Suspense fallback={<SquareSpinner message="One moment..." />}>
-        {Admin !== null ? <Admin /> : "Administration disabled"}
+        {Admin !== null ? (
+          <Admin />
+        ) : (
+          <FeatureDisabled featureName="Administration" />
+        )}
       </Suspense>
     ),
   },
