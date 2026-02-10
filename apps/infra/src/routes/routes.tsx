@@ -4,6 +4,7 @@
  */
 
 import {
+  FeatureDisabled,
   PageNotFound,
   PermissionDenied,
   RBACWrapper,
@@ -144,6 +145,20 @@ if (RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
   addClusterRoute(clusterDetailRoute, ClusterDetail);
   addClusterRoute(clusterEditRoute, ClusterEdit);
   addClusterRoute(clusterCreateRoute, ClusterCreation);
+} else {
+  // Add disabled message routes when CLUSTER_ORCH is not enabled
+  const disabledRoutes = [
+    clusterManagementRoute,
+    clusterDetailRoute,
+    clusterEditRoute,
+    clusterCreateRoute,
+  ];
+  disabledRoutes.forEach((path) => {
+    routes.push({
+      path,
+      element: <FeatureDisabled featureName="Cluster Orchestration" />,
+    });
+  });
 }
 
 export const childRoutes = routes;
