@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { catalog, cm, tm } from "@orch-ui/apis";
+import { catalog, cm } from "@orch-ui/apis";
 import { TablePom } from "@orch-ui/components";
 import { SiTablePom } from "@orch-ui/poms";
 import { Cy, CyApiDetails, CyPom, defaultActiveProject } from "@orch-ui/tests";
@@ -17,7 +17,6 @@ import {
   packageWithParameterTemplates,
 } from "@orch-ui/utils";
 import DeploymentProfileFormPom from "../../organisms/profiles/DeploymentProfileForm/DeploymentProfileForm.pom";
-import NetworkInterconnectPom from "../../organisms/setup-deployments/NetworkInterconnect/NetworkInterconnect.pom";
 import { ReviewPom } from "../../organisms/setup-deployments/Review/Review.pom";
 import SelectClusterPom from "../../organisms/setup-deployments/SelectCluster/SelectCluster.pom";
 import SelectDeploymentTypePom from "../../organisms/setup-deployments/SelectDeploymentType/SelectDeploymentType.pom";
@@ -30,8 +29,6 @@ const cs = new ClusterStore();
 const dataCySelectors = ["nextBtn", "stepper"] as const;
 type Selectors = (typeof dataCySelectors)[number];
 
-type ProjectApiAliases = "getProjectNetworks" | "emptyProjectNetworks";
-
 type DeploymentPackagesApiAliases =
   | "getDeploymentPackages"
   | "getDeploymentPackagesMocked"
@@ -40,7 +37,6 @@ type DeploymentPackagesApiAliases =
 type DeploymentPackageApiAliases = "getDeploymentPackageSingleMocked";
 
 type ApiAliases =
-  | ProjectApiAliases
   | DeploymentPackagesApiAliases
   | DeploymentPackageApiAliases
   | "postDeployment"
@@ -83,41 +79,6 @@ const deploymentPackagesApis: CyApiDetails<
   },
 };
 
-const projectApis: CyApiDetails<
-  ProjectApiAliases,
-  tm.ListV1ProjectsProjectProjectNetworksApiResponse
-> = {
-  emptyProjectNetworks: {
-    route: `**/v1/projects/${project}/networks`,
-    statusCode: 200,
-    response: [],
-  },
-  getProjectNetworks: {
-    route: `**/v1/projects/${project}/networks`,
-    statusCode: 200,
-    response: [
-      {
-        name: "Network one",
-        spec: {
-          description: "first network",
-        },
-      },
-      {
-        name: "Network two",
-        spec: {
-          description: "second network",
-        },
-      },
-      {
-        name: "Network three",
-        spec: {
-          description: "third network",
-        },
-      },
-    ],
-  },
-};
-
 const deploymentPackageApis: CyApiDetails<
   DeploymentPackageApiAliases,
   catalog.GetDeploymentPackageResponse
@@ -132,7 +93,6 @@ const deploymentPackageApis: CyApiDetails<
 };
 
 const apis: CyApiDetails<ApiAliases> = {
-  ...projectApis,
   ...deploymentPackagesApis,
   ...deploymentPackageApis,
   postDeploymentMocked: {
@@ -168,7 +128,6 @@ class SetupDeploymentPom extends CyPom<Selectors, ApiAliases> {
   selectCluster: SelectClusterPom;
   metadataPom: SetupMetadataPom;
   reviewPom: ReviewPom;
-  networkInterconnect: NetworkInterconnectPom;
 
   constructor(public rootCy: string = "setupDeployment") {
     super(rootCy, [...dataCySelectors], apis);
@@ -181,7 +140,6 @@ class SetupDeploymentPom extends CyPom<Selectors, ApiAliases> {
     this.selectCluster = new SelectClusterPom();
     this.metadataPom = new SetupMetadataPom();
     this.reviewPom = new ReviewPom("review");
-    this.networkInterconnect = new NetworkInterconnectPom();
   }
 
   // TODO: Below `code block` can be removed as it is only used in a e2e test
