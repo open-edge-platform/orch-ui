@@ -4,10 +4,10 @@ apiVersion: v2
 name: orch-ui-root
 description: Deploy Edge Orchestrator UI pods on Kubernetes
 type: application
-version: 4.0.5
+version: 4.0.6-dev
 # Default appVersion will be overwritten by a the build to use the version from package.json.
 
 # This value is supplied only to enable local unbuilt deployment of released content.
-appVersion: "4.0.5"
+appVersion: "4.0.6-dev"
 annotations: {}
 dependencies: []
