@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm, catalog, cm, mbApi, tm } from "@orch-ui/apis";
+import { adm, catalog, cm, mbApi } from "@orch-ui/apis";
 import {
   MetadataPair,
   setActiveNavItem,
@@ -48,7 +48,6 @@ import {
 } from "../../../store/reducers/setupDeployment";
 import { setProps } from "../../../store/reducers/toast";
 import ChangeProfileValues from "../../organisms/edit-deployments/ChangeProfileValues/ChangeProfileValues";
-import NetworkInterconnect from "../../organisms/setup-deployments/NetworkInterconnect/NetworkInterconnect";
 import Review from "../../organisms/setup-deployments/Review/Review";
 import SelectCluster, {
   SelectClusterMode,
@@ -76,7 +75,6 @@ enum SetupDeploymentSteps {
   "Select a Package",
   "Select a Profile",
   "Override Profile Values",
-  "Network Interconnect",
   "Select Deployment Type",
   "Enter Deployment Details",
   "Review",
@@ -118,24 +116,7 @@ const SetupDeployment = () => {
     setupDeploymentHasEmptyMandatoryParams,
   );
 
-  // Step 4: Network Interconnect
-  const { data: networks, isSuccess: networksLoaded } =
-    tm.useListV1ProjectsProjectProjectNetworksQuery({
-      "project.Project": SharedStorage.project?.name ?? "",
-    });
-  const [projectNetworks, setProjectNetworks] = useState<string[]>([]);
-  const [selectedNetwork, setSelectedNetwork] = useState<string>("");
-  const [exposedServices, setExposedServices] = useState<adm.ServiceExport[]>(
-    [],
-  );
-
-  useEffect(() => {
-    if (networksLoaded && networks) {
-      setProjectNetworks(networks.map((n) => n.name!));
-    }
-  }, [networksLoaded]);
-
-  // Step 5: Select Deployment type states
+  // Step 4: Select Deployment type states
   const [type, setType] = useState<DeploymentType>(DeploymentType.UNDEFINED);
   const [currentMetadata, setCurrentMetadata] = useState<MetadataPair[]>([]); // upon DeploymentType.Automatic
 
@@ -172,28 +153,16 @@ const SetupDeployment = () => {
   }, []);
 
   useEffect(() => {
-    const deploymentPackageKind = currentDeploymentPackage?.kind;
     const steps = Object.keys(SetupDeploymentSteps)
       // filter out the reverse mappings of enums in typescript
-      .filter((key) => !isNaN(Number(key)))
-      .filter((key) => {
-        if (SetupDeploymentSteps[Number(key)] === "Network Interconnect") {
-          return (
-            networksLoaded &&
-            projectNetworks.length &&
-            deploymentPackageKind !== "KIND_EXTENSION"
-          );
-        } else {
-          return true;
-        }
-      });
+      .filter((key) => !isNaN(Number(key)));
     setSteps(
       steps
         // create step using enum values
         .map((key) => ({ text: SetupDeploymentSteps[Number(key)] })),
     );
     setAvailableSteps(steps.map((key) => Number(key)));
-  }, [networksLoaded, projectNetworks, currentDeploymentPackage]);
+  }, [currentDeploymentPackage]);
 
   /** Setup a Deployment - header steps configuration */
 
@@ -270,38 +239,6 @@ const SetupDeployment = () => {
             deploymentPackage={currentDeploymentPackage ?? undefined}
             deploymentProfile={currentPackageProfile ?? undefined}
           />
-        );
-        break;
-      case SetupDeploymentSteps["Network Interconnect"]:
-        nextJsx = (
-          <NetworkInterconnect
-            networks={projectNetworks}
-            selectedNetwork={selectedNetwork}
-            applications={currentDeploymentPackage?.applicationReferences}
-            selectedServices={exposedServices}
-            onNetworkUpdate={(value) => {
-              setSelectedNetwork(value);
-              if (value === "") {
-                setExposedServices((prev) => {
-                  const curr = prev;
-                  curr.forEach((se) => {
-                    se.enabled = false;
-                  });
-                  return curr;
-                });
-              }
-            }}
-            onExportsUpdate={(appRef, isExported) => {
-              setExposedServices((prev) => {
-                const curr = prev;
-                const idx = curr.findIndex(
-                  ({ appName }) => appName === appRef.name,
-                );
-                curr[idx].enabled = isExported;
-                return curr;
-              });
-            }}
-          ></NetworkInterconnect>
         );
         break;
       case SetupDeploymentSteps["Select Deployment Type"]:
@@ -432,19 +369,6 @@ const SetupDeployment = () => {
     }
   }, [currentStep, currentMetadata, selectedClusters, currentDeploymentName]);
 
-  useEffect(() => {
-    if (currentDeploymentPackage?.applicationReferences) {
-      setExposedServices(
-        currentDeploymentPackage?.applicationReferences.map((appRef) => {
-          return {
-            appName: appRef.name,
-            enabled: false,
-          };
-        }),
-      );
-    }
-  }, [currentDeploymentPackage?.applicationReferences]);
-
   const convertMetadataPairsToObject = (
     metadataPairs: MetadataPair[],
   ): { [key: string]: string } =>
@@ -459,8 +383,6 @@ const SetupDeployment = () => {
     applicationPackage: catalog.DeploymentPackage | null,
     deploymentName: string | null,
     overrideValuesDict: { [key: string]: adm.OverrideValues },
-    networkName: string,
-    serviceExports: adm.ServiceExport[],
   ): Promise<boolean> => {
     // if we don't have:
     // - a package selected
@@ -520,8 +442,6 @@ const SetupDeployment = () => {
         deploymentType: type,
         overrideValues: overrideValues || [],
         publisherName: "intel", // FIXME remove once the API support it
-        networkName,
-        serviceExports: networkName !== "" ? serviceExports : [],
       },
     })
       .unwrap()
@@ -569,8 +489,6 @@ const SetupDeployment = () => {
       currentDeploymentPackage,
       currentDeploymentName,
       profileParameterOverrides,
-      selectedNetwork,
-      exposedServices,
     );
     setIsDeploying(false);
     if (!isDeploymentCreated) return;
