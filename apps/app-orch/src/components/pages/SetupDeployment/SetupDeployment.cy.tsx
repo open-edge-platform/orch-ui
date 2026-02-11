@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  packageOneExtension,
-  packageThree,
-  packageWithParameterTemplates,
-} from "@orch-ui/utils";
+import { packageThree, packageWithParameterTemplates } from "@orch-ui/utils";
 import { nameErrorMsgForRequired } from "../../../utils/global";
 import SetupDeployment from "./SetupDeployment";
 import SetupDeploymentPom from "./SetupDeployment.pom";
@@ -70,10 +66,7 @@ const deploymentAutomaticSetupMetadataTest = () => {
 describe("<SetupDeployment>", () => {
   describe("when step1: composite applications list is provided empty", () => {
     it("should disable Next Button when composite applications empty list", () => {
-      pom.interceptApis([
-        pom.api.getDeploymentPackagesEmpty,
-        pom.api.emptyProjectNetworks,
-      ]);
+      pom.interceptApis([pom.api.getDeploymentPackagesEmpty]);
       cy.mount(<SetupDeployment />);
       pom.waitForApis();
       pom.selectPackage.root.should(
@@ -86,10 +79,7 @@ describe("<SetupDeployment>", () => {
 
   describe("when step1: composite applications list is provided", () => {
     beforeEach(() => {
-      pom.interceptApis([
-        pom.api.getDeploymentPackagesMocked,
-        pom.api.emptyProjectNetworks,
-      ]);
+      pom.interceptApis([pom.api.getDeploymentPackagesMocked]);
       cy.mount(<SetupDeployment />);
       pom.waitForApis();
 
@@ -389,106 +379,6 @@ describe("<SetupDeployment>", () => {
           },
         );
       });
-    });
-  });
-
-  describe("with project networks (interconnect)", () => {
-    beforeEach(() => {
-      pom.interceptApis([
-        pom.api.getDeploymentPackagesMocked,
-        pom.api.getProjectNetworks,
-      ]);
-      cy.mount(<SetupDeployment />);
-      pom.waitForApis();
-
-      pom.selectPackage.root.should("be.visible");
-    });
-
-    it("should render", () => {
-      pom.root.should("exist");
-    });
-
-    describe("get to network interconnect step", () => {
-      beforeEach(() => {
-        pom.selectPackage.selectDeploymentPackageByName(packageThree.name);
-        pom.interceptApis([pom.api.getDeploymentPackageSingleMocked]);
-        pom.el.nextBtn.click();
-        pom.waitForApis();
-
-        selectProfileTest("low-perf");
-        pom.el.nextBtn.click();
-      });
-
-      it("select no network", () => {
-        pom.networkInterconnect.selectNetwork("None");
-        pom.el.nextBtn.click();
-        pom.selectType.radioCardAutomatic.root
-          .find(".spark-radio-button")
-          .click();
-        pom.el.nextBtn.click();
-        deploymentAutomaticSetupMetadataTest();
-        pom.interceptApis([pom.api.postDeploymentMocked]);
-        pom.el.nextBtn.click();
-        pom.waitForApis();
-
-        cy.get(`@${pom.api.postDeploymentMocked}`)
-          .its("request.body")
-          .should("deep.include", {
-            appName: "smart-checkout-package",
-            appVersion: "0.0.1",
-            networkName: "",
-            serviceExports: [],
-          });
-
-        cy.get("#pathname").contains("/applications/deployments");
-      });
-
-      it("select existing network", () => {
-        pom.networkInterconnect.selectNetwork("Network two");
-        pom.networkInterconnect.table
-          .getRow(1)
-          .find("[data-cy='rowSelectCheckbox']")
-          .click();
-        pom.el.nextBtn.click();
-
-        pom.selectType.radioCardAutomatic.root
-          .find(".spark-radio-button")
-          .click();
-        pom.el.nextBtn.click();
-        deploymentAutomaticSetupMetadataTest();
-        pom.interceptApis([pom.api.postDeploymentMocked]);
-        pom.el.nextBtn.click();
-        pom.waitForApis();
-
-        cy.get(`@${pom.api.postDeploymentMocked}`)
-          .its("request.body")
-          .should("deep.include", {
-            appName: "smart-checkout-package",
-            appVersion: "0.0.1",
-            networkName: "Network two",
-            serviceExports: [
-              { appName: "postgres", enabled: true },
-              { appName: "nginx", enabled: false },
-              { appName: "librespeed", enabled: false },
-              { appName: "console", enabled: false },
-              { appName: "inference-engine", enabled: false },
-              { appName: "wordpress", enabled: false },
-            ],
-          });
-
-        cy.get("#pathname").contains("/applications/deployments");
-      });
-    });
-
-    it("should hide interconnect step for extensions", () => {
-      pom.el.stepper
-        .find("li[text='Network Interconnect']")
-        .its("length")
-        .should("eq", 1);
-      pom.selectPackage.selectDeploymentPackageByName(packageOneExtension.name);
-      pom.el.stepper
-        .find("li[text='Network Interconnect']")
-        .should("not.exist");
     });
   });
 });
