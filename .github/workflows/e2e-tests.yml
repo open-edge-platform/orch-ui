@@ -24,7 +24,6 @@ jobs:
       run_build: true
       prefix_tag_separator: "/"
       project_folder: tests
-      orch_ci_repo_ref: main
 #   run-e2e-tests-pipeline:
 #     runs-on: 'ubuntu-latest'
 #     steps:
