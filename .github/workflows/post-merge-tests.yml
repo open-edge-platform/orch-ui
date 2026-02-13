@@ -36,7 +36,6 @@ jobs:
       run_version_dev: true
       prefix_tag_separator: "/"
       project_folder: tests
-      orch_ci_repo_ref: main
       trivy_image_skip: "ghcr.io/dependabot/dependabot-updater-core:latest"
     secrets:
       SYS_EMF_GH_TOKEN: ${{ secrets.SYS_EMF_GH_TOKEN }}

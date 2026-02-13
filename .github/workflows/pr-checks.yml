@@ -112,7 +112,6 @@ jobs:
       run_reuse_check: true
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
-      orch_ci_repo_ref: main
       version_suffix: "-pr-${{ github.event.number }}"
     secrets: inherit
 
