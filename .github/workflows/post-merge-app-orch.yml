@@ -36,7 +36,6 @@ jobs:
       run_version_tag: true
       prefix_tag_separator: "/"
       project_folder: apps/app-orch
-      orch_ci_repo_ref: main
       run_version_dev: true
       trivy_image_skip: "ghcr.io/dependabot/dependabot-updater-core:latest"
     secrets:
