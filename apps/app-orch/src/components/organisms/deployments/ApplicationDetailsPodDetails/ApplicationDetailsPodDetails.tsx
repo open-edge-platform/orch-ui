@@ -62,8 +62,6 @@ const ApplicationDetailsPodDetails = ({
           columns={columns}
           data={containers}
           sortColumns={[0, 1, 2, 3]}
-          isServerSidePaginated={false}
-          canPaginate
         />
       ) : (
         <Empty
