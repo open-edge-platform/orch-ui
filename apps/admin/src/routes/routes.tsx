@@ -21,6 +21,7 @@ import { Navigate, RouteObject } from "react-router-dom";
 import About from "../components/pages/About/About";
 import AlertDefinitions from "../components/pages/AlertDefinitions/AlertDefinitions";
 import Alerts from "../components/pages/Alerts/Alerts";
+import DomainProfile from "../components/pages/DomainProfile/DomainProfile";
 import Projects from "../components/pages/Projects/Projects";
 import SshKeys from "../components/pages/SshKeys/SshKeys";
 import Layout from "../components/templates/Layout";
@@ -99,6 +100,13 @@ export const childRoutes: RouteObjectWithRef[] = [
     // NOTE we don't do RBAC on the project page as even if the user doesn't have
     // permission to manage projects they should still be able to see the access the page (which renders a modal with instructions)
     element: <Projects />,
+    nodeRef: createRef(),
+  },
+  {
+    path: "domain-profile",
+    // NOTE we don't do RBAC on the project page as even if the user doesn't have
+    // permission to manage projects they should still be able to see the access the page (which renders a modal with instructions)
+    element: <DomainProfile />,
     nodeRef: createRef(),
   },
   {
