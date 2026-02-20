@@ -6,6 +6,7 @@
 import {
   enhancedInfraSlice,
   omSlice as observabilityMonitor,
+  rpsSlice,
   tmSlice as tdmApi,
 } from "@orch-ui/apis";
 import {
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     enhancedInfraSlice.miEnhancedApi.reducer,
   [observabilityMonitor.reducerPath]: observabilityMonitor.reducer,
   [tdmApi.reducerPath]: tdmApi.reducer,
+  [rpsSlice.reducerPath]: rpsSlice.reducer,
 });
 
 export const setupStore = (preloadedState?: RootState) => {
@@ -35,7 +37,8 @@ export const setupStore = (preloadedState?: RootState) => {
       })
         .concat(enhancedInfraSlice.miEnhancedApi.middleware)
         .concat(observabilityMonitor.middleware)
-        .concat(tdmApi.middleware),
+        .concat(tdmApi.middleware)
+        .concat(rpsSlice.middleware),
     preloadedState,
   });
 };
@@ -49,7 +52,8 @@ export const store = configureStore({
     })
       .concat(enhancedInfraSlice.miEnhancedApi.middleware)
       .concat(observabilityMonitor.middleware)
-      .concat(tdmApi.middleware),
+      .concat(tdmApi.middleware)
+      .concat(rpsSlice.middleware),
 });
 
 setupListeners(store.dispatch);

@@ -65,9 +65,9 @@ export const projectsNavItem: CollapsableListItem<string> = {
 };
 
 export const domainProfileNavItem: CollapsableListItem<string> = {
-  route: "domain-profile",
+  route: "domains",
   icon: "globe",
-  value: "Domain Profile",
+  value: "Domains",
   divider: true,
 };
 
@@ -163,7 +163,7 @@ const Layout = () => {
     if (pathname.includes("os-profiles")) {
       return osProfilesNavItem;
     }
-    if (pathname.includes("domain-profile")) {
+    if (pathname.includes("domains")) {
       return domainProfileNavItem;
     }
     if (pathname.includes("projects")) {

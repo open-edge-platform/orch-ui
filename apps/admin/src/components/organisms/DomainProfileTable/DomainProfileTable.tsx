@@ -3,26 +3,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { rps } from "@orch-ui/apis";
 import {
   ApiError,
   columnApiNameToDisplayName,
+  ConfirmationDialog,
   Empty,
+  Popup,
+  PopupOption,
   RbacRibbonButton,
-  SortDirection,
   SquareSpinner,
   Table,
   TableColumn,
 } from "@orch-ui/components";
-import { API_INTERVAL, hasRole as hasRoleDefault, Role } from "@orch-ui/utils";
-import { Button, Icon } from "@spark-design/react";
+import {
+  Direction,
+  hasRole as hasRoleDefault,
+  parseError,
+  Role,
+  SharedStorage,
+} from "@orch-ui/utils";
+import { Heading, Icon } from "@spark-design/react";
 import {
   ButtonSize,
   ButtonVariant,
   MessageBannerAlertState,
 } from "@spark-design/tokens";
+import moment from "moment";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { showMessageNotification } from "../../../store/notifications";
 import { CreateEditDomainProfile } from "../CreateEditDomainProfile/CreateEditDomainProfile";
 import "./DomainProfileTable.scss";
@@ -31,18 +41,9 @@ const dataCy = "domainTable";
 
 export type DomainProfileModalType = "create" | "edit" | "delete";
 
-export interface DomainProfileConfig {
-  id: string;
-  domainName: string;
-  domainSuffix: string;
-  certificateFileName?: string;
-  status: "active" | "pending" | "error";
-  createdAt: string;
-}
-
 interface DomainProfileModalState {
   type?: DomainProfileModalType;
-  forDomain?: DomainProfileConfig;
+  forDomain?: rps.DomainResponse;
 }
 
 interface DomainProfileTableProps {
@@ -54,7 +55,6 @@ const DomainProfileTable = ({
 }: DomainProfileTableProps) => {
   const cy = { "data-cy": dataCy };
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
@@ -62,78 +62,109 @@ const DomainProfileTable = ({
     DomainProfileModalState | undefined
   >();
 
-  const [pollingInterval] = useState<number>(API_INTERVAL);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [domainToDelete, setDomainToDelete] = useState<
+    rps.DomainResponse | undefined
+  >();
+
+  const onCloseDeleteConfirmation = () => {
+    setDeleteConfirmationOpen(false);
+    setDomainToDelete(undefined);
+  };
 
   const onCloseModal = () => {
     setDomainModalState(undefined);
-    // Note: When using real API with polling, the table will automatically
-    // update with new data. Manual refresh not needed.
   };
 
-  // Mock data - Replace with actual API call
-  const mockDomains: DomainProfileConfig[] = [
+  const [deleteDomain] = rps.useRemoveDomainMutation();
+
+  const deleteDomainProfile = async (domain: rps.DomainResponse) => {
+    try {
+      await deleteDomain({
+        projectName: SharedStorage.project?.name ?? "",
+        profileName: domain.profileName,
+      }).unwrap();
+      dispatch(
+        showMessageNotification({
+          messageTitle: "Success",
+          messageBody: `Successfully deleted domain ${domain.profileName}.`,
+          variant: MessageBannerAlertState.Success,
+        }),
+      );
+      onCloseDeleteConfirmation();
+    } catch (error) {
+      const errorObj = parseError(error);
+      dispatch(
+        showMessageNotification({
+          messageTitle: "Error",
+          messageBody: errorObj.data,
+          variant: MessageBannerAlertState.Error,
+        }),
+      );
+    }
+  };
+
+  const getPopupOptions = (domain: rps.DomainResponse): PopupOption[] => [
     {
-      id: "1",
-      domainName: "example",
-      domainSuffix: "example.com",
-      certificateFileName: "cert.pem",
-      status: "active",
-      createdAt: "2026-02-15",
+      displayText: "Edit",
+      onSelect: () => {
+        setDomainModalState({
+          type: "edit",
+          forDomain: domain,
+        });
+      },
+    },
+    {
+      displayText: "Delete",
+      onSelect: () => {
+        setDomainToDelete(domain);
+        setDeleteConfirmationOpen(true);
+      },
     },
   ];
 
-  const columns: TableColumn<DomainProfileConfig>[] = [
+  const columns: TableColumn<rps.DomainResponse>[] = [
     {
-      Header: "Domain Name",
-      accessor: (domain) => domain.domainName ?? "-",
+      Header: "Name",
+      accessor: (domain) => domain.profileName ?? "-",
     },
     {
-      Header: "Domain Suffix",
+      Header: "Suffix",
       accessor: (domain) => domain.domainSuffix ?? "-",
     },
     {
-      Header: "Certificate",
-      accessor: (domain) => domain.certificateFileName ?? "Not provided",
+      Header: "Expiration Date",
+      accessor: (domain) =>
+        domain.expirationDate
+          ? moment(domain.expirationDate).format("YYYY-MM-DD")
+          : "N/A",
     },
     {
       Header: "Actions",
-      accessor: (item: DomainProfileConfig) => (
-        <Button
-          iconOnly
-          variant="ghost"
-          size="m"
-          onPress={() => {
-            setDomainModalState({
-              type: "edit",
-              forDomain: item,
-            });
-          }}
-          data-cy="editDomainBtn"
-        >
-          <Icon artworkStyle="light" icon="edit" altText="Edit" />
-        </Button>
+      textAlign: "center",
+      accessor: (domain: rps.DomainResponse) => (
+        <Popup
+          options={getPopupOptions(domain)}
+          jsx={<Icon icon="ellipsis-v" />}
+        />
       ),
     },
   ];
 
   const sortColumn =
-    columnApiNameToDisplayName(columns, searchParams.get("column")) ??
-    "Domain Name";
-  const sortDirection = (searchParams.get("direction") ??
-    "asc") as SortDirection;
-  const searchTerm = searchParams.get("searchTerm") ?? undefined;
+    columnApiNameToDisplayName(columns, searchParams.get("column")) ?? "Name";
+  const sortDirection = (searchParams.get("direction") ?? "asc") as Direction;
 
-  // Mock API states - Replace with actual API
-  const isSuccess = true;
-  const isError = false;
-  const isLoading = false;
-  const error = undefined;
+  const { data, isSuccess, isLoading, isError, error } =
+    rps.useGetAllDomainsQuery({
+      projectName: SharedStorage.project?.name ?? "",
+      $count: true,
+    });
 
-  const data = {
-    domains: mockDomains,
-    totalElements: mockDomains?.length ?? 0,
-  };
-
+  // Since we pass $count: true, response is always CountDomainResponse
+  const domainList = data as rps.CountDomainResponse;
+  const domainData = domainList?.data ?? [];
+  console.log("DOMAINS:", domainData);
   const getDomainTableComponent = () => {
     if (
       !hasRole([
@@ -150,14 +181,14 @@ const DomainProfileTable = ({
       return <ApiError error={error} />;
     } else if (isLoading) {
       return <SquareSpinner />;
-    } else if (isSuccess && data.totalElements === 0) {
+    } else if (isSuccess && domainData.length === 0) {
       return (
         <Empty
-          title="No domain configurations available."
+          title="No domain profiles available."
           icon="information-circle"
           actions={[
             {
-              name: "Create Domain Configuration",
+              name: "Create Domain",
               disable: !hasRole([Role.PROJECT_WRITE]),
               action: () => {
                 setDomainModalState({
@@ -174,23 +205,19 @@ const DomainProfileTable = ({
           key="domainTable"
           dataCy="domainTableList"
           columns={columns}
-          data={data.domains}
+          data={domainData}
           initialSort={{
             column: sortColumn,
             direction: sortDirection,
           }}
           sortColumns={[0]}
-          canSearch
-          searchTerm={searchTerm}
-          onSearch={() => {
-            /* TODO: search actions */
-          }}
+          canSearch={false}
           actionsJsx={
             <RbacRibbonButton
               name="createDomainBtn"
               size={ButtonSize.Large}
               variant={ButtonVariant.Action}
-              text="Create Domain Configuration"
+              text="Create Domain"
               onPress={() =>
                 setDomainModalState({
                   type: "create",
@@ -208,6 +235,9 @@ const DomainProfileTable = ({
 
   return (
     <div {...cy} className="domain-table">
+      <Heading semanticLevel={1} size="l" data-cy="projectsTitle">
+        Manage Domains
+      </Heading>
       {getDomainTableComponent()}
 
       {(domainModalState?.type === "create" ||
@@ -216,11 +246,11 @@ const DomainProfileTable = ({
           isOpen
           onClose={onCloseModal}
           editDomain={domainModalState.forDomain}
-          onCreateEdit={(domainName) => {
+          onCreateEdit={() => {
             dispatch(
               showMessageNotification({
                 messageTitle: "Success",
-                messageBody: `Successfully ${domainModalState.type === "edit" ? "updated" : "created"} domain configuration`,
+                messageBody: `Successfully ${domainModalState.type === "edit" ? "updated" : "created"} domain.`,
                 variant: MessageBannerAlertState.Success,
               }),
             );
@@ -230,12 +260,25 @@ const DomainProfileTable = ({
             dispatch(
               showMessageNotification({
                 messageTitle: "Error",
-                messageBody: `Error ${domainModalState.type === "edit" ? "updating" : "creating"} domain configuration. ${errorMessage}`,
+                messageBody: `Error ${domainModalState.type === "edit" ? "updating" : "creating"} domain. ${errorMessage}`,
                 variant: MessageBannerAlertState.Error,
               }),
             );
           }}
           isDimissable
+        />
+      )}
+
+      {deleteConfirmationOpen && (
+        <ConfirmationDialog
+          content={`Are you sure you want to delete Domain "${
+            domainToDelete?.profileName ?? ""
+          }"?`}
+          isOpen={true}
+          confirmCb={() => deleteDomainProfile(domainToDelete!)}
+          confirmBtnText="Delete"
+          confirmBtnVariant={ButtonVariant.Alert}
+          cancelCb={onCloseDeleteConfirmation}
         />
       )}
     </div>
