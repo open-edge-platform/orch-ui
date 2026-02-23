@@ -139,8 +139,6 @@ const ApplicationDetailsServices = ({
           columns={servicesCols}
           data={services?.appEndpoints ?? []}
           sortColumns={[0]}
-          isServerSidePaginated={false}
-          canPaginate
         />
       )}
     </div>

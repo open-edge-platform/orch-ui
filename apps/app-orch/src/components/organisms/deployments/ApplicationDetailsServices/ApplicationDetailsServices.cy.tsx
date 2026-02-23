@@ -55,8 +55,7 @@ describe("<ApplicationDetailsServices>", () => {
     );
     pom.waitForApis();
 
-    pom.table.getRows().should("have.length", 10);
-    pom.table.getTotalItemCount().should("contain.text", 14);
+    pom.table.getRows().should("have.length", 14);
   });
 
   it("should see the target URL on Ports link", () => {
