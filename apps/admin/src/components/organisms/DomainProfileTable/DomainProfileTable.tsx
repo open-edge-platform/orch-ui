@@ -164,7 +164,7 @@ const DomainProfileTable = ({
   // Since we pass $count: true, response is always CountDomainResponse
   const domainList = data as rps.CountDomainResponse;
   const domainData = domainList?.data ?? [];
-  console.log("DOMAINS:", domainData);
+
   const getDomainTableComponent = () => {
     if (
       !hasRole([
@@ -211,7 +211,7 @@ const DomainProfileTable = ({
             direction: sortDirection,
           }}
           sortColumns={[0]}
-          canSearch={false}
+          canSearch
           actionsJsx={
             <RbacRibbonButton
               name="createDomainBtn"

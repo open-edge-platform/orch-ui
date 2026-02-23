@@ -95,7 +95,7 @@ export const CreateEditDomainProfile = ({
   const handleCreateEditSubmit = async () => {
     if (!SharedStorage.project?.name) return;
     const { profileName, domainSuffix, certificatePassword } = getValues();
-    console.log("GET VALUES:", getValues());
+
     try {
       let provisioningCert = "";
       if (certificateFile) {
@@ -114,7 +114,11 @@ export const CreateEditDomainProfile = ({
             provisioningCertStorageFormat: "string",
             version: editDomain!.version,
           },
-        }).unwrap();
+        })
+          .unwrap()
+          .then(() => {
+            if (onCreateEdit) onCreateEdit(profileName);
+          });
       } else {
         await createDomain({
           projectName: SharedStorage.project.name,
@@ -125,10 +129,13 @@ export const CreateEditDomainProfile = ({
             provisioningCertPassword: certificatePassword,
             provisioningCertStorageFormat: "string",
           },
-        }).unwrap();
+        })
+          .unwrap()
+          .then(() => {
+            if (onCreateEdit) onCreateEdit(profileName);
+          });
       }
       closeAndReset();
-      if (onCreateEdit) onCreateEdit(profileName);
     } catch (err: any) {
       if (onError) onError(err?.data?.message ?? err?.error ?? "Unknown error");
     }
@@ -202,7 +209,7 @@ export const CreateEditDomainProfile = ({
                 text={
                   isEditMode ? "Upload New Certificate" : "Upload Certificate"
                 }
-                accept=".pem,.crt,.cer,.pfx,.p12"
+                accept=".pfx"
                 onChange={handleFileUpload}
                 multiple={false}
                 type="file"
