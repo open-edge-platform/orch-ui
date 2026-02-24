@@ -166,17 +166,6 @@ const DomainProfileTable = ({
   const domainData = domainList?.data ?? [];
 
   const getDomainTableComponent = () => {
-    if (
-      !hasRole([
-        Role.PROJECT_READ,
-        Role.PROJECT_WRITE,
-        Role.PROJECT_UPDATE,
-        Role.PROJECT_DELETE,
-      ])
-    ) {
-      return;
-    }
-
     if (isError) {
       return <ApiError error={error} />;
     } else if (isLoading) {
