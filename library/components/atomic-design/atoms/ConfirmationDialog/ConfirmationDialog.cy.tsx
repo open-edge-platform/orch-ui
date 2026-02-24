@@ -160,4 +160,41 @@ describe("<ConfirmationDialog/>", () => {
       cyGet("dialog").should("exist").should("be.visible");
     });
   });
+
+  describe("reopening after dismiss", () => {
+    beforeEach(() => {
+      cy.mount(
+        <ConfirmationDialog
+          showTriggerButton
+          isOpen={false}
+          confirmCb={cy.stub().as("confirmCb")}
+          cancelCb={cy.stub().as("cancelCb")}
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          title="Test Dialog"
+          content="Test content"
+        />,
+      );
+    });
+
+    it("should reopen after being dismissed via the X button", () => {
+      pom.el.open.click();
+      cyGet("dialog").should("exist").should("be.visible");
+      cy.get(".spark-icon-cross").click();
+      pom.el.dialog.should("not.exist");
+
+      pom.el.open.click();
+      cyGet("dialog").should("exist").should("be.visible");
+    });
+
+    it("should reopen after being dismissed via the cancel button", () => {
+      pom.el.open.click();
+      cyGet("dialog").should("exist").should("be.visible");
+      cyGet("cancelBtn").click();
+      pom.el.dialog.should("not.exist");
+
+      pom.el.open.click();
+      cyGet("dialog").should("exist").should("be.visible");
+    });
+  });
 });
