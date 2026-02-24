@@ -28,3 +28,4 @@ library/utils/mocks/app-orch/index.ts
 library/utils/mocks/app-orch/adm/index.ts
 library/@spark-design
 library/@orch-utils
+library/@infra-core
