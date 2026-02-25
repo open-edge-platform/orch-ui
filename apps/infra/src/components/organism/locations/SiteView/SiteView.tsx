@@ -31,7 +31,7 @@ export const SiteView = ({ basePath, hideActions = false }: SiteViewProps) => {
     {
       projectName: SharedStorage.project?.name ?? "",
       resourceId: siteFromRedux?.resourceId ?? "",
-      regionResourceId: siteFromRedux?.region?.resourceId ?? "",
+      regionId: siteFromRedux?.region?.resourceId ?? "",
     },
     {
       skip:
