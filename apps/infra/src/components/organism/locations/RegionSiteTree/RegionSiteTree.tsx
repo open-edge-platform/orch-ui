@@ -130,7 +130,7 @@ export const RegionSiteTree = ({
     {
       projectName: SharedStorage.project?.name ?? "",
       orderBy: ORDER_BY,
-      resourceId: currentRegionId ?? "",
+      regionId: currentRegionId ?? "",
       filter: `region.resourceId="${currentRegionId}"`,
     },
     {

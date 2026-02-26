@@ -195,7 +195,7 @@ export const useProvisioning = () => {
 
         const { data: site } = await getSite({
           projectName: SharedStorage.project?.name ?? "",
-          regionResourceId: "*",
+          regionId: "*",
           resourceId: host.site?.siteID as string,
         });
 

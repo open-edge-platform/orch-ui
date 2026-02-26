@@ -100,7 +100,6 @@ export class OsResourceStore extends BaseStore<
     return {
       ...body,
       sha256: "",
-      updateSources: [],
       timestamps: {
         createdAt: currentTime,
         updatedAt: currentTime,
