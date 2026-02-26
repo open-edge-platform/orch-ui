@@ -58,6 +58,10 @@ interface ApplicationTableProps {
   hideRibbon?: boolean;
   isDialogOpen?: boolean;
 
+  /** When true, show a confirmation dialog before navigating to the add application page.
+   *  Use when ApplicationTable is embedded in a flow where navigation would lose progress (e.g. DeploymentPackageCreateEdit). */
+  confirmBeforeAdd?: boolean;
+
   // for Row Selection
   canSelect?: boolean;
   selectedIds?: string[];
@@ -76,6 +80,7 @@ const ApplicationTable = ({
   hideRibbon = false,
   manualSearch,
   isDialogOpen,
+  confirmBeforeAdd = false,
   canSelect,
   selectedIds = [],
   onSelect,
@@ -100,6 +105,14 @@ const ApplicationTable = ({
   const handleAddApplicationConfirm = () => {
     dispatch(clearApplication());
     navigate("/applications/applications/add", { relative: "path" });
+  };
+
+  const handleAddApplicationClick = () => {
+    if (confirmBeforeAdd) {
+      setShowConfirmDialog(true);
+    } else {
+      handleAddApplicationConfirm();
+    }
   };
 
   const columns: TableColumn<catalog.Application>[] = [
@@ -230,7 +243,7 @@ const ApplicationTable = ({
     if (kind === "KIND_NORMAL") {
       // Adding "Add application" action to applications
       emptyDataAction.push({
-        action: () => setShowConfirmDialog(true),
+        action: handleAddApplicationClick,
         name: `Add ${applicationType}`,
         disable: !hasPermission,
       });
@@ -258,9 +271,7 @@ const ApplicationTable = ({
     hasPermission ? (
       <Button
         data-cy="newAppRibbonButton"
-        onPress={() => {
-          setShowConfirmDialog(true);
-        }}
+        onPress={handleAddApplicationClick}
         isDisabled={!hasPermission}
       >
         Add Application
@@ -274,9 +285,7 @@ const ApplicationTable = ({
       >
         <Button
           data-cy="newAppRibbonButton"
-          onPress={() => {
-            setShowConfirmDialog(true);
-          }}
+          onPress={handleAddApplicationClick}
           isDisabled={!hasPermission}
         >
           Add Application
@@ -430,7 +439,7 @@ const ApplicationTable = ({
         />
       )}
 
-      {showConfirmDialog && (
+      {confirmBeforeAdd && showConfirmDialog && (
         <ConfirmationDialog
           isOpen={true}
           title="Confirm Navigation"
