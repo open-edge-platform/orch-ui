@@ -87,8 +87,7 @@ export const CreateEditDomainProfile = ({
   const [createDomain, { isLoading: isCreating }] =
     rps.useCreateDomainMutation();
 
-  const [updateDomainSuffix, { isLoading: isUpdating }] =
-    rps.useUpdateDomainSuffixMutation();
+  const [updateDomainSuffix] = rps.useUpdateDomainSuffixMutation();
 
   const isEditMode = !!editDomain;
 

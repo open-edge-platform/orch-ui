@@ -8,9 +8,7 @@ import "./DomainProfile.scss";
 
 const dataCy = "domain";
 
-interface DomainProfileProps {}
-
-const DomainProfile = ({}: DomainProfileProps) => {
+const DomainProfile = () => {
   const cy = { "data-cy": dataCy };
 
   return (
