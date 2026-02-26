@@ -21,7 +21,7 @@ type ApiAliases =
   | "getRegionTelemetryMetricsEmpty"
   | "getRegionTelemetryMetrics500";
 
-const regionMetricsUrl = "**/metricprofiles?regionId=region-1.0";
+const regionMetricsUrl = "**/profiles/metrics?regionId=region-1.0";
 export const regionTelemetryMetricsResponse: infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse =
   {
     telemetryMetricsProfiles: [
@@ -40,7 +40,7 @@ export const regionTelemetryMetricsResponse: infra.TelemetryMetricsProfileServic
   };
 
 const endpoints: CyApiDetails<ApiAliases> = {
-  getRegionTelemetryMetrics: { route: "**/metricprofiles*", statusCode: 200 },
+  getRegionTelemetryMetrics: { route: "**/profiles/metrics*", statusCode: 200 },
   getRegionTelemetryMetricsMocked: {
     route: regionMetricsUrl,
     statusCode: 200,

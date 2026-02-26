@@ -124,5 +124,5 @@
       "@orch-ui/infra-poms": ["apps/infra/pom.ts"],
     }
   },
-  "exclude": ["node_modules", "**/dist", "library/@orch-utils"]
+  "exclude": ["node_modules", "**/dist", "library/@orch-utils", "library/@infra-core"]
 }

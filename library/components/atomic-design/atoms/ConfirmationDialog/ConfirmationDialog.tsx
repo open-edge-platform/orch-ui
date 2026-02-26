@@ -121,7 +121,14 @@ export const ConfirmationDialog = ({
 
   return (
     <div {...cy} className={cssSelector}>
-      <DialogTrigger isDismissible defaultOpen={isOpen} size={size}>
+      <DialogTrigger
+        isDismissible
+        defaultOpen={isOpen}
+        size={size}
+        onOpenChange={(open: boolean) => {
+          if (!open && cancelCb) cancelCb();
+        }}
+      >
         <Button
           id={triggerButtonId}
           data-cy="open"
@@ -146,7 +153,6 @@ export const ConfirmationDialog = ({
                   className="cd-button"
                   variant={cancelBtnVariant}
                   onPress={() => {
-                    if (cancelCb) cancelCb();
                     close();
                   }}
                   data-cy="cancelBtn"

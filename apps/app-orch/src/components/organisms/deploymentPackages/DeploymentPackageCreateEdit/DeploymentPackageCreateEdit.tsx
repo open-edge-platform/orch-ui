@@ -352,6 +352,7 @@ const DeploymentPackageCreateEdit = ({
               });
             }}
             kind={deploymentPackage.kind ?? "KIND_NORMAL"}
+            confirmBeforeAdd
           />
           <div className="deployment-package-create-edit__footer">
             <Button
