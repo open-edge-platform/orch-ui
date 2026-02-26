@@ -103,7 +103,7 @@ export const CreateEditDomainProfile = ({
       }
 
       if (isEditMode) {
-        updateDomainSuffix({
+        await updateDomainSuffix({
           projectName: SharedStorage.project.name,
           domainPatch: {
             profileName,
@@ -117,6 +117,7 @@ export const CreateEditDomainProfile = ({
           .unwrap()
           .then(() => {
             if (onCreateEdit) onCreateEdit(profileName);
+            closeAndReset();
           });
       } else {
         await createDomain({
@@ -132,9 +133,9 @@ export const CreateEditDomainProfile = ({
           .unwrap()
           .then(() => {
             if (onCreateEdit) onCreateEdit(profileName);
+            closeAndReset();
           });
       }
-      closeAndReset();
     } catch (err: any) {
       if (onError) onError(err?.data?.message ?? err?.error ?? "Unknown error");
     }
