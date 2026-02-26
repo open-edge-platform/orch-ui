@@ -104,8 +104,6 @@ export const childRoutes: RouteObjectWithRef[] = [
   },
   {
     path: "domains",
-    // NOTE we don't do RBAC on the project page as even if the user doesn't have
-    // permission to manage projects they should still be able to see the access the page (which renders a modal with instructions)
     element: <DomainProfile />,
     nodeRef: createRef(),
   },
