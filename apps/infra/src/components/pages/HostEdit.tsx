@@ -116,7 +116,7 @@ const HostEdit = () => {
       // IMPORTANT: we used the "rid" fallback to pass anything else than empty string
       // for 24.11 api requires any non-empty value to return the site data
       // currently the host object does not contain the data about region
-      regionResourceId: host?.site?.region?.resourceId ?? "rid",
+      regionId: host?.site?.region?.resourceId ?? "rid",
       projectName: SharedStorage.project?.name ?? "",
       resourceId: host?.site?.siteID ?? "",
     },
@@ -169,7 +169,7 @@ const HostEdit = () => {
       {
         projectName: SharedStorage.project?.name ?? "",
         filter: `region.resourceId='${selectedRegion?.resourceId ?? ""}'`,
-        resourceId: selectedRegion?.resourceId ?? "",
+        regionId: selectedRegion?.resourceId ?? "",
       },
       { skip: !host || !selectedRegion?.resourceId },
     );
