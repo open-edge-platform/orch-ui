@@ -145,7 +145,7 @@ For support, start with [Troubleshooting] or [Contact us].
 
 ## License
 
-Orchestrator GUI Web User Interface is licensed under [Apache-2.0](./LICENSES/Apache-2.0.txt).
+Orchestrator GUI Web User Interface is licensed under [Apache-2.0](./LICENSE).
 
 Last Updated Date: April 7, 2025
 
