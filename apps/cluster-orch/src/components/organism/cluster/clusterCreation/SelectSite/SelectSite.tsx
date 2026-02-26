@@ -57,7 +57,7 @@ const SelectSite = ({
   const { data: preSelectedSite, isLoading } = infra.useSiteServiceGetSiteQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      regionResourceId: preRegionId ?? "*",
+      regionId: preRegionId ?? "*",
       resourceId: preSiteId ?? "",
     },
     { skip: !preSiteId || !SharedStorage.project?.name },

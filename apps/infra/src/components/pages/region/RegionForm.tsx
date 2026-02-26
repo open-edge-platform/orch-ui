@@ -132,7 +132,6 @@ const RegionForm: React.FC = () => {
     isLoading: profileMetricLoading,
   } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     {
-      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId,
     },
@@ -149,7 +148,6 @@ const RegionForm: React.FC = () => {
     isLoading: profileLogLoading,
   } = infra.useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery(
     {
-      resourceId: "group-id", //TODO: evaluate
       projectName: SharedStorage.project?.name ?? "",
       regionId: regionId,
     },
@@ -399,7 +397,6 @@ const RegionForm: React.FC = () => {
         if (metricPair.profileId != "") {
           allPromises.push(
             editMetricProfile({
-              metricgroupResourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               resourceId: metricPair.profileId,
               telemetryMetricsProfileResource: metricProfile,
@@ -408,7 +405,6 @@ const RegionForm: React.FC = () => {
         } else {
           allPromises.push(
             createMetricProfile({
-              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               telemetryMetricsProfileResource: metricProfile,
             }),
@@ -427,7 +423,6 @@ const RegionForm: React.FC = () => {
         if (logPair.profileId != "") {
           allPromises.push(
             editLogProfile({
-              loggroupResourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               resourceId: logPair.profileId,
               telemetryLogsProfileResource: logProfile,
@@ -436,7 +431,6 @@ const RegionForm: React.FC = () => {
         } else {
           allPromises.push(
             createLogProfile({
-              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               telemetryLogsProfileResource: logProfile,
             }),
@@ -456,7 +450,6 @@ const RegionForm: React.FC = () => {
           ) {
             allPromises.push(
               deleteMetricProfile({
-                metricgroupResourceId: "group-id", //TODO: evaluate
                 projectName: SharedStorage.project?.name ?? "",
                 resourceId: responsePair.profileId,
               }),
@@ -472,7 +465,6 @@ const RegionForm: React.FC = () => {
           ) {
             allPromises.push(
               deleteLogProfile({
-                loggroupResourceId: "group-id", //TODO: not used in real endpoint
                 projectName: SharedStorage.project?.name ?? "",
                 resourceId: responsePair.profileId,
               }),

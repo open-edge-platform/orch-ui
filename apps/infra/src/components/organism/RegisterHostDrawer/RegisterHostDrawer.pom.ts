@@ -20,7 +20,7 @@ type ApiAliases = "postRegisterHost200" | "patchRegisterHost200";
 export const endpoints: CyApiDetails<ApiAliases> = {
   postRegisterHost200: {
     method: "POST",
-    route: "**/compute/hosts/register",
+    route: "**/compute/hosts/register**",
     statusCode: 200,
   },
   patchRegisterHost200: {

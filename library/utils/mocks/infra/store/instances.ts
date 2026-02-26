@@ -56,7 +56,6 @@ export const instanceOne: enhancedInfraSlice.InstanceReadModified = {
   kind: "INSTANCE_KIND_METAL",
   currentState: "INSTANCE_STATE_RUNNING",
   os: osUbuntu,
-  currentOs: osUbuntu,
   securityFeature: "SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION",
   workloadMembers: [
     {
@@ -158,7 +157,6 @@ export const instanceFour: enhancedInfraSlice.InstanceReadModified = {
   provisioningStatusTimestamp: +new Date(),
   updateStatusIndicator: "STATUS_INDICATION_ERROR",
   updateStatus: "Update Failed",
-  updateStatusDetail: "Detailed error message",
   updateStatusTimestamp: +new Date(),
 };
 

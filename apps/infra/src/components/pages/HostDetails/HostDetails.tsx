@@ -115,7 +115,7 @@ const HostDetails: React.FC = () => {
   const sitesQuery = infra.useSiteServiceListSitesQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      resourceId: "*", // sitesFiltered logic can be updated with host regionId mapping
+      regionId: "*", // sitesFiltered logic can be updated with host regionId mapping
       pageSize: 100,
     },
     {

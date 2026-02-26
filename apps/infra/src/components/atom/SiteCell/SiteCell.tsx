@@ -23,7 +23,7 @@ const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
     isError,
   } = infra.useSiteServiceGetSiteQuery(
     {
-      regionResourceId: regionId,
+      regionId,
       projectName: SharedStorage.project?.name ?? "",
       resourceId: siteId!,
     },
