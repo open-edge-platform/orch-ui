@@ -1,0 +1,18 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.v-pro-activation-mode-modal {
+    &-footer {
+        display: flex;
+    }
+
+    &-activate-btn {
+        margin-left: 16px;
+    }
+
+    &-radio-group {
+        margin-top: 16px;
+    }
+}
