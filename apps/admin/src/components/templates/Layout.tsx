@@ -119,7 +119,6 @@ const Layout = () => {
       ])
     ) {
       items.push(projectsNavItem);
-      items.push(domainProfileNavItem); // TODO: check permissions
     }
     if (
       RuntimeConfig.isEnabled("ALERTS") &&
@@ -143,6 +142,7 @@ const Layout = () => {
       items.push(osProfilesNavItem);
       items.push(osUpdatePolicyNavItem);
       items.push(sshNavItem);
+      items.push(domainProfileNavItem);
     }
 
     items.push(aboutNavItem);

@@ -256,15 +256,6 @@ export const CreateEditDomainProfile = ({
           </div>
 
           <ButtonGroup align={ButtonGroupAlignment.Start}>
-            <Button
-              data-cy="submitDomain"
-              type="submit"
-              isDisabled={!isValid || !certificateFile || isCreating}
-              size={ButtonSize.Medium}
-              variant={ButtonVariant.Action}
-            >
-              {isEditMode ? "Update" : "Create"}
-            </Button>
             {isDimissable && (
               <Button
                 data-cy="cancel"
@@ -275,6 +266,15 @@ export const CreateEditDomainProfile = ({
                 Cancel
               </Button>
             )}
+            <Button
+              data-cy="submitDomain"
+              type="submit"
+              isDisabled={!isValid || !certificateFile || isCreating}
+              size={ButtonSize.Medium}
+              variant={ButtonVariant.Action}
+            >
+              {isEditMode ? "Update" : "Create"}
+            </Button>
           </ButtonGroup>
         </form>
       </Modal>
