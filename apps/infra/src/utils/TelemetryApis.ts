@@ -15,7 +15,7 @@ export const telemetryProfilesMetricsEndpoints: CyApiDetails<
   infra.TelemetryMetricsProfileServiceListTelemetryMetricsProfilesApiResponse
 > = {
   getTelemetryProfilesMetricsMocked: {
-    route: `${baseRoute}metricgroups/**/metricprofiles?*`,
+    route: `${baseRoute}profiles/metrics?*`,
     response: {
       telemetryMetricsProfiles: [],
       totalElements: 0,
@@ -30,7 +30,7 @@ export const telemetryProfilesLogsEndpoints: CyApiDetails<
   infra.TelemetryLogsProfileServiceListTelemetryLogsProfilesApiResponse
 > = {
   getTelemetryProfilesLogsMocked: {
-    route: `${baseRoute}loggroups/**/logprofiles?*`,
+    route: `${baseRoute}/profiles/logs?*`,
     response: { telemetryLogsProfiles: [], totalElements: 0, hasNext: false },
   },
 };

@@ -323,6 +323,7 @@ export const handlers = [
 
   // site
   http.get(`${baseURL}/regions/:resourceId/sites`, async ({ params }) => {
+    // @ts-ignore
     const { resourceId } =
       params as unknown as infra.SiteServiceListSitesApiArg;
 

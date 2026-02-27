@@ -13,7 +13,6 @@ export const createOsUpdatePolicy = (
   description: string,
   updatePolicy: infra.UpdatePolicy,
   targetOs?: infra.OperatingSystemResourceRead,
-  installPackages?: string,
   updateSources?: string[],
   kernelCommand?: string,
 ): infra.OsUpdatePolicyRead => {
@@ -22,9 +21,8 @@ export const createOsUpdatePolicy = (
     resourceId: id,
     name,
     description,
-    installPackages: installPackages || "",
     updateSources: updateSources || [],
-    kernelCommand: kernelCommand || "",
+    updateKernelCommand: kernelCommand || "",
     targetOs,
     updatePolicy,
     timestamps: {
@@ -49,7 +47,6 @@ export const osUpdatePolicyLatest = createOsUpdatePolicy(
   "Automated security updates policy for production environments",
   "UPDATE_POLICY_LATEST" as infra.UpdatePolicy,
   osUbuntu, // Use the actual OS resource
-  "security-updates kernel-updates",
   ["https://security-updates.example.com/repo"],
   "grub-reboot 0",
 );
@@ -60,7 +57,6 @@ export const osUpdatePolicyUnspecified = createOsUpdatePolicy(
   "Default update policy with unspecified behavior",
   "UPDATE_POLICY_UNSPECIFIED" as infra.UpdatePolicy,
   osRedHat, // Use the actual OS resource
-  "critical-patches",
   ["https://critical-updates.example.com/repo"],
 );
 

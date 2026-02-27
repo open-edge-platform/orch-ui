@@ -163,7 +163,7 @@ function ClusterDetail({ hasHeader = true, name }: ClusterDetailProps) {
   const { data: siteData } = infra.useSiteServiceGetSiteQuery(
     {
       projectName: SharedStorage.project?.name ?? "",
-      regionResourceId: "*", // Cluster or associated host have no region information
+      regionId: "*", // Cluster or associated host have no region information
       resourceId: siteId ?? "",
     },
     { skip: !siteId || !SharedStorage.project?.name },

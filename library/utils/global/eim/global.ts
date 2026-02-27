@@ -110,10 +110,7 @@ export const hostToStatuses = (
       hgs.updateStatus = {
         indicator:
           instance.updateStatusIndicator ?? "STATUS_INDICATION_UNSPECIFIED",
-        message: statusWithDetails(
-          instance.updateStatus ?? "",
-          instance.updateStatusDetail,
-        ),
+        message: statusWithDetails(instance.updateStatus ?? ""),
         timestamp: instance.updateStatusTimestamp,
       };
     }

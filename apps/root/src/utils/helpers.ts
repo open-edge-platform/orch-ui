@@ -179,7 +179,7 @@ export const getSite = async (
   } = await dispatch(
     infra.infra.endpoints.siteServiceGetSite.initiate({
       resourceId: siteId,
-      regionResourceId: "*", // host have no region information
+      regionId: "*", // host have no region information
       projectName: SharedStorage.project?.name ?? "",
     }),
   );

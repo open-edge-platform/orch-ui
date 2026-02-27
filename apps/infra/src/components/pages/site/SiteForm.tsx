@@ -77,7 +77,7 @@ const SiteForm = () => {
     error,
   } = infra.useSiteServiceGetSiteQuery(
     {
-      regionResourceId: regionId ?? "", //TODO: not used in EIM endpoint
+      regionId: regionId ?? "",
       projectName: SharedStorage.project?.name ?? "",
       resourceId: siteId,
     },
@@ -102,7 +102,6 @@ const SiteForm = () => {
     isLoading: profileMetricLoading,
   } = infra.useTelemetryMetricsProfileServiceListTelemetryMetricsProfilesQuery(
     {
-      resourceId: "group-id", //TODO: check if its right ?
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -119,7 +118,6 @@ const SiteForm = () => {
     isLoading: profileLogLoading,
   } = infra.useTelemetryLogsProfileServiceListTelemetryLogsProfilesQuery(
     {
-      resourceId: "group-id", //TODO: check if its right ?
       projectName: SharedStorage.project?.name ?? "",
       siteId: siteId,
     },
@@ -273,7 +271,7 @@ const SiteForm = () => {
   // reset form registered defaultValue when API response returns to check field sanity
   useEffect(() => {
     const defaultValue: infra.SiteServiceUpdateSiteApiArg = {
-      regionResourceId: regionId ?? "", //TODO: not used in real endpoint
+      regionId: regionId ?? "",
       projectName: SharedStorage.project?.name ?? "",
       resourceId: siteId,
       siteResource: {
@@ -356,13 +354,13 @@ const SiteForm = () => {
 
       if (siteId === "new") {
         siteOperation = createSite({
-          resourceId: site.regionId!,
+          regionId: site.regionId!,
           projectName: SharedStorage.project?.name ?? "",
           siteResource: site,
         }).unwrap();
       } else {
         siteOperation = updateSite({
-          regionResourceId: site.regionId!,
+          regionId: site.regionId!,
           projectName: SharedStorage.project?.name ?? "",
           resourceId: siteId,
           siteResource: site,
@@ -383,7 +381,6 @@ const SiteForm = () => {
         if (metricPair.profileId != "") {
           allPromises.push(
             editMetricProfile({
-              metricgroupResourceId: "group-id", //TODO: not used in real endpoint,
               projectName: SharedStorage.project?.name ?? "",
               resourceId: metricPair.profileId,
               telemetryMetricsProfileResource: metricProfile,
@@ -392,7 +389,6 @@ const SiteForm = () => {
         } else {
           allPromises.push(
             createMetricProfile({
-              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               telemetryMetricsProfileResource: metricProfile,
             }),
@@ -411,7 +407,6 @@ const SiteForm = () => {
         if (logPair.profileId != "") {
           allPromises.push(
             editLogProfile({
-              loggroupResourceId: "group-id", //TODO: not used in real endpoint
               projectName: SharedStorage.project?.name ?? "",
               resourceId: logPair.profileId,
               telemetryLogsProfileResource: logProfile,
@@ -420,7 +415,6 @@ const SiteForm = () => {
         } else {
           allPromises.push(
             createLogProfile({
-              resourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               telemetryLogsProfileResource: logProfile,
             }),
@@ -440,7 +434,6 @@ const SiteForm = () => {
           ) {
             allPromises.push(
               deleteMetricProfile({
-                metricgroupResourceId: "group-id", //TODO: evaluate
                 projectName: SharedStorage.project?.name ?? "",
                 resourceId: responsePair.profileId,
               }),
@@ -455,7 +448,6 @@ const SiteForm = () => {
             )
           ) {
             deleteLogProfile({
-              loggroupResourceId: "group-id", //TODO: evaluate
               projectName: SharedStorage.project?.name ?? "",
               resourceId: responsePair.profileId,
             });

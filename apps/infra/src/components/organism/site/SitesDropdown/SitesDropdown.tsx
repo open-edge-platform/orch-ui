@@ -34,7 +34,7 @@ const SitesDropdown = ({
     {
       projectName,
       pageSize,
-      resourceId: regionId,
+      regionId,
     },
     { skip: disable || !projectName }, // Skip call if component is disabled
   );
