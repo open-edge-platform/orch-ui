@@ -556,6 +556,10 @@ const HostDetails: React.FC = () => {
               <td data-cy="serial">{host.serialNumber || "-"}</td>
             </tr>
             <tr>
+              <td>Host ID</td>
+              <td data-cy="hostId">{host.resourceId || "-"}</td>
+            </tr>
+            <tr>
               <td>UUID</td>
               <td data-cy="guid">{host.uuid || "-"}</td>
             </tr>
