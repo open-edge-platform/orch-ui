@@ -148,7 +148,7 @@ export const CreateEditDomainProfile = ({
       <Modal
         open={isOpen}
         onRequestClose={closeAndReset}
-        modalHeading={`${isEditMode ? "Edit" : "Create"} Domain Profile Configuration`}
+        modalHeading={`${isEditMode ? "Edit" : "Create"} Domain`}
         passiveModal
         isDimissable={isDimissable}
       >
