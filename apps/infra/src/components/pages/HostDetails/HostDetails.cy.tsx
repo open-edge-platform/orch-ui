@@ -50,6 +50,7 @@ describe("HostDetails", () => {
       //   "contain.text",
       //   mockHost.powerStatus,
       // );
+      pom.el.hostId.should("have.text", mockHost.resourceId);
       pom.el.guid.should("have.text", mockHost.uuid);
       pom.el.serial.should("have.text", mockHost.serialNumber);
       pom.el.osProfiles.should(
