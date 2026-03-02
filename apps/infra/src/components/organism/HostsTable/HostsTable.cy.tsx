@@ -77,8 +77,13 @@ describe("<HostsTable/>", () => {
       });
     });
 
+    it("should render the Host ID column", () => {
+      pom.table.getColumnHeader(2).should("contain.text", "Host ID");
+      pom.table.getCell(1, 3).should("contain.text", "host-0");
+    });
+
     it("should render the provided actions", () => {
-      pom.table.getColumnHeader(7).contains("Action").should("have.length", 1);
+      pom.table.getColumnHeader(8).contains("Action").should("have.length", 1);
       //TODO: table behavior is more dynamic on the action options, need to re-visit this
       // pom.table
       //   .getRows()

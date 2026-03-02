@@ -107,6 +107,7 @@ export interface HostsTableProps {
 
 const hostColumns: TableColumn<infra.HostResourceRead>[] = [
   HostTableColumn.name(),
+  HostTableColumn.hostId,
   HostTableColumn.status,
   HostTableColumn.serialNumber,
   HostTableColumn.os,

@@ -26,6 +26,7 @@ const dataCySelectors = [
   "infraHostDetailsRestartBtn",
   "infraHostDetailsStopBtn",
   "osUpdateAvailable",
+  "hostId",
   "guid",
   "serial",
   "osProfiles",
