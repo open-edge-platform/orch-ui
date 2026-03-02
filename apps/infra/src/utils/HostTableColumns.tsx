@@ -79,6 +79,12 @@ const nameWithoutLink: TableColumn<infra.HostResourceRead> = {
   },
 };
 
+const hostId: TableColumn<infra.HostResourceRead> = {
+  Header: "Host ID",
+  apiName: "resourceId",
+  accessor: (host) => host.resourceId ?? "-",
+};
+
 const guid: TableColumn<infra.HostResourceRead> = {
   Header: "UUID",
   apiName: "uuid",
@@ -210,6 +216,7 @@ export const HostTableColumn = {
   _name,
   name,
   nameWithoutLink,
+  hostId,
   guid,
   serialNumber,
   site,
