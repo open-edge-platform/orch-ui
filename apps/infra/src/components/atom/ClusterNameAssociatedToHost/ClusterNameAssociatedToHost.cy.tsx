@@ -35,7 +35,7 @@ describe("<ClusterNameAssociatedToHost/>", () => {
     cy.get("#pathname").contains("/cluster/cluster-1");
   });
 
-  it("should render 'Not Assigned' when cluster details are not available", () => {
+  it("should render '-' when cluster details are not available", () => {
     pom.interceptApis([pom.api.getClusterNameEmpty]);
     cy.mount(<ClusterNameAssociatedToHost host={defaultHost} />);
     pom.waitForApis();
