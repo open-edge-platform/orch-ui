@@ -24,16 +24,12 @@ import {
   SharedStorage,
 } from "@orch-ui/utils";
 import { Heading, Icon } from "@spark-design/react";
-import {
-  ButtonSize,
-  ButtonVariant,
-  MessageBannerAlertState,
-} from "@spark-design/tokens";
+import { ButtonSize, ButtonVariant, ToastState } from "@spark-design/tokens";
 import moment from "moment";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { showMessageNotification } from "../../../store/notifications";
+import { showToast } from "../../../store/notifications";
 import { CreateEditDomainProfile } from "../CreateEditDomainProfile/CreateEditDomainProfile";
 import "./DomainProfileTable.scss";
 
@@ -85,20 +81,18 @@ const DomainProfileTable = ({
         profileName: domain.profileName,
       }).unwrap();
       dispatch(
-        showMessageNotification({
-          messageTitle: "Success",
-          messageBody: `Successfully deleted domain ${domain.profileName}.`,
-          variant: MessageBannerAlertState.Success,
+        showToast({
+          message: `Successfully deleted domain ${domain.profileName}.`,
+          state: ToastState.Success,
         }),
       );
       onCloseDeleteConfirmation();
     } catch (error) {
       const errorObj = parseError(error);
       dispatch(
-        showMessageNotification({
-          messageTitle: "Error",
-          messageBody: errorObj.data,
-          variant: MessageBannerAlertState.Error,
+        showToast({
+          message: errorObj.data,
+          state: ToastState.Danger,
         }),
       );
     }
@@ -191,7 +185,7 @@ const DomainProfileTable = ({
     } else {
       return (
         <Table
-          key="domainTable"
+          key={`domainTable-${domainData.length}`}
           dataCy="domainTableList"
           columns={columns}
           data={domainData}
@@ -237,20 +231,18 @@ const DomainProfileTable = ({
           editDomain={domainModalState.forDomain}
           onCreateEdit={() => {
             dispatch(
-              showMessageNotification({
-                messageTitle: "Success",
-                messageBody: `Successfully ${domainModalState.type === "edit" ? "updated" : "created"} domain.`,
-                variant: MessageBannerAlertState.Success,
+              showToast({
+                message: `Successfully ${domainModalState.type === "edit" ? "updated" : "created"} domain`,
+                state: ToastState.Success,
               }),
             );
             setDomainModalState(undefined);
           }}
           onError={(errorMessage) => {
             dispatch(
-              showMessageNotification({
-                messageTitle: "Error",
-                messageBody: `Error ${domainModalState.type === "edit" ? "updating" : "creating"} domain. ${errorMessage}`,
-                variant: MessageBannerAlertState.Error,
+              showToast({
+                message: `Error ${domainModalState.type === "edit" ? "updating" : "creating"} domain. ${errorMessage}`,
+                state: ToastState.Danger,
               }),
             );
           }}

@@ -21,6 +21,7 @@ import {
 } from "@spark-design/tokens";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import "./CreateEditDomainProfile.scss";
 const dataCy = "createEditDomain";
 
@@ -48,6 +49,7 @@ export const CreateEditDomainProfile = ({
   editDomain,
 }: CreateEditDomainProfileProps) => {
   const cy = { "data-cy": dataCy };
+  const dispatch = useDispatch();
 
   const [certificateFile, setCertificateFile] = useState<File | null>(null);
 
@@ -101,7 +103,7 @@ export const CreateEditDomainProfile = ({
         const buffer = await certificateFile.arrayBuffer();
         provisioningCert = btoa(String.fromCharCode(...new Uint8Array(buffer)));
       }
-
+      dispatch(rps.rpsApis.util.invalidateTags([{ type: "Domains" }]));
       if (isEditMode) {
         await updateDomainSuffix({
           projectName: SharedStorage.project.name,
