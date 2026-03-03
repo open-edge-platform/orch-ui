@@ -73,7 +73,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
       });
   };
 
-  const onToggleVpro = (on: boolean) => {
+  const onToggleVpro = (on: boolean, amtControlMode?: infra.AmtControlMode) => {
     patchHost({
       projectName: SharedStorage.project?.name ?? "",
       resourceId: host.resourceId as string,
@@ -82,6 +82,7 @@ const HostDetailsActions = (props: HostDetailsActionsProp) => {
         desiredAmtState: on
           ? "AMT_STATE_PROVISIONED"
           : "AMT_STATE_UNPROVISIONED",
+        ...(amtControlMode ? { amtControlMode } : {}),
       },
     })
       .unwrap()

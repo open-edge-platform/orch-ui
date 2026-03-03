@@ -21,7 +21,7 @@ describe("<OsConfig/>", () => {
   it("should render empty", () => {
     cy.mount(<OsConfig />);
     pom.root.should("exist");
-    pom.root.should("contain.text", "(Not set)");
+    pom.root.should("contain.text", "-");
   });
   it("should render any update", () => {
     cy.mount(

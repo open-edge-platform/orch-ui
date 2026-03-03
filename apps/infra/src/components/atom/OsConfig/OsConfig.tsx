@@ -22,7 +22,7 @@ export const OsConfig = ({ instance, iconOnly = false }: OsConfigProps) => {
       return instance.os.name;
     }
 
-    return <em>(Not set)</em>;
+    return "-";
   };
 
   return (

@@ -79,6 +79,12 @@ const nameWithoutLink: TableColumn<infra.HostResourceRead> = {
   },
 };
 
+const hostId: TableColumn<infra.HostResourceRead> = {
+  Header: "Host ID",
+  apiName: "resourceId",
+  accessor: (host) => host.resourceId ?? "-",
+};
+
 const guid: TableColumn<infra.HostResourceRead> = {
   Header: "UUID",
   apiName: "uuid",
@@ -144,7 +150,7 @@ const reason: TableColumn<infra.HostResourceRead> = {
   apiName: "note",
   accessor: "note",
   Cell: (table: { row: { original: infra.HostResourceRead } }) =>
-    table.row.original.note || <em>(Reason not specified)</em>,
+    table.row.original.note || "-",
 };
 
 const autoOnboard: TableColumn<infra.HostResourceRead> = {
@@ -190,10 +196,8 @@ const serialNumberUuid: TableColumn<HostData> = {
     const uuid = table.row.original.uuid;
     return (
       <>
-        <div className="serial-number">
-          {serialNumber || "No serial number present"}
-        </div>
-        <div className="uuid">{uuid || "No UUID present"}</div>
+        <div className="serial-number">{serialNumber || "-"}</div>
+        <div className="uuid">{uuid || "-"}</div>
       </>
     );
   },
@@ -210,6 +214,7 @@ export const HostTableColumn = {
   _name,
   name,
   nameWithoutLink,
+  hostId,
   guid,
   serialNumber,
   site,

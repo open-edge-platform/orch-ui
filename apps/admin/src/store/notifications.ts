@@ -20,7 +20,7 @@ export interface MessageBannerState {
   variant: MessageBannerAlertState;
 }
 
-interface NotificationsState {
+export interface NotificationsState {
   messageState: MessageBannerState;
   toastState: ToastProps;
   errorInfo?: InternalError;

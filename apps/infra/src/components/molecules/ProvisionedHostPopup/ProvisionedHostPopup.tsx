@@ -20,6 +20,7 @@ import { setErrorInfo } from "../../../store/notifications";
 import GenericHostPopup, {
   GenericHostPopupProps,
 } from "../../atom/GenericHostPopup/GenericHostPopup";
+import VProActivationModeModal from "../vProActivationModeModal/vProActivationModeModal";
 import "./ProvisionedHostPopup.scss";
 
 const dataCy = "provisionedHostPopup";
@@ -35,7 +36,7 @@ export type ProvisionedHostPopupProps = Omit<
   host: infra.HostResourceRead;
   onDeauthorizeHostWithoutWorkload?: (hostId: string) => void;
   onScheduleMaintenance?: (targetEntity: infra.HostResourceRead) => void;
-  onToggleVpro?: (boolean) => void;
+  onToggleVpro?: (boolean, amtControlMode?: infra.AmtControlMode) => void;
 };
 
 /** This will show all available host actions within popup menu (active/configured, i.e, assigned/unassigned host only) */
@@ -49,6 +50,11 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
   } = props;
 
   const navigate = useInfraNavigate();
+
+  const [isVproModeDialogOpen, setIsVproModeDialogOpen] =
+    useState<boolean>(false);
+  const [selectedAmtControlMode, setSelectedAmtControlMode] =
+    useState<infra.AmtControlMode>("AMT_CONTROL_MODE_ACM");
 
   // Deauthorizing a Host
   const [
@@ -106,7 +112,7 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
           {
             displayText: "Activate vPro",
             disable: !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]),
-            onSelect: () => onToggleVpro && onToggleVpro(true),
+            onSelect: () => setIsVproModeDialogOpen(true),
           },
         ]
       : []),
@@ -166,6 +172,14 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
     }
   };
 
+  /**
+   * Handle vPro activation with selected AMT control mode
+   */
+  const handleActivateVpro = async () => {
+    setIsVproModeDialogOpen(false);
+    onToggleVpro && onToggleVpro(true, selectedAmtControlMode);
+  };
+
   return (
     <div className="provisioned-host-popup" {...cy}>
       <GenericHostPopup
@@ -195,6 +209,16 @@ const ProvisionedHostPopup = (props: ProvisionedHostPopupProps) => {
             />
           </React.Suspense>
         )}
+
+      {/* vPro Activation Mode Selection Dialog */}
+      <VProActivationModeModal
+        isOpen={isVproModeDialogOpen}
+        onRequestClose={() => setIsVproModeDialogOpen(false)}
+        host={host}
+        selectedAmtControlMode={selectedAmtControlMode}
+        onAmtControlModeChange={setSelectedAmtControlMode}
+        onActivate={handleActivateVpro}
+      />
     </div>
   );
 };
