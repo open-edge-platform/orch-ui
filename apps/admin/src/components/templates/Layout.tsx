@@ -64,6 +64,13 @@ export const projectsNavItem: CollapsableListItem<string> = {
   divider: true,
 };
 
+export const domainProfileNavItem: CollapsableListItem<string> = {
+  route: "domains",
+  icon: "globe",
+  value: "Domains",
+  divider: true,
+};
+
 export const sshNavItem: CollapsableListItem<string> = {
   route: "ssh-keys",
   icon: "key",
@@ -135,6 +142,7 @@ const Layout = () => {
       items.push(osProfilesNavItem);
       items.push(osUpdatePolicyNavItem);
       items.push(sshNavItem);
+      items.push(domainProfileNavItem);
     }
 
     items.push(aboutNavItem);
@@ -154,6 +162,9 @@ const Layout = () => {
     }
     if (pathname.includes("os-profiles")) {
       return osProfilesNavItem;
+    }
+    if (pathname.includes("domains")) {
+      return domainProfileNavItem;
     }
     if (pathname.includes("projects")) {
       return projectsNavItem;
