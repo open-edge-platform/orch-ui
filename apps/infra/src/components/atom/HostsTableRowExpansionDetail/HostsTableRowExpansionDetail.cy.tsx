@@ -51,7 +51,7 @@ describe("<HostsTableRowExpansionDetail/>", () => {
     pom.el.osUpdate.should("contain.text", "Ubuntu");
   });
 
-  it("should show `No Update` when no os is available", () => {
+  it("should show '-' when no os update is available", () => {
     cy.mount(
       <HostsTableRowExpansionDetail
         host={{
@@ -63,6 +63,6 @@ describe("<HostsTableRowExpansionDetail/>", () => {
         }}
       />,
     );
-    pom.el.osUpdate.should("contain.text", "No Update");
+    pom.el.osUpdate.should("contain.text", "-");
   });
 });

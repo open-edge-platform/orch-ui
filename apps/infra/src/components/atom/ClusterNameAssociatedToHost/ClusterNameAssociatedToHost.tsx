@@ -44,7 +44,7 @@ const ClusterNameAssociatedToHost = ({
           {clusterName}
         </Link>
       ) : (
-        <span data-cy="notAssigned">Not Assigned</span>
+        <span data-cy="notAssigned">-</span>
       )}
     </div>
   );
