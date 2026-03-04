@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import "apps/admin/src/components/organisms/CreateEditDomainProfile/CreateEditDomainProfile.cy.tsx";
+import "apps/admin/src/components/organisms/DomainProfileTable/DomainProfileTable.cy.tsx";
 import "./src/components/atoms/AlertDefinitionDuration/AlertDefinitionDuration.cy.tsx";
 import "./src/components/atoms/AlertDefinitionEnable/AlertDefinitionEnable.cy.tsx";
 import "./src/components/atoms/AlertDefinitionThreshold/AlertDefinitionThreshold.cy.tsx";
