@@ -4,6 +4,7 @@
  */
 
 export * from "./device";
+export * from "./domains";
 export * from "./generalSettings";
 export * from "./hosts";
 export * from "./instances";

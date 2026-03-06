@@ -172,7 +172,7 @@ const DomainProfileTable = ({
           actions={[
             {
               name: "Create Domain",
-              disable: !hasRole([Role.PROJECT_WRITE]),
+              disable: !hasRole([Role.INFRA_MANAGER_WRITE]),
               action: () => {
                 setDomainModalState({
                   type: "create",
@@ -206,7 +206,7 @@ const DomainProfileTable = ({
                   type: "create",
                 })
               }
-              disabled={!hasRole([Role.PROJECT_WRITE])}
+              disabled={!hasRole([Role.INFRA_MANAGER_WRITE])}
               tooltip=""
               tooltipIcon="lock"
             />

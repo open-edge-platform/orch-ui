@@ -9,6 +9,7 @@ import { delay, http, HttpResponse } from "msw";
 import { SharedStorage } from "../..";
 import { osUbuntuId } from "./data";
 import {
+  domainStore,
   HostMock,
   HostStore,
   InstanceStore,
@@ -363,6 +364,14 @@ export const handlers = [
     } else {
       return HttpResponse.json(notFoundResponse, { status: 404 });
     }
+  }),
+  http.get(`${baseURL}/dm/amt/admin/domains`, async () => {
+    return HttpResponse.json(
+      {
+        data: domainStore.list(),
+      },
+      { status: 200 },
+    );
   }),
   http.post(`${baseURL}/sites`, async ({ request }) => {
     const body = (await request.json()) as infra.SiteResourceWrite;
