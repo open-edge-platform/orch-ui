@@ -51,9 +51,9 @@ describe("<DeauthorizeNodeConfirmationDialog/>", () => {
     });
 
     it("should enable the Deauthorize button only if a valid deauthorization reason is provided", () => {
-      cyGet("confirmBtn").should("have.attr", "aria-disabled", "true");
+      cyGet("confirmBtn").should("have.class", "spark-button-disabled");
       pom.el.reason.type("sample-deauthorize-reason");
-      cyGet("confirmBtn").should("have.attr", "aria-disabled", "false");
+      cyGet("confirmBtn").should("not.have.class", "spark-button-disabled");
     });
   });
 
