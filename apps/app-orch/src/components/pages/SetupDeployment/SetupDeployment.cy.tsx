@@ -268,20 +268,17 @@ describe("<SetupDeployment>", () => {
             .getRows()
             .eq(0)
             .find(".spark-combobox input")
-            .should("not.be.disabled");
-
-          pom.OverrideProfileValues.overrideTable.overrideForm.table
-            .getRows()
-            .eq(0)
-            .find(".spark-combobox input")
-            .clear();
-
-          pom.OverrideProfileValues.overrideTable.overrideForm.table
-            .getRows()
-            .eq(0)
-            .find(".spark-combobox input")
-            .type("222")
-            .blur();
+            .should("not.be.disabled")
+            .clear()
+            .should("have.value", "")
+            .type("222", { delay: 100 })
+            .should("have.value", "222")
+            .then(($input) => {
+              // Dispatch focusout (which React delegates onBlur from) to commit value to Redux
+              $input[0].dispatchEvent(
+                new FocusEvent("focusout", { bubbles: true }),
+              );
+            });
         });
 
         it(

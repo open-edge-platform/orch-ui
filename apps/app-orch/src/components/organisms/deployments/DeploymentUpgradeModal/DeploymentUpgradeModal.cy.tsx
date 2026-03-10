@@ -10,6 +10,10 @@ import DeploymentUpgradeModal from "./DeploymentUpgradeModal";
 import { DeploymentUpgradeModalPom } from "./DeploymentUpgradeModal.pom";
 
 const pom = new DeploymentUpgradeModalPom();
+
+// Use empty appVersion so the Combobox filter (contains) shows all versions in dropdown
+const deployment = { ...deployments.deployments[0], appVersion: "" };
+
 describe("Deployments Upgrade modal", () => {
   describe("when selecting the latest version", () => {
     beforeEach(() => {
@@ -18,7 +22,7 @@ describe("Deployments Upgrade modal", () => {
         <DeploymentUpgradeModal
           isOpen
           setIsOpen={() => {}}
-          deployment={deployments.deployments[0]}
+          deployment={deployment}
         />,
       );
       pom.waitForApis();
@@ -62,7 +66,7 @@ describe("Deployments Upgrade modal", () => {
           setIsOpen={(isOpen) => {
             setIsOpen(isOpen);
           }}
-          deployment={deployments.deployments[0]}
+          deployment={deployment}
         />
       ) : (
         <div data-cy="isClosed">Modal is closed</div>
