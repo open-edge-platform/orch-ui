@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { infra } from "@orch-ui/apis";
+import { amtControlModeLabel } from "@orch-ui/utils";
 import VproDetailItem from "./VproDetailItem";
 import "./VproDetails.scss";
 
@@ -16,6 +17,10 @@ const VproDetails = ({ host }: VproDetailsProps) => {
 
   return (
     <div {...cy} className="vpro-details-container">
+      <VproDetailItem
+        label="AMT Control Mode"
+        value={amtControlModeLabel(host.amtControlMode)}
+      />
       <VproDetailItem label="SKU" value={host.amtSku} />
       <VproDetailItem label="Power status" value={host.powerStatus} />
       <VproDetailItem label="AMT Status" value={host.amtStatus} />
