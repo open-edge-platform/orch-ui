@@ -8,8 +8,7 @@ import "./ExpansionPanel.scss";
 
 const dataCy = "expansionPanel";
 
-export interface ExpansionPanelProps
-  extends React.HTMLAttributes<HTMLDetailsElement> {
+export interface ExpansionPanelProps extends React.HTMLAttributes<HTMLDetailsElement> {
   title: string;
   isOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;

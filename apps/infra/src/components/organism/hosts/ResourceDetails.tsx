@@ -65,7 +65,8 @@ const ResourceDetails = <T extends ResourceType>({
 };
 
 /*eslint-disable @typescript-eslint/no-empty-interface */
-export interface ResourceDetailsDisplayProps<T extends ResourceType>
-  extends Pick<ResourceDetailsProps<T>, "data"> {}
+export interface ResourceDetailsDisplayProps<
+  T extends ResourceType,
+> extends Pick<ResourceDetailsProps<T>, "data"> {}
 
 export default ResourceDetails;

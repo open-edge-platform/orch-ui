@@ -31,30 +31,22 @@ import { setupWorker } from "msw/browser";
 async function prepare() {
   /* devblock:start */
   if (process.env.REACT_MOCK_API === "true") {
-    const { handlers: newHandlers } = await import(
-      "../../../library/utils/mocks_new"
-    );
-    const { handlers: eim_handlers } = await import(
-      "../../../library/utils/mocks/infra/mocks"
-    );
-    const { handlers: applicationCatalogHandlers } = await import(
-      "../../../library/utils/mocks/app-orch/catalog/applicationCatalog"
-    );
-    const { metadataBrokerHandler: mb_handlers } = await import(
-      "../../../library/utils/mocks/metadata-broker"
-    );
-    const { handlers: deploymentManagerHandlers } = await import(
-      "../../../library/utils/mocks/app-orch/adm/deploymentManager"
-    );
-    const { handlers: appResourceManagerHandlers } = await import(
-      "../../../library/utils/mocks/app-orch/adm/appResourceManager"
-    );
-    const { clusterHandlers, clusterTemplateHandlers } = await import(
-      "../../../library/utils/mocks/cluster-orch/mocks"
-    );
-    const { tenantManagerHandlers, observabilityHandlers } = await import(
-      "../../../library/utils/mocks/tenancy/index"
-    );
+    const { handlers: newHandlers } =
+      await import("../../../library/utils/mocks_new");
+    const { handlers: eim_handlers } =
+      await import("../../../library/utils/mocks/infra/mocks");
+    const { handlers: applicationCatalogHandlers } =
+      await import("../../../library/utils/mocks/app-orch/catalog/applicationCatalog");
+    const { metadataBrokerHandler: mb_handlers } =
+      await import("../../../library/utils/mocks/metadata-broker");
+    const { handlers: deploymentManagerHandlers } =
+      await import("../../../library/utils/mocks/app-orch/adm/deploymentManager");
+    const { handlers: appResourceManagerHandlers } =
+      await import("../../../library/utils/mocks/app-orch/adm/appResourceManager");
+    const { clusterHandlers, clusterTemplateHandlers } =
+      await import("../../../library/utils/mocks/cluster-orch/mocks");
+    const { tenantManagerHandlers, observabilityHandlers } =
+      await import("../../../library/utils/mocks/tenancy/index");
 
     const worker = setupWorker(
       ...newHandlers,

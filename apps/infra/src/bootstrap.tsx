@@ -34,9 +34,8 @@ import { setupWorker } from "msw/browser";
 async function prepare() {
   /* devblock:start */
   if (process.env.REACT_MOCK_API === "true") {
-    const { handlers } = await import(
-      "../../../library/utils/mocks/infra/mocks"
-    );
+    const { handlers } =
+      await import("../../../library/utils/mocks/infra/mocks");
     const worker = setupWorker(...handlers);
     return worker.start();
   }
