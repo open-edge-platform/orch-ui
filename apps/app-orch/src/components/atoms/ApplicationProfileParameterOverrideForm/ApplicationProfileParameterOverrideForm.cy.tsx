@@ -100,7 +100,7 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
     );
 
     pom.selectParam(0, "value1");
-    cyGet("testHelper").click();
+    pom.table.getRows().eq(0).find(".spark-combobox input").focus().blur();
     cy.window()
       .its("store")
       .invoke("getState")
@@ -113,7 +113,7 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
       });
 
     pom.selectParam(1, "12");
-    cyGet("testHelper").click();
+    pom.table.getRows().eq(1).find(".spark-combobox input").focus().blur();
 
     const expectedValueUpdate = {
       ...expectedValue,
@@ -123,7 +123,7 @@ describe("<ApplicationProfileParameterOverrideForm />", () => {
       },
     };
     pom.typeParam(1, "value4");
-    cyGet("testHelper").click();
+    pom.table.getRows().eq(1).find(".spark-combobox input").focus().blur();
     cy.window()
       .its("store")
       .invoke("getState")

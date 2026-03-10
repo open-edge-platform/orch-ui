@@ -73,7 +73,7 @@ describe("<SetupDeployment>", () => {
         "contain.text",
         "There are no Deployment Packages currently available.",
       );
-      pom.el.nextBtn.should("have.attr", "aria-disabled", "true");
+      pom.el.nextBtn.should("have.class", "spark-button-disabled");
     });
   });
 
@@ -90,7 +90,7 @@ describe("<SetupDeployment>", () => {
     });
 
     it("should disable Next Button before package selection", () => {
-      pom.el.nextBtn.should("have.attr", "aria-disabled", "true");
+      pom.el.nextBtn.should("have.class", "spark-button-disabled");
     });
 
     it("should contain list of multiple deployment package", () => {
@@ -113,7 +113,7 @@ describe("<SetupDeployment>", () => {
         pom.selectProfile.emptyPom.el.emptySubTitle.contains(
           "No Deployment Profiles found.",
         );
-        pom.el.nextBtn.should("have.attr", "aria-disabled", "true");
+        pom.el.nextBtn.should("have.class", "spark-button-disabled");
       });
     });
 
@@ -135,7 +135,7 @@ describe("<SetupDeployment>", () => {
           .getRowBySearchText(packageWithParameterTemplates.defaultProfileName!)
           .find("[data-cy='radioButtonCy']")
           .should("be.checked");
-        pom.el.nextBtn.should("have.attr", "aria-disabled", "false");
+        pom.el.nextBtn.should("not.have.class", "spark-button-disabled");
       });
       describe("w/o override parameter", () => {
         beforeEach(() => {
@@ -280,7 +280,8 @@ describe("<SetupDeployment>", () => {
             .getRows()
             .eq(0)
             .find(".spark-combobox input")
-            .type("222");
+            .type("222")
+            .blur();
         });
 
         it(
@@ -345,7 +346,7 @@ describe("<SetupDeployment>", () => {
             pom.interceptApis([pom.api.postDeploymentMocked]);
             pom.el.nextBtn.click().as("postClick");
             //To avoid mutliple deploy request , Check if deploy button is disabled after click
-            cy.get("@postClick").should("have.attr", "aria-disabled", "true");
+            cy.get("@postClick").should("have.class", "spark-button-disabled");
             pom.waitForApis();
 
             cy.get(`@${pom.api.postDeploymentMocked}`)

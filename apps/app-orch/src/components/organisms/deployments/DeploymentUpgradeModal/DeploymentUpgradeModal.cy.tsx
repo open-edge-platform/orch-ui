@@ -23,7 +23,7 @@ describe("Deployments Upgrade modal", () => {
       );
       pom.waitForApis();
       pom.el.selectDeploymentVersion.find("button").click();
-      cy.get("[data-key='3.0.0']").click();
+      cy.get(".spark-popover").contains("3.0.0").click();
     });
     it("upgrade", () => {
       pom.interceptApis([pom.api.postUpgradeDeploymentsList]);
@@ -75,7 +75,7 @@ describe("Deployments Upgrade modal", () => {
     });
     it("should invoke the callback on cancel", () => {
       pom.el.selectDeploymentVersion.find("button").click();
-      cy.get("[data-key='3.0.0']").click();
+      cy.get(".spark-popover").contains("3.0.0").click();
       pom.el.cancelBtn.click();
       cyGet("isClosed").should("contain.text", "Modal is closed");
     });
@@ -84,7 +84,7 @@ describe("Deployments Upgrade modal", () => {
     });
     it("should upgrade a deployment and invoke the callback", () => {
       pom.el.selectDeploymentVersion.find("button").click();
-      cy.get("[data-key='3.0.0']").click();
+      cy.get(".spark-popover").contains("3.0.0").click();
 
       pom.el.upgradeBtn.should("not.have.class", "spark-button-disabled");
 
