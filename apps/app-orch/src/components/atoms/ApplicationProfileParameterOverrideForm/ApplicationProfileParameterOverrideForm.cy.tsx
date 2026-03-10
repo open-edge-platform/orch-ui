@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cyGet } from "@orch-ui/tests";
 import { applicationOne, profileTwo } from "@orch-ui/utils";
 import { setupStore } from "../../../store";
 import { initialState } from "../../../store/reducers/setupDeployment";

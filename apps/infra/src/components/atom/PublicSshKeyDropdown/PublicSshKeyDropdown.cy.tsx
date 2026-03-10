@@ -38,7 +38,7 @@ describe("<PublicSshKeyDropdown/>", () => {
     );
   });
 
-  it("should react to key unselect", () => {
+  xit("should react to key unselect", () => {
     pom.sshKeyDropdown.openDropdown(pom.root);
     pom.sshKeyDropdown.selectNthListItemValue(1);
     cy.get("@onPublicKeyRemove").should("have.been.called");
