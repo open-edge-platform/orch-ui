@@ -27,6 +27,9 @@ export const getStringPoperty = (o: any, s: string): any => {
  */
 export const mergeRecursive = (obj1: any, obj2: any) => {
   for (const p in obj2) {
+    if (p === "__proto__" || p === "constructor" || p === "prototype") {
+      continue;
+    }
     try {
       if (obj2[p].constructor == Object) {
         obj1[p] = mergeRecursive(obj1[p], obj2[p]);
