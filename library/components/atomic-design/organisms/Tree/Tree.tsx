@@ -13,8 +13,10 @@ import "./Tree.scss";
 import { TreeUtils } from "./Tree.utils";
 const dataCy = "tree";
 
-export interface TreeProps<NodeData extends TreeNode>
-  extends Pick<TreeBranchProps<NodeData>, "onExpand" | "onCollapse"> {
+export interface TreeProps<NodeData extends TreeNode> extends Pick<
+  TreeBranchProps<NodeData>,
+  "onExpand" | "onCollapse"
+> {
   branches: TreeBranchProps<NodeData>[];
 }
 

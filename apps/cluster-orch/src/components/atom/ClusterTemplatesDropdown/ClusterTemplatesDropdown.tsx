@@ -73,7 +73,9 @@ const ClusterTemplatesDropdown = ({
               onSelectionChange(String(selected));
             }}
           >
-            {templateNames?.map((item) => <Item key={item}>{item}</Item>)}
+            {templateNames?.map((item) => (
+              <Item key={item}>{item}</Item>
+            ))}
           </Dropdown>
         )}
       {isTemplateLoading && <SquareSpinner />}

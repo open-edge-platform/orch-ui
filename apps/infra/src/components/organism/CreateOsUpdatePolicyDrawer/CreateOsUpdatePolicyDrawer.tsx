@@ -373,7 +373,7 @@ const CreateOsUpdatePolicyDrawer = ({
                   );
                   const isKernelCommandEntered = Boolean(
                     updateKernelCommandValue &&
-                      updateKernelCommandValue.trim() !== "",
+                    updateKernelCommandValue.trim() !== "",
                   );
                   return (
                     <Dropdown
@@ -459,8 +459,8 @@ const CreateOsUpdatePolicyDrawer = ({
               render={({ field }) => {
                 const isTargetOsSelected = Boolean(
                   targetOsIdValue &&
-                    targetOsIdValue !== "" &&
-                    targetOsIdValue !== "none",
+                  targetOsIdValue !== "" &&
+                  targetOsIdValue !== "none",
                 );
                 return (
                   <TextField

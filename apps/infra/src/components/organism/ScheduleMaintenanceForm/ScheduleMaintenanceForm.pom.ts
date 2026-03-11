@@ -75,7 +75,7 @@ export class ScheduleMaintenanceFormPom extends CyPom<Selectors, ApiAliases> {
     return this.nameTextField.find(".spark-fieldtext-wrapper-is-invalid");
   }
   get timezoneList() {
-    return cy.get(".spark-popover .spark-scrollbar li");
+    return cy.get(".spark-popover li");
   }
   get timezoneInputBox() {
     return this.el.timezone.find("input");
