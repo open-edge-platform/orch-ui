@@ -468,3 +468,16 @@ export const getTrustedComputeCompatibility = (
       tooltip: "This host has Secure Boot and Full Disk Encryption disabled.",
     };
 };
+
+export const getAmtControlModeLabel = (
+  mode: infra.AmtControlMode | undefined,
+): string => {
+  switch (mode) {
+    case "AMT_CONTROL_MODE_ACM":
+      return "Admin Control Mode";
+    case "AMT_CONTROL_MODE_CCM":
+      return "Client Control Mode";
+    default:
+      return "-";
+  }
+};
