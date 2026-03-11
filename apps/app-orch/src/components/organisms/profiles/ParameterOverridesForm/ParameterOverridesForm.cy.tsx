@@ -86,6 +86,7 @@ describe("<ParameterOverridesForm/>", () => {
     pom.root.should("not.contain.text", "Unique name required");
     pom.el.defaultValue.should("have.value", "testValue1");
     flagsPom.selectComboboxItem(3);
+    flagsPom.root.find("input").focus().blur();
     pom.el.suggestedValue.click();
     pom.el.defaultValue.should("have.value", "");
     cy.get("@onUpdateStub").should("have.been.calledWith", [

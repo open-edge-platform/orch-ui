@@ -55,7 +55,7 @@ describe("<HostEdit />", () => {
       pom.hostMetadata.rhfComboboxKeyPom.getInput().type("fake-Value");
 
       // Assert that the Save button is disabled
-      pom.el.updateHostButton.should("have.attr", "aria-disabled", "true");
+      pom.el.updateHostButton.should("have.class", "spark-button-disabled");
     });
 
     it("should render with empty when metadata is not available", () => {
@@ -187,7 +187,7 @@ describe("<HostEdit />", () => {
     });
 
     it("should update the selected Site", () => {
-      pom.el.siteCombobox.find("button").click();
+      pom.el.siteCombobox.find(".spark-combobox-arrow-button").click();
       cy.contains(siteMinimartTwoName).click();
 
       const expectedReq: infra.HostResourceWrite = {

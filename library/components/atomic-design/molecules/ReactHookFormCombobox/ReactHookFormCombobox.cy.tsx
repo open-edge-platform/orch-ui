@@ -49,13 +49,9 @@ describe("<ReactHookFormCombobox/>", () => {
     });
 
     it("select value via the provided options", () => {
-      pom.openCombobox();
-      cy.wait(1000); //Need to make sure combobox is open before proceeding
+      pom.selectComboboxItem(comboboxItems.length - 1);
       pom
-        .getPopOver()
-        .type(`${"{downArrow}".repeat(comboboxItems.length)}{enter}`);
-      pom
-        .getInput()
+        .getInput(false)
         .should("have.value", comboboxItems[comboboxItems.length - 1]);
     });
 

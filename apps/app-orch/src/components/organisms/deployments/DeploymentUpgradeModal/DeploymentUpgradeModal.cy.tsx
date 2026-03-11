@@ -10,6 +10,10 @@ import DeploymentUpgradeModal from "./DeploymentUpgradeModal";
 import { DeploymentUpgradeModalPom } from "./DeploymentUpgradeModal.pom";
 
 const pom = new DeploymentUpgradeModalPom();
+
+// Use empty appVersion so the Combobox filter (contains) shows all versions in dropdown
+const deployment = { ...deployments.deployments[0], appVersion: "" };
+
 describe("Deployments Upgrade modal", () => {
   describe("when selecting the latest version", () => {
     beforeEach(() => {
@@ -18,12 +22,12 @@ describe("Deployments Upgrade modal", () => {
         <DeploymentUpgradeModal
           isOpen
           setIsOpen={() => {}}
-          deployment={deployments.deployments[0]}
+          deployment={deployment}
         />,
       );
       pom.waitForApis();
       pom.el.selectDeploymentVersion.find("button").click();
-      cy.get("[data-key='3.0.0']").click();
+      cy.get(".spark-popover").contains("3.0.0").click();
     });
     it("upgrade", () => {
       pom.interceptApis([pom.api.postUpgradeDeploymentsList]);
@@ -62,7 +66,7 @@ describe("Deployments Upgrade modal", () => {
           setIsOpen={(isOpen) => {
             setIsOpen(isOpen);
           }}
-          deployment={deployments.deployments[0]}
+          deployment={deployment}
         />
       ) : (
         <div data-cy="isClosed">Modal is closed</div>
@@ -75,7 +79,7 @@ describe("Deployments Upgrade modal", () => {
     });
     it("should invoke the callback on cancel", () => {
       pom.el.selectDeploymentVersion.find("button").click();
-      cy.get("[data-key='3.0.0']").click();
+      cy.get(".spark-popover").contains("3.0.0").click();
       pom.el.cancelBtn.click();
       cyGet("isClosed").should("contain.text", "Modal is closed");
     });
@@ -84,7 +88,7 @@ describe("Deployments Upgrade modal", () => {
     });
     it("should upgrade a deployment and invoke the callback", () => {
       pom.el.selectDeploymentVersion.find("button").click();
-      cy.get("[data-key='3.0.0']").click();
+      cy.get(".spark-popover").contains("3.0.0").click();
 
       pom.el.upgradeBtn.should("not.have.class", "spark-button-disabled");
 
