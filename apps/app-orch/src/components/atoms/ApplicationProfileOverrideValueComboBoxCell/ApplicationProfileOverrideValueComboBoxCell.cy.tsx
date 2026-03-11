@@ -115,7 +115,7 @@ describe("<ApplicationProfileOverrideValueComboBoxCell />", () => {
     );
 
     pom.combobox.select("value1");
-    pom.root.click(0, 0); //blur or go out of focus
+    pom.combobox.root.find("input").focus().blur(); //blur or go out of focus
     const expectedValue = {
       "Model Size": "value1",
     };

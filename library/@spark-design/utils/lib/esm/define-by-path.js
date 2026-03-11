@@ -1,11 +1,21 @@
+const isSafeKey = (key) => key !== '__proto__' && key !== 'constructor' && key !== 'prototype';
+
 export const defineByPath = (obj, path = [], val) => {
     let target = obj;
     for (let i = 0; i < path.length - 1; i++) {
-        if (!target[path[i]]) {
-            target[path[i]] = {};
+        const key = path[i];
+        if (!isSafeKey(key)) {
+            throw new TypeError(`Unsafe key in path: ${String(key)}`);
         }
-        target = target[path[i]];
+        if (!target[key]) {
+            target[key] = {};
+        }
+        target = target[key];
     }
-    target[path[path.length - 1]] = val;
+    const lastKey = path[path.length - 1];
+    if (!isSafeKey(lastKey)) {
+        throw new TypeError(`Unsafe key in path: ${String(lastKey)}`);
+    }
+    target[lastKey] = val;
     return obj;
 };

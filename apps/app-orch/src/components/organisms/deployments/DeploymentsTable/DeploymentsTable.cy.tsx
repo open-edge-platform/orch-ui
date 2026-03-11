@@ -138,7 +138,7 @@ describe("<DeploymentsTable />", () => {
       pom.interceptApis([pom.api.getDeploymentsList]);
       cy.mount(<DeploymentsTable hasPermission={false} />);
       pom.waitForApis();
-      pom.el.addDeploymentButton.should("have.attr", "aria-disabled", "true");
+      pom.el.addDeploymentButton.should("have.class", "spark-button-disabled");
     });
 
     it("enable action button when authorized", () => {
@@ -146,9 +146,8 @@ describe("<DeploymentsTable />", () => {
       cy.mount(<DeploymentsTable hasPermission={true} />);
       pom.waitForApis();
       pom.el.addDeploymentButton.should(
-        "not.have.attr",
-        "aria-disabled",
-        "true",
+        "not.have.class",
+        "spark-button-disabled",
       );
     });
 

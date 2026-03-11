@@ -21,8 +21,10 @@ export interface MessageBannerState {
   variant: MessageBannerAlertState;
 }
 
-export interface _MessageBannerState
-  extends Omit<MessageBannerProps, "onClose" | "className"> {}
+export interface _MessageBannerState extends Omit<
+  MessageBannerProps,
+  "onClose" | "className"
+> {}
 
 interface NotificationsState {
   messageBanner?: _MessageBannerState;
