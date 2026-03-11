@@ -469,7 +469,7 @@ export const getTrustedComputeCompatibility = (
     };
 };
 
-export const amtControlModeLabel = (
+export const getAmtControlModeLabel = (
   mode: infra.AmtControlMode | undefined,
 ): string => {
   switch (mode) {
