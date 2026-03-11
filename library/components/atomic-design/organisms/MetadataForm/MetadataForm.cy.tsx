@@ -37,7 +37,9 @@ describe("<MetadataForm/>", () => {
       pom.el.add.should("have.class", "spark-button-disabled");
       pom.rhfComboboxKeyPom.getInput(false).should("be.disabled");
       pom.rhfComboboxValuePom.getInput(false).should("be.disabled");
-      pom.root.find("[data-cy='delete']").should("have.attr", "aria-disabled");
+      pom.root
+        .find("[data-cy='delete']")
+        .should("have.class", "spark-button-disabled");
     });
   });
   describe("In a default state should", () => {
