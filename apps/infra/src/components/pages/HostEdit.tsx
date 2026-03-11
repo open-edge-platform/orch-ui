@@ -354,7 +354,7 @@ const HostEdit = () => {
                     !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]) ||
                     isRegionSiteDisabled
                   }
-                  inputValue={selectedRegion?.name}
+                  selectedKey={selectedRegion?.resourceId ?? null}
                   onSelectionChange={(selection: string) => {
                     if (regionData && regionData.regions) {
                       const filteredRegion = regionData?.regions?.filter(
@@ -388,7 +388,7 @@ const HostEdit = () => {
                     !checkAuthAndRole([Role.INFRA_MANAGER_WRITE]) ||
                     isRegionSiteDisabled
                   }
-                  inputValue={selectedSite?.name}
+                  selectedKey={selectedSite?.resourceId ?? null}
                   onSelectionChange={(selection: string) => {
                     if (siteData && siteData.sites) {
                       const filteredSite = siteData?.sites?.filter(

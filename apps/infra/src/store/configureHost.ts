@@ -104,15 +104,15 @@ export const validateStep = (state: HostConfigForm) => {
       // all Hosts must have a Name and a OsID before we can proceed
       state.formStatus.enableNextBtn = Boolean(
         containsHosts(state) &&
-          containsUniqueHostNames(state) &&
-          everyHost(
-            state,
-            (hd) =>
-              hd.name &&
-              isValidHostName(hd.name) &&
-              hd.instance?.osID &&
-              hd.instance?.securityFeature,
-          ),
+        containsUniqueHostNames(state) &&
+        everyHost(
+          state,
+          (hd) =>
+            hd.name &&
+            isValidHostName(hd.name) &&
+            hd.instance?.osID &&
+            hd.instance?.securityFeature,
+        ),
       );
       break;
     }

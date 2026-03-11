@@ -17,8 +17,9 @@ export type FlexColConfigCss = Record<FlexColSizeCss, number>;
 export type FlexWrap = "wrap" | "no-wrap";
 export type FlexAlign = "middle" | "start" | "end";
 export type FlexJustify = "middle" | "start" | "end";
-export interface FlexProps
-  extends Partial<Record<FlexColSize, FlexColValue[]>> {
+export interface FlexProps extends Partial<
+  Record<FlexColSize, FlexColValue[]>
+> {
   wrap?: FlexWrap;
   align?: FlexAlign;
   justify?: FlexJustify;

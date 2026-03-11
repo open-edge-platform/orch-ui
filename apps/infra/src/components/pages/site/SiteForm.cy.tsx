@@ -76,9 +76,8 @@ describe("<SiteForm />", () => {
       pom.el.name.should("not.have.attr", "disabled");
       pom.el.name.type("-modified");
       cy.contains("button", "Save").should(
-        "have.attr",
-        "aria-disabled",
-        "false",
+        "not.have.class",
+        "spark-button-disabled",
       );
       cy.contains("button", "Save").click();
       // we are asserting that the API have been called

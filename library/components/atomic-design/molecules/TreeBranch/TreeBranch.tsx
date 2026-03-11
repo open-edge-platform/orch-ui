@@ -12,8 +12,10 @@ const dataCy = "treeBranch";
 export interface TreeNode {
   id: string;
 }
-export interface TreeBranchProps<NodeData extends TreeNode>
-  extends Omit<TreeExpander, "onExpand" | "isLeaf" | "onExpand" | "height"> {
+export interface TreeBranchProps<NodeData extends TreeNode> extends Omit<
+  TreeExpander,
+  "onExpand" | "isLeaf" | "onExpand" | "height"
+> {
   data: NodeData;
   content: React.ReactElement;
   isLoading?: boolean;

@@ -76,7 +76,9 @@ const ClusterTemplateVersionsDropdown = ({
               onSelectionChange(String(selected));
             }}
           >
-            {versions?.map((item) => <Item key={item}>{item}</Item>)}
+            {versions?.map((item) => (
+              <Item key={item}>{item}</Item>
+            ))}
           </Dropdown>
         )}
       {isTemplateLoading && <SquareSpinner />}
