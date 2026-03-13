@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-FileCopyrightText: (C) 2026 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 ---
@@ -113,6 +113,7 @@ jobs:
       prefix_tag_separator: "/"
       project_folder: apps/${{ matrix.project_folder }}
       version_suffix: "-pr-${{ github.event.number }}"
+      trivy_image_skip: "ghcr.io/github/github-mcp-server:latest,ghcr.io/github/gh-aw-mcpg:latest,ghcr.io/github/gh-aw-firewall/agent:latest,ghcr.io/github/gh-aw-firewall/api-proxy:latest,ghcr.io/github/gh-aw-firewall/squid:latest"
     secrets: inherit
 
   final-check:
