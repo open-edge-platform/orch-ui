@@ -73,6 +73,7 @@ export const LocationAutocomplete = ({
         <Icon icon="magnifier" className="location-autocomplete__icon" />
         <Combobox
           label={label}
+          inputValue={inputValue}
           onInputChange={handleInputChange}
           onSelectionChange={handleSelectionChange}
           menuTrigger="input"
