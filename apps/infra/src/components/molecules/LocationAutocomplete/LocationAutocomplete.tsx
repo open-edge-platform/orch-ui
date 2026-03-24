@@ -68,7 +68,7 @@ export const LocationAutocomplete = ({
   };
 
   return (
-    <div className="location-autocomplete" data-cy={dataCy}>
+    <div className="location-autocomplete test" data-cy={dataCy}>
       <div className="location-autocomplete__input-wrapper">
         <Icon icon="magnifier" className="location-autocomplete__icon" />
         <Combobox
