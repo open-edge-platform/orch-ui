@@ -5,13 +5,12 @@
 
 import { infra } from "@orch-ui/apis";
 import { SharedStorage } from "@orch-ui/utils";
-import { debounce } from "lodash";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   AutocompleteNode,
   buildNodeTree,
 } from "../../../molecules/LocationAutocomplete/location-autocomplete";
-import LocationAutocomplete from "../../../molecules/LocationAutocomplete/LocationAutocomplete";
+import LocationAutocompleteReactAria from "../../../molecules/LocationAutocompleteReactAria/LocationAutocompleteReactAria";
 
 interface SiteSearchProps {
   placeholder?: string;
@@ -26,21 +25,20 @@ export const SiteSearch = ({
   placeholder = "Search",
   label = "Site",
   isRequired = false,
-  defaultInputValue,
+  defaultInputValue = "",
 }: SiteSearchProps) => {
   const projectName = SharedStorage.project?.name ?? "";
-  const [searchTerm, setSearchTerm] = useState<string | undefined>();
+  const [searchTerm, setSearchTerm] = useState<string>(defaultInputValue);
 
-  const canSearch = searchTerm !== undefined && searchTerm.length > 0;
-
+  // Fetch locations filtered by search term
   const { data } = infra.useLocationServiceListLocationsQuery(
     {
       projectName,
-      name: searchTerm,
+      name: searchTerm || undefined,
       showRegions: true,
       showSites: true,
     },
-    { skip: !canSearch || !projectName },
+    { skip: !searchTerm || !projectName },
   );
 
   const nodes = useMemo(() => {
@@ -57,26 +55,19 @@ export const SiteSearch = ({
     onSiteSelect(selectedNode);
   };
 
-  const debouncedSetSearchTerm = useCallback(
-    debounce((value: string) => {
-      setSearchTerm(value);
-    }, 200),
-    [setSearchTerm],
-  );
-
   const handleInputChange = (value: string) => {
-    debouncedSetSearchTerm(value);
+    setSearchTerm(value);
   };
 
   return (
-    <LocationAutocomplete
+    <LocationAutocompleteReactAria
       nodes={nodes}
       onSelect={handleSelect}
       onInputChange={handleInputChange}
+      defaultInputValue={defaultInputValue}
       placeholder={placeholder}
       label={label}
       isRequired={isRequired}
-      defaultInputValue={defaultInputValue}
     />
   );
 };

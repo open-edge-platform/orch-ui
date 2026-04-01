@@ -11,7 +11,7 @@ import {
   Text,
 } from "@spark-design/react";
 import { InputSize } from "@spark-design/tokens";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Highlighter from "react-highlight-words";
 import { AutocompleteNode } from "./location-autocomplete";
 import "./LocationAutocomplete.scss";
@@ -23,6 +23,7 @@ interface LocationAutocompleteProps extends Omit<IComboboxProps, "children"> {
   isRequired?: boolean;
   onSelect?: (selectedNode: AutocompleteNode | null) => void;
   onInputChange?: (value: string) => void;
+  inputValue?: string;
 }
 
 const dataCy = "location-autocomplete";
@@ -33,26 +34,25 @@ export const LocationAutocomplete = ({
   label = "Location",
   isRequired = false,
   onSelect,
+  inputValue = "",
   onInputChange,
   ...comboboxProps
 }: LocationAutocompleteProps) => {
-  const [inputValue, setInputValue] = useState("");
-
   const nodeMap = useMemo(
     () => new Map(nodes.map((node) => [node.resourceId, node])),
     [nodes],
   );
 
   const handleSelectionChange = (resourceId: string | null) => {
-    let node: AutocompleteNode | undefined;
+    const node =
+      resourceId && nodeMap.has(resourceId)
+        ? nodeMap.get(resourceId)
+        : undefined;
 
-    if (resourceId && nodeMap.has(resourceId)) {
-      node = nodeMap.get(resourceId);
-      if (node) {
-        setInputValue(node.name);
-      }
-    } else {
-      setInputValue("");
+    if (node && onInputChange) {
+      onInputChange(node.name);
+    } else if (!resourceId && onInputChange) {
+      onInputChange("");
     }
 
     if (onSelect) {
@@ -61,7 +61,6 @@ export const LocationAutocomplete = ({
   };
 
   const handleInputChange = (value: string) => {
-    setInputValue(value);
     if (onInputChange) {
       onInputChange(value);
     }
@@ -75,11 +74,12 @@ export const LocationAutocomplete = ({
           label={label}
           inputValue={inputValue}
           onInputChange={handleInputChange}
-          onSelectionChange={handleSelectionChange}
+          onChange={handleSelectionChange}
           menuTrigger="input"
           placeholder={placeholder}
           isRequired={isRequired}
           size={InputSize.Large}
+          allowsCustomValue
           {...comboboxProps}
           className="location-autocomplete__combobox"
           data-cy="locationCombobox"
