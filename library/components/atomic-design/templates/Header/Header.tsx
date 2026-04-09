@@ -9,6 +9,7 @@ import { CSSProperties, ReactElement } from "react";
 import { useAuth } from "react-oidc-context";
 import { Link, useLocation } from "react-router-dom";
 import { Popup } from "../../atoms/Popup/Popup";
+import { OrchestratorClock } from "../../atoms/OrchestratorClock/OrchestratorClock";
 import { ProjectSwitch } from "../../organisms/ProjectSwitch/ProjectSwitch";
 import HeaderItem from "../HeaderItem/HeaderItem";
 import { getDocsForUrl } from "./docMapper";
@@ -138,6 +139,7 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
       ></div>
       {children}
       <div style={{ flexGrow: 1 }}></div>
+      <OrchestratorClock />
       <ProjectSwitch
         isTokenAvailable={getUserToken() !== null}
         padding={sizeStyles.profileBtnMargins}

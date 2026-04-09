@@ -1,0 +1,17 @@
+/*
+ * SPDX-FileCopyrightText: (C) 2026 Intel Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.orchestrator-clock {
+  color: var(--spark-color-white);
+  font-family: "IntelOne Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+  align-self: center;
+  padding: 0 0.75rem;
+  opacity: 0.85;
+  user-select: none;
+  letter-spacing: 0.03em;
+}
