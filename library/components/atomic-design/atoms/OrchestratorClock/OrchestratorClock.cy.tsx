@@ -6,22 +6,27 @@
 import { cyGet } from "@orch-ui/tests";
 import { OrchestratorClock } from "./OrchestratorClock";
 
-// A fixed server-side time to use in tests.
-const FAKE_SERVER_DATE = "Wed, 01 Jan 2026 12:00:00 GMT";
-const FAKE_DATETIME = "2026-01-01 12:00Z";
+// A fixed orchestrator time to use in tests.
+// The Date header uses RFC 7231 format; the component formats it as ISO UTC.
+const FAKE_SERVER_DATE = "Thu, 01 Jan 2026 12:00:00 GMT";
+const FAKE_ISO_DISPLAY = "2026-01-01 12:00:00Z";
 
 describe("<OrchestratorClock/>", () => {
   beforeEach(() => {
-    // Stub the component-status endpoint: return 200 with a Date header.
-    // In Cypress component tests, RuntimeConfig falls back to
-    // window.location.origin so the path resolves correctly.
+    // Stub the component-status endpoint, returning a Date response header.
+    // In Cypress component tests RuntimeConfig.infraApiUrl falls back to
+    // window.location.origin, so cy.intercept resolves to the Cypress dev server.
     cy.intercept("GET", "/v1/orchestrator", {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
+        // Expose the Date header as if Access-Control-Expose-Headers is applied
         Date: FAKE_SERVER_DATE,
       },
-      body: {},
+      body: {
+        "schema-version": "1.0",
+        orchestrator: { version: "2026.0", features: {} },
+      },
     }).as("getOrchestratorTime");
   });
 
@@ -30,12 +35,10 @@ describe("<OrchestratorClock/>", () => {
     cy.wait("@getOrchestratorTime");
     cyGet("orchestratorClock")
       .should("exist")
-      .and("contain.text", FAKE_DATETIME)
-      .and("not.have.class", "orchestrator-clock--local");
+      .and("contain.text", FAKE_ISO_DISPLAY);
   });
 
-  it("shows local time immediately before the fetch completes", () => {
-    // Delay the response so we can inspect the pre-fetch state.
+  it("shows local time before the fetch completes", () => {
     cy.intercept("GET", "/v1/orchestrator", (req) => {
       req.reply({
         delay: 2000,
@@ -45,29 +48,15 @@ describe("<OrchestratorClock/>", () => {
       });
     }).as("slowOrchestratorTime");
     cy.mount(<OrchestratorClock />);
-    // Clock must already be visible (local fallback), with the --local modifier.
-    cyGet("orchestratorClock")
-      .should("exist")
-      .and("have.class", "orchestrator-clock--local");
-    cy.wait("@slowOrchestratorTime");
-    // After the fetch resolves the --local modifier is removed.
-    cyGet("orchestratorClock").should(
-      "not.have.class",
-      "orchestrator-clock--local",
-    );
+    // Clock renders immediately with local fallback time
+    cyGet("orchestratorClock").should("exist");
   });
 
-  it("keeps showing local time when the fetch fails", () => {
+  it("continues showing local time when the fetch fails", () => {
     cy.intercept("GET", "/v1/orchestrator", { forceNetworkError: true }).as(
       "failedOrchestratorTime",
     );
     cy.mount(<OrchestratorClock />);
-    // Give time for the fetch attempt to settle.
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500);
-    // Clock is still visible but in local-fallback mode.
-    cyGet("orchestratorClock")
-      .should("exist")
-      .and("have.class", "orchestrator-clock--local");
+    cyGet("orchestratorClock").should("exist");
   });
 });

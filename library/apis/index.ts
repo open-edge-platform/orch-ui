@@ -35,3 +35,5 @@ export { rpsApi as rpsSlice } from "./rps/apiSlice";
 export * as rps from "./rps/rpsApis";
 export { tdmApi as tmSlice } from "./tenancy/apiSlice";
 export * as tm from "./tenancy/tenancyDataModelApi";
+export { componentStatusApi as componentStatusSlice } from "./component-status/apiSlice";
+export * as componentStatus from "./component-status/componentStatusApis";

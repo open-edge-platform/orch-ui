@@ -4,23 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { getUserToken } from "../authConfig/authConfig";
-import { RuntimeConfig } from "../runtime-config/runtime-config";
-
-/**
- * Returns the base URL (scheme + host) for the orchestrator API.
- * All API servers share the same `api.<domain>` host, so we derive the
- * origin from RuntimeConfig.infraApiUrl (a public getter).  In mock/test
- * mode getApiUrl falls back to window.location.origin so we do too.
- */
-function getOrchestratorApiOrigin(): string {
-  try {
-    const u = new URL(RuntimeConfig.infraApiUrl);
-    return `${u.protocol}//${u.host}`;
-  } catch {
-    return window.location.origin;
-  }
-}
+import { useGetOrchestratorStatusQuery } from "../../apis/component-status/componentStatusApis";
 
 export type OrchestratorTimeSource = "orchestrator" | "local";
 
@@ -29,37 +13,46 @@ export interface OrchestratorTimeResult {
   time: Date;
   /**
    * `"orchestrator"` once the Date header has been successfully read from
-   * the component-status service; `"local"` while the fetch is in-flight,
-   * when the endpoint is unreachable, or when the Date header is not yet
-   * exposed (e.g. before Access-Control-Expose-Headers is deployed).
+   * the component-status service; `"local"` while the query is in-flight
+   * or when the endpoint is unreachable.
    */
   source: OrchestratorTimeSource;
 }
 
 /**
- * Fetches the orchestrator's current time by calling GET /v1/orchestrator
- * and reading the `Date` HTTP response header.  Go's net/http sets `Date`
- * to the server's current wall-clock time on **every** response; with
- * Cache-Control: no-store the response is never served from cache, so the
- * header always reflects the real orchestrator time.
+ * Returns a live-ticking orchestrator clock sourced from the `Date` HTTP
+ * response header of GET /v1/orchestrator (component-status service).
  *
- * The hook ticks the returned Date forward every second so the UI shows a
- * live clock without repeated polling.
+ * Uses RTK Query (`useGetOrchestratorStatusQuery`) for the single initial
+ * fetch.  After that the hook ticks the time forward every second so the
+ * UI shows a live clock without repeated polling.
  *
- * While the fetch is in-flight, the endpoint is unreachable, or the Date
- * header is not yet exposed, the hook falls back to the local system clock
- * so the clock is always visible in the header.  Once the orchestrator time
- * is obtained the clock seamlessly switches to it.
+ * While the query is in-flight or the endpoint is unreachable the hook
+ * falls back to the local system clock so the clock is always visible.
+ * Once orchestrator time is obtained it seamlessly switches.
+ *
+ * Prerequisites (orch-utils chart changes):
+ *   - `cors` Traefik middleware added to the component-status IngressRoute
+ *     (provides Access-Control-Allow-Origin)
+ *   - `accessControlExposeHeaders: ["Date"]` added to the cors middleware
+ *     (allows the browser to read the Date header from JS)
+ *   - `Cache-Control: no-store` on the handler (already shipped)
  */
 export function useOrchestratorTime(): OrchestratorTimeResult {
   const [result, setResult] = useState<OrchestratorTimeResult>({
     time: new Date(),
     source: "local",
   });
+
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const baseTimeRef = useRef<Date>(new Date());
   const fetchTimeRef = useRef<number>(performance.now());
   const sourceRef = useRef<OrchestratorTimeSource>("local");
+  const anchoredRef = useRef(false);
+
+  // Single fetch via RTK Query — no manual fetch() call needed.
+  // `skip` is false so it fires once on mount.
+  const { data, fulfilledTimeStamp } = useGetOrchestratorStatusQuery();
 
   // Start a local-time tick immediately so the clock is always visible.
   useEffect(() => {
@@ -79,59 +72,28 @@ export function useOrchestratorTime(): OrchestratorTimeResult {
     };
   }, []);
 
-  // Attempt to read the orchestrator's Date header and, if successful,
-  // re-anchor the tick to the server time.
+  // When RTK Query fulfils the request, anchor the tick to orchestrator time.
   useEffect(() => {
-    let cancelled = false;
+    if (!data?.serverTime || anchoredRef.current) return;
 
-    const fetchOrchestratorTime = async () => {
-      try {
-        const token = getUserToken();
-        const origin = getOrchestratorApiOrigin();
+    const serverDate = new Date(data.serverTime);
+    if (isNaN(serverDate.getTime())) return;
 
-        const fetchStart = performance.now();
-        const resp = await fetch(`${origin}/v1/orchestrator`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        });
-        const fetchEnd = performance.now();
+    // fulfilledTimeStamp is the Unix ms when RTK Query received the response.
+    // Approximate fetch midpoint: half the RTT from the start of mount.
+    // We don't have fetchStart here, but fulfilledTimeStamp is close enough.
+    const now = performance.now();
+    const fetchedAt = fulfilledTimeStamp ?? Date.now();
+    // Advance server time forward by the time elapsed since RTK Query fulfilled
+    const msElapsedSinceFulfilled = Date.now() - fetchedAt;
+    const adjusted = new Date(serverDate.getTime() + msElapsedSinceFulfilled);
 
-        if (cancelled) return;
-
-        // If the response is not OK or the Date header is missing/unreadable
-        // (e.g. Access-Control-Expose-Headers not yet deployed), keep the
-        // local-time fallback — the clock stays visible and ticking.
-        if (!resp.ok) return;
-
-        const dateHeader = resp.headers.get("Date");
-        if (!dateHeader) return;
-
-        const serverDate = new Date(dateHeader);
-        if (isNaN(serverDate.getTime())) return;
-
-        // Compensate for network round-trip: advance server time by half RTT.
-        const halfRtt = (fetchEnd - fetchStart) / 2;
-        const adjusted = new Date(serverDate.getTime() + halfRtt);
-
-        // Re-anchor the running tick to orchestrator time.
-        baseTimeRef.current = adjusted;
-        fetchTimeRef.current = fetchEnd;
-        sourceRef.current = "orchestrator";
-        setResult({ time: new Date(adjusted), source: "orchestrator" });
-      } catch {
-        // Network error — keep the local-time fallback running.
-      }
-    };
-
-    fetchOrchestratorTime();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    baseTimeRef.current = adjusted;
+    fetchTimeRef.current = now;
+    sourceRef.current = "orchestrator";
+    anchoredRef.current = true;
+    setResult({ time: new Date(adjusted), source: "orchestrator" });
+  }, [data, fulfilledTimeStamp]);
 
   return result;
 }
