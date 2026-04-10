@@ -7,7 +7,7 @@
 # someone opens a pull request.
 
 # Everything requires UI team review by default
-* @soniabha-intc @vigneshintel @riyaz-ghati
+* @soniabha-intc @riyaz-ghati
 
 # CI files
-.github/ @adimoft @daveroge @shanedonohue @manilk1x @soniabha-intc @vigneshintel @riyaz-ghati
+.github/ @adimoft @daveroge @shanedonohue @manilk1x @soniabha-intc @riyaz-ghati
