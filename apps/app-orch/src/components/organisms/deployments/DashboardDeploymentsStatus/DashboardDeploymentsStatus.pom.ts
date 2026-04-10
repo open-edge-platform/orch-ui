@@ -15,7 +15,8 @@ type DeploymentsStatusApiAliases =
   | "deploymentStatusResponse"
   | "deploymentsStatusError403"
   | "deploymentsStatusError500";
-const deploymentsStatusApiUrl = "**/v1/projects/**/appdeployment/summary/deployments_status*";
+const deploymentsStatusApiUrl =
+  "**/v1/projects/**/appdeployment/summary/deployments_status*";
 export const deploymentsStatusApis: CyApiDetails<DeploymentsStatusApiAliases> =
   {
     unmockedAPI: {

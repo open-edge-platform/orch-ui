@@ -22,7 +22,9 @@ const injectedApi = api.injectEndpoints({
         url: "/v1/orchestrator",
         // Use a custom responseHandler to capture both the JSON body and
         // the Date response header in a single round-trip.
-        responseHandler: async (response: Response): Promise<OrchestratorStatus> => {
+        responseHandler: async (
+          response: Response,
+        ): Promise<OrchestratorStatus> => {
           const serverTime = response.headers.get("Date");
           const body = response.ok ? await response.json() : {};
           return { ...body, serverTime };

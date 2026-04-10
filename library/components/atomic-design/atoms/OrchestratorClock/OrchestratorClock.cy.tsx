@@ -7,9 +7,9 @@ import { cyGet } from "@orch-ui/tests";
 import { OrchestratorClock } from "./OrchestratorClock";
 
 // A fixed orchestrator time to use in tests.
-// The Date header uses RFC 7231 format; the component formats it as ISO UTC.
+// The Date header uses RFC 7231 format; the component formats it as ISO UTC without seconds.
 const FAKE_SERVER_DATE = "Thu, 01 Jan 2026 12:00:00 GMT";
-const FAKE_ISO_DISPLAY = "2026-01-01 12:00:00Z";
+const FAKE_ISO_DISPLAY = "2026-01-01 12:00Z";
 
 describe("<OrchestratorClock/>", () => {
   beforeEach(() => {
