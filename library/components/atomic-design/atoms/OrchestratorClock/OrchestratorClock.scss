@@ -4,14 +4,22 @@
  */
 
 .orchestrator-clock {
+  // Inherit "IntelOne Display Regular" from .header so the clock matches
+  // the rest of the header bar typography.
+  font-size: 12px;
   color: var(--spark-color-white);
-  font-family: "IntelOne Mono", "Courier New", monospace;
-  font-size: 0.75rem;
-  line-height: 1;
   white-space: nowrap;
   align-self: center;
   padding: 0 0.75rem;
   opacity: 0.85;
   user-select: none;
-  letter-spacing: 0.03em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+
+  // Subtle dimming when showing local browser time instead of orchestrator time
+  &--local {
+    opacity: 0.5;
+  }
 }
