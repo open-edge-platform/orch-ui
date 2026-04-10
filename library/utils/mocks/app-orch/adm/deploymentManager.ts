@@ -156,7 +156,7 @@ export const handlers = [
       );
     },
   ),
-  http.get(`${baseURLPrefix}/summary/deployments_status`, ({ request }) => {
+  http.get(`${baseURLPrefix}/appdeployment/summary/deployments_status`, ({ request }) => {
     const metadataString = new URL(request.url).searchParams.get("labels");
     let deployments = ds.list();
     if (metadataString) {
