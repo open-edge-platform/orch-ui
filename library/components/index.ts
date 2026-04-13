@@ -84,6 +84,7 @@ export {
   PopoverProps
 } from "./atomic-design/atoms/Popover/Popover";
 export { ContextSwitcher } from "./atomic-design/atoms/ContextSwitcher/ContextSwitcher";
+export { OrchestratorClock } from "./atomic-design/atoms/OrchestratorClock/OrchestratorClock";
 export {
   ExpansionPanel,
   ExpansionPanelProps
