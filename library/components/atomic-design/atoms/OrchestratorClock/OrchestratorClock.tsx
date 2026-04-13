@@ -32,7 +32,7 @@ export const OrchestratorClock = () => {
 
   const title =
     source === "orchestrator"
-      ? "Orchestrator time (UTC, from server Date header)"
+      ? "Orchestrator time (UTC)"
       : "Local browser time (UTC) — orchestrator time unavailable";
 
   return (

@@ -168,6 +168,12 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
       </HeaderItem>
 
       {profileButton}
+      <div
+        className="divider"
+        style={{
+          margin: `${sizeStyles.dividerMargin} 0`,
+        }}
+      ></div>
       <OrchestratorClock />
     </header>
   );
