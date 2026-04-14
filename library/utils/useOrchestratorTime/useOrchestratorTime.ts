@@ -4,7 +4,9 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "react-oidc-context";
 import { useGetOrchestratorStatusQuery } from "../../apis/component-status/componentStatusApis";
+import { RuntimeConfig } from "../runtime-config/runtime-config";
 
 export type OrchestratorTimeSource = "orchestrator" | "local";
 
@@ -50,9 +52,18 @@ export function useOrchestratorTime(): OrchestratorTimeResult {
   const sourceRef = useRef<OrchestratorTimeSource>("local");
   const anchoredRef = useRef(false);
 
-  // Single fetch via RTK Query — no manual fetch() call needed.
-  // `skip` is false so it fires once on mount.
-  const { data, fulfilledTimeStamp } = useGetOrchestratorStatusQuery();
+  // Skip the query until the user is authenticated so that the request
+  // carries a valid JWT.  Layout renders before AuthWrapper, so on a fresh
+  // login the OIDC callback is still in-flight when this hook first runs —
+  // without skip the request would fire without a token, get a 403 from
+  // validate-jwt, and RTK Query would mark it as an error (never as data).
+  // When auth is disabled we never skip.
+  const { isAuthenticated } = useAuth();
+  const skipQuery = RuntimeConfig.isAuthEnabled() && !isAuthenticated;
+  const { data, fulfilledTimeStamp } = useGetOrchestratorStatusQuery(
+    undefined,
+    { skip: skipQuery },
+  );
 
   // Start a local-time tick immediately so the clock is always visible.
   useEffect(() => {
