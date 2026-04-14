@@ -57,7 +57,7 @@ const injectedRtkApi = api
         GetV1ProjectsByProjectNameSummaryDeploymentsStatusApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg.projectName}/summary/deployments_status`,
+          url: `/v1/projects/${queryArg.projectName}/appdeployment/summary/deployments_status`,
           params: { labels: queryArg.labels },
         }),
         providesTags: ["deployment.v1.DeploymentService"],
