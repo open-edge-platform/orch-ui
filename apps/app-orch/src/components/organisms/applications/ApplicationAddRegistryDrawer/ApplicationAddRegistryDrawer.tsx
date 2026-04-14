@@ -33,7 +33,7 @@ import "./ApplicationAddRegistryDrawer.scss";
 const dataCy = "applicationAddRegistryDrawer";
 
 interface ApplicationAddRegistryDrawerProps {
-  editRegistryData?: catalog.RegistryRead;
+  editRegistryData?: catalog.Registry;
   isDrawerOpen: boolean;
   setIsDrawerOpen: (isOpen: boolean) => void;
 }
@@ -53,7 +53,7 @@ const ApplicationAddRegistryDrawer = ({
     position: ToastPosition.TopRight,
   };
 
-  const resetFormState: catalog.RegistryRead = {
+  const resetFormState: catalog.Registry = {
     name: "",
     displayName: "",
     rootUrl: "",
@@ -62,7 +62,7 @@ const ApplicationAddRegistryDrawer = ({
     authToken: "",
   };
   const [registryFormState, setRegistryFormState] =
-    useState<catalog.RegistryRead>(resetFormState);
+    useState<catalog.Registry>(resetFormState);
 
   const [createRegistry] = catalog.useCatalogServiceCreateRegistryMutation();
   const [editRegistry] = catalog.useCatalogServiceUpdateRegistryMutation();
@@ -95,7 +95,7 @@ const ApplicationAddRegistryDrawer = ({
     if (isFormValidationSuccess) {
       createRegistry({
         projectName: SharedStorage.project?.name ?? "",
-        registry: registryFormState,
+        catalogV3Registry: registryFormState,
       })
         .unwrap()
         .then(() => {
@@ -138,7 +138,7 @@ const ApplicationAddRegistryDrawer = ({
       editRegistry({
         projectName: SharedStorage.project?.name ?? "",
         registryName: registryFormState.name,
-        registry: registryFormState,
+        catalogV3Registry: registryFormState,
       })
         .unwrap()
         .then(() => {

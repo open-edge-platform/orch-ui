@@ -3,10 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm } from "@orch-ui/apis";
 import { BaseStore } from "../../baseStore";
 
-const extension1: adm.UiExtension = {
+// UiExtension was removed from the generated ADM API; defined locally for mock use
+export interface UiExtension {
+  serviceName?: string;
+  label?: string;
+  description?: string;
+  fileName?: string;
+  appName?: string;
+  moduleName?: string;
+}
+
+const extension1: UiExtension = {
   serviceName: "serviceName",
   label: "5G Dashboard",
   description:
@@ -16,12 +25,12 @@ const extension1: adm.UiExtension = {
   moduleName: "./App",
 };
 
-export class UiExtensionsStore extends BaseStore<"label", adm.UiExtension> {
+export class UiExtensionsStore extends BaseStore<"label", UiExtension> {
   constructor() {
     super("label", [extension1]);
   }
 
-  convert(body: adm.UiExtension): adm.UiExtension {
+  convert(body: UiExtension): UiExtension {
     // NOTE we don't create/update uiExtensions so this method is not actually used
     return body;
   }

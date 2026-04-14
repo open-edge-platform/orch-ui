@@ -101,7 +101,7 @@ export const handlers = [
   http.get(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
     ({ params }) => {
-      const { deplId } = params as adm.DeploymentServiceGetDeploymentApiArg;
+      const { deplId } = params as { deplId: string; projectName: string };
       const deployment = ds.get(deplId);
       if (deployment) {
         return HttpResponse.json(deployment, { status: 200 });
@@ -117,7 +117,7 @@ export const handlers = [
   http.put(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
     async ({ params, request }) => {
-      const { deplId } = params as adm.DeploymentServiceGetDeploymentApiArg;
+      const { deplId } = params as { deplId: string; projectName: string };
       const currentDeployment = ds.get(deplId);
 
       if (!currentDeployment) {
@@ -145,7 +145,7 @@ export const handlers = [
   http.delete(
     `${baseURLPrefix}/appdeployment/deployments/:deplId`,
     ({ params }) => {
-      const { deplId } = params as adm.DeploymentServiceDeleteDeploymentApiArg;
+      const { deplId } = params as { deplId: string; projectName: string };
       const deleted = ds.delete(deplId);
       if (deleted) {
         return HttpResponse.json(null, { status: 201 });

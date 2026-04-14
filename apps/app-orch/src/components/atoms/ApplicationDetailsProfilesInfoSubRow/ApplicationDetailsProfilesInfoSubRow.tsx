@@ -11,7 +11,7 @@ import "./ApplicationDetailsProfilesInfoSubRow.scss";
 const dataCy = "applicationDetailsProfilesInfoSubRow";
 
 interface ApplicationDetailsProfilesInfoSubRowProps {
-  profile: catalog.ProfileRead;
+  profile: catalog.Profile;
 }
 
 const ApplicationDetailsProfilesInfoSubRow = ({

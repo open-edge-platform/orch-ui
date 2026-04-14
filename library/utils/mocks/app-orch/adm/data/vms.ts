@@ -147,8 +147,9 @@ export const vncAddress =
 /**
  * @deprecated
  */
+// AppWorkloadServiceListAppWorkloadsApiResponse removed in multitenancy simplification
 export const vms: {
-  [key: string]: arm.AppWorkloadServiceListAppWorkloadsApiResponse;
+  [key: string]: { appWorkloads: unknown[] };
 } = {
   [deploymentClusterOneAppOneId]: { appWorkloads: [aw1, aw2, aw3] },
   [deploymentClusterOneAppTwoId]: { appWorkloads: [aw4] },
@@ -159,7 +160,8 @@ export const vms: {
 /**
  * @deprecated
  */
-export const appEndpoints: { [key: string]: arm.ListAppEndpointsResponse } = {
+// ListAppEndpointsResponse removed in multitenancy simplification
+export const appEndpoints: { [key: string]: { appEndpoints: unknown[] } } = {
   [deploymentClusterOneAppConsoleId]: {
     appEndpoints: [appEndpoint1, appEndpoint2],
   },

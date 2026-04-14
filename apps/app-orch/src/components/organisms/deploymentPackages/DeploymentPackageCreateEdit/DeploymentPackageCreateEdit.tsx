@@ -229,14 +229,14 @@ const DeploymentPackageCreateEdit = ({
 
       p = createDeploymentPackage({
         projectName: SharedStorage.project?.name ?? "",
-        deploymentPackage: updatedDeploymentPackage,
+        catalogV3DeploymentPackage: updatedDeploymentPackage,
       }).unwrap();
     } else {
       p = editDeploymentPackage({
         projectName: SharedStorage.project?.name ?? "",
         deploymentPackageName: deploymentPackage.name,
         version: deploymentPackage.version,
-        deploymentPackage: deploymentPackage,
+        catalogV3DeploymentPackage: deploymentPackage,
       }).unwrap();
     }
 
@@ -351,7 +351,11 @@ const DeploymentPackageCreateEdit = ({
                 );
               });
             }}
-            kind={deploymentPackage.kind ?? "KIND_NORMAL"}
+            kind={
+              (deploymentPackage.kind as
+                | import("@orch-ui/apis").CatalogKinds
+                | undefined) ?? "KIND_NORMAL"
+            }
             confirmBeforeAdd
           />
           <div className="deployment-package-create-edit__footer">

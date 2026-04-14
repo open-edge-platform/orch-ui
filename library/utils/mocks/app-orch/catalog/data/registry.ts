@@ -5,7 +5,7 @@
 
 import { catalog } from "@orch-ui/apis";
 
-export const registry: catalog.RegistryRead = {
+export const registry: catalog.Registry = {
   name: "orch-harbor",
   displayName: "",
   description: "The orch internal harbor",
@@ -17,7 +17,7 @@ export const registry: catalog.RegistryRead = {
   type: "HELM",
 };
 
-export const dockerImageRegistry: catalog.RegistryRead = {
+export const dockerImageRegistry: catalog.Registry = {
   name: "orch-image",
   displayName: "orch-image",
   rootUrl: "https://edgeAI.com",
@@ -31,7 +31,7 @@ export const dockerImageRegistry: catalog.RegistryRead = {
 /**
  * @deprecated create shared/src/mocks/app-orch/catalog/registries.ts instead
  */
-export const registryResponse: catalog.ListRegistriesResponseRead = {
+export const registryResponse: catalog.ListRegistriesResponse = {
   registries: [
     {
       name: "orch-harbor",

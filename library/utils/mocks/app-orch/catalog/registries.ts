@@ -13,7 +13,7 @@ import {
   registryTwoName,
 } from "./data/appCatalogIds";
 
-export const registryOne: catalog.RegistryRead = {
+export const registryOne: catalog.Registry = {
   name: registryOneName,
   displayName: registryOneName,
   rootUrl: "https://sample-registry.com/chartrepo/open-edge-platform/",
@@ -22,7 +22,7 @@ export const registryOne: catalog.RegistryRead = {
   username: "intel-user1",
   authToken: "authSecret1",
 };
-export const registryTwo: catalog.RegistryRead = {
+export const registryTwo: catalog.Registry = {
   name: registryTwoName,
   displayName: registryTwoName,
   rootUrl: "https://micron.com",
@@ -32,7 +32,7 @@ export const registryTwo: catalog.RegistryRead = {
   username: "intel-user2",
   authToken: "authSecret2",
 };
-export const registryThree: catalog.RegistryRead = {
+export const registryThree: catalog.Registry = {
   name: registryThreeName,
   displayName: registryThreeName,
   rootUrl: "https://intel.com",
@@ -42,7 +42,7 @@ export const registryThree: catalog.RegistryRead = {
   username: "intel-user3",
   authToken: "authSecret3",
 };
-export const registryFour: catalog.RegistryRead = {
+export const registryFour: catalog.Registry = {
   name: registryFourName,
   displayName: registryFourName,
   rootUrl: "https://edgeAI.com",
@@ -52,14 +52,14 @@ export const registryFour: catalog.RegistryRead = {
   username: "intel-user4",
   authToken: "authSecret4",
 };
-export const registryFive: catalog.RegistryRead = {
+export const registryFive: catalog.Registry = {
   name: registryFiveName,
   displayName: registryFiveName,
   rootUrl: "https://no-inventory.com",
   type: "HELM",
   createTime: "2017-07-21T17:32:28Z",
 };
-export const registrySix: catalog.RegistryRead = {
+export const registrySix: catalog.Registry = {
   name: registryThreeName,
   rootUrl: "https://charts.bitnami.com/bitnami",
   type: "HELM",
@@ -68,8 +68,8 @@ export const registrySix: catalog.RegistryRead = {
 
 export class RegistryStore extends BaseStore<
   "name",
-  catalog.RegistryRead,
-  catalog.RegistryRead
+  catalog.Registry,
+  catalog.Registry
 > {
   constructor() {
     super("name", [

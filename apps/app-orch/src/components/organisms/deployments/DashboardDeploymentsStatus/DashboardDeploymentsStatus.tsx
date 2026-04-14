@@ -11,7 +11,7 @@ import {
 } from "@orch-ui/components";
 import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import "./DashboardDeploymentsStatus.scss";
-const { useDeploymentServiceGetDeploymentsStatusQuery } = adm;
+const { useGetV1ProjectsByProjectNameSummaryDeploymentsStatusQuery } = adm;
 
 const DashboardDeploymentsStatus = ({
   metadata = {
@@ -22,7 +22,7 @@ const DashboardDeploymentsStatus = ({
   metadata?: MetadataPairs;
 }) => {
   const { data, isError, error, isLoading, isSuccess } =
-    useDeploymentServiceGetDeploymentsStatusQuery(
+    useGetV1ProjectsByProjectNameSummaryDeploymentsStatusQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
         // Add `labels: list_of_metadata(key=value)` only if atleast one metadata exists

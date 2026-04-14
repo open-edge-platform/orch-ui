@@ -60,7 +60,7 @@ const DeploymentDetailsTable = ({
   // Do not call Hooks inside useEffect(...),
   // useMemo(...), or other built-in Hooks.
   const getTableRowPopupOptions = useCallback(
-    (cluster: adm.ClusterRead): PopupOption[] => [
+    (cluster: adm.ClusterInfoRead): PopupOption[] => [
       {
         displayText: "View Instance Detail",
         disable: !checkAuthAndRole([Role.AO_WRITE]),
@@ -80,12 +80,12 @@ const DeploymentDetailsTable = ({
     ],
     [],
   );
-  const columns: TableColumn<adm.ClusterRead>[] = [
+  const columns: TableColumn<adm.ClusterInfoRead>[] = [
     {
       Header: "Cluster ID",
       apiName: "id",
       accessor: (cluster) => cluster.id,
-      Cell: (table: { row: { original: adm.ClusterRead } }) => {
+      Cell: (table: { row: { original: adm.ClusterInfoRead } }) => {
         const row = table.row.original;
         return (
           <Hyperlink
@@ -102,7 +102,7 @@ const DeploymentDetailsTable = ({
       Header: "Cluster Name",
       apiName: "name",
       accessor: (cluster) => cluster.name,
-      Cell: (table: { row: { original: adm.ClusterRead } }) => {
+      Cell: (table: { row: { original: adm.ClusterInfoRead } }) => {
         const row = table.row.original;
         return row.name;
       },
@@ -110,7 +110,7 @@ const DeploymentDetailsTable = ({
     {
       Header: "Status",
       accessor: (row) => admStatusToText(row.status),
-      Cell: (table: { row: { original: adm.ClusterRead } }) => {
+      Cell: (table: { row: { original: adm.ClusterInfoRead } }) => {
         const row = table.row.original;
         return (
           <StatusIcon
@@ -126,7 +126,7 @@ const DeploymentDetailsTable = ({
         `${row.status?.summary?.running ?? 0}/${
           row.status?.summary?.total ?? 0
         }`,
-      Cell: (table: { row: { original: adm.ClusterRead } }) => {
+      Cell: (table: { row: { original: adm.ClusterInfoRead } }) => {
         const row = table.row.original;
         return (
           <Text size={TextSize.Medium}>
@@ -157,7 +157,7 @@ const DeploymentDetailsTable = ({
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
   const offset = parseInt(searchParams.get("offset") ?? "0");
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
-  const searchFilter = getFilter<adm.ClusterRead>(
+  const searchFilter = getFilter<adm.ClusterInfoRead>(
     searchParams.get("searchTerm") ?? "",
     ["id", "name"],
     Operator.OR,
@@ -174,10 +174,9 @@ const DeploymentDetailsTable = ({
     });
   };
   const { data, isSuccess, isLoading, isError, error } =
-    adm.useDeploymentServiceListDeploymentClustersQuery(
+    adm.useGetV1ProjectsByProjectNameAppdeploymentClustersQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        deplId: deployment.deployId ?? "",
         orderBy,
         pageSize,
         offset,

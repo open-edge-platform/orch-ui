@@ -11,7 +11,7 @@ import "./DeploymentPackageDetailsMain.scss";
 const dataCy = "deploymentPackageDetailsMain";
 
 interface DeploymentPackageDetailsMainProps {
-  deploymentPackage: catalog.DeploymentPackageRead;
+  deploymentPackage: catalog.DeploymentPackage;
 }
 
 const DeploymentPackageDetailsMain = ({

@@ -34,7 +34,7 @@ const ProfileName = ({
       skip: !projectName,
     },
   );
-  const [profile, setProfile] = useState<catalog.ProfileRead>();
+  const [profile, setProfile] = useState<catalog.Profile>();
   // we are reading an entire application, but we need to find a single profile
   useEffect(() => {
     setProfile(

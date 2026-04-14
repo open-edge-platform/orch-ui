@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { arm } from "@orch-ui/apis";
 import { delay, http, HttpResponse } from "msw";
 import { appEndpoints, vms, vmWithVnc, vncAddress } from "./data/vms";
 
@@ -13,14 +12,22 @@ export const handlers = [
   http.get(
     `${baseURLPrefix}/endpoints/applications/:appId/clusters/:clusterId`,
     ({ params }) => {
-      const { appId } = params as arm.EndpointsServiceListAppEndpointsApiArg;
+      const { appId } = params as {
+        appId: string;
+        clusterId: string;
+        projectName: string;
+      };
       return HttpResponse.json(appEndpoints[appId], { status: 200 });
     },
   ),
   http.get(
     `${baseURLPrefix}/workloads/applications/:appId/clusters/:clusterId`,
     ({ params }) => {
-      const { appId } = params as arm.AppWorkloadServiceListAppWorkloadsApiArg;
+      const { appId } = params as {
+        appId: string;
+        clusterId: string;
+        projectName: string;
+      };
       if (Object.keys(vms).indexOf(appId) === -1) {
         return HttpResponse.json(
           { error: "Application not found" },

@@ -218,7 +218,7 @@ export const DeploymentsTable = ({
   const orderBy =
     getOrder(searchParams.get("column"), sortDirection) ?? "name asc";
   const { data, isSuccess, isLoading, isError, error } =
-    adm.useDeploymentServiceListDeploymentsQuery(
+    adm.useGetV1ProjectsByProjectNameAppdeploymentDeploymentsQuery(
       {
         offset,
         pageSize,
@@ -235,7 +235,14 @@ export const DeploymentsTable = ({
       },
     );
 
-  const [deleteDeployment] = adm.useDeploymentServiceDeleteDeploymentMutation();
+  // TODO: Delete deployment endpoint removed in multitenancy simplification
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const deleteDeployment = async (_arg: {
+    projectName: string;
+    deplId: string;
+  }) => {
+    throw new Error("Delete deployment not supported in current API");
+  };
   const deleteHostFn = async (deplId: string) => {
     try {
       await deleteDeployment({

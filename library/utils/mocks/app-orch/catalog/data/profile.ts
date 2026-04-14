@@ -8,7 +8,7 @@ import { catalog } from "@orch-ui/apis";
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/profiles.ts instead
  */
-export const singleProfile: catalog.ProfileRead = {
+export const singleProfile: catalog.Profile = {
   name: "default",
   displayName: "profile default",
   description: "Default Profile description",
@@ -18,14 +18,14 @@ export const singleProfile: catalog.ProfileRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/profiles.ts instead
  */
-export const minimalSingleProfile: catalog.ProfileRead = {
+export const minimalSingleProfile: catalog.Profile = {
   name: "minimal",
 };
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/profiles.ts instead
  */
-export const completeSingleProfile: catalog.ProfileRead = {
+export const completeSingleProfile: catalog.Profile = {
   name: "complete",
   displayName: "Testing Name",
   description: "TestingDescription",
@@ -37,7 +37,7 @@ export const completeSingleProfile: catalog.ProfileRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/profiles.ts instead
  */
-export const profileFormValues: catalog.ProfileRead = {
+export const profileFormValues: catalog.Profile = {
   name: "testing-name",
   displayName: "Testing-Name",
   description: "TestingDescription",

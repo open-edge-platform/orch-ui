@@ -3,25 +3,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { arm } from "@orch-ui/apis";
-import {
-  SquareSpinner,
-  Status,
-  StatusIcon,
-  Table,
-  TableColumn,
-} from "@orch-ui/components";
-import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
-import { Text, Tooltip } from "@spark-design/react";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../../../store/hooks";
-import {
-  invalidateCacheByTagname,
-  printStatus,
-} from "../../../../utils/global";
+// TODO: EndpointsService endpoints removed in multitenancy simplification
+// Defining local stub types until API is re-added
+interface AppEndpointRead {
+  name?: string;
+  fqdns?: { fqdn?: string }[];
+  ports?: {
+    name?: string;
+    value?: number;
+    protocol?: string;
+    serviceProxyUrl?: string;
+  }[];
+  status?: string;
+}
 
-const { useEndpointsServiceListAppEndpointsQuery } = arm;
+const useEndpointsServiceListAppEndpointsQuery = (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _arg: unknown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _opts?: unknown,
+) => ({
+  data: undefined as { appEndpoints?: AppEndpointRead[] } | undefined,
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+});
 
 interface ApplicationDetailsServicesProps {
   appId: string;
@@ -58,7 +64,7 @@ const ApplicationDetailsServices = ({
     }
   }, [isSuccess]);
 
-  const servicesCols: TableColumn<arm.AppEndpointRead>[] = [
+  const servicesCols: TableColumn<AppEndpointRead>[] = [
     {
       Header: "Name",
       accessor: "name",

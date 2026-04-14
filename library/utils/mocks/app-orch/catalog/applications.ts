@@ -58,7 +58,7 @@ import {
 import CatalogBaseStore from "./baseStore";
 import { profileOne, profileThree, profileTwo } from "./profiles";
 
-export const applicationOne: catalog.ApplicationRead = {
+export const applicationOne: catalog.Application = {
   chartName: appOneChartName,
   chartVersion: appOneChartVersion,
   helmRegistryName: helmRegistryName,
@@ -73,7 +73,7 @@ export const applicationOne: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationTwo: catalog.ApplicationRead = {
+export const applicationTwo: catalog.Application = {
   chartName: appTwoChartName,
   chartVersion: appTwoChartVersion,
   helmRegistryName: helmRegistryName,
@@ -87,7 +87,7 @@ export const applicationTwo: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationThree: catalog.ApplicationRead = {
+export const applicationThree: catalog.Application = {
   chartName: appThreeChartName,
   chartVersion: appThreeChartVersion,
   helmRegistryName: helmRegistryName,
@@ -98,7 +98,7 @@ export const applicationThree: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationFour: catalog.ApplicationRead = {
+export const applicationFour: catalog.Application = {
   chartName: appFourChartName,
   chartVersion: appFourChartVersion,
   helmRegistryName: helmRegistryName,
@@ -112,7 +112,7 @@ export const applicationFour: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationFive: catalog.ApplicationRead = {
+export const applicationFive: catalog.Application = {
   chartName: appFiveChartName,
   chartVersion: appFiveChartVersion,
   helmRegistryName: helmRegistryName,
@@ -126,7 +126,7 @@ export const applicationFive: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationSix: catalog.ApplicationRead = {
+export const applicationSix: catalog.Application = {
   chartName: appSixChartName,
   chartVersion: appSixChartVersion,
   helmRegistryName: helmRegistryName,
@@ -140,7 +140,7 @@ export const applicationSix: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationSeven: catalog.ApplicationRead = {
+export const applicationSeven: catalog.Application = {
   chartName: appOneChartName,
   chartVersion: appOneChartVersion,
   helmRegistryName: helmRegistryName,
@@ -154,7 +154,7 @@ export const applicationSeven: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationEight: catalog.ApplicationRead = {
+export const applicationEight: catalog.Application = {
   chartName: appEightChartName,
   chartVersion: appEightChartVersion,
   helmRegistryName: helmRegistryName,
@@ -168,7 +168,7 @@ export const applicationEight: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationNine: catalog.ApplicationRead = {
+export const applicationNine: catalog.Application = {
   chartName: appNineChartName,
   chartVersion: appNineChartVersion,
   helmRegistryName: helmRegistryName,
@@ -182,7 +182,7 @@ export const applicationNine: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationTen: catalog.ApplicationRead = {
+export const applicationTen: catalog.Application = {
   chartName: appOneChartName,
   chartVersion: appOneChartVersion,
   helmRegistryName: helmRegistryName,
@@ -197,7 +197,7 @@ export const applicationTen: catalog.ApplicationRead = {
   kind: "KIND_NORMAL",
 };
 
-export const applicationExtensionOne: catalog.ApplicationRead = {
+export const applicationExtensionOne: catalog.Application = {
   chartName: appOneChartName,
   chartVersion: appTwoChartVersion,
   helmRegistryName: helmRegistryName,
@@ -211,7 +211,7 @@ export const applicationExtensionOne: catalog.ApplicationRead = {
   kind: "KIND_EXTENSION",
 };
 
-export const applicationExtensionTwo: catalog.ApplicationRead = {
+export const applicationExtensionTwo: catalog.Application = {
   chartName: appOneChartName,
   chartVersion: appTwoChartVersion,
   helmRegistryName: helmRegistryName,
@@ -228,7 +228,7 @@ export const applicationExtensionTwo: catalog.ApplicationRead = {
 /**
  * Application to test the Parameter templates
  */
-export const appWithParameterTemplates: catalog.ApplicationRead = {
+export const appWithParameterTemplates: catalog.Application = {
   chartName: "foobar",
   chartVersion: "0.5.43",
   helmRegistryName: "harbor",
@@ -263,7 +263,7 @@ export const appWithParameterTemplates: catalog.ApplicationRead = {
   defaultProfileName: "cpu",
 };
 
-export const appForEditDeployment1: catalog.ApplicationRead = {
+export const appForEditDeployment1: catalog.Application = {
   chartName: "foobar",
   chartVersion: "0.5.43",
   helmRegistryName: "harbor",
@@ -303,7 +303,7 @@ export const appForEditDeployment1: catalog.ApplicationRead = {
   defaultProfileName: "cpu",
 };
 
-export const appForEditDeployment2: catalog.ApplicationRead = {
+export const appForEditDeployment2: catalog.Application = {
   chartName: "foobar",
   chartVersion: "0.5.43",
   helmRegistryName: "harbor",
@@ -368,7 +368,7 @@ export const multipleExtensionsResponse: catalog.ListApplicationsResponse = {
   totalElements: 2,
 };
 
-export class ApplicationsStore extends CatalogBaseStore<catalog.ApplicationRead> {
+export class ApplicationsStore extends CatalogBaseStore<catalog.Application> {
   constructor() {
     super([
       applicationOne,
@@ -402,7 +402,7 @@ export class ApplicationsStore extends CatalogBaseStore<catalog.ApplicationRead>
   }
 
   getByApplicationKind(
-    applications: catalog.ApplicationRead[],
+    applications: catalog.Application[],
     kind: CatalogKinds,
   ) {
     if (!kind) return applications; // Retuns all kinds
@@ -411,12 +411,12 @@ export class ApplicationsStore extends CatalogBaseStore<catalog.ApplicationRead>
 
   filter(
     searchTerm: string | undefined,
-    apps: catalog.ApplicationRead[],
-  ): catalog.ApplicationRead[] {
+    apps: catalog.Application[],
+  ): catalog.Application[] {
     if (!searchTerm || searchTerm === null || searchTerm.trim().length === 0)
       return apps;
     const searchTermValue = searchTerm.split("OR")[0].split("=")[1];
-    const result = apps.filter((app: catalog.ApplicationRead) => {
+    const result = apps.filter((app: catalog.Application) => {
       return (
         app.name.includes(searchTermValue) ||
         app.displayName?.includes(searchTermValue) ||
@@ -428,8 +428,8 @@ export class ApplicationsStore extends CatalogBaseStore<catalog.ApplicationRead>
 
   sort(
     orderBy: string | undefined,
-    apps: catalog.ApplicationRead[],
-  ): catalog.ApplicationRead[] {
+    apps: catalog.Application[],
+  ): catalog.Application[] {
     if (!orderBy || orderBy === null || orderBy.trim().length === 0)
       return apps;
     const column: "name" | "description" | "version" = orderBy.split(" ")[0] as

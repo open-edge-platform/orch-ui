@@ -122,7 +122,7 @@ const DeploymentPackageHelmChartInfoForm = () => {
 
   const handleImport = () => {
     const dpPayload: catalog.CatalogServiceImportApiArg = {
-      url: deploymentPackage.helmChartURL,
+      url: deploymentPackage.helmChartURL ?? "",
       projectName: SharedStorage.project?.name ?? "",
     };
     if (deploymentPackage.username && deploymentPackage.password) {

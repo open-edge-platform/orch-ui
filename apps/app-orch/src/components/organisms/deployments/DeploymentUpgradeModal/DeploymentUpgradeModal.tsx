@@ -24,7 +24,14 @@ import {
 import { useState } from "react";
 import "./DeploymentUpgradeModal.scss";
 
-const { useDeploymentServiceUpdateDeploymentMutation } = adm;
+// TODO: UpdateDeployment endpoint removed in multitenancy simplification
+const useDeploymentServiceUpdateDeploymentMutation = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const stub = async (_arg: unknown) => {
+    throw new Error("Update deployment not supported in current API");
+  };
+  return [stub] as const;
+};
 
 interface DeploymentUpgradeModalProps {
   isOpen: boolean;
@@ -155,8 +162,11 @@ const DeploymentUpgradeModal = ({
                     })
                       .unwrap()
                       .then(
-                        (data: adm.UpdateDeploymentResponse) => {
-                          setIsOpen(false, data.deployment);
+                        (data: {
+                          deployment?: adm.DeploymentRead;
+                          deploymentId?: string;
+                        }) => {
+                          setIsOpen(false, data.deployment ?? deployment);
                         },
                         (rejected) => {
                           const {

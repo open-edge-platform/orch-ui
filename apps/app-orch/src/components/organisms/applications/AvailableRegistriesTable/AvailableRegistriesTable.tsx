@@ -45,7 +45,7 @@ interface AvailableRegistriesTableProps {
   hasPermission?: boolean;
   hideRibbon?: boolean;
   onAdd?: () => void;
-  onEdit?: (registry: catalog.RegistryRead) => void;
+  onEdit?: (registry: catalog.Registry) => void;
   onDelete?: (deleteRegistryState: DeleteRegistryState) => void;
 }
 const AvailableRegistriesTable = ({
@@ -70,7 +70,7 @@ const AvailableRegistriesTable = ({
     catalog.useCatalogServiceListRegistriesQuery(
       {
         projectName,
-        filter: getFilter<catalog.RegistryRead>(
+        filter: getFilter<catalog.Registry>(
           searchParams.get("searchTerm") ?? "",
           ["name", "type"],
           Operator.OR,
@@ -110,7 +110,7 @@ const AvailableRegistriesTable = ({
     }
   };
 
-  const columns: TableColumn<catalog.RegistryRead>[] = [
+  const columns: TableColumn<catalog.Registry>[] = [
     {
       Header: "Name",
       accessor: (row) => row.name,
@@ -123,7 +123,7 @@ const AvailableRegistriesTable = ({
     },
     {
       Header: "Date Added",
-      accessor: (r: catalog.RegistryRead) => rfc3339ToDate(r.createTime, true),
+      accessor: (r: catalog.Registry) => rfc3339ToDate(r.createTime, true),
       apiName: "createTime",
     },
     {

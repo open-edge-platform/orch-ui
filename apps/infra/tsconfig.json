@@ -8,8 +8,10 @@
     "src/**/*.cy.ts"
   ],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "skipDefaultLibCheck": true,
     "baseUrl": "./",
+    "rootDir": "./",
     "outDir": "./dist",
     "noImplicitAny": false,
     "paths": {
