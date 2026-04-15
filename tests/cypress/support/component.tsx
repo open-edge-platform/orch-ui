@@ -28,7 +28,7 @@ import "./commands";
 import "@spark-design/fonts/fonts.css";
 //import "@spark-design/css/style/style.css";
 
-import { mbSlice, tmSlice } from "@orch-ui/apis";
+import { componentStatusSlice, mbSlice, tmSlice } from "@orch-ui/apis";
 import { uiSlice, uiSliceName, _UIRootState } from "@orch-ui/components";
 import { getMockAuthProps, ProjectItem, SharedStorage } from "@orch-ui/utils";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
@@ -45,6 +45,7 @@ export const setupStore = (preloadedState?: _UIRootState) => {
     [mbSlice.reducerPath]: mbSlice.reducer,
     [uiSliceName]: uiSlice.reducer,
     [tmSlice.reducerPath]: tmSlice.reducer,
+    [componentStatusSlice.reducerPath]: componentStatusSlice.reducer,
   });
   return configureStore({
     reducer: rootReducer,
@@ -54,7 +55,8 @@ export const setupStore = (preloadedState?: _UIRootState) => {
         immutableCheck: false,
       })
         .concat(mbSlice.middleware)
-        .concat(tmSlice.middleware),
+        .concat(tmSlice.middleware)
+        .concat(componentStatusSlice.middleware),
     preloadedState,
   });
 };
