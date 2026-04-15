@@ -19,6 +19,8 @@ export * as arm from "./app-resource-mgr/resourceManagerApis";
 export * as appUtilities from "./app-utilities/appUtilitiesServiceApis";
 export { coApi as cmSlice } from "./cluster-manager/apiSlice";
 export * as cm from "./cluster-manager/clusterManagerApis";
+export { componentStatusApi as componentStatusSlice } from "./component-status/apiSlice";
+export * as componentStatus from "./component-status/componentStatusApis";
 export { infraApi as infraSlice } from "./infra/apiSlice";
 // Enhanced Api Slice
 export * as enhancedInfraSlice from "./infra/enhancedApiSlice";

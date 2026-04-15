@@ -6,6 +6,7 @@
 import {
   adm,
   cm,
+  componentStatusSlice,
   enhancedInfraSlice,
   mbApi,
   omSlice,
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
   // TODO: Remove this after updating openapi.schema
   [admUpdated.reducerPath]: admUpdated.reducer,
   [tmSlice.reducerPath]: tmSlice.reducer,
+  [componentStatusSlice.reducerPath]: componentStatusSlice.reducer,
 });
 
 export const setupStore = (preloadedState?: RootState) => {
@@ -61,7 +63,8 @@ export const setupStore = (preloadedState?: RootState) => {
         .concat(admUpdated.middleware)
         .concat(mbApi.metadataBroker.middleware)
         .concat(omSlice.middleware)
-        .concat(tmSlice.middleware),
+        .concat(tmSlice.middleware)
+        .concat(componentStatusSlice.middleware),
     preloadedState,
   });
 };
@@ -78,7 +81,8 @@ export const store = configureStore({
       .concat(admUpdated.middleware)
       .concat(mbApi.metadataBroker.middleware)
       .concat(omSlice.middleware)
-      .concat(tmSlice.middleware),
+      .concat(tmSlice.middleware)
+      .concat(componentStatusSlice.middleware),
 });
 
 setupListeners(store.dispatch);

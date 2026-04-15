@@ -22,7 +22,7 @@
 
 // Alternatively you can use CommonJS syntax:
 import "@cypress/code-coverage/support";
-import { mbSlice, tmSlice } from "@orch-ui/apis";
+import { componentStatusSlice, mbSlice, tmSlice } from "@orch-ui/apis";
 import { defaultActiveProject, MountOptions } from "@orch-ui/tests";
 
 import { uiSlice, uiSliceName, _UIRootState } from "@orch-ui/components";
@@ -55,6 +55,7 @@ export const setupStore = (preloadedState?: _UIRootState) => {
     [mbSlice.reducerPath]: mbSlice.reducer,
     [uiSliceName]: uiSlice.reducer,
     [tmSlice.reducerPath]: tmSlice.reducer,
+    [componentStatusSlice.reducerPath]: componentStatusSlice.reducer,
   });
   return configureStore({
     reducer: rootReducer,
@@ -64,7 +65,8 @@ export const setupStore = (preloadedState?: _UIRootState) => {
         immutableCheck: false,
       })
         .concat(mbSlice.middleware)
-        .concat(tmSlice.middleware),
+        .concat(tmSlice.middleware)
+        .concat(componentStatusSlice.middleware),
     preloadedState,
   });
 };
