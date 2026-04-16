@@ -8,7 +8,6 @@ import {
   CollapsableList,
   CollapsableListItem,
   Flex,
-  MessageBanner as NotificationBanner,
   SidebarMain,
 } from "@orch-ui/components";
 import {
@@ -18,13 +17,13 @@ import {
   Role,
   RuntimeConfig,
 } from "@orch-ui/utils";
-import { Toast } from "@spark-design/react";
+import { MessageBanner, Toast } from "@spark-design/react";
 import { ToastVisibility } from "@spark-design/tokens";
 import { useLocation, useNavigate, useOutlet } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { childRoutesWithRef } from "../../routes/routes";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { disableMessageBanner, hideToast } from "../../store/notifications";
+import { hideToast } from "../../store/notifications";
 import "../../styles/Global.scss";
 import "../../styles/spark-global.scss";
 import "../../styles/transitions.scss";
@@ -201,11 +200,14 @@ const Layout = () => {
                   <div
                     className={`${cssComponentSelector}__message-banner-box`}
                   >
-                    <NotificationBanner
-                      variant={messageState.variant as any}
-                      title={messageState.messageTitle}
-                      text={messageState.messageBody}
-                      onClose={() => dispatch(disableMessageBanner())}
+                    <MessageBanner
+                      variant={messageState.variant}
+                      exposeColor="white"
+                      showIcon
+                      outlined
+                      messageTitle={messageState.messageTitle}
+                      messageBody={messageState.messageBody}
+                      showClose
                     />
                   </div>
                 </Flex>
