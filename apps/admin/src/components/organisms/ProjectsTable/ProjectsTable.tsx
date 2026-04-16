@@ -71,14 +71,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
 
   const [pollingInterval, setPollingInterval] = useState<number>(API_INTERVAL);
   const onCloseModal = () => {
-    const isCreate = projectModalState?.type === "create";
     setProjectModalState(undefined);
-
-    // TODO: Table doesnot render new row addition,
-    // if the table update happens from same page! Ex: via Modal.
-    if (isCreate) {
-      navigate(0);
-    }
   };
   const validateMember = (project: AdminProject) => {
     const text = memberProjects?.find((mProj) => mProj?.name === project.name)
@@ -312,16 +305,11 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
               }),
             );
             setProjectModalState(undefined);
+            navigate(0);
           }}
-          onError={(errorMessage) => {
-            dispatch(
-              showMessageNotification({
-                messageTitle: "Error",
-                messageBody: `Error creating project. ${errorMessage}`,
-                variant: MessageBannerAlertState.Error,
-              }),
-            );
-          }}
+          existingProjectNames={
+            projects?.map((p) => p.name).filter(Boolean) as string[]
+          }
           isDimissable
         />
       )}

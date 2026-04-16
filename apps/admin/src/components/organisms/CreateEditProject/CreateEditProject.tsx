@@ -4,7 +4,11 @@
  */
 
 import { tm } from "@orch-ui/apis";
-import { MessageBannerAlertState, Modal } from "@orch-ui/components";
+import {
+  MessageBanner as OrchMessageBanner,
+  MessageBannerAlertState,
+  Modal,
+} from "@orch-ui/components";
 import { parseError, ProjectModalInput, toApiName } from "@orch-ui/utils";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -34,14 +38,15 @@ export interface CreateEditProjectProps {
   onClose: () => void;
   onError?: (err: string) => void;
   isDimissable: boolean;
+  existingProjectNames?: string[];
 }
 
 export const CreateEditProject = ({
   isOpen,
   onCreateEdit,
   onClose,
-  onError,
   isDimissable,
+  existingProjectNames = [],
 }: CreateEditProjectProps) => {
   const cy = { "data-cy": dataCy };
 
@@ -51,11 +56,13 @@ export const CreateEditProject = ({
   const [projectNameInput, setProjectNameInput] = useState<string>("");
   const [projectDescriptionInput, setProjectDescriptionInput] =
     useState<string>("");
+  const [submitError, setSubmitError] = useState<string>("");
 
   const closeAndReset = () => {
     onClose();
     setProjectNameInput("");
     setProjectDescriptionInput("");
+    setSubmitError("");
   };
 
   const {
@@ -78,8 +85,10 @@ export const CreateEditProject = ({
 
   /* Method to handle submit: create project */
   const handleCreateSubmit = () => {
+    setSubmitError("");
     const p = createProject({
       "project.Project": toApiName(projectNameInput),
+      updateIfExists: false,
       projectProjectPost: {
         description: projectDescriptionInput || projectNameInput,
       },
@@ -92,7 +101,20 @@ export const CreateEditProject = ({
         }
         closeAndReset();
         if (onCreateEdit) onCreateEdit(projectNameInput);
-      }).catch((err) => onError && onError(parseError(err).data));
+      }).catch((err) => {
+        const parsed = parseError(err);
+        if (
+          parsed.status === 403 ||
+          (typeof parsed.data === "string" &&
+            parsed.data.toLowerCase().includes("already exist"))
+        ) {
+          setSubmitError(
+            "A project with that name already exists. Please choose a different name.",
+          );
+        } else {
+          setSubmitError(parsed.data);
+        }
+      });
     }
   };
 
@@ -120,21 +142,35 @@ export const CreateEditProject = ({
             <Controller
               name="nameInput"
               control={control}
-              rules={{ required: true }}
+              rules={{
+                required: true,
+                validate: (value) => {
+                  const apiName = toApiName(value);
+                  if (existingProjectNames.some((name) => name === apiName)) {
+                    return "A project with this name already exists. Please choose a different name.";
+                  }
+                  return true;
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   className="name"
                   data-cy="projectName"
                   placeholder="Enter new project name"
-                  onInput={(e) => setProjectNameInput(e.currentTarget.value)}
+                  onInput={(e) => {
+                    setProjectNameInput(e.currentTarget.value);
+                    setSubmitError("");
+                  }}
                   validationState={
                     errors.nameInput !== undefined ? "invalid" : "valid"
                   }
                   errorMessage={
-                    errors.nameInput !== undefined
+                    errors.nameInput?.type === "required"
                       ? "Project name is required"
-                      : ""
+                      : errors.nameInput?.type === "validate"
+                        ? (errors.nameInput.message ?? "")
+                        : ""
                   }
                   size={InputSize.Large}
                   isRequired
@@ -155,6 +191,17 @@ export const CreateEditProject = ({
               size={InputSize.Large}
             />
           </div>
+          {submitError && (
+            <div className="project-field-container" data-cy="submitError">
+              <OrchMessageBanner
+                icon="information-circle"
+                title="Error"
+                text={submitError}
+                variant={MessageBannerAlertState.Error}
+                onClose={() => setSubmitError("")}
+              />
+            </div>
+          )}
           <ButtonGroup align={ButtonGroupAlignment.Start}>
             <Button
               data-cy="submitProject"
