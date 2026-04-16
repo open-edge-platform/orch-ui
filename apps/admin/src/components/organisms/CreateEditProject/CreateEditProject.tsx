@@ -146,9 +146,7 @@ export const CreateEditProject = ({
                 required: true,
                 validate: (value) => {
                   const apiName = toApiName(value);
-                  if (
-                    existingProjectNames.some((name) => name === apiName)
-                  ) {
+                  if (existingProjectNames.some((name) => name === apiName)) {
                     return "A project with this name already exists. Please choose a different name.";
                   }
                   return true;
