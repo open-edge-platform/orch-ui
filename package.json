@@ -105,7 +105,7 @@
     "webpack-remove-code-blocks": "^0.10.1"
   },
   "dependencies": {
-    "@react-aria/utils": "^3.14.2",
+    "@react-aria/utils": "3.14.2",
     "@reduxjs/toolkit": "^2.5.0",
     "@spark-design/brand-tokens": "file:library/@spark-design/brand-tokens",
     "@spark-design/core": "file:library/@spark-design/core",
@@ -125,7 +125,7 @@
     "prismjs": "^1.30.0",
     "query-string": "^9.1.1",
     "react": "18.2.0",
-    "react-aria": "^3.22.0",
+    "react-aria": "3.22.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-error-boundary": "^4.0.13",
@@ -134,7 +134,7 @@
     "react-oidc-context": "^3.2.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.30.3",
-    "react-stately": "^3.20.0",
+    "react-stately": "3.20.0",
     "react-table": "^7.8.0",
     "react-transition-group": "^4.4.5",
     "redux": "^5.0.1",
@@ -156,6 +156,12 @@
   "overrides": {
     "js-yaml": "^4.1.1",
     "serialize-javascript": "^7.0.3",
-    "diff": "^8.0.3"
+    "diff": "^8.0.3",
+    "@react-aria/combobox": "3.11.1",
+    "@react-aria/overlays": "3.25.0",
+    "@react-stately/combobox": "3.10.2",
+    "@react-stately/overlays": "3.6.13",
+    "@react-stately/utils": "3.10.5",
+    "@react-types/combobox": "3.13.2"
   }
 }
