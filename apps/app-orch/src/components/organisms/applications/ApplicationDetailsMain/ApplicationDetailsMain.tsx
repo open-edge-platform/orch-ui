@@ -164,7 +164,7 @@ const ApplicationDetailsMain = ({
             columns={columns}
             data={app.profiles}
             sortColumns={[1, 2, 3]}
-            subRow={(row: { original: catalog.ProfileRead }) => (
+            subRow={(row: { original: catalog.Profile }) => (
               <ApplicationDetailsProfilesInfoSubRow profile={row.original} />
             )}
           />

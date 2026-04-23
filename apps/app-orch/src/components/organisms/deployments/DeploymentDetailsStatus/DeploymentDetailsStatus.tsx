@@ -34,7 +34,7 @@ export interface DeploymentDetailsProps {
   /* Composite App/ App Pkg name and version */
   compositeAppDetailsProps: CompositeAppDetailsProps;
   /** Deployment Status */
-  status?: adm.DeploymentStatusRead;
+  status?: adm.StatusRead;
   detailedStatus?: boolean;
 }
 

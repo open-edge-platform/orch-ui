@@ -28,7 +28,7 @@ export const ApplicationReferencesTwo: catalog.ApplicationReference[] =
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const compositeApplicationDefault: catalog.DeploymentPackageRead = {
+export const compositeApplicationDefault: catalog.DeploymentPackage = {
   applicationReferences: [],
   name: "defaultName",
   version: "defaultVersion",
@@ -39,14 +39,14 @@ export const compositeApplicationDefault: catalog.DeploymentPackageRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const smallResponse: catalog.DeploymentPackageRead[] = [
+export const smallResponse: catalog.DeploymentPackage[] = [
   compositeApplicationDefault,
 ];
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-const CompositeApplicationOne: catalog.DeploymentPackageRead = {
+const CompositeApplicationOne: catalog.DeploymentPackage = {
   name: "intel-app-package-one",
   displayName: "intel-app-package-one",
   description:
@@ -64,7 +64,7 @@ const CompositeApplicationOne: catalog.DeploymentPackageRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-const CompositeApplicationTwo: catalog.DeploymentPackageRead = {
+const CompositeApplicationTwo: catalog.DeploymentPackage = {
   ...CompositeApplicationOne,
   applicationReferences: ApplicationReferencesTwo,
   name: "intel-app-package-two",
@@ -75,43 +75,39 @@ const CompositeApplicationTwo: catalog.DeploymentPackageRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationOneVersionOne: catalog.DeploymentPackageRead =
-  {
-    ...CompositeApplicationOne,
-    version: "1.0.0",
-  };
+export const CompositeApplicationOneVersionOne: catalog.DeploymentPackage = {
+  ...CompositeApplicationOne,
+  version: "1.0.0",
+};
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationOneVersionTwo: catalog.DeploymentPackageRead =
-  {
-    ...CompositeApplicationOne,
-    version: "2.0.0",
-  };
+export const CompositeApplicationOneVersionTwo: catalog.DeploymentPackage = {
+  ...CompositeApplicationOne,
+  version: "2.0.0",
+};
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationOneVersionThree: catalog.DeploymentPackageRead =
-  {
-    ...CompositeApplicationOne,
-    version: "3.0.0",
-  };
+export const CompositeApplicationOneVersionThree: catalog.DeploymentPackage = {
+  ...CompositeApplicationOne,
+  version: "3.0.0",
+};
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationTwoVersionOne: catalog.DeploymentPackageRead =
-  {
-    ...CompositeApplicationTwo,
-    version: "1.0.0",
-  };
+export const CompositeApplicationTwoVersionOne: catalog.DeploymentPackage = {
+  ...CompositeApplicationTwo,
+  version: "1.0.0",
+};
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationList: catalog.DeploymentPackageRead[] = [
+export const CompositeApplicationList: catalog.DeploymentPackage[] = [
   CompositeApplicationOne,
   CompositeApplicationTwo,
 ];
@@ -119,15 +115,15 @@ export const CompositeApplicationList: catalog.DeploymentPackageRead[] = [
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationOneVersionList: catalog.DeploymentPackageRead[] =
-  [
-    CompositeApplicationOneVersionOne,
-    CompositeApplicationOneVersionTwo,
-    CompositeApplicationOneVersionThree,
-  ];
+export const CompositeApplicationOneVersionList: catalog.DeploymentPackage[] = [
+  CompositeApplicationOneVersionOne,
+  CompositeApplicationOneVersionTwo,
+  CompositeApplicationOneVersionThree,
+];
 
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/packages.ts instead
  */
-export const CompositeApplicationTwoVersionList: catalog.DeploymentPackageRead[] =
-  [CompositeApplicationTwoVersionOne];
+export const CompositeApplicationTwoVersionList: catalog.DeploymentPackage[] = [
+  CompositeApplicationTwoVersionOne,
+];

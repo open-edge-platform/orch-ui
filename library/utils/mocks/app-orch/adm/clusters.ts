@@ -15,7 +15,13 @@ import {
 } from "../../cluster-orch/clusters";
 import { packageFour, packageOne, packageThree } from "../catalog/packages";
 
-export const clusterA: adm.ClusterRead = {
+// ClusterRead was removed in multitenancy simplification; define locally for mock use
+interface ClusterRead extends adm.ClusterInfoRead {
+  status?: adm.StatusRead;
+  apps?: adm.AppRead[];
+}
+
+export const clusterA: ClusterRead = {
   id: "cluster-a-id",
   name: clusterOne.name,
   status: {
@@ -35,7 +41,7 @@ export const clusterA: adm.ClusterRead = {
   })),
 };
 
-export const clusterB: adm.ClusterRead = {
+export const clusterB: ClusterRead = {
   id: "cluster-b-id",
   name: clusterTwo.name,
   status: {
@@ -48,7 +54,7 @@ export const clusterB: adm.ClusterRead = {
   },
 };
 
-export const clusterC: adm.ClusterRead = {
+export const clusterC: ClusterRead = {
   id: "cluster-c-id",
   name: clusterThree.name,
   status: {
@@ -61,7 +67,7 @@ export const clusterC: adm.ClusterRead = {
   },
 };
 
-export const clusterD: adm.ClusterRead = {
+export const clusterD: ClusterRead = {
   id: "cluster-d-id",
   name: clusterFour.name,
   status: {
@@ -74,7 +80,7 @@ export const clusterD: adm.ClusterRead = {
   },
 };
 
-export const clusterE: adm.ClusterRead = {
+export const clusterE: ClusterRead = {
   id: "cluster-e-id",
   name: clusterFive.name,
   status: {
@@ -87,7 +93,7 @@ export const clusterE: adm.ClusterRead = {
   },
 };
 
-export const clusterF: adm.ClusterRead = {
+export const clusterF: ClusterRead = {
   id: "cluster-f-id",
   name: clusterSix.name,
   status: {
@@ -100,7 +106,7 @@ export const clusterF: adm.ClusterRead = {
   },
 };
 
-export const clusterNotReady: adm.ClusterRead = {
+export const clusterNotReady: ClusterRead = {
   id: "cluster-not-ready-id",
   name: clusterOne.name,
   status: {
@@ -113,26 +119,23 @@ export const clusterNotReady: adm.ClusterRead = {
   },
 };
 
-export class DeploymentClustersStore extends BaseStore<"id", adm.ClusterRead> {
+export class DeploymentClustersStore extends BaseStore<"id", ClusterRead> {
   constructor() {
     super("id", [clusterA, clusterB, clusterC, clusterD, clusterE, clusterF]);
   }
 
-  convert(body: adm.ClusterRead): adm.ClusterRead {
+  convert(body: ClusterRead): ClusterRead {
     return body;
   }
 
-  filter(
-    searchTerm: string | undefined,
-    cs: adm.ClusterRead[],
-  ): adm.ClusterRead[] {
+  filter(searchTerm: string | undefined, cs: ClusterRead[]): ClusterRead[] {
     if (!searchTerm || searchTerm === null || searchTerm.trim().length === 0)
       return cs;
     const searchTermValue = searchTerm.split("OR")[0].split("=")[1];
-    return cs.filter((c: adm.ClusterRead) => c.name?.includes(searchTermValue));
+    return cs.filter((c: ClusterRead) => c.name?.includes(searchTermValue));
   }
 
-  sort(orderBy: string | undefined, cs: adm.ClusterRead[]): adm.ClusterRead[] {
+  sort(orderBy: string | undefined, cs: ClusterRead[]): ClusterRead[] {
     if (!orderBy || orderBy === null || orderBy.trim().length === 0) return cs;
     const column: "name" = orderBy.split(" ")[0] as "name";
     const direction = orderBy.split(" ")[1];

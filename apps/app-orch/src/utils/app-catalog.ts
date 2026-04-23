@@ -10,14 +10,8 @@ import { Status } from "@orch-ui/components";
  * Utility do sort object that have an optional displayName and a mandatory name
  */
 export const displayNamedItemSort = (
-  a:
-    | adm.DeploymentRead
-    | catalog.ApplicationRead
-    | catalog.DeploymentPackageRead,
-  b:
-    | adm.DeploymentRead
-    | catalog.ApplicationRead
-    | catalog.DeploymentPackageRead,
+  a: adm.DeploymentRead | catalog.Application | catalog.DeploymentPackage,
+  b: adm.DeploymentRead | catalog.Application | catalog.DeploymentPackage,
 ): number => {
   const ta = a.displayName ? a.displayName : a.name;
   const tb = b.displayName ? b.displayName : b.name;

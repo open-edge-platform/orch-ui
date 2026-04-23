@@ -14,19 +14,19 @@ import DeploymentPackageTable from "../../deploymentPackages/DeploymentPackageTa
 import "./SelectPackage.scss";
 
 export interface SelectPackageProps {
-  onSelect: (applicationPackage: catalog.DeploymentPackageRead | null) => void;
-  selectedPackage?: catalog.DeploymentPackageRead;
+  onSelect: (applicationPackage: catalog.DeploymentPackage | null) => void;
+  selectedPackage?: catalog.DeploymentPackage;
 }
 const SelectPackage = ({ onSelect, selectedPackage }: SelectPackageProps) => {
   const [currentSelect, setCurrentSelect] = useState<
-    catalog.DeploymentPackageRead | undefined
+    catalog.DeploymentPackage | undefined
   >(selectedPackage);
   const [tabIndex, setTabIndex] = useState<string | number>(
     selectedPackage?.kind ?? "KIND_NORMAL",
   );
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const onRowSelect = (selection: catalog.DeploymentPackageRead) => {
+  const onRowSelect = (selection: catalog.DeploymentPackage) => {
     onSelect(selection);
     setCurrentSelect(selection);
   };

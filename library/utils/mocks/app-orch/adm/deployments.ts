@@ -63,7 +63,6 @@ export const deploymentMinimal: adm.DeploymentRead = {
   appName: packageOne.name,
   appVersion: packageOne.version,
   profileName: "",
-  publisherName: "intel", // FIXME remove once gone from ADM
   targetClusters: [],
   status: {
     state: "RUNNING",
@@ -83,7 +82,6 @@ export const deploymentWithUpdateAvailable: adm.DeploymentRead = {
   appName: packageOne.name,
   appVersion: "0.0.1", //packageOne.version,
   profileName: "default-profile",
-  publisherName: "intel", // FIXME remove once gone from ADM
   overrideValues: [
     {
       targetNamespace: "testing",
@@ -92,7 +90,7 @@ export const deploymentWithUpdateAvailable: adm.DeploymentRead = {
         version: "11",
         image: { containerDisk: { pullSecret: "value1" } },
         a: { b: { c: { d: { e: "value3" } } } },
-      },
+      } as unknown as adm.GoogleProtobufStruct,
     },
     {
       targetNamespace: "console",
@@ -123,7 +121,6 @@ export const deploymentOne: adm.DeploymentRead = {
   appName: packageOne.name,
   appVersion: packageOne.version,
   profileName: "default-profile",
-  publisherName: "intel", // FIXME remove once gone from ADM
   overrideValues: [
     {
       targetNamespace: "testing",
@@ -132,7 +129,7 @@ export const deploymentOne: adm.DeploymentRead = {
         version: "11",
         image: { containerDisk: { pullSecret: "value1" } },
         a: { b: { c: { d: { e: "value3" } } } },
-      },
+      } as unknown as adm.GoogleProtobufStruct,
     },
     {
       targetNamespace: "console",
@@ -163,7 +160,6 @@ export const deploymentTwo: adm.DeploymentRead = {
   appName: packageThree.name,
   appVersion: packageThree.version,
   profileName: profileOne.name,
-  publisherName: "intel", // FIXME remove once gone from ADM
   overrideValues: [
     {
       targetNamespace: "testing",
@@ -171,7 +167,7 @@ export const deploymentTwo: adm.DeploymentRead = {
       values: {
         image: {
           containerDisk: { pullSecret: "%OrchGeneratedDockerCredential%" },
-        },
+        } as unknown as adm.GoogleProtobufStruct,
         version: "11",
       },
     },
@@ -197,7 +193,6 @@ export const deploymentThree: adm.DeploymentRead = {
   appName: packageFour.name,
   appVersion: packageFour.version,
   profileName: deploymentProfileTwo.name,
-  publisherName: "intel", // FIXME remove once gone from ADM
   targetClusters: packageFour.applicationReferences.map((ar) => ({
     appName: ar.name,
     labels: deploymentTwoMetadata,
@@ -209,7 +204,7 @@ export const deploymentThree: adm.DeploymentRead = {
       values: {
         image: { containerDisk: { pullSecret: "value2" } },
         version: "12",
-      },
+      } as unknown as adm.GoogleProtobufStruct,
     },
   ],
   status: {
@@ -228,7 +223,6 @@ const deploymentDefault = {
   appName: packageOne.name,
   appVersion: packageOne.version,
   profileName: "",
-  publisherName: "intel", // FIXME remove once gone from ADM
   targetClusters: [],
 };
 export const deploymentDeploying: adm.DeploymentRead = {
@@ -297,7 +291,7 @@ export const deploymentEditAutomatic: adm.DeploymentRead = {
       appName: appForEditDeployment2.name,
       values: {
         key: "3",
-      },
+      } as unknown as adm.GoogleProtobufStruct,
     },
   ],
   status: {
@@ -328,7 +322,7 @@ export const deploymentEditManual: adm.DeploymentRead = {
       appName: appForEditDeployment2.name,
       values: {
         key: "3",
-      },
+      } as unknown as adm.GoogleProtobufStruct,
     },
   ],
   status: {

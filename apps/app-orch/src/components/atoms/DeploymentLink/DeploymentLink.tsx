@@ -5,7 +5,6 @@
 
 import { adm } from "@orch-ui/apis";
 import { ApiError, SquareSpinner } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
 import { Link } from "react-router-dom";
 
 const dataCy = "deploymentLink";
@@ -14,18 +13,17 @@ export interface DeploymentLinkProps {
   deplId: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const DeploymentLink = ({ deplId }: DeploymentLinkProps) => {
   const cy = { "data-cy": dataCy };
 
-  const {
-    data: deploymentResponse,
-    isLoading,
-    isError,
-    error,
-  } = adm.useDeploymentServiceGetDeploymentQuery({
-    projectName: SharedStorage.project?.name ?? "",
-    deplId,
-  });
+  // TODO: GetDeployment endpoint removed in multitenancy simplification
+  // Returning placeholder while API is updated
+  const deploymentResponse: { deployment?: adm.DeploymentRead } | undefined =
+    undefined;
+  const isLoading = false;
+  const isError = false;
+  const error = undefined;
 
   if (isError) {
     return <ApiError error={error} />;

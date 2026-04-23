@@ -9,7 +9,7 @@ import { profileFormValues } from "./profile";
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/applications.ts instead
  */
-export const singleApplication: catalog.ApplicationRead = {
+export const singleApplication: catalog.Application = {
   name: "engage",
   displayName: "engage display name",
   description: "This application is VM-based engage app",
@@ -42,7 +42,7 @@ export const singleApplication: catalog.ApplicationRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/applications.ts instead
  */
-export const singleApplicationWithShortDescription: catalog.ApplicationRead = {
+export const singleApplicationWithShortDescription: catalog.Application = {
   name: "engage",
   displayName: "engage display name",
   description: "description",
@@ -74,7 +74,7 @@ export const singleApplicationWithShortDescription: catalog.ApplicationRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/applications.ts instead
  */
-export const multipleApplication: catalog.ApplicationRead[] = [
+export const multipleApplication: catalog.Application[] = [
   {
     name: "engage",
     displayName: "engage app",
@@ -226,7 +226,7 @@ export const multipleApplication: catalog.ApplicationRead[] = [
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/applications.ts instead
  */
-export const applicationFormValues: catalog.ApplicationRead = {
+export const applicationFormValues: catalog.Application = {
   name: "testing-name",
   displayName: "Testing Name",
   version: "1.0.0",
@@ -241,9 +241,7 @@ export const applicationFormValues: catalog.ApplicationRead = {
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/applications.ts instead
  */
-export const applicationReviewInfomation = (
-  formInput: catalog.ApplicationRead,
-) => [
+export const applicationReviewInfomation = (formInput: catalog.Application) => [
   { key: "Name", value: formInput.displayName || "testing" },
   { key: "Version", value: formInput.version },
   { key: "Description", value: formInput.description || "" },
@@ -256,7 +254,7 @@ export const applicationReviewInfomation = (
 /**
  * @deprecated use shared/src/mocks/app-orch/catalog/applications.ts instead
  */
-export const applicationDetails: catalog.ApplicationRead = {
+export const applicationDetails: catalog.Application = {
   name: "wordpress",
   displayName: "engage display name",
   description: "This application is VM-based engage app",

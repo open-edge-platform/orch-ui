@@ -7770,7 +7770,6 @@ export const {
   useSiteServiceListSitesQuery,
   useSiteServiceCreateSiteMutation,
   useSiteServiceGetSiteQuery,
-  useLazySiteServiceGetSiteQuery,
   useSiteServiceUpdateSiteMutation,
   useSiteServiceDeleteSiteMutation,
   useSiteServicePatchSiteMutation,

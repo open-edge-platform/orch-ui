@@ -295,7 +295,7 @@ const ApplicationTable = ({
   ) : undefined;
 
   const memoTable = useCallback(
-    (applicationsData: catalog.ListApplicationsResponseRead) => (
+    (applicationsData: catalog.ListApplicationsResponse) => (
       <Table
         // Basic table data
         key="applications-table"

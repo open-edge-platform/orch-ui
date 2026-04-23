@@ -211,7 +211,7 @@ const ApplicationCreateEdit = () => {
     if (isCreatePage) {
       createApplication({
         projectName: SharedStorage.project?.name ?? "",
-        application: app,
+        catalogV3Application: app,
       });
     } else if (appName && version) {
       // if it's edit we surely have the name and version
@@ -219,7 +219,7 @@ const ApplicationCreateEdit = () => {
         projectName: SharedStorage.project?.name ?? "",
         applicationName: appName,
         version: version,
-        application: app,
+        catalogV3Application: app,
       });
     } /* else appName & version is missing on Edit */
     setPreviousButtonDisable(true);

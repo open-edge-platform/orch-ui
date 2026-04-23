@@ -8,11 +8,11 @@
 
 window.__RUNTIME_CONFIG__ = {
   AUTH: "false",
-  KC_URL: "https://keycloak.kind.internal",
+  KC_URL: "https://keycloak.orch-10-114-181-220.espdqa.infra-host.com",
   KC_REALM: "master",
   KC_CLIENT_ID: "webui-client",
   SESSION_TIMEOUT: 0,
-  OBSERVABILITY_URL: "https://observability-ui.kind.internal",
+  OBSERVABILITY_URL: "https://observability-ui.orch-10-114-181-220.espdqa.infra-host.com",
   MFE: {
     APP_ORCH: "false",
     INFRA: "false",
@@ -21,14 +21,14 @@ window.__RUNTIME_CONFIG__ = {
   },
   TITLE: "Admin",
   API: {
-    CATALOG: "https://app-orch.kind.internal",
-    ADM: "https://app-orch.kind.internal",
-    ARM: "https://app-orch.kind.internal",
-    INFRA: "https://api.kind.internal",
-    CO: "https://cluster-orch.kind.internal",
-    MB: "https://metadata.kind.internal",
-    ALERT: "https://alerting-monitor.kind.internal",
-    TM: "https://api.kind.internal",
+    CATALOG: "https://app-orch.orch-10-114-181-220.espdqa.infra-host.com",
+    ADM: "https://app-orch.orch-10-114-181-220.espdqa.infra-host.com",
+    ARM: "https://app-orch.orch-10-114-181-220.espdqa.infra-host.com",
+    INFRA: "https://api.orch-10-114-181-220.espdqa.infra-host.com",
+    CO: "https://cluster-orch.orch-10-114-181-220.espdqa.infra-host.com",
+    MB: "https://metadata.orch-10-114-181-220.espdqa.infra-host.com",
+    ALERT: "https://alerting-monitor.orch-10-114-181-220.espdqa.infra-host.com",
+    TM: "https://api.orch-10-114-181-220.espdqa.infra-host.com",
   },
   VERSIONS: {
     orchestrator: "unknown",

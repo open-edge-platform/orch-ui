@@ -10,7 +10,7 @@ import DeploymentApplicationsTablePom from "./DeploymentApplicationsTable.pom";
 
 const pom = new DeploymentApplicationsTablePom();
 describe("<DeploymentApplicationsTable/>", () => {
-  const mockDeploymentPackage: catalog.DeploymentPackageRead = {
+  const mockDeploymentPackage: catalog.DeploymentPackage = {
     ...packageOne,
     applicationReferences: [
       {

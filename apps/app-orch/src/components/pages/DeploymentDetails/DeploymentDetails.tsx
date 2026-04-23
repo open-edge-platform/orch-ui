@@ -12,7 +12,6 @@ import {
   setBreadcrumb,
 } from "@orch-ui/components";
 import {
-  API_INTERVAL,
   checkAuthAndRole,
   parseError,
   Role,
@@ -93,21 +92,12 @@ const DeploymentDetails = ({
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] =
     useState<boolean>(false);
 
-  const {
-    data: apiDeployment,
-    isSuccess: isDeploymentSuccess,
-    isLoading: isDeploymentLoading,
-    isError: isDeploymentError,
-  } = adm.useDeploymentServiceGetDeploymentQuery(
-    {
-      projectName: SharedStorage.project?.name ?? "",
-      deplId: id!,
-    },
-    {
-      skip: !SharedStorage.project?.name || !id || upgradeState.isModalOpen,
-      pollingInterval: deleteConfirmationOpen ? undefined : API_INTERVAL,
-    },
-  );
+  // TODO: GetDeployment endpoint removed in multitenancy simplification
+  const apiDeployment: { deployment?: adm.DeploymentRead } | undefined =
+    undefined;
+  const isDeploymentSuccess = false;
+  const isDeploymentLoading = false;
+  const isDeploymentError = false;
 
   const validateDeploymentName =
     isDeploymentSuccess &&
@@ -127,7 +117,14 @@ const DeploymentDetails = ({
         )
       : initialBreadcrumbStack;
 
-  const [deleteDeployment] = adm.useDeploymentServiceDeleteDeploymentMutation();
+  // TODO: DeleteDeployment endpoint removed in multitenancy simplification
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const deleteDeployment = async (_arg: {
+    projectName: string;
+    deplId: string;
+  }) => {
+    throw new Error("Delete deployment not supported in current API");
+  };
 
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumb));

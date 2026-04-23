@@ -50,8 +50,8 @@ export interface DeploymentPackageTableProps {
   kind?: CatalogKinds;
   hideColumns?: string[];
   canRadioSelect?: boolean;
-  onRadioSelectRow?: (selectedRow: catalog.DeploymentPackageRead) => void;
-  prevRadioSelection?: catalog.DeploymentPackageRead;
+  onRadioSelectRow?: (selectedRow: catalog.DeploymentPackage) => void;
+  prevRadioSelection?: catalog.DeploymentPackage;
 }
 
 const DeploymentPackageTable = ({
@@ -113,12 +113,12 @@ const DeploymentPackageTable = ({
       });
   };
 
-  const columns: TableColumn<catalog.DeploymentPackageRead>[] = [
+  const columns: TableColumn<catalog.DeploymentPackage>[] = [
     {
       Header: "Name",
-      accessor: (item: catalog.DeploymentPackageRead) => item.name,
+      accessor: (item: catalog.DeploymentPackage) => item.name,
       apiName: "name",
-      Cell: (table: { row: { original: catalog.DeploymentPackageRead } }) => (
+      Cell: (table: { row: { original: catalog.DeploymentPackage } }) => (
         <Link
           to={`/applications/package/${table.row.original.name}/version/${table.row.original.version}/`}
         >
@@ -153,7 +153,7 @@ const DeploymentPackageTable = ({
     },
     {
       Header: "Description",
-      accessor: (item: catalog.DeploymentPackageRead) => item.description,
+      accessor: (item: catalog.DeploymentPackage) => item.description,
       apiName: "description",
       Cell: (table) => {
         const deploymentPackage = table.row.original;
@@ -172,7 +172,7 @@ const DeploymentPackageTable = ({
       // NOTE: accessor: will not trigger re-render of table!  We were using
       // Cell:  but that would cause the popup to immediately dissapear whenever
       // it was made visible
-      accessor: (item: catalog.DeploymentPackageRead) => (
+      accessor: (item: catalog.DeploymentPackage) => (
         <Popup
           onToggle={(isToggled: boolean) => {
             setPollingInterval(isToggled ? 0 : API_INTERVAL);
@@ -186,7 +186,7 @@ const DeploymentPackageTable = ({
   if (canRadioSelect) {
     columns.unshift({
       Header: "Select",
-      Cell: (table: { row: { original: catalog.DeploymentPackageRead } }) => {
+      Cell: (table: { row: { original: catalog.DeploymentPackage } }) => {
         const row = table.row.original;
         return (
           <input
@@ -205,10 +205,9 @@ const DeploymentPackageTable = ({
     });
   }
 
-  const filteredColums: TableColumn<catalog.DeploymentPackageRead>[] =
-    hideColumns
-      ? columns.filter((column) => !hideColumns.includes(column.Header))
-      : columns;
+  const filteredColums: TableColumn<catalog.DeploymentPackage>[] = hideColumns
+    ? columns.filter((column) => !hideColumns.includes(column.Header))
+    : columns;
 
   // Server-side API config
   const sortColumn =
@@ -229,7 +228,7 @@ const DeploymentPackageTable = ({
     catalog.useCatalogServiceListDeploymentPackagesQuery(
       {
         projectName: SharedStorage.project?.name ?? "",
-        filter: getFilter<catalog.DeploymentPackageRead>(
+        filter: getFilter<catalog.DeploymentPackage>(
           searchTerm,
           ["name", "displayName", "description", "version"],
           Operator.OR,
@@ -350,7 +349,7 @@ const DeploymentPackageTable = ({
 
   const memoTable = useCallback(
     (
-      deploymentPackages: catalog.DeploymentPackageRead[],
+      deploymentPackages: catalog.DeploymentPackage[],
       totalElements: number,
     ) => {
       return (

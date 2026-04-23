@@ -43,7 +43,7 @@ import {
 } from "./deploymentProfiles";
 import { profileOne } from "./profiles";
 
-export const packageOne: catalog.DeploymentPackageRead = {
+export const packageOne: catalog.DeploymentPackage = {
   applicationReferences: [
     {
       name: applicationTwo.name,
@@ -88,7 +88,7 @@ export const packageOne: catalog.DeploymentPackageRead = {
   kind: "KIND_NORMAL",
 };
 
-export const packageOneExtension: catalog.DeploymentPackageRead = {
+export const packageOneExtension: catalog.DeploymentPackage = {
   applicationReferences: [
     {
       name: applicationTwo.name,
@@ -133,7 +133,7 @@ export const packageOneExtension: catalog.DeploymentPackageRead = {
   kind: "KIND_EXTENSION",
 };
 
-export const packageTwo: catalog.DeploymentPackageRead = {
+export const packageTwo: catalog.DeploymentPackage = {
   ...packageOne,
   name: "smart-inventory-package-two",
   version: appPackageOneVersionTwo,
@@ -168,7 +168,7 @@ export const packageTwo: catalog.DeploymentPackageRead = {
   kind: "KIND_NORMAL",
 };
 
-export const packageTwoExtension: catalog.DeploymentPackageRead = {
+export const packageTwoExtension: catalog.DeploymentPackage = {
   ...packageOne,
   name: appPackageTwoNameExtension,
   displayName: appPackageTwoNameExtension,
@@ -204,7 +204,7 @@ export const packageTwoExtension: catalog.DeploymentPackageRead = {
   kind: "KIND_EXTENSION",
 };
 
-export const packageThree: catalog.DeploymentPackageRead = {
+export const packageThree: catalog.DeploymentPackage = {
   applicationReferences: [
     {
       name: applicationTwo.name,
@@ -243,7 +243,7 @@ export const packageThree: catalog.DeploymentPackageRead = {
   // This package doesn't have defaultProfileName intentionally.
 };
 
-export const packageFour: catalog.DeploymentPackageRead = {
+export const packageFour: catalog.DeploymentPackage = {
   applicationReferences: [
     {
       name: applicationOne.name,
@@ -298,7 +298,7 @@ export const packageFour: catalog.DeploymentPackageRead = {
  * - low-perf (default) uses the cpu profile
  * - high-perf uses the gpu profile (has a parameter template)
  */
-export const packageWithParameterTemplates: catalog.DeploymentPackageRead = {
+export const packageWithParameterTemplates: catalog.DeploymentPackage = {
   applicationReferences: [
     {
       name: appWithParameterTemplates.name,
@@ -329,7 +329,7 @@ export const packageWithParameterTemplates: catalog.DeploymentPackageRead = {
   kind: "KIND_NORMAL",
 };
 
-export const packageForEditDeployment: catalog.DeploymentPackageRead = {
+export const packageForEditDeployment: catalog.DeploymentPackage = {
   name: "package-for-edit-deployment",
   version: "1.0.0",
   kind: "KIND_NORMAL",
@@ -364,7 +364,7 @@ export const packageForEditDeployment: catalog.DeploymentPackageRead = {
   ],
 };
 
-export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPackageRead> {
+export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPackage> {
   constructor() {
     super([
       packageOne,
@@ -378,19 +378,19 @@ export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPack
     ]);
   }
 
-  post(body: catalog.DeploymentPackageRead): catalog.DeploymentPackageRead {
+  post(body: catalog.DeploymentPackage): catalog.DeploymentPackage {
     this.resources.push(body);
     return body;
   }
 
   filter(
     searchTerm: string | undefined,
-    pkgs: catalog.DeploymentPackageRead[],
-  ): catalog.DeploymentPackageRead[] {
+    pkgs: catalog.DeploymentPackage[],
+  ): catalog.DeploymentPackage[] {
     if (!searchTerm || searchTerm === null || searchTerm.trim().length === 0)
       return pkgs;
     const searchTermValue = searchTerm.split("OR")[0].split("=")[1];
-    const result = pkgs.filter((pkg: catalog.DeploymentPackageRead) => {
+    const result = pkgs.filter((pkg: catalog.DeploymentPackage) => {
       return (
         pkg.name.includes(searchTermValue) ||
         pkg.displayName?.includes(searchTermValue) ||
@@ -403,8 +403,8 @@ export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPack
 
   sort(
     orderBy: string | undefined,
-    pkgs: catalog.DeploymentPackageRead[],
-  ): catalog.DeploymentPackageRead[] {
+    pkgs: catalog.DeploymentPackage[],
+  ): catalog.DeploymentPackage[] {
     if (!orderBy || orderBy === null || orderBy.trim().length === 0)
       return pkgs;
     const column: "name" | "description" | "version" = orderBy.split(" ")[0] as
@@ -428,10 +428,7 @@ export class DeploymentPackagesStore extends CatalogStore<catalog.DeploymentPack
     return pkgs;
   }
 
-  getByPackagesKind(
-    packages: catalog.DeploymentPackageRead[],
-    kind: CatalogKinds,
-  ) {
+  getByPackagesKind(packages: catalog.DeploymentPackage[], kind: CatalogKinds) {
     if (!kind) return packages; // Retuns all kinds
     return packages.filter((pckg) => pckg.kind === kind);
   }
