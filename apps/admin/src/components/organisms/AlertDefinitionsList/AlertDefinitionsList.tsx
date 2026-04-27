@@ -74,11 +74,6 @@ const AlertDefinitionsList = () => {
                 message: "Alert definitions Successfully updated",
               }),
             );
-            dispatch(
-              omApi.observabilityMonitor.util.invalidateTags([
-                { type: "alert-definition" },
-              ]),
-            );
             setActions([]);
           })
           .catch(() => {
@@ -266,11 +261,6 @@ const AlertDefinitionsList = () => {
               setActions([]);
               setAlertDefinitionsTableData(
                 alertDefinitions?.alertDefinitions ?? [],
-              );
-              dispatch(
-                omApi.observabilityMonitor.util.invalidateTags([
-                  { type: "alert-definition" },
-                ]),
               );
             }}
           >
