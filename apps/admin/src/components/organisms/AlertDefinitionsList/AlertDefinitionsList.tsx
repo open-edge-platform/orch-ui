@@ -5,7 +5,7 @@
 
 import { omApi } from "@orch-ui/apis";
 import { OrchTable } from "@orch-ui/components";
-import { SharedStorage } from "@orch-ui/utils";
+import { API_INTERVAL, SharedStorage } from "@orch-ui/utils";
 import { Button } from "@spark-design/react";
 import { ToastState } from "@spark-design/tokens";
 import { useEffect, useState } from "react";
@@ -39,13 +39,25 @@ const AlertDefinitionsList = () => {
     isLoading,
     isError,
     error,
-  } = omApi.useGetProjectAlertDefinitionsQuery({
-    projectName: SharedStorage.project?.name ?? "",
-  });
+    refetch,
+    isUninitialized,
+  } = omApi.useGetProjectAlertDefinitionsQuery(
+    {
+      projectName: SharedStorage.project?.name ?? "",
+    },
+    { pollingInterval: API_INTERVAL },
+  );
 
   useEffect(() => {
     setAlertDefinitionsTableData(alertDefinitions?.alertDefinitions ?? []);
   }, [alertDefinitions, isSuccess]);
+
+  // Refetch API if previously called and project changes to ensure fresh data
+  useEffect(() => {
+    if (!isUninitialized) {
+      refetch();
+    }
+  }, [SharedStorage.project?.name, refetch, isUninitialized]);
 
   const updateAlertDefinitions = async () => {
     const requests: Promise<unknown>[] = [];
