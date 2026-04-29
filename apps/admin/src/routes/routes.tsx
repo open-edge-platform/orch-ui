@@ -75,7 +75,7 @@ const getHomeRoute = () => {
     return "/admin/alert-definitions";
   }
 
-  if (hasClusterPermission) {
+  if (hasClusterPermission && RuntimeConfig.isEnabled("CLUSTER_ORCH")) {
     return "/admin/cluster-templates";
   }
 
