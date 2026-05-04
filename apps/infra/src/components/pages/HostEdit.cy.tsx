@@ -251,4 +251,72 @@ describe("<HostEdit />", () => {
       pom.el.siteCombobox.should("be.disabled");
     });
   });
+
+  describe("Save Button Region/Site Validation", () => {
+    it("should disable Save button when region is changed and no site is selected", () => {
+      // Changing region clears the site selection
+      pom.el.regionCombobox.find(".spark-combobox-arrow-button").click();
+      cy.contains("Portland").click();
+
+      // Site is now undefined — Save must be disabled
+      pom.el.updateHostButton.should("have.class", "spark-button-disabled");
+    });
+
+    it("should enable Save button after selecting a new site following region change", () => {
+      // Change region — site is cleared
+      pom.el.regionCombobox.find(".spark-combobox-arrow-button").click();
+      cy.contains("Portland").click();
+
+      // Save is disabled while no site is selected
+      pom.el.updateHostButton.should("have.class", "spark-button-disabled");
+
+      // Select a site from the reloaded list
+      pom.el.siteCombobox.find(".spark-combobox-arrow-button").click();
+      cy.contains(siteMinimartTwoName).click();
+
+      // Save should now be enabled
+      pom.el.updateHostButton.should("not.have.class", "spark-button-disabled");
+    });
+
+    it("should disable Save button when host has no site assigned", () => {
+      pom.interceptApis([
+        pom.api.getInstances,
+        pom.api.hostWithoutSite,
+        pom.api.regionsSuccess,
+      ]);
+      cy.mount(<HostEdit />, {
+        routerProps: {
+          initialEntries: [`/host/${mockHost.resourceId}/edit`],
+        },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
+        reduxStore: store,
+      });
+      pom.waitForApis();
+
+      // Region and site are both unset — Save must be disabled
+      pom.el.updateHostButton.should("have.class", "spark-button-disabled");
+    });
+
+    it("should not disable Save button due to region/site when dropdowns are disabled", () => {
+      // When dropdowns are disabled (no instances), region/site validation is skipped
+      pom.interceptApis([
+        pom.api.getInstancesEmpty,
+        pom.api.hostWithoutSite,
+        pom.api.regionsSuccess,
+      ]);
+      cy.mount(<HostEdit />, {
+        routerProps: {
+          initialEntries: [`/host/${mockHost.resourceId}/edit`],
+        },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
+        reduxStore: store,
+      });
+      pom.waitForApis();
+
+      // Dropdowns are disabled, so region/site emptiness should not block Save
+      pom.el.regionCombobox.should("be.disabled");
+      pom.el.siteCombobox.should("be.disabled");
+      pom.el.updateHostButton.should("not.have.class", "spark-button-disabled");
+    });
+  });
 });
