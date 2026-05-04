@@ -399,6 +399,7 @@ const HostEdit = () => {
                       }
                     }
                   }}
+                  isRequired={true}
                   data-cy="siteCombobox"
                 >
                   {siteData && siteData.sites
@@ -444,7 +445,12 @@ const HostEdit = () => {
                 className="update-button"
                 variant="action"
                 data-cy="updateHostButton"
-                isDisabled={hasMetadataError}
+                isDisabled={
+                  hasMetadataError ||
+                  (!isRegionSiteDisabled &&
+                    !isRegionSiteLoading &&
+                    (!selectedRegion?.resourceId || !selectedSite?.resourceId))
+                }
               >
                 Save
               </Button>
