@@ -23,7 +23,7 @@ type SuccessApiAliases = "createProject";
 type ErrorApiAliases = "createProjectError";
 type ApiAliases = SuccessApiAliases | ErrorApiAliases;
 
-const successEndpoints: CyApiDetails<SuccessApiAliases, tm.ProjectProjectPost> =
+const successEndpoints: CyApiDetails<SuccessApiAliases, tm.ProjectWrite> =
   {
     createProject: {
       route: projectByIdRoute,

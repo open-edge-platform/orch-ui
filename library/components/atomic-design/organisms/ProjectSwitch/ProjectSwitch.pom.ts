@@ -26,7 +26,7 @@ type ApiAliases = SuccessApiAliases | ErrrorApiAliases;
 
 const successEndpoints: CyApiDetails<SuccessApiAliases, Project[]> = {
   getProjects: {
-    route: "*/projects?member-role=true",
+    route: "*/projects*",
     statusCode: 200,
     response: [...Array(mockProjectLength).keys()].map((index) => ({
       name: `project-${index}`,
@@ -44,12 +44,12 @@ const successEndpoints: CyApiDetails<SuccessApiAliases, Project[]> = {
     })),
   },
   getProjectsEmpty: {
-    route: "*/projects?member-role=true",
+    route: "*/projects*",
     statusCode: 200,
     response: [],
   },
   getProjectsSampleProject: {
-    route: "*/projects?member-role=true",
+    route: "*/projects*",
     statusCode: 200,
     response: [
       {
@@ -75,7 +75,7 @@ const errorEndpoints: CyApiDetails<
   Partial<InfraUIMessageError>
 > = {
   getProjectsMissingOrg: {
-    route: "*/projects?member-role=true",
+    route: "*/projects*",
     statusCode: 401,
     response: {
       message: "Unauthorized",

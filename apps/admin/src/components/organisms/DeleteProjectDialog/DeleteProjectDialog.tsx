@@ -40,7 +40,7 @@ const DeleteProjectDialog = ({
 }: DeleteProjectDialogProps) => {
   const cy = { "data-cy": dataCy };
 
-  const { useDeleteV1ProjectsProjectProjectMutation: useDeleteProject } = tm;
+  const { useDeleteV1ProjectsByNameMutation: useDeleteProject } = tm;
 
   const [deleteProjectName, setDeleteProjectName] = useState<string>("");
   const [deleteProject] = useDeleteProject();
@@ -53,7 +53,7 @@ const DeleteProjectDialog = ({
       return;
     }
     deleteProject({
-      "project.Project": projectName,
+      name: projectName,
     })
       .then((res) => {
         if ((res as { error: FetchBaseQueryError | SerializedError }).error) {

@@ -27,8 +27,8 @@ NC='\033[0m' # No Color
 
 echo -e "${CYAN}Generate RTK endpoints APIs${NC}"
 
-# echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
-# npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
+echo -e "${CYAN}Generate TENANT_MANAGER RTK endpoints APIs${NC}"
+npx @rtk-query/codegen-openapi ${prefix}tenancy/tenancyDataModel.config.json
 
 echo -e "${CYAN}Generate EDGE_INFRA_MANAGER RTK endpoints APIs${NC}"
 npx @rtk-query/codegen-openapi ${prefix}infra/infraApis.config.json
