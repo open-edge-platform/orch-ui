@@ -40,7 +40,7 @@ export const DashboardSummaries = () => {
   const { deploymentId } = useParams<urlParams>();
   const [projectName, setProjectName] = useState<string>("");
 
-  const { data: projects } = tm.useListV1ProjectsQuery({ "member-role": true });
+  const { data: projects } = tm.useListV1ProjectsQuery({});
   useEffect(() => {
     setProjectName(
       projects?.find((proj) => proj.name === SharedStorage.project?.name)?.spec

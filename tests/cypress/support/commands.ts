@@ -115,7 +115,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add("currentProject", () => {
   cy.visit("/");
-  cy.intercept("/v1/projects?member-role=true").as("getProjects");
+  cy.intercept("/v1/projects*").as("getProjects");
   cy.url().should("contain", Cypress.config().baseUrl!);
   cy.contains("Dashboard").should("be.visible");
   cy.dataCy("projectSwitchText").should("not.have.text", "Select Projects");

@@ -40,7 +40,7 @@ export const handlers = [
             description: "third network",
           },
         },
-      ] as tm.ListV1ProjectsProjectProjectNetworksApiResponse,
+      ],
       { status: 200 },
     );
   }),
