@@ -7,6 +7,7 @@ import { tm } from "@orch-ui/apis";
 import {
   AppOrchShow,
   Flex,
+  InfraShow,
   MetadataPair,
   SquareSpinner,
 } from "@orch-ui/components";
@@ -20,12 +21,14 @@ import DeploymentDrawer from "../../organisms/DeploymentDrawer/DeploymentDrawer"
 import DeploymentsContainer from "../../organisms/DeploymentsContainer/DeploymentsContainer";
 import FiltersDrawer from "../../organisms/FiltersDrawer/FiltersDrawer";
 import "./DashboardSummaries.scss";
-//import AppOrchUIDeploymentStatus from "AppOrchUI/DeploymentsStatus"; //delay the load
 
-const AppOrchUIDeploymentStatus = React.lazy(
-  () => import("AppOrchUI/DeploymentsStatus"),
-);
-const EimUIHostStatus = React.lazy(() => import("EimUI/HostStatus"));
+const AppOrchUIDeploymentStatus = RuntimeConfig.isEnabled("APP_ORCH")
+  ? React.lazy(() => import("AppOrchUI/DeploymentsStatus"))
+  : null;
+
+const EimUIHostStatus = RuntimeConfig.isEnabled("INFRA")
+  ? React.lazy(() => import("EimUI/HostStatus"))
+  : null;
 
 type urlParams = {
   deploymentId?: string;
@@ -87,21 +90,27 @@ export const DashboardSummaries = () => {
           <AppOrchShow>
             <div className="dashboard__status-item">
               <Suspense fallback={<SquareSpinner message="One moment..." />}>
-                <AppOrchUIDeploymentStatus metadata={{ pairs: filters }} />
+                {AppOrchUIDeploymentStatus && (
+                  <AppOrchUIDeploymentStatus metadata={{ pairs: filters }} />
+                )}
               </Suspense>
             </div>
           </AppOrchShow>
-          <div
-            className={`dashboard__status-item${
-              !RuntimeConfig.isEnabled("APP_ORCH")
-                ? " dashboard__status-item--centered"
-                : ""
-            }`}
-          >
-            <Suspense fallback={<SquareSpinner message="One moment..." />}>
-              <EimUIHostStatus metadata={{ pairs: filters }} />
-            </Suspense>
-          </div>
+          <InfraShow>
+            <div
+              className={`dashboard__status-item${
+                !RuntimeConfig.isEnabled("APP_ORCH")
+                  ? " dashboard__status-item--centered"
+                  : ""
+              }`}
+            >
+              <Suspense fallback={<SquareSpinner message="One moment..." />}>
+                {EimUIHostStatus && (
+                  <EimUIHostStatus metadata={{ pairs: filters }} />
+                )}
+              </Suspense>
+            </div>
+          </InfraShow>
         </div>
       </DashboardCard>
 
