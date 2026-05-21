@@ -113,7 +113,7 @@ const ConfigureAllHosts = () => {
             isRequired
           />
         </Flex>
-        {createCluster && (
+        {createCluster && RuntimeConfig.isEnabled("CLUSTER_ORCH") && (
           <Flex cols={[4]} gap="2">
             {ClusterTemplatesDropdownRemote && (
               <ClusterTemplatesDropdownRemote
