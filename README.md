@@ -161,14 +161,17 @@ added explicitly.
 
 If your cluster was deployed with
 [`edge-out-of-band-manageability`](https://github.com/open-edge-platform/edge-out-of-band-manageability),
-set the `EOM_CORS_EXTRA_ORIGINS` environment variable (comma-separated list of
-extra origins) and re-sync the `traefik-extra-objects` release:
+extra CORS origins are an explicit opt-in (default off). Set
+**both** flags below and re-sync the `traefik-extra-objects` release:
 
 ```bash
 cd <path-to>/edge-out-of-band-manageability/post-orch
 
 # Load the cluster's standard env vars (EOM_CLUSTER_DOMAIN, etc.)
 set -a; source post-orch.env; set +a
+
+# Opt in to extra CORS origins (default is false).
+export EOM_CORS_ALLOW_EXTRA_ORIGINS=true
 
 # Add your dev origin(s).
 export EOM_CORS_EXTRA_ORIGINS="http://localhost:8080"
