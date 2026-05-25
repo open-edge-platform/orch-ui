@@ -117,6 +117,85 @@ If you would like to see data without connecting to real API's you can enable th
 
 Set this value BEFORE you run the `npm run start`.
 
+### Running the local UI against a remote Edge Orchestrator cluster
+
+The dev server defaults to mock data (or to the `kind.internal` FQDN baked into
+each app's `public/runtime-config.js`). To point your localhost UI at a real
+cluster two things are required:
+
+1. Tell the UI where the cluster lives, and
+2. Tell the cluster's gateway to accept browser requests from your laptop's
+   origin (CORS).
+
+#### 1. Point the UI at the cluster
+
+Edit the `fqdn` constant of each
+`apps/<mfe>/public/runtime-config.js` you intend to run (at minimum the one
+for `root`, which serves `http://localhost:8080`):
+
+```js
+// Replace "kind.internal" with your cluster's domain.
+const fqdn = "your-cluster.example.com";
+```
+
+This rewrites every derived URL — `https://api.<fqdn>`, `https://keycloak.<fqdn>`,
+`https://web-ui.<fqdn>`, etc. — to your cluster.
+
+Then start the dev server (mock mode off):
+
+```bash
+unset REACT_MOCK_API
+npm run start
+```
+
+The UI is served at <http://localhost:8080> and will call
+`https://api.<your-cluster>/v1/...` from the browser.
+
+#### 2. Allow your machine origin through CORS on the cluster
+
+Because the UI (`http://localhost:8080`) and the API
+(`https://api.<your-cluster>`) are different origins, the browser issues a
+CORS preflight on every API call. The cluster's Traefik `cors` middleware
+only allows the cluster's own public origins by default; your local machine must be
+added explicitly.
+
+If your cluster was deployed with
+[`edge-out-of-band-manageability`](https://github.com/open-edge-platform/edge-out-of-band-manageability),
+set the `EOM_CORS_EXTRA_ORIGINS` environment variable (comma-separated list of
+extra origins) and re-sync the `traefik-extra-objects` release:
+
+```bash
+cd <path-to>/edge-out-of-band-manageability/post-orch
+
+# Load the cluster's standard env vars (EOM_CLUSTER_DOMAIN, etc.)
+set -a; source post-orch.env; set +a
+
+# Add your dev origin(s).
+export EOM_CORS_EXTRA_ORIGINS="http://localhost:8080"
+
+# Reconcile only the gateway/CORS chart.
+helmfile -e onprem-eim sync --selector app=traefik-extra-objects
+```
+
+You can verify the change (the exact `Middleware` name and namespace come from
+the `traefik-extra-objects` chart in your cluster — adjust if your deploy
+overrides them):
+
+```bash
+kubectl get middleware.traefik.io -A \
+  -o jsonpath='{range .items[*]}{.metadata.namespace}/{.metadata.name}: {.spec.headers.accessControlAllowOriginList}{"\n"}{end}' \
+  | grep -i cors
+```
+
+`http://localhost:8080` should appear alongside the cluster's public origins.
+After this, hard-reload the UI (browsers cache failed preflights) and the API
+calls will succeed.
+
+> The two cluster public origins (`https://<EOM_CLUSTER_DOMAIN>` and
+> `https://web-ui.<EOM_CLUSTER_DOMAIN>`) are injected automatically from
+> `EOM_CLUSTER_DOMAIN` — only **extra** dev origins go in
+> `EOM_CORS_EXTRA_ORIGINS`.
+
 ### Testing
 
 The test codes are written with Cypress. To test Orchestrator GUI Web User Interface,
