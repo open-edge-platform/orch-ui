@@ -12,6 +12,8 @@ on:
     paths:
       - 'apps/app-orch/**'
       - 'package-lock.json'
+    tags:
+      - '*'
   workflow_dispatch:
 
 permissions:

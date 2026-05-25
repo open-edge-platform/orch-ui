@@ -12,6 +12,8 @@ on:
     paths:
       - 'apps/infra/**'
       - 'package-lock.json'
+    tags:
+      - '*'
   workflow_dispatch:
 
 permissions:
