@@ -11,8 +11,6 @@ on:
       - release-*
     paths:
       - 'tests/**'
-    tags:
-      - '*'
   workflow_dispatch:
 
 permissions:

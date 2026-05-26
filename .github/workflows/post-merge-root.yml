@@ -12,8 +12,6 @@ on:
     paths:
       - 'apps/root/**'
       - 'package-lock.json'
-    tags:
-      - '*'
   workflow_dispatch:
 
 permissions:
