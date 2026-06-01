@@ -1,5 +1,5 @@
 import { tdmApi as api } from "./apiSlice";
-export const addTagTypes = ["Org", "Project", "Network"] as const;
+export const addTagTypes = ["Org", "Project"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -10,51 +10,40 @@ const injectedRtkApi = api
         query: () => ({ url: `/v1/orgs` }),
         providesTags: ["Org"],
       }),
-      deleteV1OrgsOrgOrg: build.mutation<
-        DeleteV1OrgsOrgOrgApiResponse,
-        DeleteV1OrgsOrgOrgApiArg
+      getV1OrgsByName: build.query<
+        GetV1OrgsByNameApiResponse,
+        GetV1OrgsByNameApiArg
       >({
-        query: (queryArg) => ({
-          url: `/v1/orgs/${queryArg["org.Org"]}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Org"],
-      }),
-      getV1OrgsOrgOrg: build.query<
-        GetV1OrgsOrgOrgApiResponse,
-        GetV1OrgsOrgOrgApiArg
-      >({
-        query: (queryArg) => ({ url: `/v1/orgs/${queryArg["org.Org"]}` }),
+        query: (queryArg) => ({ url: `/v1/orgs/${queryArg.name}` }),
         providesTags: ["Org"],
       }),
-      putV1OrgsOrgOrg: build.mutation<
-        PutV1OrgsOrgOrgApiResponse,
-        PutV1OrgsOrgOrgApiArg
+      putV1OrgsByName: build.mutation<
+        PutV1OrgsByNameApiResponse,
+        PutV1OrgsByNameApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/orgs/${queryArg["org.Org"]}`,
+          url: `/v1/orgs/${queryArg.name}`,
           method: "PUT",
-          body: queryArg.orgOrgPost,
+          body: queryArg.orgWrite,
           params: { update_if_exists: queryArg.updateIfExists },
         }),
         invalidatesTags: ["Org"],
       }),
-      getV1OrgsOrgOrgFolders: build.query<
-        GetV1OrgsOrgOrgFoldersApiResponse,
-        GetV1OrgsOrgOrgFoldersApiArg
+      deleteV1OrgsByName: build.mutation<
+        DeleteV1OrgsByNameApiResponse,
+        DeleteV1OrgsByNameApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/orgs/${queryArg["org.Org"]}/Folders`,
+          url: `/v1/orgs/${queryArg.name}`,
+          method: "DELETE",
         }),
-        providesTags: ["Org"],
+        invalidatesTags: ["Org"],
       }),
-      getV1OrgsOrgOrgStatus: build.query<
-        GetV1OrgsOrgOrgStatusApiResponse,
-        GetV1OrgsOrgOrgStatusApiArg
+      getV1OrgsByNameStatus: build.query<
+        GetV1OrgsByNameStatusApiResponse,
+        GetV1OrgsByNameStatusApiArg
       >({
-        query: (queryArg) => ({
-          url: `/v1/orgs/${queryArg["org.Org"]}/status`,
-        }),
+        query: (queryArg) => ({ url: `/v1/orgs/${queryArg.name}/status` }),
         providesTags: ["Org"],
       }),
       listV1Projects: build.query<
@@ -62,108 +51,54 @@ const injectedRtkApi = api
         ListV1ProjectsApiArg
       >({
         query: (queryArg) => ({
-          url: "/v1/projects",
-          // FIXME this parameter has been manually added,
-          // we need to have it in the openapi specs or it will be overridden everytime we auto-generate the code
-          params: { "member-role": queryArg["member-role"] },
+          url: `/v1/projects`,
+          params: { org: queryArg.org },
         }),
         providesTags: ["Project"],
       }),
-      deleteV1ProjectsProjectProject: build.mutation<
-        DeleteV1ProjectsProjectProjectApiResponse,
-        DeleteV1ProjectsProjectProjectApiArg
+      getV1ProjectsByName: build.query<
+        GetV1ProjectsByNameApiResponse,
+        GetV1ProjectsByNameApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}`,
-          method: "DELETE",
+          url: `/v1/projects/${queryArg.name}`,
+          params: { org: queryArg.org },
+        }),
+        providesTags: ["Project"],
+      }),
+      putV1ProjectsByName: build.mutation<
+        PutV1ProjectsByNameApiResponse,
+        PutV1ProjectsByNameApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v1/projects/${queryArg.name}`,
+          method: "PUT",
+          body: queryArg.projectWrite,
+          params: {
+            org: queryArg.org,
+            update_if_exists: queryArg.updateIfExists,
+          },
         }),
         invalidatesTags: ["Project"],
       }),
-      getV1ProjectsProjectProject: build.query<
-        GetV1ProjectsProjectProjectApiResponse,
-        GetV1ProjectsProjectProjectApiArg
+      deleteV1ProjectsByName: build.mutation<
+        DeleteV1ProjectsByNameApiResponse,
+        DeleteV1ProjectsByNameApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}`,
-        }),
-        providesTags: ["Project"],
-      }),
-      putV1ProjectsProjectProject: build.mutation<
-        PutV1ProjectsProjectProjectApiResponse,
-        PutV1ProjectsProjectProjectApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}`,
-          method: "PUT",
-          body: queryArg.projectProjectPost,
-          params: { update_if_exists: queryArg.updateIfExists },
+          url: `/v1/projects/${queryArg.name}`,
+          method: "DELETE",
+          params: { org: queryArg.org },
         }),
         invalidatesTags: ["Project"],
       }),
-      getV1ProjectsProjectProjectNetworks: build.query<
-        GetV1ProjectsProjectProjectNetworksApiResponse,
-        GetV1ProjectsProjectProjectNetworksApiArg
+      getV1ProjectsByNameStatus: build.query<
+        GetV1ProjectsByNameStatusApiResponse,
+        GetV1ProjectsByNameStatusApiArg
       >({
         query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/Networks`,
-        }),
-        providesTags: ["Project"],
-      }),
-      listV1ProjectsProjectProjectNetworks: build.query<
-        ListV1ProjectsProjectProjectNetworksApiResponse,
-        ListV1ProjectsProjectProjectNetworksApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/networks`,
-        }),
-        providesTags: ["Network"],
-      }),
-      deleteV1ProjectsProjectProjectNetworksNetworkNetwork: build.mutation<
-        DeleteV1ProjectsProjectProjectNetworksNetworkNetworkApiResponse,
-        DeleteV1ProjectsProjectProjectNetworksNetworkNetworkApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/networks/${queryArg["network.Network"]}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Network"],
-      }),
-      getV1ProjectsProjectProjectNetworksNetworkNetwork: build.query<
-        GetV1ProjectsProjectProjectNetworksNetworkNetworkApiResponse,
-        GetV1ProjectsProjectProjectNetworksNetworkNetworkApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/networks/${queryArg["network.Network"]}`,
-        }),
-        providesTags: ["Network"],
-      }),
-      putV1ProjectsProjectProjectNetworksNetworkNetwork: build.mutation<
-        PutV1ProjectsProjectProjectNetworksNetworkNetworkApiResponse,
-        PutV1ProjectsProjectProjectNetworksNetworkNetworkApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/networks/${queryArg["network.Network"]}`,
-          method: "PUT",
-          body: queryArg.networkNetworkPost,
-          params: { update_if_exists: queryArg.updateIfExists },
-        }),
-        invalidatesTags: ["Network"],
-      }),
-      getV1ProjectsProjectProjectNetworksNetworkNetworkStatus: build.query<
-        GetV1ProjectsProjectProjectNetworksNetworkNetworkStatusApiResponse,
-        GetV1ProjectsProjectProjectNetworksNetworkNetworkStatusApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/networks/${queryArg["network.Network"]}/status`,
-        }),
-        providesTags: ["Network"],
-      }),
-      getV1ProjectsProjectProjectStatus: build.query<
-        GetV1ProjectsProjectProjectStatusApiResponse,
-        GetV1ProjectsProjectProjectStatusApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/v1/projects/${queryArg["project.Project"]}/status`,
+          url: `/v1/projects/${queryArg.name}/status`,
+          params: { org: queryArg.org },
         }),
         providesTags: ["Project"],
       }),
@@ -172,251 +107,123 @@ const injectedRtkApi = api
   });
 export { injectedRtkApi as tenancyDataModelApi };
 export type ListV1OrgsApiResponse =
-  /** status 200 Response returned back after getting org.Org objects */ OrgOrgList;
+  /** status 200 List of organizations */ OrgList;
 export type ListV1OrgsApiArg = void;
-export type DeleteV1OrgsOrgOrgApiResponse = unknown;
-export type DeleteV1OrgsOrgOrgApiArg = {
-  /** Name of the org.Org node */
-  "org.Org": string;
+export type GetV1OrgsByNameApiResponse = /** status 200 Organization */ Org;
+export type GetV1OrgsByNameApiArg = {
+  /** Org name */
+  name: string;
 };
-export type GetV1OrgsOrgOrgApiResponse =
-  /** status 200 Response returned back after getting org.Org object */ OrgOrgGet;
-export type GetV1OrgsOrgOrgApiArg = {
-  /** Name of the org.Org node */
-  "org.Org": string;
-};
-export type PutV1OrgsOrgOrgApiResponse = /** status 200 Default response */ {
-  message?: string;
-};
-export type PutV1OrgsOrgOrgApiArg = {
-  /** Name of the org.Org node */
-  "org.Org": string;
-  /** If set to false, disables update of preexisting object. Default value is true */
+export type PutV1OrgsByNameApiResponse =
+  /** status 200 Created or updated organization */ Org;
+export type PutV1OrgsByNameApiArg = {
+  /** Org name */
+  name: string;
+  /** If false, the call fails with 409 when the org already exists. Defaults to true. */
   updateIfExists?: boolean;
-  /** Request used to create org.Org */
-  orgOrgPost: OrgOrgPost;
+  orgWrite: OrgWrite;
 };
-export type GetV1OrgsOrgOrgFoldersApiResponse =
-  /** status 200 Response returned back after getting org.Org objects */ OrgOrgNamedLink;
-export type GetV1OrgsOrgOrgFoldersApiArg = {
-  /** Name of the org.Org node */
-  "org.Org": string;
+export type DeleteV1OrgsByNameApiResponse = /** status 200 OK */ void;
+export type DeleteV1OrgsByNameApiArg = {
+  /** Org name */
+  name: string;
 };
-export type GetV1OrgsOrgOrgStatusApiResponse =
-  /** status 200 Response returned back after getting status subresource of org.Org object */ OrgOrgStatus;
-export type GetV1OrgsOrgOrgStatusApiArg = {
-  /** Name of the org.Org node */
-  "org.Org": string;
+export type GetV1OrgsByNameStatusApiResponse =
+  /** status 200 Organization status */ Org;
+export type GetV1OrgsByNameStatusApiArg = {
+  /** Org name */
+  name: string;
 };
 export type ListV1ProjectsApiResponse =
-  /** status 200 Response returned back after getting project.Project objects */ ProjectProjectList;
-// FIXME this parameter has been manually added,
-export type ListV1ProjectsApiArg = { "member-role"?: boolean };
-export type DeleteV1ProjectsProjectProjectApiResponse = unknown;
-export type DeleteV1ProjectsProjectProjectApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
+  /** status 200 List of projects */ ProjectList;
+export type ListV1ProjectsApiArg = {
+  /** Filter to a single org by name. When omitted, the caller's resolved org scope (from JWT) is used. */
+  org?: string;
 };
-export type GetV1ProjectsProjectProjectApiResponse =
-  /** status 200 Response returned back after getting project.Project object */ ProjectProjectGet;
-export type GetV1ProjectsProjectProjectApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
+export type GetV1ProjectsByNameApiResponse = /** status 200 Project */ Project;
+export type GetV1ProjectsByNameApiArg = {
+  /** Project name */
+  name: string;
+  /** Disambiguate by org when the same project name exists under multiple orgs. */
+  org?: string;
 };
-export type PutV1ProjectsProjectProjectApiResponse =
-  /** status 200 Default response */ {
-    message?: string;
-  };
-export type PutV1ProjectsProjectProjectApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
-  /** If set to false, disables update of preexisting object. Default value is true */
+export type PutV1ProjectsByNameApiResponse =
+  /** status 200 Created or updated project */ Project;
+export type PutV1ProjectsByNameApiArg = {
+  /** Project name */
+  name: string;
+  /** Target org (required for creation when the caller has scope to multiple orgs). */
+  org?: string;
+  /** If false, the call fails with 409 when the project already exists. Defaults to true. */
   updateIfExists?: boolean;
-  /** Request used to create project.Project */
-  projectProjectPost: ProjectProjectPost;
+  projectWrite: ProjectWrite;
 };
-export type GetV1ProjectsProjectProjectNetworksApiResponse =
-  /** status 200 Response returned back after getting project.Project objects */ ProjectProjectNamedLink;
-export type GetV1ProjectsProjectProjectNetworksApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
+export type DeleteV1ProjectsByNameApiResponse = /** status 200 OK */ void;
+export type DeleteV1ProjectsByNameApiArg = {
+  /** Project name */
+  name: string;
+  /** Disambiguate by org when the same project name exists under multiple orgs. */
+  org?: string;
 };
-export type ListV1ProjectsProjectProjectNetworksApiResponse =
-  /** status 200 Response returned back after getting network.Network objects */ NetworkNetworkList;
-export type ListV1ProjectsProjectProjectNetworksApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
+export type GetV1ProjectsByNameStatusApiResponse =
+  /** status 200 Project status */ Project;
+export type GetV1ProjectsByNameStatusApiArg = {
+  /** Project name */
+  name: string;
+  org?: string;
 };
-export type DeleteV1ProjectsProjectProjectNetworksNetworkNetworkApiResponse =
-  unknown;
-export type DeleteV1ProjectsProjectProjectNetworksNetworkNetworkApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
-  /** Name of the network.Network node */
-  "network.Network": string;
-};
-export type GetV1ProjectsProjectProjectNetworksNetworkNetworkApiResponse =
-  /** status 200 Response returned back after getting network.Network object */ NetworkNetworkGet;
-export type GetV1ProjectsProjectProjectNetworksNetworkNetworkApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
-  /** Name of the network.Network node */
-  "network.Network": string;
-};
-export type PutV1ProjectsProjectProjectNetworksNetworkNetworkApiResponse =
-  /** status 200 Default response */ {
-    message?: string;
-  };
-export type PutV1ProjectsProjectProjectNetworksNetworkNetworkApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
-  /** Name of the network.Network node */
-  "network.Network": string;
-  /** If set to false, disables update of preexisting object. Default value is true */
-  updateIfExists?: boolean;
-  /** Request used to create network.Network */
-  networkNetworkPost: NetworkNetworkPost;
-};
-export type GetV1ProjectsProjectProjectNetworksNetworkNetworkStatusApiResponse =
-  /** status 200 Response returned back after getting status subresource of network.Network object */ NetworkNetworkStatus;
-export type GetV1ProjectsProjectProjectNetworksNetworkNetworkStatusApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
-  /** Name of the network.Network node */
-  "network.Network": string;
-};
-export type GetV1ProjectsProjectProjectStatusApiResponse =
-  /** status 200 Response returned back after getting status subresource of project.Project object */ ProjectProjectStatus;
-export type GetV1ProjectsProjectProjectStatusApiArg = {
-  /** Name of the project.Project node */
-  "project.Project": string;
-};
-export type OrgOrgList = {
-  name?: string;
-  spec?: {
-    description?: string;
-  };
-  status?: {
-    orgStatus?: {
-      message?: string;
-      statusIndicator?: string;
-      timeStamp?: number;
-      uID?: string;
-    };
-  };
-}[];
-export type OrgOrgGet = {
-  spec?: {
-    description?: string;
-  };
-  status?: {
-    orgStatus?: {
-      message?: string;
-      statusIndicator?: string;
-      timeStamp?: number;
-      uID?: string;
-    };
-  };
-};
-export type OrgOrgPost = {
+export type OrgSpec = {
   description?: string;
 };
-export type OrgOrgNamedLink = object[];
-export type OrgOrgStatus = {
-  orgStatus?: {
-    message?: string;
-    statusIndicator?: string;
-    timeStamp?: number;
-    uID?: string;
-  };
+export type StatusDetail = {
+  /** One of STATUS_INDICATION_IN_PROGRESS, STATUS_INDICATION_IDLE, STATUS_INDICATION_ERROR. */
+  statusIndicator?: string;
+  message?: string;
+  timeStamp?: number;
+  /** Stable UUID of the resource. */
+  uID?: string;
 };
-export type ProjectProjectList = {
+export type OrgStatusWrap = {
+  orgStatus?: StatusDetail;
+};
+export type Org = {
   name?: string;
-  spec?: {
-    description?: string;
-  };
-  status?: {
-    projectStatus?: {
-      message?: string;
-      statusIndicator?: string;
-      timeStamp?: number;
-      uID?: string;
-    };
-  };
-}[];
-export type ProjectProjectGet = {
-  spec?: {
-    description?: string;
-  };
-  status?: {
-    projectStatus?: {
-      message?: string;
-      statusIndicator?: string;
-      timeStamp?: number;
-      uID?: string;
-    };
-  };
+  spec?: OrgSpec;
+  status?: OrgStatusWrap;
 };
-export type ProjectProjectPost = {
+export type OrgList = Org[];
+export type Error = {
+  error?: string;
+};
+export type OrgWrite = {
   description?: string;
 };
-export type ProjectProjectNamedLink = object[];
-export type NetworkNetworkList = {
-  name?: string;
-  spec?: {
-    description?: string;
-    type?: string;
-  };
-  status?: {
-    status?: {
-      currentState?: string;
-    };
-  };
-}[];
-export type NetworkNetworkGet = {
-  spec?: {
-    description?: string;
-    type?: string;
-  };
-  status?: {
-    status?: {
-      currentState?: string;
-    };
-  };
-};
-export type NetworkNetworkPost = {
+export type ProjectSpec = {
   description?: string;
-  type?: string;
 };
-export type NetworkNetworkStatus = {
-  status?: {
-    currentState?: string;
-  };
+export type ProjectStatusWrap = {
+  projectStatus?: StatusDetail;
 };
-export type ProjectProjectStatus = {
-  projectStatus?: {
-    message?: string;
-    statusIndicator?: string;
-    timeStamp?: number;
-    uID?: string;
-  };
+export type Project = {
+  name?: string;
+  /** Name of the org the project belongs to. */
+  orgName?: string;
+  spec?: ProjectSpec;
+  status?: ProjectStatusWrap;
+};
+export type ProjectList = Project[];
+export type ProjectWrite = {
+  description?: string;
 };
 export const {
   useListV1OrgsQuery,
-  useDeleteV1OrgsOrgOrgMutation,
-  useGetV1OrgsOrgOrgQuery,
-  usePutV1OrgsOrgOrgMutation,
-  useGetV1OrgsOrgOrgFoldersQuery,
-  useGetV1OrgsOrgOrgStatusQuery,
+  useGetV1OrgsByNameQuery,
+  usePutV1OrgsByNameMutation,
+  useDeleteV1OrgsByNameMutation,
+  useGetV1OrgsByNameStatusQuery,
   useListV1ProjectsQuery,
-  useDeleteV1ProjectsProjectProjectMutation,
-  useGetV1ProjectsProjectProjectQuery,
-  usePutV1ProjectsProjectProjectMutation,
-  useGetV1ProjectsProjectProjectNetworksQuery,
-  useListV1ProjectsProjectProjectNetworksQuery,
-  useDeleteV1ProjectsProjectProjectNetworksNetworkNetworkMutation,
-  useGetV1ProjectsProjectProjectNetworksNetworkNetworkQuery,
-  usePutV1ProjectsProjectProjectNetworksNetworkNetworkMutation,
-  useGetV1ProjectsProjectProjectNetworksNetworkNetworkStatusQuery,
-  useGetV1ProjectsProjectProjectStatusQuery,
+  useGetV1ProjectsByNameQuery,
+  usePutV1ProjectsByNameMutation,
+  useDeleteV1ProjectsByNameMutation,
+  useGetV1ProjectsByNameStatusQuery,
 } = injectedRtkApi;

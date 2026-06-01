@@ -1,0 +1,327 @@
+# SPDX-FileCopyrightText: (C) 2026 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+openapi: 3.0.3
+info:
+  title: Tenancy Manager API
+  description: REST API exposed by the Tenancy Manager (orch-utils/tenancy-manager). Replaces the legacy nexus-api-gw tenancy-datamodel endpoints.
+  version: "1.0.0"
+servers:
+  - url: /
+paths:
+  /v1/orgs:
+    get:
+      tags: [Org]
+      summary: List organizations
+      operationId: listV1Orgs
+      responses:
+        "200":
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrgList"
+  /v1/orgs/{name}:
+    parameters:
+      - $ref: "#/components/parameters/OrgName"
+    get:
+      tags: [Org]
+      summary: Get organization
+      operationId: getV1OrgsByName
+      responses:
+        "200":
+          description: Organization
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Org"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags: [Org]
+      summary: Create or update organization
+      operationId: putV1OrgsByName
+      parameters:
+        - in: query
+          name: update_if_exists
+          description: If false, the call fails with 409 when the org already exists. Defaults to true.
+          required: false
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrgWrite"
+      responses:
+        "200":
+          description: Created or updated organization
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Org"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Org]
+      summary: Delete organization
+      operationId: deleteV1OrgsByName
+      responses:
+        "200":
+          description: OK
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/orgs/{name}/status:
+    parameters:
+      - $ref: "#/components/parameters/OrgName"
+    get:
+      tags: [Org]
+      summary: Get organization status (includes recently deleted)
+      operationId: getV1OrgsByNameStatus
+      responses:
+        "200":
+          description: Organization status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Org"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/projects:
+    get:
+      tags: [Project]
+      summary: List projects in the caller's org scope
+      operationId: listV1Projects
+      parameters:
+        - in: query
+          name: org
+          description: Filter to a single org by name. When omitted, the caller's resolved org scope (from JWT) is used.
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectList"
+  /v1/projects/{name}:
+    parameters:
+      - $ref: "#/components/parameters/ProjectName"
+    get:
+      tags: [Project]
+      summary: Get project
+      operationId: getV1ProjectsByName
+      parameters:
+        - in: query
+          name: org
+          description: Disambiguate by org when the same project name exists under multiple orgs.
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    put:
+      tags: [Project]
+      summary: Create or update project
+      operationId: putV1ProjectsByName
+      parameters:
+        - in: query
+          name: org
+          description: Target org (required for creation when the caller has scope to multiple orgs).
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: update_if_exists
+          description: If false, the call fails with 409 when the project already exists. Defaults to true.
+          required: false
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectWrite"
+      responses:
+        "200":
+          description: Created or updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Project]
+      summary: Delete project
+      operationId: deleteV1ProjectsByName
+      parameters:
+        - in: query
+          name: org
+          description: Disambiguate by org when the same project name exists under multiple orgs.
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /v1/projects/{name}/status:
+    parameters:
+      - $ref: "#/components/parameters/ProjectName"
+    get:
+      tags: [Project]
+      summary: Get project status (includes recently deleted)
+      operationId: getV1ProjectsByNameStatus
+      parameters:
+        - in: query
+          name: org
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Project status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+components:
+  parameters:
+    OrgName:
+      in: path
+      name: name
+      required: true
+      description: Org name
+      schema:
+        type: string
+    ProjectName:
+      in: path
+      name: name
+      required: true
+      description: Project name
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    StatusDetail:
+      type: object
+      properties:
+        statusIndicator:
+          type: string
+          description: One of STATUS_INDICATION_IN_PROGRESS, STATUS_INDICATION_IDLE, STATUS_INDICATION_ERROR.
+        message:
+          type: string
+        timeStamp:
+          type: integer
+          format: int64
+        uID:
+          type: string
+          description: Stable UUID of the resource.
+    OrgStatusWrap:
+      type: object
+      properties:
+        orgStatus:
+          $ref: "#/components/schemas/StatusDetail"
+    ProjectStatusWrap:
+      type: object
+      properties:
+        projectStatus:
+          $ref: "#/components/schemas/StatusDetail"
+    OrgSpec:
+      type: object
+      properties:
+        description:
+          type: string
+    ProjectSpec:
+      type: object
+      properties:
+        description:
+          type: string
+    Org:
+      type: object
+      properties:
+        name:
+          type: string
+        spec:
+          $ref: "#/components/schemas/OrgSpec"
+        status:
+          $ref: "#/components/schemas/OrgStatusWrap"
+    OrgList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Org"
+    OrgWrite:
+      type: object
+      properties:
+        description:
+          type: string
+    Project:
+      type: object
+      properties:
+        name:
+          type: string
+        orgName:
+          type: string
+          description: Name of the org the project belongs to.
+        spec:
+          $ref: "#/components/schemas/ProjectSpec"
+        status:
+          $ref: "#/components/schemas/ProjectStatusWrap"
+    ProjectList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Project"
+    ProjectWrite:
+      type: object
+      properties:
+        description:
+          type: string

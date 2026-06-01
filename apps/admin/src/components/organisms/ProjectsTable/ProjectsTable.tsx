@@ -180,7 +180,7 @@ const ProjectsTable = ({ hasRole = hasRoleDefault }: ProjectsTableProps) => {
   const searchTerm = searchParams.get("searchTerm") ?? undefined;
 
   const { data: memberProjects } = listProjects(
-    { "member-role": true },
+    {},
     {
       // If Modal is open i.e if the modal state is defined then skip polling
       ...(!projectModalState ? { pollingInterval: pollingInterval } : {}),
