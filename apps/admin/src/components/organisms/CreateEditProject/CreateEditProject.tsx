@@ -50,7 +50,7 @@ export const CreateEditProject = ({
 }: CreateEditProjectProps) => {
   const cy = { "data-cy": dataCy };
 
-  const { usePutV1ProjectsProjectProjectMutation: usePutProject } = tm;
+  const { usePutV1ProjectsByNameMutation: usePutProject } = tm;
 
   const [createProject] = usePutProject();
   const [projectNameInput, setProjectNameInput] = useState<string>("");
@@ -87,9 +87,9 @@ export const CreateEditProject = ({
   const handleCreateSubmit = () => {
     setSubmitError("");
     const p = createProject({
-      "project.Project": toApiName(projectNameInput),
+      name: toApiName(projectNameInput),
       updateIfExists: false,
-      projectProjectPost: {
+      projectWrite: {
         description: projectDescriptionInput || projectNameInput,
       },
     });

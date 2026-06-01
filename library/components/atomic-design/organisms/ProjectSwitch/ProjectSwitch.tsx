@@ -21,7 +21,7 @@ import { SquareSpinner } from "../../atoms/SquareSpinner/SquareSpinner";
 import { RBACWrapper } from "../../molecules/RBACWrapper/RBACWrapper";
 import "./ProjectSwitch.scss";
 
-export type Project = tm.ProjectProjectGet & { name?: string };
+export type Project = tm.Project & { name?: string };
 
 const dataCy = "projectSwitch";
 export interface ProjectSwitchProps {
@@ -88,7 +88,7 @@ export const ProjectSwitch = ({
     isError,
     error,
   } = tm.useListV1ProjectsQuery(
-    { "member-role": true },
+    {},
     {
       // Poll if we are showing projects or if no project is selected
       ...(!showProjects || !selectedProject
@@ -131,7 +131,7 @@ export const ProjectSwitch = ({
 
     if (isError) {
       const err = error as InternalError;
-      // NOTE the /v1/projects?member-role=true returns 401 if the user is not associated with any project
+      // NOTE the /v1/projects endpoint returns 401 if the user is not associated with any project
       if (err?.status === 401) {
         SharedStorage.removeStorageItem(StorageItems.PROJECT);
         navigate(projectHomeLink);

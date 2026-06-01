@@ -5,8 +5,8 @@
 
 import { tm } from "@orch-ui/apis";
 
-/** Actual GET Project type. TODO: Update `ProjectProjectGet` to have `name` option */
-export type AdminProject = tm.ProjectProjectGet & { name?: string };
+/** Actual GET Project type. */
+export type AdminProject = tm.Project;
 /** Controller Input format used for react form controller of create,delete & rename project modal */
 export interface ProjectModalInput {
   nameInput: string;
