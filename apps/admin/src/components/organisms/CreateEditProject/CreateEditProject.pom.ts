@@ -23,14 +23,13 @@ type SuccessApiAliases = "createProject";
 type ErrorApiAliases = "createProjectError";
 type ApiAliases = SuccessApiAliases | ErrorApiAliases;
 
-const successEndpoints: CyApiDetails<SuccessApiAliases, tm.ProjectProjectPost> =
-  {
-    createProject: {
-      route: projectByIdRoute,
-      method: "PUT",
-      statusCode: 200,
-    },
-  };
+const successEndpoints: CyApiDetails<SuccessApiAliases, tm.ProjectWrite> = {
+  createProject: {
+    route: projectByIdRoute,
+    method: "PUT",
+    statusCode: 200,
+  },
+};
 
 const errorEndpoints: CyApiDetails<ErrorApiAliases> = {
   createProjectError: {

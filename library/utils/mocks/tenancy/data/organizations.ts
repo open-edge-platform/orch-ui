@@ -5,7 +5,7 @@
 
 import { tm } from "@orch-ui/apis";
 
-export const orgs: tm.OrgOrgList = [
+export const orgs: tm.OrgList = [
   {
     name: "intel",
     spec: {
@@ -23,12 +23,12 @@ export const orgs: tm.OrgOrgList = [
 ];
 
 export default class OrganizationStore {
-  orgs: tm.OrgOrgList;
+  orgs: tm.OrgList;
   constructor() {
     this.orgs = orgs;
   }
 
-  list(): tm.OrgOrgList {
+  list(): tm.OrgList {
     return this.orgs;
   }
 }
