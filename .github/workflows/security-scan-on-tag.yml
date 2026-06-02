@@ -1,19 +1,14 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+---
+# SPDX-FileCopyrightText: (C) 2026 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
----
-name: Post-Merge Infra
+name: Security scan on tag
 
 on:
-  push:
-    branches:
-      - main
-      - release-*
-    paths:
-      - 'apps/infra/**'
-      - 'package-lock.json'
   workflow_dispatch:
-
+  push:
+    tags:
+      - '*'
 permissions:
   contents: read
 
@@ -24,20 +19,11 @@ jobs:
       security-events: write
       id-token: write
       actions: read
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@cfb192dcc6a08f6da56ed0f3af272d4f52d84d3e  # 2026.1.3
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@e1be8f090e3bb60af180bfac5ca32638517f9d1f
     with:
-      bootstrap_tools: "base,helm,yq,jq"
-      run_version_check: true
-      run_dep_version_check: false
       run_build: false
-      run_docker_build: true
-      run_docker_push: true
-      run_helm_build: true
-      run_helm_push: true
-      run_version_tag: true
-      prefix_tag_separator: "/"
-      project_folder: apps/infra
-      run_version_dev: true
+      run_version_tag: false
+      run_repo_pipeline: false
       trivy_image_skip: |
         ghcr.io/dependabot/dependabot-updater-core:latest,
         ghcr.io/github/github-mcp-server:latest,

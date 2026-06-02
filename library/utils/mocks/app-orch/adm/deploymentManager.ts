@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { adm, tm } from "@orch-ui/apis";
+import { adm } from "@orch-ui/apis";
 import { delay, http, HttpResponse } from "msw";
 import {
   DeploymentClustersStore,
@@ -18,32 +18,6 @@ const ds = new DeploymentsStore();
 const uiStore = new UiExtensionsStore();
 
 export const handlers = [
-  // this get definition could belong to Tenant mock; api definition does not have type for network object
-  http.get(`${baseURLPrefix}/networks`, () => {
-    return HttpResponse.json(
-      [
-        {
-          name: "Network one",
-          spec: {
-            description: "first network",
-          },
-        },
-        {
-          name: "Network two",
-          spec: {
-            description: "second network",
-          },
-        },
-        {
-          name: "Network three",
-          spec: {
-            description: "third network",
-          },
-        },
-      ] as tm.ListV1ProjectsProjectProjectNetworksApiResponse,
-      { status: 200 },
-    );
-  }),
   http.get(`${baseURLPrefix}/appdeployment/deployments`, ({ request }) => {
     const metadataString = new URL(request.url).searchParams.get("labels");
     let deployments = ds.list();
