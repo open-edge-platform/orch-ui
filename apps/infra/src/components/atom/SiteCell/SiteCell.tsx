@@ -10,7 +10,6 @@ import { Drawer } from "@spark-design/react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { selectSite, setSite } from "../../../store/locations";
 import { DrawerHeader } from "../../molecules/DrawerHeader/DrawerHeader";
-import { handleSiteViewAction } from "../../organism/locations/RegionSiteTree/RegionSiteTree.handlers";
 import { SiteView } from "../../organism/locations/SiteView/SiteView";
 const dataCy = "siteCell";
 
@@ -84,7 +83,7 @@ const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
         role="button"
         tabIndex={0}
         style={{ cursor: "pointer" }}
-        onClick={() => handleSiteViewAction(dispatch, site)}
+        onClick={() => dispatch(setSite(site))}
       >
         {site.name}
       </a>
