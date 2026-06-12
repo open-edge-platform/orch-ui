@@ -52,7 +52,9 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({
           url: `/v1/projects`,
-          params: { org: queryArg.org },
+          // FIXME this parameter has been manually added,
+          // we need to have it in the openapi specs or it will be overridden everytime we auto-generate the code
+          params: { "member-role": queryArg["member-role"], org: queryArg.org },
         }),
         providesTags: ["Project"],
       }),
@@ -139,7 +141,10 @@ export type ListV1ProjectsApiResponse =
 export type ListV1ProjectsApiArg = {
   /** Filter to a single org by name. When omitted, the caller's resolved org scope (from JWT) is used. */
   org?: string;
+  // FIXME this parameter has been manually added,
+  "member-role"?: boolean;
 };
+
 export type GetV1ProjectsByNameApiResponse = /** status 200 Project */ Project;
 export type GetV1ProjectsByNameApiArg = {
   /** Project name */
