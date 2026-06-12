@@ -88,7 +88,7 @@ export const ProjectSwitch = ({
     isError,
     error,
   } = tm.useListV1ProjectsQuery(
-    {},
+    { "member-role": true },
     {
       // Poll if we are showing projects or if no project is selected
       ...(!showProjects || !selectedProject
