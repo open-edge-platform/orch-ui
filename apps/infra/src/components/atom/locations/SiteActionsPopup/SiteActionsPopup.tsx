@@ -10,6 +10,7 @@ import { Icon } from "@spark-design/react";
 import { useAppDispatch } from "../../../../store/hooks";
 import {
   setMaintenanceEntity,
+  setSite,
   setSiteToDelete,
 } from "../../../../store/locations";
 
@@ -44,11 +45,13 @@ export const SiteActionsPopup = ({ site }: SiteActionsPopupProps) => {
         options={[
           {
             displayText: "Edit",
-            onSelect: () =>
+            onSelect: () => {
+              dispatch(setSite(undefined));
               navigate(regionSiteRoute, {
                 regionId: site.region?.regionID ?? "",
                 siteId: site.siteID ?? "",
-              }),
+              });
+            },
           },
           {
             displayText: "Schedule Maintenance",
