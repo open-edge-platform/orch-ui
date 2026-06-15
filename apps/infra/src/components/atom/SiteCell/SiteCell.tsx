@@ -5,9 +5,43 @@
 
 import { infra } from "@orch-ui/apis";
 import { SquareSpinner } from "@orch-ui/components";
-import { getInfraPath, regionSiteRoute, SharedStorage } from "@orch-ui/utils";
-import { Link } from "react-router-dom";
+import { SharedStorage } from "@orch-ui/utils";
+import { Drawer } from "@spark-design/react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { selectSite, setSite } from "../../../store/locations";
+import { DrawerHeader } from "../../molecules/DrawerHeader/DrawerHeader";
+import { SiteView } from "../../organism/locations/SiteView/SiteView";
 const dataCy = "siteCell";
+
+export interface SiteDetailsDrawerProps {
+  basePath?: string;
+  hideActions?: boolean;
+}
+
+export const SiteDetailsDrawer = ({
+  basePath,
+  hideActions,
+}: SiteDetailsDrawerProps) => {
+  const dispatch = useAppDispatch();
+  const site = useAppSelector(selectSite);
+  return (
+    <Drawer
+      show={site !== undefined}
+      headerProps={{
+        headerContent: site && (
+          <DrawerHeader
+            targetEntity={site}
+            targetEntityType="site"
+            onClose={() => dispatch(setSite(undefined))}
+          />
+        ),
+      }}
+      bodyContent={<SiteView basePath={basePath} hideActions={hideActions} />}
+      backdropClosable
+      onHide={() => dispatch(setSite(undefined))}
+    />
+  );
+};
 
 export interface SiteCellProps {
   siteId?: string;
@@ -16,6 +50,7 @@ export interface SiteCellProps {
 }
 const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
   const cy = { "data-cy": dataCy };
+  const dispatch = useAppDispatch();
 
   const {
     data: site,
@@ -42,16 +77,18 @@ const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
     return <span {...cy}>{siteId}</span>;
   }
   return (
-    <Link
-      {...cy}
-      to={getInfraPath(regionSiteRoute, {
-        regionId: site.region?.resourceId ?? "",
-        siteId: siteId,
-      })}
-      relative="path"
-    >
-      {site.name}
-    </Link>
+    <>
+      <a
+        {...cy}
+        role="button"
+        tabIndex={0}
+        style={{ cursor: "pointer" }}
+        onClick={() => dispatch(setSite(site))}
+      >
+        {site.name}
+      </a>
+      <SiteDetailsDrawer hideActions />
+    </>
   );
 };
 
