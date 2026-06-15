@@ -205,7 +205,8 @@ export const useProvisioning = () => {
           site?.metadata?.forEach((tags) => {
             combinedClusterLabels[tags.key] = tags.value;
           });
-
+          combinedClusterLabels["edge-orchestrator.intel.com/auto-created"] =
+            "true";
           const nodeSpec: cm.NodeSpec = {
             id: registerHostResp?.resourceId as string,
             role: "all",

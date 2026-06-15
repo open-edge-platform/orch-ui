@@ -156,61 +156,64 @@ export const handlers = [
       );
     },
   ),
-  http.get(`${baseURLPrefix}/summary/deployments_status`, ({ request }) => {
-    const metadataString = new URL(request.url).searchParams.get("labels");
-    let deployments = ds.list();
-    if (metadataString) {
-      deployments = deployments.filter((deployment) => {
-        let matchSimilarity = 0;
-        const metadataParams = metadataString.split(",");
-        // For each metadata in first targetClusters
-        // Note metadata within all targetClusters are assumed to be same
-        metadataParams.forEach((keyValuePairs) => {
-          const [key, value] = keyValuePairs.split("=");
-          if (
-            deployment.targetClusters &&
-            deployment.targetClusters.length > 0 &&
-            deployment.targetClusters[0].labels &&
-            deployment.targetClusters[0].labels[key] === value
-          )
-            matchSimilarity++;
+  http.get(
+    `${baseURLPrefix}/appdeployment/summary/deployments_status`,
+    ({ request }) => {
+      const metadataString = new URL(request.url).searchParams.get("labels");
+      let deployments = ds.list();
+      if (metadataString) {
+        deployments = deployments.filter((deployment) => {
+          let matchSimilarity = 0;
+          const metadataParams = metadataString.split(",");
+          // For each metadata in first targetClusters
+          // Note metadata within all targetClusters are assumed to be same
+          metadataParams.forEach((keyValuePairs) => {
+            const [key, value] = keyValuePairs.split("=");
+            if (
+              deployment.targetClusters &&
+              deployment.targetClusters.length > 0 &&
+              deployment.targetClusters[0].labels &&
+              deployment.targetClusters[0].labels[key] === value
+            )
+              matchSimilarity++;
+          });
+
+          // If the all metadata within first targetCluster matches
+          return matchSimilarity === metadataParams.length;
         });
+      }
 
-        // If the all metadata within first targetCluster matches
-        return matchSimilarity === metadataParams.length;
-      });
-    }
+      const deploymentStat = {
+        total: 0,
+        running: 0,
+        down: 0,
+        error: 0,
+        deploying: 0,
+        updating: 0,
+      };
 
-    const deploymentStat = {
-      total: 0,
-      running: 0,
-      down: 0,
-      error: 0,
-      deploying: 0,
-      updating: 0,
-    };
+      if (deployments) {
+        deploymentStat.total += deployments.length;
 
-    if (deployments) {
-      deploymentStat.total += deployments.length;
+        deployments.map((depl) => {
+          if (depl.status?.state === "RUNNING") {
+            /* Check if Deploying, Upgrading, Terminating & Unknown in running */
+            deploymentStat.running++;
+          } else if (depl.status?.state === "INTERNAL_ERROR") {
+            deploymentStat.error++;
+          } else if (depl.status?.state === "DEPLOYING") {
+            deploymentStat.deploying++;
+          } else if (depl.status?.state === "UPDATING") {
+            deploymentStat.updating++;
+          } else if (depl.status?.state === "DOWN") {
+            deploymentStat.down++;
+          }
+        });
+      }
 
-      deployments.map((depl) => {
-        if (depl.status?.state === "RUNNING") {
-          /* Check if Deploying, Upgrading, Terminating & Unknown in running */
-          deploymentStat.running++;
-        } else if (depl.status?.state === "INTERNAL_ERROR") {
-          deploymentStat.error++;
-        } else if (depl.status?.state === "DEPLOYING") {
-          deploymentStat.deploying++;
-        } else if (depl.status?.state === "UPDATING") {
-          deploymentStat.updating++;
-        } else if (depl.status?.state === "DOWN") {
-          deploymentStat.down++;
-        }
-      });
-    }
-
-    return HttpResponse.json(deploymentStat, { status: 200 });
-  }),
+      return HttpResponse.json(deploymentStat, { status: 200 });
+    },
+  ),
   http.get(
     `${baseURLPrefix}/appdeployment/deployments/:deplId/clusters`,
     ({ request }) => {

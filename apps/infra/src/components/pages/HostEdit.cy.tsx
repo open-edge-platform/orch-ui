@@ -251,4 +251,71 @@ describe("<HostEdit />", () => {
       pom.el.siteCombobox.should("be.disabled");
     });
   });
+
+  describe("Save Button Region/Site Validation", () => {
+    it("should disable Save button when region is changed and no sites exist for new region", () => {
+      // Override the sites intercept with an empty list BEFORE changing region.
+      // This prevents the useEffect from auto-re-selecting the host's original site
+      // when the new sites response arrives (which would keep the button enabled).
+      pom.interceptApis([pom.api.sitesEmpty]);
+
+      // Change region — onSelectionChange sets selectedSite to undefined and triggers reload
+      pom.el.regionCombobox.find(".spark-combobox-arrow-button").click();
+      cy.contains("Portland").click();
+
+      // Wait for the empty sites response so isSiteLoading returns to false
+      pom.waitForApis();
+
+      // selectedSite is undefined and no sites available to auto-select → Save must be disabled
+      pom.el.updateHostButton.should("have.class", "spark-button-disabled");
+    });
+
+    it("should keep Save button enabled when both region and site are validly selected", () => {
+      // The beforeEach loads a host with a valid region and site already selected.
+      // This verifies the validation does not incorrectly block saving in the normal state.
+      pom.el.updateHostButton.should("not.have.class", "spark-button-disabled");
+    });
+
+    it("should disable Save button when host has no site assigned", () => {
+      // Do NOT pass reduxStore: store — a fresh store is needed so RTK Query does not
+      // serve cached host data from the beforeEach mount (which had site populated).
+      pom.interceptApis([
+        pom.api.getInstances,
+        pom.api.hostWithoutSite,
+        pom.api.regionsSuccess,
+      ]);
+      cy.mount(<HostEdit />, {
+        routerProps: {
+          initialEntries: [`/host/${mockHost.resourceId}/edit`],
+        },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
+      });
+      pom.waitForApis();
+
+      // selectedRegion and selectedSite are both undefined → Save must be disabled
+      pom.el.updateHostButton.should("have.class", "spark-button-disabled");
+    });
+
+    it("should not disable Save button due to region/site when dropdowns are disabled", () => {
+      // When dropdowns are disabled (no instances), region/site validation is skipped.
+      // Fresh store ensures no cached host data interferes with the instances check.
+      pom.interceptApis([
+        pom.api.getInstancesEmpty,
+        pom.api.hostWithoutSite,
+        pom.api.regionsSuccess,
+      ]);
+      cy.mount(<HostEdit />, {
+        routerProps: {
+          initialEntries: [`/host/${mockHost.resourceId}/edit`],
+        },
+        routerRule: [{ path: "/host/:id/edit", element: <HostEdit /> }],
+      });
+      pom.waitForApis();
+
+      // Dropdowns are disabled, so region/site emptiness should not block Save
+      pom.el.regionCombobox.should("be.disabled");
+      pom.el.siteCombobox.should("be.disabled");
+      pom.el.updateHostButton.should("not.have.class", "spark-button-disabled");
+    });
+  });
 });

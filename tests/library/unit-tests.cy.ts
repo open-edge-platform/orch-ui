@@ -18,6 +18,7 @@ import "../../library/components/atomic-design/atoms/DownloadButton/DownloadButt
 import "../../library/components/atomic-design/atoms/EChart/EChart.cy.tsx";
 import "../../library/components/atomic-design/atoms/ExpansionPanel/ExpansionPanel.cy.tsx";
 import "../../library/components/atomic-design/atoms/Modal/Modal.cy.tsx";
+import "../../library/components/atomic-design/atoms/OrchestratorClock/OrchestratorClock.cy.tsx";
 import "../../library/components/atomic-design/atoms/PermissionDenied/PermissionDenied.cy.tsx";
 import "../../library/components/atomic-design/atoms/Popup/Popup.cy.tsx";
 import "../../library/components/atomic-design/atoms/RadioCard/RadioCard.cy.tsx";
