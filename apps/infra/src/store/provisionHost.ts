@@ -4,6 +4,7 @@
  */
 
 import { infra } from "@orch-ui/apis";
+import { RuntimeConfig } from "@orch-ui/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isEqual } from "lodash";
 import { RootState } from "./store";
@@ -117,6 +118,7 @@ const validateStep = (state: HostProvisionState) => {
       const hasOs = isSet(state.commonHostData?.os?.resourceId);
 
       const hasClusterTemplate =
+        !RuntimeConfig.isEnabled("CLUSTER_ORCH") ||
         !state.createCluster ||
         (isSet(state.commonHostData?.clusterTemplateName) &&
           isSet(state.commonHostData?.clusterTemplateVersion));

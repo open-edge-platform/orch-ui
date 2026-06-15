@@ -8,6 +8,7 @@ import { Flex, MessageBannerAlertState } from "@orch-ui/components";
 import {
   hostProvisionRoute,
   hostsRoute,
+  RuntimeConfig,
   useInfraNavigate,
 } from "@orch-ui/utils";
 import {
@@ -67,7 +68,10 @@ const RegisterHosts = () => {
         each host in the respective fields
       </p>
       <AddHostsForm />
-      <Flex cols={[4]} align="start">
+      <Flex
+        cols={[RuntimeConfig.isEnabled("CLUSTER_ORCH") ? 4 : 6]}
+        align="start"
+      >
         <div className={`${className}__auto-onboard`}>
           <Heading semanticLevel={6}>Onboard Automatically</Heading>
           <p>Hosts will be onboarded once they connect</p>
@@ -96,21 +100,23 @@ const RegisterHosts = () => {
             <label>Provision Automatically</label>
           </ToggleSwitch>
         </div>
-        <div className={`${className}__create-cluster`}>
-          <Heading semanticLevel={6}>Create Single-host Clusters</Heading>
-          <p>Each host will be assigned to a new cluster.</p>
-          <ToggleSwitch
-            data-cy="createCluster"
-            isSelected={createCluster}
-            onChange={(value) => {
-              dispatch(setCreateClusterValue(value));
-            }}
-            isDisabled={!autoOnboard || !autoProvision}
-            className={`${className}__auto-provision-switch`}
-          >
-            <label>Create Single-host Clusters</label>
-          </ToggleSwitch>
-        </div>
+        {RuntimeConfig.isEnabled("CLUSTER_ORCH") && (
+          <div className={`${className}__create-cluster`}>
+            <Heading semanticLevel={6}>Create Single-host Clusters</Heading>
+            <p>Each host will be assigned to a new cluster.</p>
+            <ToggleSwitch
+              data-cy="createCluster"
+              isSelected={createCluster}
+              onChange={(value) => {
+                dispatch(setCreateClusterValue(value));
+              }}
+              isDisabled={!autoOnboard || !autoProvision}
+              className={`${className}__auto-provision-switch`}
+            >
+              <label>Create Single-host Clusters</label>
+            </ToggleSwitch>
+          </div>
+        )}
       </Flex>
 
       <AutoPropertiesMessageBanner />
