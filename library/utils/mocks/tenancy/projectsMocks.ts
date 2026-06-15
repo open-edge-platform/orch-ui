@@ -33,8 +33,17 @@ export const handlers = [
       await delay(2000);
       const { project: projectId } = params as unknown as ProjectParam;
       const body = (await request.json()) as AdminProject;
+      const url = new URL(request.url);
+      const updateIfExists =
+        url.searchParams.get("update_if_exists") !== "false";
 
       if (projectStore.get(projectId)) {
+        if (!updateIfExists) {
+          return HttpResponse.json(
+            { message: "Already Exists." },
+            { status: 403 },
+          );
+        }
         const updatedProject = projectStore.put(projectId, body);
         return HttpResponse.json(
           updatedProject ?? {

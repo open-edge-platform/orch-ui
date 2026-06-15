@@ -8,6 +8,7 @@ import { Icon } from "@spark-design/react";
 import { CSSProperties, ReactElement } from "react";
 import { useAuth } from "react-oidc-context";
 import { Link, useLocation } from "react-router-dom";
+import { OrchestratorClock } from "../../atoms/OrchestratorClock/OrchestratorClock";
 import { Popup } from "../../atoms/Popup/Popup";
 import { ProjectSwitch } from "../../organisms/ProjectSwitch/ProjectSwitch";
 import HeaderItem from "../HeaderItem/HeaderItem";
@@ -167,6 +168,13 @@ export const Header = ({ size, children, style, ...rest }: HeaderProps) => {
       </HeaderItem>
 
       {profileButton}
+      <div
+        className="divider"
+        style={{
+          margin: `${sizeStyles.dividerMargin} 0`,
+        }}
+      ></div>
+      <OrchestratorClock />
     </header>
   );
 };
