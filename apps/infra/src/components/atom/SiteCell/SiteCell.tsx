@@ -87,7 +87,7 @@ const SiteCell = ({ siteId, regionId = "*" }: SiteCellProps) => {
       >
         {site.name}
       </a>
-      <SiteDetailsDrawer />
+      <SiteDetailsDrawer hideActions />
     </>
   );
 };
