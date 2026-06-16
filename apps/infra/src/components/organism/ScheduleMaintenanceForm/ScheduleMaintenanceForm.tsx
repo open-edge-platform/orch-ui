@@ -130,6 +130,47 @@ export const ScheduleMaintenanceForm = ({
   }, [maintenance.resourceId]);
 
   /* APIs */
+  // Fetch existing schedules for the same target to validate duplicate names.
+  const projectName = SharedStorage.project?.name ?? "";
+  const duplicateNameTargetIds: {
+    hostId?: string;
+    siteId?: string;
+    regionId?: string;
+  } = {};
+  if (targetEntityType === "region") {
+    duplicateNameTargetIds.regionId = maintenance.targetRegion?.resourceId;
+  } else if (targetEntityType === "site") {
+    duplicateNameTargetIds.siteId = maintenance.targetSite?.resourceId;
+  } else {
+    duplicateNameTargetIds.hostId = maintenance.targetHost?.resourceId;
+  }
+  const { data: existingSchedules } =
+    infra.useScheduleServiceListSchedulesQuery(
+      {
+        projectName,
+        ...duplicateNameTargetIds,
+      },
+      {
+        skip: !projectName,
+      },
+    );
+
+  /** Set of names already taken by other schedules on the same target.
+   * The currently-edited maintenance is excluded so its own name does not
+   * trigger the duplicate validation. */
+  const existingMaintenanceNames = new Set<string>(
+    existingSchedules
+      ? [
+          ...existingSchedules.singleSchedules
+            .filter((s) => s.resourceId !== maintenance.resourceId)
+            .map((s) => (s.name ?? "").trim().toLowerCase()),
+          ...existingSchedules.repeatedSchedules
+            .filter((r) => r.repeatedScheduleID !== maintenance.resourceId)
+            .map((r) => (r.name ?? "").trim().toLowerCase()),
+        ].filter((n) => n.length > 0)
+      : [],
+  );
+
   const [postSingleMaintenance] =
     infra.useScheduleServiceCreateSingleScheduleMutation();
   const [postRepeatedMaintenance] =
@@ -335,6 +376,13 @@ export const ScheduleMaintenanceForm = ({
                 pattern: new RegExp(
                   /^([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9-\s/]*[A-Za-z0-9])$/,
                 ),
+                validate: {
+                  duplicate: (value) =>
+                    !existingMaintenanceNames.has(
+                      (value ?? "").trim().toLowerCase(),
+                    ) ||
+                    "A maintenance schedule with this name already exists.",
+                },
               }}
               render={({ field }) => (
                 <TextField
@@ -348,10 +396,13 @@ export const ScheduleMaintenanceForm = ({
                     const value = e.currentTarget.value;
                     onUpdate({ ...maintenance, name: value });
                   }}
-                  errorMessage={getDisplayNameValidationErrorMessage(
-                    formErrors?.name?.type,
-                    20,
-                  )}
+                  errorMessage={
+                    formErrors?.name?.message ||
+                    getDisplayNameValidationErrorMessage(
+                      formErrors?.name?.type,
+                      20,
+                    )
+                  }
                   validationState={
                     formErrors?.name && Object.keys(formErrors?.name).length > 0
                       ? "invalid"
