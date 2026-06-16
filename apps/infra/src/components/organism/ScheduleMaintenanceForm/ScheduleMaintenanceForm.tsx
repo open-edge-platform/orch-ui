@@ -125,6 +125,7 @@ export const ScheduleMaintenanceForm = ({
 
   /* State Management */
   const [isMaintenanceEdit, setIsMaintenanceEdit] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   useEffect(() => {
     setIsMaintenanceEdit(maintenance.resourceId !== undefined);
   }, [maintenance.resourceId]);
@@ -182,6 +183,7 @@ export const ScheduleMaintenanceForm = ({
 
   /** Add new maintenance via INFRA-API */
   const submitMaintenance = () => {
+    setIsSubmitting(true);
     const submitSingleMaintenance = isMaintenanceEdit
       ? editSingleMaintenance
       : postSingleMaintenance;
@@ -299,9 +301,11 @@ export const ScheduleMaintenanceForm = ({
             );
             onSave();
           }
+          setIsSubmitting(false);
         })
         .catch((err) => {
           setMessageBannerState(errorMaintenanceMessage("update", err));
+          setIsSubmitting(false);
         });
       return;
     }
@@ -325,6 +329,7 @@ export const ScheduleMaintenanceForm = ({
               : activateMaintenanceMessage,
           );
           onSave();
+          setIsSubmitting(false);
         })
         .catch((err) => {
           setMessageBannerState(
@@ -333,6 +338,7 @@ export const ScheduleMaintenanceForm = ({
               err,
             ),
           );
+          setIsSubmitting(false);
         });
     } else {
       dispatch(
@@ -341,6 +347,7 @@ export const ScheduleMaintenanceForm = ({
           state: ToastState.Danger,
         }),
       );
+      setIsSubmitting(false);
     }
   };
 
@@ -549,10 +556,14 @@ export const ScheduleMaintenanceForm = ({
             data-cy="saveButton"
             className="action-drawer"
             variant="action"
-            isDisabled={Object.keys(formErrors).length !== 0}
+            isDisabled={Object.keys(formErrors).length !== 0 || isSubmitting}
             type="submit"
           >
-            {isMaintenanceEdit ? "Update" : "Add"}
+            {isSubmitting
+              ? "Creating..."
+              : isMaintenanceEdit
+                ? "Update"
+                : "Add"}
           </Button>
         </ButtonGroup>
       </div>
