@@ -142,12 +142,6 @@ describe("<ScheduleMaintenanceDrawer/>", () => {
     };
 
     const fillBasicEditMaintenanceForm = (maintenanceName: string) => {
-      pom.maintenanceListPom.interceptApis([
-        pom.maintenanceListPom.api.getMaintenance,
-      ]);
-      pom.selectTab("Schedule Events");
-      pom.waitForApis();
-
       pom.maintenanceListPom.tablePom
         .getRowBySearchText(maintenanceName)
         .find("[data-cy='popup']")
@@ -168,7 +162,20 @@ describe("<ScheduleMaintenanceDrawer/>", () => {
     };
 
     it("edit single schedule maintenance from closed-ended to open-ended", () => {
-      cy.mount(<TestingComponent mockEntity={hostTwo} />);
+      // Set up API mock BEFORE mounting the component
+      pom.maintenanceListPom.interceptApis([
+        pom.maintenanceListPom.api.getMaintenance,
+      ]);
+
+      cy.mount(<TestingComponent mockEntity={hostTwo} />, {
+        reduxStore: store,
+      });
+      pom.root.should("exist");
+
+      pom.selectTab("Schedule Events");
+      pom.waitForApis();
+      // Wait for the table element to be visible before searching for rows
+      pom.maintenanceListPom.tablePom.root.should("be.visible");
 
       fillBasicEditMaintenanceForm("schedule3");
       pom.maintenanceFormPom.selectFromDropdown(
@@ -221,7 +228,18 @@ describe("<ScheduleMaintenanceDrawer/>", () => {
     });
 
     it("edit repeated schedule maintenance without timezone and time change", () => {
-      cy.mount(<TestingComponent mockEntity={hostFour} />);
+      // Set up API mock BEFORE mounting the component
+      pom.maintenanceListPom.interceptApis([
+        pom.maintenanceListPom.api.getMaintenance,
+      ]);
+
+      cy.mount(<TestingComponent mockEntity={hostFour} />, {
+        reduxStore: store,
+      });
+      pom.root.should("exist");
+
+      pom.selectTab("Schedule Events");
+      pom.waitForApis();
 
       fillBasicEditMaintenanceForm("r-schedule1");
       pom.maintenanceFormPom.selectFromDropdown(
