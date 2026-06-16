@@ -559,11 +559,7 @@ export const ScheduleMaintenanceForm = ({
             isDisabled={Object.keys(formErrors).length !== 0 || isSubmitting}
             type="submit"
           >
-            {isSubmitting
-              ? "Creating..."
-              : isMaintenanceEdit
-                ? "Update"
-                : "Add"}
+            {isMaintenanceEdit ? "Update" : "Add"}
           </Button>
         </ButtonGroup>
       </div>
