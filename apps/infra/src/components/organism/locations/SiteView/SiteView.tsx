@@ -76,7 +76,7 @@ export const SiteView = ({ basePath, hideActions = false }: SiteViewProps) => {
       <Heading semanticLevel={5} className={`${className}__hosts`}>
         Hosts
       </Heading>
-      <SiteViewHostTable site={site} basePath={basePath} />
+      <SiteViewHostTable site={site} basePath={basePath} hideActions />
     </div>
   );
 };

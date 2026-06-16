@@ -14,20 +14,27 @@ const dataCy = "siteViewHostTable";
 export interface SiteViewHostTableProps {
   site?: infra.SiteResourceRead;
   basePath?: string;
+  hideActions?: boolean;
 }
 export const SiteViewHostTable = ({
   site,
   basePath,
+  hideActions = false,
 }: SiteViewHostTableProps) => {
   const cy = { "data-cy": dataCy };
 
   const columns: TableColumn<infra.HostResourceRead>[] = [
     HostTableColumn.name(),
     HostTableColumn.status,
-    HostTableColumn.actions((host: infra.HostResourceRead) => (
-      <HostPopup host={host} basePath={basePath} />
-    )),
-  ];
+  ].filter(Boolean);
+
+  if (!hideActions) {
+    columns.push(
+      HostTableColumn.actions((host: infra.HostResourceRead) => (
+        <HostPopup host={host} basePath={basePath} />
+      )),
+    );
+  }
 
   const projectName = SharedStorage.project?.name ?? "";
   const { data, isSuccess, isError, isLoading, error } =
