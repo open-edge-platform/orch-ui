@@ -112,7 +112,7 @@ export const Locations = () => {
             variant: MessageBannerAlertState.Success,
           }),
         );
-        if (regionToDelete) dispatch(deleteTreeNode());
+        dispatch(deleteTreeNode(regionId));
       })
       .catch((error) => {
         dispatch(
