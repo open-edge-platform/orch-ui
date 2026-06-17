@@ -121,14 +121,14 @@ export const ScheduleMaintenanceList = ({
 
   /** contains success deactivate Maintenance messages definition */
   const deactivatedMaintenanceMessage = {
-    messageTitle: "Deactivated Maintenance Mode",
-    messageBody: `${targetEntity.name} is now out of maintenance mode`,
+    messageTitle: "Maintenance Schedule Deleted",
+    messageBody: `Maintenance schedule for ${targetEntity.name} has been deleted`,
     variant: MessageBannerAlertState.Success,
   };
   /** contains error Maintenance messages definition */
   const errorMaintenanceMessage = () => ({
-    messageTitle: "Maintenance Mode Failure",
-    messageBody: `Failed to deactivate maintenance mode for ${targetEntity.name}`,
+    messageTitle: "Maintenance Schedule Deletion Failure",
+    messageBody: `Failed to delete maintenance schedule for ${targetEntity.name}`,
     variant: MessageBannerAlertState.Error,
   });
 
