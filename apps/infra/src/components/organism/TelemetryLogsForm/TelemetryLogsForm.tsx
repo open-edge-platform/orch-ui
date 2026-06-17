@@ -193,11 +193,11 @@ const TelemetryLogsForm = ({
                     setSourceExists(false);
                   }}
                 >
-                  <Item key="TELEMETRY_SEVERITY_LEVEL_CRITICAL">CRITICAL</Item>
-                  <Item key="TELEMETRY_SEVERITY_LEVEL_ERROR">ERROR</Item>
-                  <Item key="TELEMETRY_SEVERITY_LEVEL_WARN">WARN</Item>
-                  <Item key="TELEMETRY_SEVERITY_LEVEL_INFO">INFO</Item>
-                  <Item key="TELEMETRY_SEVERITY_LEVEL_DEBUG">DEBUG</Item>
+                  <Item key="SEVERITY_LEVEL_CRITICAL">CRITICAL</Item>
+                  <Item key="SEVERITY_LEVEL_ERROR">ERROR</Item>
+                  <Item key="SEVERITY_LEVEL_WARN">WARN</Item>
+                  <Item key="SEVERITY_LEVEL_INFO">INFO</Item>
+                  <Item key="SEVERITY_LEVEL_DEBUG">DEBUG</Item>
                 </Dropdown>
               )}
             />
