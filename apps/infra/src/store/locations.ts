@@ -103,15 +103,15 @@ export const locations = createSlice({
       state.regionId = undefined;
       state.regionToDelete = action.payload;
     },
-    deleteTreeNode(state: LocationsState) {
-      if (!state.regionToDelete) return;
-      const { regionToDelete } = state;
+    deleteTreeNode(
+      state: LocationsState,
+      action: PayloadAction<string | undefined>,
+    ) {
+      const resourceId = action.payload ?? state.regionToDelete?.resourceId;
+      if (!resourceId) return;
 
       //first check if its a root node
-      const node = TreeBranchStateUtils.find(
-        regionToDelete.resourceId!,
-        state.branches,
-      );
+      const node = TreeBranchStateUtils.find(resourceId, state.branches);
       if (node?.isRoot) {
         const rootIndex = state.branches.findIndex(
           (root) => root.id === node.id,
@@ -122,14 +122,14 @@ export const locations = createSlice({
       }
 
       const parent = TreeBranchStateUtils.find(
-        regionToDelete.resourceId!,
+        resourceId,
         state.branches,
         true,
       );
       if (!parent || !parent.children) return;
       const { children } = parent;
       const index = children.findIndex((child) => {
-        return child.id === regionToDelete.resourceId;
+        return child.id === resourceId;
       });
 
       children.splice(index, 1);
