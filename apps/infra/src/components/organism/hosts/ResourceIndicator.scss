@@ -35,6 +35,11 @@
     text-decoration: underline;
     cursor: pointer;
   }
+  &__view-details:focus-visible {
+    outline: 0.2rem solid var(--spark-color-classic-blue);
+    outline-offset: 0.2rem;
+    text-decoration: underline;
+  }
 
   span[class^="spark-font"] {
     display: block;
