@@ -13,7 +13,8 @@
   border: 0.1rem solid var(--spark-color-carbon-tint2);
 
   &:hover {
-    box-shadow: var(--spark-shadow-x) var(--spark-shadow-y) 1rem var(--spark-shadow-basic);
+    box-shadow: var(--spark-shadow-x) var(--spark-shadow-y) 1rem
+      var(--spark-shadow-basic);
   }
 
   &__icon {
