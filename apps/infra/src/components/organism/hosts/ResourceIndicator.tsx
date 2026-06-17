@@ -50,7 +50,15 @@ const ResourceIndicator = <T extends ResourceType>({
           </Text>
           <Text
             className={`${ri}__view-details`}
+            role="button"
+            tabIndex={0}
             onClick={() => onClickCategory(title, data)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClickCategory(title, data);
+              }
+            }}
           >
             View Details
           </Text>

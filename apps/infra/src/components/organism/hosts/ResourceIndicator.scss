@@ -13,8 +13,7 @@
   border: 0.1rem solid var(--spark-color-carbon-tint2);
 
   &:hover {
-    box-shadow: var(--spark-shadow-x) var(--spark-shadow-y) 1rem
-      var(--spark-shadow-basic);
+    box-shadow: var(--spark-shadow-x) var(--spark-shadow-y) 1rem var(--spark-shadow-basic);
   }
 
   &__icon {
@@ -34,6 +33,11 @@
   &__view-details:hover {
     text-decoration: underline;
     cursor: pointer;
+  }
+  &__view-details:focus-visible {
+    outline: 0.2rem solid var(--spark-color-classic-blue);
+    outline-offset: 0.2rem;
+    text-decoration: underline;
   }
 
   span[class^="spark-font"] {
