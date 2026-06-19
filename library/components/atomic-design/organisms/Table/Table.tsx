@@ -216,7 +216,11 @@ export const Table = <T extends object>({
     const { pageSize } = initialState;
     if (pageSize <= 0) throw new Error("Negative pageSize value not allowed");
 
-    return pageSize > localTotalOverallRowsCount
+    // Never clamp to 0 (e.g. when there are no rows yet); a pageSize of 0
+    // causes a division-by-zero in pagination resulting in an infinite
+    // page count and a "RangeError: Invalid array length" crash.
+    return pageSize > localTotalOverallRowsCount &&
+      localTotalOverallRowsCount > 0
       ? localTotalOverallRowsCount
       : pageSize;
   });
@@ -225,6 +229,9 @@ export const Table = <T extends object>({
     if (!initialState || !initialState.pageIndex) return DEFAULT_PAGEINDEX;
     const { pageIndex } = initialState;
     if (pageIndex <= 0) throw new Error("Negative pageIndex value not allowed");
+    // No rows: stay on the first page to avoid a negative page index.
+    if (localTotalOverallRowsCount <= 0 || localPageSize <= 0)
+      return DEFAULT_PAGEINDEX;
     const initialRow = pageIndex * localPageSize; //pageIndex: 1, pageSize: 9  .. index: 9 ... too big last index is 8
     if (initialRow >= localTotalOverallRowsCount)
       return Math.floor((localTotalOverallRowsCount - 1) / localPageSize); //last page
