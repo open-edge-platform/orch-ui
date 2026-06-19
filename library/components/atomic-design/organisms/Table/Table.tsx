@@ -216,13 +216,7 @@ export const Table = <T extends object>({
     const { pageSize } = initialState;
     if (pageSize <= 0) throw new Error("Negative pageSize value not allowed");
 
-    // Never clamp to 0 (e.g. when there are no rows yet); a pageSize of 0
-    // causes a division-by-zero in pagination resulting in an infinite
-    // page count and a "RangeError: Invalid array length" crash.
-    return pageSize > localTotalOverallRowsCount &&
-      localTotalOverallRowsCount > 0
-      ? localTotalOverallRowsCount
-      : pageSize;
+    return pageSize;
   });
 
   const [localPageIndex, setlocalPageIndex] = useState(() => {
