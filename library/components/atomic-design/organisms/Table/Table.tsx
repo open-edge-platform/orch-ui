@@ -216,15 +216,16 @@ export const Table = <T extends object>({
     const { pageSize } = initialState;
     if (pageSize <= 0) throw new Error("Negative pageSize value not allowed");
 
-    return pageSize > localTotalOverallRowsCount
-      ? localTotalOverallRowsCount
-      : pageSize;
+    return pageSize;
   });
 
   const [localPageIndex, setlocalPageIndex] = useState(() => {
     if (!initialState || !initialState.pageIndex) return DEFAULT_PAGEINDEX;
     const { pageIndex } = initialState;
     if (pageIndex <= 0) throw new Error("Negative pageIndex value not allowed");
+    // No rows: stay on the first page to avoid a negative page index.
+    if (localTotalOverallRowsCount <= 0 || localPageSize <= 0)
+      return DEFAULT_PAGEINDEX;
     const initialRow = pageIndex * localPageSize; //pageIndex: 1, pageSize: 9  .. index: 9 ... too big last index is 8
     if (initialRow >= localTotalOverallRowsCount)
       return Math.floor((localTotalOverallRowsCount - 1) / localPageSize); //last page
