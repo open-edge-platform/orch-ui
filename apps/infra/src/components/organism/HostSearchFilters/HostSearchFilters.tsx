@@ -39,7 +39,9 @@ const HostSearchFilters = () => {
     ].map((name) => ({
       id: name,
       name,
-      isSelected: false,
+      // Reflect applied filters from the store so selections persist across tab navigation
+      isSelected:
+        hostFilterState.statuses?.includes(AggregatedStatus[name]) ?? false,
     }));
   };
 
@@ -83,14 +85,19 @@ const HostSearchFilters = () => {
   useEffect(() => {
     if (osProfiles && isOSSuccess) {
       setOsProfileSelection(
-        osProfiles.OperatingSystemResources?.map((os) => ({
-          id: os.profileName!,
-          name: os.name ?? os.profileName!,
-          isSelected:
-            // See previous value or set default false
-            osProfileSelections.find((prevOs) => os.profileName === prevOs.id)
-              ?.isSelected || false,
-        })) ?? [],
+        osProfiles.OperatingSystemResources?.map((os) => {
+          const profileName = os.profileName ?? "";
+          return {
+            id: profileName,
+            name: os.name ?? profileName,
+            isSelected:
+              // Reflect applied filters from the store, else see previous value
+              (hostFilterState.osProfiles?.includes(profileName) ||
+                osProfileSelections.find((prevOs) => profileName === prevOs.id)
+                  ?.isSelected) ??
+              false,
+          };
+        }) ?? [],
       );
     }
   }, [osProfiles]);
